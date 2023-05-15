@@ -1,0 +1,138 @@
+package com.chua.common.support.path;
+
+import java.io.IOException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Objects;
+
+/**
+ * 计数器
+ *
+ * @author CH
+ * @since 2021-09-29
+ */
+public class CountingPathVisitor extends SimplePathVisitor {
+
+    static final String[] EMPTY_STRING_ARRAY = {};
+
+    /**
+     * Creates a new instance configured with a BigInteger {@link Counters.PathCounters}.
+     *
+     * @return a new instance configured with a BigInteger {@link Counters.PathCounters}.
+     */
+    public static CountingPathVisitor withBigIntegerCounters() {
+        return new CountingPathVisitor(Counters.bigIntegerPathCounters());
+    }
+
+    /**
+     * Creates a new instance configured with a long {@link Counters.PathCounters}.
+     *
+     * @return a new instance configured with a long {@link Counters.PathCounters}.
+     */
+    public static CountingPathVisitor withLongCounters() {
+        return new CountingPathVisitor(Counters.longPathCounters());
+    }
+
+    private final Counters.PathCounters pathCounters;
+    private final PathFilter fileFilter;
+    private final PathFilter dirFilter;
+
+    /**
+     * Constructs a new instance.
+     *
+     * @param pathCounter How to count path visits.
+     */
+    public CountingPathVisitor(final Counters.PathCounters pathCounter) {
+        this(pathCounter, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
+    }
+
+    /**
+     * Constructs a new instance.
+     *
+     * @param pathCounter How to count path visits.
+     * @param fileFilter  Filters which files to count.
+     * @param dirFilter   Filters which directories to count.
+     * @since 2.9.0
+     */
+    public CountingPathVisitor(final Counters.PathCounters pathCounter, final PathFilter fileFilter, final PathFilter dirFilter) {
+        this.pathCounters = Objects.requireNonNull(pathCounter, "pathCounter");
+        this.fileFilter = Objects.requireNonNull(fileFilter, "fileFilter");
+        this.dirFilter = Objects.requireNonNull(dirFilter, "dirFilter");
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof CountingPathVisitor)) {
+            return false;
+        }
+        final CountingPathVisitor other = (CountingPathVisitor) obj;
+        return Objects.equals(pathCounters, other.pathCounters);
+    }
+
+    /**
+     * Gets the visitation counts.
+     *
+     * @return the visitation counts.
+     */
+    public Counters.PathCounters getPathCounters() {
+        return pathCounters;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(pathCounters);
+    }
+
+    @Override
+    public FileVisitResult postVisitDirectory(final Path dir, final IOException exc) throws IOException {
+        updateDirCounter(dir, exc);
+        return FileVisitResult.CONTINUE;
+    }
+
+    @Override
+    public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attributes) throws IOException {
+        final FileVisitResult accept = dirFilter.accept(dir, attributes);
+        return accept != FileVisitResult.CONTINUE ? FileVisitResult.SKIP_SUBTREE : FileVisitResult.CONTINUE;
+    }
+
+    @Override
+    public String toString() {
+        return pathCounters.toString();
+    }
+
+    /**
+     * Updates the counter for visiting the given directory.
+     *
+     * @param dir the visited directory.
+     * @param exc Encountered exception.
+     * @since 2.9.0
+     */
+    protected void updateDirCounter(final Path dir, final IOException exc) {
+        pathCounters.getDirectoryCounter().increment();
+    }
+
+    /**
+     * Updates the counters for visiting the given file.
+     *
+     * @param file       the visited file.
+     * @param attributes the visited file attributes.
+     */
+    protected void updateFileCounters(final Path file, final BasicFileAttributes attributes) {
+        pathCounters.getFileCounter().increment();
+        pathCounters.getByteCounter().add(attributes.size());
+    }
+
+    @Override
+    public FileVisitResult visitFile(final Path file, final BasicFileAttributes attributes) throws IOException {
+        if (Files.exists(file) && fileFilter.accept(file, attributes) == FileVisitResult.CONTINUE) {
+            updateFileCounters(file, attributes);
+        }
+        return FileVisitResult.CONTINUE;
+    }
+
+}
