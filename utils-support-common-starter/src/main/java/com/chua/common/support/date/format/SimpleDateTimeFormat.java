@@ -1,7 +1,7 @@
 package com.chua.common.support.date.format;
 
 import com.chua.common.support.date.DateUtils;
-import com.google.common.base.Strings;
+import com.chua.common.support.utils.StringUtils;
 
 import java.text.ParseException;
 import java.time.Instant;
@@ -127,7 +127,7 @@ public class SimpleDateTimeFormat implements DateTimeFormat {
 
     @Override
     public LocalDateTime parse(String timeStr, String pattern) {
-        if (Strings.isNullOrEmpty(timeStr)) {
+        if (StringUtils.isNullOrEmpty(timeStr)) {
             return null;
         }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);

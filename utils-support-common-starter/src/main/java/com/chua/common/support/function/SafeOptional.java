@@ -1,6 +1,7 @@
 package com.chua.common.support.function;
 
-import com.chua.starter.core.support.utils.ClassUtils;
+
+import com.chua.common.support.utils.ClassUtils;
 
 import java.util.function.Function;
 import java.util.function.Supplier;

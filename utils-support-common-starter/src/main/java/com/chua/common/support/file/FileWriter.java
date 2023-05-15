@@ -4,7 +4,6 @@ import com.alibaba.fastjson.util.IOUtils;
 import com.chua.common.support.utils.FileUtils;
 import com.chua.common.support.utils.IoUtils;
 import com.chua.common.support.utils.StringUtils;
-import org.springframework.util.Assert;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -386,7 +385,6 @@ public class FileWriter extends FileWrapper {
      * 检查文件
      */
     private void checkFile() {
-        Assert.notNull(file, "File to write content is null !");
         if (this.file.exists() && !file.isFile()) {
             throw new RuntimeException("File [{}] is not a file !" + this.file.getAbsoluteFile());
         }

@@ -1,16 +1,20 @@
 package com.chua.common.support.constant;
 
+import com.chua.common.support.file.tar.TarEntry;
+import com.chua.common.support.file.tar.TarInputStream;
 import com.chua.common.support.file.xz.XZInputStream;
 import com.chua.common.support.function.Joiner;
+import com.chua.common.support.lang.process.ProgressBar;
+import com.chua.common.support.lang.process.ProgressStyle;
 import com.chua.common.support.log.Log;
 import com.chua.common.support.pojo.ComputerUniqueIdentification;
 import com.chua.common.support.resource.ResourceProvider;
+import com.chua.common.support.resource.repository.Metadata;
+import com.chua.common.support.resource.repository.Repository;
 import com.chua.common.support.resource.resource.Resource;
 import com.chua.common.support.utils.*;
-import javafx.scene.control.ProgressBar;
 import lombok.Builder;
 import lombok.Data;
-import lombok.SneakyThrows;
 
 import javax.management.MBeanServer;
 import javax.management.MalformedObjectNameException;
@@ -25,9 +29,6 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -999,7 +1000,7 @@ public final class Projects {
      */
     private static void installWinEnv(String[] path) {
         String djlCacheDir = System.getProperty("DJL_CACHE_DIR");
-        if (Strings.isNullOrEmpty(djlCacheDir)) {
+        if (StringUtils.isEmpty(djlCacheDir)) {
             installLocalWindowEnv(path);
             return;
         }
@@ -1102,8 +1103,8 @@ public final class Projects {
         }
         Repository repository = Repository.current().add(Repository.classpath(true));
         String arch = getArch();
-        String name1 = (Strings.isNullOrEmpty(path) ? "" : StringUtils.endWithAppend(path, "/")) +
-                (Strings.isNullOrEmpty(arch) ? dependency.getSystem() : dependency.getSystem() + dependency.getSub() + arch) +
+        String name1 = (StringUtils.isNullOrEmpty(path) ? "" : StringUtils.endWithAppend(path, "/")) +
+                (StringUtils.isNullOrEmpty(arch) ? dependency.getSystem() : dependency.getSystem() + dependency.getSub() + arch) +
                 "/" +
                 name;
         Repository resolve = repository.resolve(name1 + dependency.getSuffix());

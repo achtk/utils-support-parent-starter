@@ -59,7 +59,31 @@ public class StringUtils {
     public static boolean isEmpty(CharSequence str) {
         return str == null || str.length() == 0;
     }
-
+    /**
+     * <p>字符串是否为空，空的定义如下：</p>
+     * <ol>
+     *     <li>{@code null}</li>
+     *     <li>空字符串：{@code ""}</li>
+     * </ol>
+     *
+     * <p>例：</p>
+     * <ul>
+     *     <li>{@code StrUtil.isEmpty(null)     // true}</li>
+     *     <li>{@code StrUtil.isEmpty("")       // true}</li>
+     *     <li>{@code StrUtil.isEmpty(" \t\n")  // false}</li>
+     *     <li>{@code StrUtil.isEmpty("abc")    // false}</li>
+     * </ul>
+     *
+     * <p>注意：该方法与 {@link #isBlank(CharSequence)} 的区别是：该方法不校验空白字符。</p>
+     * <p>建议：</p>
+     *
+     * @param str 被检测的字符串
+     * @return 是否为空
+     * @see #isBlank(CharSequence)
+     */
+    public static boolean isNullOrEmpty(CharSequence str) {
+        return isEmpty(str);
+    }
 
     /**
      * <p>字符串是否为非空白，非空白的定义如下： </p>

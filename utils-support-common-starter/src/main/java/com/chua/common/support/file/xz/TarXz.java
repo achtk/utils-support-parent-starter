@@ -9,10 +9,10 @@
 
 package com.chua.common.support.file.xz;
 
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.file.Decompress;
 import com.chua.common.support.file.tar.Tar;
 import com.chua.common.support.file.tar.TarInputStream;
-import com.chua.common.support.spi.Spi;
 
 import java.io.*;
 

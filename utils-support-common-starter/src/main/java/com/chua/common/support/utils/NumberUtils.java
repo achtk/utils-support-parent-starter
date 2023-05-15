@@ -14,7 +14,6 @@ import java.util.stream.IntStream;
 import static com.chua.common.support.constant.CommonConstant.*;
 import static com.chua.common.support.constant.RegexConstant.INT_PATTERN;
 
-
 /**
  * 数字处理
  *
@@ -2506,34 +2505,6 @@ public class NumberUtils {
         return result;
     }
 
-    /**
-     * 通过中文数字获取4位数阿拉伯数字
-     * 万以内的数据转换
-     *
-     * @param single 中文数字
-     * @return 4位数阿拉伯数字
-     */
-    private static String getNumberFromChinese(String single) {
-        String result = "0";
-        int highIndex = 1;
-        for (int i = 0; i < single.length(); i++) {
-            String str = String.valueOf(single.charAt(i));
-            int unit = NumberValue.LEVEL.indexOf(str);
-            int number = NumberValue.NUMBER.indexOf(str);
-            if (-1 == number) {
-                number = NumberValue.BIG_NUMBER.indexOf(str);
-            }
-            if (unit == -1) {
-                int next = 0;
-                if (i < single.length() - 1) {
-                    next = NumberValue.LEVEL.indexOf(String.valueOf(single.charAt(i + 1)));
-                }
-                result = String.valueOf(Integer.parseInt(result) + number * (int) (Math.pow(10, next)));
-            }
-        }
-        result = "" + Integer.parseInt(result) * (int) (Math.pow(10, 0));
-        return result;
-    }
 
     /**
      * 阿拉伯数字转中文数字
