@@ -7,11 +7,12 @@ import com.chua.common.support.reflection.reflections.serializers.Serializer;
 import com.chua.common.support.reflection.reflections.serializers.XmlSerializer;
 import com.chua.common.support.reflection.reflections.util.*;
 import com.chua.common.support.reflection.reflections.vfs.Vfs;
+import com.chua.common.support.reflection.reflections.scanners.Scanner;
+
 import javassist.bytecode.ClassFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nullable;
 import java.io.*;
 import java.lang.annotation.Annotation;
 import java.lang.annotation.Inherited;
@@ -212,7 +213,7 @@ public class Reflections implements NameHelper {
         return storeMap;
     }
 
-    private boolean doFilter(Vfs.File file, @Nullable Predicate<String> predicate) {
+    private boolean doFilter(Vfs.File file, Predicate<String> predicate) {
         String path = file.getRelativePath();
         String fqn = path.replace('/', '.');
         return predicate == null || predicate.test(path) || predicate.test(fqn);

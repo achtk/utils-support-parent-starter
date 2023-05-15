@@ -3,8 +3,9 @@ package com.chua.common.support.collection;
 import com.chua.common.support.bean.BeanMap;
 import com.chua.common.support.converter.Converter;
 import com.chua.common.support.function.SafeConsumer;
+import com.chua.common.support.unit.name.NamingCase;
 import com.chua.common.support.utils.MapUtils;
-import com.google.common.base.Strings;
+import com.chua.common.support.utils.StringUtils;
 
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
@@ -170,7 +171,7 @@ public interface TypeMap<E> extends Map<String, Object> {
      */
     @SuppressWarnings("all")
     default <T> T computeIfAbsent(String key, Function<String, T> value, Class<T> type) {
-        if (Strings.isNullOrEmpty(key) || null == source()) {
+        if (StringUtils.isNullOrEmpty(key) || null == source()) {
             return null;
         }
 
@@ -940,7 +941,8 @@ public interface TypeMap<E> extends Map<String, Object> {
             return;
         }
         source.put(k, v);
-        source.put(Converter.toCamelHyphen(k), v);
+        source.put(NamingCase.toUnderlineCase(k), v);
+        source.put(NamingCase.toKebabCase(k), v);
     }
 
 

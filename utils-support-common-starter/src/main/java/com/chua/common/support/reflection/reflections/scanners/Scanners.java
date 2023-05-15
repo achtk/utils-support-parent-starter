@@ -11,7 +11,6 @@ import javassist.bytecode.ClassFile;
 
 import java.lang.annotation.Inherited;
 import java.lang.reflect.AnnotatedElement;
-import java.util.Scanner;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;

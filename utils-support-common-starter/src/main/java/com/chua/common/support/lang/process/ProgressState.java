@@ -1,6 +1,6 @@
 package com.chua.common.support.lang.process;
 
-import com.google.common.base.Strings;
+import com.chua.common.support.utils.StringUtils;
 import lombok.Data;
 
 import java.time.Duration;
@@ -64,7 +64,7 @@ public class ProgressState {
 
     private String format(String s) {
         if(s.length() < MAX_NAME) {
-            return Strings.repeat(" ", MAX_NAME - s.length()) + s;
+            return StringUtils.repeat(" ", MAX_NAME - s.length()) + s;
         }
 
         return s.substring(0, MAX_NAME - 3) + "...";

@@ -8,7 +8,6 @@ import javassist.bytecode.ClassFile;
 import javassist.bytecode.MethodInfo;
 import javassist.expr.*;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +27,7 @@ public class MemberUsageScanner implements Scanner {
         this(ClasspathHelper.classLoaders());
     }
 
-    public MemberUsageScanner(@Nonnull ClassLoader[] classLoaders) {
+    public MemberUsageScanner(ClassLoader[] classLoaders) {
         this.classLoaders = classLoaders;
     }
 

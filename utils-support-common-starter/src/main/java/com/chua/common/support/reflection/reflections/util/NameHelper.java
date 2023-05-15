@@ -2,7 +2,6 @@ package com.chua.common.support.reflection.reflections.util;
 
 import com.chua.common.support.reflection.reflections.ReflectionsException;
 
-import javax.annotation.Nullable;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -210,7 +209,7 @@ public interface NameHelper {
      * @param <T>        类型
      * @return 注解
      */
-    @Nullable
+    
     default <T extends AnnotatedElement> T forElement(String descriptor, Class<T> resultType, ClassLoader[] loaders) {
         Member member = forMember(descriptor, loaders);
         //noinspection unchecked
@@ -225,7 +224,7 @@ public interface NameHelper {
      * @return 方法
      * @throws ReflectionsException ex
      */
-    @Nullable
+    
     default Method forMethod(String descriptor, ClassLoader... loaders) throws ReflectionsException {
         return forElement(descriptor, Method.class, loaders);
     }
@@ -250,7 +249,7 @@ public interface NameHelper {
      * @return 字段
      * @throws ReflectionsException ex
      */
-    @Nullable
+    
     default Field forField(String descriptor, ClassLoader... loaders) {
         return forElement(descriptor, Field.class, loaders);
     }

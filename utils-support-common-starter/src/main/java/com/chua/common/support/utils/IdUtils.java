@@ -1,6 +1,7 @@
 package com.chua.common.support.utils;
 
 
+import com.chua.common.support.constant.Projects;
 import com.chua.common.support.date.DateTime;
 
 import java.net.InetAddress;
@@ -9,7 +10,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static com.chua.common.support.date.constant.DateFormatConstant.YYYYMMDDHHMMSS;
@@ -58,11 +58,6 @@ public class IdUtils {
     static final String PID = Projects.getPid();
     static final String COMPUTER_UNIQUE_IDENTIFICATION = Projects.getComputerUniqueIdentificationString();
 
-    static final Cache<Integer, AtomicLong> CACHE = CacheBuilder
-            .newBuilder()
-            .expireAfterWrite(1, TimeUnit.SECONDS)
-            .build();
-
     /**
      * traceId
      *
@@ -76,7 +71,7 @@ public class IdUtils {
                 + COMPUTER_UNIQUE_IDENTIFICATION
                 + "t"
                 + System.currentTimeMillis()
-                + String.format("%04d", Optional.ofNullable(CACHE.getIfPresent(RandomUtils.randomInt())).orElse(new AtomicLong(1)).incrementAndGet());
+                + String.format("%04d", RandomUtils.randomInt());
     }
 
     /**

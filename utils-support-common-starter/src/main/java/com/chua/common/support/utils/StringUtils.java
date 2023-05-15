@@ -1913,4 +1913,25 @@ public class StringUtils {
         checkArgument(!token.isEmpty());
         return Ascii.toLowerCase(token);
     }
+
+    /**
+     * 限制长度
+     *
+     * @param source 数据
+     * @param less   不足补全字段
+     * @param limit  长度
+     * @return 结果
+     */
+    public static String limit(String source, String less, int limit) {
+        if (isNullOrEmpty(source)) {
+            return repeat(less, limit);
+        }
+
+        if (source.length() < limit) {
+            return source + repeat(less, limit - source.length());
+        }
+
+        return source.substring(0, limit);
+    }
+
 }

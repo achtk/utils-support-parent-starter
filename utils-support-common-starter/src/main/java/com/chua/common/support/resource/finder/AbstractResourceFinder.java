@@ -1,12 +1,12 @@
 package com.chua.common.support.resource.finder;
 
+import com.chua.common.support.function.Joiner;
 import com.chua.common.support.function.SafeConsumer;
 import com.chua.common.support.matcher.PathMatcher;
 import com.chua.common.support.resource.ResourceConfiguration;
 import com.chua.common.support.resource.resource.Resource;
 import com.chua.common.support.utils.FileUtils;
-import com.google.common.base.Joiner;
-import com.google.common.base.Strings;
+import com.chua.common.support.utils.StringUtils;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -61,7 +61,7 @@ public abstract class AbstractResourceFinder implements ResourceFinder{
      * @return 获取真实名称
      */
     protected String getRealName(String filePath, String rootPath) {
-        if(Strings.isNullOrEmpty(rootPath)) {
+        if(StringUtils.isNullOrEmpty(rootPath)) {
             return filePath.replace("\\", "/");
         }
 
