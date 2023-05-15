@@ -1,8 +1,8 @@
 package com.chua.common.support.resource.repository;
 
+import com.chua.common.support.media.MediaType;
 import com.chua.common.support.media.MediaTypeFactory;
 import com.chua.common.support.utils.FileUtils;
-import com.google.common.net.MediaType;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,6 +1,10 @@
 package com.chua.common.support.utils;
 
 import java.util.Arrays;
+import java.util.Optional;
+
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_EMPTY_STRING;
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_NULL_STRING;
 
 /**
  * 对象工具
@@ -279,4 +283,82 @@ public class ObjectUtils {
     public static <T>T firstNonNull(T v1, T v2) {
         return null == v1 ? v2 : v1;
     }
+
+
+    /**
+     * 是否任意为空
+     * @param args 参数
+     * @return 是否任意为空
+     */
+    public static boolean isAnyEmpty(Object... args) {
+        for (Object arg : args) {
+            if(null == arg) {
+                return true;
+            }
+
+            if (arg instanceof String && StringUtils.isNullOrEmpty((String) arg)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * 获取默认值
+     *
+     * @param value        值
+     * @param defaultValue 默认值
+     * @return 结果
+     */
+    public static Object defaultIfNull(Object value, String defaultValue) {
+        return Optional.ofNullable(value).orElse(defaultValue);
+    }
+
+
+    /**
+     * Return a String representation of the specified Object.
+     * <p>Builds a String representation of the contents in case of an array.
+     * Returns a {@code "null"} String if {@code obj} is {@code null}.
+     *
+     * @param obj the object to build a String representation for
+     * @return a String representation of {@code obj}
+     */
+    public static String nullSafeToString(Object obj) {
+        if (obj == null) {
+            return SYMBOL_NULL_STRING;
+        }
+        if (obj instanceof String) {
+            return (String) obj;
+        }
+        if (obj instanceof Object[]) {
+            return nullSafeToString((Object[]) obj);
+        }
+        if (obj instanceof boolean[]) {
+            return nullSafeToString((boolean[]) obj);
+        }
+        if (obj instanceof byte[]) {
+            return nullSafeToString((byte[]) obj);
+        }
+        if (obj instanceof char[]) {
+            return nullSafeToString((char[]) obj);
+        }
+        if (obj instanceof double[]) {
+            return nullSafeToString((double[]) obj);
+        }
+        if (obj instanceof float[]) {
+            return nullSafeToString((float[]) obj);
+        }
+        if (obj instanceof int[]) {
+            return nullSafeToString((int[]) obj);
+        }
+        if (obj instanceof long[]) {
+            return nullSafeToString((long[]) obj);
+        }
+        if (obj instanceof short[]) {
+            return nullSafeToString((short[]) obj);
+        }
+        String str = obj.toString();
+        return (str != null ? str : SYMBOL_EMPTY_STRING);
+    }
+
 }

@@ -4,16 +4,21 @@ import com.chua.common.support.collection.ConcurrentReferenceHashMap;
 import com.chua.common.support.collection.ConcurrentReferenceTable;
 import com.chua.common.support.collection.Table;
 import com.chua.common.support.converter.Converter;
+import com.chua.common.support.lang.proxy.BridgingMethodIntercept;
+import com.chua.common.support.lang.proxy.ProxyUtils;
+import com.chua.common.support.unit.name.NamingCase;
 
 import java.io.Closeable;
 import java.io.Externalizable;
 import java.io.File;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 
 import static com.chua.common.support.constant.CommonConstant.*;
@@ -908,5 +913,724 @@ public class ClassUtils {
         } catch (MalformedURLException ignored) {
         }
         return ClassUtils.class.getClassLoader().getResource(source);
+    }
+
+    /**
+     * java类
+     *
+     * @param type 类型
+     * @return java类
+     */
+    public static boolean isJavaType(Class<?> type) {
+        return type.getTypeName().startsWith("java.") ||
+                type.isPrimitive()
+                ;
+    }
+
+
+
+    /**
+     * 字段查询
+     *
+     * @param aClass   处理类
+     * @param callback 回调
+     */
+    public static void doWithFields(final Class<?> aClass, final Consumer<Field> callback) {
+        try {
+            for (Field field : getFields(aClass)) {
+                try {
+                    callback.accept(field);
+                } catch (Throwable ex) {
+                    throw new IllegalStateException("Not allowed to access field '" + field.getName() + "': " + ex);
+                }
+            }
+        } catch (Throwable ignore) {
+        }
+    }
+
+    /**
+     * 获取所有字段
+     *
+     * @param obj 对象
+     * @return 所有字段
+     */
+    public static List<Field> getFields(final Object obj) {
+        if (null == obj) {
+            return Collections.emptyList();
+        }
+        final Class<?> aClass = ClassUtils.toType(obj);
+        return MapUtils.getComputeIfFunction(CLASS_FIELD_LOCAL, aClass, aClass12 -> {
+            List<Field> result = new ArrayList<>();
+            Class<?> newClass = aClass12;
+            while (!ClassUtils.isObject(newClass)) {
+                Field[] fields = new Field[0];
+                try {
+                    fields = newClass.getDeclaredFields();
+                    result.addAll(Arrays.asList(fields));
+                    newClass = newClass.getSuperclass();
+                } catch (Throwable ignored) {
+                    break;
+                }
+            }
+            return result;
+        });
+    }
+
+
+    /**
+     * 字段查询
+     *
+     * @param aClass   处理类
+     * @param callback 回调
+     */
+    public static void doWithLocalFields(final Class<?> aClass, final Consumer<Field> callback) {
+        for (Field field : getLocalFields(aClass)) {
+            try {
+                callback.accept(field);
+            } catch (Throwable ex) {
+                throw new IllegalStateException("Not allowed to access field '" + field.getName() + "': " + ex);
+            }
+        }
+    }
+
+
+    /**
+     * 方法回调
+     *
+     * @param aClass   类
+     * @param callback 方法回调
+     */
+    public static void doWithLocalMethods(final Class<?> aClass, final Consumer<Method> callback) {
+        if (null == aClass || null == callback) {
+            return;
+        }
+        for (Method method : getLocalMethods(aClass)) {
+            try {
+                callback.accept(method);
+            } catch (Throwable throwable) {
+                throw new IllegalStateException("Not allowed to access method '" + method.getName() + "': " + throwable);
+            }
+        }
+    }
+
+    /**
+     * 方法回调
+     *
+     * @param aClass   类
+     * @param callback 方法回调
+     */
+    public static void doWithMethods(final Class<?> aClass, final Consumer<Method> callback) {
+        if (null == aClass || null == callback) {
+            return;
+        }
+        for (Method method : getMethods(aClass)) {
+            try {
+                callback.accept(method);
+            } catch (Throwable throwable) {
+                throw new IllegalStateException("Not allowed to access method '" + method.getName() + "': " + throwable);
+            }
+        }
+    }
+
+    /**
+     * 获取当前类所有字段
+     *
+     * @param obj 对象
+     * @return 所有字段
+     */
+    public static List<Field> getLocalFields(final Object obj) {
+        if (null == obj) {
+            return Collections.emptyList();
+        }
+        final Class<?> aClass = ClassUtils.toType(obj);
+
+        return MapUtils.getComputeIfFunction(CLASS_FIELD, aClass, it -> {
+            Field[] fields = aClass.getDeclaredFields();
+            return Arrays.asList(fields);
+        });
+    }
+
+    /**
+     * 获取所有方法
+     *
+     * @param obj 对象
+     * @return 所有字段
+     */
+    public static List<Method> getMethods(final Object obj) {
+        if (null == obj) {
+            return Collections.emptyList();
+        }
+        final Class<?> aClass = ClassUtils.toType(obj);
+
+        return MapUtils.getComputeIfFunction(CLASS_METHOD, aClass, it -> {
+            List<Method> result = new ArrayList<>();
+            Class<?> newClass = aClass;
+            while (!ClassUtils.isObject(newClass)) {
+                Method[] methods = newClass.getDeclaredMethods();
+                result.addAll(Arrays.asList(methods));
+                newClass = newClass.getSuperclass();
+            }
+
+            Class<?>[] interfaces = aClass.getInterfaces();
+            Set<Class<?>> allInterfaces = new HashSet<>();
+            for (Class<?> anInterface : interfaces) {
+                Class<?>[] newInterface1 = anInterface.getInterfaces();
+                allInterfaces.add(anInterface);
+                allInterfaces.addAll(Arrays.asList(newInterface1));
+            }
+
+            for (Class<?> allInterface : allInterfaces) {
+                Method[] methods = allInterface.getDeclaredMethods();
+                for (Method method : methods) {
+                    if (method.isDefault()) {
+                        result.add(method);
+                    }
+                }
+            }
+
+            return result;
+        });
+    }
+
+    /**
+     * 获取所有方法
+     *
+     * @param obj 对象
+     * @return 所有字段
+     */
+    public static List<Method> getLocalMethods(final Object obj) {
+        if (null == obj) {
+            return Collections.emptyList();
+        }
+        final Class<?> aClass = ClassUtils.toType(obj);
+
+        return MapUtils.getComputeIfFunction(CLASS_METHOD_LOCAL, aClass, it -> {
+            Method[] methods = aClass.getDeclaredMethods();
+            return Arrays.asList(methods);
+        });
+    }
+
+    /**
+     * 构造
+     *
+     * @param tClass  类型
+     * @param classes 参数
+     * @param <T>     类型
+     * @return 构造
+     */
+    public static <T> Constructor<T> getConstructor(Class<T> tClass, Class<?>[] classes) {
+        Constructor<?>[] declaredConstructors = tClass.getDeclaredConstructors();
+        Constructor<?> item = null;
+        boolean isTrue = true;
+        for (Constructor<?> declaredConstructor : declaredConstructors) {
+            Class<?>[] parameterTypes = declaredConstructor.getParameterTypes();
+            for (int i = 0; i < parameterTypes.length; i++) {
+                Class<?> parameterType = parameterTypes[i];
+                Class<?> aClass = classes[i];
+                if (aClass.getTypeName() == parameterType.getTypeName()) {
+                    continue;
+                }
+
+                boolean b = !parameterType.isAssignableFrom(aClass) && !(Void.class.isAssignableFrom(aClass) || void.class.isAssignableFrom(aClass));
+                if (b) {
+                    isTrue = false;
+                    break;
+                }
+            }
+            if (isTrue) {
+                item = declaredConstructor;
+                break;
+            }
+        }
+
+        return (Constructor<T>) item;
+    }
+
+
+    /**
+     * 类是否是Object.class
+     *
+     * @param clazz 类
+     * @return 类是 Object.class 或者null 返回true
+     */
+    @SuppressWarnings("all")
+    public static boolean isObject(Class<?> clazz) {
+        return null == clazz || Object.class.getName().equals(clazz.getName());
+    }
+
+
+    /**
+     * 是否有空
+     *
+     * @param args 参数
+     * @return 是否有空
+     */
+    private static boolean hasNone(Object[] args) {
+        for (Object arg : args) {
+            if (null == arg) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 是否全空
+     *
+     * @param args 参数
+     * @return 是否全空
+     */
+    private static boolean isAllNull(Object[] args) {
+        for (Object arg : args) {
+            if (null != arg) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 获取对象
+     *
+     * @param parameterTypes 类型
+     * @param params         参数
+     * @return 参数
+     */
+    private static Object[] getArgs(Class<?>[] parameterTypes, Map<Class<?>, Object> params) {
+        Object[] rs = new Object[parameterTypes.length];
+        int index = 0;
+        for (Class<?> aClass : parameterTypes) {
+            Object o = params.get(aClass);
+            rs[index++] = createValue(o, aClass, params);
+        }
+
+        return rs;
+    }
+
+    /**
+     * 获取值
+     *
+     * @param o      获取到的对象
+     * @param aClass 值的类型
+     * @param params 参数集合
+     * @return 值
+     */
+    private static Object createValue(Object o, Class<?> aClass, Map<Class<?>, Object> params) {
+        if (null != o) {
+            return o;
+        }
+
+        for (Map.Entry<Class<?>, Object> entry : params.entrySet()) {
+            if (void.class == entry.getKey()) {
+                continue;
+            }
+
+            if (aClass.isAssignableFrom(entry.getKey())) {
+                return entry.getValue();
+            }
+        }
+
+        if (params.size() == 1) {
+            Map.Entry<Class<?>, Object> first = MapUtils.getFirst(params);
+            Object necessary = Converter.convertIfNecessary(first.getValue(), aClass);
+            if (null != necessary) {
+                return necessary;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * 类型与值
+     *
+     * @param params 值
+     * @return 类型与值
+     */
+    private static Map<Class<?>, Object> createTypeAndValue(Object[] params) {
+        Map<Class<?>, Object> rs = new HashMap<>(params.length);
+        for (Object param : params) {
+            if (null == param) {
+                rs.put(void.class, null);
+            } else {
+                rs.put(param.getClass(), param);
+            }
+        }
+
+        return rs;
+    }
+
+    /**
+     * 执行方法
+     *
+     * @param object     对象
+     * @param type       类型
+     * @param methodName 方法
+     * @param args       参数
+     * @return 结果
+     */
+    public static Object invokeMethodChain(Object object, Class<?> type, String methodName, Object... args) {
+        if (null == type) {
+            return null;
+        }
+
+        Method method = findMethod(type, methodName, toType(args));
+        if (null == method) {
+            return null;
+        }
+        method.setAccessible(true);
+        return invokeMethod(method, object, args);
+    }
+
+    /**
+     * 执行方法
+     *
+     * @param bean       类型
+     * @param methodName 方法
+     * @param args       参数
+     * @return 结果
+     */
+    public static Object invokeBean(Object bean, String methodName, Object... args) {
+        if (null == bean) {
+            return null;
+        }
+
+        Class<?> type = toType(bean);
+
+        Method method = findMethod(type, methodName, toType(args));
+        if (null == method) {
+            return null;
+        }
+        setAccessible(method);
+        return invokeMethod(method, bean, args);
+    }
+
+    /**
+     * 执行方法
+     *
+     * @param type       类型
+     * @param methodName 方法
+     * @param args       参数
+     * @return 结果
+     */
+    public static Object invokeMethod(Class<?> type, String methodName, Object... args) {
+        if (null == type) {
+            return null;
+        }
+
+        Method method = findMethod(type, methodName, toType(args));
+        if (null == method) {
+            return null;
+        }
+
+        return invokeMethod(method, null, args);
+    }
+
+    /**
+     * 执行方法
+     *
+     * @param method 方法
+     * @param bean   对象
+     * @param args   参数
+     * @return 结果
+     */
+    public static Object invokeMethod(Method method, Object bean, Object... args) {
+        if (bean instanceof Callable) {
+            try {
+                return ((Callable<?>) bean).call();
+            } catch (Exception ignored) {
+            }
+
+            return null;
+        }
+
+        if (method.isDefault()) {
+            return invokeDefaultMethod(method, bean, args);
+        }
+        try {
+            return method.invoke(bean, method.getParameterCount() == 0 ? EMPTY_OBJECT : args);
+        } catch (Throwable ignored) {
+        }
+        return null;
+    }
+
+    /**
+     * 执行方法
+     *
+     * @param method 方法
+     * @param bean   对象
+     * @param args   参数
+     * @return 结果
+     */
+    public static Object invokeDefaultMethod(Method method, Object bean, Object... args) {
+        if (bean instanceof Callable) {
+            try {
+                return ((Callable<?>) bean).call();
+            } catch (Exception ignored) {
+            }
+        }
+
+        if (!method.isDefault()) {
+            return null;
+        }
+
+        try {
+            Constructor<?> constructor = MethodHandles.Lookup.class
+                    .getDeclaredConstructor(Class.class, int.class);
+            constructor.setAccessible(true);
+            Class<?> declaringClass = method.getDeclaringClass();
+            int allModes = MethodHandles.Lookup.PUBLIC | MethodHandles.Lookup.PRIVATE | MethodHandles.Lookup.PROTECTED | MethodHandles.Lookup.PACKAGE;
+            return ((MethodHandles.Lookup) constructor.newInstance(declaringClass, allModes))
+                    .unreflectSpecial(method, declaringClass)
+                    .bindTo(bean)
+                    .invokeWithArguments(method.getParameterCount() == 0 ? EMPTY_OBJECT : args);
+        } catch (Throwable e) {
+            return null;
+        }
+    }
+
+    /**
+     * Attempt to find a {@link Method} on the supplied class with the supplied name
+     * and parameter types. Searches all superclasses up to {@code Object}.
+     * <p>Returns {@code null} if no {@link Method} can be found.
+     *
+     * @param clazz      the class to introspect
+     * @param name       the name of the method
+     * @param paramTypes the parameter types of the method
+     *                   (may be {@code null} to indicate any signature)
+     * @return the Method object, or {@code null} if none found
+     */
+    public static Method findMethod(Class<?> clazz, String name, Class<?>... paramTypes) {
+        Class<?> searchType = clazz;
+        while (searchType != null) {
+            Method[] methods = (searchType.isInterface() ? searchType.getMethods() :
+                    getMethods(searchType).toArray(EMPTY_METHOD_ARRAY));
+            for (Method method : methods) {
+                if (name.equals(method.getName()) && (paramTypes == null || hasSameParams(method, paramTypes))) {
+                    return method;
+                }
+            }
+            searchType = searchType.getSuperclass();
+        }
+        return null;
+    }
+
+    private static boolean hasSameParams(Method method, Class<?>[] paramTypes) {
+        if (paramTypes.length != method.getParameterCount()) {
+            return false;
+        }
+
+        Class<?>[] parameterTypes = method.getParameterTypes();
+        for (int i = 0; i < parameterTypes.length; i++) {
+            Class<?> parameterType = parameterTypes[i];
+            if (!parameterType.isAssignableFrom(paramTypes[i])) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
+    /**
+     * 设置可执行
+     *
+     * @param method 方法
+     */
+    public static void setAccessible(Method method) {
+        if (null == method) {
+            return;
+        }
+
+        method.setAccessible(true);
+    }
+
+    /**
+     * 设置可执行
+     *
+     * @param field 方法
+     */
+    public static void setAccessible(Field field) {
+        if (null == field) {
+            return;
+        }
+
+        field.setAccessible(true);
+    }
+
+
+
+    /**
+     * 获取字段值
+     *
+     * @param fieldName 字段
+     * @param target    类型
+     * @param value     值
+     */
+    public static Object getFieldValue(String fieldName, Class<?> target, Object value) {
+        List<Field> fields = getFields(target);
+        for (Field field : fields) {
+            if (fieldName.equals(field.getName())) {
+                return getFieldValue(field, target, value);
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * 获取字段值
+     *
+     * @param field  字段
+     * @param target 类型
+     * @param value  值
+     */
+    public static Object getFieldValue(Field field, Class<?> target, Object value) {
+        if (null == field) {
+            return null;
+        }
+
+        String name = "get" + NamingCase.toFirstUpperCase(field.getName());
+        try {
+            Method declaredMethod = target.getDeclaredMethod(name);
+            if (null != declaredMethod) {
+                declaredMethod.setAccessible(true);
+                return declaredMethod.invoke(value);
+            }
+        } catch (Exception ignore) {
+        }
+
+        try {
+            Method declaredMethod = target.getDeclaredMethod(field.getName());
+            if (null != declaredMethod) {
+                declaredMethod.setAccessible(true);
+                return declaredMethod.invoke(value);
+            }
+        } catch (Exception ignore) {
+        }
+
+        try {
+            field.setAccessible(true);
+            return field.get(value);
+        } catch (IllegalAccessException e) {
+            return null;
+        }
+    }
+
+    /**
+     * 获取字段值
+     *
+     * @param field 字段
+     * @param value 值
+     */
+    public static Object getFieldValue(Field field, Object value) {
+        if (null == field) {
+            return null;
+        }
+
+        try {
+            return field.get(value);
+        } catch (IllegalAccessException e) {
+            return null;
+        }
+    }
+
+    /**
+     * 获取字段值
+     *
+     * @param fieldName 名称
+     * @param type      类型
+     * @param value     值
+     * @param bean      对象
+     */
+    public static void setFieldValue(String fieldName, Object value, Object bean) {
+        if (ObjectUtils.isAnyEmpty(fieldName, value, bean)) {
+            return;
+        }
+
+        setFieldValue(fieldName, bean.getClass(), value, bean);
+    }
+
+    /**
+     * 获取字段值
+     *
+     * @param fieldName 名称
+     * @param type      类型
+     * @param value     值
+     * @param bean      对象
+     */
+    public static void setFieldValue(String fieldName, Class<?> type, Object value, Object bean) {
+        if (ObjectUtils.isAnyEmpty(fieldName, type, value)) {
+            return;
+        }
+
+        List<Field> fields = getFields(type);
+        for (Field field : fields) {
+            if (fieldName.equals(field.getName())) {
+                setFieldValue(field, value, bean);
+                break;
+            }
+        }
+    }
+
+    /**
+     * 获取字段值
+     *
+     * @param field 字段
+     * @param value 值
+     * @param bean  对象
+     */
+    public static void setFieldValue(Field field, Object value, Object bean) {
+        if (null == field) {
+            return;
+        }
+
+        if (null == bean) {
+            return;
+        }
+
+        setFieldValue(field, bean.getClass(), value, bean);
+    }
+
+    /**
+     * 获取字段值
+     *
+     * @param field  字段
+     * @param target 类型
+     * @param value  值
+     * @param bean   对象
+     */
+    public static void setFieldValue(Field field, Class<?> target, Object value, Object bean) {
+        if (null == field) {
+            return;
+        }
+
+
+        String name = "set" + NamingCase.toFirstUpperCase(field.getName());
+        try {
+            Method declaredMethod = target.getDeclaredMethod(name, field.getType());
+            if (null != declaredMethod) {
+                declaredMethod.setAccessible(true);
+                declaredMethod.invoke(bean, value);
+                return;
+            }
+        } catch (Exception ignore) {
+        }
+
+        try {
+            Method declaredMethod = target.getDeclaredMethod(field.getName(), field.getType());
+            if (null != declaredMethod) {
+                declaredMethod.setAccessible(true);
+                declaredMethod.invoke(bean, value);
+                return;
+            }
+        } catch (Exception ignore) {
+        }
+
+        try {
+            field.setAccessible(true);
+            field.set(bean, value);
+        } catch (IllegalAccessException e) {
+        }
     }
 }

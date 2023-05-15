@@ -1,8 +1,8 @@
 package com.chua.common.support.resource.repository;
 
 import com.chua.common.support.utils.FileUtils;
+import com.chua.common.support.utils.StringUtils;
 import com.chua.common.support.utils.UrlUtils;
-import com.google.common.base.Strings;
 
 import java.io.File;
 import java.io.IOException;
@@ -65,7 +65,7 @@ public final class UrlMetadata implements Metadata {
 
     @Override
     public boolean isImage() {
-        if(Strings.isNullOrEmpty(contentType)) {
+        if(StringUtils.isNullOrEmpty(contentType)) {
             return false;
         }
         return contentType.contains("image");
@@ -73,7 +73,7 @@ public final class UrlMetadata implements Metadata {
 
     @Override
     public String getContentType() {
-        if(Strings.isNullOrEmpty(contentType)) {
+        if(StringUtils.isNullOrEmpty(contentType)) {
             return null;
         }
         return contentType;
@@ -81,7 +81,7 @@ public final class UrlMetadata implements Metadata {
 
     @Override
     public String getType() {
-        if(Strings.isNullOrEmpty(contentType)) {
+        if(StringUtils.isNullOrEmpty(contentType)) {
             return null;
         }
         return contentType.substring(0, contentType.indexOf("/"));
@@ -89,7 +89,7 @@ public final class UrlMetadata implements Metadata {
 
     @Override
     public String getSubType() {
-        if(Strings.isNullOrEmpty(contentType)) {
+        if(StringUtils.isNullOrEmpty(contentType)) {
             return null;
         }
         return contentType.substring(contentType.indexOf("/") + 1);

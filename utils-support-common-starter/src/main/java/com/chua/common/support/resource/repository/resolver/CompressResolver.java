@@ -1,9 +1,8 @@
 package com.chua.common.support.resource.repository.resolver;
 
-import com.chua.common.support.context.annotation.AutoInject;
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.matcher.PathMatcher;
-import com.chua.common.support.repository.Metadata;
-import com.chua.common.support.spi.Spi;
+import com.chua.common.support.resource.repository.Metadata;
 import com.chua.common.support.utils.FileUtils;
 
 import java.net.URL;
@@ -20,8 +19,7 @@ import static com.chua.common.support.constant.CommonConstant.COMPRESS_URL_PREFI
 @Spi("compress")
 public final class CompressResolver implements Resolver {
 
-    @AutoInject
-    private PathMatcher pathMatcher;
+    private PathMatcher pathMatcher = PathMatcher.INSTANCE;
 
     @Override
     public List<Metadata> resolve(URL root, String name) {

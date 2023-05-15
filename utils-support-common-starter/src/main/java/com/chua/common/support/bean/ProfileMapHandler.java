@@ -1,11 +1,11 @@
 package com.chua.common.support.bean;
 
-import com.chua.common.support.converter.Converter;
 import com.chua.common.support.matcher.PathMatcher;
 import com.chua.common.support.placeholder.MapMixSystemPlaceholderResolver;
 import com.chua.common.support.placeholder.PlaceholderSupport;
 import com.chua.common.support.placeholder.PropertyResolver;
 import com.chua.common.support.placeholder.StringValuePropertyResolver;
+import com.chua.common.support.unit.name.NamingCase;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -36,7 +36,7 @@ public class ProfileMapHandler implements ProfileHandler {
             return o instanceof String ? placeholderResolver.resolvePlaceholders(o.toString()) : o;
         }
 
-        String camel = Converter.toHyphenLowerCamel(name);
+        String camel = NamingCase.toHyphenLowerCamel(name);
         Object o1 = param.get(camel);
         return o1 instanceof String ? placeholderResolver.resolvePlaceholders(o1.toString()) : o1;
     }
@@ -44,7 +44,7 @@ public class ProfileMapHandler implements ProfileHandler {
     @Override
     public boolean isMatcher(String newKey) {
         for (Map.Entry<?, ?> entry : param.entrySet()) {
-            if (PathMatcher.APACHE_INSTANCE.match(newKey, entry.getKey().toString())) {
+            if (PathMatcher.INSTANCE.match(newKey, entry.getKey().toString())) {
                 return true;
             }
         }
@@ -55,7 +55,7 @@ public class ProfileMapHandler implements ProfileHandler {
     public Map<String, Object> getChildren(String newKey) {
         Map<String, Object> rs = new LinkedHashMap<>();
         for (Map.Entry<?, ?> entry : param.entrySet()) {
-            if (PathMatcher.APACHE_INSTANCE.match(newKey, entry.getKey().toString())) {
+            if (PathMatcher.INSTANCE.match(newKey, entry.getKey().toString())) {
                 rs.put(entry.getKey().toString(), entry.getValue());
             }
         }

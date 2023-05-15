@@ -1,14 +1,13 @@
 package com.chua.common.support.resource.repository.resolver;
 
-import com.chua.common.support.context.annotation.AutoInject;
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.matcher.PathMatcher;
-import com.chua.common.support.repository.Metadata;
-import com.chua.common.support.repository.UrlMetadata;
 import com.chua.common.support.resource.ResourceConfiguration;
 import com.chua.common.support.resource.finder.ClassPathAnyResourceFinder;
 import com.chua.common.support.resource.finder.ClassPathResourceFinder;
 import com.chua.common.support.resource.finder.ResourceFinder;
-import com.chua.common.support.spi.Spi;
+import com.chua.common.support.resource.repository.Metadata;
+import com.chua.common.support.resource.repository.UrlMetadata;
 
 import java.net.URL;
 import java.util.List;
@@ -25,8 +24,7 @@ import static com.chua.common.support.constant.CommonConstant.*;
 @Spi("classpath")
 public final class ClasspathResolver implements Resolver {
 
-    @AutoInject
-    private PathMatcher pathMatcher;
+    private PathMatcher pathMatcher = PathMatcher.INSTANCE;
 
     @Override
     public List<Metadata> resolve(URL root, String name) {

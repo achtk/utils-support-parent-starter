@@ -1,19 +1,16 @@
 package com.chua.common.support.bean;
 
 
+import com.chua.common.support.annotations.ExportProperty;
 import com.chua.common.support.collection.ConcurrentReferenceHashMap;
-import com.chua.common.support.file.export.ExportProperty;
 import com.chua.common.support.json.Json;
 import com.chua.common.support.utils.ClassUtils;
+import com.chua.common.support.utils.StringUtils;
 import com.chua.common.support.value.Value;
-import com.google.common.base.Strings;
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 
 import java.beans.BeanInfo;
 import java.lang.reflect.Modifier;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 
@@ -25,7 +22,7 @@ import java.util.stream.Collectors;
 @SuppressWarnings("ALL")
 public class BeanMap extends LinkedHashMap<String, Object> {
 
-    private static final Cache<String, BeanMap> CACHE = CacheBuilder.newBuilder().expireAfterWrite(3, TimeUnit.MINUTES).build();
+    private static final Map<String, BeanMap> CACHE = new ConcurrentReferenceHashMap<>(64);
 
     private static final BeanMap EMPTY = new BeanMap(null, false);
 
@@ -270,7 +267,7 @@ public class BeanMap extends LinkedHashMap<String, Object> {
                         newKey = key.substring(0, index);
                         splitKey = key.substring(index + 1);
                     }
-                    if (!Strings.isNullOrEmpty(splitKey)) {
+                    if (!StringUtils.isNullOrEmpty(splitKey)) {
                         map.put(newKey, levelOpenMap(splitKey, value));
                     } else {
                         map.put(newKey, value);

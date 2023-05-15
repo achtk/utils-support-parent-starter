@@ -1,11 +1,11 @@
 package com.chua.common.support.bean;
 
-import com.chua.common.support.context.environment.Environment;
 import com.chua.common.support.converter.Converter;
+import com.chua.common.support.lang.environment.Environment;
+import com.chua.common.support.unit.name.NamingCase;
 import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.StringUtils;
 import com.chua.common.support.value.Value;
-import com.google.common.base.Strings;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
@@ -46,15 +46,7 @@ public class BeanBinder {
      * @return 结果
      */
     public static BeanBinder of(Environment environment) {
-        return new BeanBinder(new ProfileHandler() {
-            @Override
-            public Object getProperty(String name) {
-
-                return environment.getProperty(name);
-            }
-
-
-        });
+        return new BeanBinder(environment::getProperty);
     }
 
     /**
@@ -100,7 +92,7 @@ public class BeanBinder {
     private <T> void bind(String pre, Class<T> target, T forObject) {
         ClassUtils.doWithFields(target, field -> {
             String name = getName(field);
-            String key = Strings.isNullOrEmpty(pre) ? name : StringUtils.endWithAppend(pre, ".").concat(name);
+            String key = StringUtils.isNullOrEmpty(pre) ? name : StringUtils.endWithAppend(pre, ".").concat(name);
             Class<?> type = field.getType();
             Object value = getValue(key, type);
             if (null == value) {
@@ -202,6 +194,6 @@ public class BeanBinder {
      */
     private String getName(Field field) {
         BeanProperty beanProperty = field.getDeclaredAnnotation(BeanProperty.class);
-        return null == beanProperty ? Converter.toCamelHyphen(field.getName()) : beanProperty.value();
+        return null == beanProperty ? NamingCase.toKebabCase(field.getName()) : beanProperty.value();
     }
 }

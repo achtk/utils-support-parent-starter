@@ -4,7 +4,7 @@ import com.chua.common.support.bean.BeanMap;
 import com.chua.common.support.constant.CommonConstant;
 import com.chua.common.support.utils.CollectionUtils;
 import com.chua.common.support.utils.MapUtils;
-import com.google.common.base.Strings;
+import com.chua.common.support.utils.StringUtils;
 
 import java.util.*;
 
@@ -52,7 +52,7 @@ public class LevelsOpen implements Levels {
                     newKey = key.substring(0, index);
                     splitKey = key.substring(index + 1);
                 }
-                if (!Strings.isNullOrEmpty(splitKey)) {
+                if (!StringUtils.isNullOrEmpty(splitKey)) {
                     map.put(newKey, levelOpenMap(splitKey, value));
                 } else {
                     map.put(newKey, value);

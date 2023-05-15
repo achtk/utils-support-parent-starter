@@ -6,6 +6,7 @@ import static com.chua.common.support.constant.NumberConstant.SIX;
 
 /**
  * 命名规则封装，主要是针对驼峰风格命名、连接符命名等的封装
+ *
  * @author CH
  */
 public class NamingCase {
@@ -363,6 +364,7 @@ public class NamingCase {
         }
         return sbu.toString();
     }
+
     /**
      * <p>
      * 检查是否为数字字符，数字字符指0~9
@@ -382,5 +384,29 @@ public class NamingCase {
      */
     private static boolean isNumber(char ch) {
         return ch >= '0' && ch <= '9';
+    }
+
+    /**
+     * 减号转驼峰(首字母小写)
+     * <pre>
+     *     toHyphenLowerCamel("user-name") = userName
+     * </pre>
+     *
+     * @param source 原始数据
+     * @return 下划线数据
+     */
+    public static String toHyphenLowerCamel(String source) {
+        int len = source.length();
+        StringBuilder sb = new StringBuilder(len);
+        for (int i = 0; i < len; i++) {
+            char c = source.charAt(i);
+            if (c == UNDERLINE) {
+                ++i;
+                sb.append(Character.toUpperCase(source.charAt(i)));
+            } else {
+                sb.append(c);
+            }
+        }
+        return sb.toString();
     }
 }

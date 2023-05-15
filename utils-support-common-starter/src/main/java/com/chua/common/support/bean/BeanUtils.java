@@ -2,10 +2,10 @@ package com.chua.common.support.bean;
 
 import com.chua.common.support.collection.ConcurrentReferenceHashMap;
 import com.chua.common.support.converter.Converter;
+import com.chua.common.support.unit.name.NamingCase;
 import com.chua.common.support.utils.ArrayUtils;
 import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.MapUtils;
-import com.chua.common.support.utils.PreconditionUtils;
 import lombok.Data;
 
 import java.beans.BeanInfo;
@@ -18,6 +18,8 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+
+import static lombok.Lombok.checkNotNull;
 
 /**
  * bean tools
@@ -154,8 +156,8 @@ public class BeanUtils {
      * @param ignoreProperties 忽略字段
      */
     private static void copyPropertiesBean(Object source, Object target, String[] ignoreProperties) {
-        PreconditionUtils.notNull(source, "源对象不能为空");
-        PreconditionUtils.notNull(target, "目标对象不能为空");
+        checkNotNull(source, "源对象不能为空");
+        checkNotNull(target, "目标对象不能为空");
         Class<?> targetClass = target.getClass();
 
         if (target instanceof Map) {
@@ -240,12 +242,12 @@ public class BeanUtils {
             if (null != string) {
                 return string;
             }
-            string = MapUtils.getString(source1, Converter.toCamelUnderscore(name));
+            string = MapUtils.getString(source1, NamingCase.toUnderlineCase(name));
             if (null != string) {
                 return string;
             }
 
-            string = MapUtils.getString(source1, Converter.toCamelUnderscore(name).toUpperCase());
+            string = MapUtils.getString(source1, NamingCase.toUnderlineCase(name).toUpperCase());
             if (null != string) {
                 return string;
             }
@@ -293,12 +295,12 @@ public class BeanUtils {
             if (null != string) {
                 return string;
             }
-            string = MapUtils.getString(source1, Converter.toCamelUnderscore(name));
+            string = MapUtils.getString(source1,  NamingCase.toUnderlineCase(name));
             if (null != string) {
                 return string;
             }
 
-            string = MapUtils.getString(source1, Converter.toCamelUnderscore(name).toUpperCase());
+            string = MapUtils.getString(source1, NamingCase.toUnderlineCase(name).toUpperCase());
             if (null != string) {
                 return string;
             }

@@ -1,7 +1,8 @@
 package com.chua.common.support.lang.process;
 
 
-import com.google.common.base.Strings;
+
+import com.chua.common.support.utils.StringUtils;
 
 import java.text.DecimalFormat;
 import java.time.Duration;
@@ -9,8 +10,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.function.Function;
 
-import static com.chua.common.support.process.StringDisplayUtils.getStringDisplayLength;
-import static com.chua.common.support.process.StringDisplayUtils.trimDisplayLength;
+import static com.chua.common.support.lang.process.StringDisplayUtils.getStringDisplayLength;
+import static com.chua.common.support.lang.process.StringDisplayUtils.trimDisplayLength;
 
 
 /**
@@ -93,7 +94,7 @@ public class DefaultProgressBarRenderer implements ProgressBarRenderer {
         }
         if(progressStyle != ProgressStyle.LOADING) {
             String c = progressStyle.format(String.valueOf(progress.current / unitSize));
-            return Util.repeat(' ', m.length() - c.length()) + c + (!Strings.isNullOrEmpty(m) ? ("/" + m) : m ) + unitName;
+            return Util.repeat(' ', m.length() - c.length()) + c + (!StringUtils.isNullOrEmpty(m) ? ("/" + m) : m ) + unitName;
         }
         return Util.repeat(' ', m.length()) + m + unitName;
     }

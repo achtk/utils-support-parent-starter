@@ -1,6 +1,6 @@
 package com.chua.common.support.resource.repository.resolver;
 
-import com.chua.common.support.repository.Metadata;
+import com.chua.common.support.resource.repository.Metadata;
 
 import java.net.URL;
 import java.util.List;

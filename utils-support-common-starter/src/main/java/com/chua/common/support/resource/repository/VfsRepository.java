@@ -1,14 +1,11 @@
 package com.chua.common.support.resource.repository;
 
-import com.chua.common.support.context.environment.StandardEnvironment;
-import com.chua.common.support.context.factory.ApplicationContextBuilder;
-import com.chua.common.support.context.factory.ConfigurableBeanFactory;
 import com.chua.common.support.matcher.PathMatcher;
-import com.chua.common.support.repository.resolver.Resolver;
+import com.chua.common.support.resource.repository.resolver.Resolver;
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.ArrayUtils;
 import com.chua.common.support.utils.FileUtils;
-import com.google.common.base.Strings;
+import com.chua.common.support.utils.StringUtils;
 
 import java.net.URL;
 import java.util.Arrays;
@@ -53,7 +50,7 @@ public class VfsRepository implements Repository {
      */
     @Override
     public List<Metadata> getMetadata(String path) {
-        if(Strings.isNullOrEmpty(path)) {
+        if(StringUtils.isNullOrEmpty(path)) {
             return Arrays.stream(url).map(UrlMetadata::new).collect(Collectors.toList());
         }
 

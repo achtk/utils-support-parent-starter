@@ -8,10 +8,7 @@ import java.nio.charset.Charset;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -1934,4 +1931,41 @@ public class StringUtils {
         return source.substring(0, limit);
     }
 
+    /**
+     * 移除标识之后的数据
+     *
+     * @param resource 路径
+     * @param s        标识
+     * @return 结果
+     */
+    public static String removeSuffixContains(String resource, String s) {
+        if (isEmpty(resource) || isEmpty(s) || !resource.contains(s)) {
+            return resource;
+        }
+
+        return resource.substring(0, resource.indexOf(s));
+    }
+
+    /**
+     * Convert a {@code String} array into a delimited {@code String} (e.g. CSV).
+     * <p>Useful for {@code toString()} implementations.
+     *
+     * @param arr   the array to display (potentially {@code null} or empty)
+     * @param delim the delimiter to use (typically a ",")
+     * @return the delimited {@code String}
+     */
+    public static String arrayToDelimitedString(Object[] arr, String delim) {
+        if (ArrayUtils.isEmpty(arr)) {
+            return "";
+        }
+        if (arr.length == 1) {
+            return ObjectUtils.nullSafeToString(arr[0]);
+        }
+
+        StringJoiner sj = new StringJoiner(delim);
+        for (Object elem : arr) {
+            sj.add(String.valueOf(elem));
+        }
+        return sj.toString();
+    }
 }
