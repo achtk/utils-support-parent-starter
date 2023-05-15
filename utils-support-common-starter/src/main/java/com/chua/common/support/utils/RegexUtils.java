@@ -3,13 +3,14 @@ package com.chua.common.support.utils;
 import com.chua.common.support.constant.CommonConstant;
 import com.chua.common.support.constant.RegexConstant;
 
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.chua.common.support.constant.NumberConstant.FOUR;
 
 /**
  * regex
@@ -621,7 +622,7 @@ public class RegexUtils {
             return false;
         } else {
         }
-        if (str.length() % 4 != 0) {
+        if (str.length() % FOUR != 0) {
             return false;
         }
 

@@ -10,10 +10,16 @@ import java.util.*;
  */
 public class MultiLinkedValueMap<K, V> implements MultiValueMap<K, V>, Serializable {
 
-    private final Map<K, List<V>> targetMap;
+    private Map<K, List<V>> targetMap;
 
-    public MultiLinkedValueMap(Map<K, List<V>> targetMap) {
-        this.targetMap = targetMap;
+    public MultiLinkedValueMap(Map<K, V> targetMap) {
+        this();
+        targetMap.forEach(this::add);
+    }
+
+    public MultiLinkedValueMap(MultiValueMap<K, V> targetMap) {
+        this();
+        this.targetMap.putAll(targetMap);
     }
 
     public MultiLinkedValueMap() {

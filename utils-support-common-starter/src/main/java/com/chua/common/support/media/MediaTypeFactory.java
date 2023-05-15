@@ -2,6 +2,7 @@ package com.chua.common.support.media;
 
 import com.chua.common.support.collection.MultiLinkedValueMap;
 import com.chua.common.support.collection.MultiValueMap;
+import com.chua.common.support.utils.FileUtils;
 import com.chua.common.support.utils.IoUtils;
 import com.chua.common.support.utils.StringUtils;
 
@@ -93,7 +94,7 @@ public class MediaTypeFactory {
         List<MediaType> mediaTypes = null;
         String ext = filename;
 
-        while (!Strings.isNullOrEmpty(ext = FileUtils.getSimpleExtension(ext))) {
+        while (!StringUtils.isEmpty(ext = FileUtils.getSimpleExtension(ext))) {
             mediaTypes = FILE_EXTENSION_TO_MEDIA_TYPES.get(ext.toLowerCase(Locale.ENGLISH));
             if (null == mediaTypes) {
                 continue;

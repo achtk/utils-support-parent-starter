@@ -1,8 +1,6 @@
 package com.chua.common.support.ansi;
 
 
-import org.springframework.util.Assert;
-
 import java.util.Locale;
 
 /**
@@ -36,7 +34,6 @@ public abstract class AnsiOutput {
      * @param enabled if ANSI is enabled, disabled or detected
      */
     public static void setEnabled(Enabled enabled) {
-        Assert.notNull(enabled, "Enabled must not be null");
         AnsiOutput.enabled = enabled;
     }
 

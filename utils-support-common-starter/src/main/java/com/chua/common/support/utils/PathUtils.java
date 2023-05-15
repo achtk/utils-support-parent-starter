@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_DOT;
+
 /**
  * 路径工具
  *
@@ -197,10 +199,10 @@ public class PathUtils {
      * @return 文件
      */
     public static File createFile(int pageCount, int pageIndex, String targetPath, String type) {
-        if (pageCount == 1 && targetPath.contains(".")) {
+        if (pageCount == 1 && targetPath.contains(SYMBOL_DOT)) {
             return new File(targetPath);
         }
-        return new File(targetPath + "-" + pageIndex + "." + type);
+        return new File(targetPath + "-" + pageIndex + SYMBOL_DOT + type);
     }
 
     /**

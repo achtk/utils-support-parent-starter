@@ -12,6 +12,9 @@ import java.util.regex.Pattern;
  * @author ACHTK
  */
 public final class CommonConstant {
+    public static final String WILDCARD = "*";
+    public static final int INVALID_EXITVALUE = 0xdeadbeef;
+
     public static final int MAX_HTTP_CONTENT_LENGTH = 1024 * 1024 * 10;
     public static final int MAX_CACHED_BUILDER_SIZE = 8 * 1024;
     public static final int MAX_IDLE_BUILDERS = 8;

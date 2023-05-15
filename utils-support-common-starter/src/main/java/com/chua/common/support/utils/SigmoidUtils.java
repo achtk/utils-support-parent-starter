@@ -22,9 +22,8 @@ public class SigmoidUtils {
      * @return 导
      */
     public static double sigmoidDerivative(double value) {
-        double A = sigmoid(value);
-        double B = 1 - sigmoid(value);
-        double result = A * B;
-        return result;
+        double a = sigmoid(value);
+        double b = 1 - sigmoid(value);
+        return a * b;
     }
 }

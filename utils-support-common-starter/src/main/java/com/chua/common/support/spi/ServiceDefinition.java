@@ -6,7 +6,6 @@ import com.chua.common.support.spi.finder.ServiceFinder;
 import lombok.Data;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 
 /**
@@ -90,6 +89,11 @@ public class ServiceDefinition {
                 return (T) serviceAutowire.autowire(constructor.newInstance(args));
             } catch (Exception ignored) {
             }
+        }
+
+        try {
+            return (T) implClass.newInstance();
+        } catch (Exception ignored) {
         }
         return null;
     }

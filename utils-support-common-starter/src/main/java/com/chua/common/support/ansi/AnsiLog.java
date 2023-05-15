@@ -1,8 +1,6 @@
 package com.chua.common.support.ansi;
 
 
-import com.chua.common.support.utils.OsUtils;
-
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 
@@ -245,7 +243,7 @@ public abstract class AnsiLog {
         ERROR_COLOR_PREFIX = "[" + colorStr("ERROR", 31) + "] ";
         if (System.console() != null) {
             enableColor = true;
-            if (OsUtils.isWindows()) {
+            if (Projects.isWindows()) {
                 enableColor = false;
             }
         }

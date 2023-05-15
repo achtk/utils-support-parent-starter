@@ -1,6 +1,8 @@
 package com.chua.common.support.file;
 
 import com.chua.common.support.constant.FileType;
+import com.chua.common.support.media.MediaType;
+import com.chua.common.support.media.MediaTypeFactory;
 import lombok.Builder;
 import lombok.Data;
 

@@ -1,6 +1,7 @@
 package com.chua.common.support.log;
 
 
+import com.chua.common.support.constant.Level;
 import com.chua.common.support.spi.ServiceProvider;
 
 /**
@@ -29,14 +30,7 @@ public interface Log {
      * @return log
      */
     public static Log getLogger(String impl, Class<?> type) {
-        switch (impl) {
-            case "NOLOG":
-                return new NoSysLog();
-            case "SYS":
-                return new SysLog();
-            default:
-                return new Slf4jLog();
-        }
+        return ServiceProvider.of(Log.class).getNewExtension(impl, type);
     }
 
     /**
@@ -100,4 +94,36 @@ public interface Log {
      * @param args    参数
      */
     void info(String message, Object... args);
+
+    /**
+     * 日志
+     * @param level 等级
+     * @param message 消息
+     * @param args 参数
+     */
+    default void log(Level level, String message, Object... args) {
+        if(level.getLevel() >= Level.TRACE.getLevel() ) {
+            trace(message, args);
+            return;
+        }
+        if(level.getLevel() >= Level.DEBUG.getLevel() ) {
+            debug(message, args);
+            return;
+        }
+
+        if(level.getLevel() >= Level.INFO.getLevel() ) {
+            info(message, args);
+            return;
+        }
+
+        if(level.getLevel() >= Level.WARN.getLevel() ) {
+            warn(message, args);
+            return;
+        }
+
+        if(level.getLevel() >= Level.ERROR.getLevel() ) {
+            error(message, args);
+            return;
+        }
+    }
 }

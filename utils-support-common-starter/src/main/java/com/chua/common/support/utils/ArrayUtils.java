@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.chua.common.support.constant.CommonConstant.INDEX_NOT_FOUND;
-import static com.chua.common.support.constant.CommonConstant.SYMBOL_ASTERISK;
 
 /**
  * array
+ *
  * @author CH
  */
 public class ArrayUtils {
@@ -27,6 +27,7 @@ public class ArrayUtils {
     public static boolean isArray(Object obj) {
         return null != obj && obj.getClass().isArray();
     }
+
     /**
      * 是否包含{@code null}元素
      *
@@ -543,34 +544,6 @@ public class ArrayUtils {
     }
 
     /**
-     * 是否匹配
-     *
-     * @param array 数组
-     * @param name  名称
-     * @return 是否匹配
-     */
-    public static boolean isMatch(String[] array, String name) {
-        if (isEmpty(array)) {
-            return false;
-        }
-
-        for (String s : array) {
-            if (s.contains(SYMBOL_ASTERISK)) {
-                if (ApachePathMatcher.APACHE_INSTANCE.match(s, name)) {
-                    return true;
-                }
-                continue;
-            }
-
-            if (s.equals(name)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * 联合两个数组
      *
      * @param target 第一个数组
@@ -588,42 +561,28 @@ public class ArrayUtils {
         T[] instance = (T[]) Array.newInstance(result.get(0).getClass(), 0);
         return result.toArray(instance);
     }
+
     /**
-     * 集合转为数组
+     * 对象转为数组
      *
-     * @param columns    字段顺序
-     * @param collection 集合
+     * @param iterable iterable
+     * @param array    对象
      * @return 数组
      */
-    public static Object[][] toArrays(List<String> columns, List<?> collection) {
-        Object[][] rs = new Object[collection.size()][columns.size()];
-        for (int i = 0; i < collection.size(); i++) {
-            Object o = collection.get(i);
-            Object[] objects = toArray(columns, o);
-            for (int j = 0; j < columns.size(); j++) {
-                rs[i][j] = objects[j];
-            }
-        }
-
-        return rs;
+    public static <T> T[] toArray(Iterable<? extends T> iterable, T[] array) {
+        List<? extends T> ts = CollectionUtils.newArrayList(iterable);
+        return ts.toArray(array);
     }
 
     /**
      * 对象转为数组
      *
-     * @param columns 字段顺序
-     * @param o       对象
+     * @param iterable iterable
      * @return 数组
      */
-    private static Object[] toArray(List<String> columns, Object o) {
-        BeanMap beanMap = BeanMap.of(o);
-        Object[] rs = new Object[columns.size()];
-        for (int i = 0; i < columns.size(); i++) {
-            String column = columns.get(i);
-            rs[i] = beanMap.get(column);
-        }
-
-        return rs;
+    public static <T> T[] toArray(Iterable<? extends T> iterable) {
+        List<? extends T> ts = CollectionUtils.newArrayList(iterable);
+        return (T[]) ts.toArray();
     }
 
     /**
@@ -769,18 +728,20 @@ public class ArrayUtils {
 
     /**
      * 是否全部为空
+     *
      * @param arr 数组
      * @return 是否全部为空
      */
     public static boolean allEmpty(Object[] arr) {
         for (Object o : arr) {
-            if(null != o) {
+            if (null != o) {
                 return false;
             }
         }
 
         return true;
     }
+
     /**
      * 数组或集合转String
      *

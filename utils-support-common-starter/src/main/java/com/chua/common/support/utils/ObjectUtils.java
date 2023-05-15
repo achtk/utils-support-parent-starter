@@ -260,4 +260,23 @@ public class ObjectUtils {
         }
         return hash;
     }
+
+    /**
+     * 获取hashcode
+     * @param objects objects
+     * @return hashcode
+     */
+    public static int hashCode(Object... objects) {
+        return Arrays.hashCode(objects);
+    }
+
+    /**
+     * 第一个不为空的值
+     * @param v1 v1
+     * @param v2 v2
+     * @return 值
+     */
+    public static <T>T firstNonNull(T v1, T v2) {
+        return null == v1 ? v2 : v1;
+    }
 }

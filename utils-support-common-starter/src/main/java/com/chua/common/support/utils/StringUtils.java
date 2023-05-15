@@ -1,6 +1,7 @@
 package com.chua.common.support.utils;
 
 import com.chua.common.support.date.DateUtils;
+import com.chua.common.support.lang.Ascii;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
@@ -17,6 +18,7 @@ import java.util.regex.Pattern;
 
 import static com.chua.common.support.constant.CommonConstant.*;
 import static com.chua.common.support.date.constant.DateFormatConstant.*;
+import static com.chua.common.support.utils.Preconditions.checkArgument;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
@@ -851,12 +853,12 @@ public class StringUtils {
         } else {
             int length = str.length();
             int start = 0;
-            int end = length;// 扫描字符串头部
+            int end = length;
             if (mode <= 0) {
                 while ((start < end) && (predicate.test(str.charAt(start)))) {
                     start++;
                 }
-            }// 扫描字符串尾部
+            }
             if (mode >= 0) {
                 while ((start < end) && (predicate.test(str.charAt(end - 1)))) {
                     end--;
@@ -1412,7 +1414,7 @@ public class StringUtils {
         }
         int pads = size - str.length();
         if (pads <= 0) {
-            return str; // returns original String when possible
+            return str;
         }
         if (pads > PAD_LIMIT) {
             return leftPad(str, size, String.valueOf(padChar));
@@ -1454,7 +1456,7 @@ public class StringUtils {
         int strLen = str.length();
         int pads = size - strLen;
         if (pads <= 0) {
-            return str; // returns original String when possible
+            return str;
         }
         if (padLen == 1 && pads <= PAD_LIMIT) {
             return leftPad(str, size, padStr.charAt(0));
@@ -1750,5 +1752,141 @@ public class StringUtils {
         } else {
             return source;
         }
+    }
+
+    /**
+     * 根据分隔列表获取字符串数组
+     *
+     * @param source    数据
+     * @param delimiter 分隔符
+     * @return String[]
+     */
+    public static String[] delimitedListToStringArray(String source, String delimiter) {
+        return delimitedListToStringArray(source, delimiter, null);
+    }
+
+    /**
+     * 根据分隔列表获取字符串数组
+     *
+     * @param source        数据
+     * @param delimiter     分隔符
+     * @param charsToDelete 删除符号
+     * @return String[]
+     */
+    public static String[] delimitedListToStringArray(String source, String delimiter, String charsToDelete) {
+        if (source == null) {
+            return new String[0];
+        }
+        if (delimiter == null) {
+            return new String[]{source};
+        }
+
+        List<String> result = new ArrayList<>();
+        if (delimiter.isEmpty()) {
+            for (int i = 0; i < source.length(); i++) {
+                result.add(deleteAny(source.substring(i, i + 1), charsToDelete));
+            }
+        } else {
+            int pos = 0;
+            int delPos;
+            while ((delPos = source.indexOf(delimiter, pos)) != -1) {
+                result.add(deleteAny(source.substring(pos, delPos), charsToDelete));
+                pos = delPos + delimiter.length();
+            }
+            if (source.length() > 0 && pos <= source.length()) {
+                result.add(deleteAny(source.substring(pos), charsToDelete));
+            }
+        }
+        return result.toArray(new String[0]);
+    }
+
+    /**
+     * 删除字符串
+     * <pre>
+     *     capitalize("11", 1) = ""
+     *     capitalize("t1", "") = "t1"
+     *     capitalize(null, "1") = null
+     *     capitalize("//", "1") = "//"
+     *     capitalize("T1", "1") = "T"
+     * </pre>
+     *
+     * @param source        源数据
+     * @param charsToDelete 待删除字符
+     * @return 删除后的字符串
+     */
+    public static String deleteAny(String source, String charsToDelete) {
+        if (isEmpty(source) || isEmpty(charsToDelete)) {
+            return source;
+        }
+
+        StringBuilder sb = new StringBuilder(source.length());
+        for (int i = 0; i < source.length(); i++) {
+            char c = source.charAt(i);
+            if (charsToDelete.indexOf(c) == -1) {
+                sb.append(c);
+            }
+        }
+        return sb.toString();
+    }
+
+    /**
+     * 第一个字符大写
+     * <pre>
+     *     capitalize("11") = "11"
+     *     capitalize("t1") = "T1"
+     *     capitalize(null) = null
+     *     capitalize("//") = "/"
+     * </pre>
+     *
+     * @param source 数据
+     * @return String
+     */
+    public static String capitalize(String source) {
+        return changeFirstCharacterCase(source, true);
+    }
+
+    /**
+     * 第一个字符大小写
+     * <pre>
+     *     capitalize("11", true) = "11"
+     *     capitalize("t1", true) = "T1"
+     *     capitalize(null, true) = null
+     *     capitalize("//", true) = "//"
+     *     capitalize("T1", false) = "t1"
+     * </pre>
+     *
+     * @param source     数据
+     * @param capitalize true:大写, false: 小写
+     * @return String
+     */
+    public static String changeFirstCharacterCase(String source, boolean capitalize) {
+        if (!isEmpty(source)) {
+            return source;
+        }
+
+        char baseChar = source.charAt(0);
+        char updatedChar;
+        if (capitalize) {
+            updatedChar = Character.toUpperCase(baseChar);
+        } else {
+            updatedChar = Character.toLowerCase(baseChar);
+        }
+        if (baseChar == updatedChar) {
+            return source;
+        }
+
+        char[] chars = source.toCharArray();
+        chars[0] = updatedChar;
+        return new String(chars, 0, chars.length);
+    }
+
+    /**
+     * 标准化
+     * @param token token
+     * @return 标准化
+     */
+    public static String normalizeToken(String token) {
+        checkArgument(!token.isEmpty());
+        return Ascii.toLowerCase(token);
     }
 }

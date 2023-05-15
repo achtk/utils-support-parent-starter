@@ -1,5 +1,8 @@
 package com.chua.common.support.utils;
 
+import com.chua.common.support.collection.MultiLinkedValueMap;
+import com.chua.common.support.collection.MultiValueMap;
+import com.chua.common.support.constant.NumberConstant;
 import com.chua.common.support.converter.Converter;
 import com.chua.common.support.function.Splitter;
 
@@ -1132,4 +1135,89 @@ public class MapUtils {
         return tpl;
     }
 
+    /**
+     * 生成索引集合
+     *
+     * @param valuesInOrder list
+     * @param <T>           类型
+     * @return 索引集合
+     */
+    public static <T> Map<T, Integer> indexMap(List<T> valuesInOrder) {
+        Map<T, Integer> rs = new HashMap<>(valuesInOrder.size());
+        int i = 0;
+        for (T t : valuesInOrder) {
+            rs.put(t, i++);
+        }
+
+        return rs;
+    }
+
+    /**
+     * 获取key
+     * @return key
+     */
+    @SuppressWarnings("unchecked")
+    public static <K extends Object> Function<Map.Entry<K, ?>, K> keyFunction() {
+        return Map.Entry::getKey;
+    }
+
+    /**
+     * 获取value
+     * @return value
+     */
+    @SuppressWarnings("unchecked")
+    public static <V extends Object> Function<Map.Entry<?, V>, V> valueFunction() {
+        return Map.Entry::getValue;
+    }
+
+
+    /**
+     * 初始化
+     * @return map
+     * @param <K> k
+     * @param <V> v
+     */
+    public static <K, V> Map<K, V> newHashMap() {
+        return new HashMap<>(DEFAULT_INITIAL_CAPACITY);
+    }
+    /**
+     * HashMap
+     * @param k k
+     * @param v v
+     * @return map
+     */
+    public static <K, V>Map<K, V> ofHashMap(K k, V v) {
+        Map<K, V> rs = new HashMap<>();
+        rs.put(k, v);
+        return rs;
+    }
+    /**
+     * multimap
+     * @param k k
+     * @param v v
+     * @return map
+     */
+    public static <K, V>Map<K, V> ofLinkedMap(K k, V v) {
+        Map<K, V> rs = new LinkedHashMap<>();
+        rs.put(k, v);
+        return rs;
+    }
+    /**
+     * multimap
+     * @param k k
+     * @param v v
+     * @return map
+     */
+    public static <K, V>MultiValueMap<K, V> ofMultiMap(K k, V v) {
+        MultiValueMap<K, V> rs = new MultiLinkedValueMap<>();
+        rs.add(k, v);
+        return rs;
+    }
+    /**
+     * multimap
+     * @return map
+     */
+    public static <K, V>MultiValueMap<K, V> ofMultiMap() {
+        return new MultiLinkedValueMap<>();
+    }
 }

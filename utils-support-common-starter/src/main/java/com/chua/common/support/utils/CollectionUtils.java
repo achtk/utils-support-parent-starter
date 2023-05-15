@@ -66,6 +66,17 @@ public class CollectionUtils {
     /**
      * 集合是否为空
      *
+     * @param it 集合
+     * @param <E>        类型
+     * @return 集合是否为空
+     */
+    public static <E> boolean isEmpty(Iterable<? extends E> it) {
+        return null == it || !it.iterator().hasNext();
+    }
+
+    /**
+     * 集合是否为空
+     *
      * @param collection 集合
      * @param <E>        类型
      * @return 集合是否为空
@@ -408,44 +419,90 @@ public class CollectionUtils {
     /**
      * 添加数据
      *
-     * @param source  元数据
+     * @param elements  元数据
      * @param element 元素
      */
-    public static <E> void addAll(List<E> source, E... element) {
-        if (null == source || element.length == 0) {
-            return;
+    public static <E> List<E> addAll(List<E> elements, E... element) {
+        if (null == elements || element.length == 0) {
+            return Collections.emptyList();
         }
 
         for (E e : element) {
             if (null == e) {
                 continue;
             }
-            source.add(e);
+            elements.add(e);
         }
+
+        return elements;
     }
 
     /**
      * 添加数据
      *
-     * @param source  元数据
+     * @param elements  元数据
      * @param element 元素
      */
-    public static <E> void addAll(List<E> source, List<E> element) {
-        if (null == source || null == element) {
-            return;
+    public static <E> List<E> addAll(List<E> elements, List<E> element) {
+        if (null == elements || null == element) {
+            return Collections.emptyList();
         }
 
-        source.addAll(element);
+        elements.addAll(element);
+        return elements;
     }
 
     /**
      * 返回集合
-     * @param list 数组
+     * @param elements 数组
      * @return 集合
      * @param <T> 类型
      */
-    public static <T>List<T> newArrayList(T[] list) {
-        return null == list ? Collections.emptyList() : Arrays.asList(list);
+    public static <T>List<T> newArrayList(T[] elements) {
+        return null == elements ? Collections.emptyList() : Arrays.asList(elements);
+    }
+
+    /**
+     * 返回集合
+     * @param elements 数组
+     * @return 集合
+     * @param <E> 类型
+     */
+    @SuppressWarnings("all")
+    public static <E>List<E> newArrayList(Iterable<? extends E> elements) {
+        if(null == elements) {
+            return Collections.emptyList();
+        }
+
+        if(elements instanceof Collection) {
+            return Collections.unmodifiableList(new LinkedList<>((Collection)elements));
+        }
+
+        return newArrayList(elements.iterator());
+    }
+
+    /**
+     * 初始化
+     * @param elements 元素
+     * @return 集合
+     * @param <E> 类型
+     */
+    public static <E> List<E> newArrayList(Iterator<? extends E> elements) {
+        if (!elements.hasNext()) {
+            return Collections.emptyList();
+        }
+        E first = elements.next();
+        if (!elements.hasNext()) {
+            return Collections.unmodifiableList(addAll(new ArrayList<>(), first));
+        }
+
+        List<E> rs = new LinkedList<>();
+        rs.add(first);
+
+        while (elements.hasNext()) {
+            rs.add(elements.next());
+        }
+        return Collections.unmodifiableList(rs);
     }
     /**
      * 返回集合

@@ -1,7 +1,7 @@
 package com.chua.common.support.converter.definition;
 
+import com.chua.common.support.function.Splitter;
 import com.chua.common.support.json.Json;
-import com.google.common.base.Splitter;
 
 import java.util.*;
 

@@ -9,10 +9,10 @@
 
 package com.chua.common.support.file.xz;
 
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.file.AbstractCompress;
 import com.chua.common.support.file.Decompress;
 import com.chua.common.support.file.FileMedia;
-import com.chua.common.support.spi.Spi;
 import com.chua.common.support.utils.IoUtils;
 
 import java.io.*;

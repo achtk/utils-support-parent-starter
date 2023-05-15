@@ -1,6 +1,6 @@
 package com.chua.common.support.date.range;
 
-import com.google.common.collect.Range;
+import com.chua.common.support.range.Range;
 
 import java.time.LocalDateTime;
 

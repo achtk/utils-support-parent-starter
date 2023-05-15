@@ -2447,7 +2447,7 @@ public class NumberUtils {
      * @return 结果
      */
     public static double isZero(double value, double defaultValue) {
-        return value == 0.0D ? defaultValue : value;
+        return value == 0.0d ? defaultValue : value;
     }
 
     /**
@@ -2495,7 +2495,7 @@ public class NumberUtils {
         for (int i = 0; i < lists.size(); i++) {
             Integer highLevelIndex = lists.size() - i - 1;
             String single = lists.get(i);
-            String nextResult = getNumberFromFChinese(single);
+            String nextResult = getNumberFromChinese(single);
             if (SYMBOL_EOF.equals(nextResult)) {
                 throw new NumberFormatException();
             }
@@ -2513,7 +2513,7 @@ public class NumberUtils {
      * @param single 中文数字
      * @return 4位数阿拉伯数字
      */
-    private static String getNumberFromFChinese(String single) {
+    private static String getNumberFromChinese(String single) {
         String result = "0";
         int highIndex = 1;
         for (int i = 0; i < single.length(); i++) {

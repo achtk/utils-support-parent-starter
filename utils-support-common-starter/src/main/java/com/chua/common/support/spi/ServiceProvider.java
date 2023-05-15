@@ -1,6 +1,7 @@
 package com.chua.common.support.spi;
 
 
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.function.NameAware;
 import com.chua.common.support.spi.autowire.AutoServiceAutowire;
@@ -10,6 +11,8 @@ import com.chua.common.support.spi.finder.CustomServiceFinder;
 import com.chua.common.support.spi.finder.SamePackageServiceFinder;
 import com.chua.common.support.spi.finder.ServiceFinder;
 import com.chua.common.support.utils.ClassUtils;
+import com.chua.common.support.utils.Preconditions;
+import com.chua.common.support.utils.StringUtils;
 import com.chua.common.support.value.Value;
 
 import java.util.*;
@@ -30,6 +33,7 @@ public class ServiceProvider<T> implements InitializingAware {
     private final Value<Class<T>> value;
     private final ClassLoader classLoader;
     private final ServiceAutowire serviceAutowire;
+    private static final Map<Class<?>, String> SPI_NAME = new HashMap<>();
 
     private final Map<String, SortedSet<ServiceDefinition>> definitions = new ConcurrentHashMap<>();
 
@@ -321,5 +325,25 @@ public class ServiceProvider<T> implements InitializingAware {
         }
 
         return (T) Optional.ofNullable(getDefinition(name).getObj(serviceAutowire)).orElse(defaultImpl);
+    }
+
+
+    public T getSpiService() {
+        Preconditions.checkArgument(!value.isNull());
+        String s = SPI_NAME.get(value.getValue());
+        if (StringUtils.isEmpty(s)) {
+            Spi spi = value.getValue().getDeclaredAnnotation(Spi.class);
+            if (null == spi) {
+                throw new IllegalStateException("The " + value.getValue().getName() + " must contain the [@Spi] annotation!");
+            }
+
+            String[] value = spi.value();
+            if (value.length == 0) {
+                return null;
+            }
+            s = value[0];
+            SPI_NAME.putIfAbsent(this.value.getValue(), s);
+        }
+        return getExtension(s);
     }
 }
