@@ -3,6 +3,7 @@ package com.chua.common.support.context.resolver.factory;
 import com.chua.common.support.annotations.Order;
 import com.chua.common.support.context.resolver.NamePair;
 import com.chua.common.support.context.resolver.OrderResolver;
+import com.chua.common.support.utils.ClassUtils;
 
 /**
  * order
@@ -15,7 +16,7 @@ public class OrderOrderResolver implements OrderResolver {
         if (null == namePair) {
             return 0;
         }
-        Order order = namePair.getType().getDeclaredAnnotation(Order.class);
+        Order order = ClassUtils.getDeclaredAnnotation(namePair.getType(), Order.class);
         return null != order ? order.value() : 0;
     }
 }

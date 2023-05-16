@@ -1954,7 +1954,7 @@ public class ClassUtils {
      * @param annotationType 注解
      * @return 结果
      */
-    public static Annotation getDeclaredAnnotation(Object type, Class<? extends Annotation> annotationType) {
+    public static <A extends Annotation>A getDeclaredAnnotation(Object type, Class<? extends A> annotationType) {
         if (type instanceof Class) {
             return ((Class<?>) type).getDeclaredAnnotation(annotationType);
         }
