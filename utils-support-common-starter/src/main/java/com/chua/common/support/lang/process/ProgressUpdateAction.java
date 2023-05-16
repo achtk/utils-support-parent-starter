@@ -57,7 +57,6 @@ class ProgressUpdateAction implements Runnable {
                     consumer.clear();
                 }
                 consumer.close();
-                TerminalUtils.closeTerminal();
             }
         }
     }

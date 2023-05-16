@@ -1,7 +1,5 @@
 package com.chua.common.support.lang.process;
 
-import static org.jline.utils.WCWidth.wcwidth;
-
 /**
  * Contains methods to compute the display lengths of characters and strings on a terminal.
  *
@@ -18,7 +16,8 @@ class StringDisplayUtils {
     static int getCharDisplayLength(char c) {
         // wcwidth is actually implemented in jline3: no need to implement our own
         // control characters will have -1 wcwidth, but actually 0 when displayed
-        return Math.max(wcwidth(c), 0);
+//        return Math.max(wcwidth(c), 0);
+        return 0;
     }
 
     /**
