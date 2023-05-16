@@ -27,9 +27,10 @@ class Util {
     }
 
     static ConsoleProgressBarConsumer createConsoleConsumer(PrintStream out, int predefinedWidth) {
-        return TerminalUtils.hasCursorMovementSupport()
-                ? new InteractiveConsoleProgressBarConsumer(out, predefinedWidth)
-                : new ConsoleProgressBarConsumer(out, predefinedWidth);
+//        return TerminalUtils.hasCursorMovementSupport()
+//                ? new InteractiveConsoleProgressBarConsumer(out, predefinedWidth)
+//                : new ConsoleProgressBarConsumer(out, predefinedWidth);
+        return new InteractiveConsoleProgressBarConsumer(out, predefinedWidth);
     }
 
     static String repeat(char c, int n) {

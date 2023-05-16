@@ -1,4 +1,4 @@
-package com.chua.spi;
+package com.chua.example;
 
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.spi.autowire.ServiceAutowire;
@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * @author CH
  */
-public class Example {
+public class SpiExample {
 
     public static void main(String[] args) {
         //查找 com.chua.common.support.spi.autowire.ServiceAutowire  类的实现类
