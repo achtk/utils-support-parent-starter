@@ -15,7 +15,7 @@
  */
 package com.chua.common.support.file.univocity.parsers.conversions;
 
-import com.chua.common.support.date.DateUtils;
+import com.chua.common.support.lang.date.DateUtils;
 import com.chua.common.support.file.univocity.parsers.common.DataProcessingException;
 
 import java.text.SimpleDateFormat;

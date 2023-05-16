@@ -3,6 +3,7 @@ package com.chua.common.support.reflection.reflections.util;
 import com.chua.common.support.reflection.reflections.Configuration;
 import com.chua.common.support.reflection.reflections.Reflections;
 import com.chua.common.support.reflection.reflections.ReflectionsException;
+import com.chua.common.support.reflection.reflections.scanners.ResourceScanner;
 import com.chua.common.support.reflection.reflections.scanners.Scanners;
 
 import java.net.URL;
@@ -29,10 +30,10 @@ import java.util.stream.Stream;
  * @author Administrator
  */
 public class ConfigurationBuilder implements Configuration {
-    public static final Set<Scanner> DEFAULT_SCANNERS = new HashSet<>(Arrays.asList(Scanners.TypesAnnotated, Scanners.SubTypes));
+    public static final Set<ResourceScanner> DEFAULT_SCANNERS = new HashSet<>(Arrays.asList(Scanners.TypesAnnotated, Scanners.SubTypes));
     public static final Predicate<String> DEFAULT_INPUTS_FILTER = t -> true;
 
-    private Set<Scanner> scanners;
+    private Set<ResourceScanner> scanners;
     private Set<URL> urls;
     private Predicate<String> inputsFilter;
     private boolean isParallel = true;
@@ -97,10 +98,10 @@ public class ConfigurationBuilder implements Configuration {
             } else if (param instanceof URL) {
                 builder.addUrls((URL) param);
             } else if (param instanceof Scanner) {
-                builder.addScanners((Scanner) param);
-            } else if (param instanceof Class && Scanner.class.isAssignableFrom((Class) param)) {
+                builder.addScanners((ResourceScanner) param);
+            } else if (param instanceof Class && ResourceScanner.class.isAssignableFrom((Class) param)) {
                 try {
-                    builder.addScanners(((Class<Scanner>) param).getDeclaredConstructor().newInstance());
+                    builder.addScanners(((Class<ResourceScanner>) param).getDeclaredConstructor().newInstance());
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -137,14 +138,14 @@ public class ConfigurationBuilder implements Configuration {
     }
 
     @Override
-    public Set<Scanner> getScanners() {
+    public Set<ResourceScanner> getScanners() {
         return scanners != null ? scanners : DEFAULT_SCANNERS;
     }
 
     /**
      * set the scanners instances for scanning different metadata
      */
-    public ConfigurationBuilder setScanners(Scanner... scanners) {
+    public ConfigurationBuilder setScanners(ResourceScanner... scanners) {
         this.scanners = new HashSet<>(Arrays.asList(scanners));
         return this;
     }
@@ -152,7 +153,7 @@ public class ConfigurationBuilder implements Configuration {
     /**
      * set the scanners instances for scanning different metadata
      */
-    public ConfigurationBuilder addScanners(Scanner... scanners) {
+    public ConfigurationBuilder addScanners(ResourceScanner... scanners) {
         if (this.scanners == null) {
             setScanners(scanners);
         } else {

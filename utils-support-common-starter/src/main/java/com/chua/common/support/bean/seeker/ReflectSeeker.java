@@ -1,8 +1,9 @@
 package com.chua.common.support.bean.seeker;
 
-import com.chua.common.support.reflect.reflections.Reflections;
-import com.chua.common.support.reflect.reflections.scanners.Scanners;
-import com.chua.common.support.reflect.reflections.util.ConfigurationBuilder;
+
+import com.chua.common.support.reflection.reflections.Reflections;
+import com.chua.common.support.reflection.reflections.scanners.Scanners;
+import com.chua.common.support.reflection.reflections.util.ConfigurationBuilder;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;

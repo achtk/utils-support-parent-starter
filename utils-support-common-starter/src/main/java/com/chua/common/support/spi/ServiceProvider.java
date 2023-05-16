@@ -17,6 +17,7 @@ import com.chua.common.support.value.Value;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiConsumer;
 
 import static com.chua.common.support.constant.CommonConstant.SYMBOL_COMMA;
 
@@ -258,6 +259,7 @@ public class ServiceProvider<T> implements InitializingAware {
         }
         return result;
     }
+
     /**
      * 获取实现
      *
@@ -281,7 +283,16 @@ public class ServiceProvider<T> implements InitializingAware {
         return result;
     }
 
-
+    /**
+     * 获取实现
+     *
+     * @param consumer 消费者
+     * @param args     參數
+     * @return 实现
+     */
+    public Map<String, T> forEach(BiConsumer<String, T> consumer, Object... args) {
+        list(args).forEach(consumer);
+    }
     //get *******************************************************************************************************************
 
     /**

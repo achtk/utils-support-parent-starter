@@ -30,6 +30,28 @@ public class NamingCase {
      * @param str 转换前的驼峰式命名的字符串，也可以为下划线形式
      * @return 转换后下划线方式命名的字符串
      */
+    public static String toCamelUnderscore(CharSequence str) {
+        return toSymbolCase(str, UNDERLINE);
+    }
+    /**
+     * 将驼峰式命名的字符串转换为下划线方式，又称SnakeCase、underScoreCase。<br>
+     * 如果转换前的驼峰式命名的字符串为空，则返回空字符串。<br>
+     * 规则为：
+     * <ul>
+     *     <li>单字之间以下划线隔开</li>
+     *     <li>每个单字的首字母亦用小写字母</li>
+     * </ul>
+     * 例如：
+     *
+     * <pre>
+     * HelloWorld=》hello_world
+     * Hello_World=》hello_world
+     * HelloWorld_test=》hello_world_test
+     * </pre>
+     *
+     * @param str 转换前的驼峰式命名的字符串，也可以为下划线形式
+     * @return 转换后下划线方式命名的字符串
+     */
     public static String toUnderlineCase(CharSequence str) {
         return toSymbolCase(str, UNDERLINE);
     }
@@ -54,6 +76,18 @@ public class NamingCase {
      * @return 转换后下划线方式命名的字符串
      */
     public static String toKebabCase(CharSequence str) {
+        return toSymbolCase(str, DASHED);
+    }
+    /**
+     * 驼峰转减号
+     * <pre>
+     *     toCamelHyphen("userName") = user-name
+     * </pre>
+     *
+     * @param str 原始数据
+     * @return 下划线数据
+     */
+    public static String toCamelHyphen(CharSequence str) {
         return toSymbolCase(str, DASHED);
     }
 

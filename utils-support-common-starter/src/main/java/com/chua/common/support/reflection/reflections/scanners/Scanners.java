@@ -35,7 +35,7 @@ import static com.chua.common.support.reflection.reflections.util.JavassistHelpe
  * <i>note that scanners must be configured in {@link Configuration} in order to be queried</i>
  *  @author Administrator
  */
-public enum Scanners implements Scanner, QueryBuilder, NameHelper {
+public enum Scanners implements ResourceScanner, QueryBuilder, NameHelper {
 
     /**
      * scan type superclasses and interfaces

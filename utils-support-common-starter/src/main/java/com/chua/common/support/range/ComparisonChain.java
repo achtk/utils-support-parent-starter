@@ -1,7 +1,7 @@
 package com.chua.common.support.range;
 
-import com.chua.common.support.math.IntMath;
-import com.chua.common.support.math.LongMath;
+import com.chua.common.support.lang.math.IntMath;
+import com.chua.common.support.lang.math.LongMath;
 
 import java.util.Comparator;
 

@@ -15,8 +15,8 @@
  ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.conversions;
 
-import com.chua.common.support.date.CreditCodeUtils;
-import com.chua.common.support.date.DateUtils;
+import com.chua.common.support.lang.date.CreditCodeUtils;
+import com.chua.common.support.lang.date.DateUtils;
 import com.chua.common.support.lang.exception.ValidateException;
 import com.chua.common.support.utils.NumberUtils;
 import com.chua.common.support.utils.ObjectUtils;

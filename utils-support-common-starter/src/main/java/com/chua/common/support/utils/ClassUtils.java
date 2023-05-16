@@ -8,15 +8,13 @@ import com.chua.common.support.lang.proxy.BridgingMethodIntercept;
 import com.chua.common.support.lang.proxy.ProxyUtils;
 import com.chua.common.support.unit.name.NamingCase;
 
-import java.io.Closeable;
-import java.io.Externalizable;
-import java.io.File;
-import java.io.Serializable;
+import java.io.*;
 import java.lang.annotation.Annotation;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.function.Consumer;
@@ -676,21 +674,21 @@ public class ClassUtils {
         if (object instanceof String && ((String) object).contains(SYMBOL_DOT)) {
             Class<?> aClass = ClassUtils.forName(object.toString());
             if (null != aClass && void.class != aClass) {
-                return aClass;
+                return ObjectUtils.defaultIfNull(aClass, void.class);
             }
         }
 
         Class<?> aClass = object.getClass();
         if (!Proxy.isProxyClass(aClass)) {
-            return aClass;
+            return ObjectUtils.defaultIfNull(aClass, void.class);
         }
 
         String toString = object.toString();
         if (!toString.contains("$Proxy")) {
             Class<?> aClass1 = forName(StringUtils.removeSuffixContains(toString.replace("@", ""), "("), object.getClass().getClassLoader());
-            return null == aClass1 ? void.class : aClass1;
+            return null == aClass1 ? void.class : ObjectUtils.defaultIfNull(aClass1, void.class);
         }
-        return null;
+        return void.class;
     }
 
     /**
@@ -1335,6 +1333,10 @@ public class ClassUtils {
      * @return 结果
      */
     public static Object invokeMethod(Method method, Object bean, Object... args) {
+        if(null == method) {
+            return null;
+        }
+
         if (bean instanceof Callable) {
             try {
                 return ((Callable<?>) bean).call();
@@ -1633,4 +1635,243 @@ public class ClassUtils {
         } catch (IllegalAccessException e) {
         }
     }
+
+
+    /**
+     * 类型是否相等
+     *
+     * @param targetType 目标类型
+     * @param source     值
+     * @return
+     */
+    public static boolean isEquals(Class<?> targetType, Object source) {
+        if (null == source) {
+            return true;
+        }
+
+        Class<?> aClass = source.getClass();
+        if (targetType.isAssignableFrom(aClass)) {
+            return true;
+        }
+
+        Object convertIfNecessary = Converter.convertIfNecessary(source, targetType);
+        return null != convertIfNecessary;
+    }
+
+    /**
+     * 执行方法
+     *
+     * @param object 对象
+     * @param field  字段
+     * @return 结果
+     */
+    public static Object invoke(InvocationHandler object, Field field) {
+        field.setAccessible(true);
+        try {
+            return field.get(object);
+        } catch (IllegalAccessException e) {
+            return null;
+        }
+    }
+
+    /**
+     * Resolve the given class name into a Class instance. Supports
+     * primitives (like "int") and array class names (like "String[]").
+     * <p>This is effectively equivalent to the {@code forName}
+     * method with the same arguments, with the only difference being
+     * the exceptions thrown in case of class loading failure.
+     *
+     * @param className   the name of the Class
+     * @param classLoader the class loader to use
+     *                    (may be {@code null}, which indicates the default class loader)
+     * @return a class instance for the supplied name
+     * @throws IllegalArgumentException if the class name was not resolvable
+     *                                  (that is, the class could not be found or the class file could not be loaded)
+     * @throws IllegalStateException    if the corresponding class is resolvable but
+     *                                  there was a readability mismatch in the inheritance hierarchy of the class
+     *                                  (typically a missing dependency declaration in a Jigsaw module definition
+     *                                  for a superclass or interface implemented by the class to be loaded here)
+     * @see #forName(String, ClassLoader)
+     */
+    public static Class<?> resolveClassName(String className, ClassLoader classLoader)
+            throws IllegalArgumentException {
+
+        try {
+            return forName(className, classLoader);
+        } catch (IllegalAccessError err) {
+            throw new IllegalStateException("Readability mismatch in inheritance hierarchy of class [" +
+                    className + "]: " + err.getMessage(), err);
+        } catch (LinkageError err) {
+            throw new IllegalArgumentException("Unresolvable class definition for class [" + className + "]", err);
+        }
+    }
+
+
+
+    /**
+     * 类型是否一致
+     *
+     * @param value  对象
+     * @param target 类型
+     * @return 类型是否一致
+     */
+    public static boolean isAssignableFrom(Object value, Class<?> target) {
+        if (null == value && isVoid(target)) {
+            return true;
+        }
+
+        if (null == value) {
+            return false;
+        }
+
+        return target.isAssignableFrom(value.getClass());
+    }
+
+    /**
+     * 返回一致类型的对象
+     *
+     * @param value  对象
+     * @param target 类型
+     * @return 返回一致类型的对象
+     */
+    public static <T> T withAssignableFrom(Object value, Class<T> target) {
+        if (null == value && isVoid(target)) {
+            return null;
+        }
+
+        return target.isAssignableFrom(value.getClass()) ? (T) value : null;
+    }
+
+
+    /**
+     * 获取所有父类
+     *
+     * @param type 类
+     * @return 所有接口
+     */
+    public static Set<Class<?>> getSuperType(Class<?> type) {
+        Set<Class<?>> result = new HashSet<>();
+        getSuperType(type, result);
+        return result;
+    }
+
+    /**
+     * 获取所有父类
+     *
+     * @param type   类
+     * @param result 结果
+     */
+    private static void getSuperType(Class<?> type, Set<Class<?>> result) {
+        if (null == type) {
+            return;
+        }
+
+        Class<?> superclass = type.getSuperclass();
+        Class<?>[] interfaces = type.getInterfaces();
+        for (Class<?> anInterface : interfaces) {
+            result.add(anInterface);
+        }
+        if (Object.class == superclass || null == superclass) {
+            return;
+        }
+
+        result.add(superclass);
+        getSuperType(superclass, result);
+    }
+    /**
+     * 获取所有接口
+     *
+     * @param type 类
+     * @return 所有接口
+     */
+    public static void withInterface(Class<?> type, Consumer<Class<?>> consumer) {
+        Set<Class<?>> result = new HashSet<>();
+        loopInterfaces(type, result);
+        for (Class<?> aClass : result) {
+            consumer.accept(aClass);
+        }
+    }
+
+    /**
+     * 获取所有接口
+     *
+     * @param type 类
+     * @return 所有接口
+     */
+    public static Set<Class<?>> getAllInterfaces(Class<?> type) {
+        Set<Class<?>> result = new HashSet<>();
+        loopInterfaces(type, result);
+        return result;
+    }
+
+    /**
+     * 获取所有接口
+     *
+     * @param type   类
+     * @param result 结果
+     */
+    private static void loopInterfaces(Class<?> type, Set<Class<?>> result) {
+        Class<?>[] interfaces = type.getInterfaces();
+        for (Class<?> anInterface : interfaces) {
+            result.add(anInterface);
+            loopInterfaces(anInterface, result);
+        }
+    }
+
+    /**
+     * 获取所有父类
+     *
+     * @param type 类
+     * @return 所有接口
+     */
+    public static void withSuperType(Class<?> type, Consumer<Class<?>> consumer) {
+        Set<Class<?>> result = new HashSet<>();
+        getSuperType(type, result);
+        for (Class<?> aClass : result) {
+            consumer.accept(aClass);
+        }
+    }
+    /**
+     * 获取类加载器下的资源
+     *
+     * @param classLoader 类加载器
+     * @return 资源
+     */
+    public static List<java.net.URL> classLoaderJarRoots(ClassLoader classLoader) {
+        if (!(classLoader instanceof URLClassLoader)) {
+            return Collections.emptyList();
+        }
+
+        //获取资源文件
+        Enumeration<URL> enumeration = null;
+
+        try {
+            enumeration = classLoader.getResources("");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        List<URL> rs = new LinkedList<>();
+
+        while (enumeration.hasMoreElements()) {
+            rs.add(enumeration.nextElement());
+        }
+
+        URL[] urls = ((URLClassLoader) classLoader).getURLs();
+        rs.addAll(Arrays.asList(urls));
+        //是系统加载器扫描 清单条目
+        if (classLoader == ClassLoader.getSystemClassLoader()) {
+            String javaClassPathProperty = System.getProperty(JAVA_CLASS_PATH);
+            for (String path : StringUtils.delimitedListToStringArray(javaClassPathProperty,
+                    System.getProperty(SYMBOL_LEFT_SLASH))) {
+                try {
+                    rs.add(new File(path).toURI().toURL());
+                } catch (Exception ignore) {
+                }
+            }
+        }
+
+        return rs;
+
+    }
+
 }

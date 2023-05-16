@@ -1,9 +1,7 @@
 package com.chua.common.support.lang.proxy;
 
-import com.chua.common.support.describe.Bench;
-import com.chua.common.support.describe.Marker;
-import com.chua.common.support.describe.describe.MethodDescribe;
 import com.chua.common.support.utils.ClassUtils;
+import org.slf4j.Marker;
 
 import java.lang.reflect.Method;
 
@@ -15,7 +13,7 @@ import java.lang.reflect.Method;
 public class BridgingMethodIntercept<T> extends DelegateMethodIntercept<T> {
 
     public BridgingMethodIntercept(String type, Object bridging) {
-        super((Class<T>) ClassUtils.forName(type), it -> {
+        super(ClassUtils.forName(type), it -> {
             if (null == bridging) {
                 return null;
             }
@@ -37,19 +35,16 @@ public class BridgingMethodIntercept<T> extends DelegateMethodIntercept<T> {
                 return null;
             }
 
-            Marker marker = Marker.of(bridging);
-            Bench bench = marker.createBench(MethodDescribe.builder().method(it.getMethod()).build());
-            Object value = bench.execute(it.getArgs()).getValue();
-            Class<?> aClass = it.getMethod().getReturnType();
-            if (null == value || aClass.isAssignableFrom(value.getClass())) {
-                return value;
+            Method method = it.getMethod();
+            ClassUtils.setAccessible(method);
+            try {
+                return ClassUtils.invokeMethod(method, bridging, it.getArgs());
+            } catch (Exception e) {
+                Method method1 = ClassUtils.findMethod(bridging.getClass(), method.getName(), ClassUtils.toType(it.getArgs()));
+                ClassUtils.setAccessible(method1);
+                return ClassUtils.invokeMethod(method1, bridging, it.getArgs());
             }
 
-            if (aClass.isInterface()) {
-                return ProxyUtils.newProxy(aClass, new BridgingMethodIntercept(aClass, value));
-            }
-
-            return value;
         });
     }
 

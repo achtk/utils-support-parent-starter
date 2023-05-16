@@ -2,7 +2,7 @@ package com.chua.common.support.utils;
 
 
 import com.chua.common.support.constant.Projects;
-import com.chua.common.support.date.DateTime;
+import com.chua.common.support.lang.date.DateTime;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -10,9 +10,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.atomic.AtomicLong;
 
-import static com.chua.common.support.date.constant.DateFormatConstant.YYYYMMDDHHMMSS;
+import static com.chua.common.support.lang.date.constant.DateFormatConstant.YYYYMMDDHHMMSS;
 
 
 /**

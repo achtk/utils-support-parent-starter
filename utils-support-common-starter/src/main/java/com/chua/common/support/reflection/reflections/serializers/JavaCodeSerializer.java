@@ -1,7 +1,7 @@
 package com.chua.common.support.reflection.reflections.serializers;
 
 import com.chua.common.support.reflection.reflections.Reflections;
-import com.chua.common.support.reflection.reflections.scanners.TypeElementsScanner;
+import com.chua.common.support.reflection.reflections.scanners.TypeElementsResourceScanner;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,7 +38,7 @@ import java.util.stream.IntStream;
  * }</pre>
  * <p>this allows strongly typed access by fqn to type elements - packages, classes, annotations, fields and methods:
  * <pre>{@code MyTestModelStore.com.chua.common.support.reflections.TestModel$C1.methods.m1.class}</pre>
- * <p>depends on {@link TypeElementsScanner} configured
+ * <p>depends on {@link TypeElementsResourceScanner} configured
  * @author Administrator
  */
 public class JavaCodeSerializer implements Serializer {
@@ -105,7 +105,7 @@ public class JavaCodeSerializer implements Serializer {
     }
 
     private void toString(Reflections reflections) {
-        Map<String, Set<String>> map = reflections.getStore().get(TypeElementsScanner.class.getSimpleName());
+        Map<String, Set<String>> map = reflections.getStore().get(TypeElementsResourceScanner.class.getSimpleName());
         prevPaths = new ArrayList<>();
         indent = 1;
 

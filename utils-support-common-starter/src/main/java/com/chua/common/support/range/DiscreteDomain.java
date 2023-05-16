@@ -1,6 +1,6 @@
 package com.chua.common.support.range;
 
-import com.chua.common.support.math.IntMath;
+import com.chua.common.support.lang.math.IntMath;
 import com.chua.common.support.utils.Preconditions;
 
 import java.io.Serializable;

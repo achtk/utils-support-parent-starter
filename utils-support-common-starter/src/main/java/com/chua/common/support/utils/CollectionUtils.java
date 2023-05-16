@@ -458,7 +458,7 @@ public class CollectionUtils {
      * @return 集合
      * @param <T> 类型
      */
-    public static <T>List<T> newArrayList(T[] elements) {
+    public static <T>List<T> newArrayList(T... elements) {
         return null == elements ? Collections.emptyList() : Arrays.asList(elements);
     }
 
@@ -510,7 +510,16 @@ public class CollectionUtils {
      * @return 集合
      * @param <T> 类型
      */
-    public static <T>List<T> newLinkedList(T[] list) {
+    public static <T>List<T> newLinkedList(T... list) {
         return null == list ? Collections.emptyList() : new LinkedList<>(Arrays.asList(list));
+    }
+    /**
+     * 返回集合
+     * @param list 数组
+     * @return 集合
+     * @param <T> 类型
+     */
+    public static <T>Set<T> newHashSet(T... list) {
+        return null == list ? Collections.emptySet() : new HashSet<>(Arrays.asList(list));
     }
 }

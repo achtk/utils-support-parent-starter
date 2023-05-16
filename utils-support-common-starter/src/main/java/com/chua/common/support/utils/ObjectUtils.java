@@ -1,10 +1,10 @@
 package com.chua.common.support.utils;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Optional;
 
-import static com.chua.common.support.constant.CommonConstant.SYMBOL_EMPTY_STRING;
-import static com.chua.common.support.constant.CommonConstant.SYMBOL_NULL_STRING;
+import static com.chua.common.support.constant.CommonConstant.*;
 
 /**
  * 对象工具
@@ -313,6 +313,16 @@ public class ObjectUtils {
     public static Object defaultIfNull(Object value, String defaultValue) {
         return Optional.ofNullable(value).orElse(defaultValue);
     }
+    /**
+     * 获取默认值
+     *
+     * @param value        值
+     * @param defaultValue 默认值
+     * @return 结果
+     */
+    public static <T>T defaultIfNull(T value, T defaultValue) {
+        return Optional.ofNullable(value).orElse(defaultValue);
+    }
 
 
     /**
@@ -359,6 +369,48 @@ public class ObjectUtils {
         }
         String str = obj.toString();
         return (str != null ? str : SYMBOL_EMPTY_STRING);
+    }
+
+    /**
+     * Convert the given array (which may be a primitive array) to an
+     * object array (if necessary of primitive wrapper objects).
+     * <p>A {@code null} source value will be converted to an
+     * empty Object array.
+     *
+     * @param source the (potentially primitive) array
+     * @return the corresponding object array (never {@code null})
+     * @throws IllegalArgumentException if the parameter is not an array
+     */
+    public static Object[] toObjectArray(Object source) {
+        if (source instanceof Object[]) {
+            return (Object[]) source;
+        }
+        if (source == null) {
+            return EMPTY_OBJECT_ARRAY;
+        }
+        if (!source.getClass().isArray()) {
+            throw new IllegalArgumentException("Source is not an array: " + source);
+        }
+        int length = Array.getLength(source);
+        if (length == 0) {
+            return EMPTY_OBJECT_ARRAY;
+        }
+        Class<?> wrapperType = Array.get(source, 0).getClass();
+        Object[] newArray = (Object[]) Array.newInstance(wrapperType, length);
+        for (int i = 0; i < length; i++) {
+            newArray[i] = Array.get(source, i);
+        }
+        return newArray;
+    }
+
+    /**
+     * 对象是否相等
+     * @param a a
+     * @param b b
+     * @return 对象是否相等
+     */
+    public static boolean equal(Object a, Object b) {
+        return a == b || (a != null && a.equals(b));
     }
 
 }

@@ -50,7 +50,7 @@ public class ProxyUtils {
      * @return 代理类
      */
     public static <T> T proxy(Class<T> target, ClassLoader classLoader, BiFunction<Method, Object[], Object> function) {
-        return newProxy(target, classLoader, (obj, method, args, proxy) -> function.apply(method, args));
+        return newProxy(target, classLoader, (obj, method, args, proxy, proxyPluginList) -> function.apply(method, args));
     }
 
     /**

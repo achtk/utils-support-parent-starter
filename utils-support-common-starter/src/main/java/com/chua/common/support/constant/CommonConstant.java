@@ -808,6 +808,7 @@ public final class CommonConstant {
     public static final String GZ = ".gz";
     public static final String EMPTY_STRING = "";
     public static final String CUT = "[,;]{1}";
+    public static final CharSequence POM = "pom.xml";
 
     /**
      *

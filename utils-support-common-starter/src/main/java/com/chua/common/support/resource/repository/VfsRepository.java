@@ -1,5 +1,8 @@
 package com.chua.common.support.resource.repository;
 
+import com.chua.common.support.context.environment.StandardEnvironment;
+import com.chua.common.support.context.factory.ApplicationContextBuilder;
+import com.chua.common.support.context.factory.ConfigurableBeanFactory;
 import com.chua.common.support.matcher.PathMatcher;
 import com.chua.common.support.resource.repository.resolver.Resolver;
 import com.chua.common.support.spi.ServiceProvider;

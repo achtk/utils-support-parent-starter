@@ -1,13 +1,13 @@
 package com.chua.common.support.reflection.reflections;
 
-import com.chua.common.support.reflection.reflections.scanners.MemberUsageScanner;
-import com.chua.common.support.reflection.reflections.scanners.MethodParameterNamesScanner;
+import com.chua.common.support.reflection.reflections.scanners.MemberUsageResourceScanner;
+import com.chua.common.support.reflection.reflections.scanners.MethodParameterNamesResourceScanner;
 import com.chua.common.support.reflection.reflections.scanners.Scanners;
 import com.chua.common.support.reflection.reflections.serializers.Serializer;
 import com.chua.common.support.reflection.reflections.serializers.XmlSerializer;
 import com.chua.common.support.reflection.reflections.util.*;
 import com.chua.common.support.reflection.reflections.vfs.Vfs;
-import com.chua.common.support.reflection.reflections.scanners.Scanner;
+import com.chua.common.support.reflection.reflections.scanners.ResourceScanner;
 
 import javassist.bytecode.ClassFile;
 import org.slf4j.Logger;
@@ -128,8 +128,8 @@ public class Reflections implements NameHelper {
      * <p>uses {@link ClasspathHelper#forPackage(String, ClassLoader...)} to resolve urls from given {@code prefix}
      * <p>optional {@code scanners} defaults to {@link Scanners#TypesAnnotated} and {@link Scanners#SubTypes}
      */
-    public Reflections(String prefix, Scanner... scanners) {
-        this((Object) prefix, scanners);
+    public Reflections(String prefix, ResourceScanner... resourceScanners) {
+        this((Object) prefix, resourceScanners);
     }
 
     /**
@@ -148,7 +148,7 @@ public class Reflections implements NameHelper {
 
     protected Map<String, Map<String, Set<String>>> scan() {
         long start = System.currentTimeMillis();
-        Map<String, Set<Map.Entry<String, String>>> collect = configuration.getScanners().stream().map(Scanner::index).distinct()
+        Map<String, Set<Map.Entry<String, String>>> collect = configuration.getScanners().stream().map(ResourceScanner::index).distinct()
                 .collect(Collectors.toMap(s -> s, s -> Collections.synchronizedSet(new HashSet<>())));
         Set<URL> urls = configuration.getUrls();
 
@@ -159,23 +159,23 @@ public class Reflections implements NameHelper {
                 for (Vfs.File file : dir.getFiles()) {
                     if (doFilter(file, configuration.getInputsFilter())) {
                         ClassFile classFile = null;
-                        for (Scanner scanner : configuration.getScanners()) {
+                        for (ResourceScanner resourceScanner : configuration.getScanners()) {
                             try {
-                                if (doFilter(file, scanner::acceptsInput)) {
-                                    List<Map.Entry<String, String>> entries = scanner.scan(file);
+                                if (doFilter(file, resourceScanner::acceptsInput)) {
+                                    List<Map.Entry<String, String>> entries = resourceScanner.scan(file);
                                     if (entries == null) {
                                         if (classFile == null) {
                                             classFile = getClassFile(file);
                                         }
-                                        entries = scanner.scan(classFile);
+                                        entries = resourceScanner.scan(classFile);
                                     }
                                     if (entries != null) {
-                                        collect.get(scanner.index()).addAll(entries);
+                                        collect.get(resourceScanner.index()).addAll(entries);
                                     }
                                 }
                             } catch (Exception e) {
                                 if (log != null) {
-                                    log.trace("could not scan file {} with scanner {}", file.getRelativePath(), scanner.getClass().getSimpleName(), e);
+                                    log.trace("could not scan file {} with scanner {}", file.getRelativePath(), resourceScanner.getClass().getSimpleName(), e);
                                 }
                             }
                         }
@@ -563,26 +563,26 @@ public class Reflections implements NameHelper {
 
     /**
      * get parameter names of the given {@code member}, either method or constructor
-     * <p>depends on {@link MethodParameterNamesScanner} configured
+     * <p>depends on {@link MethodParameterNamesResourceScanner} configured
      */
     public List<String> getMemberParameterNames(Member member) {
-        return store.getOrDefault(MethodParameterNamesScanner.class.getSimpleName(), Collections.emptyMap()).getOrDefault(toName((AnnotatedElement) member), Collections.emptySet())
+        return store.getOrDefault(MethodParameterNamesResourceScanner.class.getSimpleName(), Collections.emptyMap()).getOrDefault(toName((AnnotatedElement) member), Collections.emptySet())
                 .stream().flatMap(s -> Stream.of(s.split(", "))).collect(Collectors.toList());
     }
 
     /**
      * get code usages for the given {@code member}, either field, method or constructor
-     * <p>depends on {@link MemberUsageScanner} configured
+     * <p>depends on {@link MemberUsageResourceScanner} configured
      */
     public Collection<Member> getMemberUsage(Member member) {
-        Set<String> usages = store.getOrDefault(MemberUsageScanner.class.getSimpleName(), Collections.emptyMap()).getOrDefault(toName((AnnotatedElement) member), Collections.emptySet());
+        Set<String> usages = store.getOrDefault(MemberUsageResourceScanner.class.getSimpleName(), Collections.emptyMap()).getOrDefault(toName((AnnotatedElement) member), Collections.emptySet());
         return forNames(usages, Member.class, loaders());
     }
 
     /**
      * returns all keys and values scanned by {@link Scanners#SubTypes} scanner
      * <p><i>using this api is discouraged, it is better to get elements by specific criteria such as {@code SubTypes.of(Class)} or {@code TypesAnnotated.with(Class)} </i>
-     * <p></p><i>deprecated, use {@link #getAll(Scanner)} instead</i>
+     * <p></p><i>deprecated, use {@link #getAll(ResourceScanner)} instead</i>
      */
     @Deprecated
     public Set<String> getAllTypes() {
@@ -593,8 +593,8 @@ public class Reflections implements NameHelper {
      * returns all key and values scanned by the given {@code scanner} <pre>{@code Set<String> all = reflections.getAll(SubTypes)}</pre>
      * <p><i>using this is discouraged, it is better to get elements by specific criteria such as {@code SubTypes.of(Class)} or {@code TypesAnnotated.with(Class)} </i>
      */
-    public Set<String> getAll(Scanner scanner) {
-        Map<String, Set<String>> map = store.getOrDefault(scanner.index(), Collections.emptyMap());
+    public Set<String> getAll(ResourceScanner resourceScanner) {
+        Map<String, Set<String>> map = store.getOrDefault(resourceScanner.index(), Collections.emptyMap());
         return Stream.concat(map.keySet().stream(), map.values().stream().flatMap(Collection::stream)).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 

@@ -1,6 +1,6 @@
 package com.chua.common.support.reflection.reflections;
 
-import com.chua.common.support.reflection.reflections.scanners.Scanner;
+import com.chua.common.support.reflection.reflections.scanners.ResourceScanner;
 import com.chua.common.support.reflection.reflections.util.ConfigurationBuilder;
 
 import java.net.URL;
@@ -20,7 +20,7 @@ public interface Configuration {
      *
      * @return Set<Scanner>
      */
-    Set<Scanner> getScanners();
+    Set<ResourceScanner> getScanners();
 
     /**
      * the urls to be scanned. required.

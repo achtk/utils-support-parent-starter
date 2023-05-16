@@ -1,6 +1,6 @@
 package com.chua.common.support.utils;
 
-import com.chua.common.support.date.DateUtils;
+import com.chua.common.support.lang.date.DateUtils;
 import com.chua.common.support.lang.Ascii;
 
 import java.nio.ByteBuffer;
@@ -14,7 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.chua.common.support.constant.CommonConstant.*;
-import static com.chua.common.support.date.constant.DateFormatConstant.*;
+import static com.chua.common.support.lang.date.constant.DateFormatConstant.*;
 import static com.chua.common.support.utils.Preconditions.checkArgument;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -711,7 +711,31 @@ public class StringUtils {
     public static String trim(CharSequence str) {
         return (null == str) ? null : trim(str, 0);
     }
+    /**
+     * Trim leading and trailing whitespace from the given {@code String}.
+     *
+     * @param str the {@code String} to check
+     * @return the trimmed {@code String}
+     * @see java.lang.Character#isWhitespace
+     */
+    public static String trimWhitespace(String str) {
+        if (isEmpty(str)) {
+            return str;
+        }
 
+        int beginIndex = 0;
+        int endIndex = str.length() - 1;
+
+        while (beginIndex <= endIndex && Character.isWhitespace(str.charAt(beginIndex))) {
+            beginIndex++;
+        }
+
+        while (endIndex > beginIndex && Character.isWhitespace(str.charAt(endIndex))) {
+            endIndex--;
+        }
+
+        return str.substring(beginIndex, endIndex + 1);
+    }
     /**
      * 去除所有空格
      * <pre>

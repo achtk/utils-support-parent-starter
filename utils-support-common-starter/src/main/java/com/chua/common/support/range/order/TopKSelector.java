@@ -1,6 +1,6 @@
 package com.chua.common.support.range.order;
 
-import com.chua.common.support.math.IntMath;
+import com.chua.common.support.lang.math.IntMath;
 import java.math.RoundingMode;
 import java.util.*;
 
