@@ -13,5 +13,6 @@ public class AutoServiceAutowire implements ServiceAutowire{
         if(null == object) {
             return null;
         }
+        return object;
     }
 }
