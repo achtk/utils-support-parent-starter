@@ -171,6 +171,25 @@ public class NamingCase {
     }
 
     /**
+     * 将下划线方式命名的字符串转换为帕斯卡式。<br>
+     * 规则为：
+     * <ul>
+     *     <li>单字之间不以空格或任何连接符断开</li>
+     *     <li>第一个单字首字母采用大写字母</li>
+     *     <li>后续单字的首字母亦用大写字母</li>
+     * </ul>
+     * 如果转换前的下划线大写方式命名的字符串为空，则返回空字符串。<br>
+     * 例如：hello_world=》HelloWorld
+     *
+     * @param name 转换前的下划线大写方式命名的字符串
+     * @return 转换后的驼峰式命名的字符串
+     */
+    public static String toHyphenUpperCamel(CharSequence name) {
+        return toFirstUpperCase(toCamelCase(name));
+    }
+
+
+    /**
      * 将下划线方式命名的字符串转换为驼峰式。如果转换前的下划线大写方式命名的字符串为空，则返回空字符串。<br>
      * 规则为：
      * <ul>
@@ -185,6 +204,39 @@ public class NamingCase {
      */
     public static String toCamelCase(CharSequence name) {
         return toCamelCase(name, UNDERLINE);
+    }
+
+
+    /**
+     * 将下划线方式命名的字符串转换为驼峰式。如果转换前的下划线大写方式命名的字符串为空，则返回空字符串。<br>
+     * 规则为：
+     * <ul>
+     *     <li>单字之间不以空格或任何连接符断开</li>
+     *     <li>第一个单字首字母采用小写字母</li>
+     *     <li>后续单字的首字母亦用大写字母</li>
+     * </ul>
+     * 例如：hello_world=》helloWorld
+     *
+     * @param name 转换前的下划线大写方式命名的字符串
+     * @return 转换后的驼峰式命名的字符串
+     */
+    public static String toLowerCamelHyphen(CharSequence name) {
+        return toCamelCase(name, UNDERLINE);
+    }
+
+
+
+    /**
+     * 减号转下划线
+     * <pre>
+     *     toHyphenUpperUnderscore("user-name") = user_name
+     * </pre>
+     *
+     * @param source 原始数据
+     * @return 下划线数据
+     */
+    public static String toHyphenUpperUnderscore(String source) {
+        return toSymbolCase(toCamelCase(source, DASHED), UNDERLINE);
     }
 
     /**

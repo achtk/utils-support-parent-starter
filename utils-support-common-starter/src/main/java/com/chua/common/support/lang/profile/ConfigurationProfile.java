@@ -1,20 +1,20 @@
 package com.chua.common.support.lang.profile;
 
-import com.chua.starter.core.support.bean.BeanBinder;
-import com.chua.starter.core.support.bean.ProfileHandler;
-import com.chua.starter.core.support.collection.KeyValue;
-import com.chua.starter.core.support.factory.ServiceProvider;
-import com.chua.starter.core.support.profile.resolver.ProfileResolver;
-import com.chua.starter.core.support.profile.value.MapProfileValue;
-import com.chua.starter.core.support.profile.value.ProfileValue;
-import com.chua.starter.core.support.utils.FileUtils;
-import com.chua.starter.core.support.utils.StringUtils;
-import com.google.common.base.Strings;
+
+import com.chua.common.support.bean.BeanBinder;
+import com.chua.common.support.bean.ProfileHandler;
+import com.chua.common.support.collection.KeyValue;
+import com.chua.common.support.lang.profile.resolver.ProfileResolver;
+import com.chua.common.support.lang.profile.value.MapProfileValue;
+import com.chua.common.support.lang.profile.value.ProfileValue;
+import com.chua.common.support.spi.ServiceFactory;
+import com.chua.common.support.utils.FileUtils;
+import com.chua.common.support.utils.StringUtils;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.chua.starter.core.support.constant.CommonConstant.*;
+import static com.chua.common.support.constant.CommonConstant.*;
 
 
 /**
@@ -22,16 +22,15 @@ import static com.chua.starter.core.support.constant.CommonConstant.*;
  *
  * @author CH
  */
-public class ConfigurationProfile implements Profile {
+public class ConfigurationProfile extends ServiceFactory<ProfileResolver> implements Profile {
 
     private final Map<String, ProfileValue> profileUrl = new ConcurrentHashMap<>();
-    final ServiceProvider<ProfileResolver> provider = ServiceProvider.of(ProfileResolver.class);
 
     @Override
     public Profile addProfile(String resourceUrl) {
         String suffix = resourceUrl;
         ProfileResolver profileResolver = null;
-        while (!Strings.isNullOrEmpty(suffix = FileUtils.getSimpleExtension(suffix))) {
+        while (!StringUtils.isNullOrEmpty(suffix = FileUtils.getSimpleExtension(suffix))) {
             profileResolver = provider.getExtension(suffix);
             if (null != profileResolver) {
                 break;

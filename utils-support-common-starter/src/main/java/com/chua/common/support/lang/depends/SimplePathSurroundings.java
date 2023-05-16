@@ -1,6 +1,6 @@
 package com.chua.common.support.lang.depends;
 
-import com.chua.common.support.classloader.DelegateClassLoader;
+import com.chua.common.support.lang.classloader.DelegateClassLoader;
 
 import java.net.URL;
 import java.net.URLClassLoader;

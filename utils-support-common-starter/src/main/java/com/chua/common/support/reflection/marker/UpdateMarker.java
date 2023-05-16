@@ -1,10 +1,11 @@
 package com.chua.common.support.reflection.marker;
 
-import com.chua.common.support.describe.describe.AnnotationDescribe;
-import com.chua.common.support.describe.describe.ConstructDescribe;
-import com.chua.common.support.describe.describe.FieldDescribe;
-import com.chua.common.support.describe.describe.MethodDescribe;
-import com.chua.common.support.proxy.ProxyUtils;
+import com.chua.common.support.lang.proxy.ProxyUtils;
+import com.chua.common.support.lang.proxy.VoidMethodIntercept;
+import com.chua.common.support.reflection.describe.AnnotationDescribe;
+import com.chua.common.support.reflection.describe.ConstructDescribe;
+import com.chua.common.support.reflection.describe.FieldDescribe;
+import com.chua.common.support.reflection.describe.MethodDescribe;
 import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.JavassistUtils;
 import javassist.ClassPool;
@@ -108,7 +109,7 @@ public class UpdateMarker implements Marker {
         try {
             return createMarker();
         } catch (Exception e) {
-            return ProxyUtils.newProxy(target, (obj, method, args, proxy) -> null);
+            return ProxyUtils.newProxy(target, new VoidMethodIntercept<>());
         }
     }
 
@@ -137,7 +138,7 @@ public class UpdateMarker implements Marker {
 
         Object entity = JavassistUtils.toEntity(ctClass, classPool);
         if (null == entity) {
-            return (T) ProxyUtils.newProxy(type, ClassUtils.getDefaultClassLoader(), (obj, method, args, proxy) -> null);
+            return (T) ProxyUtils.newProxy(type, ClassUtils.getDefaultClassLoader(), new VoidMethodIntercept<>());
         }
         return (T) entity;
     }

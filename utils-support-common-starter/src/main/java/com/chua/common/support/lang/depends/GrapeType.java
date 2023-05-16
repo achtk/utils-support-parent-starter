@@ -1,7 +1,7 @@
 package com.chua.common.support.lang.depends;
 
-import com.chua.common.support.aware.InitializingAware;
 import com.chua.common.support.collection.AnnotationAttributes;
+import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.AnnotationUtils;
 import lombok.AllArgsConstructor;

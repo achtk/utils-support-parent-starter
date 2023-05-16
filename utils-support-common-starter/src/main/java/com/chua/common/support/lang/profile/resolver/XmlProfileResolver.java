@@ -1,11 +1,11 @@
 package com.chua.common.support.lang.profile.resolver;
 
-import com.chua.starter.core.support.annotations.Extension;
-import com.chua.starter.core.support.file.xml.XML;
-import com.chua.starter.core.support.json.Json;
-import com.chua.starter.core.support.json.JsonObject;
-import com.chua.starter.core.support.profile.value.MapProfileValue;
-import com.chua.starter.core.support.profile.value.ProfileValue;
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.file.xml.XML;
+import com.chua.common.support.json.Json;
+import com.chua.common.support.json.JsonObject;
+import com.chua.common.support.lang.profile.value.MapProfileValue;
+import com.chua.common.support.lang.profile.value.ProfileValue;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -20,7 +20,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  *
  * @author CH
  */
-@Extension("xml")
+@Spi("xml")
 public class XmlProfileResolver implements ProfileResolver {
 
     @Override

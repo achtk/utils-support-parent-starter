@@ -1,9 +1,9 @@
 package com.chua.common.support.lang.profile.resolver;
 
-import com.chua.starter.core.support.annotations.Extension;
-import com.chua.starter.core.support.file.ini.IniFile;
-import com.chua.starter.core.support.profile.value.MapProfileValue;
-import com.chua.starter.core.support.profile.value.ProfileValue;
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.file.ini.IniFile;
+import com.chua.common.support.lang.profile.value.MapProfileValue;
+import com.chua.common.support.lang.profile.value.ProfileValue;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,7 +19,7 @@ import java.util.Map;
  *
  * @author CH
  */
-@Extension("ini")
+@Spi("ini")
 public class IniProfileResolver implements ProfileResolver {
 
     final IniFile iniFile = new IniFile();

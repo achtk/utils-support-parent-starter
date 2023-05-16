@@ -1,9 +1,8 @@
 package com.chua.common.support.reflection.marker;
 
+import com.chua.common.support.function.Joiner;
 import com.chua.common.support.utils.JavassistUtils;
 import com.chua.common.support.utils.StringUtils;
-import com.google.common.base.Joiner;
-import com.google.common.base.Strings;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtMethod;
@@ -35,7 +34,7 @@ public class CreateMarker extends AppendMarker {
     protected void doAnalysisMethod(CtClass ctClass, ClassPool classPool, boolean isInterface) {
         methodDescribes.forEach(methodDescribe -> {
             String type = methodDescribe.returnType();
-            if (Strings.isNullOrEmpty(type)) {
+            if (StringUtils.isNullOrEmpty(type)) {
                 type = String.class.getTypeName();
             }
 

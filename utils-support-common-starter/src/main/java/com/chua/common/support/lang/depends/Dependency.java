@@ -1,7 +1,5 @@
 package com.chua.common.support.lang.depends;
 
-import org.springframework.core.annotation.AliasFor;
-
 import java.lang.annotation.*;
 
 /**
@@ -88,10 +86,8 @@ public @interface Dependency {
      * {@code @Grab('junit:junit:*;transitive=false')}<br>
      * {@code @Grab('group=junit;module=junit;version=4.8.2;classifier=javadoc')}<br>
      */
-    @AliasFor("artifact")
     String value() default "";
 
-    @AliasFor("value")
     String artifact() default "";
 
     /**

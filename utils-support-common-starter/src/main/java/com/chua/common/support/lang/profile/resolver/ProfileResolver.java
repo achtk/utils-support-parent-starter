@@ -1,7 +1,7 @@
 package com.chua.common.support.lang.profile.resolver;
 
-import com.chua.starter.core.support.profile.value.ProfileValue;
-import com.chua.starter.core.support.utils.UrlUtils;
+import com.chua.common.support.lang.profile.value.ProfileValue;
+import com.chua.common.support.utils.UrlUtils;
 
 import java.io.InputStream;
 import java.util.Collections;

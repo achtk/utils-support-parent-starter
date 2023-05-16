@@ -1,11 +1,11 @@
 package com.chua.common.support.reflection.marker;
 
 import com.chua.common.support.bean.BeanUtils;
-import com.chua.common.support.describe.describe.*;
-import com.chua.common.support.proxy.BridgingMethodIntercept;
-import com.chua.common.support.proxy.ProxyUtils;
+import com.chua.common.support.lang.proxy.BridgingMethodIntercept;
+import com.chua.common.support.lang.proxy.ProxyUtils;
+import com.chua.common.support.lang.proxy.VoidMethodIntercept;
+import com.chua.common.support.reflection.describe.*;
 import com.chua.common.support.utils.*;
-import com.google.common.base.Strings;
 import javassist.*;
 import javassist.bytecode.AnnotationsAttribute;
 import javassist.bytecode.ClassFile;
@@ -124,14 +124,14 @@ public class AppendMarker implements Marker {
             classPool.importPackage(aPackage);
         }
 
-        String className = Strings.isNullOrEmpty(name) ? "MarkerInstanceFactory$" + RandomUtils.randomString(10) : name;
+        String className = StringUtils.defaultString(name, "MarkerInstanceFactory$" + RandomUtils.randomString(10));
         if (ClassUtils.isPresent(name)) {
             return ClassUtils.forObject(name);
         }
         try {
             T entity = createInstance(classPool, className, target.isInterface());
             if (null == entity) {
-                return ProxyUtils.newProxy(target, ClassUtils.getDefaultClassLoader(), (obj, method, args, proxy) -> null);
+                return ProxyUtils.newProxy(target, ClassUtils.getDefaultClassLoader(), new VoidMethodIntercept<>());
             }
 
             if (target.isAssignableFrom(entity.getClass())) {
@@ -141,7 +141,7 @@ public class AppendMarker implements Marker {
 
         } catch (Exception e) {
             Marker marker = Marker.of(target);
-            return ProxyUtils.newProxy(target, (obj, method, args, proxy) -> {
+            return ProxyUtils.newProxy(target, (obj, method, args, proxy, plugins) -> {
                 if (null == entity) {
                     return null;
                 }
@@ -158,7 +158,7 @@ public class AppendMarker implements Marker {
             classPool.importPackage(aPackage);
         }
 
-        String className = Strings.isNullOrEmpty(name) ? "MarkerInstanceFactory$" + RandomUtils.randomString(10) : name;
+        String className = StringUtils.isNullOrEmpty(name) ? "MarkerInstanceFactory$" + RandomUtils.randomString(10) : name;
         if (ClassUtils.isPresent(name)) {
             return Marker.of(ClassUtils.forObject(name));
         }
@@ -227,7 +227,7 @@ public class AppendMarker implements Marker {
     protected void doAnalysisMethod(CtClass ctClass, ClassPool classPool, boolean isInterface) {
         methodDescribes.forEach(methodDescribe -> {
             String type = methodDescribe.returnType();
-            if (Strings.isNullOrEmpty(type)) {
+            if (StringUtils.isNullOrEmpty(type)) {
                 type = String.class.getTypeName();
             }
             try {

@@ -1,11 +1,11 @@
 package com.chua.common.support.reflection.marker;
 
 
-import com.chua.common.support.describe.describe.AnnotationDescribe;
-import com.chua.common.support.describe.describe.ConstructDescribe;
-import com.chua.common.support.describe.describe.FieldDescribe;
-import com.chua.common.support.describe.describe.MethodDescribe;
-import com.chua.common.support.proxy.ProxyUtils;
+import com.chua.common.support.lang.proxy.ProxyUtils;
+import com.chua.common.support.reflection.describe.AnnotationDescribe;
+import com.chua.common.support.reflection.describe.ConstructDescribe;
+import com.chua.common.support.reflection.describe.FieldDescribe;
+import com.chua.common.support.reflection.describe.MethodDescribe;
 
 /**
  * 简单制作器

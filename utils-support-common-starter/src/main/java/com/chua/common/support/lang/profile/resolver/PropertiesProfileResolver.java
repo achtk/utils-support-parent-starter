@@ -1,8 +1,8 @@
 package com.chua.common.support.lang.profile.resolver;
 
-import com.chua.starter.core.support.annotations.Extension;
-import com.chua.starter.core.support.profile.value.ProfileValue;
-import com.chua.starter.core.support.profile.value.PropertiesProfileValue;
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.lang.profile.value.ProfileValue;
+import com.chua.common.support.lang.profile.value.PropertiesProfileValue;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,7 +18,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  *
  * @author CH
  */
-@Extension("properties")
+@Spi("properties")
 public class PropertiesProfileResolver implements ProfileResolver {
 
     @Override

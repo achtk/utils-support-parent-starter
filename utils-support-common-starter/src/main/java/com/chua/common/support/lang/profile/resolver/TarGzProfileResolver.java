@@ -1,7 +1,7 @@
 package com.chua.common.support.lang.profile.resolver;
 
-import com.chua.starter.core.support.annotations.Extension;
-import com.chua.starter.core.support.file.tar.TarInputStream;
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.file.tar.TarInputStream;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,7 +12,7 @@ import java.util.zip.GZIPInputStream;
  *
  * @author CH
  */
-@Extension({"tar.gz"})
+@Spi({"tar.gz"})
 public class TarGzProfileResolver extends TarProfileResolver {
     /**
      * 打开流

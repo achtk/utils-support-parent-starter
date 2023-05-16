@@ -1,6 +1,6 @@
 package com.chua.common.support.lang.profile.value;
 
-import com.chua.starter.core.support.collection.ChainMap;
+import com.chua.common.support.function.ChainMap;
 
 /**
  * 配置值

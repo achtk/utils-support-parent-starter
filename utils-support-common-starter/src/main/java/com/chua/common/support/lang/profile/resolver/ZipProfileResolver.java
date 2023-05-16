@@ -1,10 +1,11 @@
 package com.chua.common.support.lang.profile.resolver;
 
-import com.chua.starter.core.support.annotations.Extension;
-import com.chua.starter.core.support.factory.ServiceProvider;
-import com.chua.starter.core.support.profile.value.ProfileValue;
-import com.chua.starter.core.support.utils.UrlUtils;
-import org.apache.commons.io.FilenameUtils;
+
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.lang.profile.value.ProfileValue;
+import com.chua.common.support.spi.ServiceProvider;
+import com.chua.common.support.utils.FileUtils;
+import com.chua.common.support.utils.UrlUtils;
 
 import java.io.*;
 import java.net.URL;
@@ -12,8 +13,7 @@ import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import static com.chua.starter.core.support.constant.CommonConstant.FILE;
-import static com.chua.starter.core.support.constant.CommonConstant.JAR_URL_SEPARATOR;
+import static com.chua.common.support.constant.CommonConstant.JAR_URL_SEPARATOR;
 
 
 /**
@@ -21,7 +21,7 @@ import static com.chua.starter.core.support.constant.CommonConstant.JAR_URL_SEPA
  *
  * @author CH
  */
-@Extension({"zip"})
+@Spi({"zip"})
 public class ZipProfileResolver implements ProfileResolver {
     @Override
     public List<ProfileValue> resolve(String resourceUrl) {
@@ -92,7 +92,7 @@ public class ZipProfileResolver implements ProfileResolver {
             while (entries.hasMoreElements()) {
                 ZipEntry zipEntry = entries.nextElement();
                 String name = zipEntry.getName();
-                String suffix = FilenameUtils.getExtension(name);
+                String suffix = FileUtils.getExtension(name);
                 ProfileResolver profileResolver = provider.getExtension(suffix);
                 if (null == profileResolver) {
                     continue;

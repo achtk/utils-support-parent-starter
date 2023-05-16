@@ -1,13 +1,13 @@
 package com.chua.common.support.lang.profile.resolver;
 
-import com.chua.starter.core.support.annotations.Extension;
+import com.chua.common.support.annotations.Spi;
 
 /**
  * 解释器
  *
  * @author CH
  */
-@Extension({"jar"})
+@Spi({"jar"})
 public class JarProfileResolver extends ZipProfileResolver {
 
     @Override

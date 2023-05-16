@@ -1,5 +1,7 @@
 package com.chua.common.support.utils;
 
+import com.chua.common.support.function.SafeConsumer;
+
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Optional;
@@ -411,6 +413,19 @@ public class ObjectUtils {
      */
     public static boolean equal(Object a, Object b) {
         return a == b || (a != null && a.equals(b));
+    }
+
+    /**
+     * 处理非空
+     *
+     * @param value    值
+     * @param consumer 回调
+     */
+    public static void ifNone(Object value, SafeConsumer<Object> consumer) {
+        if (null == value) {
+            return;
+        }
+        consumer.accept(value);
     }
 
 }

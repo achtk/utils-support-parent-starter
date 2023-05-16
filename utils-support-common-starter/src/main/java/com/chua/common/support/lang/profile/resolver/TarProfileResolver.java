@@ -1,21 +1,21 @@
 package com.chua.common.support.lang.profile.resolver;
 
-import com.chua.starter.core.support.annotations.Extension;
-import com.chua.starter.core.support.factory.ServiceProvider;
-import com.chua.starter.core.support.file.tar.TarEntry;
-import com.chua.starter.core.support.file.tar.TarInputStream;
-import com.chua.starter.core.support.profile.value.ProfileValue;
-import com.chua.starter.core.support.utils.IoUtils;
-import com.chua.starter.core.support.utils.UrlUtils;
-import com.google.common.base.Strings;
-import org.apache.commons.io.FilenameUtils;
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.file.tar.TarEntry;
+import com.chua.common.support.file.tar.TarInputStream;
+import com.chua.common.support.lang.profile.value.ProfileValue;
+import com.chua.common.support.spi.ServiceFactory;
+import com.chua.common.support.utils.FileUtils;
+import com.chua.common.support.utils.IoUtils;
+import com.chua.common.support.utils.StringUtils;
+import com.chua.common.support.utils.UrlUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.*;
 
-import static com.chua.starter.core.support.constant.CommonConstant.JAR_URL_SEPARATOR;
+import static com.chua.common.support.constant.CommonConstant.JAR_URL_SEPARATOR;
 
 
 /**
@@ -23,10 +23,8 @@ import static com.chua.starter.core.support.constant.CommonConstant.JAR_URL_SEPA
  *
  * @author CH
  */
-@Extension({"tar"})
-public class TarProfileResolver implements ProfileResolver {
-
-    final ServiceProvider<ProfileResolver> provider = ServiceProvider.of(ProfileResolver.class);
+@Spi({"tar"})
+public class TarProfileResolver extends ServiceFactory<ProfileResolver> implements ProfileResolver {
 
     @Override
     public List<ProfileValue> resolve(String resourceUrl) {
@@ -90,7 +88,7 @@ public class TarProfileResolver implements ProfileResolver {
     private Collection<? extends ProfileValue> resolve(String resourceUrl, TarInputStream tarInputStream, String name) {
         String suffix = name;
         ProfileResolver profileResolver = null;
-        while (!Strings.isNullOrEmpty(suffix = FilenameUtils.getExtension(suffix))) {
+        while (!StringUtils.isNullOrEmpty(suffix = FileUtils.getExtension(suffix))) {
             profileResolver = provider.getExtension(suffix);
             if (null != profileResolver) {
                 break;

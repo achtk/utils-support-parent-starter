@@ -1,9 +1,10 @@
 package com.chua.common.support.lang.profile.resolver;
 
-import com.chua.starter.core.support.annotations.Extension;
-import com.chua.starter.core.support.json.Json;
-import com.chua.starter.core.support.profile.value.MapProfileValue;
-import com.chua.starter.core.support.profile.value.ProfileValue;
+
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.json.Json;
+import com.chua.common.support.lang.profile.value.MapProfileValue;
+import com.chua.common.support.lang.profile.value.ProfileValue;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,7 +20,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  *
  * @author CH
  */
-@Extension("json")
+@Spi("json")
 public class JsonProfileResolver implements ProfileResolver {
     @Override
     public List<ProfileValue> resolve(String resourceUrl, InputStream inputStream) {

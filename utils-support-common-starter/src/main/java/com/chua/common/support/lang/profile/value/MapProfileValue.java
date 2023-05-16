@@ -1,16 +1,18 @@
 package com.chua.common.support.lang.profile.value;
 
-import com.chua.starter.core.support.json.jsonpath.DocumentContext;
-import com.chua.starter.core.support.json.jsonpath.JsonPath;
-import com.chua.starter.core.support.utils.StringUtils;
-import com.google.common.base.Splitter;
+
+import com.chua.common.support.function.Splitter;
+import com.chua.common.support.json.jsonpath.DocumentContext;
+import com.chua.common.support.json.jsonpath.JsonPath;
+import com.chua.common.support.matcher.PathMatcher;
+import com.chua.common.support.utils.StringUtils;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.chua.starter.core.support.constant.CommonConstant.PATH_INSTANCE;
-import static com.chua.starter.core.support.constant.CommonConstant.SYMBOL_XPATH;
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_XPATH;
+
 
 /**
  * profile value
@@ -78,7 +80,7 @@ public class MapProfileValue implements ProfileValue {
         Map<String, Object> guess = new LinkedHashMap<>();
         String newKey1 = key + ".*";
         map.forEach((k, v) -> {
-            if (PATH_INSTANCE.match(newKey1, k.toString())) {
+            if (PathMatcher.INSTANCE.match(newKey1, k.toString())) {
                 guess.put(k.toString(), v);
             }
         });

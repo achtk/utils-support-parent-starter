@@ -1,9 +1,9 @@
 package com.chua.common.support.lang.profile.resolver;
 
-import com.chua.starter.core.support.annotations.Extension;
-import com.chua.starter.core.support.profile.value.MapProfileValue;
-import com.chua.starter.core.support.profile.value.ProfileValue;
-import org.yaml.snakeyaml.Yaml;
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.file.yaml.YamlReader;
+import com.chua.common.support.lang.profile.value.MapProfileValue;
+import com.chua.common.support.lang.profile.value.ProfileValue;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,14 +19,13 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  *
  * @author CH
  */
-@Extension({"yaml", "yml"})
+@Spi({"yaml", "yml"})
 public class YamlProfileResolver implements ProfileResolver {
 
     @Override
     public List<ProfileValue> resolve(String resourceUrl, InputStream inputStream) {
-        try (InputStreamReader isr = new InputStreamReader(inputStream, UTF_8)) {
-            Yaml yaml = new Yaml();
-            return Collections.singletonList(new MapProfileValue(resourceUrl, yaml.loadAs(isr, Map.class)));
+        try (YamlReader yaml = new YamlReader(new InputStreamReader(inputStream, UTF_8))) {
+            return Collections.singletonList(new MapProfileValue(resourceUrl, yaml.read(Map.class)));
         } catch (IOException e) {
             return Collections.emptyList();
         }
