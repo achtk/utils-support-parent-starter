@@ -168,7 +168,7 @@ public class BitUtils {
     public static String asBitShortString(String source) {
         int length = source.length();
         if (length < SHORT_BIT_SIZE) {
-            source = Strings.repeat("0", SHORT_BIT_SIZE - source.length()).concat(source);
+            source = StringUtils.repeat("0", SHORT_BIT_SIZE - source.length()).concat(source);
         } else if (length > SHORT_BIT_SIZE) {
             source = source.substring(length - SHORT_BIT_SIZE, length);
         }
