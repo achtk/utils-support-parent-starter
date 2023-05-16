@@ -1,6 +1,7 @@
 package com.chua.common.support.utils;
 
-import lombok.extern.slf4j.Slf4j;
+import com.chua.common.support.function.Joiner;
+import com.chua.common.support.log.Log;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -11,6 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.chua.common.support.constant.CommonConstant.EMPTY_BYTE;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
@@ -20,9 +22,9 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  * @version 1.0.0
  * @since 2020/12/26
  */
-@Slf4j
 public class ByteUtils extends BitUtils {
 
+    private static final Log log = Log.getLogger(ByteUtils.class);
     /**
      * double value to byte array
      *
@@ -137,8 +139,8 @@ public class ByteUtils extends BitUtils {
      * @return byte array
      */
     public static byte[] asBytes(String source) {
-        if (Strings.isNullOrEmpty(source)) {
-            return EMPTY_BYTES;
+        if (StringUtils.isNullOrEmpty(source)) {
+            return EMPTY_BYTE;
         }
         return source.getBytes(UTF_8);
     }
@@ -163,7 +165,7 @@ public class ByteUtils extends BitUtils {
      */
     public static byte[] complementArithmetic(int b) {
         int bit = INT_SIZE * BIT_LENGTH;
-        List<String> split = Arrays.stream(asBitIntString(Integer.toBinaryString(-b)).split("")).filter(item -> !Strings.isNullOrEmpty(item)).collect(Collectors.toList());
+        List<String> split = Arrays.stream(asBitIntString(Integer.toBinaryString(-b)).split("")).filter(item -> !StringUtils.isNullOrEmpty(item)).collect(Collectors.toList());
         log.info("\n{}(源数据) \n-> {}(原码) \n-> {}(反码) \n-> {}(补码)", b, asBitIntString(Integer.toBinaryString(b)), asBitIntString(Integer.toBinaryString(~b)), asBitIntString(Joiner.on("").join(split)));
         byte[] bytes = new byte[bit];
         for (int i = 0; i < split.size(); i++) {
@@ -181,7 +183,7 @@ public class ByteUtils extends BitUtils {
      */
     public static byte[] complementArithmetic(long b) {
         int bit = INT_SIZE * BIT_LENGTH;
-        List<String> split = Arrays.stream(asBitLongString(Long.toBinaryString(-b)).split("")).filter(item -> !Strings.isNullOrEmpty(item)).collect(Collectors.toList());
+        List<String> split = Arrays.stream(asBitLongString(Long.toBinaryString(-b)).split("")).filter(item -> !StringUtils.isNullOrEmpty(item)).collect(Collectors.toList());
         log.info("\n{}(源数据) \n-> {}(原码) \n-> {}(反码) \n-> {}(补码)", b, asBitLongString(Long.toBinaryString(b)), asBitLongString(Long.toBinaryString(~b)), asBitLongString(Joiner.on("").join(split)));
         byte[] bytes = new byte[bit];
         for (int i = 0; i < split.size(); i++) {
@@ -199,7 +201,7 @@ public class ByteUtils extends BitUtils {
      */
     public static byte[] complementArithmetic(short b) {
         int bit = SHORT_SIZE * BIT_LENGTH;
-        List<String> split = Arrays.stream(asBitShortString(Integer.toBinaryString(-b)).split("")).filter(item -> !Strings.isNullOrEmpty(item.trim())).collect(Collectors.toList());
+        List<String> split = Arrays.stream(asBitShortString(Integer.toBinaryString(-b)).split("")).filter(item -> !StringUtils.isNullOrEmpty(item.trim())).collect(Collectors.toList());
         log.info("\n{}(源数据) \n-> {}(原码) \n-> {}(反码) \n-> {}(补码)", b, asBitShortString(Integer.toBinaryString(b)), asBitShortString(Integer.toBinaryString(~b)), asBitShortString(Joiner.on("").join(split)));
         byte[] bytes = new byte[bit];
         for (int i = 0; i < split.size(); i++) {
@@ -217,7 +219,7 @@ public class ByteUtils extends BitUtils {
      */
     public static byte[] complementArithmetic(byte b) {
         int bit = BYTE_SIZE * BIT_LENGTH;
-        List<String> split = Arrays.stream(asBitByteString(Integer.toBinaryString(-b)).split("")).filter(item -> !Strings.isNullOrEmpty(item)).collect(Collectors.toList());
+        List<String> split = Arrays.stream(asBitByteString(Integer.toBinaryString(-b)).split("")).filter(item -> !StringUtils.isNullOrEmpty(item)).collect(Collectors.toList());
         log.info("\n{}(源数据) \n-> {}(原码) \n-> {}(反码) \n-> {}(补码)", b, asBitByteString(Integer.toBinaryString(b)), asBitByteString(Integer.toBinaryString(~b)), asBitByteString(Joiner.on("").join(split)));
         byte[] bytes = new byte[bit];
         for (int i = 0; i < split.size(); i++) {

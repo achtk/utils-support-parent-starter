@@ -72,4 +72,9 @@ public class NumberValue implements Value<Number> {
         return null;
     }
 
+    @Override
+    public Throwable getThrowable() {
+        return null;
+    }
+
 }

@@ -1,27 +1,9 @@
-/*******************************************************************************
- * Copyright 2018 Univocity Software Pty Ltd
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.conversions;
 
 import com.chua.common.support.lang.date.CreditCodeUtils;
 import com.chua.common.support.lang.date.DateUtils;
 import com.chua.common.support.lang.exception.ValidateException;
-import com.chua.common.support.utils.NumberUtils;
-import com.chua.common.support.utils.ObjectUtils;
-import com.chua.common.support.utils.RegexUtils;
-import com.chua.common.support.utils.StringUtils;
+import com.chua.common.support.utils.*;
 
 import java.net.MalformedURLException;
 import java.util.regex.Matcher;

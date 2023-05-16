@@ -128,7 +128,7 @@ public class IdUtils {
         sb.append(localDateTime.format(DateTimeFormatter.ofPattern(TIME_FORMAT)));
         synchronized (LOCK) {
             sb.append(System.nanoTime());
-            sb.append(Strings.padEnd(random.nextInt() + "", 8, '0'));
+            sb.append(StringUtils.padAfter(random.nextInt() + "", 8, '0'));
         }
         return sb.toString();
     }

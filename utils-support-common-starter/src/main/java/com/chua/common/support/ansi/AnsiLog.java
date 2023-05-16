@@ -1,6 +1,8 @@
 package com.chua.common.support.ansi;
 
 
+import com.chua.common.support.constant.Projects;
+
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 
@@ -248,7 +250,7 @@ public abstract class AnsiLog {
             }
         }
 
-        if (OsUtils.isCygwinOrMinGW()) {
+        if (Projects.isCygwinOrMinGW()) {
             enableColor = true;
         }
 

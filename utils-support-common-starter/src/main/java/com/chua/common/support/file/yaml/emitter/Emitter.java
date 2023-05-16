@@ -17,9 +17,7 @@
 package com.chua.common.support.file.yaml.emitter;
 
 import com.chua.common.support.file.yaml.Version;
-import com.chua.common.support.file.yaml.parser.DocumentEndEvent;
-import com.chua.common.support.file.yaml.parser.DocumentStartEvent;
-import com.chua.common.support.file.yaml.parser.Event;
+import com.chua.common.support.file.yaml.parser.*;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -400,20 +398,23 @@ public class Emitter {
 		else if (event.type == SCALAR || event.type == MAPPING_START || event.type == SEQUENCE_START) {
 			processAnchor("&");
 			processTag();
-			if (event.type == SCALAR)
+			if (event.type == SCALAR) {
 				expectScalar();
-			else if (event.type == SEQUENCE_START) {
-				if (flowLevel != 0 || config.canonical || ((SequenceStartEvent)event).isFlowStyle || checkEmptySequence())
+			} else if (event.type == SEQUENCE_START) {
+				if (flowLevel != 0 || config.canonical || ((SequenceStartEvent)event).isFlowStyle || checkEmptySequence()) {
 					expectFlowSequence();
-				else
+				} else {
 					expectBlockSequence();
+				}
 			} else if (event.type == MAPPING_START)
-				if (flowLevel != 0 || config.canonical || ((MappingStartEvent)event).isFlowStyle || checkEmptyMapping())
+				if (flowLevel != 0 || config.canonical || ((MappingStartEvent)event).isFlowStyle || checkEmptyMapping()) {
 					expectFlowMapping();
-				else
+				} else {
 					expectBlockMapping();
-		} else
+				}
+		} else {
 			throw new EmitterException("Expected 'scalar', 'mapping start', or 'sequence start' but found: " + event);
+		}
 	}
 
 	private void expectAlias () throws IOException {
@@ -470,16 +471,22 @@ public class Emitter {
 
 	boolean checkSimpleKey () {
 		int length = 0;
-		if (event instanceof NodeEvent && ((NodeEvent)event).anchor != null) {
-			if (preparedAnchor == null) preparedAnchor = prepareAnchor(((NodeEvent)event).anchor);
+		if (event instanceof AbstractNodeEvent && ((AbstractNodeEvent)event).anchor != null) {
+			if (preparedAnchor == null) {
+				preparedAnchor = prepareAnchor(((AbstractNodeEvent)event).anchor);
+			}
 			length += preparedAnchor.length();
 		}
 		String tag = null;
-		if (event.type == SCALAR)
+		if (event.type == SCALAR) {
 			tag = ((ScalarEvent)event).tag;
-		else if (event.type == MAPPING_START || event.type == SEQUENCE_START) tag = ((CollectionStartEvent)event).tag;
+		} else if (event.type == MAPPING_START || event.type == SEQUENCE_START) {
+			tag = ((CollectionStartEvent)event).tag;
+		}
 		if (tag != null) {
-			if (preparedTag == null) preparedTag = prepareTag(tag);
+			if (preparedTag == null) {
+				preparedTag = prepareTag(tag);
+			}
 			length += preparedTag.length();
 		}
 		if (event.type == SCALAR && analysis == null) {
@@ -492,14 +499,17 @@ public class Emitter {
 	}
 
 	private void processAnchor (String indicator) throws IOException {
-		NodeEvent ev = (NodeEvent)event;
+		AbstractNodeEvent ev = (AbstractNodeEvent)event;
 		if (ev.anchor == null) {
 			preparedAnchor = null;
 			return;
 		}
-		if (preparedAnchor == null) preparedAnchor = prepareAnchor(ev.anchor);
-		if (preparedAnchor != null && !"".equals(preparedAnchor))
+		if (preparedAnchor == null) {
+			preparedAnchor = prepareAnchor(ev.anchor);
+		}
+		if (preparedAnchor != null && !"".equals(preparedAnchor)) {
 			writer.writeIndicator(indicator + preparedAnchor, true, false, false);
+		}
 		preparedAnchor = null;
 	}
 
@@ -525,16 +535,26 @@ public class Emitter {
 				return;
 			}
 		}
-		if (tag == null) throw new EmitterException("Tag is not specified.");
-		if (preparedTag == null) preparedTag = prepareTag(tag);
-		if (preparedTag != null && !"".equals(preparedTag)) writer.writeIndicator(preparedTag, true, false, false);
+		if (tag == null) {
+			throw new EmitterException("Tag is not specified.");
+		}
+		if (preparedTag == null) {
+			preparedTag = prepareTag(tag);
+		}
+		if (preparedTag != null && !"".equals(preparedTag)) {
+			writer.writeIndicator(preparedTag, true, false, false);
+		}
 		preparedTag = null;
 	}
 
 	private char chooseScalarStyle () {
 		ScalarEvent ev = (ScalarEvent)event;
-		if (analysis == null) analysis = ScalarAnalysis.analyze(ev.value, config.escapeUnicode);
-		if (ev.style == '"' || config.canonical) return '"';
+		if (analysis == null) {
+			analysis = ScalarAnalysis.analyze(ev.value, config.escapeUnicode);
+		}
+		if (ev.style == '"' || config.canonical) {
+			return '"';
+		}
 		if ((ev.style == 0 || ev.style == '|' || ev.style == '>')
 				&& !(simpleKeyContext && (analysis.empty || analysis.multiline))
 				&& ((flowLevel != 0 && analysis.allowFlowPlain) || (flowLevel == 0 && analysis.allowBlockPlain))) {
@@ -554,26 +574,35 @@ public class Emitter {
 
 	private void processScalar () throws IOException {
 		ScalarEvent ev = (ScalarEvent)event;
-		if (analysis == null) analysis = ScalarAnalysis.analyze(ev.value, config.escapeUnicode);
-		if (style == 0) style = chooseScalarStyle();
+		if (analysis == null) {
+			analysis = ScalarAnalysis.analyze(ev.value, config.escapeUnicode);
+		}
+		if (style == 0) {
+			style = chooseScalarStyle();
+		}
 		boolean split = !simpleKeyContext;
-		if (style == '"')
+		if (style == '"') {
 			writer.writeDoubleQuoted(analysis.scalar, split, indent, config.wrapColumn, config.escapeUnicode);
-		else if (style == '\'')
+		} else if (style == '\'') {
 			writer.writeSingleQuoted(analysis.scalar, split, indent, config.wrapColumn);
-		else if (style == '>')
+		} else if (style == '>') {
 			writer.writeFolded(analysis.scalar, indent, config.wrapColumn);
-		else if (style == '|')
+		} else if (style == '|') {
 			writer.writeLiteral(analysis.scalar, indent);
-		else
+		} else {
 			writer.writePlain(analysis.scalar, split, indent, config.wrapColumn);
+		}
 		analysis = null;
 		style = 0;
 	}
 
 	private String prepareTag (String tag) {
-		if (tag == null || "".equals(tag)) throw new EmitterException("Tag cannot be empty.");
-		if (tag.equals("!")) return tag;
+		if (tag == null || "".equals(tag)) {
+			throw new EmitterException("Tag cannot be empty.");
+		}
+		if (tag.equals("!")) {
+			return tag;
+		}
 		String handle = null;
 		String suffix = tag;
 		for (Iterator iter = tagPrefixes.keySet().iterator(); iter.hasNext();) {
@@ -585,25 +614,34 @@ public class Emitter {
 		}
 		StringBuilder chunks = new StringBuilder();
 		int start = 0, ending = 0;
-		while (ending < suffix.length())
+		while (ending < suffix.length()) {
 			ending++;
-		if (start < ending) chunks.append(suffix.substring(start, ending));
+		}
+		if (start < ending) {
+			chunks.append(suffix.substring(start, ending));
+		}
 		String suffixText = chunks.toString();
-		if (tag.charAt(0) == '!' && isVersion10) return tag;
-		if (handle != null) return handle + suffixText;
-		if (config.useVerbatimTags)
+		if (tag.charAt(0) == '!' && isVersion10) {
+			return tag;
+		}
+		if (handle != null) {
+			return handle + suffixText;
+		}
+		if (config.useVerbatimTags) {
 			return "!<" + suffixText + ">";
-		else
+		} else {
 			return "!" + suffixText;
+		}
 	}
 
 	String prepareTagHandle (String handle) {
-		if (handle == null || "".equals(handle))
+		if (handle == null || "".equals(handle)) {
 			throw new EmitterException("Tag handle cannot be empty.");
-		else if (handle.charAt(0) != '!' || handle.charAt(handle.length() - 1) != '!')
+		} else if (handle.charAt(0) != '!' || handle.charAt(handle.length() - 1) != '!') {
 			throw new EmitterException("Tag handle must begin and end with '!': " + handle);
-		else if (!"!".equals(handle) && !HANDLE_FORMAT.matcher(handle).matches())
+		} else if (!"!".equals(handle) && !HANDLE_FORMAT.matcher(handle).matches()) {
 			throw new EmitterException("Invalid syntax for tag handle: " + handle);
+		}
 		return handle;
 	}
 

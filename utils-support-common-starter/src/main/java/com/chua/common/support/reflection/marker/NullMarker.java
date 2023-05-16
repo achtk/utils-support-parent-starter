@@ -2,6 +2,7 @@ package com.chua.common.support.reflection.marker;
 
 
 import com.chua.common.support.lang.proxy.ProxyUtils;
+import com.chua.common.support.lang.proxy.VoidMethodIntercept;
 import com.chua.common.support.reflection.describe.AnnotationDescribe;
 import com.chua.common.support.reflection.describe.ConstructDescribe;
 import com.chua.common.support.reflection.describe.FieldDescribe;
@@ -87,7 +88,7 @@ final class NullMarker implements Marker {
 
     @Override
     public <T> T marker(Class<T> target) {
-        return ProxyUtils.newProxy(target, (obj, method, args, proxy) -> null);
+        return ProxyUtils.newProxy(target, new VoidMethodIntercept<>());
     }
 
     @Override

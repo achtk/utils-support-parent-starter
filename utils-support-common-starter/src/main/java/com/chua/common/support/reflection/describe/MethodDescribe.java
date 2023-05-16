@@ -2,6 +2,7 @@ package com.chua.common.support.reflection.describe;
 
 import com.chua.common.support.reflection.describe.factory.MethodAnnotationFactory;
 import com.chua.common.support.reflection.describe.provider.MethodDescribeProvider;
+import com.chua.common.support.unit.name.NamingCase;
 import com.chua.common.support.utils.ArrayUtils;
 import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.StringUtils;
@@ -511,7 +512,7 @@ public class MethodDescribe implements MemberDescribe {
          * @return this
          */
         public MethodDescribeBuilder getter(String name) {
-            methodDescribe.name(METHOD_GETTER + StringUtils.toFirstUpperCase(name));
+            methodDescribe.name(METHOD_GETTER + NamingCase.toFirstUpperCase(name));
             return this;
         }
 
@@ -522,7 +523,7 @@ public class MethodDescribe implements MemberDescribe {
          * @return this
          */
         public MethodDescribeBuilder setter(String name) {
-            methodDescribe.name(METHOD_SETTER + StringUtils.toFirstUpperCase(name));
+            methodDescribe.name(METHOD_SETTER + NamingCase.toFirstUpperCase(name));
             return this;
         }
 

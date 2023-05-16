@@ -13,6 +13,7 @@ import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import static com.chua.common.support.constant.CommonConstant.FILE;
 import static com.chua.common.support.constant.CommonConstant.JAR_URL_SEPARATOR;
 
 

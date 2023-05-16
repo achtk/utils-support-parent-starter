@@ -463,7 +463,7 @@ public class AnnotationAttributes extends LinkedHashMap<String, Object> {
         }
 
         if(o instanceof String) {
-            return Strings.isNullOrEmpty(o.toString());
+            return StringUtils.isNullOrEmpty(o.toString());
         }
         return false;
     }

@@ -152,7 +152,7 @@ public class BitUtils {
     public static String asBitLongString(String source) {
         int length = source.length();
         if (length < LONG_BIT_SIZE) {
-            source = Strings.repeat("0", LONG_BIT_SIZE - source.length()).concat(source);
+            source = StringUtils.repeat("0", LONG_BIT_SIZE - source.length()).concat(source);
         } else if (length > LONG_BIT_SIZE) {
             source = source.substring(length - LONG_BIT_SIZE, length);
         }

@@ -16,6 +16,7 @@ import com.chua.common.support.reflection.reflections.scanners.Scanners;
 import com.chua.common.support.reflection.reflections.util.ConfigurationBuilder;
 import com.chua.common.support.resource.ResourceConfiguration;
 import com.chua.common.support.resource.finder.SubtypeResourceFinder;
+import com.chua.common.support.unit.name.NamingCase;
 import com.chua.common.support.utils.ClassUtils;
 
 import java.io.IOException;
@@ -169,7 +170,7 @@ final class TearMarker implements Marker {
      * @return 结果
      */
     private MethodDescribe createGetter(String name, final String[] parameterTypes) {
-        name = METHOD_GETTER + Converter.toFirstUpperCase(name);
+        name = METHOD_GETTER + NamingCase.toFirstUpperCase(name);
         MethodDescribe methodDescribe = methodCraftTable.get(name, parameterTypes);
         if (null == methodDescribe || methodDescribe instanceof MethodBenchFactory.VoidMethodDescribe) {
             return methodCraftTable.get(name);
@@ -254,7 +255,7 @@ final class TearMarker implements Marker {
             methodCraftTable.forEach(update::create);
             return update.marker(target);
         }
-        return Reflect.create(target).getObjectValue().getObject();
+        return Reflect.create(target).getObjectValue().getValue();
     }
 
     @Override

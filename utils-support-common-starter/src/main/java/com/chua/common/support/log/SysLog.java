@@ -1,5 +1,7 @@
 package com.chua.common.support.log;
 
+import com.chua.common.support.utils.StringUtils;
+
 /**
  * 日志
  *

@@ -16,6 +16,8 @@
 
 package com.chua.common.support.file.yaml;
 
+import com.chua.common.support.file.yaml.YamlConfig.ConstructorParameters;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -52,7 +54,9 @@ class Beans {
 
     static public DeferredConstruction getDeferredConstruction(Class type, YamlConfig config) {
         ConstructorParameters parameters = config.readConfig.constructorParameters.get(type);
-        if (parameters != null) return new DeferredConstruction(parameters.constructor, parameters.parameterNames);
+        if (parameters != null) {
+            return new DeferredConstruction(parameters.constructor, parameters.parameterNames);
+        }
         try {
             Class constructorProperties = Class.forName("java.beans.ConstructorProperties");
             for (Constructor typeConstructor : type.getConstructors()) {

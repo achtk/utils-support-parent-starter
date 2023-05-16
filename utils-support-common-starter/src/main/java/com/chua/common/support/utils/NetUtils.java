@@ -946,18 +946,6 @@ public class NetUtils {
         }
     }
 
-    public static boolean matchIpExpression(String pattern, String host, int port) throws UnknownHostException {
-
-        // if the pattern is subnet format, it will not be allowed to config port param in pattern.
-        if (pattern.contains("/")) {
-            CIDRUtils utils = new CIDRUtils(pattern);
-            return utils.isInRange(host);
-        }
-
-
-        return matchIpRange(pattern, host, port);
-    }
-
     /**
      * @param pattern
      * @param host

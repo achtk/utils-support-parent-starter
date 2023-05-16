@@ -1,5 +1,6 @@
 package com.chua.common.support.context.bean;
 
+import com.chua.common.support.collection.ConfigureAttributes;
 import com.chua.common.support.context.definition.MethodDefinition;
 import com.chua.common.support.context.definition.ObjectDefinition;
 import com.chua.common.support.context.definition.TypeDefinition;

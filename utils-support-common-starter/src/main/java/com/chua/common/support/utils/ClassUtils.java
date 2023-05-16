@@ -221,6 +221,16 @@ public class ClassUtils {
     public static <T> boolean isVoid(Class<T> value) {
         return null == value || value == void.class || value == Void.class;
     }
+    /**
+     * 是否为空
+     *
+     * @param value 类
+     * @param <T>   类型
+     * @return 是否为空
+     */
+    public static <T> boolean isVoid(T value) {
+        return null == value || isVoid(toType(value));
+    }
 
     /**
      * 获取默认类加载器
@@ -1593,7 +1603,36 @@ public class ClassUtils {
 
         setFieldValue(field, bean.getClass(), value, bean);
     }
+    /**
+     * 赋值
+     *
+     * @param field 字段
+     * @param value 值
+     * @param type  类型
+     * @param bean  对象
+     * @param <T>   类型
+     */
+    public static <T> void setAllFieldValue(Field field, Object value, Class<T> type, T bean) {
+        Class<?> type1 = field.getType();
+        value = Converter.convertIfNecessary(value, type1);
+        String name = field.getName();
+        try {
+            Method method = type.getMethod(METHOD_SETTER + NamingCase.toFirstUpperCase(name), type1);
+            if (null != method) {
+                method.setAccessible(true);
+                method.invoke(bean, value);
+                return;
+            }
+        } catch (Exception ignore) {
+        }
 
+        try {
+            field.setAccessible(true);
+            field.set(bean, value);
+        } catch (IllegalAccessException ignore) {
+        }
+
+    }
     /**
      * 获取字段值
      *
@@ -1873,5 +1912,38 @@ public class ClassUtils {
         return rs;
 
     }
+    /**
+     * 查询唯一类型值, 非唯一返回空
+     *
+     * @param args   参数
+     * @param aClass 类型
+     * @return
+     */
+    public static Object findOnlyOneValue(Collection<Object> args, Class<?> aClass) {
+        return findOnlyOneValue(args.toArray(), aClass, 0);
+    }
 
+    /**
+     * 查询唯一类型值, 非唯一返回空
+     *
+     * @param args   参数
+     * @param aClass 类型
+     * @param index
+     * @return
+     */
+    public static Object findOnlyOneValue(Object[] args, Class<?> aClass, int index) {
+        if (null == args) {
+            return null;
+        }
+        aClass = fromPrimitive(aClass);
+
+        List<Object> tpl = new LinkedList<>();
+        for (Object arg : args) {
+            if (null == arg || (null != arg && aClass.isAssignableFrom(arg.getClass()))) {
+                tpl.add(arg);
+            }
+        }
+
+        return CollectionUtils.find(tpl, index);
+    }
 }

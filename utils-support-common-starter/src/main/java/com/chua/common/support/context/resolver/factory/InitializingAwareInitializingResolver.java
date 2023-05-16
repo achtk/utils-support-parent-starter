@@ -1,6 +1,7 @@
 package com.chua.common.support.context.resolver.factory;
 
 import com.chua.common.support.context.resolver.InitializingResolver;
+import com.chua.common.support.function.InitializingAware;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;

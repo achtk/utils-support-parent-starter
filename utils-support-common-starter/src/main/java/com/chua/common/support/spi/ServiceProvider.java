@@ -18,6 +18,7 @@ import com.chua.common.support.value.Value;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 import static com.chua.common.support.constant.CommonConstant.SYMBOL_COMMA;
 
@@ -31,12 +32,15 @@ public class ServiceProvider<T> implements InitializingAware {
 
     private static final ServiceProvider EMPTY = new ServiceProvider(null, null, null);
     private static final Map<Class<?>, ServiceProvider> CACHE = new ConcurrentHashMap<>();
+    private final List<ServiceFinder> finders = new LinkedList<>();
+
     private final Value<Class<T>> value;
-    private final ClassLoader classLoader;
-    private final ServiceAutowire serviceAutowire;
+    private ClassLoader classLoader;
+    private ServiceAutowire serviceAutowire;
     private static final Map<Class<?>, String> SPI_NAME = new HashMap<>();
 
     private final Map<String, SortedSet<ServiceDefinition>> definitions = new ConcurrentHashMap<>();
+    private static final Map<ClassLoader, Map<Class<?>, ServiceProvider>> SERVICE_PROVIDER_MAP = new ConcurrentHashMap<>();
 
     private static final Comparator<ServiceDefinition> COMPARATOR = new Comparator<ServiceDefinition>() {
         @Override
@@ -77,7 +81,11 @@ public class ServiceProvider<T> implements InitializingAware {
         if (ClassUtils.isVoid(value)) {
             return EMPTY;
         }
-        return CACHE.computeIfAbsent(value, it -> new ServiceProvider<>(value, classLoader, serviceAutowire));
+        return CACHE.computeIfAbsent(value, it -> {
+            ServiceProvider<T> provider = new ServiceProvider<>(value, classLoader, serviceAutowire);
+            provider.afterPropertiesSet();
+            return provider;
+        });
     }
 
     /**
@@ -90,7 +98,6 @@ public class ServiceProvider<T> implements InitializingAware {
         this.value = Value.of(value);
         this.classLoader = Optional.ofNullable(classLoader).orElse(ClassLoader.getSystemClassLoader());
         this.serviceAutowire = Optional.ofNullable(serviceAutowire).orElse(AutoServiceAutowire.INSTANCE);
-        afterPropertiesSet();
     }
 
     @Override
@@ -290,7 +297,7 @@ public class ServiceProvider<T> implements InitializingAware {
      * @param args     參數
      * @return 实现
      */
-    public Map<String, T> forEach(BiConsumer<String, T> consumer, Object... args) {
+    public void forEach(BiConsumer<String, T> consumer, Object... args) {
         list(args).forEach(consumer);
     }
     //get *******************************************************************************************************************
@@ -356,5 +363,88 @@ public class ServiceProvider<T> implements InitializingAware {
             SPI_NAME.putIfAbsent(this.value.getValue(), s);
         }
         return getExtension(s);
+    }
+
+
+    /**
+     * 初始化spi
+     *
+     * @param <T> 类型
+     * @return this
+     */
+    public static <T> ServiceProviderBuilder<T> newBuilder() {
+        return new ServiceProviderBuilder<T>();
+    }
+    /**
+     * 构建类
+     */
+    public static class ServiceProviderBuilder<T> {
+
+        private boolean openLog;
+
+        private ClassLoader classLoader;
+        private ServiceAutowire serviceAutowire = new AutoServiceAutowire();
+        private final List<ServiceFinder> finders = new LinkedList<>();
+
+        /**
+         * 开启日志
+         *
+         * @return this
+         */
+        public ServiceProviderBuilder<T> openLog() {
+            this.openLog = true;
+            return this;
+        }
+
+        /**
+         * 装配器
+         *
+         * @return this
+         */
+        public ServiceProviderBuilder<T> serviceAutowire(ServiceAutowire serviceAutowire) {
+            this.serviceAutowire = serviceAutowire;
+            return this;
+        }
+
+        /**
+         * 类加载器
+         *
+         * @return this
+         */
+        public ServiceProviderBuilder<T> classloader(ClassLoader classLoader) {
+            this.classLoader = classLoader;
+            return this;
+        }
+
+        /**
+         * 设置发现器
+         *
+         * @return this
+         */
+        public ServiceProviderBuilder<T> finder(ServiceFinder... finders) {
+            this.finders.addAll(Arrays.asList(finders));
+            return this;
+        }
+
+        /**
+         * 构建
+         *
+         * @param target 目标类型
+         * @return 实体
+         */
+        public ServiceProvider<T> build(Class<T> target) {
+            ClassLoader classLoader1 = Optional.ofNullable(classLoader).orElse(ClassUtils.getDefaultClassLoader());
+            return SERVICE_PROVIDER_MAP
+                    .computeIfAbsent(classLoader1, it -> new ConcurrentHashMap<>())
+                    .computeIfAbsent(target, new Function<Class<?>, ServiceProvider>() {
+                        @Override
+                        public ServiceProvider apply(Class<?> aClass) {
+                            ServiceProvider<T> serviceProvider = new ServiceProvider<>(target, classLoader, serviceAutowire);
+                            serviceProvider.finders.addAll(finders);
+                            serviceProvider.afterPropertiesSet();
+                            return serviceProvider;
+                        }
+                    });
+        }
     }
 }

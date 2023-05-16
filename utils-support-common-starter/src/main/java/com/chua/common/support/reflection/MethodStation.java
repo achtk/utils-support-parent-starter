@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  */
 public class MethodStation extends MethodCraftTable {
 
-    public static final MethodStation INSTANCE = new MethodStation();
+    public static final MethodStation INSTANCE = new MethodStation(null);
     protected static final String GETTER_PREFIX = CommonConstant.METHOD_GETTER;
     protected static final String SETTER_PREFIX = CommonConstant.METHOD_SETTER;
     private static final Map<Class<?>, MethodStation> CACHE = new HashMap<>();

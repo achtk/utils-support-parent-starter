@@ -133,7 +133,6 @@ public final class AnsiColors {
         }
 
         LabColor(Color color) {
-            Assert.notNull(color, "Color must not be null");
             float[] lab = fromXyz(color.getColorComponents(XYZ_COLOR_SPACE, null));
             this.l = lab[0];
             this.a = lab[1];

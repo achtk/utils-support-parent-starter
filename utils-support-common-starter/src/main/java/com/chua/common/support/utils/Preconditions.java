@@ -29,6 +29,7 @@ public final class Preconditions {
             throw new IllegalArgumentException(String.valueOf(errorMessage));
         }
     }
+
     /**
      * 参数是否合法
      *
@@ -45,6 +46,7 @@ public final class Preconditions {
             throw new IllegalArgumentException(StringUtils.format(errorMessage, errorMessageArgs));
         }
     }
+
     /**
      * 参数是否合法
      *
@@ -55,6 +57,7 @@ public final class Preconditions {
             throw new IllegalArgumentException();
         }
     }
+
     /**
      * 参数是否合法
      *
@@ -81,6 +84,7 @@ public final class Preconditions {
         }
         return value;
     }
+
     /**
      * 检查值是否合法
      *
@@ -94,6 +98,7 @@ public final class Preconditions {
         }
         return value;
     }
+
     /**
      * 检查对象是否为空
      *
@@ -108,12 +113,26 @@ public final class Preconditions {
         return reference;
     }
 
+    /**
+     * 检查对象是否为空
+     *
+     * @param reference 对象
+     * @param <T>       类型
+     * @param message   提示信息
+     * @return 检查对象是否为空
+     */
+    public static void checkNotNull(String reference, String message) {
+        if (StringUtils.isEmpty(reference)) {
+            throw new IllegalArgumentException(message);
+        }
+    }
 
     /**
      * uncheck
-     * @param t 对象
-     * @return 对象
+     *
+     * @param t   对象
      * @param <T> 类型
+     * @return 对象
      */
     public static <T extends Object> T uncheckedCastNullableTToT(T t) {
         return t;
@@ -121,8 +140,9 @@ public final class Preconditions {
 
     /**
      * 参数是否合法
+     *
      * @param role 提示消息
-     * @param x 值
+     * @param x    值
      * @return 参数是否合法
      */
 
@@ -132,10 +152,12 @@ public final class Preconditions {
         }
         return x;
     }
+
     /**
      * 参数是否合法
+     *
      * @param role 提示消息
-     * @param x 值
+     * @param x    值
      * @return 参数是否合法
      */
 
@@ -148,22 +170,25 @@ public final class Preconditions {
 
     /**
      * 检查参数合法性
-     * @param condition 表达式
+     *
+     * @param condition  表达式
      * @param methodName 方法
-     * @param a 参数1
-     * @param b 参数2
+     * @param a          参数1
+     * @param b          参数2
      */
     public static void checkNoOverflow(boolean condition, String methodName, int a, int b) {
         if (!condition) {
             throw new ArithmeticException("overflow: " + methodName + "(" + a + ", " + b + ")");
         }
     }
+
     /**
      * 检查参数合法性
-     * @param condition 表达式
+     *
+     * @param condition  表达式
      * @param methodName 方法
-     * @param a 参数1
-     * @param b 参数2
+     * @param a          参数1
+     * @param b          参数2
      */
     public static void checkNoOverflow(boolean condition, String methodName, long a, long b) {
         if (!condition) {
