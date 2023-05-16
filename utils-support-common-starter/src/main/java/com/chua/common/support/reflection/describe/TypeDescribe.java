@@ -1,6 +1,5 @@
 package com.chua.common.support.reflection.describe;
 
-import com.chua.common.support.context.definition.TypeDefinition;
 import com.chua.common.support.reflection.MethodStation;
 import com.chua.common.support.reflection.describe.provider.MethodDescribeProvider;
 import com.chua.common.support.utils.ArrayUtils;
@@ -180,6 +179,4 @@ public class TypeDescribe implements MemberDescribe {
         return MethodStation.of(object);
     }
 
-    public TypeDefinition<Object> getObjectValue(Object[] args) {
-    }
 }
