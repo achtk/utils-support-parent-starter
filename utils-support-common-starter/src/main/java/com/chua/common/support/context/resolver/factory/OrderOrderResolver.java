@@ -1,6 +1,7 @@
 package com.chua.common.support.context.resolver.factory;
 
 import com.chua.common.support.annotations.Order;
+import com.chua.common.support.context.resolver.NamePair;
 import com.chua.common.support.context.resolver.OrderResolver;
 
 /**
@@ -10,11 +11,11 @@ import com.chua.common.support.context.resolver.OrderResolver;
  */
 public class OrderOrderResolver implements OrderResolver {
     @Override
-    public int order(Class<?> type) {
-        if (null == type) {
+    public int resolve(NamePair namePair) {
+        if (null == namePair) {
             return 0;
         }
-        Order order = type.getDeclaredAnnotation(Order.class);
+        Order order = namePair.getType().getDeclaredAnnotation(Order.class);
         return null != order ? order.value() : 0;
     }
 }

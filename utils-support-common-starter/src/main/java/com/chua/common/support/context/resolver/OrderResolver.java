@@ -1,16 +1,14 @@
 package com.chua.common.support.context.resolver;
 
 /**
- * 优先级
- *
+ * 优先级解析器
  * @author CH
  */
 public interface OrderResolver {
     /**
-     * 优先级
-     *
-     * @param type 类型
-     * @return 优先级
+     * 名称
+     * @param namePair 注解
+     * @return 名称
      */
-    int order(Class<?> type);
+    int resolve(NamePair namePair);
 }

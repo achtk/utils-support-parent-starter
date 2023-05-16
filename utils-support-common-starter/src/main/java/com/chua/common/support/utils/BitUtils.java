@@ -184,7 +184,7 @@ public class BitUtils {
     public static String asBitByteString(String source) {
         int length = source.length();
         if (length < BYTE_BIT_SIZE) {
-            source = Strings.repeat("0", BYTE_BIT_SIZE - source.length()).concat(source);
+            source = StringUtils.repeat("0", BYTE_BIT_SIZE - source.length()).concat(source);
         } else if (length > BYTE_BIT_SIZE) {
             source = source.substring(length - BYTE_BIT_SIZE, length);
         }
@@ -369,7 +369,7 @@ public class BitUtils {
             for (int i = sourceLength; i > mold; i--) {
                 stringBuilder1.append(bytes[i]);
             }
-            stringBuilder.append(SYMBOL_BLANK).append(Strings.repeat("0", size - mold)).append(stringBuilder1);
+            stringBuilder.append(SYMBOL_BLANK).append(StringUtils.repeat("0", size - mold)).append(stringBuilder1);
         }
         String resource = stringBuilder.toString();
         return resource.endsWith(SYMBOL_BLANK) ? resource.substring(0, resource.length() - 1) : resource;

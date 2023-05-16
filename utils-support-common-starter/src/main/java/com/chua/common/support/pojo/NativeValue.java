@@ -33,9 +33,9 @@ public class NativeValue {
 
     public void link() {
         StringBuffer stringBuffer = new StringBuffer(root).append("/");
-        if (Projects.isWindow()) {
+        if (Projects.isWindows()) {
             stringBuffer.append(win);
-        } else if (Projects.isWindow()) {
+        } else if (Projects.isLinux()) {
             stringBuffer.append(linux);
         } else {
             stringBuffer.append(unix);
@@ -47,9 +47,9 @@ public class NativeValue {
         }
 
         stringBuffer.append("/").append(name);
-        if (Projects.isWindow()) {
+        if (Projects.isWindows()) {
             stringBuffer.append(".dll");
-        } else if (Projects.isWindow()) {
+        } else if (Projects.isLinux()) {
             stringBuffer.append(".so");
         } else {
             stringBuffer.append(".lib");

@@ -1946,4 +1946,31 @@ public class ClassUtils {
 
         return CollectionUtils.find(tpl, index);
     }
+
+    /**
+     * 获取注解
+     *
+     * @param type           类型
+     * @param annotationType 注解
+     * @return 结果
+     */
+    public static Annotation getDeclaredAnnotation(Object type, Class<? extends Annotation> annotationType) {
+        if (type instanceof Class) {
+            return ((Class<?>) type).getDeclaredAnnotation(annotationType);
+        }
+
+        if (type instanceof Method) {
+            return ((Method) type).getDeclaredAnnotation(annotationType);
+        }
+
+        if (type instanceof Field) {
+            return ((Field) type).getDeclaredAnnotation(annotationType);
+        }
+
+        if (type instanceof Constructor) {
+            return ((Constructor) type).getDeclaredAnnotation(annotationType);
+        }
+
+        return null;
+    }
 }

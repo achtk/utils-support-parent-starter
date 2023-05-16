@@ -2,10 +2,7 @@ package com.chua.common.support.context.definition;
 
 import com.chua.common.support.context.enums.Scope;
 import com.chua.common.support.context.factory.ConfigurableBeanFactory;
-import com.chua.common.support.context.resolver.NamedResolver;
-import com.chua.common.support.context.resolver.OrderResolver;
-import com.chua.common.support.context.resolver.ProxyResolver;
-import com.chua.common.support.context.resolver.ScopeResolver;
+import com.chua.common.support.context.resolver.*;
 import com.chua.common.support.context.resolver.factory.AutoInjectHandler;
 import com.chua.common.support.context.value.AutoValueHandler;
 import com.chua.common.support.reflection.Reflect;
@@ -352,12 +349,12 @@ public class ClassDefinition<T> extends AbstractDelegateDefinition<T>{
         });
 
         ServiceProvider.of(NamedResolver.class).forEach((k, v) -> {
-            String[] named = v.named(type);
+            String[] named = v.resolve(NamePair.builder().type(type).build());
             names.addAll(Arrays.asList(named));
         });
 
         ServiceProvider.of(OrderResolver.class).forEach((k, v) -> {
-            order = v.order(type);
+            order = v.resolve(NamePair.builder().type(type).build());
         });
 
 

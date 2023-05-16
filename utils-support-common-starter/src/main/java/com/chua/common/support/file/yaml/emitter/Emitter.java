@@ -418,7 +418,7 @@ public class Emitter {
 	}
 
 	private void expectAlias () throws IOException {
-		if (((NodeEvent)event).anchor == null) throw new EmitterException("Anchor is not specified for alias.");
+		if (((AbstractNodeEvent)event).anchor == null) throw new EmitterException("Anchor is not specified for alias.");
 		processAnchor("*");
 		state = states.remove(0);
 	}

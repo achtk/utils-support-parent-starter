@@ -1,16 +1,15 @@
 package com.chua.common.support.context.resolver;
 
 /**
- * 命名
- *
+ * 名称解析器
  * @author CH
  */
 public interface NamedResolver {
     /**
-     * 命名
+     * 名称
      *
-     * @param type 类型
-     * @return 命名
+     * @param pair 注解
+     * @return 名称
      */
-    String[] named(Class<?> type);
+    String[] resolve(NamePair pair);
 }

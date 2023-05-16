@@ -24,7 +24,7 @@ public class FileSystemAnyResourceFinder extends AbstractResourceFinder{
 
     @Override
     public Set<Resource> find(String name) {
-        if(Projects.isWindow()) {
+        if(Projects.isWindows()) {
             if(null == WIN_FINDER) {
                 return Collections.emptySet();
             }
