@@ -22,6 +22,6 @@ public class ProfilePropertySource implements PropertySource {
 
     @Override
     public String getProperty(String name) {
-        return profile.get(name, "").toString();
+        return profile.getString(name, "").toString();
     }
 }

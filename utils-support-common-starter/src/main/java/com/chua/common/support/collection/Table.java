@@ -1,6 +1,7 @@
 package com.chua.common.support.collection;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.function.BiFunction;
 
 /**
@@ -109,4 +110,16 @@ public interface Table<R, C, V> {
      * @return v
      */
     V computeIfAbsent(R r, C c, BiFunction<R, C, V> function);
+
+    /**
+     * row
+     * @return row
+     */
+    Set<R> rowKeySet();
+
+    /**
+     * row map
+     * @return map
+     */
+    Map<C, Map<C, V>> rowMap();
 }

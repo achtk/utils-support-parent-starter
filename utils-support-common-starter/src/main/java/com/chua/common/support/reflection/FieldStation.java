@@ -1,6 +1,6 @@
 package com.chua.common.support.reflection;
 
-import com.chua.common.support.collection.TypeMap;
+import com.chua.common.support.collection.TypeHashMap;
 import com.chua.common.support.converter.Converter;
 import com.chua.common.support.reflection.craft.FieldCraftTable;
 import com.chua.common.support.unit.name.NamingCase;
@@ -658,7 +658,7 @@ public final class FieldStation extends FieldCraftTable {
      * @author CH
      * @since 2021-10-19
      */
-    public static class AnnotationType implements TypeMap<AnnotationType> {
+    public static class AnnotationType extends TypeHashMap {
 
         private Annotation annotation;
         private Class<?> type;
@@ -674,13 +674,9 @@ public final class FieldStation extends FieldCraftTable {
         }
 
         @Override
-        public Object getObject(String key, Object defaultValue) {
-            return null == annotation ? defaultValue : attribute.getOrDefault(key, defaultValue);
+        public Object getObject(String key) {
+            return attribute.get(key);
         }
 
-        @Override
-        public Map<String, Object> source() {
-            return attribute;
-        }
     }
 }

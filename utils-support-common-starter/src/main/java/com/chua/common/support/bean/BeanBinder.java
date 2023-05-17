@@ -1,7 +1,5 @@
 package com.chua.common.support.bean;
 
-import com.chua.common.support.converter.Converter;
-import com.chua.common.support.lang.environment.Environment;
 import com.chua.common.support.unit.name.NamingCase;
 import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.StringUtils;
@@ -42,11 +40,11 @@ public class BeanBinder {
     /**
      * 初始化
      *
-     * @param environment 环境
+     * @param beanAware 环境
      * @return 结果
      */
-    public static BeanBinder of(Environment environment) {
-        return new BeanBinder(environment::getProperty);
+    public static BeanBinder of(BeanAware beanAware) {
+        return new BeanBinder(beanAware::getProperty);
     }
 
     /**

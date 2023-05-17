@@ -1,9 +1,16 @@
 package com.chua.common.support.collection;
 
+import com.chua.common.support.bean.BeanBinder;
+import com.chua.common.support.bean.ProfileHandler;
+import com.chua.common.support.lang.profile.Profile;
+import com.chua.common.support.lang.profile.value.MapProfileValue;
+import com.chua.common.support.lang.profile.value.ProfileValue;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.*;
+
+import static com.chua.common.support.constant.CommonConstant.SYSTEM;
 
 /**
  * 类型集合
@@ -11,53 +18,69 @@ import java.util.*;
  * @author CH
  * @version 1.0.0
  */
-@EqualsAndHashCode
-@NoArgsConstructor
-@SuppressWarnings("ALL")
-public class TypeHashMap<T> implements TypeMap<T> {
+public class TypeHashMap implements Profile {
 
-    private Map<String, Object> source;
+    private final Map<String, ProfileValue> map = new LinkedHashMap<>();
+    private final ProfileValue profileValue = new MapProfileValue(SYSTEM);
 
-    private static final TypeHashMap EMPTY = new TypeHashMap(Collections.emptyMap());
-
-    public TypeHashMap(int initialCapacity) {
-        this.source = new HashMap<>(initialCapacity);
+    {
+        map.put(SYSTEM, profileValue);
     }
 
-    public TypeHashMap(Map<String, Object> source) {
-        this.source = source;
+    public TypeHashMap(Map<?, ?> map) {
+        map.forEach((k, v) -> profileValue.add(k.toString(), v));
     }
 
-    /**
-     * 创建集合
-     *
-     * @return 集合
-     */
-    public static TypeHashMap create() {
-        return new TypeHashMap(new LinkedHashMap<>());
-    }
-
-
-    /**
-     * 空集合
-     *
-     * @return 集合
-     */
-    public static TypeMap<TypeHashMap> empty() {
-        return EMPTY;
-    }
-
-    public static <T> TypeMap<T> empty(Class<T> expressionValueClass) {
-        return EMPTY;
+    public TypeHashMap() {
     }
 
     @Override
-    public Object getObject(String key, Object defaultValue) {
-        return null != source ? Optional.ofNullable(source.get(key)).orElse(defaultValue) : defaultValue;
+    public Profile addProfile(Profile profile) {
+        Map<String, ProfileValue> profile1 = profile.getProfile();
+        for (ProfileValue value : profile1.values()) {
+            profileValue.add(value);
+        }
+        return this;
     }
 
     @Override
-    public Map<String, Object> source() {
-        return source;
+    public Profile addProfile(String resourceUrl) {
+        return this;
+    }
+
+    @Override
+    public Profile addProfile(int index, String resourceUrl) {
+        return this;
+    }
+
+    @Override
+    public Profile addProfile(String profile, String key, Object value) {
+        profileValue.add(key, value);
+        return this;
+    }
+
+    @Override
+    public Object getObject(String name) {
+        return profileValue.getValue(name);
+    }
+
+    @Override
+    public boolean noConfiguration() {
+        return false;
+    }
+
+    @Override
+    public <E> E bind(String pre, Class<E> target) {
+        return BeanBinder.of(new ProfileHandler() {
+            @Override
+            public Object getProperty(String name) {
+                return profileValue.getValue(name);
+            }
+        }).bind(pre, target).getValue();
+    }
+
+    @Override
+    public Map<String, ProfileValue> getProfile() {
+        return map;
     }
 }

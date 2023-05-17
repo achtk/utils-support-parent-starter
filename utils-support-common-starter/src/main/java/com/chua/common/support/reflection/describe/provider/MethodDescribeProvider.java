@@ -68,6 +68,20 @@ public class MethodDescribeProvider extends LinkedList<MethodDescribe>
         return methodDescribe.invoke(entity, args).getValue(target);
     }
 
+    @Override
+    public <T> T executeThis(Class<T> target, Object... args) {
+        MethodDescribe methodDescribe = findMethodDescribe(args, true);
+        if (null == methodDescribe) {
+            methodDescribe = findMethodDescribe(args, false);
+        }
+
+        if (null == methodDescribe) {
+            return null;
+        }
+
+        return methodDescribe.invoke(methodDescribe.entity(), args).getValue(target);
+    }
+
     /**
      * 检索方法
      *
@@ -150,4 +164,5 @@ public class MethodDescribeProvider extends LinkedList<MethodDescribe>
 
         return null;
     }
+
 }

@@ -1,7 +1,10 @@
 package com.chua.common.support.collection;
 
+import com.chua.common.support.utils.CollectionUtils;
+
 import java.io.Serializable;
 import java.util.*;
+import java.util.function.BiConsumer;
 
 /**
  * map
@@ -18,8 +21,7 @@ public class MultiLinkedValueMap<K, V> implements MultiValueMap<K, V>, Serializa
     }
 
     public MultiLinkedValueMap(MultiValueMap<K, V> targetMap) {
-        this();
-        this.targetMap.putAll(targetMap);
+        addAll(targetMap);
     }
 
     public MultiLinkedValueMap() {
@@ -39,14 +41,14 @@ public class MultiLinkedValueMap<K, V> implements MultiValueMap<K, V>, Serializa
     }
 
     @Override
-    public void addAll(K key, List<? extends V> values) {
+    public void addAll(K key, List<V> values) {
         List<V> currentValues = this.targetMap.computeIfAbsent(key, k -> new LinkedList<>());
         currentValues.addAll(values);
     }
 
     @Override
     public void addAll(MultiValueMap<K, V> values) {
-        for (Entry<K, List<V>> entry : values.entrySet()) {
+        for (Map.Entry<K, List<V>> entry : values.entrySet()) {
             addAll(entry.getKey(), entry.getValue());
         }
     }
@@ -74,66 +76,56 @@ public class MultiLinkedValueMap<K, V> implements MultiValueMap<K, V>, Serializa
         return singleValueMap;
     }
 
-    // Map implementation
+    @Override
+    public Set<Map.Entry<K, List<V>>> entrySet() {
+        return targetMap.entrySet();
+    }
 
     @Override
-    public int size() {
-        return this.targetMap.size();
+    public void forEach(BiConsumer<K, V> consumer) {
+        for (Map.Entry<K, List<V>> entry : targetMap.entrySet()) {
+            K key = entry.getKey();
+            entry.getValue().forEach(v -> {
+                consumer.accept(key, v);
+            });
+        }
     }
 
     @Override
     public boolean isEmpty() {
-        return this.targetMap.isEmpty();
+        return targetMap.isEmpty();
     }
 
     @Override
-    public boolean containsKey(Object key) {
-        return this.targetMap.containsKey(key);
-    }
-
-    @Override
-    public boolean containsValue(Object value) {
-        return this.targetMap.containsValue(value);
-    }
-
-    @Override
-    public List<V> get(Object key) {
-        return this.targetMap.get(key);
-    }
-
-    @Override
-    public List<V> put(K key, List<V> value) {
-        return this.targetMap.put(key, value);
-    }
-
-    @Override
-    public List<V> remove(Object key) {
-        return this.targetMap.remove(key);
-    }
-
-    @Override
-    public void putAll(Map<? extends K, ? extends List<V>> map) {
-        this.targetMap.putAll(map);
-    }
-
-    @Override
-    public void clear() {
-        this.targetMap.clear();
+    public List<V> values() {
+        Collection<List<V>> values = targetMap.values();
+        List<V> rs = new LinkedList<>();
+        for (List<V> value : values) {
+            rs.addAll(value);
+        }
+        return rs;
     }
 
     @Override
     public Set<K> keySet() {
-        return this.targetMap.keySet();
+        return targetMap.keySet();
     }
 
     @Override
-    public Collection<List<V>> values() {
-        return this.targetMap.values();
+    public List<V> get(K key) {
+        return  targetMap.get(key);
     }
 
     @Override
-    public Set<Entry<K, List<V>>> entrySet() {
-        return this.targetMap.entrySet();
+    public V getOne(K key) {
+        return CollectionUtils.findLast(targetMap.get(key));
+    }
+
+    // Map implementation
+
+    @Override
+    public boolean containsKey(Object key) {
+        return this.targetMap.containsKey(key);
     }
 
     @Override

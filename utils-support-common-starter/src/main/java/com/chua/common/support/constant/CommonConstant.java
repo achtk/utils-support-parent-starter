@@ -420,6 +420,11 @@ public final class CommonConstant {
      * default
      */
     public static final String DEFAULT = "default";
+
+    /**
+     * default
+     */
+    public static final String SYSTEM = "system";
     /**
      * null
      */

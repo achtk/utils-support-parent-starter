@@ -1973,4 +1973,17 @@ public class ClassUtils {
 
         return null;
     }
+
+    /**
+     * 获取类的类加载器
+     *
+     * @param caller 类
+     * @return ClassLoader
+     */
+    public static ClassLoader getCallerClassLoader(Class<?> caller) {
+        Preconditions.checkNotNull(caller);
+        ClassLoader classLoader = caller.getClassLoader();
+        return null == classLoader ? ClassLoader.getSystemClassLoader() : classLoader;
+    }
+
 }

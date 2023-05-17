@@ -1,6 +1,7 @@
 package com.chua.common.support.reflection.describe;
 
 import com.chua.common.support.reflection.describe.factory.MethodAnnotationFactory;
+import com.chua.common.support.reflection.describe.provider.FieldDescribeProvider;
 import com.chua.common.support.reflection.describe.provider.MethodDescribeProvider;
 import com.chua.common.support.unit.name.NamingCase;
 import com.chua.common.support.utils.ArrayUtils;
@@ -420,6 +421,11 @@ public class MethodDescribe implements MemberDescribe {
 
     @Override
     public FieldDescribe getFieldDescribe(String name) {
+        return null;
+    }
+
+    @Override
+    public FieldDescribeProvider getFieldDescribeProvider(String name) {
         return null;
     }
 

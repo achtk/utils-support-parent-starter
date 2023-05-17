@@ -4,6 +4,10 @@ import com.chua.common.support.function.Splitter;
 import com.chua.common.support.lang.Ascii;
 import com.chua.common.support.lang.date.DateUtils;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
+import java.lang.reflect.Modifier;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.time.LocalDate;
@@ -2243,5 +2247,261 @@ public class StringUtils {
             }
         }
         return true;
+    }
+
+    /**
+     * 翻译Modifier值
+     *
+     * @param mod modifier
+     * @return 翻译值
+     */
+    public static String modifier(int mod, char splitter) {
+        StringBuilder sb = new StringBuilder();
+        if (Modifier.isAbstract(mod)) {
+            sb.append("abstract").append(splitter);
+        }
+        if (Modifier.isFinal(mod)) {
+            sb.append("final").append(splitter);
+        }
+        if (Modifier.isInterface(mod)) {
+            sb.append("interface").append(splitter);
+        }
+        if (Modifier.isNative(mod)) {
+            sb.append("native").append(splitter);
+        }
+        if (Modifier.isPrivate(mod)) {
+            sb.append("private").append(splitter);
+        }
+        if (Modifier.isProtected(mod)) {
+            sb.append("protected").append(splitter);
+        }
+        if (Modifier.isPublic(mod)) {
+            sb.append("public").append(splitter);
+        }
+        if (Modifier.isStatic(mod)) {
+            sb.append("static").append(splitter);
+        }
+        if (Modifier.isStrict(mod)) {
+            sb.append("strict").append(splitter);
+        }
+        if (Modifier.isSynchronized(mod)) {
+            sb.append("synchronized").append(splitter);
+        }
+        if (Modifier.isTransient(mod)) {
+            sb.append("transient").append(splitter);
+        }
+        if (Modifier.isVolatile(mod)) {
+            sb.append("volatile").append(splitter);
+        }
+        if (sb.length() > 0) {
+            sb.deleteCharAt(sb.length() - 1);
+        }
+        return sb.toString();
+    }
+
+    /**
+     * 自动换行
+     *
+     * @param string 字符串
+     * @param width  行宽
+     * @return 换行后的字符串
+     */
+    public static String wrap(String string, int width) {
+        final StringBuilder sb = new StringBuilder();
+        final char[] buffer = string.toCharArray();
+        int count = 0;
+        for (char c : buffer) {
+
+            if (count == width) {
+                count = 0;
+                sb.append('\n');
+                if (c == '\n') {
+                    continue;
+                }
+            }
+
+            if (c == '\n') {
+                count = 0;
+            } else {
+                count++;
+            }
+
+            sb.append(c);
+        }
+        return sb.toString();
+    }
+
+
+    /**
+     * 翻译类名称
+     *
+     * @param clazz Java类
+     * @return 翻译值
+     */
+    public static String classname(Class<?> clazz) {
+        if (clazz.isArray()) {
+            StringBuilder sb = new StringBuilder(clazz.getName());
+            sb.delete(0, 2);
+            if (sb.length() > 0 && sb.charAt(sb.length() - 1) == ';') {
+                sb.deleteCharAt(sb.length() - 1);
+            }
+            sb.append("[]");
+            return sb.toString();
+        } else {
+            return clazz.getName();
+        }
+    }
+
+    /**
+     * 将一个对象转换为字符串
+     *
+     * @param obj 目标对象
+     * @return 字符串
+     */
+    public static String objectToString(Object obj) {
+        if (null == obj) {
+            return EMPTY_STRING;
+        }
+        try {
+            return obj.toString();
+        } catch (Throwable t) {
+            return "ERROR DATA!!! Method toString() throw exception. obj class: " + obj.getClass()
+                    + ", exception class: " + t.getClass()
+                    + ", exception message: " + t.getMessage();
+        }
+    }
+
+    /**
+     * Gets a CharSequence length or {@code 0} if the CharSequence is
+     * {@code null}.
+     *
+     * @param cs a CharSequence or {@code null}
+     * @return CharSequence length or {@code 0} if the CharSequence is
+     * {@code null}.
+     * @since 2.4
+     * @since 3.0 Changed signature from length(String) to length(CharSequence)
+     */
+    public static int length(final CharSequence cs) {
+        return cs == null ? 0 : cs.length();
+    }
+
+
+    public static List<String> toLines(String text) {
+        List<String> result = new ArrayList<String>();
+        BufferedReader reader = new BufferedReader(new StringReader(text));
+        try {
+            String line = reader.readLine();
+            while (line != null) {
+                result.add(line);
+                line = reader.readLine();
+            }
+        } catch (IOException exc) {
+            // quit
+        } finally {
+            try {
+                reader.close();
+            } catch (IOException e) {
+                // ignore
+            }
+        }
+        return result;
+    }
+    /**
+     * 去除前后指定字符
+     * <pre>
+     * strip(null, *)          = null
+     * strip("", *)            = ""
+     * strip("abc", null)      = "abc"
+     * strip("  abc", null)    = "abc"
+     * strip("abc  ", null)    = "abc"
+     * strip(" abc ", null)    = "abc"
+     * strip("  abcyx", "xyz") = "  abc"
+     * </pre>
+     *
+     * @param str        源数据
+     * @param stripChars 指定字符
+     * @return 去除前后指定字符
+     */
+    public static String strip(final String str, final String stripChars) {
+        if (isNullOrEmpty(str)) {
+            return str;
+        }
+        final String newStr = stripStart(str, stripChars);
+        return stripEnd(newStr, stripChars);
+    }
+
+    /**
+     * 去除字符串后面指定字符
+     * <pre>
+     * stripEnd(null, *)          = null
+     * stripEnd("", *)            = ""
+     * stripEnd("abc", "")        = "abc"
+     * stripEnd("abc", null)      = "abc"
+     * stripEnd("  abc", null)    = "  abc"
+     * stripEnd("abc  ", null)    = "abc"
+     * stripEnd(" abc ", null)    = " abc"
+     * stripEnd("  abcyx", "xyz") = "  abc"
+     * stripEnd("120.00", ".0")   = "12"
+     * </pre>
+     *
+     * @param str        源数据
+     * @param stripChars 待去除字符
+     * @return 去除字符串后面指定字符
+     */
+    public static String stripEnd(final String str, final String stripChars) {
+        int end;
+        if (str == null || (end = str.length()) == 0) {
+            return str;
+        }
+
+        if (stripChars == null) {
+            while (end != 0 && Character.isWhitespace(str.charAt(end - 1))) {
+                end--;
+            }
+        } else if (stripChars.isEmpty()) {
+            return str;
+        } else {
+            while (end != 0 && stripChars.indexOf(str.charAt(end - 1)) != -1) {
+                end--;
+            }
+        }
+        return str.substring(0, end);
+    }
+
+    /**
+     * 去除字符串前面指定字符
+     * <pre>
+     * stripStart(null, *)          = null
+     * stripStart("", *)            = ""
+     * stripStart("abc", "")        = "abc"
+     * stripStart("abc", null)      = "abc"
+     * stripStart("  abc", null)    = "abc"
+     * stripStart("abc  ", null)    = "abc  "
+     * stripStart(" abc ", null)    = "abc "
+     * stripStart("yxabc  ", "xyz") = "abc  "
+     * </pre>
+     *
+     * @param str        源数据
+     * @param stripChars 待去除字符
+     * @return 去除字符串前面指定字符
+     */
+    public static String stripStart(final String str, final String stripChars) {
+        int strLen;
+        if (str == null || (strLen = str.length()) == 0) {
+            return str;
+        }
+        int start = 0;
+        if (stripChars == null) {
+            while (start != strLen && Character.isWhitespace(str.charAt(start))) {
+                start++;
+            }
+        } else if (stripChars.isEmpty()) {
+            return str;
+        } else {
+            while (start != strLen && stripChars.indexOf(str.charAt(start)) != INDEX_NOT_FOUND) {
+                start++;
+            }
+        }
+        return str.substring(start);
     }
 }

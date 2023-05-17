@@ -1,5 +1,6 @@
 package com.chua.common.support.reflection.describe;
 
+import com.chua.common.support.reflection.describe.provider.FieldDescribeProvider;
 import com.chua.common.support.reflection.describe.provider.MethodDescribeProvider;
 
 import java.lang.annotation.Annotation;
@@ -18,6 +19,13 @@ public interface MemberDescribe {
      * @return 属性
      */
     FieldDescribe getFieldDescribe(String name);
+    /**
+     * 获取属性
+     *
+     * @param name 属性名称
+     * @return 属性
+     */
+    FieldDescribeProvider getFieldDescribeProvider(String name);
 
     /**
      * 获取方法

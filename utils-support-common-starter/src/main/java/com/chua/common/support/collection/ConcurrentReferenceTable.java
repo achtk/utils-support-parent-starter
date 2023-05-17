@@ -2,10 +2,7 @@ package com.chua.common.support.collection;
 
 import com.chua.common.support.constant.NumberConstant;
 
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BiFunction;
 
 import static com.chua.common.support.constant.NumberConstant.DEFAULT_INITIAL_CAPACITY;
@@ -127,6 +124,17 @@ public class ConcurrentReferenceTable<R, C, V> implements Table<R, C, V>{
         V apply = function.apply(r, c);
         rpl.computeIfAbsent(r, r1 -> new ConcurrentReferenceHashMap<>(initialCapacity)).putIfAbsent(c, apply);
         return apply;
+    }
+
+    @Override
+    public Set<R> rowKeySet() {
+        return new HashSet<>(rpl.keySet());
+    }
+
+    @Override
+    public Map<C, Map<C, V>> rowMap() {
+        Map<C, Map<C, V>> rs = new LinkedHashMap<>();
+        return rs;
     }
 
 }

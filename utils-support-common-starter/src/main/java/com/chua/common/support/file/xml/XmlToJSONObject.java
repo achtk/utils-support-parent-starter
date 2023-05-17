@@ -260,7 +260,7 @@ public class XmlToJSONObject extends JsonObject {
             this.source = new HashMap<String, Object>();
         } else {
             this.source = new HashMap<String, Object>(m.size());
-            for (final Entry<?, ?> e : m.entrySet()) {
+            for (final Map.Entry<?, ?> e : m.entrySet()) {
                 if (e.getKey() == null) {
                     throw new NullPointerException("Null key.");
                 }
@@ -882,7 +882,7 @@ public class XmlToJSONObject extends JsonObject {
      * @return An Entry Set
      * @see Map#entrySet()
      */
-    public Set<Entry<String, Object>> entrySet() {
+    public Set<Map.Entry<String, Object>> entrySet() {
         return this.source.entrySet();
     }
 
@@ -1941,7 +1941,7 @@ public class XmlToJSONObject extends JsonObject {
             if (!this.keySet().equals(((XmlToJSONObject) other).keySet())) {
                 return false;
             }
-            for (final Entry<String, ?> entry : this.entrySet()) {
+            for (final Map.Entry<String, ?> entry : this.entrySet()) {
                 String name = entry.getKey();
                 Object valueThis = entry.getValue();
                 Object valueOther = ((XmlToJSONObject) other).get(name);
@@ -2424,7 +2424,7 @@ public class XmlToJSONObject extends JsonObject {
             writer.write('{');
 
             if (length == 1) {
-                final Entry<String, ?> entry = this.entrySet().iterator().next();
+                final Map.Entry<String, ?> entry = this.entrySet().iterator().next();
                 final String key = entry.getKey();
                 writer.write(quote(key));
                 writer.write(':');
@@ -2438,7 +2438,7 @@ public class XmlToJSONObject extends JsonObject {
                 }
             } else if (length != 0) {
                 final int newIndent = indent + indentFactor;
-                for (final Entry<String, ?> entry : this.entrySet()) {
+                for (final Map.Entry<String, ?> entry : this.entrySet()) {
                     if (needsComma) {
                         writer.write(',');
                     }
@@ -2482,7 +2482,7 @@ public class XmlToJSONObject extends JsonObject {
      */
     public Map<String, Object> toMap() {
         Map<String, Object> results = new HashMap<String, Object>();
-        for (Entry<String, Object> entry : this.entrySet()) {
+        for (Map.Entry<String, Object> entry : this.entrySet()) {
             Object value;
             if (entry.getValue() == null || NULL.equals(entry.getValue())) {
                 value = null;

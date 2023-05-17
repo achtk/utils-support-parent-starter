@@ -1,6 +1,7 @@
 package com.chua.common.support.reflection.describe;
 
 import com.chua.common.support.collection.ConcurrentReferenceHashMap;
+import com.chua.common.support.reflection.describe.provider.FieldDescribeProvider;
 import com.chua.common.support.reflection.describe.provider.MethodDescribeProvider;
 
 import java.lang.annotation.Annotation;
@@ -52,6 +53,11 @@ public class TypeAttribute implements MemberDescribe {
     @Override
     public FieldDescribe getFieldDescribe(String name) {
         return typeDescribe.getFieldDescribe(name);
+    }
+
+    @Override
+    public FieldDescribeProvider getFieldDescribeProvider(String name) {
+        return new FieldDescribeProvider().addChain(getFieldDescribe(name));
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.chua.common.support.context.bean;
 
-import com.chua.common.support.collection.ConfigureAttributes;
+import com.chua.common.support.collection.TypeHashMap;
 import com.chua.common.support.context.definition.MethodDefinition;
 import com.chua.common.support.context.definition.ObjectDefinition;
 import com.chua.common.support.context.definition.TypeDefinition;
@@ -59,7 +59,7 @@ public class BeanObject {
 
         return invoke(parameterDescribe -> {
             for (ParameterAnalyzer parameterAnalyzer : parameterAnalyzers) {
-                Object value = parameterAnalyzer.analyzer(parameterDescribe, new ConfigureAttributes(args));
+                Object value = parameterAnalyzer.analyzer(parameterDescribe, new TypeHashMap(args));
                 if (null != value) {
                     return value;
                 }

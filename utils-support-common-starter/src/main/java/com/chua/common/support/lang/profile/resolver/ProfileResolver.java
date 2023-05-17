@@ -1,5 +1,6 @@
 package com.chua.common.support.lang.profile.resolver;
 
+import com.chua.common.support.converter.Converter;
 import com.chua.common.support.lang.profile.value.ProfileValue;
 import com.chua.common.support.utils.UrlUtils;
 
@@ -22,7 +23,7 @@ public interface ProfileResolver {
      */
     default List<ProfileValue> resolve(String resourceUrl) {
         try {
-            return resolve(resourceUrl, UrlUtils.createUrl(resourceUrl).openStream());
+            return resolve(resourceUrl, Converter.convertIfNecessary(resourceUrl, InputStream.class));
         } catch (Throwable e) {
             return Collections.emptyList();
         }

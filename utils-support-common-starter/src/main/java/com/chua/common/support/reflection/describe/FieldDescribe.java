@@ -1,5 +1,6 @@
 package com.chua.common.support.reflection.describe;
 
+import com.chua.common.support.reflection.describe.provider.FieldDescribeProvider;
 import com.chua.common.support.reflection.describe.provider.MethodDescribeProvider;
 import com.chua.common.support.utils.ArrayUtils;
 import com.chua.common.support.value.NullValue;
@@ -204,6 +205,11 @@ public class FieldDescribe implements MemberDescribe {
     @Override
     public FieldDescribe getFieldDescribe(String name) {
         return this.name.equals(name) ? this : null;
+    }
+
+    @Override
+    public FieldDescribeProvider getFieldDescribeProvider(String name) {
+        return this.name.equals(name) ? new FieldDescribeProvider().addChain(this) : null;
     }
 
     @Override

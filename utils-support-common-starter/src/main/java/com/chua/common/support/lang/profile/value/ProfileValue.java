@@ -2,6 +2,8 @@ package com.chua.common.support.lang.profile.value;
 
 import com.chua.common.support.function.ChainMap;
 
+import java.util.Set;
+
 /**
  * 配置值
  *
@@ -24,10 +26,21 @@ public interface ProfileValue extends ChainMap<ProfileValue, String, Object> {
     Object getValue(String key);
 
     /**
-     * 获取值
-     *
-     * @param key key
+     * 是否包含数据
+     * @param name name
      * @return 结果
      */
-    Object getJsonValue(String key);
+    boolean contains(String name);
+
+    /**
+     * 添加配置
+     * @param value 配置
+     */
+    void add(ProfileValue value);
+
+    /**
+     * keys
+     * @return key
+     */
+    Set<String> keys();
 }

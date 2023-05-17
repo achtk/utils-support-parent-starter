@@ -1,6 +1,7 @@
 package com.chua.common.support.reflection.describe;
 
 import com.chua.common.support.reflection.MethodStation;
+import com.chua.common.support.reflection.describe.provider.FieldDescribeProvider;
 import com.chua.common.support.reflection.describe.provider.MethodDescribeProvider;
 import com.chua.common.support.utils.ArrayUtils;
 import com.chua.common.support.utils.ClassUtils;
@@ -48,11 +49,17 @@ public class TypeDescribe implements MemberDescribe {
     public TypeDescribe(Class<?> beanClass) {
         this.beanClass = beanClass;
         this.name = beanClass.getName();
-        this.annotationTypes = Arrays.stream(beanClass.getDeclaredAnnotations()).map(AnnotationDescribe::of).
-                toArray(AnnotationDescribe[]::new);
-        this.methodDescribes = ClassUtils.getMethods(beanClass).stream().map(MethodDescribe::of)
+        this.annotationTypes = Arrays.stream(beanClass.getDeclaredAnnotations())
+                .map(AnnotationDescribe::of)
+                .toArray(AnnotationDescribe[]::new);
+        this.methodDescribes = ClassUtils.getMethods(beanClass).stream()
+                .map(MethodDescribe::of)
+                .map(it -> it.entity(object))
                 .collect(Collectors.toList());
-        this.fieldDescribes = ClassUtils.getFields(beanClass).stream().map(FieldDescribe::of).collect(Collectors.toList());
+        this.fieldDescribes = ClassUtils.getFields(beanClass).stream()
+                .map(FieldDescribe::of)
+                .map(it -> it.entity(object))
+                .collect(Collectors.toList());
     }
 
     public TypeDescribe(Object object) {
@@ -85,6 +92,11 @@ public class TypeDescribe implements MemberDescribe {
         Optional<FieldDescribe> first = fieldDescribes.stream().filter(it -> it.name().equals(name))
                 .findFirst();
         return first.map(it -> it.entity(object)).orElse(null);
+    }
+
+    @Override
+    public FieldDescribeProvider getFieldDescribeProvider(String name) {
+        return new FieldDescribeProvider().addChain(getFieldDescribe(name));
     }
 
     @Override

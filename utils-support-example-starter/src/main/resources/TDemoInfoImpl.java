@@ -2,7 +2,7 @@ package com.chua.tools.example.entity;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.chua.example.support.dynamic.TDemoInfo;
+import com.chua.example.dynamic.TDemoInfo;
 
 import java.util.Date;
 

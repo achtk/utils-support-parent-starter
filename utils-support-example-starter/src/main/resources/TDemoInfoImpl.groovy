@@ -1,6 +1,6 @@
 package com.chua.tools
 
-import com.chua.example.support.dynamic.TDemoInfo;
+import com.chua.example.dynamic.TDemoInfo;
 
 
 /**
