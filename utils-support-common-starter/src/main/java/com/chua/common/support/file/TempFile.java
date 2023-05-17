@@ -11,7 +11,7 @@ public class TempFile extends AbstractResourceFile {
         super(ResourceFileConfiguration.builder().build());
     }
 
-    public TempFile(ResourceConfiguration resourceConfiguration) {
+    public TempFile(ResourceFileConfiguration resourceConfiguration) {
         super(resourceConfiguration);
     }
 }

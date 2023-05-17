@@ -35,6 +35,12 @@ public class StringUtils {
     static final String[] PADDING = {"", " ", "  ", "   ", "    ", "     ", "      ", "       ", "        ",
             "         ", "          ", "           ", "            ", "             ", "              ", "               ",
             "                ", "                 ", "                  ", "                   ", "                    "};
+    private static final ThreadLocal<Stack<StringBuilder>> THREAD_LOCAL_BUILDERS = new ThreadLocal<Stack<StringBuilder>>() {
+        @Override
+        protected Stack<StringBuilder> initialValue() {
+            return new Stack<>();
+        }
+    };
 
     /**
      * <p>字符串是否为空，空的定义如下：</p>
@@ -2504,4 +2510,67 @@ public class StringUtils {
         }
         return str.substring(start);
     }
+
+
+    /**
+     * Maintains cached StringBuilders in a flyweight pattern, to minimize new StringBuilder GCs. The StringBuilder is
+     * prevented from growing too large.
+     * <p>
+     * Care must be taken to release the builder once its work has been completed, with {@link #releaseBuilder}
+     *
+     * @return an empty StringBuilder
+     */
+    public static StringBuilder borrowBuilder() {
+       return new StringBuilder();
+    }
+
+
+    /**
+     * Join a collection of strings by a separator
+     *
+     * @param strings collection of string objects
+     * @param sep     string to place between strings
+     * @return joined string
+     */
+    public static String join(Collection<?> strings, String sep) {
+        return join(strings.iterator(), sep);
+    }
+
+    /**
+     * Join a collection of strings by a separator
+     *
+     * @param strings iterator of string objects
+     * @param sep     string to place between strings
+     * @return joined string
+     */
+    public static String join(Iterator<?> strings, String sep) {
+        if (!strings.hasNext()) {
+            return "";
+        }
+
+        String start = strings.next().toString();
+        if (!strings.hasNext()) // only one, avoid builder
+        {
+            return start;
+        }
+
+        StringJoiner j = new StringJoiner(sep);
+        j.add(start);
+        while (strings.hasNext()) {
+            j.add(strings.next().toString());
+        }
+        return j.toString();
+    }
+
+    /**
+     * Join an array of strings by a separator
+     *
+     * @param strings collection of string objects
+     * @param sep     string to place between strings
+     * @return joined string
+     */
+    public static String join(String[] strings, String sep) {
+        return join(Arrays.asList(strings), sep);
+    }
+
 }

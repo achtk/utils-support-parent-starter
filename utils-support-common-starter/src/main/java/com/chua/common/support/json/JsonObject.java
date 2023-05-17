@@ -6,6 +6,7 @@ import com.chua.common.support.utils.MapUtils;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * json object
@@ -31,4 +32,7 @@ public class JsonObject extends TypeHashMap implements Profile {
         return new JsonObject();
     }
 
+    public Set<String> keySet() {
+        return source.keySet();
+    }
 }

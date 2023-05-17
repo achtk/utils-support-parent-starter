@@ -84,6 +84,13 @@ public interface Joiner {
     <T> String join(T array);
 
     /**
+     * 空置替换
+     * @param s 替换值
+     * @return this
+     */
+    Joiner useForNull(String s);
+
+    /**
      * 拆分器
      */
     abstract class AbstractJoiner implements Joiner {
@@ -119,6 +126,7 @@ public interface Joiner {
 
         private String s;
         private String kvSeparator;
+        private String replace;
 
         public DelegateJoiner(String s) {
             this.s = s;
@@ -137,7 +145,7 @@ public interface Joiner {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(s);
             array.forEach((k, v) -> {
-                stringBuilder.append(k).append(kvSeparator).append(v);
+                stringBuilder.append(k).append(kvSeparator).append(ObjectUtils.defaultIfNull(v, replace));
             });
             return stringBuilder.substring(s.length());
         }
@@ -149,10 +157,10 @@ public interface Joiner {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(s);
             for (T t : array) {
-                if (null == t) {
+                if (null == t && StringUtils.isEmpty(replace)) {
                     continue;
                 }
-                stringBuilder.append(t);
+                stringBuilder.append(ObjectUtils.defaultIfNull(t, replace));
             }
             return stringBuilder.substring(s.length());
         }
@@ -186,6 +194,12 @@ public interface Joiner {
                 return join((T[])array);
             }
             return EMPTY;
+        }
+
+        @Override
+        public Joiner useForNull(String s) {
+            this.replace = s;
+            return this;
         }
 
     }
