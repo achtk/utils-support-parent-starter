@@ -78,8 +78,12 @@ public class MapProfileValue implements ProfileValue {
         }
 
         try {
-            String newName = key.startsWith(SYMBOL_HASH) ? key : SYMBOL_HASH + key;
-            spelExpressionParser.parseExpression(newName);
+            try {
+                return spelExpressionParser.parseExpression(key);
+            } catch (Exception e) {
+                String newName = key.startsWith(SYMBOL_HASH) ? key : SYMBOL_HASH + key;
+                return spelExpressionParser.parseExpression(newName);
+            }
         } catch (Exception ignored) {
         }
 
@@ -100,8 +104,12 @@ public class MapProfileValue implements ProfileValue {
         }
 
         try {
-            String newName = name.startsWith(SYMBOL_HASH) ? name : SYMBOL_HASH + name;
-            spelExpressionParser.parseExpression(newName);
+            try {
+                spelExpressionParser.parseExpression(name);
+            } catch (Exception e) {
+                String newName = name.startsWith(SYMBOL_HASH) ? name : SYMBOL_HASH + name;
+                spelExpressionParser.parseExpression(newName);
+            }
             return true;
         } catch (Exception ignored) {
         }
