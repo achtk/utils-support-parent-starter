@@ -2,15 +2,14 @@ package com.chua.common.support.spi;
 
 
 import com.chua.common.support.annotations.Spi;
-import com.chua.common.support.collection.SortedList;
 import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.function.NameAware;
 import com.chua.common.support.spi.autowire.AutoServiceAutowire;
 import com.chua.common.support.spi.autowire.ServiceAutowire;
-import com.chua.common.support.spi.finder.ServiceLoaderServiceFinder;
 import com.chua.common.support.spi.finder.CustomServiceFinder;
 import com.chua.common.support.spi.finder.SamePackageServiceFinder;
 import com.chua.common.support.spi.finder.ServiceFinder;
+import com.chua.common.support.spi.finder.ServiceLoaderServiceFinder;
 import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.Preconditions;
 import com.chua.common.support.utils.StringUtils;
@@ -358,7 +357,7 @@ public class ServiceProvider<T> implements InitializingAware {
             return definitions.size() == 1 ? Optional.ofNullable(definitions.values().iterator().next().first().getObj(serviceAutowire)) :Optional.empty();
         }
 
-        return getDefinition(name).newInstance(serviceAutowire);
+        return Optional.ofNullable(getDefinition(name).newInstance(serviceAutowire));
     }
     /**
      * 获取实现

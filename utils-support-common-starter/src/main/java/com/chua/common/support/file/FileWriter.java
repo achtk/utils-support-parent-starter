@@ -1,6 +1,5 @@
 package com.chua.common.support.file;
 
-import com.alibaba.fastjson.util.IOUtils;
 import com.chua.common.support.utils.FileUtils;
 import com.chua.common.support.utils.IoUtils;
 import com.chua.common.support.utils.StringUtils;
@@ -119,7 +118,7 @@ public class FileWriter extends FileWrapper {
         } catch (IOException e) {
             throw new IOException(e);
         } finally {
-            IOUtils.close(writer);
+            IoUtils.closeQuietly(writer);
         }
         return file;
     }

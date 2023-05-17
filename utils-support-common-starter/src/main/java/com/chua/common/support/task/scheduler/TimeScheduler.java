@@ -105,7 +105,7 @@ public interface TimeScheduler {
         private Executor executor;
 
         public TimeSchedulerBuilder(String type) {
-            this.timeScheduler = ServiceProvider.of(TimeScheduler.class).getNewExtension(type, "jdk");
+            this.timeScheduler = ServiceProvider.of(TimeScheduler.class).getNewExtension(type);
         }
 
         /**

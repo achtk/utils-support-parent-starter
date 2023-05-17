@@ -4,9 +4,11 @@ import com.chua.common.support.collection.ConcurrentReferenceHashMap;
 import com.chua.common.support.collection.ConcurrentReferenceTable;
 import com.chua.common.support.collection.Table;
 import com.chua.common.support.converter.Converter;
+import com.chua.common.support.function.MethodFilter;
 import com.chua.common.support.lang.proxy.BridgingMethodIntercept;
 import com.chua.common.support.lang.proxy.ProxyUtils;
 import com.chua.common.support.unit.name.NamingCase;
+import com.sun.istack.internal.Nullable;
 
 import java.io.*;
 import java.lang.annotation.Annotation;
@@ -20,6 +22,7 @@ import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 
 import static com.chua.common.support.constant.CommonConstant.*;
+import static com.chua.common.support.converter.Converter.convertIfPrimitive;
 
 /**
  * 类处理工具
@@ -221,6 +224,7 @@ public class ClassUtils {
     public static <T> boolean isVoid(Class<T> value) {
         return null == value || value == void.class || value == Void.class;
     }
+
     /**
      * 是否为空
      *
@@ -342,7 +346,7 @@ public class ClassUtils {
      * @param name       名称
      * @param returnType 返回类型
      * @return 类
-     * @throws LinkageError           ex 连接异常
+     * @throws LinkageError ex 连接异常
      */
     public static <T> Class<T> forName(String name, Class<T> returnType) {
         Class<?> aClass = null;
@@ -360,7 +364,7 @@ public class ClassUtils {
      * @param name        名称
      * @param classLoader 类加载器
      * @return 类
-     * @throws LinkageError           连接异常
+     * @throws LinkageError 连接异常
      */
     public static Class<?> forName(String name, ClassLoader classLoader) {
 
@@ -426,6 +430,7 @@ public class ClassUtils {
         }
         return result;
     }
+
     /**
      * 实例化类
      *
@@ -457,6 +462,7 @@ public class ClassUtils {
             return null;
         }
     }
+
     /**
      * 实例化类
      * <p>
@@ -512,6 +518,7 @@ public class ClassUtils {
         }
         return (T) createAlgorithm(tClass, params);
     }
+
     /**
      * 参数
      *
@@ -837,6 +844,7 @@ public class ClassUtils {
         });
 
     }
+
     /**
      * 是否包含类
      *
@@ -862,7 +870,6 @@ public class ClassUtils {
 
         return false;
     }
-
 
 
     /**
@@ -934,7 +941,6 @@ public class ClassUtils {
                 type.isPrimitive()
                 ;
     }
-
 
 
     /**
@@ -1026,18 +1032,32 @@ public class ClassUtils {
      *
      * @param aClass   类
      * @param callback 方法回调
+     * @param methodFilter 过滤器
      */
-    public static void doWithMethods(final Class<?> aClass, final Consumer<Method> callback) {
+    public static void doWithMethods(final Class<?> aClass, final Consumer<Method> callback, MethodFilter methodFilter) {
         if (null == aClass || null == callback) {
             return;
         }
         for (Method method : getMethods(aClass)) {
+            if (methodFilter != null && !methodFilter.matches(method)) {
+                continue;
+            }
             try {
                 callback.accept(method);
             } catch (Throwable throwable) {
                 throw new IllegalStateException("Not allowed to access method '" + method.getName() + "': " + throwable);
             }
         }
+    }
+
+    /**
+     * 方法回调
+     *
+     * @param aClass   类
+     * @param callback 方法回调
+     */
+    public static void doWithMethods(final Class<?> aClass, final Consumer<Method> callback) {
+        doWithMethods(aClass, callback, null);
     }
 
     /**
@@ -1343,7 +1363,7 @@ public class ClassUtils {
      * @return 结果
      */
     public static Object invokeMethod(Method method, Object bean, Object... args) {
-        if(null == method) {
+        if (null == method) {
             return null;
         }
 
@@ -1469,7 +1489,6 @@ public class ClassUtils {
 
         field.setAccessible(true);
     }
-
 
 
     /**
@@ -1603,6 +1622,7 @@ public class ClassUtils {
 
         setFieldValue(field, bean.getClass(), value, bean);
     }
+
     /**
      * 赋值
      *
@@ -1633,6 +1653,7 @@ public class ClassUtils {
         }
 
     }
+
     /**
      * 获取字段值
      *
@@ -1746,7 +1767,6 @@ public class ClassUtils {
     }
 
 
-
     /**
      * 类型是否一致
      *
@@ -1817,6 +1837,7 @@ public class ClassUtils {
         result.add(superclass);
         getSuperType(superclass, result);
     }
+
     /**
      * 获取所有接口
      *
@@ -1870,6 +1891,7 @@ public class ClassUtils {
             consumer.accept(aClass);
         }
     }
+
     /**
      * 获取类加载器下的资源
      *
@@ -1912,6 +1934,7 @@ public class ClassUtils {
         return rs;
 
     }
+
     /**
      * 查询唯一类型值, 非唯一返回空
      *
@@ -1954,7 +1977,7 @@ public class ClassUtils {
      * @param annotationType 注解
      * @return 结果
      */
-    public static <A extends Annotation>A getDeclaredAnnotation(Object type, Class<? extends A> annotationType) {
+    public static <A extends Annotation> A getDeclaredAnnotation(Object type, Class<? extends A> annotationType) {
         if (type instanceof Class) {
             return ((Class<?>) type).getDeclaredAnnotation(annotationType);
         }
@@ -1984,6 +2007,36 @@ public class ClassUtils {
         Preconditions.checkNotNull(caller);
         ClassLoader classLoader = caller.getClassLoader();
         return null == classLoader ? ClassLoader.getSystemClassLoader() : classLoader;
+    }
+
+    /**
+     * 是否子类
+     *
+     * @param type  类型
+     * @param value 对象
+     * @return 是否子类
+     */
+    public static boolean isAssignableValue(Class<?> type, @Nullable Object value) {
+        return (value != null ? isAssignable(type, value.getClass()) : !type.isPrimitive());
+    }
+
+    /**
+     * 是否子类
+     *
+     * @param lhsType 类型
+     * @param rhsType 对象
+     * @return 是否子类
+     */
+    public static boolean isAssignable(Class<?> lhsType, Class<?> rhsType) {
+        if (lhsType.isAssignableFrom(rhsType)) {
+            return true;
+        }
+        if (lhsType.isPrimitive()) {
+            Class<?> resolvedPrimitive = convertIfPrimitive(rhsType);
+            return (lhsType == resolvedPrimitive);
+        }
+        Class<?> resolvedWrapper = convertIfPrimitive(rhsType);
+        return (resolvedWrapper != null && lhsType.isAssignableFrom(resolvedWrapper));
     }
 
 }

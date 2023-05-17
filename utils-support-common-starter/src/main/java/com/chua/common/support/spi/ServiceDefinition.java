@@ -79,6 +79,10 @@ public class ServiceDefinition {
      * @return 实现
      */
     public <T> T newInstance(ServiceAutowire serviceAutowire, Object... args) {
+        if(null == implClass) {
+            return null;
+        }
+
         Constructor<?>[] constructors = implClass.getConstructors();
         for (Constructor<?> constructor : constructors) {
             if(constructor.getParameterCount() != args.length) {

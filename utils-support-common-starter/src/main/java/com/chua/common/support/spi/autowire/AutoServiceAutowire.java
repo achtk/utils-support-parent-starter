@@ -1,7 +1,5 @@
 package com.chua.common.support.spi.autowire;
 
-import com.chua.common.support.extra.spring.SpringUtils;
-import com.chua.common.support.reflection.describe.MethodDescribe;
 import com.chua.common.support.reflection.describe.TypeDescribe;
 import com.chua.common.support.reflection.describe.provider.MethodDescribeProvider;
 import com.chua.common.support.utils.ClassUtils;
@@ -12,13 +10,14 @@ import com.chua.common.support.utils.ClassUtils;
  */
 public class AutoServiceAutowire implements ServiceAutowire{
 
-    public static final ServiceAutowire INSTANCE = new AutoServiceAutowire();
+    public static ServiceAutowire INSTANCE = new AutoServiceAutowire();
     static final String APPLICATION_CONTEXT = "org.springframework.context.ApplicationContext";
+    static final String UTILS = "com.chua.common.support.extra.spring.SpringUtils";
     private static MethodDescribeProvider methodDescribe;
 
     static {
-        if(ClassUtils.isPresent(APPLICATION_CONTEXT)) {
-            TypeDescribe typeDescribe = new TypeDescribe(SpringUtils.class);
+        if(ClassUtils.isPresent(APPLICATION_CONTEXT) && ClassUtils.isPresent(UTILS)) {
+            TypeDescribe typeDescribe = new TypeDescribe(UTILS);
             methodDescribe = typeDescribe.getMethodDescribe("getApplicationContext")
                     .isChain()
                     .getMethodDescribe("getAutowireCapableBeanFactory")
