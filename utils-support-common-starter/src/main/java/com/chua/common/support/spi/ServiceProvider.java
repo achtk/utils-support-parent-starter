@@ -347,7 +347,19 @@ public class ServiceProvider<T> implements InitializingAware {
 
         return (T) Optional.ofNullable(getDefinition(name).newInstance(serviceAutowire)).orElse(defaultImpl);
     }
+    /**
+     * 获取实现(每次初始化)
+     *
+     * @param name 名称
+     * @return 实现
+     */
+    public Optional<T> getIfPresent(String name) {
+        if (null == name) {
+            return definitions.size() == 1 ? Optional.ofNullable(definitions.values().iterator().next().first().getObj(serviceAutowire)) :Optional.empty();
+        }
 
+        return getDefinition(name).newInstance(serviceAutowire);
+    }
     /**
      * 获取实现
      *
