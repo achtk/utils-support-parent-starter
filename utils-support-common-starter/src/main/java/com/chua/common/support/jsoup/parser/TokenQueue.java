@@ -2,6 +2,9 @@ package com.chua.common.support.jsoup.parser;
 
 import com.chua.common.support.jsoup.helper.Validate;
 
+import static com.chua.common.support.utils.StringUtils.borrowBuilder;
+import static com.chua.common.support.utils.StringUtils.isWhitespace;
+
 /**
  * A character queue with parsing helpers.
  *
@@ -304,7 +307,7 @@ public class TokenQueue {
             }
             last = c;
         }
-        return releaseBuilder(out);
+        return out.toString();
     }
 
     /**

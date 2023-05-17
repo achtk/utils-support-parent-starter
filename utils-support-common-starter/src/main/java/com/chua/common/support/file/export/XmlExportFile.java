@@ -104,7 +104,7 @@ public class XmlExportFile extends AbstractExportFile {
     public void doAnalysisValue(StringBuffer buffer, Pair pair, Object value) {
         buffer.append("<").append(pair.getName());
         String label = pair.getLabel();
-        if (!Strings.isNullOrEmpty(label) && !pair.getName().equals(label)) {
+        if (!StringUtils.isNullOrEmpty(label) && !pair.getName().equals(label)) {
             buffer.append(" describe=\"").append(pair.getLabel()).append("\"");
         }
         buffer.append(">");

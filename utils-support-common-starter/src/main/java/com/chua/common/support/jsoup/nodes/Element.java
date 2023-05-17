@@ -6,6 +6,7 @@ import com.chua.common.support.jsoup.internal.NonnullByDefault;
 import com.chua.common.support.jsoup.parser.ParseSettings;
 import com.chua.common.support.jsoup.parser.Tag;
 import com.chua.common.support.jsoup.select.*;
+import com.chua.common.support.utils.StringUtils;
 import lombok.EqualsAndHashCode;
 
 import java.io.IOException;
@@ -17,6 +18,7 @@ import java.util.regex.PatternSyntaxException;
 
 import static com.chua.common.support.jsoup.internal.Normalizer.normalize;
 import static com.chua.common.support.jsoup.nodes.TextNode.lastCharIsWhitespace;
+import static com.chua.common.support.utils.StringUtils.*;
 
 /**
  * A HTML element consists of a tag name, attributes, and child nodes (including text nodes and
@@ -26,7 +28,6 @@ import static com.chua.common.support.jsoup.nodes.TextNode.lastCharIsWhitespace;
  *
  * @author Jonathan Hedley, jonathan@hedley.net
  */
-@NonnullByDefault
 @EqualsAndHashCode(callSuper = false)
 public class Element extends Node {
     private static final List<Element> EmptyChildren = Collections.emptyList();
@@ -1365,7 +1366,7 @@ public class Element extends Node {
             }
         }, this);
 
-        return releaseBuilder(accum).trim();
+        return accum.toString().trim();
     }
 
     /**
@@ -1379,7 +1380,7 @@ public class Element extends Node {
     public String wholeText() {
         final StringBuilder accum = borrowBuilder();
         NodeTraversor.traverse((node, depth) -> appendWholeText(node, accum), this);
-        return releaseBuilder(accum);
+        return accum.toString();
     }
 
     private static void appendWholeText(Node node, StringBuilder accum) {
@@ -1408,7 +1409,7 @@ public class Element extends Node {
             appendWholeText(node, accum);
         }
 
-        return releaseBuilder(accum);
+        return accum.toString();
     }
 
     /**
@@ -1425,7 +1426,7 @@ public class Element extends Node {
     public String ownText() {
         StringBuilder sb = borrowBuilder();
         ownText(sb);
-        return releaseBuilder(sb).trim();
+        return sb.toString().trim();
     }
 
     private void ownText(StringBuilder accum) {
@@ -1536,7 +1537,7 @@ public class Element extends Node {
                 sb.append(cDataNode.getWholeText());
             }
         }
-        return releaseBuilder(sb);
+        return sb.toString();
     }
 
     /**
@@ -1771,7 +1772,7 @@ public class Element extends Node {
     public String html() {
         StringBuilder accum = borrowBuilder();
         html(accum);
-        String html = releaseBuilder(accum);
+        String html = accum.toString();
         return NodeUtils.outputSettings(this).prettyPrint() ? html.trim() : html;
     }
 

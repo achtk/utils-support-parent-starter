@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.function.Consumer;
 
+import static com.chua.common.support.utils.StringUtils.borrowBuilder;
 import static com.chua.common.support.utils.StringUtils.padding;
 
 /**
@@ -216,7 +217,7 @@ public abstract class Node implements Cloneable {
             return "";
         }
 
-        return resolve(baseUri(), attributes().getIgnoreCase(attributeKey));
+        return StringUtils.resolve(baseUri(), attributes().getIgnoreCase(attributeKey));
     }
 
     protected abstract List<Node> ensureChildNodes();
@@ -697,7 +698,7 @@ public abstract class Node implements Cloneable {
     public String outerHtml() {
         StringBuilder accum = borrowBuilder();
         outerHtml(accum);
-        return releaseBuilder(accum);
+        return accum.toString();
     }
 
     protected void outerHtml(Appendable accum) {

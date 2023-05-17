@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
  * @author CH
  */
 public class RegexConstant {
+    public static final Pattern EXTRA_DOT_SEGMENTS_PATTERN = Pattern.compile("^/((\\.{1,2}/)+)");
 
     public static final Pattern CONTROL_CHARS = Pattern.compile("[\\x00-\\x1f]*");
 

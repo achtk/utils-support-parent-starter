@@ -364,7 +364,7 @@ public class Attributes implements Iterable<Attribute>, Cloneable {
         } catch (IOException e) { // ought never happen
             throw new SerializationException(e);
         }
-        return releaseBuilder(sb);
+        return sb.toString();
     }
 
     final void html(final Appendable accum, final Document.OutputSettings out) throws IOException {

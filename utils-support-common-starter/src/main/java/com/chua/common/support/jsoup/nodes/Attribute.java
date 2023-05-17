@@ -124,7 +124,7 @@ public class Attribute implements Map.Entry<String, String>, Cloneable  {
         } catch(IOException exception) {
         	throw new SerializationException(exception);
         }
-        return StringUtils.releaseBuilder(sb);
+        return sb.toString();
     }
 
     protected void html(Appendable accum, Document.OutputSettings out) throws IOException {

@@ -11,7 +11,7 @@ import static com.chua.common.support.utils.StringUtils.borrowBuilder;
  * An XML Declaration.
  */
 public class XmlDeclaration extends LeafNode {
-
+    private final boolean isProcessingInstruction;
     /**
      * Create a new XML declaration
      * @param name of declaration

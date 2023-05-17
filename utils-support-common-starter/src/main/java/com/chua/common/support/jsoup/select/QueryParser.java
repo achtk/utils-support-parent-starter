@@ -2,6 +2,7 @@ package com.chua.common.support.jsoup.select;
 
 import com.chua.common.support.jsoup.helper.Validate;
 import com.chua.common.support.jsoup.parser.TokenQueue;
+import com.chua.common.support.utils.NumberUtils;
 import com.chua.common.support.utils.StringUtils;
 
 import java.util.ArrayList;
@@ -157,7 +158,7 @@ public class QueryParser {
                 sq.append(tq.consume());
             }
         }
-        return StringUtils.releaseBuilder(sq);
+        return sq.toString();
     }
 
     private void findElements() {
@@ -349,7 +350,7 @@ public class QueryParser {
 
     private int consumeIndex() {
         String indexS = tq.chompTo(")").trim();
-        Validate.isTrue(StringUtils.isNumeric(indexS), "Index must be numeric");
+        Validate.isTrue(NumberUtils.isNumber(indexS), "Index must be numeric");
         return Integer.parseInt(indexS);
     }
 

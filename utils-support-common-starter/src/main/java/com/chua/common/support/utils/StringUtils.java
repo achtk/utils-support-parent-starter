@@ -2722,7 +2722,7 @@ public class StringUtils {
         }
         // workaround: //example.com + ./foo = //example.com/./foo, not //example.com/foo
         URL url = new URL(base, relUrl);
-        String fixedFile = EXTRA_DOT_SEGMENTS_PATTERN.matcher(url.getFile()).replaceFirst("/");
+        String fixedFile = RegexConstant.EXTRA_DOT_SEGMENTS_PATTERN.matcher(url.getFile()).replaceFirst("/");
         if (url.getRef() != null) {
             fixedFile = fixedFile + "#" + url.getRef();
         }

@@ -10,7 +10,6 @@ import com.chua.common.support.jsoup.parser.Parser;
 import com.chua.common.support.jsoup.parser.TokenQueue;
 import com.chua.common.support.utils.StringUtils;
 
-import javax.annotation.Nullable;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSocketFactory;
 import java.io.*;
@@ -1221,7 +1220,7 @@ public class HttpConnection implements Connection {
                     .append('=')
                     .append(URLEncoder.encode(keyVal.value(), DataUtil.DEFAULT_CHARSET_NAME));
             }
-            req.url(new URL(StringUtils.releaseBuilder(url)));
+            req.url(new URL(url.toString()));
             req.data().clear(); // moved into url as get params
         }
     }

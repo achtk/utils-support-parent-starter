@@ -338,7 +338,6 @@ public class W3CDom {
         private final Stack<HashMap<String, String>> namespacesStack = new Stack<>(); // stack of namespaces, prefix => urn
         private Node dest;
         private Syntax syntax = Syntax.xml; // the syntax (to coerce attributes to). From the input doc if available.
-        @Nullable
         private final com.chua.common.support.jsoup.nodes.Element contextElement;
 
         public W3CBuilder(Document doc) {
