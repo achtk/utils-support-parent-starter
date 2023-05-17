@@ -1,8 +1,5 @@
 package com.chua.common.support.utils;
 
-import com.chua.common.support.path.Counters;
-import com.chua.common.support.path.DeletingPathVisitor;
-import com.chua.common.support.path.PathFilter;
 
 import java.io.*;
 import java.nio.file.*;
@@ -94,8 +91,13 @@ public class PathUtils {
      * @throws IOException 异常
      */
     public static void deleteDirectory(final Path directory, final LinkOption[] linkOptions) throws IOException {
-        visitFileTree(new DeletingPathVisitor(Counters.longPathCounters(), linkOptions),
-                directory).getPathCounters();
+       Files.walkFileTree(directory, new SimpleFileVisitor<Path>() {
+           @Override
+           public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+               Files.delete(file);
+               return super.visitFile(file, attrs);
+           }
+       });
     }
 
     /**
@@ -219,22 +221,6 @@ public class PathUtils {
         }
     }
 
-    /**
-     * 遍历
-     *
-     * @param start          目录
-     * @param pathFilter     过滤器
-     * @param maxDepth       深度
-     * @param readAttributes 属性
-     * @param options        配置
-     * @return 结果
-     * @throws IOException ex
-     */
-    public static Stream<Path> walk(final Path start, final PathFilter pathFilter, final int maxDepth,
-                                    final boolean readAttributes, final FileVisitOption... options) throws IOException {
-        return Files.walk(start, maxDepth, options).filter(path -> pathFilter.accept(path,
-                readAttributes ? readBasicFileAttributesUnchecked(path) : null) == FileVisitResult.CONTINUE);
-    }
 
     /**
      * 获取属性

@@ -2,6 +2,7 @@ package com.chua.common.support.spi;
 
 
 import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.collection.SortedList;
 import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.function.NameAware;
 import com.chua.common.support.spi.autowire.AutoServiceAutowire;
@@ -299,6 +300,22 @@ public class ServiceProvider<T> implements InitializingAware {
      */
     public void forEach(BiConsumer<String, T> consumer, Object... args) {
         list(args).forEach(consumer);
+    }
+
+    /**
+     * 遍历
+     */
+    public void moreEach(BiConsumer<String, T> consumer) {
+        for (Map.Entry<String, SortedSet<ServiceDefinition>> entry : definitions.entrySet()) {
+            SortedSet<ServiceDefinition> value = entry.getValue();
+            for (ServiceDefinition definition : value) {
+                T imageConverter = definition.getObj(serviceAutowire);
+                if (null == imageConverter) {
+                    continue;
+                }
+                consumer.accept(entry.getKey(), imageConverter);
+            }
+        }
     }
     //get *******************************************************************************************************************
 
