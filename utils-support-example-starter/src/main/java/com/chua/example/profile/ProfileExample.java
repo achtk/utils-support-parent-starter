@@ -18,7 +18,7 @@ public class ProfileExample {
                 .addProfile("Cargo.toml")
                 .addProfile("application.yml");
 
-        log.info("server.port -> {}", profile.getShortValue("server.port"));
+        log.info("server.port -> {}", profile.getShortValue("server['port'] - 1"));
         log.info("0x0404.1100 -> {}", profile.getString("0x0404.1100"));
 //        log.info("bind entity -> {}", profile.bind(ObjectFileObject.class));
         System.out.println();
