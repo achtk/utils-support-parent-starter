@@ -1,0 +1,6 @@
+getUuid() {
+    return "bsh文件执行方法[getId]:" +Math.random().toString();
+}
+getId() {
+    return "bsh文件执行方法[getId]:" +3;
+}

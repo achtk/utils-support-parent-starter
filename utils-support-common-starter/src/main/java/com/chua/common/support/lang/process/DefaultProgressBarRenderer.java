@@ -159,7 +159,7 @@ public class DefaultProgressBarRenderer implements ProgressBarRenderer {
         etaString  = "?".equals(etaString) ? "" : etaString;
         String suffix = style.rightBracket + " " + ratio(progress) + " ("
                 + Util.formatDuration(progress.getTotalElapsed())
-                + (isEtaShown ? etaString  : "")
+                + (isEtaShown ? "/" + etaString  : "")
                 + ") "
                 + speedString + progress.extraMessage;
         int suffixLength = getStringDisplayLength(suffix);

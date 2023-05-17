@@ -1,4 +1,4 @@
-package com.chua.example;
+package com.chua.example.progressbar;
 
 import com.chua.common.support.lang.process.ProgressBar;
 import com.chua.common.support.utils.ThreadUtils;

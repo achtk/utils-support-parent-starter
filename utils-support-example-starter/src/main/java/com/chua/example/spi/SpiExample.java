@@ -1,4 +1,4 @@
-package com.chua.example;
+package com.chua.example.spi;
 
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.spi.autowire.ServiceAutowire;
