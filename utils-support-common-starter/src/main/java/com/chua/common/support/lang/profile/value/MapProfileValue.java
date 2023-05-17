@@ -79,10 +79,10 @@ public class MapProfileValue implements ProfileValue {
 
         try {
             try {
-                return spelExpressionParser.parseExpression(key);
+                return spelExpressionParser.parseExpression(key).getValue();
             } catch (Exception e) {
                 String newName = key.startsWith(SYMBOL_HASH) ? key : SYMBOL_HASH + key;
-                return spelExpressionParser.parseExpression(newName);
+                return spelExpressionParser.parseExpression(newName).getValue();
             }
         } catch (Exception ignored) {
         }
