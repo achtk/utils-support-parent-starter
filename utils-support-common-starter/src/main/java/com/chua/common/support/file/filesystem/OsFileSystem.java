@@ -4,7 +4,10 @@ import com.chua.common.support.binary.ByteSource;
 import com.chua.common.support.binary.ByteSourceArray;
 import com.chua.common.support.binary.ByteSourceInputStream;
 import com.chua.common.support.file.ResourceFile;
+import com.chua.common.support.file.TempFile;
+import com.chua.common.support.file.base64.Base64File;
 import com.chua.common.support.spi.ServiceProvider;
+import com.chua.common.support.utils.ContentTypeUtils;
 import com.chua.common.support.utils.IoUtils;
 import com.chua.common.support.utils.StringUtils;
 
