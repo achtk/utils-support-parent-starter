@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_HASH;
+
 
 /**
  * profile value
@@ -70,12 +72,14 @@ public class MapProfileValue implements ProfileValue {
         }
 
         try {
-            return documentContext.read("$." + key);
+            String newName = key.startsWith("$.") ? key : "$." + key;
+            return documentContext.read(newName);
         } catch (Exception ignored) {
         }
 
         try {
-            return spelExpressionParser.parseExpression("#" + key).getValue();
+            String newName = key.startsWith(SYMBOL_HASH) ? key : SYMBOL_HASH + key;
+            spelExpressionParser.parseExpression(newName);
         } catch (Exception ignored) {
         }
 
@@ -89,13 +93,15 @@ public class MapProfileValue implements ProfileValue {
         }
 
         try {
-            documentContext.read("$." + name);
+            String newName = name.startsWith("$.") ? name : "$." + name;
+            documentContext.read(newName);
             return true;
         } catch (Exception ignored) {
         }
 
         try {
-            spelExpressionParser.parseExpression("#" + name);
+            String newName = name.startsWith(SYMBOL_HASH) ? name : SYMBOL_HASH + name;
+            spelExpressionParser.parseExpression(newName);
             return true;
         } catch (Exception ignored) {
         }
