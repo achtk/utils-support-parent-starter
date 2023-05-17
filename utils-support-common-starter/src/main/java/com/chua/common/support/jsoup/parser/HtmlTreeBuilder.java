@@ -2,6 +2,7 @@ package com.chua.common.support.jsoup.parser;
 
 import com.chua.common.support.jsoup.helper.Validate;
 import com.chua.common.support.jsoup.nodes.*;
+import com.chua.common.support.utils.StringUtils;
 
 import java.io.Reader;
 import java.io.StringReader;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.chua.common.support.jsoup.parser.HtmlTreeBuilderState.Constants.InTableFoster;
+import static com.chua.common.support.utils.StringUtils.inSorted;
 
 /**
  * HTML Tree Builder; creates a DOM from Tokens.
@@ -58,7 +60,7 @@ public class HtmlTreeBuilder extends TreeBuilder {
         return new HtmlTreeBuilder();
     }
 
-    @Override @ParametersAreNonnullByDefault
+    @Override
     protected void initialiseParse(Reader input, String baseUri, Parser parser) {
         super.initialiseParse(input, baseUri, parser);
 
@@ -292,17 +294,18 @@ public class HtmlTreeBuilder extends TreeBuilder {
 
     void insert(Token.Character characterToken) {
         final Node node;
-        Element el = currentElement(); // will be doc if no current element; allows for whitespace to be inserted into the doc root object (not on the stack)
+        Element el = currentElement();
         final String tagName = el.normalName();
         final String data = characterToken.getData();
 
-        if (characterToken.isCData())
+        if (characterToken.isCData()) {
             node = new CDataNode(data);
-        else if (isContentForTagData(tagName))
+        } else if (isContentForTagData(tagName)) {
             node = new DataNode(data);
-        else
+        } else {
             node = new TextNode(data);
-        el.appendChild(node); // doesn't use insertNode, because we don't foster these; and will always have a stack.
+        }
+        el.appendChild(node);
         onNodeInserted(node, characterToken);
     }
 
@@ -432,7 +435,7 @@ public class HtmlTreeBuilder extends TreeBuilder {
     private void clearStackToContext(String... nodeNames) {
         for (int pos = stack.size() -1; pos >= 0; pos--) {
             Element next = stack.get(pos);
-            if (in(next.normalName(), nodeNames) || next.normalName().equals("html")) {
+            if (StringUtils.in(next.normalName(), nodeNames) || next.normalName().equals("html")) {
                 break;
             } else {
                 stack.remove(pos);

@@ -1,9 +1,11 @@
 package com.chua.common.support.file.export;
 
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.bean.BeanMap;
 import com.chua.common.support.converter.Converter;
-import com.chua.common.support.spi.Spi;
-import com.google.common.base.Joiner;
+import com.chua.common.support.function.Joiner;
+import com.chua.common.support.function.NameAware;
+import com.chua.common.support.unit.name.NamingCase;
 
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -50,7 +52,7 @@ public class SqlExportFile extends AbstractExportFile{
         BeanMap mapping = BeanMap.create(datum);
         String simpleName = datum.getClass().getSimpleName();
 
-        stringBuffer.append("INSERT INTO ").append(Converter.toCamelUnderscore(simpleName).toUpperCase())
+        stringBuffer.append("INSERT INTO ").append(NamingCase.toCamelUnderscore(simpleName).toUpperCase())
                 .append("(`").append(Joiner.on("`,`").join(mapping.keySet())).append("`)")
                 .append(" VALUE ('").append(Joiner.on("','").join(mapping.values())).append("')");
 

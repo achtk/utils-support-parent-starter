@@ -8,7 +8,6 @@ import com.chua.common.support.jsoup.select.Selector;
 import com.chua.common.support.utils.StringUtils;
 import org.w3c.dom.*;
 
-import javax.annotation.Nullable;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -103,7 +102,7 @@ public class W3CDom {
      * @see OutputKeys#INDENT
      * @see OutputKeys#MEDIA_TYPE
      */
-    public static String asString(Document doc, @Nullable Map<String, String> properties) {
+    public static String asString(Document doc, Map<String, String> properties) {
         try {
             DOMSource domSource = new DOMSource(doc);
             StringWriter writer = new StringWriter();

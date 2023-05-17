@@ -1,12 +1,12 @@
 package com.chua.common.support.file.imports;
 
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.file.export.ExportConfiguration;
-import com.chua.common.support.spi.Spi;
-import com.chua.common.support.univocity.parsers.common.record.Record;
-import com.chua.common.support.univocity.parsers.common.record.RecordMetaData;
-import com.chua.common.support.univocity.parsers.csv.CsvParser;
-import com.chua.common.support.univocity.parsers.csv.CsvParserSettings;
-import com.google.common.base.Strings;
+import com.chua.common.support.file.univocity.parsers.common.record.Record;
+import com.chua.common.support.file.univocity.parsers.common.record.RecordMetaData;
+import com.chua.common.support.file.univocity.parsers.csv.CsvParser;
+import com.chua.common.support.file.univocity.parsers.csv.CsvParserSettings;
+import com.chua.common.support.utils.StringUtils;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -58,7 +58,7 @@ public class CsvImportFile extends AbstractImportFile {
         csvParserSettings = new CsvParserSettings();
 
         csvParserSettings.setHeaders(headers);
-        if (!Strings.isNullOrEmpty(configuration.emptyValue())) {
+        if (!StringUtils.isNullOrEmpty(configuration.emptyValue())) {
             csvParserSettings.setNullValue(configuration.emptyValue());
         }
 

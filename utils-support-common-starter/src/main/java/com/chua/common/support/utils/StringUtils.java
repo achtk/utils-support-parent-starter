@@ -1,6 +1,8 @@
 package com.chua.common.support.utils;
 
+import com.chua.common.support.constant.RegexConstant;
 import com.chua.common.support.function.Splitter;
+import com.chua.common.support.jsoup.helper.Validate;
 import com.chua.common.support.lang.Ascii;
 import com.chua.common.support.lang.date.DateUtils;
 
@@ -8,6 +10,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.lang.reflect.Modifier;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.time.LocalDate;
@@ -19,6 +23,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.chua.common.support.constant.CommonConstant.*;
+import static com.chua.common.support.constant.RegexConstant.CONTROL_CHARS;
 import static com.chua.common.support.lang.date.constant.DateFormatConstant.*;
 import static com.chua.common.support.utils.Preconditions.checkArgument;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -2516,7 +2521,7 @@ public class StringUtils {
      * Maintains cached StringBuilders in a flyweight pattern, to minimize new StringBuilder GCs. The StringBuilder is
      * prevented from growing too large.
      * <p>
-     * Care must be taken to release the builder once its work has been completed, with {@link #releaseBuilder}
+     * Care must be taken to release the builder once its work has been completed
      *
      * @return an empty StringBuilder
      */
@@ -2572,5 +2577,158 @@ public class StringUtils {
     public static String join(String[] strings, String sep) {
         return join(Arrays.asList(strings), sep);
     }
+    /**
+     * Tests that a String contains only ASCII characters.
+     *
+     * @param string scanned string
+     * @return true if all characters are in range 0 - 127
+     */
+    public static boolean isAscii(String string) {
+        Validate.notNull(string);
+        for (int i = 0; i < string.length(); i++) {
+            int c = string.charAt(i);
+            if (c > 127) { // ascii range
+                return false;
+            }
+        }
+        return true;
+    }
 
+
+    /**
+     * Tests if a code point is "whitespace" as defined in the HTML spec. Used for output HTML.
+     *
+     * @param c code point to test
+     * @return true if code point is whitespace, false otherwise
+     * @see #isActuallyWhitespace(int)
+     */
+    public static boolean isWhitespace(int c) {
+        return c == ' ' || c == '\t' || c == '\n' || c == '\f' || c == '\r';
+    }
+
+    /**
+     * Tests if a code point is "whitespace" as defined by what it looks like. Used for Element.text etc.
+     *
+     * @param c code point to test
+     * @return true if code point is whitespace, false otherwise
+     */
+    public static boolean isActuallyWhitespace(int c) {
+        return c == ' ' || c == '\t' || c == '\n' || c == '\f' || c == '\r' || c == 160;
+        // 160 is &nbsp; (non-breaking space). Not in the spec but expected.
+    }
+
+    public static boolean isInvisibleChar(int c) {
+        return c == 8203 || c == 173; // zero width sp, soft hyphen
+        // previously also included zw non join, zw join - but removing those breaks semantic meaning of text
+    }
+
+    /**
+     * Normalise the whitespace within this string; multiple spaces collapse to a single, and all whitespace characters
+     * (e.g. newline, tab) convert to a simple space.
+     *
+     * @param string content to normalise
+     * @return normalised string
+     */
+    public static String normaliseWhitespace(String string) {
+        StringBuilder sb = borrowBuilder();
+        appendNormalisedWhitespace(sb, string, false);
+        return sb.toString();
+    }
+
+    /**
+     * After normalizing the whitespace within a string, appends it to a string builder.
+     *
+     * @param accum        builder to append to
+     * @param string       string to normalize whitespace within
+     * @param stripLeading set to true if you wish to remove any leading whitespace
+     */
+    public static void appendNormalisedWhitespace(StringBuilder accum, String string, boolean stripLeading) {
+        boolean lastWasWhite = false;
+        boolean reachedNonWhite = false;
+
+        int len = string.length();
+        int c;
+        for (int i = 0; i < len; i += Character.charCount(c)) {
+            c = string.codePointAt(i);
+            if (isActuallyWhitespace(c)) {
+                if ((stripLeading && !reachedNonWhite) || lastWasWhite) {
+                    continue;
+                }
+                accum.append(' ');
+                lastWasWhite = true;
+            } else if (!isInvisibleChar(c)) {
+                accum.appendCodePoint(c);
+                lastWasWhite = false;
+                reachedNonWhite = true;
+            }
+        }
+    }
+
+    public static boolean in(final String needle, final String... haystack) {
+        final int len = haystack.length;
+        for (int i = 0; i < len; i++) {
+            if (haystack[i].equals(needle)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean inSorted(String needle, String[] haystack) {
+        return Arrays.binarySearch(haystack, needle) >= 0;
+    }
+
+
+    /**
+     * Create a new absolute URL, from a provided existing absolute URL and a relative URL component.
+     *
+     * @param baseUrl the existing absolute base URL
+     * @param relUrl  the relative URL to resolve. (If it's already absolute, it will be returned)
+     * @return an absolute URL if one was able to be generated, or the empty string if not
+     */
+    public static String resolve(String baseUrl, String relUrl) {
+        // workaround: java will allow control chars in a path URL and may treat as relative, but Chrome / Firefox will strip and may see as a scheme. Normalize to browser's view.
+        baseUrl = stripControlChars(baseUrl);
+        relUrl = stripControlChars(relUrl);
+        try {
+            java.net.URL base;
+            try {
+                base = new URL(baseUrl);
+            } catch (MalformedURLException e) {
+                // the base is unsuitable, but the attribute/rel may be abs on its own, so try that
+                URL abs = new URL(relUrl);
+                return abs.toExternalForm();
+            }
+            return resolve(base, relUrl).toExternalForm();
+        } catch (MalformedURLException e) {
+            // it may still be valid, just that Java doesn't have a registered stream handler for it, e.g. tel
+            // we test here vs at start to normalize supported URLs (e.g. HTTP -> http)
+            return RegexConstant.VALID_URI_SCHEME.matcher(relUrl).find() ? relUrl : "";
+        }
+    }
+    /**
+     * Create a new absolute URL, from a provided existing absolute URL and a relative URL component.
+     *
+     * @param base   the existing absolute base URL
+     * @param relUrl the relative URL to resolve. (If it's already absolute, it will be returned)
+     * @return the resolved absolute URL
+     * @throws MalformedURLException if an error occurred generating the URL
+     */
+    public static java.net.URL resolve(URL base, String relUrl) throws MalformedURLException {
+        relUrl = stripControlChars(relUrl);
+        // workaround: java resolves '//path/file + ?foo' to '//path/?foo', not '//path/file?foo' as desired
+        if (relUrl.startsWith("?")) {
+            relUrl = base.getPath() + relUrl;
+        }
+        // workaround: //example.com + ./foo = //example.com/./foo, not //example.com/foo
+        URL url = new URL(base, relUrl);
+        String fixedFile = EXTRA_DOT_SEGMENTS_PATTERN.matcher(url.getFile()).replaceFirst("/");
+        if (url.getRef() != null) {
+            fixedFile = fixedFile + "#" + url.getRef();
+        }
+        return new URL(url.getProtocol(), url.getHost(), url.getPort(), fixedFile);
+    }
+    private static String stripControlChars(final String input) {
+        return CONTROL_CHARS.matcher(input).replaceAll("");
+    }
 }

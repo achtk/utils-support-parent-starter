@@ -5,6 +5,7 @@ import com.chua.common.support.jsoup.helper.Validate;
 import com.chua.common.support.jsoup.select.NodeFilter;
 import com.chua.common.support.jsoup.select.NodeTraversor;
 import com.chua.common.support.jsoup.select.NodeVisitor;
+import com.chua.common.support.utils.StringUtils;
 
 import java.io.IOException;
 import java.util.*;

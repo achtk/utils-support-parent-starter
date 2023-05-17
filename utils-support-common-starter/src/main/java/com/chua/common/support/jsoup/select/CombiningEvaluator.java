@@ -3,7 +3,6 @@ package com.chua.common.support.jsoup.select;
 import com.chua.common.support.jsoup.nodes.Element;
 import com.chua.common.support.utils.StringUtils;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -27,7 +26,7 @@ public abstract class CombiningEvaluator extends Evaluator {
         updateNumEvaluators();
     }
 
-    @Nullable Evaluator rightMostEvaluator() {
+    Evaluator rightMostEvaluator() {
         return num > 0 ? evaluators.get(num - 1) : null;
     }
     

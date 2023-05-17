@@ -6,14 +6,11 @@ import com.chua.common.support.jsoup.helper.Validate;
 import java.io.IOException;
 
 import static com.chua.common.support.utils.StringUtils.borrowBuilder;
-import static com.chua.common.support.utils.StringUtils.releaseBuilder;
 
 /**
  * An XML Declaration.
  */
 public class XmlDeclaration extends LeafNode {
-    // todo this impl isn't really right, the data shouldn't be attributes, just a run of text after the name
-    private final boolean isProcessingInstruction; // <! if true, <? if false, declaration (and last data char should be ?)
 
     /**
      * Create a new XML declaration
@@ -49,7 +46,7 @@ public class XmlDeclaration extends LeafNode {
         } catch (IOException e) {
             throw new SerializationException(e);
         }
-        return releaseBuilder(sb).trim();
+        return sb.toString().trim();
     }
 
     private void getWholeDeclaration(Appendable accum, Document.OutputSettings out) throws IOException {

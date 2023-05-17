@@ -10,6 +10,11 @@ import java.util.regex.Pattern;
  * @author CH
  */
 public class RegexConstant {
+
+    public static final Pattern CONTROL_CHARS = Pattern.compile("[\\x00-\\x1f]*");
+
+    public static final Pattern VALID_URI_SCHEME = Pattern.compile("^[a-zA-Z][a-zA-Z0-9+-.]*:");
+
     public static final Pattern INT_PATTERN = Pattern.compile("-?[1-9]\\d*");
 
     /**

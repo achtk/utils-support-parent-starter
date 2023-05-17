@@ -1,9 +1,9 @@
 package com.chua.common.support.file.export;
 
-import com.chua.common.support.net.NetAddress;
-import com.chua.common.support.spi.Spi;
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.utils.NetAddress;
+import com.chua.common.support.utils.StringUtils;
 import com.chua.common.support.value.Pair;
-import com.google.common.base.Strings;
 
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -66,7 +66,7 @@ public class RdfExportFile extends XmlExportFile {
     public void doAnalysisValue(StringBuffer buffer, Pair pair, Object value) {
         buffer.append("<").append(META).append(":").append(pair.getName());
         String label = pair.getLabel();
-        if (!Strings.isNullOrEmpty(label) && !pair.getName().equals(label)) {
+        if (!StringUtils.isNullOrEmpty(label) && !pair.getName().equals(label)) {
             buffer.append(" describe=\"").append(pair.getLabel()).append("\"");
         }
         buffer.append(">");

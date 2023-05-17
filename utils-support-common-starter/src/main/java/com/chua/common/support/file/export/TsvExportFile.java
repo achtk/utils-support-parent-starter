@@ -1,10 +1,11 @@
 package com.chua.common.support.file.export;
 
-import com.chua.common.support.spi.Spi;
-import com.chua.common.support.univocity.parsers.tsv.TsvParserSettings;
-import com.chua.common.support.univocity.parsers.tsv.TsvWriter;
-import com.chua.common.support.univocity.parsers.tsv.TsvWriterSettings;
-import com.google.common.base.Strings;
+
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.file.univocity.parsers.tsv.TsvParserSettings;
+import com.chua.common.support.file.univocity.parsers.tsv.TsvWriter;
+import com.chua.common.support.file.univocity.parsers.tsv.TsvWriterSettings;
+import com.chua.common.support.utils.StringUtils;
 
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -32,7 +33,7 @@ public class TsvExportFile extends AbstractExportFile {
 
         tsvParserSettings.setHeaders(headers);
         tsvWriterSettings.setHeaders(headers);
-        if (!Strings.isNullOrEmpty(configuration.emptyValue())) {
+        if (!StringUtils.isNullOrEmpty(configuration.emptyValue())) {
             tsvParserSettings.setNullValue(configuration.emptyValue());
             tsvWriterSettings.setNullValue(configuration.emptyValue());
         }

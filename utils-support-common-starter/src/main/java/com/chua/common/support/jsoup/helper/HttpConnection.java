@@ -136,7 +136,7 @@ public class HttpConnection implements Connection {
     }
 
     private Request req;
-    private @Nullable Connection.Response res;
+    private Connection.Response res;
 
     @Override
     public Connection newRequest() {
@@ -165,7 +165,7 @@ public class HttpConnection implements Connection {
         return this;
     }
 
-    public Connection proxy(@Nullable Proxy proxy) {
+    public Connection proxy(Proxy proxy) {
         req.proxy(proxy);
         return this;
     }
@@ -566,7 +566,7 @@ public class HttpConnection implements Connection {
             return Collections.emptyList();
         }
 
-        private @Nullable Map.Entry<String, List<String>> scanHeaders(String name) {
+        private Map.Entry<String, List<String>> scanHeaders(String name) {
             String lc = lowerCase(name);
             for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
                 if (lowerCase(entry.getKey()).equals(lc))
@@ -609,18 +609,18 @@ public class HttpConnection implements Connection {
             // make sure that we can send Sec-Fetch-Site headers etc.
         }
 
-        private @Nullable Proxy proxy;
+        private Proxy proxy;
         private int timeoutMilliseconds;
         private int maxBodySizeBytes;
         private boolean followRedirects;
         private final Collection<Connection.KeyVal> data;
-        private @Nullable String body = null;
+        private String body = null;
         private boolean ignoreHttpErrors = false;
         private boolean ignoreContentType = false;
         private Parser parser;
         private boolean parserDefined = false; // called parser(...) vs initialized in ctor
         private String postDataCharset = DataUtil.DEFAULT_CHARSET_NAME;
-        private @Nullable SSLSocketFactory sslSocketFactory;
+        private SSLSocketFactory sslSocketFactory;
         private CookieManager cookieManager;
         private volatile boolean executing = false;
 
@@ -659,7 +659,7 @@ public class HttpConnection implements Connection {
             return proxy;
         }
 
-        public Request proxy(@Nullable Proxy proxy) {
+        public Request proxy(Proxy proxy) {
             this.proxy = proxy;
             return this;
         }
@@ -734,7 +734,7 @@ public class HttpConnection implements Connection {
             return data;
         }
 
-        public Connection.Request requestBody(@Nullable String body) {
+        public Connection.Request requestBody(String body) {
             this.body = body;
             return this;
         }
@@ -774,11 +774,11 @@ public class HttpConnection implements Connection {
         private static final String LOCATION = "Location";
         private final int statusCode;
         private final String statusMessage;
-        private @Nullable ByteBuffer byteData;
-        private @Nullable InputStream bodyStream;
-        private @Nullable HttpURLConnection conn;
-        private @Nullable String charset;
-        private @Nullable final String contentType;
+        private ByteBuffer byteData;
+        private InputStream bodyStream;
+        private HttpURLConnection conn;
+        private String charset;
+        private final String contentType;
         private boolean executed = false;
         private boolean inputStreamRead = false;
         private int numRedirects = 0;
@@ -805,7 +805,7 @@ public class HttpConnection implements Connection {
             return execute(req, null);
         }
 
-        static Response execute(Request req, @Nullable Response previousResponse) throws IOException {
+        static Response execute(Request req, Response previousResponse) throws IOException {
             synchronized (req) {
                 Validate.isFalse(req.executing, "Multiple threads were detected trying to execute the same request concurrently. Make sure to use Connection#newRequest() and do not share an executing request between threads.");
                 req.executing = true;
@@ -1037,7 +1037,7 @@ public class HttpConnection implements Connection {
         }
 
         // set up url, method, header, cookies
-        private Response(HttpURLConnection conn, Request request, @Nullable Response previousResponse) throws IOException {
+        private Response(HttpURLConnection conn, Request request, Response previousResponse) throws IOException {
             this.conn = conn;
             this.req = request;
             method = Method.valueOf(conn.getRequestMethod());
@@ -1115,7 +1115,7 @@ public class HttpConnection implements Connection {
             }
         }
 
-        private @Nullable static String setOutputContentType(final Connection.Request req) {
+        private static String setOutputContentType(final Connection.Request req) {
             final String contentType = req.header(CONTENT_TYPE);
             String bound = null;
             if (contentType != null) {
@@ -1138,7 +1138,7 @@ public class HttpConnection implements Connection {
             return bound;
         }
 
-        private static void writePost(final Connection.Request req, final OutputStream outputStream, @Nullable final String boundary) throws IOException {
+        private static void writePost(final Connection.Request req, final OutputStream outputStream, final String boundary) throws IOException {
             final Collection<Connection.KeyVal> data = req.data();
             final BufferedWriter w = new BufferedWriter(new OutputStreamWriter(outputStream, Charset.forName(req.postDataCharset())));
 
@@ -1238,8 +1238,8 @@ public class HttpConnection implements Connection {
     public static class KeyVal implements Connection.KeyVal {
         private String key;
         private String value;
-        private @Nullable InputStream stream;
-        private @Nullable String contentType;
+        private InputStream stream;
+        private String contentType;
 
         public static KeyVal create(String key, String value) {
             return new KeyVal(key, value);

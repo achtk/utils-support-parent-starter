@@ -1,13 +1,13 @@
 package com.chua.common.support.file.export;
 
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.bean.BeanMap;
-import com.chua.common.support.describe.describe.FieldDescribe;
 import com.chua.common.support.file.export.resolver.DateValueResolver;
 import com.chua.common.support.file.export.resolver.ValueResolver;
-import com.chua.common.support.spi.Spi;
+import com.chua.common.support.reflection.describe.FieldDescribe;
 import com.chua.common.support.utils.ClassUtils;
+import com.chua.common.support.utils.StringUtils;
 import com.chua.common.support.value.Pair;
-import com.google.common.base.Strings;
 
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -149,7 +149,7 @@ public class XmlExportFile extends AbstractExportFile {
 
         ValueResolver valueResolver = null;
         String value = null;
-        if (null != exportProperty && !Strings.isNullOrEmpty(exportProperty.format())) {
+        if (null != exportProperty && !StringUtils.isNullOrEmpty(exportProperty.format())) {
             valueResolver = new DateValueResolver(exportProperty.format());
             value = exportProperty.value();
         }

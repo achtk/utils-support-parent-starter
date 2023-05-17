@@ -14,7 +14,6 @@ import java.util.HashMap;
 
 import static com.chua.common.support.jsoup.nodes.Document.OutputSettings.Syntax;
 import static com.chua.common.support.utils.StringUtils.borrowBuilder;
-import static com.chua.common.support.utils.StringUtils.releaseBuilder;
 
 /**
  * HTML entities, and escape routines. Source: <a href="http://www.w3.org/TR/html5/named-character-references.html#named-character-references">W3C
@@ -50,7 +49,7 @@ public class Entities {
         } catch (IOException e) {
             throw new SerializationException(e);
         }
-        return releaseBuilder(accum);
+        return accum.toString();
     }
 
     private Entities() {

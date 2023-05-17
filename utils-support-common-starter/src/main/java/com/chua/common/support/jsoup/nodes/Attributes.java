@@ -4,13 +4,11 @@ import com.chua.common.support.jsoup.SerializationException;
 import com.chua.common.support.jsoup.helper.Validate;
 import com.chua.common.support.jsoup.parser.ParseSettings;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.*;
 
 import static com.chua.common.support.jsoup.internal.Normalizer.lowerCase;
 import static com.chua.common.support.utils.StringUtils.borrowBuilder;
-import static com.chua.common.support.utils.StringUtils.releaseBuilder;
 
 /**
  * The attributes of an Element.
@@ -26,25 +24,15 @@ import static com.chua.common.support.utils.StringUtils.releaseBuilder;
  * @author Jonathan Hedley, jonathan@hedley.net
  */
 public class Attributes implements Iterable<Attribute>, Cloneable {
-    // The Attributes object is only created on the first use of an attribute; the Element will just have a null
-    // Attribute slot otherwise
     protected static final String dataPrefix = "data-";
-    // Indicates a jsoup internal key. Can't be set via HTML. (It could be set via accessor, but not too worried about
-    // that. Suppressed from list, iter.
     static final char InternalPrefix = '/';
-    private static final int InitialCapacity = 3; // sampling found mean count when attrs present = 1.49; 1.08 overall. 2.6:1 don't have any attrs.
-
-    // manages the key/val arrays
+    private static final int InitialCapacity = 3;
     private static final int GrowthFactor = 2;
     static final int NotFound = -1;
     private static final String EmptyString = "";
-
-    // the number of instance fields is kept as low as possible giving an object size of 24 bytes
-    private int size = 0; // number of slots used (not total capacity, which is keys.length)
+    private int size = 0;
     String[] keys = new String[InitialCapacity];
-    Object[] vals = new Object[InitialCapacity]; // Genericish: all non-internal attribute values must be Strings and are cast on access.
-
-    // check there's room for more
+    Object[] vals = new Object[InitialCapacity];
     private void checkCapacity(int minNewSize) {
         Validate.isTrue(minNewSize >= size);
         int curCap = keys.length;
@@ -61,8 +49,9 @@ public class Attributes implements Iterable<Attribute>, Cloneable {
     int indexOfKey(String key) {
         Validate.notNull(key);
         for (int i = 0; i < size; i++) {
-            if (key.equals(keys[i]))
+            if (key.equals(keys[i])) {
                 return i;
+            }
         }
         return NotFound;
     }
@@ -78,7 +67,7 @@ public class Attributes implements Iterable<Attribute>, Cloneable {
 
     // we track boolean attributes as null in values - they're just keys. so returns empty for consumers
     // casts to String, so only for non-internal attributes
-    static String checkNotNull(@Nullable Object val) {
+    static String checkNotNull(Object val) {
         return val == null ? EmptyString : (String) val;
     }
 
@@ -108,7 +97,6 @@ public class Attributes implements Iterable<Attribute>, Cloneable {
      * @param key case sensitive key to the object.
      * @return the object associated to this key, or {@code null} if not found.
      */
-    @Nullable
     Object getUserData(String key) {
         Validate.notNull(key);
         if (!isInternalKey(key)) key = internalKey(key);
@@ -120,12 +108,12 @@ public class Attributes implements Iterable<Attribute>, Cloneable {
      * Adds a new attribute. Will produce duplicates if the key already exists.
      * @see Attributes#put(String, String)
      */
-    public Attributes add(String key, @Nullable String value) {
+    public Attributes add(String key, String value) {
         addObject(key, value);
         return this;
     }
 
-    private void addObject(String key, @Nullable Object value) {
+    private void addObject(String key, Object value) {
         checkCapacity(size + 1);
         keys[size] = key;
         vals[size] = value;
@@ -138,7 +126,7 @@ public class Attributes implements Iterable<Attribute>, Cloneable {
      * @param value attribute value (may be null, to set a boolean attribute)
      * @return these attributes, for chaining
      */
-    public Attributes put(String key, @Nullable String value) {
+    public Attributes put(String key, String value) {
         Validate.notNull(key);
         int i = indexOfKey(key);
         if (i != NotFound)
@@ -167,7 +155,7 @@ public class Attributes implements Iterable<Attribute>, Cloneable {
         return this;
     }
 
-    void putIgnoreCase(String key, @Nullable String value) {
+    void putIgnoreCase(String key, String value) {
         int i = indexOfKeyIgnoreCase(key);
         if (i != NotFound) {
             vals[i] = value;
@@ -404,7 +392,7 @@ public class Attributes implements Iterable<Attribute>, Cloneable {
      * @return if both sets of attributes have the same content
      */
     @Override
-    public boolean equals(@Nullable Object o) {
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 

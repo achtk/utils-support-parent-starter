@@ -1,15 +1,15 @@
 package com.chua.common.support.file.imports;
 
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.bean.BeanUtils;
 import com.chua.common.support.binary.ByteSourceArray;
-import com.chua.common.support.file.resource.LineFile;
-import com.chua.common.support.file.resource.ResourceConfiguration;
-import com.chua.common.support.file.resource.line.TextFile;
-import com.chua.common.support.spi.Spi;
+import com.chua.common.support.file.LineFile;
+import com.chua.common.support.file.ResourceFileConfiguration;
+import com.chua.common.support.file.line.TextFile;
+import com.chua.common.support.function.Splitter;
+import com.chua.common.support.resource.ResourceConfiguration;
 import com.chua.common.support.utils.IoUtils;
 import com.chua.common.support.utils.StringUtils;
-import com.google.common.base.Splitter;
-import com.google.common.base.Strings;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,10 +32,10 @@ public class SqlImportFile implements ImportFile {
     @Override
     public <T> void imports(InputStream inputStream, Class<T> type, ImportListener<T> listener) {
         try (InputStream inputStream1 = inputStream) {
-            LineFile<String> lineFile = new TextFile(ResourceConfiguration.builder().byteSource(new ByteSourceArray(IoUtils.toByteArray(inputStream1))).build());
+            LineFile<String> lineFile = new TextFile(ResourceFileConfiguration.builder().byteSource(new ByteSourceArray(IoUtils.toByteArray(inputStream1))).build());
             AtomicInteger index = new AtomicInteger(0);
             lineFile.line(s -> {
-                if (Strings.isNullOrEmpty(s)) {
+                if (StringUtils.isNullOrEmpty(s)) {
                     return false;
                 }
 
