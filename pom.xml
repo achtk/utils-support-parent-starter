@@ -11,6 +11,7 @@
     <modules>
         <module>utils-support-common-starter</module>
         <module>utils-support-example-starter</module>
+        <module>utils-support-quartz-starter</module>
     </modules>
 
     <!-- -Djava.net.preferIPv4Stack=true-->
@@ -39,7 +40,13 @@
             <dependency>
                 <groupId>com.chua</groupId>
                 <artifactId>utils-support-common-starter</artifactId>
-                <version>3.1.0</version>
+                <version>${utils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.chua</groupId>
+                <artifactId>utils-support-common-starter</artifactId>
+                <version>${utils.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
