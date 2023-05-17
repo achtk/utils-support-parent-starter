@@ -8,7 +8,7 @@ import com.chua.common.support.resource.ResourceConfiguration;
 public class TempFile extends AbstractResourceFile {
 
     public TempFile() {
-        super(ResourceConfiguration.builder().build());
+        super(ResourceFileConfiguration.builder().build());
     }
 
     public TempFile(ResourceConfiguration resourceConfiguration) {

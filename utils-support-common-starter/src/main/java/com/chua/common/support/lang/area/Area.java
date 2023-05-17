@@ -2,6 +2,8 @@ package com.chua.common.support.lang.area;
 
 import com.chua.common.support.binary.ByteSourceInputStream;
 import com.chua.common.support.converter.Converter;
+import com.chua.common.support.file.ResourceFileConfiguration;
+import com.chua.common.support.file.line.TsvFile;
 import com.chua.common.support.io.CompressInputStream;
 import com.chua.common.support.lang.treenode.TreeNode;
 import com.chua.common.support.resource.ResourceConfiguration;
@@ -68,7 +70,7 @@ public class Area {
         try (CompressInputStream compressInputStream = new CompressInputStream(ResourceProvider.of(
                 "classpath:area.xz").getResource(),
                 "area.tsv")) {
-            TsvFile tsvFile = new TsvFile(ResourceConfiguration.builder().byteSource(new ByteSourceInputStream(compressInputStream)).build());
+            TsvFile tsvFile = new TsvFile(ResourceFileConfiguration.builder().byteSource(new ByteSourceInputStream(compressInputStream)).build());
 
             Class<?> type = Area.class;
             Field[] declaredFields = type.getDeclaredFields();
@@ -114,7 +116,7 @@ public class Area {
         try (CompressInputStream compressInputStream = new CompressInputStream(ResourceProvider.of(
                 "classpath:area.xz").getResource(),
                 "area.tsv")) {
-            TsvFile tsvFile = new TsvFile(ResourceConfiguration.builder().byteSource(new ByteSourceInputStream(compressInputStream)).build());
+            TsvFile tsvFile = new TsvFile(ResourceFileConfiguration.builder().byteSource(new ByteSourceInputStream(compressInputStream)).build());
 
             Class<?> type = Area.class;
             Field[] declaredFields = type.getDeclaredFields();

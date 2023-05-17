@@ -1,6 +1,7 @@
 package com.chua.common.support.file.line;
 
 import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.file.ResourceFileConfiguration;
 import com.chua.common.support.resource.ResourceConfiguration;
 
 /**
@@ -11,7 +12,7 @@ import com.chua.common.support.resource.ResourceConfiguration;
 @Spi("bcp")
 public class BcpFile extends TsvFile {
 
-    public BcpFile(ResourceConfiguration resourceConfiguration) {
+    public BcpFile(ResourceFileConfiguration resourceConfiguration) {
         super(resourceConfiguration);
     }
 

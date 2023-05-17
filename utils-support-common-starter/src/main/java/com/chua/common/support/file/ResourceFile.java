@@ -178,15 +178,4 @@ public interface ResourceFile {
      * @return E
      */
     <E> E transferFile(Class<E> target);
-
-    /**
-     * 类型转化
-     *
-     * @param targetType 类型
-     * @param <T>        类型
-     * @return 结果
-     */
-    default <T> T getFromType(Class<T> targetType) {
-        return ObjectUtils.withProxy(this, targetType);
-    }
 }
