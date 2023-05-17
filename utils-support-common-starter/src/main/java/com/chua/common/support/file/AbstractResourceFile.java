@@ -24,15 +24,15 @@ import java.util.Base64;
  */
 public abstract class AbstractResourceFile implements ResourceFile {
 
-    protected final ResourceFileConfiguration resourceFileConfiguration;
+    protected final ResourceFileConfiguration resourceConfiguration;
 
-    public AbstractResourceFile(ResourceFileConfiguration resourceFileConfiguration) {
-        this.resourceFileConfiguration = resourceFileConfiguration;
+    public AbstractResourceFile(ResourceFileConfiguration resourceConfiguration) {
+        this.resourceConfiguration = resourceConfiguration;
     }
 
     @Override
     public File toFile() {
-        return null == resourceFileConfiguration.getSource() ? createFile() : resourceFileConfiguration.getSource();
+        return null == resourceConfiguration.getSource() ? createFile() : resourceConfiguration.getSource();
     }
 
     /**
@@ -41,7 +41,7 @@ public abstract class AbstractResourceFile implements ResourceFile {
      * @return 是否是临时文件
      */
     protected boolean isTempFile() {
-        return null == resourceFileConfiguration.getSource();
+        return null == resourceConfiguration.getSource();
     }
 
     @Override
@@ -63,7 +63,7 @@ public abstract class AbstractResourceFile implements ResourceFile {
     private File createFile() {
         Path tempPath = null;
         try {
-            tempPath = Files.createTempFile("temp_", "." + resourceFileConfiguration.getType());
+            tempPath = Files.createTempFile("temp_", "." + resourceConfiguration.getType());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -82,22 +82,22 @@ public abstract class AbstractResourceFile implements ResourceFile {
 
     @Override
     public InputStream openInputStream() throws IOException {
-        ByteSource byteSource = resourceFileConfiguration.getByteSource();
+        ByteSource byteSource = resourceConfiguration.getByteSource();
         if (null != byteSource) {
             return byteSource.getInputStream();
         }
 
-        File source = resourceFileConfiguration.getSource();
+        File source = resourceConfiguration.getSource();
         if (null != source) {
             return Files.newInputStream(source.toPath());
         }
 
-        String sourceUrl = resourceFileConfiguration.getSourceUrl();
+        String sourceUrl = resourceConfiguration.getSourceUrl();
         if (new File(sourceUrl).exists()) {
             return Files.newInputStream(Paths.get(sourceUrl));
         }
 
-        Resource resource = ResourceProvider.of(resourceFileConfiguration.getSourceUrl()).getResource();
+        Resource resource = ResourceProvider.of(resourceConfiguration.getSourceUrl()).getResource();
         if (null != resource) {
             return resource.openStream();
         }
@@ -108,28 +108,28 @@ public abstract class AbstractResourceFile implements ResourceFile {
 
     @Override
     public void transfer(String suffix, OutputStream outputStream) throws IOException {
-        MediaConverter.of(resourceFileConfiguration.getSource()).convert(suffix, outputStream);
+        MediaConverter.of(resourceConfiguration.getSource()).convert(suffix, outputStream);
     }
 
     @Override
     public String getContentType() {
-        return resourceFileConfiguration.getContentType();
+        return resourceConfiguration.getContentType();
     }
 
     @Override
     public String formatName() {
-        return resourceFileConfiguration.getType();
+        return resourceConfiguration.getType();
     }
 
     @Override
     public String subtype() {
-        return resourceFileConfiguration.getSubtype();
+        return resourceConfiguration.getSubtype();
     }
 
     @Override
     public long size() {
         try {
-            return resourceFileConfiguration.getByteSource().getLength();
+            return resourceConfiguration.getByteSource().getLength();
         } catch (IOException e) {
             return -1L;
         }
@@ -137,7 +137,7 @@ public abstract class AbstractResourceFile implements ResourceFile {
 
     @Override
     public long lastModified() {
-        File source = resourceFileConfiguration.getSource();
+        File source = resourceConfiguration.getSource();
         return null == source ? -1L : source.lastModified();
     }
 

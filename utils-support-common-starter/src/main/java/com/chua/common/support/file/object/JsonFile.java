@@ -1,12 +1,13 @@
 package com.chua.common.support.file.object;
 
-import com.chua.common.support.file.resource.AbstractResourceFile;
-import com.chua.common.support.file.resource.ObjectFile;
-import com.chua.common.support.file.resource.ResourceConfiguration;
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.file.AbstractResourceFile;
+import com.chua.common.support.file.ObjectFile;
+import com.chua.common.support.file.ResourceFileConfiguration;
 import com.chua.common.support.json.Json;
 import com.chua.common.support.json.TypeReference;
-import com.chua.common.support.reflect.Reflect;
-import com.chua.common.support.spi.Spi;
+import com.chua.common.support.reflection.Reflect;
+import com.chua.common.support.resource.ResourceConfiguration;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -19,7 +20,7 @@ import java.util.List;
 @Spi("json")
 public class JsonFile extends AbstractResourceFile implements ObjectFile {
 
-    public JsonFile(ResourceConfiguration resourceConfiguration) {
+    public JsonFile(ResourceFileConfiguration resourceConfiguration) {
         super(resourceConfiguration);
     }
 
@@ -29,7 +30,7 @@ public class JsonFile extends AbstractResourceFile implements ObjectFile {
             return Json.fromJson(isr, target);
         } catch (IOException ignored) {
         }
-        return Reflect.create(target).getObjectValue().getObject();
+        return Reflect.create(target).getObjectValue().getValue();
     }
 
     @Override

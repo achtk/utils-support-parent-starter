@@ -1,9 +1,10 @@
 package com.chua.common.support.file.image;
 
-import com.chua.common.support.exception.NotSupportedException;
-import com.chua.common.support.file.resource.*;
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.file.*;
+import com.chua.common.support.lang.exception.NotSupportedException;
+import com.chua.common.support.resource.ResourceConfiguration;
 import com.chua.common.support.spi.ServiceProvider;
-import com.chua.common.support.spi.Spi;
 import com.chua.common.support.utils.StringUtils;
 
 import javax.imageio.IIOImage;
@@ -22,7 +23,7 @@ import java.util.Iterator;
 @Spi("image")
 public class ImageResourceFile extends AbstractResourceFile implements ImageFile {
 
-    public ImageResourceFile(ResourceConfiguration resourceConfiguration) {
+    public ImageResourceFile(ResourceFileConfiguration resourceConfiguration) {
         super(resourceConfiguration);
     }
 

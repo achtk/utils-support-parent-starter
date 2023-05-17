@@ -37,7 +37,7 @@ public class TsvFile extends AbstractResourceFile implements LineFile<String[]> 
     public void line(Function<String[], Boolean> line, int skip) throws IOException {
         int count = 0;
         root:
-        try (InputStreamReader reader = new InputStreamReader(openInputStream(), resourceFileConfiguration.getCharset())) {
+        try (InputStreamReader reader = new InputStreamReader(openInputStream(), resourceConfiguration.getCharset())) {
             TsvParser parser = new TsvParser(settings);
             IterableResult<String[], ParsingContext> iterate = parser.iterate(reader);
             for (String[] next : iterate) {

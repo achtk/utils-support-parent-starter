@@ -1,8 +1,9 @@
 package com.chua.common.support.file.url;
 
-import com.chua.common.support.file.resource.AbstractResourceFile;
-import com.chua.common.support.file.resource.ResourceConfiguration;
-import com.chua.common.support.spi.Spi;
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.file.AbstractResourceFile;
+import com.chua.common.support.file.ResourceFileConfiguration;
+import com.chua.common.support.resource.ResourceConfiguration;
 import com.chua.common.support.utils.UrlUtils;
 
 import java.net.MalformedURLException;
@@ -18,7 +19,7 @@ public class UrlFile extends AbstractResourceFile {
     private final String urlPath;
     private URL url;
 
-    public UrlFile(ResourceConfiguration resourceConfiguration) {
+    public UrlFile(ResourceFileConfiguration resourceConfiguration) {
         super(resourceConfiguration);
         this.urlPath = resourceConfiguration.getSourceUrl();
         try {

@@ -1,15 +1,16 @@
 package com.chua.common.support.file.object;
 
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.bean.BeanBinder;
 import com.chua.common.support.bean.ProfileMapHandler;
-import com.chua.common.support.file.resource.AbstractResourceFile;
-import com.chua.common.support.file.resource.LineFile;
-import com.chua.common.support.file.resource.ObjectFile;
-import com.chua.common.support.file.resource.ResourceConfiguration;
-import com.chua.common.support.reflect.Reflect;
-import com.chua.common.support.spi.Spi;
+import com.chua.common.support.file.AbstractResourceFile;
+import com.chua.common.support.file.LineFile;
+import com.chua.common.support.file.ObjectFile;
+import com.chua.common.support.file.ResourceFileConfiguration;
+import com.chua.common.support.reflection.Reflect;
+import com.chua.common.support.resource.ResourceConfiguration;
 import com.chua.common.support.utils.IoUtils;
-import com.google.common.base.Strings;
+import com.chua.common.support.utils.StringUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,7 +28,7 @@ import static com.chua.common.support.constant.CommonConstant.SYMBOL_EQUALS;
 @Spi("properties")
 public class PropertiesFile extends AbstractResourceFile implements ObjectFile, LineFile<Properties> {
 
-    public PropertiesFile(ResourceConfiguration resourceConfiguration) {
+    public PropertiesFile(ResourceFileConfiguration resourceConfiguration) {
         super(resourceConfiguration);
     }
 
@@ -39,7 +40,7 @@ public class PropertiesFile extends AbstractResourceFile implements ObjectFile, 
             return BeanBinder.of(new ProfileMapHandler(properties)).bind(target).getValue();
         } catch (IOException ignored) {
         }
-        return Reflect.create(target).getObjectValue().getObject();
+        return Reflect.create(target).getObjectValue().getValue();
     }
 
     @Override
@@ -59,7 +60,7 @@ public class PropertiesFile extends AbstractResourceFile implements ObjectFile, 
 
                 String next = lineIterator.next();
                 String[] split = next.split(SYMBOL_EQUALS, 2);
-                if (split.length == 2 && !Strings.isNullOrEmpty(split[1])) {
+                if (split.length == 2 && !StringUtils.isNullOrEmpty(split[1])) {
                     Properties properties = new Properties();
                     properties.put(split[0], split[1]);
                     Boolean aBoolean = line.apply(properties);

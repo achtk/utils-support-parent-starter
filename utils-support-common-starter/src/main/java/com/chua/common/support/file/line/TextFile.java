@@ -26,7 +26,7 @@ public class TextFile extends AbstractResourceFile implements LineFile<String> {
     public void line(Function<String, Boolean> line, int skip) throws IOException {
         int count = 0;
         try (InputStream inputStream = openInputStream()) {
-            IoUtils.LineIterator lineIterator = IoUtils.lineIterator(inputStream, resourceFileConfiguration.getCharset());
+            IoUtils.LineIterator lineIterator = IoUtils.lineIterator(inputStream, resourceConfiguration.getCharset());
             while (lineIterator.hasNext()) {
                 if (count++ < skip) {
                     continue;
