@@ -42,6 +42,6 @@ public  class DelegateValue<T> implements Value<T> {
 
     @Override
     public boolean isNull() {
-        return null != object;
+        return null == object;
     }
 }
