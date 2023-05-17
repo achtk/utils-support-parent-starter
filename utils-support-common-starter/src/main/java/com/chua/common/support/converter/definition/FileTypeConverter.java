@@ -10,8 +10,7 @@ import java.net.URI;
 import java.net.URL;
 import java.nio.file.Path;
 
-import static com.chua.common.support.constant.CommonConstant.FILE;
-import static com.chua.common.support.constant.CommonConstant.HTTP;
+import static com.chua.common.support.constant.CommonConstant.*;
 
 /**
  * 文件
@@ -73,19 +72,39 @@ public class FileTypeConverter implements TypeConverter<File> {
             }
         }
 
-        File temp = new File(str);
+        File temp = null;
+        if(str.startsWith(CLASSPATH_URL_PREFIX)) {
+            temp = new File(str.substring(CLASSPATH_URL_PREFIX.length()));
+        } else {
+            temp = new File(str);
+        }
+
         if (temp.exists()) {
             return temp;
         }
 
-        temp = new File("src/main/resources", str);
+        if(str.startsWith(CLASSPATH_URL_PREFIX)) {
+            temp = new File("src/main/resources", str.substring(CLASSPATH_URL_PREFIX.length()));
+        } else {
+            temp = new File("src/main/resources", str);
+        }
+
         if (temp.exists()) {
             return temp;
         }
 
-        URL resource = ClassLoader.getSystemClassLoader().getResource(str);
+        URL resource = null;
+        if(str.startsWith(CLASSPATH_URL_PREFIX)) {
+            resource = ClassLoader.getSystemClassLoader().getResource(str.substring(CLASSPATH_URL_PREFIX.length()));
+        } else {
+            resource = ClassLoader.getSystemClassLoader().getResource(str);
+        }
+
         if (null != resource && FILE.equals(resource.getProtocol())) {
-            return new File(resource.getFile());
+            temp = new File(resource.getFile());
+            if(temp.exists()) {
+                return temp;
+            }
         }
 
         String userHome = System.getProperty("user_home");

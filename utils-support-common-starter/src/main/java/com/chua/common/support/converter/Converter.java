@@ -3,6 +3,7 @@ package com.chua.common.support.converter;
 import com.chua.common.support.converter.definition.EnumTypeConverter;
 import com.chua.common.support.converter.definition.MapTypeConverter;
 import com.chua.common.support.converter.definition.TypeConverter;
+import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.spi.finder.SamePackageServiceFinder;
 
 import java.lang.reflect.Type;
@@ -43,28 +44,11 @@ public final class Converter {
     };
 
     static {
-        SamePackageServiceFinder samePackageServiceFinder = new SamePackageServiceFinder();
-        List<Class<?>> subTypeByPackage = samePackageServiceFinder.findSubTypeByPackage(Converter.class.getPackage().getName());
-        TypeConverter typeConverter = null;
-        for (Class<?> it : subTypeByPackage) {
-            if (it.isInterface() || !TypeConverter.class.isAssignableFrom(it)) {
-                continue;
-            }
-
-            try {
-                typeConverter = (TypeConverter) it.newInstance();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            if (null == typeConverter) {
-                continue;
-            }
-
+        ServiceProvider<TypeConverter> serviceProvider = ServiceProvider.of(TypeConverter.class);
+        serviceProvider.forEach((n, typeConverter) -> {
             CONVERTER_MAP.put(typeConverter.getType(), typeConverter);
-        }
+        });
     }
-
     /**
      * 转化
      *
