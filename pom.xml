@@ -12,6 +12,11 @@
         <module>utils-support-common-starter</module>
         <module>utils-support-example-starter</module>
         <module>utils-support-quartz-starter</module>
+        <module>utils-support-pinyin-starter</module>
+        <module>utils-support-hanlp-starter</module>
+        <module>utils-support-image-starter</module>
+        <module>utils-support-pcap-starter</module>
+        <module>utils-support-groovy-starter</module>
     </modules>
 
     <!-- -Djava.net.preferIPv4Stack=true-->
@@ -47,6 +52,36 @@
                 <groupId>com.chua</groupId>
                 <artifactId>utils-support-common-starter</artifactId>
                 <version>${utils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.chua</groupId>
+                <artifactId>utils-support-pinyin-starter</artifactId>
+                <version>${utils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.chua</groupId>
+                <artifactId>utils-support-hanlp-starter</artifactId>
+                <version>${utils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.chua</groupId>
+                <artifactId>utils-support-image-starter</artifactId>
+                <version>${utils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.chua</groupId>
+                <artifactId>utils-support-pcap-starter</artifactId>
+                <version>${utils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.chua</groupId>
+                <artifactId>utils-support-groovy-starter</artifactId>
+                <version>3.1.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
