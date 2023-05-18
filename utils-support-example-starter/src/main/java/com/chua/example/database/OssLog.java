@@ -2,7 +2,6 @@ package com.chua.example.database;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.chua.api.json.support.open.OpenMapping;
 import com.chua.common.support.file.export.ExportIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +13,7 @@ import lombok.NoArgsConstructor;
  * @Version: 1.0
  */
 @NoArgsConstructor
-@OpenMapping( virtual = "oss_log", dataSource = "atguigudb")
+//@OpenMapping( virtual = "oss_log", dataSource = "atguigudb")
 @Data
 public class OssLog{
 
