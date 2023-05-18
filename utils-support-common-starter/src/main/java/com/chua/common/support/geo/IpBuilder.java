@@ -48,7 +48,7 @@ public class IpBuilder {
      * @return 定位
      */
     public IpPosition build(String type) {
-        IpPosition position = ServiceProvider.of(IpPosition.class).getExtension(com.chua.common.support.utils.StringUtils.defaultString(type, "lite2"));
+        IpPosition position = ServiceProvider.of(IpPosition.class).getNewExtension(type);
         if(position instanceof ProfileProvider) {
             ((ProfileProvider<?>) position).addProfile(environment);
         }
