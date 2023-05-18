@@ -15,7 +15,7 @@ import java.util.*;
  */
 @Spi("ip")
 @SpiDefault
-public class GeoIPPosition  extends ProfileProvider<GeoPosition> implements GeoPosition {
+public class IpIPPosition extends ProfileProvider<IpPosition> implements IpPosition {
     private static final List<Ipv4Info> I_PV_4_INFOS = new LinkedList<>();
 
     private final Ipv4Info UNKNOWN = new Ipv4Info(0, 0, "未知", "未知", "未知", "未知", 0, 0, "未知");

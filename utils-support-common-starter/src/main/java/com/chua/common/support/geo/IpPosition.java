@@ -11,7 +11,7 @@ import java.util.List;
  *
  * @author CH
  */
-public interface GeoPosition extends InitializingAware, AutoCloseable {
+public interface IpPosition extends InitializingAware, AutoCloseable {
     double MIN_LAT = -90;
     double MAX_LAT = 90;
     double MIN_LNG = -180;

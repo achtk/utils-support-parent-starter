@@ -68,46 +68,6 @@ public class NameReverseGeoPosition extends ProfileProvider<ReverseGeoPosition> 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-//        String name = "classpath:**/" + CN;
-//        ResourceProvider provider = ResourceProvider.of(name);
-//        Set<Resource> resources = provider.getResources();
-//        String sd = "download";
-//        if (resources.isEmpty() && getDoubleValue(sd, 0d) == 0d) {
-//            String url = DUMP + "/" + CN;
-//            log.warn("未找到资源文件, 开始下载文件 DOWNLOAD....");
-//            InputStream inputStream = unZip(url);
-//            log.warn("下载完成");
-//            try {
-//                createKdTree(inputStream, false);
-//            } catch (IOException ignored) {
-//            }
-//            return;
-//        }
-//
-//        for (Resource resource : resources) {
-//            try (CompressInputStream resourceInputStream = new CompressInputStream(resource, "CN.txt")) {
-//                createKdTree(resourceInputStream, false);
-//                break;
-//            } catch (IOException ignored) {
-//                log.warn(ignored.getMessage());
-//            }
-//        }
-    }
-
-    /**
-     * 解压zip
-     *
-     * @param url url
-     * @return 流
-     */
-    private InputStream unZip(String url) {
-        URL resource = NameReverseGeoPosition.class.getResource("/");
-        String form = resource.getPath();
-        HttpClientInvoker invoker = HttpClient.get()
-                .url(url).newInvoker();
-        HttpResponse httpResponse = invoker.execute();
-        httpResponse.receive(new File(form, CN));
-        return (InputStream) httpResponse.content();
     }
 
     /**
@@ -148,7 +108,7 @@ public class NameReverseGeoPosition extends ProfileProvider<ReverseGeoPosition> 
         GeoName geoName = kdTree.findNearest(new GeoName(latitude, longitude));
         GeoCity geoCity = new GeoCity();
         if (geoName.nameLocation.length > 3) {
-            geoCity.city(geoName.nameLocation[geoName.nameLocation.length - 3]);
+            geoCity.city(geoName.nameLocation[geoName.nameLocation.length - 1]);
         }
         geoCity.latitude(geoName.latitude)
                 .longitude(geoName.longitude)

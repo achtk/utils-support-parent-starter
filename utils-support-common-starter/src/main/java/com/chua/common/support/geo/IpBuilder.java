@@ -14,9 +14,9 @@ import java.util.Map;
  * @author CH
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class GeoBuilder {
+public class IpBuilder {
 
-    private GeoPosition geoPosition;
+    private IpPosition ipPosition;
     private final Map<String, Object> environment = new HashMap<>();
 
     /**
@@ -26,7 +26,7 @@ public class GeoBuilder {
      * @param value 值
      * @return this
      */
-    public GeoBuilder environment(String name, Object value) {
+    public IpBuilder environment(String name, Object value) {
         environment.put(name, value);
         return this;
     }
@@ -37,7 +37,7 @@ public class GeoBuilder {
      * @param value 值
      * @return this
      */
-    public GeoBuilder database(Object value) {
+    public IpBuilder database(Object value) {
         return environment("database", value);
     }
 
@@ -47,8 +47,8 @@ public class GeoBuilder {
      * @param type 类型
      * @return 定位
      */
-    public GeoPosition build(String type) {
-        GeoPosition position = ServiceProvider.of(GeoPosition.class).getExtension(com.chua.common.support.utils.StringUtils.defaultString(type, "lite2"));
+    public IpPosition build(String type) {
+        IpPosition position = ServiceProvider.of(IpPosition.class).getExtension(com.chua.common.support.utils.StringUtils.defaultString(type, "lite2"));
         if(position instanceof ProfileProvider) {
             ((ProfileProvider<?>) position).addProfile(environment);
         }
@@ -65,7 +65,7 @@ public class GeoBuilder {
      *
      * @return 定位
      */
-    public GeoPosition build() {
+    public IpPosition build() {
         return build("lite2");
     }
 
@@ -74,7 +74,7 @@ public class GeoBuilder {
      *
      * @return this
      */
-    public static GeoBuilder newBuilder() {
-        return new GeoBuilder();
+    public static IpBuilder newBuilder() {
+        return new IpBuilder();
     }
 }

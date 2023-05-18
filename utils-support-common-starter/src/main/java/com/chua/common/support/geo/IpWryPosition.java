@@ -19,8 +19,8 @@ import java.util.regex.Pattern;
  * @author CH
  */
 @Spi("qqwry")
-public class GeoWryPosition extends ProfileProvider<GeoPosition>
-        implements GeoPosition {
+public class IpWryPosition extends ProfileProvider<IpPosition>
+        implements IpPosition {
     private static final Pattern DB_VER = Pattern.compile("(\\d+)年(\\d+)月(\\d+)日.*");
     private static final int INDEX_RECORD_LENGTH = 7;
     private static final byte REDIRECT_MODE_1 = 0x01;
