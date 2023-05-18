@@ -35,7 +35,6 @@ class IpUtils {
         if (ip == null) {
             return false;
         }
-        //TODO ipv6支持。暂时忽略ipv6地址
         if (ip.contains(":")) {
             return false;
         }

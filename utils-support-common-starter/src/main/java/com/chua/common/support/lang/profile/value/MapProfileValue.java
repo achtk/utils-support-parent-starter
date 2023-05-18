@@ -1,6 +1,7 @@
 package com.chua.common.support.lang.profile.value;
 
 
+import com.chua.common.support.constant.ValueMode;
 import com.chua.common.support.json.jsonpath.DocumentContext;
 import com.chua.common.support.json.jsonpath.JsonPath;
 import com.chua.common.support.lang.expression.parser.SpelExpressionParser;
@@ -62,28 +63,26 @@ public class MapProfileValue implements ProfileValue {
     }
 
     @Override
-    public Object getValue(String key) {
+    public Object getValue(String key, ValueMode valueMode) {
         if(null == key) {
             return null;
         }
+
         Object o = map.get(key);
-        if(null != o) {
+        if(null != o || valueMode == ValueMode.NONE) {
             return o;
         }
 
-        try {
-            String newName = key.startsWith("$.") ? key : "$." + key;
-            return documentContext.read(newName);
-        } catch (Exception ignored) {
+        if(valueMode == ValueMode.XPATH) {
+            try {
+                return documentContext.read(key);
+            } catch (Exception ignored) {
+            }
+            return null;
         }
 
         try {
-            try {
-                return spelExpressionParser.parseExpression(key).getValue();
-            } catch (Exception e) {
-                String newName = key.startsWith(SYMBOL_HASH) ? key : SYMBOL_HASH + key;
-                return spelExpressionParser.parseExpression(newName).getValue();
-            }
+            return spelExpressionParser.parseExpression(key).getValue();
         } catch (Exception ignored) {
         }
 
@@ -91,28 +90,26 @@ public class MapProfileValue implements ProfileValue {
     }
 
     @Override
-    public boolean contains(String name) {
+    public boolean contains(String name, ValueMode valueMode) {
         if(map.containsKey(name)) {
             return true;
         }
 
-        try {
-            String newName = name.startsWith("$.") ? name : "$." + name;
-            documentContext.read(newName);
-            return true;
-        } catch (Exception ignored) {
+        if(valueMode == ValueMode.XPATH) {
+            try {
+                documentContext.read(name);
+                return true;
+            } catch (Exception ignored) {
+            }
+            return false;
         }
 
         try {
-            try {
-                spelExpressionParser.parseExpression(name);
-            } catch (Exception e) {
-                String newName = name.startsWith(SYMBOL_HASH) ? name : SYMBOL_HASH + name;
-                spelExpressionParser.parseExpression(newName);
-            }
-            return true;
+             spelExpressionParser.parseExpression(name).getValue();
+             return true;
         } catch (Exception ignored) {
         }
+
         return false;
     }
 

@@ -19,7 +19,7 @@ public class ProfileBuilder {
      * @return 配置
      */
     public Profile build() {
-        return new ConfigurationProfile();
+        return new DelegateProfile();
     }
 
     /**

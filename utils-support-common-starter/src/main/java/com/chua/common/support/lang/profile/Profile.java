@@ -2,6 +2,7 @@ package com.chua.common.support.lang.profile;
 
 
 import com.chua.common.support.bean.BeanMap;
+import com.chua.common.support.constant.ValueMode;
 import com.chua.common.support.converter.Converter;
 import com.chua.common.support.file.univocity.parsers.annotations.Convert;
 import com.chua.common.support.json.JsonArray;
@@ -53,16 +54,18 @@ public interface Profile {
      * @return this
      */
     Profile addProfile(String profile, String key, Object value);
+
     /**
      * 添加数据
      *
-     * @param value   value
+     * @param value value
      * @return this
      */
     default Profile addProfile(Map<String, Object> value) {
         value.forEach(this::addProfile);
         return this;
     }
+
     /**
      * 添加数据
      *
@@ -89,10 +92,20 @@ public interface Profile {
     /**
      * 获取数据
      *
-     * @param name 名称
+     * @param name      名称
+     * @param valueMode 取值模式
      * @return 结果
      */
-    Object getObject(String name);
+    Object getObject(String name, ValueMode valueMode);
+    /**
+     * 获取数据
+     *
+     * @param name      名称
+     * @return 结果
+     */
+    default Object getObject(String name) {
+        return getObject(name, ValueMode.XPATH);
+    }
 
     /**
      * 获取数据

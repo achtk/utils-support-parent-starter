@@ -2,6 +2,7 @@ package com.chua.common.support.collection;
 
 import com.chua.common.support.bean.BeanBinder;
 import com.chua.common.support.bean.ProfileHandler;
+import com.chua.common.support.constant.ValueMode;
 import com.chua.common.support.lang.profile.Profile;
 import com.chua.common.support.lang.profile.value.MapProfileValue;
 import com.chua.common.support.lang.profile.value.ProfileValue;
@@ -60,8 +61,8 @@ public class TypeHashMap implements Profile {
     }
 
     @Override
-    public Object getObject(String name) {
-        return profileValue.getValue(name);
+    public Object getObject(String name, ValueMode valueMode) {
+        return profileValue.getValue(name, valueMode);
     }
 
     @Override

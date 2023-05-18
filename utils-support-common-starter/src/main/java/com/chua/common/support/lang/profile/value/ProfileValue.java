@@ -1,5 +1,6 @@
 package com.chua.common.support.lang.profile.value;
 
+import com.chua.common.support.constant.ValueMode;
 import com.chua.common.support.function.ChainMap;
 
 import java.util.Set;
@@ -20,17 +21,39 @@ public interface ProfileValue extends ChainMap<ProfileValue, String, Object> {
     /**
      * 获取值
      *
-     * @param key key
+     * @param name      索引
+     * @param valueMode 模式
      * @return 结果
      */
-    Object getValue(String key);
+    Object getValue(String name, ValueMode valueMode);
+
+    /**
+     * 获取值
+     *
+     * @param name      索引
+     * @return 结果
+     */
+    default Object getValue(String name) {
+        return getValue(name, ValueMode.XPATH);
+    }
 
     /**
      * 是否包含数据
-     * @param name name
+     *
+     * @param name      索引
+     * @param valueMode 模式
      * @return 结果
      */
-    boolean contains(String name);
+    boolean contains(String name, ValueMode valueMode);
+    /**
+     * 是否包含数据
+     *
+     * @param name      索引
+     * @return 结果
+     */
+    default boolean contains(String name) {
+        return contains(name, ValueMode.XPATH);
+    }
 
     /**
      * 添加配置

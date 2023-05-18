@@ -2,6 +2,7 @@ package com.chua.common.support.lang.profile;
 
 
 import com.chua.common.support.bean.BeanBinder;
+import com.chua.common.support.constant.ValueMode;
 import com.chua.common.support.lang.profile.resolver.ProfileResolver;
 import com.chua.common.support.lang.profile.value.MapProfileValue;
 import com.chua.common.support.lang.profile.value.ProfileValue;
@@ -22,7 +23,7 @@ import static com.chua.common.support.constant.CommonConstant.SYSTEM;
  *
  * @author CH
  */
-public class ConfigurationProfile extends ServiceFactory<ProfileResolver> implements Profile {
+public class DelegateProfile extends ServiceFactory<ProfileResolver> implements Profile {
 
     private final List<ProfileValue> profiles = new LinkedList<>();
     private final Map<String, ProfileValue> profileMap = new ConcurrentHashMap<>();
@@ -99,13 +100,13 @@ public class ConfigurationProfile extends ServiceFactory<ProfileResolver> implem
     }
 
     @Override
-    public Object getObject(String name) {
+    public Object getObject(String name, ValueMode valueMode) {
         for (ProfileValue profileValue : profiles) {
-            if (!profileValue.contains(name)) {
+            if (!profileValue.contains(name, valueMode)) {
                 continue;
             }
 
-            return profileValue.getValue(name);
+            return profileValue.getValue(name, valueMode);
         }
         return null;
     }
