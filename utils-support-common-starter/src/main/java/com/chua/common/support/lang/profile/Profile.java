@@ -4,7 +4,6 @@ package com.chua.common.support.lang.profile;
 import com.chua.common.support.bean.BeanMap;
 import com.chua.common.support.constant.ValueMode;
 import com.chua.common.support.converter.Converter;
-import com.chua.common.support.file.univocity.parsers.annotations.Convert;
 import com.chua.common.support.json.JsonArray;
 import com.chua.common.support.json.JsonObject;
 import com.chua.common.support.lang.profile.value.ProfileValue;
@@ -87,6 +86,59 @@ public interface Profile {
      */
     default Profile addProfile(String key, Object value) {
         return addProfile(null, key, value);
+    }
+
+    /**
+     * 添加数据
+     *
+     * @param row   column
+     * @param key   key
+     * @param value value
+     * @return this
+     */
+    default Profile addMapProfile(String row, String key, Object value) {
+        Object o = getObject(row);
+        if (null == o) {
+            Map<String, Object> tpl = new LinkedHashMap<>();
+            tpl.put(key, value);
+            addProfile(row, tpl);
+            return this;
+        }
+
+
+        if (o instanceof Map) {
+            ((Map) o).put(key, value);
+            return this;
+        }
+
+        return this;
+    }
+
+    /**
+     * 添加数据
+     *
+     * @param row   column
+     * @param value value
+     * @return this
+     */
+    default Profile addListProfile(String row, Object value) {
+        Object o = getObject(row);
+        if (null == o) {
+            List<Object> tpl = new LinkedList<>();
+            tpl.add(value);
+            addProfile(row, tpl);
+            return this;
+        }
+
+
+        if (o instanceof Collection) {
+            List<Object> tpl = new LinkedList<>((Collection<?>) o);
+            tpl.add(value);
+            addProfile(row, tpl);
+            return this;
+        }
+
+        return this;
     }
 
     /**
@@ -379,22 +431,24 @@ public interface Profile {
         Object object = getObject(name);
         return Converter.convertIfNecessary(object, Boolean.class);
     }
+
     /**
      * 获取数据
      *
-     * @param name         名称
+     * @param name 名称
      * @return 结果
      */
     default boolean getBooleanValue(String name) {
         return getBooleanValue(name, false);
     }
-        /**
-         * 获取数据
-         *
-         * @param name         名称
-         * @param defaultValue 默认值
-         * @return 结果
-         */
+
+    /**
+     * 获取数据
+     *
+     * @param name         名称
+     * @param defaultValue 默认值
+     * @return 结果
+     */
     default boolean getBooleanValue(String name, boolean defaultValue) {
         Object object = getObject(name);
         return Optional.ofNullable(Converter.convertIfNecessary(object, Boolean.class)).orElse(defaultValue);
@@ -556,4 +610,12 @@ public interface Profile {
      */
     Map<String, ProfileValue> getProfile();
 
+    /**
+     * 获取值
+     * @param name 名称
+     * @param defaultValue 默认值
+     * @param returnType 返回类型
+     * @return T
+     */
+    <T>T getType(String name, T defaultValue, Class<T> returnType);
 }

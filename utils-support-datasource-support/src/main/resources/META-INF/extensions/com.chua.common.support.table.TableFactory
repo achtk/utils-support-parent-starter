@@ -1,0 +1,5 @@
+com.chua.datasource.support.schema.MemSchemaFactory
+saw=com.chua.datasource.support.schema.TablesawSchemaFactory
+tablesaw=com.chua.datasource.support.schema.TablesawSchemaFactory
+datasource=com.chua.datasource.support.schema.DataSourceSchemaFactory
+com.chua.datasource.support.schema.FileSchemaFactory

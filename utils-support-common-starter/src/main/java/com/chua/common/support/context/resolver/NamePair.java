@@ -3,6 +3,7 @@ package com.chua.common.support.context.resolver;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Singular;
+import lombok.experimental.Accessors;
 
 import java.lang.annotation.Annotation;
 import java.util.Set;
@@ -13,6 +14,7 @@ import java.util.Set;
  */
 @Data
 @Builder
+@Accessors(chain = true)
 public class NamePair {
     /**
      * 注解类型

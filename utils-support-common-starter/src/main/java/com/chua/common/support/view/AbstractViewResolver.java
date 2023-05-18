@@ -1,10 +1,10 @@
 package com.chua.common.support.view;
 
+import com.chua.common.support.function.strategy.name.NamedStrategy;
 import com.chua.common.support.image.filter.ImageFilter;
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.StringUtils;
-import com.chua.common.support.view.strategy.NamedStrategy;
-import com.chua.common.support.view.strategy.RejectStrategy;
+import com.chua.common.support.function.strategy.name.RejectStrategy;
 import com.chua.common.support.view.viewer.SourceViewer;
 import com.chua.common.support.view.viewer.Viewer;
 import lombok.Getter;

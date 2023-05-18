@@ -78,19 +78,6 @@ public abstract class AbstractClient<T> implements Client<T> {
      */
     public abstract void connectClient();
 
-    /**
-     * 获取客户端
-     * @throws Exception ex
-     * @return 客户端
-     */
-    public abstract T getClient() throws Exception;
-
-    /**
-     * 获取客户端
-     *
-     * @param client 客户端
-     */
-    public abstract void closeClient(T client);
 
 
 }

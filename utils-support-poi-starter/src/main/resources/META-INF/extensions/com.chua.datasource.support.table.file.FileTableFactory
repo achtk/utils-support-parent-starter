@@ -1,0 +1,2 @@
+xls=com.chua.poi.support.table.excel.ExcelTranslatableTable
+xlsx=com.chua.poi.support.table.excel.ExcelTranslatableTable

@@ -23,6 +23,10 @@
         <module>utils-support-alibaba-starter</module>
         <module>utils-support-fingerprint-starter</module>
         <module>utils-support-guava-starter</module>
+        <module>utils-support-minio-starter</module>
+        <module>utils-support-maven-starter</module>
+        <module>utils-support-poi-starter</module>
+        <module>utils-support-datasource-support</module>
     </modules>
 
     <!-- -Djava.net.preferIPv4Stack=true-->
@@ -123,6 +127,30 @@
             <dependency>
                 <groupId>com.chua</groupId>
                 <artifactId>utils-support-guava-starter</artifactId>
+                <version>${utils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.chua</groupId>
+                <artifactId>utils-support-maven-starter</artifactId>
+                <version>${utils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.chua</groupId>
+                <artifactId>utils-support-minio-starter</artifactId>
+                <version>${utils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.chua</groupId>
+                <artifactId>utils-support-datasource-support</artifactId>
+                <version>${utils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.chua</groupId>
+                <artifactId>utils-support-poi-support</artifactId>
                 <version>${utils.version}</version>
             </dependency>
         </dependencies>

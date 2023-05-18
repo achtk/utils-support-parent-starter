@@ -2,6 +2,8 @@ package com.chua.common.support.lang.expression.parser;
 
 import com.chua.common.support.value.Value;
 
+import java.util.Map;
+
 /**
  * 解析器
  * @author CH
@@ -15,6 +17,16 @@ public interface ExpressionParser {
      */
 
     ExpressionParser setVariable(String name, Object value);
+    /**
+     * 设置参数
+     * @param value 值
+     * @return this
+     */
+
+    default ExpressionParser setVariable(Map<String, Object> value) {
+        value.forEach(this::setVariable);
+        return this;
+    }
 
     /**
      * 解析表达式

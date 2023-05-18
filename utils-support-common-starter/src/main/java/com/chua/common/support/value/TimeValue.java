@@ -40,7 +40,7 @@ public class TimeValue<T> extends DelegateValue<T> {
      * @return 结果
      */
     public static <T> TimeValue<T> of(T value) {
-        return new TimeValue<>(value);
+        return new TimeValue<>(value, Duration.ofMinutes(-1));
     }
 
 
@@ -72,6 +72,9 @@ public class TimeValue<T> extends DelegateValue<T> {
      * @return 生成时间
      */
     public boolean isTimeout() {
+        if(timeout.toMillis() == -1) {
+            return false;
+        }
         return (entryTime + timeout.toMillis()) < System.currentTimeMillis();
     }
 }

@@ -1,14 +1,14 @@
 package com.chua.common.support.view;
 
 import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.function.strategy.name.NamedStrategy;
 import com.chua.common.support.media.MediaType;
 import com.chua.common.support.media.MediaTypeFactory;
 import com.chua.common.support.utils.FileUtils;
 import com.chua.common.support.utils.StringUtils;
 import com.chua.common.support.value.ContentTypeValue;
 import com.chua.common.support.value.Value;
-import com.chua.common.support.view.strategy.NamedStrategy;
-import com.chua.common.support.view.strategy.RejectStrategy;
+import com.chua.common.support.function.strategy.name.RejectStrategy;
 import com.chua.common.support.view.viewer.Viewer;
 
 import java.io.*;

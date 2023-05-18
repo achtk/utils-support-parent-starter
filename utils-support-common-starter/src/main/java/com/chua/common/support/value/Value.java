@@ -3,6 +3,7 @@ package com.chua.common.support.value;
 import com.chua.common.support.converter.Converter;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 /**
  * 值
@@ -66,6 +67,14 @@ public interface Value<T> extends Serializable {
      * @return 值
      */
     T getValue();
+    /**
+     * 获取值
+     * @param defaultValue 默认值
+     * @return 值
+     */
+    default T getDefaultValue(Object defaultValue) {
+        return Optional.ofNullable(getValue()).orElse((T) defaultValue);
+    }
 
     /**
      * 获取值

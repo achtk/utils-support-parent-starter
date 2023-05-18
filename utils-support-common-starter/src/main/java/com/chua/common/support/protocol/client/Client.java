@@ -1,7 +1,19 @@
 package com.chua.common.support.protocol.client;
 
 import com.chua.common.support.function.InitializingAware;
+import com.chua.common.support.lang.pool.BoundBlockingPool;
+import com.chua.common.support.lang.pool.ObjectFactory;
+import com.chua.common.support.lang.pool.Pool;
+import com.chua.common.support.lang.pool.PoolConfig;
+import com.chua.common.support.lang.proxy.DelegateMethodIntercept;
+import com.chua.common.support.lang.proxy.ProxyMethod;
+import com.chua.common.support.lang.proxy.ProxyUtils;
 import com.chua.common.support.router.Router;
+import com.chua.common.support.utils.ClassUtils;
+
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
 
 /**
  * 客户端
@@ -10,12 +22,47 @@ import com.chua.common.support.router.Router;
  */
 public interface Client<T> extends InitializingAware, AutoCloseable {
     /**
-     * 获取客户端连接池
+     * 获取客户端
      *
-     * @param clientType 客户端类型
      * @return 客户端
      */
-    T getPool(Class<T> clientType);
+    T getClient();
+
+    /**
+     * 获取客户端池
+     *
+     * @param poolConfig 配置
+     * @return 客户端
+     */
+    default Pool<T> getClientPool(PoolConfig<T> poolConfig) {
+        Class<?> argument = (Class<?>) ClassUtils.getActualTypeArguments(this.getClass())[0];
+        BoundBlockingPool<T> pool = null;
+        AtomicReference<BoundBlockingPool<T>> reference = new AtomicReference<>();
+        try {
+            return (pool = new BoundBlockingPool<>(new ObjectFactory<T>() {
+                @Override
+                public T makeObject() throws Exception {
+                    T client = getClient();
+                    Class<?> aClass = client.getClass();
+                    T proxyClient = (T) ProxyUtils.newProxy(argument, new DelegateMethodIntercept(aClass, new Function<ProxyMethod, Object>() {
+                        @Override
+                        public Object apply(ProxyMethod proxyMethod) {
+                            if (proxyMethod.is("close")) {
+                                reference.get().releaseObject((T) proxyMethod.getObj());
+                                return null;
+                            }
+                            return proxyMethod.getValue(client);
+                        }
+                    }));
+
+                    return proxyClient;
+                }
+            }, poolConfig, this::closeClient));
+        } finally {
+            reference.set(pool);
+        }
+    }
+
     /**
      * 连接
      *
@@ -61,4 +108,12 @@ public interface Client<T> extends InitializingAware, AutoCloseable {
      */
     @Override
     void close();
+
+
+    /**
+     * 获取客户端
+     *
+     * @param client 客户端
+     */
+    void closeClient(T client);
 }

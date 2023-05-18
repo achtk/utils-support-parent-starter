@@ -2,6 +2,7 @@ package com.chua.common.support.spi;
 
 
 import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.collection.SortedArrayList;
 import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.function.NameAware;
 import com.chua.common.support.spi.autowire.AutoServiceAutowire;
@@ -38,6 +39,7 @@ public class ServiceProvider<T> implements InitializingAware {
     private ClassLoader classLoader;
     private ServiceAutowire serviceAutowire;
     private static final Map<Class<?>, String> SPI_NAME = new HashMap<>();
+    protected static final CustomServiceFinder DEFAULT_FINDER = new CustomServiceFinder();
 
     private final Map<String, SortedSet<ServiceDefinition>> definitions = new ConcurrentHashMap<>();
     private static final Map<ClassLoader, Map<Class<?>, ServiceProvider>> SERVICE_PROVIDER_MAP = new ConcurrentHashMap<>();
@@ -159,6 +161,30 @@ public class ServiceProvider<T> implements InitializingAware {
         return rs;
     }
 
+    //register *******************************************************************************************************************
+    public void register(Object ref) {
+        List<ServiceDefinition> serviceDefinitions = DEFAULT_FINDER.buildDefinition(ref);
+        for (ServiceDefinition serviceDefinition : serviceDefinitions) {
+            String name = serviceDefinition.getName();
+            definitions.computeIfAbsent(name, it -> new TreeSet<>(COMPARATOR)).add(serviceDefinition);
+        }
+    }
+
+    public void register(String name, Object ref) {
+        ServiceDefinition serviceDefinition = new ServiceDefinition();
+        serviceDefinition.setObj(ref);
+        serviceDefinition.setType(value.getValue());
+        serviceDefinition.setImplClass(ref.getClass());
+        definitions.computeIfAbsent(name, it -> new TreeSet<>(COMPARATOR)).add(serviceDefinition);
+    }
+
+    public void register(String name, Class<T> ref) {
+        ServiceDefinition serviceDefinition = new ServiceDefinition();
+        serviceDefinition.setImplClass(ref);
+        serviceDefinition.setType(value.getValue());
+        definitions.computeIfAbsent(name, it -> new TreeSet<>(COMPARATOR)).add(serviceDefinition);
+
+    }
     //Definition *******************************************************************************************************************
     public ServiceDefinition getDefinition(String name, Object... args) {
         SortedSet<ServiceDefinition> definitions = new TreeSet<>(COMPARATOR);
@@ -243,26 +269,32 @@ public class ServiceProvider<T> implements InitializingAware {
     }
 
     //collect *******************************************************************************************************************
-
+    /**
+     * 映射
+     * @return 映射
+     */
+    public Map<String, Class<T>> mapping() {
+        return listType();
+    }
     /**
      * 获取实现
      *
      * @param args 參數
      * @return 实现
      */
-    public Map<String, Class<? extends T>> listType() {
+    public Map<String, Class<T>> listType() {
         if (definitions.isEmpty()) {
             return Collections.emptyMap();
         }
 
-        Map<String, Class<? extends T>> result = new HashMap<>(definitions.size());
+        Map<String, Class<T>> result = new HashMap<>(definitions.size());
 
         for (SortedSet<ServiceDefinition> value : this.definitions.values()) {
             ServiceDefinition noneObject = value.first();
             if (null == noneObject) {
                 continue;
             }
-            result.put(noneObject.getName(), (Class<? extends T>) noneObject.implClass);
+            result.put(noneObject.getName(), (Class<T>) noneObject.implClass);
         }
         return result;
     }

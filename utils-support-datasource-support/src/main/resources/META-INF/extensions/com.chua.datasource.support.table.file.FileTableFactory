@@ -1,0 +1,6 @@
+com.chua.datasource.support.table.csv.CsvTranslatableTable
+com.chua.datasource.support.table.json.JsonScannableTable
+com.chua.datasource.support.table.text.TextScannableTable
+com.chua.datasource.support.table.text.BcpScannableTable
+com.chua.datasource.support.table.tsv.TsvScannableTable
+com.chua.datasource.support.table.dbf.DbfScannableTable
