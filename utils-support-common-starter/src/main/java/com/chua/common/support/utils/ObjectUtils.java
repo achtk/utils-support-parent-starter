@@ -5,6 +5,7 @@ import com.chua.common.support.function.SafeConsumer;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.function.Function;
 
 import static com.chua.common.support.constant.CommonConstant.*;
 
@@ -451,5 +452,19 @@ public class ObjectUtils {
         }
 
         return target.isAssignableFrom(value.getClass()) ? (T) value : null;
+    }
+
+    /**
+     * 下发有效消息
+     *
+     * @param value    值
+     * @param function 回调
+     */
+    public static <T, E> T ifValid(E value, Function<E, T> function) {
+        boolean rs = null == value || (value instanceof String && "".equals(value));
+        if (rs) {
+            return null;
+        }
+        return function.apply(value);
     }
 }

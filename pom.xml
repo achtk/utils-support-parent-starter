@@ -27,6 +27,7 @@
         <module>utils-support-maven-starter</module>
         <module>utils-support-poi-starter</module>
         <module>utils-support-datasource-support</module>
+        <module>utils-support-httpclient-starter</module>
     </modules>
 
     <!-- -Djava.net.preferIPv4Stack=true-->
