@@ -19,15 +19,15 @@ public class HanyuTranslateMockResolver extends HanyuMockResolver {
     public String resolve(MockValue mock, ExpressionParser expressionParser) {
         String base = null;
         try {
-            base = expressionParser.compile(mock.base()).getStringValue();
+            base = expressionParser.parseExpression(mock.base()).getStringValue();
         } catch (Exception e) {
             base = mock.base();
         }
 
         super.resolve(mock, expressionParser);
 
-        Value<Document> ifPresent = CACHE.getIfPresent(base);
-        if (null == ifPresent || ifPresent.isNullValue()) {
+        Value<Document> ifPresent = (Value<Document>) CACHEABLE.get(base);
+        if (null == ifPresent || ifPresent.isNull()) {
             return null;
         }
 

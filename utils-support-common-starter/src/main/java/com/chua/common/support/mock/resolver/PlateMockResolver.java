@@ -21,8 +21,8 @@ public class PlateMockResolver implements MockResolver {
     /**
      * 车牌号码候选字母(无I/O)
      */
-    private static final List<String> PLATE_NUMBERS_LIST = Lists.newArrayList(
-            "A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z");
+    private static final List<String> PLATE_NUMBERS_LIST = ImmutableCollection.<String>builder().add(
+            "A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z").unmodifiableList();
 
     /**
      * 省份前缀

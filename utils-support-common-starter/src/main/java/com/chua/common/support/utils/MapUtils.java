@@ -1113,11 +1113,12 @@ public class MapUtils {
      * @param source 来源
      * @return 目标
      */
-    public static Map<String, Object> asStringMap(Map<?, ?> source) {
-        Map<String, Object> tpl = new LinkedHashMap<>(source.size());
-        for (Map.Entry<?, ?> entry : source.entrySet()) {
-            tpl.put(entry.getKey().toString(), entry.getValue());
-        }
+    @SuppressWarnings("ALL")
+    public static Map<String, String> asStringMap(Map source) {
+        Map<String, String> tpl = new LinkedHashMap<>(source.size());
+        source.forEach((k, v) -> {
+            tpl.put(k.toString(), v.toString());
+        });
         return tpl;
     }
 

@@ -22,7 +22,7 @@ import static com.chua.common.support.constant.CommonConstant.SYMBOL_LEFT_SQUARE
 public class NumberMockResolver extends DateMockResolver {
     @Override
     public String resolve(MockValue mock, ExpressionParser expressionParser) {
-        String base = expressionParser.compile(mock.base()).getStringValue();
+        String base = expressionParser.parseExpression(mock.base()).getStringValue();
         if(CardUtils.isValidCard(base)) {
             return String.valueOf(CardUtils.getAgeByIdCard(base));
         }

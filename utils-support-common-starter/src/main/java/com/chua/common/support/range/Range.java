@@ -2,6 +2,8 @@ package com.chua.common.support.range;
 
 import com.chua.common.support.range.order.Ordering;
 import com.chua.common.support.utils.CollectionUtils;
+import com.chua.common.support.utils.NumberUtils;
+import com.chua.common.support.utils.StringUtils;
 
 import java.io.Serializable;
 import java.util.Comparator;
@@ -11,7 +13,9 @@ import java.util.SortedSet;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import static com.chua.common.support.constant.CommonConstant.*;
 import static com.chua.common.support.utils.Preconditions.*;
+import static com.chua.common.support.utils.RandomUtils.*;
 
 /**
  * Range
@@ -36,6 +40,94 @@ import static com.chua.common.support.utils.Preconditions.*;
  * @author CH
  */
 public final class Range<C extends Comparable> implements Predicate<C>, Serializable {
+    static final String REG = "[\\,\\~]{1}";
+
+    /**
+     * 构建数据
+     * @param base 数据
+     * @return 结果
+     */
+    public static Range<Double> of(String base) {
+        if (!base.startsWith(SYMBOL_LEFT_BRACKETS) && !base.startsWith(SYMBOL_LEFT_SQUARE_BRACKET)) {
+            return Range.all();
+        }
+
+        String[] split = base.split(REG, 2);
+        String item = split[0];
+        if (split.length == 2) {
+            String item1 = split[1];
+            //(1 ~  +∞) or [1 ~  +∞)
+            if (!StringUtils.isNullOrEmpty(item) && StringUtils.isNullOrEmpty(item1)) {
+                String end = item.trim().replace(SYMBOL_LEFT_BRACKETS, EMPTY);
+                String end1 = item.trim().replace(SYMBOL_LEFT_SQUARE_BRACKET, EMPTY);
+                return item.startsWith(SYMBOL_LEFT_BRACKETS) ?
+                        Range.greaterThan(item.contains(".") ? NumberUtils.toDouble(end) : NumberUtils.toLong(end)) :
+                        Range.atLeast(item.contains(".") ? NumberUtils.toDouble(end1) : NumberUtils.toLong(end1));
+            }
+            //(-∞ ~ 1) or [-∞ ~  1]
+            if (StringUtils.isNullOrEmpty(item) && !StringUtils.isNullOrEmpty(item1)) {
+                String end = item1.trim().replace(SYMBOL_LEFT_BRACKETS, EMPTY);
+                String end1 = item1.trim().replace(SYMBOL_LEFT_SQUARE_BRACKET, EMPTY);
+
+                return item1.startsWith(SYMBOL_RIGHT_BRACKETS) ?
+                        Range.lessThan(item1.contains(".") ? NumberUtils.toDouble(end) : NumberUtils.toLong(end)) :
+                        Range.atLeast(item1.contains(".") ? NumberUtils.toDouble(end1) : NumberUtils.toLong(end1));
+            }
+
+            //(-∞ ~ 1) or [-∞ ~  1]
+            if (StringUtils.isNullOrEmpty(item) && StringUtils.isNullOrEmpty(item1)) {
+                return Range.all();
+            }
+
+            //(0 ~ 1) or (0 ~  1]
+            String value = item1.trim().replace(SYMBOL_RIGHT_BRACKETS, EMPTY);
+            String value1 = item1.trim().replace(SYMBOL_RIGHT_SQUARE_BRACKET, EMPTY);
+
+            Number end = item1.contains(".") ? NumberUtils.toDouble(value) : NumberUtils.toLong(value);
+            Number end1 = item1.contains(".") ? NumberUtils.toDouble(value1) : NumberUtils.toLong(value1);
+            if (item.startsWith(SYMBOL_LEFT_BRACKETS)) {
+                String firstValue = item.replace(SYMBOL_LEFT_BRACKETS, EMPTY);
+                Number start = firstValue.contains(".") ? Double.parseDouble(firstValue) : Long.parseLong(firstValue);
+                return item1.startsWith(SYMBOL_RIGHT_BRACKETS) ?
+                        Range.openClosed(firstValue.contains(".") ? start.doubleValue() : start.longValue(), firstValue.contains(".") ? end.doubleValue() : end.longValue()) :
+                        Range.open(firstValue.contains(".") ? start.doubleValue() : start.longValue(), firstValue.contains(".") ? end1.doubleValue() : end1.longValue());
+            }
+
+            //[0 ~ 1) or [0 ~  1]
+            String firstValue = item.replace(SYMBOL_LEFT_SQUARE_BRACKET, EMPTY);
+            Number start = firstValue.contains(".") ? Double.parseDouble(firstValue) : Long.parseLong(firstValue);
+            return item1.startsWith(SYMBOL_RIGHT_BRACKETS) ?
+                    Range.closedOpen(firstValue.contains(".") ? start.doubleValue() : start.longValue(), firstValue.contains(".") ? end.doubleValue() : end.longValue()) :
+                    Range.closed(firstValue.contains(".") ? start.doubleValue() : start.longValue(), firstValue.contains(".") ? end1.doubleValue() : end1.longValue());
+
+        }
+
+        return Range.all();
+    }
+
+    public C random() {
+        if (hasLowerBound() && hasUpperBound()) {
+            C lowerEndpoint = lowerEndpoint();
+            C upperEndpoint = upperEndpoint();
+            if (lowerEndpoint instanceof Long) {
+                Long c = randomLong((Long) lowerEndpoint, (Long) upperEndpoint);
+                return (C) c;
+            }
+
+            if (lowerEndpoint instanceof Double) {
+                Double c = randomDouble((Double) lowerEndpoint, (Double) upperEndpoint);
+                return (C) c;
+            }
+
+
+            if (lowerEndpoint instanceof String) {
+                String v = lowerEndpoint.toString() + upperEndpoint.toString();
+                String c = randomString(v, 10);
+                return (C) c;
+            }
+        }
+        return null;
+    }
 
     static class LowerBoundFn implements Function<Range, Cut> {
         static final LowerBoundFn INSTANCE = new LowerBoundFn();

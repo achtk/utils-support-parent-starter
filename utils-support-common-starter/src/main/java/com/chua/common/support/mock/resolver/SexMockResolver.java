@@ -16,7 +16,7 @@ public class SexMockResolver implements MockResolver {
 
     @Override
     public String resolve(MockValue mock, ExpressionParser expressionParser) {
-        String base = expressionParser.compile(mock.base()).getStringValue();
+        String base = expressionParser.parseExpression(mock.base()).getStringValue();
         if(CardUtils.isValidCard(base)) {
             Integer gender = CardUtils.getIdcardInfo(base).getGender();
             if (mock.returnType() == String.class) {

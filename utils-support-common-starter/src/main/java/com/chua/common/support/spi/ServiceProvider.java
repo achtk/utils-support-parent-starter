@@ -425,7 +425,15 @@ public class ServiceProvider<T> implements InitializingAware {
         return (T) Optional.ofNullable(getDefinition(name).getObj(serviceAutowire)).orElse(defaultImpl);
     }
 
-
+    /**
+     * 获取实现
+     *
+     * @param name 名称
+     * @return 实现
+     */
+    public T getExtension(Enum name) {
+        return  null == name ? defaultImpl : getExtension(name.name().toLowerCase());
+    }
     public T getSpiService() {
         Preconditions.checkArgument(!value.isNull());
         String s = SPI_NAME.get(value.getValue());

@@ -100,4 +100,12 @@ public interface Value<T> extends Serializable {
      * @return 是否为空
      */
     boolean isNull();
+
+    /**
+     * 获取值
+     * @return 值
+     */
+    default String getStringValue() {
+        return getValue(String.class);
+    }
 }

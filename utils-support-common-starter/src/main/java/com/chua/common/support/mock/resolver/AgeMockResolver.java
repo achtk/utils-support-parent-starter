@@ -34,7 +34,7 @@ public class AgeMockResolver implements MockResolver {
      * @return 城市
      */
     public static String getRandom(MockValue mock, ExpressionParser expressionParser) {
-        String base = expressionParser.compile(mock.base()).getStringValue();
+        String base = expressionParser.parseExpression(mock.base()).getStringValue();
         if(CardUtils.isValidCard(base)) {
             return String.valueOf(CardUtils.getAgeByIdCard(base));
         }

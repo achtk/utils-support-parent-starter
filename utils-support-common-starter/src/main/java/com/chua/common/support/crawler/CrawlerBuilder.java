@@ -169,7 +169,7 @@ public class CrawlerBuilder {
             boolean underWhiteUrl = false;
             for (String whiteRegex : this.whiteUrlRegex) {
                 if (whiteRegex.contains("*")) {
-                    if (PathMatcher.APACHE_INSTANCE.match(whiteRegex, link)) {
+                    if (PathMatcher.INSTANCE.match(whiteRegex, link)) {
                         underWhiteUrl = true;
                     }
                     continue;
@@ -187,7 +187,7 @@ public class CrawlerBuilder {
     public List<ParserProcessor> newProcessors() {
         List<ParserProcessor> result = new LinkedList<>();
         processors.forEach(it -> {
-            ParserProcessor parser = ClassUtils.forObjectReturn(it.getClass(), ParserProcessor.class);
+            ParserProcessor parser = ClassUtils.forObject(it.getClass(), ParserProcessor.class);
             if (null != parser) {
                 result.add(parser);
             }
