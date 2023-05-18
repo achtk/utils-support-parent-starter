@@ -216,7 +216,7 @@ public interface Profile {
      * @return 结果
      */
     default long getLongValue(String name) {
-        return getLongValue(name, 0l);
+        return getLongValue(name, 0L);
     }
 
     /**

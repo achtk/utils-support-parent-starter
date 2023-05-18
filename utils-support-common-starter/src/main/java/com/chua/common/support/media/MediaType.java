@@ -6,6 +6,7 @@ import com.chua.common.support.function.Splitter;
 import com.chua.common.support.lang.Ascii;
 import com.chua.common.support.utils.MapUtils;
 import com.chua.common.support.utils.ObjectUtils;
+import lombok.EqualsAndHashCode;
 
 import java.nio.charset.Charset;
 import java.util.LinkedHashMap;
@@ -24,6 +25,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  *
  * @author CH
  */
+@EqualsAndHashCode
 public class MediaType {
     private static final String CHARSET_ATTRIBUTE = "charset";
     private static final String APPLICATION_TYPE = "application";

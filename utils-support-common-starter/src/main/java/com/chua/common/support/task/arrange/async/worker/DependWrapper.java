@@ -2,6 +2,7 @@ package com.chua.common.support.task.arrange.async.worker;
 
 
 import com.chua.common.support.task.arrange.Worker;
+import lombok.EqualsAndHashCode;
 
 /**
  * 对依赖的wrapper的封装
@@ -9,6 +10,7 @@ import com.chua.common.support.task.arrange.Worker;
  * @author wuweifeng wrote on 2019-12-20
  * @version 1.0
  */
+@EqualsAndHashCode
 public class DependWrapper {
     private Worker<?, ?> dependWrapper;
     /**

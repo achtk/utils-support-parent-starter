@@ -580,6 +580,7 @@ public class ArrayUtils {
      * @param iterable iterable
      * @return 数组
      */
+    @SuppressWarnings("unchecked")
     public static <T> T[] toArray(Iterable<? extends T> iterable) {
         List<? extends T> ts = CollectionUtils.newArrayList(iterable);
         return (T[]) ts.toArray();
