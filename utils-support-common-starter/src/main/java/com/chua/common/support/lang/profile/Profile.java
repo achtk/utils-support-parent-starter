@@ -97,10 +97,11 @@ public interface Profile {
      * @return 结果
      */
     Object getObject(String name, ValueMode valueMode);
+
     /**
      * 获取数据
      *
-     * @param name      名称
+     * @param name 名称
      * @return 结果
      */
     default Object getObject(String name) {
@@ -366,6 +367,37 @@ public interface Profile {
      */
     default BigDecimal getBigDecimal(String name) {
         return getBigDecimal(name, null);
+    }
+
+    /**
+     * 获取数据
+     *
+     * @param name 名称
+     * @return 结果
+     */
+    default Boolean getBoolean(String name) {
+        Object object = getObject(name);
+        return Converter.convertIfNecessary(object, Boolean.class);
+    }
+    /**
+     * 获取数据
+     *
+     * @param name         名称
+     * @return 结果
+     */
+    default boolean getBooleanValue(String name) {
+        return getBooleanValue(name, false);
+    }
+        /**
+         * 获取数据
+         *
+         * @param name         名称
+         * @param defaultValue 默认值
+         * @return 结果
+         */
+    default boolean getBooleanValue(String name, boolean defaultValue) {
+        Object object = getObject(name);
+        return Optional.ofNullable(Converter.convertIfNecessary(object, Boolean.class)).orElse(defaultValue);
     }
 
     /**

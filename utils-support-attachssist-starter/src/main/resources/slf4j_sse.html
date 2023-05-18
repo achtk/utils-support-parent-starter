@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title> - 空白页</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="{{contentPath}}/resource/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="{{contentPath}}/resource/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+
+    <link href="{{contentPath}}/resource/css/animate.css" rel="stylesheet">
+    <link href="{{contentPath}}/resource/css/style.css?v=4.1.0" rel="stylesheet">
+
+    <style>
+        #tools {
+            position: fixed;
+            top: 50px;
+            right: 0;
+        }
+    </style>
+</head>
+
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-4">
+        <h2>日志</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="index.html">主页</a>
+            </li>
+            <li>
+                <strong>系统日志</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content">
+    <div id="result" data-page-body=true style="overflow:auto; width: 100%;height: 100%"></div>
+    <div id="tools">
+        <div class="btn btn-primary pull-right" id="clear">清除</div>
+        <div class="btn btn-default pull-right auto" id="auto">解除滚动</div>
+        <div class="pull-right" id="limit">
+            <input style="height: 30px;line-height: 30px;" placeholder="日志上线数量" value="10000"
+                   class="input-group form-control"/>
+        </div>
+    </div>
+</div>
+
+<!-- 全局js -->
+<script src="{{contentPath}}/resource/js/jquery.min.js?v=2.1.4"></script>
+<script src="{{contentPath}}/resource/js/bootstrap.min.js?v=3.3.6"></script>
+
+<!-- 自定义js -->
+<script src="{{contentPath}}/resource/js/content.js?v=1.0.0"></script>
+<script src="{{contentPath}}/resource/lib/reconnecting-websocket.min.js?v=1.0.0"></script>
+<script src="{{contentPath}}/resource/lib/ansi_up.js?v=1.0.0"></script>
+
+
+<script>
+    var ansi_up = new AnsiUp;
+    var $log = $('#result');
+    var limit = $('#limit > input').val();
+    localStorage.setItem("autoScroll", true);
+    var $clear = $('#clear');
+    var $auto = $('#auto');
+
+    $clear.off('click');
+    $clear.on("click", function () {
+        $log.empty();
+        limit = $('#limit > input').val();
+    });
+
+    $auto.off('click');
+    $auto.on("click", function () {
+        let _this = $(this);
+        if (_this.hasClass("auto")) {
+            localStorage.removeItem("autoScroll")
+            _this.removeClass("auto");
+            _this.text("自动滚动");
+        } else {
+            localStorage.setItem("autoScroll", true);
+            _this.addClass("auto");
+            _this.text("解除滚动");
+        }
+        return false;
+    });
+    var fevent = function (_this, data, type) {
+        let $this = $(_this);
+        if ($this.children('p').length > 0) {
+            return;
+        }
+        let $p = $this.parent();
+        let $d = undefined;
+        if ($p.children("div").length == 0) {
+            $p.append('<div style="background-color: #f5f5f5; margin: 0px 34px; "></div>');
+        }
+        $d = $p.children("div");
+        if (type == 10) {
+            if ($d.children("p").length > 0) {
+                $d.toggle();
+                return;
+            }
+        }
+        let id = data.replace("#", " ");
+        $.ajax({
+            url: 'http://' + window.location.hostname + ':100' + id,
+            method: 'get',
+            success: function (data) {
+                if (!!data) {
+                    let _value = "";
+                    let arrays = data.split('\r\n');
+                    for (let item in arrays) {
+                        let i = arrays[item];
+                        _value += '<p style="font-size: 14px; margin: 8px;" title="' + i + '"><span>' + i + '</span></p>';
+                    }
+                    if (type != 10) {
+                        layx.open({
+                            id: id,
+                            content: {
+                                type: 'html',
+                                value: _value
+                            },
+                            toolBar: {
+                                background: "#f5f5f5",
+                                titleBar: {
+                                    title: $this.text(),
+                                    useSubTitle: true
+                                }
+                            }
+                        });
+                    } else {
+                        if ($d.children("p").length == 0) {
+                            $d.append(_value);
+                        }
+                    }
+                }
+            }
+        })
+    }
+
+    let $sc = $('[data-page-body="true"]');
+    let render = function (data) {
+        if (!data) {
+            return;
+        }
+        while ($log.children('span').length >= limit) {
+            $log.find('span:eq(0)').remove();
+        }
+        let _html = undefined;
+        if (!data.startsWith("html:")) {
+            _html = '<p style="margin-bottom:2px;margin-top: 0px;">' + ansi_up.ansi_to_html(data)
+                .replaceAll('&gt;', '>')
+                .replaceAll('&#x27;', '\'')
+                .replaceAll('&lt;', '<') + '</p>';
+        } else {
+            data = data.substring(5);
+            _html = $('<p style="margin-bottom:2px;margin-top: 0px;"><span> ' + data + '</span></p>');
+        }
+        $log.append(_html);
+        if (localStorage.getItem("autoScroll")) {
+            if ($sc.length > 0) {
+                let _ssc = $sc[0];
+                _ssc.scrollTop = _ssc.scrollHeight;
+            } else {
+                $(document).scrollTop($(document).height());
+            }
+        } else {
+            $(document).scrollTop($(document).height());
+        }
+    }
+
+    var wsFuc = undefined;
+
+    if ("WebSocket" in window) {
+        wsFuc = function () {
+            // 创建一个 websocket
+            var ws = new ReconnectingWebSocket('ws://' + window.location.hostname + ":{{ws}}/log");
+
+            ws.onopen = function () {
+            };
+
+            ws.onmessage = function (evt) {
+                try {
+                    render(evt.data);
+                } catch (e) {
+                }
+            };
+
+            ws.onclose = function () {
+            };
+        }
+        wsFuc();
+    } else {
+        document.getElementById('result').innerHTML = '"您的浏览器不支持 WebSocket!"';
+    }
+</script>
+
+</body>
+
+</html>

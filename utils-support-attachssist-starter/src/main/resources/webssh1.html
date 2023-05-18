@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+<head>
+    <title>WebSSH</title>
+    <link href="{{contentPath}}/resource/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="{{contentPath}}/resource/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+    <link href="{{contentPath}}/resource/styles/github.css" rel="stylesheet">
+
+    <link href="{{contentPath}}/resource/css/animate.css" rel="stylesheet">
+    <link href="{{contentPath}}/resource/css/style.css?v=4.1.0" rel="stylesheet">
+    <link href="{{contentPath}}/resource/js/plugins/toastr/toastr.min.css" rel="stylesheet">
+    <link href="{{contentPath}}/resource//css/xterm.css" rel="stylesheet"/>
+    <link href="{{contentPath}}/resource/lib/layx.min.css?v=4.1.0" rel="stylesheet">
+
+</head>
+<body>
+<div id="terminal" style="width: 100%;height: 100%"></div>
+
+<script src="{{contentPath}}/resource//js/jquery-3.4.1.min.js"></script>
+<script charset="utf-8" src="{{contentPath}}/resource//js/xterm.js"></script>
+<script charset="utf-8" src="{{contentPath}}/resource//js/webssh.js"></script>
+<script src="{{contentPath}}/resource/lib/reconnecting-websocket.min.js?v=1.0.0"></script>
+<script src="{{contentPath}}/resource/lib/layx.min.js" type="text/javascript"></script>
+
+<script>
+    const show1 = function () {
+        openTerminal({
+            operate: 'connect',
+            host: '{{host}}',//IP
+            port: '{{port}}',//端口号
+            username: '{{username}}',//用户名
+            password: '{{password}}'//密码
+        });
+    }
+
+    show1();
+
+    function openTerminal(options) {
+        var client = new WSSHClient("ws://" + window.location.hostname + ":{{ws}}/ssh?host=" + options.host
+            + "&port=" + options.port
+            + "&username=" + options.username
+            + "&password=" + options.password
+        );
+        var term = new Terminal({
+            cols: 97,
+            rows: 37,
+            cursorBlink: true, // 光标闪烁
+            cursorStyle: "block", // 光标样式  null | 'block' | 'underline' | 'bar'
+            scrollback: 800, //回滚
+            tabStopWidth: 8, //制表宽度
+            screenKeys: true
+        });
+
+        term.on('data', function (data) {
+            //键盘输入时的回调函数
+            client.sendClientData(data);
+        });
+        term.open(document.getElementById('terminal'));
+        //在页面上显示连接中...
+        term.write('Connecting...');
+        //执行连接操作
+        client.connect({
+            onError: function (error) {
+                //连接失败回调
+                term.write('Error: ' + error + '\r\n');
+            },
+            onConnect: function () {
+                //连接成功回调
+                client.sendInitData(options);
+            },
+            onClose: function () {
+                //连接关闭回调
+                term.write("\rconnection closed");
+            },
+            onData: function (data) {
+                //收到数据时回调
+                term.write(data);
+            }
+        });
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title> - 空白页</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="{{contentPath}}/resource/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="{{contentPath}}/resource/css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+    <link href="{{contentPath}}/resource/styles/github.css" rel="stylesheet">
+    <link href="{{contentPath}}/resource/js/plugins/steps/jquery.steps.css" rel="stylesheet">
+    <link href="{{contentPath}}/resource/js/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="{{contentPath}}/resource/js/plugins/toastr/toastr.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{contentPath}}/resource/bootstrap.min.css"/>
+    <link rel="stylesheet" href="{{contentPath}}/resource/js/plugins/bootstrap-table/bootstrap.min.css"/>
+    <link rel="stylesheet" href="{{contentPath}}/resource/js/plugins/code/lib/codemirror.css"/>
+    <link rel="stylesheet" href="{{contentPath}}/resource/js/plugins/code/theme/material-ocean.css"/>
+    <!--支持代码折叠-->
+    <link rel="stylesheet" href="{{contentPath}}/resource/js/plugins/code/addon/fold/foldgutter.css"/>
+
+    <link href="{{contentPath}}/resource/css/animate.css" rel="stylesheet">
+    <link href="{{contentPath}}/resource/css/style.css?v=4.1.0" rel="stylesheet">
+    <link rel="stylesheet"
+          href="{{contentPath}}/resource/js/plugins/bootstrap-table/extensions/resizable/jquery.resizableColumns.css"/>
+    <link rel="stylesheet"
+          href="{{contentPath}}/resource/js/plugins/bootstrap-table/extensions/fixed-columns/bootstrap-table-fixed-columns.min.css"/>
+    <link rel="stylesheet" href="{{contentPath}}/resource/js/plugins/bootstrap-table/bootstrap-table.min.css"/>
+
+    <style>
+        #tools {
+            position: fixed;
+            top: 50px;
+            right: 0;
+        }
+
+        .hljs .hljs-keyword:first-child {
+            margin-left: -197px;
+        }
+
+        .hljs .hljs-attr:first-child {
+            margin-left: -197px;
+        }
+    </style>
+</head>
+
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-4">
+        <h2>Spring</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="index.html">Spring</a>
+            </li>
+            <li>
+                <strong>Beans</strong>
+            </li>
+        </ol>
+
+    </div>
+</div>
+
+
+<div class="wrapper wrapper-content">
+    <div class="col-md-12" style="height: 100%">
+        <table class="table table-striped " id="exampleTableColumns"></table>
+    </div>
+</div>
+
+<script>
+</script>
+<!-- 全局js -->
+<script src="{{contentPath}}/resource/js/jquery.min.js?v=2.1.4"></script>
+<script src="{{contentPath}}/resource/js/bootstrap.min.js?v=3.3.6"></script>
+
+<!-- 自定义js -->
+<script src="{{contentPath}}/resource/js/content.js?v=1.0.0"></script>
+<script src="{{contentPath}}/resource/js/plugins/toastr/toastr.min.js"></script>
+<script src="{{contentPath}}/resource/js/plugins/bootstrap-table/extensions/resizable/jquery.resizableColumns.min.js"></script>
+<script src="{{contentPath}}/resource/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="{{contentPath}}/resource/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+<script src="{{contentPath}}/resource/js/plugins/bootstrap-table/extensions/fixed-columns/bootstrap-table-fixed-columns.min.js"></script>
+<script src="{{contentPath}}/resource/js/plugins/bootstrap-table/extensions/resizable/bootstrap-table-resizable.min.js"></script>
+<style>
+    .CodeMirror {
+        border-top: 1px solid black;
+        border-bottom: 1px solid black;
+    }
+
+    /*- scrollbar -*/
+    ::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #999;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb:vertical:hover {
+        background-color: #666;
+    }
+
+    ::-webkit-scrollbar-thumb:vertical:active {
+        background-color: #333;
+    }
+
+    ::-webkit-scrollbar-button {
+        display: none;
+    }
+
+    ::-webkit-scrollbar-track {
+        background-color: #f1f1f1;
+    }
+</style>
+<script>
+
+    let fix = function () {
+    }
+
+    $(window).resize(function () {
+        fix();
+    });
+    $('#exampleTableColumns').bootstrapTable({
+        url: "spring-bean-data",
+        method: 'POST',                      //请求方式（*）
+        height: 600,
+        fixedColumns: true,
+        fixedNumber: 3,
+        striped: true,                      //是否显示行间隔色
+        cache: !0,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+        search: !0,                      //是否显示表格搜索
+        pageSize: 20,                     //每页的记录行数（*）
+        pageList: [20, 40, 60, 80],        //可供选择的每页的行数（*）
+        pagination: true,                   //是否显示分页（*）
+        sortable: true,                     //是否启用排序
+        onClickCell: function (field, value, row, $element) {
+            copyUrl2(value);
+        },
+        columns: [{
+            title: '序号',
+            align: "center",
+            formatter: function (value, row, index) {
+                return index + 1;
+            }
+        }, {
+            field: 'primary',
+            title: '是否主要',
+            align: "center",
+            formatter: function (value, row, index) {
+                return 'false' === value ? '<i class="fa fa-heart-o"></i>' : '<i class="fa fa-heart"></i>';
+            }
+        }, {
+            field: 'bean',
+            title: 'Bean',
+            colspan: 1,
+            cellStyle: function (value, row, index) {
+                return {
+                    css: {
+                        "min-width": "100px",
+                        "white-space": "nowrap",
+                        "text-overflow": "ellipsis",
+                        "overflow": "hidden",
+                        "max-width": "300px"
+                    }
+                }
+            },
+            formatter: function (value, row, index) {
+                return `<span title="${value}">${value}</span>`;
+            }
+        }, {
+            field: 'qualifiers',
+            title: '别名',
+            colspan: 1,
+            cellStyle: function (value, row, index) {
+                return {
+                    css: {
+                        "min-width": "100px",
+                        "white-space": "nowrap",
+                        "text-overflow": "ellipsis",
+                        "overflow": "hidden",
+                        "max-width": "300px"
+                    }
+                }
+            },
+            formatter: function (value, row, index) {
+                return `<span title="${value}">${value}</span>`;
+            }
+        }, {
+            field: 'scope',
+            title: '作用范围',
+            width: 20,
+            formatter: function (value, row, index) {
+                return `<span class="badge badge-primary">${value}</span>`;
+            }
+        }, {
+            field: 'annotationMetadata_annotationTypes',
+            title: '注解',
+            width: 200,
+            formatter: function (value, row, index) {
+                if (!value) {
+                    return "";
+                }
+
+                value = value.replace("[", "").replace("]", "");
+                let rs = '';
+                let _v = value.split(",");
+                for (let item in _v) {
+                    let item1 = _v[item].trim();
+                    rs += `<p class="badge badge-warning-light">${item1}</p>`;
+                }
+                return rs;
+            },
+        }, {
+            field: 'dependsOn',
+            title: '依赖',
+            width: 200,
+            formatter: function (value, row, index) {
+                if (!value) {
+                    return "";
+                }
+
+                value = value.replace("[", "").replace("]", "");
+                let rs = '';
+                let _v = value.split(",");
+                for (let item in _v) {
+                    let item1 = _v[item].trim();
+                    rs += `<p class="badge badge-warning-light">${item1}</p>`;
+                }
+                return rs;
+            },
+        }, {
+            field: 'beanClass',
+            title: 'Bean所在类',
+            cellStyle: function (value, row, index) {
+                return {
+                    css: {
+                        "min-width": "100px",
+                        "white-space": "nowrap",
+                        "text-overflow": "ellipsis",
+                        "overflow": "hidden",
+                        "max-width": "200px"
+                    }
+                }
+            },
+            formatter: function (value, row, index) {
+                return `<span title="${value}">${value}</span>`;
+            }
+        }, {
+            field: 'resource',
+            title: '资源文件',
+            cellStyle: function (value, row, index) {
+                return {
+                    css: {
+                        "min-width": "100px",
+                        "white-space": "nowrap",
+                        "text-overflow": "ellipsis",
+                        "overflow": "hidden",
+                        "max-width": "200px"
+                    }
+                }
+            },
+            formatter: function (value, row, index) {
+                return `<span title="${value}">${value}</span>`;
+            }
+        }]
+    });
+
+
+    function copyUrl2(url2) {
+        var input = document.createElement('input'); // 创建input标签，只有input标签选中可以
+        input.setAttribute('id', 'copyInput'); // 给input一个id属性
+        input.setAttribute('value', url2); // 给input一个value属性，属性值是变量span的文本
+        document.getElementsByTagName('body')[0].appendChild(input); // body里面添加input实体
+        document.getElementById('copyInput').select(); // 使用js去通过id找到并执行input实体的全部选中
+        document.execCommand("Copy"); //原生copy方法执行浏览器复制命令
+        document.getElementById('copyInput').remove(); // 为避免下次页面添加copy方法 所以这里copy完之后要移除input实体
+        toastr.info("复制成功");//提醒
+    }
+
+</script>
+</body>
+
+</html>

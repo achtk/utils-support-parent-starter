@@ -23,8 +23,8 @@ import static com.chua.common.support.constant.CommonConstant.JAR_URL_SEPARATOR;
  *
  * @author CH
  */
-public abstract class AbstractViewResolver implements com.chua.common.support.view.ViewResolver {
-    protected com.chua.common.support.view.ViewConfig config;
+public abstract class AbstractViewResolver implements ViewResolver {
+    protected ViewConfig config;
 
     protected Map<String, ImageFilter> imageFilterList = new ConcurrentHashMap<>();
     @Getter
@@ -35,19 +35,19 @@ public abstract class AbstractViewResolver implements com.chua.common.support.vi
     private String sourcePath;
 
     @Override
-    public com.chua.common.support.view.ViewResolver setConfig(com.chua.common.support.view.ViewConfig config) {
+    public ViewResolver setConfig(ViewConfig config) {
         this.config = config;
         return this;
     }
 
     @Override
-    public com.chua.common.support.view.ViewResolver addPlugin(String name, ImageFilter imageFilter) {
+    public ViewResolver addPlugin(String name, ImageFilter imageFilter) {
         imageFilterList.put(name, imageFilter);
         return this;
     }
 
     @Override
-    public com.chua.common.support.view.ViewResolver setPlugin(Map<String, ImageFilter> imageFilter) {
+    public ViewResolver setPlugin(Map<String, ImageFilter> imageFilter) {
         this.imageFilterList = imageFilter;
         return this;
     }
@@ -107,10 +107,10 @@ public abstract class AbstractViewResolver implements com.chua.common.support.vi
     /**
      * 渲染图片
      *
-     * @param os
-     * @param stream2
-     * @param viewPreview
-     * @param pluginList
+     * @param os          os
+     * @param stream2     stream
+     * @param viewPreview preview
+     * @param pluginList  plugin
      */
     private void renderImage(OutputStream os, byte[] stream2, ViewPreview viewPreview, Set<String> pluginList) {
         String format = viewPreview.getContentType()

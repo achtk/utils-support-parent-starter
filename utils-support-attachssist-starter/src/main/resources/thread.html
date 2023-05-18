@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+
+    <title> - 空白页</title>
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <link href="favicon.ico" rel="shortcut icon">
+    <link href="{{contentPath}}/resource/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+
+    <style>
+        #tools {
+            position: fixed;
+            top: 50px;
+            right: 0;
+            z-index: 20230305;
+        }
+
+        .hljs .hljs-keyword:first-child {
+            margin-left: -197px;
+        }
+
+        .hljs .hljs-attr:first-child {
+            margin-left: -197px;
+        }
+
+        .line {
+            width: auto !important;
+            height: auto !important;
+            margin: inherit !important;
+            overflow: inherit !important;
+            font-size: inherit !important;
+            background-color: inherit !important;
+        }
+    </style>
+</head>
+<div id="tools">
+    <input class="pull-left" id="pid" placeholder="PID" value=""/>
+</div>
+<body class="gray-bg">
+
+<div data-page-body=true id="request" style="overflow:auto; height: 100%">
+</div>
+</div>
+
+<script>
+</script>
+<!-- 全局js -->
+<script src="{{contentPath}}/resource/js/jquery.min.js?v=2.1.4"></script>
+<script src="{{contentPath}}/resource/js/bootstrap.min.js?v=3.3.6"></script>
+
+
+<style>
+    .CodeMirror {
+        border-top: 1px solid black;
+        border-bottom: 1px solid black;
+    }
+
+    /*- scrollbar -*/
+    ::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #999;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb:vertical:hover {
+        background-color: #666;
+    }
+
+    ::-webkit-scrollbar-thumb:vertical:active {
+        background-color: #333;
+    }
+
+    ::-webkit-scrollbar-button {
+        display: none;
+    }
+
+    ::-webkit-scrollbar-track {
+        background-color: #f1f1f1;
+    }
+</style>
+
+<script>
+    $.ajax({
+        url: 'thread_info',
+        type: 'post',
+    }).done(xhr => {
+        $(request).html(xhr
+            .replaceAll(/\\n/g, '<br/>')
+            .replaceAll(/\\"/g, '"')
+            .replace(/nid=(\w+)\s+/g, 'nid=<span style="color: red" id="$1">$1</span> ')
+            .replaceAll(/\\t/g, '<span style="margin-left: 14px"></span>')
+        );
+    });
+
+
+    //监听回车（13是回车的代号）
+    $(document).keydown(function (event) {
+        if (event.keyCode == 13) {
+            let val = $('#pid').val();
+            let val16 = (parseInt(val)).toString(16);
+            console.log(val + '->' + val16)
+            let $id = $("#0x" + val16);
+            $('#request,html,body').animate({scrollTop: $id[0].offsetTop - 120}, "slow")
+        }
+    });
+</script>
+</body>
+
+</html>

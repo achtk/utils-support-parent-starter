@@ -54,7 +54,7 @@
 
     <!-- 至多只能配置一个root -->
     <root>
-        <level value="INFO"/>
+        <level value="debug"/>
         <appender-ref ref="console"/>
         <appender-ref ref="async"/>
     </root>

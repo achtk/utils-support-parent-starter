@@ -35,4 +35,8 @@ public class JsonObject extends TypeHashMap implements Profile {
     public Set<String> keySet() {
         return source.keySet();
     }
+
+    public Set<Map.Entry<String, Object>> entrySet() {
+        return source.entrySet();
+    }
 }

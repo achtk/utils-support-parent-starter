@@ -1,0 +1,5 @@
+com.chua.agent.support.pointer.ZookeeperServerPoint
+com.chua.agent.support.pointer.RedisServerPoint
+com.chua.agent.support.pointer.MonogoServerPoint
+com.chua.agent.support.pointer.DubboServerPoint
+com.chua.agent.support.pointer.MysqlServerPoint

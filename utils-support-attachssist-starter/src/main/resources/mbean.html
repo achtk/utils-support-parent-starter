@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title> - 空白页</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="{{contentPath}}/resource/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="{{contentPath}}/resource/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+    <link href="{{contentPath}}/resource/styles/github.css" rel="stylesheet">
+
+    <link href="{{contentPath}}/resource/css/animate.css" rel="stylesheet">
+
+    <!-- ztree -->
+    <link href="{{contentPath}}/resource/css/ztree/demo.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{contentPath}}/resource/css/ztree/zTreeStyle/zTreeStyle.css" type="text/css">
+
+    <style>
+        .gray-bg {
+            background-color: #f0f3f4;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body class="gray-bg">
+<div id="tools">
+    <div class="btn btn-primary pull-right" id="show">隐藏/显示</div>
+</div>
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-4">
+        <h2>其它</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="index.html">mbean</a>
+            </li>
+            <li>
+                <strong>mbean</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content">
+    <ul class="sortable-list connectList agile-list"
+        style="overflow:auto;display:none;height: 100%;position: fixed;right: 0;width: 700px;background: white;">
+
+    </ul>
+
+    <div id="result" data-page-body=true style="overflow:auto; width: 100%;height: 100%;">
+        <div class="v1">
+            <ul id="mbean" class="ztree"
+                style="float:left;width:34%;height:100%;min-height:800px;margin:0;overflow:auto;"></ul>
+            <iframe id="frame1" name="iframe1"
+                    style="float:right;width:65%;height:100%;min-height:800px;margin:0;overflow:auto;"
+                    src="/agent/method"></iframe>
+        </div>
+    </div>
+</div>
+
+<!-- 全局js -->
+<script src="{{contentPath}}/resource/js/jquery.min.js?v=2.1.4"></script>
+<script src="{{contentPath}}/resource/js/bootstrap.min.js?v=3.3.6"></script>
+
+<!-- ztree -->
+<script src="{{contentPath}}/resource/js/plugins/ztree/jquery.ztree.core.js"></script>
+
+<!-- md5 -->
+<script src="{{contentPath}}/resource/js/jquery.md5.js"></script>
+
+<script>
+    $(function () {
+        window.zTreeObj = undefined;
+        const $mbean = $('#mbean');
+        let zNodes = [];
+        let setting = {
+            data: {
+                simpleData: {
+                    enable: true,
+                    idKey: "id",
+                    pIdKey: "pId",
+                    rootPId: undefined
+                }
+            },
+            callback: {
+                onClick: chooseNode,
+            },
+        };
+        $.ajax({
+            url: 'mbean_info',
+            type: 'post',
+        }).done(xhr => {
+            let _arr = JSON.parse(xhr);
+            console.log(_arr);
+            _arr.forEach((item, idx) => {
+                let obj = {
+                    id: item.id,
+                    pId: item.pid,
+                    name: item.name,
+                    objectName: (item.objectName != null && item.objectName != "") ? item.objectName : null,
+                    methodDesc: (item.methodDesc != null) ? item.methodDesc : null,
+                    type: (item.type != null && item.type != "") ? item.type : null,
+                };
+                zNodes.push(obj);
+            });
+            console.log(zNodes);
+            zTreeObj = $.fn.zTree.init($mbean, setting, zNodes);
+        });
+
+        function chooseNode(event, treeId, treeNode) {
+            if (treeNode.type == "method" || treeNode.type == "property") {
+                let val = JSON.stringify(treeNode);
+                console.log(val);
+                $(window.frames["iframe1"].document).find("#item").val(val);
+                // console.log($(window.frames["iframe1"].document).find("#item").attr("id"));
+                window.frames["iframe1"].window.showInfo();
+            }
+        }
+
+    });
+
+</script>
+</body>
+
+</html>

@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+
+    <title> - 空白页</title>
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <link href="favicon.ico" rel="shortcut icon">
+    <link href="{{contentPath}}/resource/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="{{contentPath}}/resource/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+    <link href="{{contentPath}}/resource/styles/github.css" rel="stylesheet">
+
+    <link href="{{contentPath}}/resource/css/animate.css" rel="stylesheet">
+    <link href="{{contentPath}}/resource/lib/xr-styles.css?v=4.1.0" rel="stylesheet">
+    <link href="{{contentPath}}/resource/css/style.css?v=4.1.0" rel="stylesheet">
+    <link href="{{contentPath}}/resource/js/plugins/toastr/toastr.min.css" rel="stylesheet">
+
+    <style>
+        #tools {
+            position: fixed;
+            top: 50px;
+            right: 0;
+        }
+
+        .hljs .hljs-keyword:first-child {
+            margin-left: -197px;
+        }
+
+        .hljs .hljs-attr:first-child {
+            margin-left: -197px;
+        }
+
+        .NodeToggler__plus___1gUVv:before {
+            margin-left: -3px !important;
+            margin-top: -1px !important;
+        }
+
+        #tools {
+            position: fixed;
+            top: 28px;
+            right: 0;
+        }
+    </style>
+</head>
+
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-4">
+        <h2>日志</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="index.html">链路追踪</a>
+            </li>
+            <li>
+                <strong>链路追踪</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content">
+    <div class="view-io PageContainer__withStandaloneToolbarCompensation___3QGxk PageContainer__pageContainer___3XbpK"
+         style="width: 100%;margin: 0;overflow: auto;">
+        <div class="Tree__tree___3onDU" data-test-tree="calls">
+            <url class="Children__rootChildren___1tlEa Children__children___3Xkho" id="trace">
+            </url>
+        </div>
+    </div>
+
+    <div id="tools">
+        <input class="input-group pull-right" id="threshold" style="margin-left: 4px;width: 100px; height: 30px;"
+               type="number" value="20000">
+        <div class="btn btn-primary pull-right" id="trace-clear">清除</div>
+    </div>
+</div>
+
+<!-- 全局js -->
+<script src="{{contentPath}}/resource/js/jquery.min.js?v=2.1.4"></script>
+<script src="{{contentPath}}/resource/js/bootstrap.min.js?v=3.3.6"></script>
+
+<!-- 自定义js -->
+<script src="{{contentPath}}/resource/js/content.js?v=1.0.0"></script>
+<script src="{{contentPath}}/resource/lib/highlight.pack.js" type="text/javascript"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script src="{{contentPath}}/resource/lib/sql-formatter.min.js" type="text/javascript"></script>
+<script src="{{contentPath}}/resource/lib/ansi_up.js?v=1.0.0"></script>
+<script src="{{contentPath}}/resource/js/plugins/toastr/toastr.min.js"></script>
+
+<!-- Peity -->
+<script src="{{contentPath}}/resource/js/plugins/peity/jquery.peity.min.js"></script>
+<script>
+    var $traceClear = $('#trace-clear');
+    $traceClear.off('click');
+    $traceClear.on("click", function () {
+        $('#trace').empty();
+    });
+
+    function add0(m) {
+        return m < 10 ? '0' + m : m
+    }
+
+    function format(shijianchuo) {
+        var time = new Date(shijianchuo);
+        var y = time.getFullYear();
+        var m = time.getMonth() + 1;
+        var d = time.getDate();
+        var h = time.getHours();
+        var mm = time.getMinutes();
+        var s = time.getSeconds();
+        return y + '-' + add0(m) + '-' + add0(d) + ' ' + add0(h) + ':' + add0(mm) + ':' + add0(s);
+    }
+</script>
+<script>
+    var ansi_up = new AnsiUp;
+
+    const $trace = $('#trace');
+    const render = function (data) {
+        let type = data.type;
+        let typeMethod = data.typeMethod;
+        let linkId = data.linkId;
+        console.log("pid:" + data.pid + "\n id:" + data.id + "\ntype :" + type + "\nlinkId :" + linkId)
+        let id = data.id;
+        let pid = data.pid;
+        let costTime = data.costTime;
+        let enterTime = format(data.enterTime);
+        let message = data.message;
+        let method = data.method;
+        let ex = data.ex == 'null' ? '' : data.ex;
+        let stack = data.stack.join(",;");
+        let error = data.error;
+        let size = stack.split(',;').length;
+        let $linkId = $trace.find("#" + linkId);
+        let less = "100.0";
+        let $pid = $linkId.find("#" + pid);
+        if ($pid.length != 0) {
+            let _v = ~~($pid.parent().parent().parent().find('.times:eq(0)').text().replace("ms", ""));
+            less = (costTime / _v * 100).toFixed(2);
+        }
+        let $ms = $linkId.find('.StatisticsItem__label--cpuProfile___3th4D');
+        let $id = $linkId.find("#" + id);
+        let _new = `
+                <li id="${linkId}" pid="${pid}" _id="${id}" class="node branch Node__node___24rzp node--branch node--details-collapsed " data-test-node="true" data-test-node--id="${linkId}" data-test-node--type="request">
+                    <div class="node-self NodeSelf__nodeSelf___3tcbj" data-test-node-self--id="${linkId}" data-test-node-self--type="request">
+                        <div>
+                            <div class="NodeHeader__header--request___2g0Xa NodeHeader__blueHeader___DOPR2 NodeHeader__header___32SVl" data-test-node-header="true">
+                                <div class="NodeHeader__titleRow___2Z5er">
+                                    <span class="NodeToggler__plus___1gUVv NodeToggler__icon___220Zi" data-test-toggler-icon="branch"></span>
+                                    <span class="Title__title___3-ktO" data-test-node-title="true">
+                                        <span class="ShortenedTitle__title___3ZZcz" title="${message}" data-test-node-shortened-title="true">
+                                            <span class="times StatisticsItem__label--cpuProfile___3th4D label__label___3bsPv" title="Time spent servicing the request" data-test-statistics="true" value="${costTime}">${costTime} ms</span>
+                                            <span class="NodeTypeLabel__fullLabel___1UksM NodeTypeLabel__label___3WXR0">${ex}</span>
+                                            <span class="SummaryLine__traceTitleSummaryLine___207G6">${type}</span></span>
+                                            <span class="Timestamp__timestamp___3RbUL">@ ${enterTime}</span>
+                                            <aside class="Tools__tools___24znf">
+                                                <button type="submit" class="NodeDetailsToggle__expandToggle___2AaMC NodeDetailsToggle__toggle___156lj" data-test-node-details-toggle="true"></button>
+                                                <span></span>
+                                                <span data-async-status="true" data-test-async-status="true" style="height: 18px;" class="AsyncStatus__dropdownClosed___2kNjz AsyncStatus__dropdownTemplate___3Pbsj">
+                                                    <span class="AsyncStatus__asyncIcon___31t5G AsyncStatus__icon___1y-qN"></span>
+                                                Async 9/9
+                                                </span>
+                                                <div class="ActionMenu__inactiveActionMenu___2fQD8 ActionMenu__actionMenu___2iDsi" data-action-menu="true" data-test-action-menu="true">
+                                                    <a class="ActionMenu__button___3_erY"></a>
+                                                </div>
+                                            </aside>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+            `;
+        let _v = `
+               <ul id="${id}-parent" class="node-details node-details--level1 children Children__children___3Xkho" style="display: none;">
+
+                </ul>
+            `;
+
+        let _vv = `
+            <li data-test-flat-group="trace-106-flatGroup" class="node-self stackTrace node branch FlatGroup__group___2ZOEK">
+                    <div class="node-self stackTrace ExpandHandle__handle___3X2sw">
+                        <span class="ExpandHandle__handleLine___3JNCU"></span>
+                        <span class="ExpandHandle__count___ZF2st">${size} collapsed
+                            <span class="data" style="display: none"></span>
+                        </span>
+                    </div>
+                    </li>
+        `;
+        let _vvCopy = `
+            <li data-test-flat-group="trace-106-flatGroup" class="node branch FlatGroup__group___2ZOEK__copy">
+                    <div class="node-self stackTrace ExpandHandle__handle___3X2sw">
+                        <span class="ExpandHandle__handleLine___3JNCU"></span>
+                        <span class="ExpandHandle__count___ZF2st" style="color:red;"> Exception
+                            <span class="data" style="display: none"></span>
+                        </span>
+                    </div>
+                    </li>
+        `;
+        let _v2 = `
+            <li id="${id}" pid="${pid}" class="node branch Node__node___24rzp node--child node--branch node--details-collapsed" data-test-node="true" data-test-node--id="trace-2346" data-test-node--type="trace">
+                        <div class="node-self NodeSelf__nodeSelf___3tcbj" data-test-node-self--id="trace-2346" data-test-node-self--type="trace">
+                            <div class="NodeHeader__header--trace___R471x NodeHeader__lightHeader___1_t-x NodeHeader__header___32SVl" data-test-node-header="true">
+                                <div class="NodeHeader__titleRow___2Z5er">
+                                    <span class="NodeToggler__plus___1gUVv NodeToggler__icon___220Zi NodeToggler__minus___1tM2g" data-test-toggler-icon="branch"></span>
+                                    <span class="Title__title___3-ktO" data-test-node-title="true">
+                                        <span class="ShortenedTitle__title___3ZZcz" title="${typeMethod}" data-test-node-shortened-title="true">
+                                            <span class="PercentagesItem__highText___TNe6z PercentagesItem__text___2R6EI" title="Time spent in branch">${less}%</span>
+                                            <span class="times StatisticsItem__label--light___1TTyt label__lightLabel___3VtcB label__label___3bsPv" title="Time spent in branch" data-test-statistics="true">${costTime} ms</span>
+                                            <span class="SummaryLine__traceTitleSummaryLine___207G6" title="${method}">${method}</span>
+                                        </span>
+                                        <aside class="Tools__tools___24znf">
+                                            <span></span>
+                                            <span></span>
+                                        </aside>
+                                    </span>
+                                    <div class="PackageLabel__package___1bNMj">
+                                        <span class="PackageLabel__label___1W_KH" title="${type}">${type}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+        `;
+
+        let $v = $(_v);
+        let $_vv = $(_vv);
+        let $_vvCopy = $(_vvCopy);
+        let $data = undefined;
+        let $data_copy = undefined;
+        let $out = $('.ShortenedTitle__title___3ZZcz');
+        let out = `<span data-test-threshold-exceeded-icon="true" class="RequestShortenedTitle__notificationIcon___1hqyN" title="Threshold exceeded"></span>`;
+        $_vv.find('.data').text(stack);
+        $_vvCopy.find('.data').text(data.error);
+        if ($linkId.length == 0) {
+            let $new = $(_new);
+            if (!!error) {
+                $v.append($_vvCopy);
+            }
+            $v.append($_vv);
+            $new.append($v);
+            $trace.append($new);
+            $data = $new.find('.FlatGroup__group___2ZOEK');
+            $data_copy = $new.find('.FlatGroup__group___2ZOEK__copy');
+            if (costTime > $('#threshold').val()) {
+                $new.find('.ShortenedTitle__title___3ZZcz').prepend(out);
+            }
+        } else {
+            let _v2v = $(_v2);
+            let _vvv = $(_v);
+            if (!!error) {
+                _vvv.append($_vvCopy);
+            }
+            _vvv.append($_vv);
+            _v2v.append(_vvv);
+            $v.append(_v2v);
+            $data = $v.find('.FlatGroup__group___2ZOEK');
+            $data_copy = $v.find('.FlatGroup__group___2ZOEK__copy');
+            if ($pid.length == 0) {
+                if ($linkId.find('ul').length == 0) {
+                    $linkId.append($v);
+                } else {
+                    $linkId.find('ul:eq(0) li:eq(0)').after($v);
+                }
+            } else {
+                $pid.append($v);
+                // $v.append($pid.parent());
+            }
+        }
+        $data.find('.ExpandHandle__count___ZF2st').off('click');
+        $data.find('.ExpandHandle__count___ZF2st').on('click', function (da) {
+            let $f = $(this).parentsUntil('.FlatGroup__group___2ZOEK').parent();
+            if ($f.find('.detail-data').length == 0) {
+                let _text = $(this).find('.data').text();
+                let $div = $('<ul class="detail-data node-details node-details--level1"></ul>');
+                $div.on("click", function () {
+                    copyUrl2($(this).html().replace(/<br>/g, '\r\n').replace(/<(.*?)>/g, ' ').replace(/\s+/g, ' '));
+                })
+                let values = _text.split(',;');
+                for (let index in values) {
+                    $div.append('<li class="node-details__item">' + values[index] + '</li>');
+                }
+                $f.find('div').append($div);
+            } else {
+                $f.find('.detail-data').remove();
+            }
+            return false;
+        });
+        $data_copy.find('.ExpandHandle__count___ZF2st').off('click');
+        $data_copy.find('.ExpandHandle__count___ZF2st ').on('click', function (da) {
+            let $li = $(this).parentsUntil('li').parent();
+            if ($li.find('.detail-data').length == 0) {
+                let _text = $(this).find('.data').text();
+                let $div = $('<div class="detail-data"></div>');
+                let arr = _text.split('<br />');
+                for (let i = 0; i < arr.length; i++) {
+                    const arrElement = arr[i];
+                    $div.append('<p>' + ansi_up.ansi_to_html(arrElement).replaceAll('&lt;', "<").replaceAll('&gt;', ">").replaceAll('&#x27;', "'").replaceAll('\r\n', '<br />') + '</p>');
+                }
+                $li.find('div').append($div);
+            } else {
+                $li.find('.detail-data').remove();
+            }
+            return false;
+        });
+
+        if ($ms.length > 0) {
+            $ms.text(~~$ms.attr('value') + costTime + " ms");
+        }
+        $('#trace .node--details-collapsed .NodeSelf__nodeSelf___3tcbj').off('click');
+        $('#trace .node--details-collapsed .NodeSelf__nodeSelf___3tcbj').on('click', function (_this) {
+            let $url = $(this).find('  .Children__children___3Xkho');
+            if ($url.length == 0) {
+                $url = $(this).parent().find('  .Children__children___3Xkho');
+            }
+            if ($url.is(':hidden')) {
+                $url.show();
+                let $node = $(this).find('.NodeToggler__icon___220Zi ');
+                $node.removeClass('NodeToggler__plus___1gUVv');
+                $node.addClass('NodeToggler__minus___1tM2g');
+            } else {
+                $url.hide();
+                let $node = $(this).find('.NodeToggler__icon___220Zi ');
+                $node.removeClass('NodeToggler__minus___1tM2g');
+                $node.addClass('NodeToggler__plus___1gUVv');
+            }
+
+            return false;
+        });
+        return false;
+    }
+
+    function copyUrl2(url2) {
+        var input = document.createElement('input'); // 创建input标签，只有input标签选中可以
+        input.setAttribute('id', 'copyInput'); // 给input一个id属性
+        input.setAttribute('value', url2); // 给input一个value属性，属性值是变量span的文本
+        document.getElementsByTagName('body')[0].appendChild(input); // body里面添加input实体
+        document.getElementById('copyInput').select(); // 使用js去通过id找到并执行input实体的全部选中
+        document.execCommand("Copy"); //原生copy方法执行浏览器复制命令
+        document.getElementById('copyInput').remove(); // 为避免下次页面添加copy方法 所以这里copy完之后要移除input实体
+        toastr.info("复制成功");//提醒
+    }
+
+    if ("WebSocket" in window) {
+        // 创建一个 websocket
+        var ws = new WebSocket('ws://' + window.location.hostname + ":{{ws}}/trace");
+
+        ws.onopen = function () {
+        };
+
+        ws.onmessage = function (evt) {
+            var received_msg = evt.data;
+            try {
+                let parse = JSON.parse(received_msg);
+                render(parse);
+            } catch (e) {
+            }
+        };
+
+        ws.onclose = function () {
+        };
+    } else {
+        document.getElementById('result').innerHTML = '"您的浏览器不支持 WebSocket!"';
+    }
+</script>
+</body>
+
+</html>

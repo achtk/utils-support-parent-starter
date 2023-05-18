@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title> - 空白页</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="{{contentPath}}/resource/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="{{contentPath}}/resource/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+    <link href="{{contentPath}}/resource/styles/github.css" rel="stylesheet">
+
+    <link href="{{contentPath}}/resource/css/animate.css" rel="stylesheet">
+    <link href="{{contentPath}}/resource/css/style.css?v=4.1.0" rel="stylesheet">
+    <link href="{{contentPath}}/resource/js/plugins/toastr/toastr.min.css" rel="stylesheet">
+
+    <style>
+        #tools {
+            position: fixed;
+            top: 50px;
+            right: 0;
+        }
+
+        .hljs .hljs-keyword:first-child {
+            margin-left: -197px;
+        }
+
+        .hljs .hljs-attr:first-child {
+            margin-left: -197px;
+        }
+
+        .hljs .hljs-selector-tag:first-child {
+            margin-left: -197px;
+        }
+    </style>
+</head>
+
+<body class="gray-bg">
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-4">
+        <h2>数据库相关</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="index.html">数据库</a>
+            </li>
+            <li>
+                <strong>SQL</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content">
+    <div id="result" data-page-body=true style="overflow:auto; width: 100%;height: 100%">
+        <div id="vertical-timeline" class="vertical-container light-timeline">
+
+        </div>
+
+    </div>
+</div>
+
+<!-- 全局js -->
+<script src="{{contentPath}}/resource/js/jquery.min.js?v=2.1.4"></script>
+<script src="{{contentPath}}/resource/js/bootstrap.min.js?v=3.3.6"></script>
+
+<!-- 自定义js -->
+<script src="{{contentPath}}/resource/js/content.js?v=1.0.0"></script>
+<script src="{{contentPath}}/resource/lib/highlight.pack.js" type="text/javascript"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script src="{{contentPath}}/resource/lib/sql-formatter.min.js" type="text/javascript"></script>
+
+<!-- Peity -->
+<script src="{{contentPath}}/resource/js/plugins/peity/jquery.peity.min.js"></script>
+<script src="{{contentPath}}/resource/lib/reconnecting-websocket.min.js?v=1.0.0"></script>
+<script src="{{contentPath}}/resource/js/plugins/toastr/toastr.min.js"></script>
+
+<script>
+    function add0(m) {
+        return m < 10 ? '0' + m : m
+    }
+
+    function format(shijianchuo) {
+        var time = new Date(parseInt(shijianchuo));
+        var y = time.getFullYear();
+        var m = time.getMonth() + 1;
+        var d = time.getDate();
+        var h = time.getHours();
+        var mm = time.getMinutes();
+        var s = time.getSeconds();
+        return y + '-' + add0(m) + '-' + add0(d) + ' ' + add0(h) + ':' + add0(mm) + ':' + add0(s);
+    }
+
+    function formatDay(shijianchuo) {
+        var time = new Date(parseInt(shijianchuo));
+        var h = time.getHours();
+        var mm = time.getMinutes();
+        var s = time.getSeconds();
+        return add0(h) + ':' + add0(mm) + ':' + add0(s);
+    }
+    var wsFuc = undefined;
+
+    var limit = 10;
+    if ("WebSocket" in window) {
+        wsFuc = function (){
+            // 创建一个 websocket
+            var ws = new ReconnectingWebSocket('ws://' + window.location.hostname + ":{{ws}}/sql");
+
+            ws.onopen = function () {
+            };
+
+            ws.onmessage = function (evt) {
+                let item = JSON.parse(evt.data.replaceAll('\n', ''));
+
+                let e = {
+                    date: formatDay(item['enterTime']),
+                    title: format(item['enterTime']),
+                    achievement: sqlFormatter.format(item['message'])
+                };
+
+                var html = `
+                <div class="vertical-timeline-block">
+                        <div class="vertical-timeline-icon navy-bg">
+                            <i class="fa fa-briefcase"></i>
+                        </div>
+
+                        <div class="vertical-timeline-content">
+                        <button class="btn btn-default"  onclick="copyUrl2(undefined)"><i class="fa fa-copy"></i></button>
+                        <span class="hidden" id="text">${e.achievement}</span>
+                        <pre>
+                             <code class="code">
+                            ${e.achievement}
+                            </code></pre>
+                            <span class="vertical-date">
+                        ${e.date} <br>
+                        <small>${e.title}</small>
+                    </span>
+                        </div>
+                    </div>
+            `;
+                var html1 = `<div class="timeline-item">
+                <div class="row">
+                    <div class="col-xs-3 date">
+                        <i class="fa fa-briefcase"></i> ${e.date}
+                        <br>
+                        <small class="text-navy">${e.title}</small>
+                    </div>
+                    <div class="col-xs-7 content no-top-border">
+                        <p class="m-b-xs"><strong>语句</strong>
+                        </p>
+                        <code id="code">
+                            ${e.achievement}
+                            </code>
+                    </div>
+                </div>
+            </div>`;
+                let _html = $(html);
+                $('#vertical-timeline').prepend(_html);
+                while ($('#vertical-timeline .vertical-timeline-block').length >= limit) {
+                    $('#vertical-timeline').find('.vertical-timeline-block:last').remove();
+                }
+                hljs.highlightBlock(_html[0]);
+            };
+
+            ws.onclose = function () {
+            };
+        }
+
+        wsFuc();
+    } else {
+        document.getElementById('result').innerHTML = '"您的浏览器不支持 WebSocket!"';
+    }
+
+
+    function copyUrl2(url2, $this) {
+        url2 = $(event.currentTarget).parent().find('#text').text();
+        url2 = url2.replaceAll("\n", "\r\n ");
+        var input = document.createElement('input'); // 创建input标签，只有input标签选中可以
+        input.setAttribute('id', 'copyInput'); // 给input一个id属性
+        input.setAttribute('value', url2); // 给input一个value属性，属性值是变量span的文本
+        document.getElementsByTagName('body')[0].appendChild(input); // body里面添加input实体
+        document.getElementById('copyInput').select(); // 使用js去通过id找到并执行input实体的全部选中
+        document.execCommand("Copy"); //原生copy方法执行浏览器复制命令
+        document.getElementById('copyInput').remove(); // 为避免下次页面添加copy方法 所以这里copy完之后要移除input实体
+        toastr.info("复制成功");//提醒
+    }
+</script>
+</body>
+
+</html>

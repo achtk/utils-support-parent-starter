@@ -17,6 +17,10 @@
         <module>utils-support-image-starter</module>
         <module>utils-support-pcap-starter</module>
         <module>utils-support-groovy-starter</module>
+        <module>utils-support-aspose-starter</module>
+        <module>utils-support-attach-support</module>
+        <module>utils-support-attachssist-starter</module>
+        <module>utils-support-alibaba-starter</module>
     </modules>
 
     <!-- -Djava.net.preferIPv4Stack=true-->
@@ -81,6 +85,12 @@
             <dependency>
                 <groupId>com.chua</groupId>
                 <artifactId>utils-support-groovy-starter</artifactId>
+                <version>3.1.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.chua</groupId>
+                <artifactId>utils-support-aspose-starter</artifactId>
                 <version>3.1.0</version>
             </dependency>
         </dependencies>

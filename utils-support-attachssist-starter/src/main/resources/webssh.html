@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+<head>
+    <title>WebSSH</title>
+    <link href="{{contentPath}}/resource/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="{{contentPath}}/resource/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+    <link href="{{contentPath}}/resource/styles/github.css" rel="stylesheet">
+
+    <link href="{{contentPath}}/resource/css/animate.css" rel="stylesheet">
+    <link href="{{contentPath}}/resource/css/style.css?v=4.1.0" rel="stylesheet">
+    <link href="{{contentPath}}/resource/js/plugins/toastr/toastr.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{contentPath}}/resource//css/xterm.css"/>
+    <link href="{{contentPath}}/resource/lib/layx.min.css?v=4.1.0" rel="stylesheet">
+
+    <style>
+        #tools {
+            position: fixed;
+            top: 10px;
+            left: 0;
+            z-index: 10000;
+        }
+    </style>
+</head>
+<body>
+<div id="tools">
+    <input class="input-group block  pull-left" id="host" placeholder="地址" value="192.168.110.100"/>
+    <input class="input-group block  pull-left" id="port" placeholder="端口" value="22"/>
+    <input class="input-group block  pull-left" id="username" placeholder="账号" value="root"/>
+    <input class="input-group block  pull-left" id="password" placeholder="密码" type="password" value="boren1818"/>
+    <div class="btn btn-primary pull-left" id="show" onclick="show1()">连接</div>
+    <div class="btn btn-primary pull-left" id="dishow">断开连接</div>
+</div>
+<div id="terminal" style="width: 100%;height: 100%"></div>
+
+<script src="{{contentPath}}/resource//js/jquery-3.4.1.min.js"></script>
+<script src="{{contentPath}}/resource/lib/layx.min.js" type="text/javascript"></script>
+
+<script>
+    const show1 = function () {
+        let op = {
+            operate: 'connect',
+            host: $('#host').val(),//IP
+            port: $('#port').val(),//端口号
+            username: $('#username').val(),//用户名
+            password: $('#password').val()//密码
+        };
+        layx.open({
+            id: new Date().getTime() + "",
+            content: {
+                type: 'local-url',
+                value: `./webssh1.html?host=${op.host}&port=${op.port}&username=${op.username}&password=${op.password}`
+            },
+            toolBar: {
+                background: "#f5f5f5",
+                titleBar: {
+                    title: new Date().getTime(),
+                    useSubTitle: true
+                }
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

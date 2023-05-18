@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title> - 空白页</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="{{contentPath}}/resource/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="{{contentPath}}/resource/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+    <link href="{{contentPath}}/resource/styles/github.css" rel="stylesheet">
+
+    <link href="{{contentPath}}/resource/css/animate.css" rel="stylesheet">
+    <link href="{{contentPath}}/resource/css/style.css?v=4.1.0" rel="stylesheet">
+
+    <style>
+        #tools {
+            position: fixed;
+            top: 50px;
+            right: 0;
+        }
+
+        .hljs .hljs-keyword:first-child {
+            margin-left: -197px;
+        }
+
+        .hljs .hljs-attr:first-child {
+            margin-left: -197px;
+        }
+
+        #tools {
+            position: fixed;
+            top: 50px;
+            right: 0;
+        }
+    </style>
+</head>
+
+<body class="gray-bg">
+<div id="tools">
+    <div class="btn btn-primary pull-right" id="show">隐藏/显示</div>
+</div>
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-4">
+        <h2>其它</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="index.html">文件句柄</a>
+            </li>
+            <li>
+                <strong>文件句柄</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content">
+    <ul class="sortable-list connectList agile-list"
+        style="overflow:auto;display:none;height: 100%;position: fixed;right: 0;width: 700px;background: white;">
+
+    </ul>
+
+    <div id="result" data-page-body=true style="overflow:auto; width: 100%;height: 100%">
+        <div class="v1"></div>
+    </div>
+</div>
+
+<!-- 全局js -->
+<script src="{{contentPath}}/resource/js/jquery.min.js?v=2.1.4"></script>
+<script src="{{contentPath}}/resource/js/bootstrap.min.js?v=3.3.6"></script>
+
+<!-- 自定义js -->
+<script src="{{contentPath}}/resource/js/content.js?v=1.0.0"></script>
+<script src="{{contentPath}}/resource/lib/highlight.pack.js" type="text/javascript"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script src="{{contentPath}}/resource/lib/sql-formatter.min.js" type="text/javascript"></script>
+
+<!-- Peity -->
+<script src="{{contentPath}}/resource/js/plugins/peity/jquery.peity.min.js"></script>
+<script src="{{contentPath}}/resource/js/jquery-ui-1.10.4.min.js"></script>
+
+<script>
+    $(function () {
+        let $agilelist = $('.agile-list');
+
+        $('#show').click(function () {
+            $agilelist.toggle();
+        });
+
+        $.ajax({
+            url: 'stream_data'
+        }).done(xhr => {
+            let json = JSON.parse(xhr);
+            let xhr1 = json['data'];
+            let xhr2 = json['title'];
+            $agilelist.empty();
+
+            for (let item of xhr2.split('\r\n')) {
+                let itemId = item
+                    .replaceAll("\\", "_")
+                    .replaceAll(".", "_")
+                    .replaceAll(":", "_")
+                    .replaceAll("\s+", "_")
+                    .replaceAll("/", "_")
+                    .trim();
+                $agilelist.append(`
+                     <li class="info-element alert alert-info" onclick=find("${itemId}")>
+                        <i class="fa fa-terminal"></i>  ${item}
+                    </li>
+                `);
+            }
+            let split = xhr1.split('----');
+            let $stream = $('#result > .v1');
+            $stream.empty();
+            for (let item of split) {
+                let index = item.indexOf("</span>");
+                let id = undefined;
+                if (index > -1) {
+                    id = item.substring(0, index).replace("Opend <span style='color:red;'>", '')
+                        .replaceAll("\\", "_")
+                        .replaceAll(".", "_")
+                        .replaceAll(":", "_")
+                        .replaceAll("\s+", "_")
+                        .replaceAll("/", "_")
+                        .trim();
+                }
+                $stream.append(`
+                    <pre id="${id}">
+                        <code class="class" id="person-code" >${item}</code>
+                    </pre>
+                `);
+            }
+        });
+    });
+
+    const find = function (id) {
+        let $id = $("#" + id);
+        $('#result').animate({scrollTop: $id[0].offsetTop - 120}, "slow")
+    }
+</script>
+</body>
+
+</html>
