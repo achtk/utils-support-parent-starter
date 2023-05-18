@@ -1,5 +1,7 @@
 package com.chua.common.support.collection;
 
+import com.chua.common.support.range.IpRange;
+
 import java.util.*;
 
 /**
@@ -46,6 +48,11 @@ public class ImmutableCollection {
             return this;
         }
 
+        public CollectionBuilder<E> add(E... e) {
+            list.addAll(Arrays.asList(e));
+            return this;
+        }
+
 
         public CollectionBuilder<E> addAll(Collection<E> elements) {
             list.addAll(elements);
@@ -78,6 +85,9 @@ public class ImmutableCollection {
         }
 
 
+        public List<E> newArrayList() {
+            return new ArrayList<>(build());
+        }
     }
 
     public static class MapBuilder<K, V>{

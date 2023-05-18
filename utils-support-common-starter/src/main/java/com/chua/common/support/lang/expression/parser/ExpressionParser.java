@@ -1,5 +1,6 @@
 package com.chua.common.support.lang.expression.parser;
 
+import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.value.Value;
 
 import java.util.Map;
@@ -9,6 +10,10 @@ import java.util.Map;
  * @author CH
  */
 public interface ExpressionParser {
+    static ExpressionParser create() {
+        return ServiceProvider.of(ExpressionParser.class).getNewExtension("el");
+    }
+
     /**
      * 设置参数
      * @param name 名称

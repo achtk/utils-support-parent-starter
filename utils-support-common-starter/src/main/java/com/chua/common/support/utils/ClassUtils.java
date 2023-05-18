@@ -9,6 +9,7 @@ import com.chua.common.support.function.SafeConsumer;
 import com.chua.common.support.lang.proxy.BridgingMethodIntercept;
 import com.chua.common.support.lang.proxy.ProxyUtils;
 import com.chua.common.support.unit.name.NamingCase;
+import com.chua.common.support.value.*;
 import com.sun.istack.internal.Nullable;
 
 import java.io.*;
@@ -533,6 +534,15 @@ public class ClassUtils {
         return createArgs(params, declaredConstructor.getParameterTypes());
     }
 
+    private static Object[] createArgs(IndexValue indexValue, int[] index) {
+        if (index.length == 0) {
+            return indexValue.getAll().stream().map(KeyValue::getValue).toArray(Object[]::new);
+        }
+
+        return Arrays.stream(index).mapToObj(it -> {
+            return indexValue.get(it).getValue();
+        }).toArray(Object[]::new);
+    }
     /**
      * 参数
      *
@@ -2066,5 +2076,51 @@ public class ClassUtils {
             }
         });
         return rs;
+    }
+
+
+    /**
+     * 过滤类型
+     *
+     * @param sources 对象
+     * @param limit   限制数量
+     * @param type    类型
+     * @param name    方法名称
+     * @param index   参数位置
+     * @param <T>     类型
+     * @return 类型
+     */
+    public static void forFilterType(List<?> sources, TypeValue type, String name, int... index) {
+        for (Object source : sources) {
+            IndexValue indexValue = filterType(source, type);
+            if (null != indexValue) {
+                Class<?> aClass = source.getClass();
+                ClassUtils.invokeMethodChain(source, aClass, name, createArgs(indexValue, index));
+            }
+        }
+    }
+
+    /**
+     * 过滤类型
+     *
+     * @param preEvent 对象
+     * @param limit    限制数量
+     * @param type     类型
+     * @param <T>      类型
+     * @return 类型
+     */
+    public static IndexValue filterType(Object preEvent, TypeValue type) {
+        IndexValue indexValue = new SimpleIndexValue();
+        Type[] typeArguments = ClassUtils.getActualTypeArguments(preEvent.getClass());
+        for (Type typeArgument : typeArguments) {
+            if (typeArgument instanceof Class) {
+                indexValue.add(new SimpleKeyValue((Class) typeArgument, type.get((Class) typeArgument)));
+                continue;
+            }
+            indexValue.addAll(filterType(typeArgument, type).getAll());
+        }
+
+
+        return indexValue;
     }
 }
