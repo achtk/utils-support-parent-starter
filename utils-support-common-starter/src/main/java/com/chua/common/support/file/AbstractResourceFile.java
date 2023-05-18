@@ -1,7 +1,7 @@
 package com.chua.common.support.file;
 
 import com.chua.common.support.binary.ByteSource;
-import com.chua.common.support.file.converter.MediaConverter;
+import com.chua.common.support.file.transfer.MediaConverter;
 import com.chua.common.support.lang.proxy.DelegateMethodIntercept;
 import com.chua.common.support.lang.proxy.ProxyUtils;
 import com.chua.common.support.resource.ResourceProvider;

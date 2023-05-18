@@ -3,7 +3,7 @@ package com.chua.common.support.file.folder;
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.file.ResourceFile;
 import com.chua.common.support.file.ResourceFileConfiguration;
-import com.chua.common.support.file.converter.MediaConverter;
+import com.chua.common.support.file.transfer.MediaConverter;
 import com.chua.common.support.lang.proxy.DelegateMethodIntercept;
 import com.chua.common.support.lang.proxy.ProxyUtils;
 import com.chua.common.support.utils.FileUtils;

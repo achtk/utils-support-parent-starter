@@ -1,6 +1,6 @@
 package com.chua.common.support.file.filesystem;
 
-import com.chua.common.support.file.converter.MediaConverter;
+import com.chua.common.support.file.transfer.MediaConverter;
 import com.chua.common.support.utils.FileUtils;
 
 import java.io.ByteArrayOutputStream;

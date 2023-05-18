@@ -2,7 +2,7 @@ package com.chua.image.support.image;
 
 import com.chua.common.support.image.image.AbstractImageReader;
 import com.chua.common.support.image.image.AbstractImageWriter;
-import com.chua.common.support.spi.Spi;
+import com.chua.common.support.annotations.Spi;
 
 import java.net.URL;
 

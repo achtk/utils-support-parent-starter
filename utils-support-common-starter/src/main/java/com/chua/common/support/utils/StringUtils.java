@@ -1143,7 +1143,28 @@ public class StringUtils {
     public static boolean startWith(CharSequence str, char c) {
         return c == str.charAt(0);
     }
-
+    /**
+     * <p>Check if a CharSequence starts with a specified prefix (optionally case insensitive).</p>
+     *
+     * @see java.lang.String#startsWith(String)
+     * @param str  the CharSequence to check, may be null
+     * @param prefix the prefix to find, may be null
+     * @param ignoreCase indicates whether the compare should ignore case
+     *  (case insensitive) or not.
+     * @return {@code true} if the CharSequence starts with the prefix or
+     *  both {@code null}
+     */
+    private static boolean startsWith(final CharSequence str, final CharSequence prefix, final boolean ignoreCase) {
+        if (str == null || prefix == null) {
+            return str == prefix;
+        }
+        // Get length once instead of twice in the unlikely case that it changes.
+        final int preLen = prefix.length();
+        if (preLen > str.length()) {
+            return false;
+        }
+        return CharUtils.regionMatches(str, ignoreCase, 0, prefix, 0, preLen);
+    }
     /**
      * 是否以指定字符串开头
      *
@@ -2731,4 +2752,148 @@ public class StringUtils {
     private static String stripControlChars(final String input) {
         return CONTROL_CHARS.matcher(input).replaceAll("");
     }
+
+
+
+    /**
+     * Prepends the prefix to the start of the string if the string does not
+     * already start with any of the prefixes.
+     *
+     * @param str The string.
+     * @param prefix The prefix to prepend to the start of the string.
+     * @param ignoreCase Indicates whether the compare should ignore case.
+     * @param prefixes Additional prefixes that are valid (optional).
+     *
+     * @return A new String if prefix was prepended, the same string otherwise.
+     */
+    private static String prependIfMissing(final String str, final CharSequence prefix, final boolean ignoreCase, final CharSequence... prefixes) {
+        if (str == null || isEmpty(prefix) || startsWith(str, prefix, ignoreCase)) {
+            return str;
+        }
+        if (ArrayUtils.isNotEmpty(prefixes)) {
+            for (final CharSequence p : prefixes) {
+                if (startsWith(str, p, ignoreCase)) {
+                    return str;
+                }
+            }
+        }
+        return prefix.toString() + str;
+    }
+
+    /**
+     * Prepends the prefix to the start of the string if the string does not
+     * already start with any of the prefixes.
+     *
+     * <pre>
+     * StringUtils.prependIfMissing(null, null) = null
+     * StringUtils.prependIfMissing("abc", null) = "abc"
+     * StringUtils.prependIfMissing("", "xyz") = "xyz"
+     * StringUtils.prependIfMissing("abc", "xyz") = "xyzabc"
+     * StringUtils.prependIfMissing("xyzabc", "xyz") = "xyzabc"
+     * StringUtils.prependIfMissing("XYZabc", "xyz") = "xyzXYZabc"
+     * </pre>
+     * <p>With additional prefixes,</p>
+     * <pre>
+     * StringUtils.prependIfMissing(null, null, null) = null
+     * StringUtils.prependIfMissing("abc", null, null) = "abc"
+     * StringUtils.prependIfMissing("", "xyz", null) = "xyz"
+     * StringUtils.prependIfMissing("abc", "xyz", new CharSequence[]{null}) = "xyzabc"
+     * StringUtils.prependIfMissing("abc", "xyz", "") = "abc"
+     * StringUtils.prependIfMissing("abc", "xyz", "mno") = "xyzabc"
+     * StringUtils.prependIfMissing("xyzabc", "xyz", "mno") = "xyzabc"
+     * StringUtils.prependIfMissing("mnoabc", "xyz", "mno") = "mnoabc"
+     * StringUtils.prependIfMissing("XYZabc", "xyz", "mno") = "xyzXYZabc"
+     * StringUtils.prependIfMissing("MNOabc", "xyz", "mno") = "xyzMNOabc"
+     * </pre>
+     *
+     * @param str The string.
+     * @param prefix The prefix to prepend to the start of the string.
+     * @param prefixes Additional prefixes that are valid.
+     *
+     * @return A new String if prefix was prepended, the same string otherwise.
+     *
+     * @since 3.2
+     */
+    public static String prependIfMissing(final String str, final CharSequence prefix, final CharSequence... prefixes) {
+        return prependIfMissing(str, prefix, false, prefixes);
+    }
+
+    /**
+     * Prepends the prefix to the start of the string if the string does not
+     * already start, case insensitive, with any of the prefixes.
+     *
+     * <pre>
+     * StringUtils.prependIfMissingIgnoreCase(null, null) = null
+     * StringUtils.prependIfMissingIgnoreCase("abc", null) = "abc"
+     * StringUtils.prependIfMissingIgnoreCase("", "xyz") = "xyz"
+     * StringUtils.prependIfMissingIgnoreCase("abc", "xyz") = "xyzabc"
+     * StringUtils.prependIfMissingIgnoreCase("xyzabc", "xyz") = "xyzabc"
+     * StringUtils.prependIfMissingIgnoreCase("XYZabc", "xyz") = "XYZabc"
+     * </pre>
+     * <p>With additional prefixes,</p>
+     * <pre>
+     * StringUtils.prependIfMissingIgnoreCase(null, null, null) = null
+     * StringUtils.prependIfMissingIgnoreCase("abc", null, null) = "abc"
+     * StringUtils.prependIfMissingIgnoreCase("", "xyz", null) = "xyz"
+     * StringUtils.prependIfMissingIgnoreCase("abc", "xyz", new CharSequence[]{null}) = "xyzabc"
+     * StringUtils.prependIfMissingIgnoreCase("abc", "xyz", "") = "abc"
+     * StringUtils.prependIfMissingIgnoreCase("abc", "xyz", "mno") = "xyzabc"
+     * StringUtils.prependIfMissingIgnoreCase("xyzabc", "xyz", "mno") = "xyzabc"
+     * StringUtils.prependIfMissingIgnoreCase("mnoabc", "xyz", "mno") = "mnoabc"
+     * StringUtils.prependIfMissingIgnoreCase("XYZabc", "xyz", "mno") = "XYZabc"
+     * StringUtils.prependIfMissingIgnoreCase("MNOabc", "xyz", "mno") = "MNOabc"
+     * </pre>
+     *
+     * @param str The string.
+     * @param prefix The prefix to prepend to the start of the string.
+     * @param prefixes Additional prefixes that are valid (optional).
+     *
+     * @return A new String if prefix was prepended, the same string otherwise.
+     *
+     * @since 3.2
+     */
+    public static String prependIfMissingIgnoreCase(final String str, final CharSequence prefix, final CharSequence... prefixes) {
+        return prependIfMissing(str, prefix, true, prefixes);
+    }
+
+
+    /**
+     * 编码字符串
+     *
+     * @param str 字符串
+     * @return 编码后的字节码
+     */
+    public static byte[] utf8Bytes(CharSequence str) {
+        return bytes(str, UTF_8);
+    }
+
+    /**
+     * 编码字符串
+     *
+     * @param str     字符串
+     * @param charset 字符集，如果此字段为空，则解码的结果取决于平台
+     * @return 编码后的字节码
+     */
+    public static byte[] bytes(CharSequence str, Charset charset) {
+        if (str == null) {
+            return null;
+        }
+
+        if (null == charset) {
+            return str.toString().getBytes();
+        }
+        return str.toString().getBytes(charset);
+    }
+
+    /**
+     * 编码字符串
+     *
+     * @param str     字符串
+     * @param charset 字符集，如果此字段为空，则解码的结果取决于平台
+     * @return 编码后的字节码
+     */
+    public static byte[] bytes(CharSequence str, String charset) {
+        return bytes(str, isNullOrEmpty(charset) ? Charset.defaultCharset() : Charset.forName(charset));
+    }
+
 }

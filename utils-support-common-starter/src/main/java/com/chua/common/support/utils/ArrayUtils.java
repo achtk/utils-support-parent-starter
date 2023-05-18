@@ -509,6 +509,19 @@ public class ArrayUtils {
         return null == array || array.length == 0;
     }
 
+    // ----------------------------------------------------------------------
+    /**
+     * <p>Checks if an array of Objects is not empty and not {@code null}.
+     *
+     * @param <T> the component type of the array
+     * @param array  the array to test
+     * @return {@code true} if the array is not empty and not {@code null}
+     * @since 2.5
+     */
+    public static <T> boolean isNotEmpty(final T[] array) {
+        return !isEmpty(array);
+    }
+
     /**
      * Converts from 1D array index to 1D on x axis.
      *

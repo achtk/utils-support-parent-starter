@@ -122,5 +122,12 @@ public final class Converter {
         return fromPrimitive(target);
     }
 
-
+    /**
+     * 转化Int
+     * @param value 值
+     * @return 结果
+     */
+    public static Integer createInteger(String value) {
+        return Converter.convertIfNecessary(value, Integer.class);
+    }
 }

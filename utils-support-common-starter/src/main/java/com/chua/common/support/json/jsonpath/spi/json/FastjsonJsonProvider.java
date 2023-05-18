@@ -1,5 +1,6 @@
 package com.chua.common.support.json.jsonpath.spi.json;
 
+import com.alibaba.fastjson2.JSON;
 import com.chua.common.support.json.Json;
 import com.chua.common.support.json.JsonArray;
 import com.chua.common.support.json.JsonObject;
@@ -17,9 +18,9 @@ public class FastjsonJsonProvider extends AbstractJsonProvider {
     @Override
     public Object parse(String json) throws InvalidJsonException {
         if (StringUtils.trim(json).startsWith("[")) {
-            return Json.getJsonArray(json);
+            return JSON.parseArray(json);
         }
-        return Json.getJsonObject(json);
+        return JSON.parseObject(json);
     }
 
     @Override

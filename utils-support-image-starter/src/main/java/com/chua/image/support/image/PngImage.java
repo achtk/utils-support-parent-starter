@@ -3,7 +3,7 @@ package com.chua.image.support.image;
 import com.chua.common.support.image.image.AbstractImageWriter;
 import com.chua.common.support.image.image.CompressImage;
 import com.chua.common.support.image.image.Image;
-import com.chua.common.support.spi.Spi;
+import com.chua.common.support.annotations.Spi;
 import com.idrsolutions.image.png.PngCompressor;
 
 import javax.imageio.ImageIO;

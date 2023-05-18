@@ -21,6 +21,7 @@
         <module>utils-support-attach-support</module>
         <module>utils-support-attachssist-starter</module>
         <module>utils-support-alibaba-starter</module>
+        <module>utils-support-fingerprint-starter</module>
     </modules>
 
     <!-- -Djava.net.preferIPv4Stack=true-->
@@ -85,13 +86,37 @@
             <dependency>
                 <groupId>com.chua</groupId>
                 <artifactId>utils-support-groovy-starter</artifactId>
-                <version>3.1.0</version>
+                <version>${utils.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.chua</groupId>
                 <artifactId>utils-support-aspose-starter</artifactId>
-                <version>3.1.0</version>
+                <version>${utils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.chua</groupId>
+                <artifactId>utils-support-alibaba-starter</artifactId>
+                <version>${utils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.chua</groupId>
+                <artifactId>utils-support-attach-support</artifactId>
+                <version>${utils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.chua</groupId>
+                <artifactId>utils-support-attachssist-starter</artifactId>
+                <version>${utils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.chua</groupId>
+                <artifactId>utils-support-fingerprint-starter</artifactId>
+                <version>${utils.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
