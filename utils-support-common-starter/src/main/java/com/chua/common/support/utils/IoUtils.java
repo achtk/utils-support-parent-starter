@@ -16,6 +16,7 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.List;
 import java.util.*;
 import java.util.zip.GZIPInputStream;
@@ -139,17 +140,19 @@ public class IoUtils {
             ((HttpURLConnection) conn).disconnect();
         }
     }
+
     /**
      * 关闭
      *
      * @param graphics2d graphics2d
      */
     public static void closeQuietly(Graphics2D graphics2d) {
-        if(null == graphics2d) {
+        if (null == graphics2d) {
             return;
         }
         graphics2d.dispose();
     }
+
     /**
      * 关闭
      *
@@ -743,6 +746,7 @@ public class IoUtils {
         }
         return toByteArray(input, (int) size);
     }
+
     /**
      * 流转字节
      *
@@ -755,6 +759,7 @@ public class IoUtils {
         copy(input, output);
         return output.toByteArray();
     }
+
     /**
      * 流转字节
      *
@@ -767,6 +772,7 @@ public class IoUtils {
         copy(input, output);
         return output;
     }
+
     /**
      * 流转字节
      *
@@ -1232,6 +1238,25 @@ public class IoUtils {
      * @param data     数据
      * @param output   流
      * @param encoding 编码
+     * @param append   是否追加
+     * @throws IOException IOException
+     */
+    public static void write(final String data, final File output, final Charset encoding, boolean append) throws IOException {
+        FileUtils.forceMkdirParent(output);
+
+        StandardOpenOption[] standardOpenOptions = new StandardOpenOption[0];
+        if(append) {
+            standardOpenOptions = new StandardOpenOption[]{StandardOpenOption.APPEND};
+        }
+        Files.write(output.toPath(), data.getBytes(encoding), standardOpenOptions);
+    }
+
+    /**
+     * 写数据
+     *
+     * @param data     数据
+     * @param output   流
+     * @param encoding 编码
      * @throws IOException IOException
      */
     public static void write(final String data, final OutputStream output, final Charset encoding) throws IOException {
@@ -1553,8 +1578,6 @@ public class IoUtils {
 
         return null;
     }
-
-
 
 
     /**

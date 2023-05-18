@@ -14,6 +14,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -3025,5 +3026,32 @@ public class StringUtils {
         }
         return str.substring(str.length() - len);
     }
-
+    /**
+     * 大小格式化
+     *
+     * @param size   大小
+     * @param format 格式
+     * @return 大小格式化
+     */
+    public static String getNetFileSizeDescription(long size, DecimalFormat format) {
+        StringBuilder bytes = new StringBuilder();
+        int s1024 = 1024;
+        if (size >= s1024 * s1024 * s1024) {
+            double i = (size / (1024.0 * 1024.0 * 1024.0));
+            bytes.append(format.format(i)).append("GB");
+        } else if (size >= s1024 * s1024) {
+            double i = (size / (1024.0 * 1024.0));
+            bytes.append(format.format(i)).append("MB");
+        } else if (size >= s1024) {
+            double i = (size / (1024.0));
+            bytes.append(format.format(i)).append("KB");
+        } else {
+            if (size <= 0) {
+                bytes.append("0B");
+            } else {
+                bytes.append((int) size).append("B");
+            }
+        }
+        return bytes.toString();
+    }
 }

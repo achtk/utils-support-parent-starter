@@ -18,6 +18,7 @@ import java.util.function.Supplier;
  * @author CH
  */
 public class ThreadUtils {
+    public static final int INVALID_EXITVALUE = 0xdeadbeef;
 
     /**
      *
