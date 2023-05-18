@@ -1,8 +1,8 @@
 package com.chua.common.support.extra.el.expression.node.impl;
 
-import com.jfirer.baseutil.StringUtil;
-import com.jfirer.baseutil.reflect.ReflectUtil;
-import com.jfirer.baseutil.reflect.ValueAccessor;
+import com.chua.common.support.extra.el.baseutil.StringUtil;
+import com.chua.common.support.extra.el.baseutil.reflect.ReflectUtil;
+import com.chua.common.support.extra.el.baseutil.reflect.ValueAccessor;
 import com.chua.common.support.extra.el.expression.node.CalculateNode;
 import com.chua.common.support.extra.el.expression.token.Token;
 import com.chua.common.support.extra.el.expression.token.ValueResult;
