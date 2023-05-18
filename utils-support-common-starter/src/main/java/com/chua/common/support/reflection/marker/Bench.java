@@ -24,15 +24,26 @@ public interface Bench {
      * @return 结果
      */
     Value<Object> execute(Object... args);
+    /**
+     * 执行
+     *
+     * @param entity  实体
+     * @param args    参数
+     * @return 结果
+     */
+    default Value<Object> executeBean(Object entity, Object[] args) {
+        return executeBean(entity, args, new Object[0]);
+    }
 
     /**
      * 执行
      *
-     * @param entity 实体
-     * @param args   参数
+     * @param entity  实体
+     * @param args    参数
+     * @param plugins 插件
      * @return 结果
      */
-    Value<Object> executeBean(Object entity, Object... args);
+    Value<Object> executeBean(Object entity, Object[] args, Object... plugins);
 
     /**
      * 执行

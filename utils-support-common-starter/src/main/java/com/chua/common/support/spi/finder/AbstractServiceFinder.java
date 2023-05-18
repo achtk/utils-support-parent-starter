@@ -253,6 +253,10 @@ public abstract class AbstractServiceFinder implements ServiceFinder{
         if (null != spi) {
             name.addAll(Arrays.asList(spi.value()));
         }
+        Extension extension = implType.getDeclaredAnnotation(Extension.class);
+        if (null != extension) {
+            name.add(extension.value());
+        }
 
         return name.toArray(new String[0]);
     }

@@ -13,30 +13,22 @@ import java.util.List;
  * @author CH
  */
 @SuppressWarnings("ALL")
-public class JdkProxyFactory<T> extends AbstractProxyFactory<T> {
+public class JdkProxyFactory<T> implements ProxyFactory<T> {
 
     public static final ProxyFactory INSTANCE = new JdkProxyFactory();
 
-    public JdkProxyFactory(List<ProxyPlugin> proxyPluginList) {
-        super(proxyPluginList);
-    }
-
-    public JdkProxyFactory(ProxyPlugin... proxyPluginList) {
-        super(proxyPluginList);
-    }
-
     @Override
-    public T proxy(Class<T> target, ClassLoader classLoader, MethodIntercept<T> intercept) {
-        return (T) Proxy.newProxyInstance(classLoader, new Class[]{target}, new JdkInvocationHandler(intercept, proxyPluginList));
+    public T proxy(Class<T> target, ClassLoader classLoader, MethodIntercept<T> intercept, ProxyPlugin[] plugins) {
+        return (T) Proxy.newProxyInstance(classLoader, new Class[]{target}, new JdkInvocationHandler(intercept, plugins));
     }
 
 
     public static class JdkInvocationHandler<T> implements InvocationHandler {
 
         final MethodIntercept<T> intercept;
-        final List<ProxyPlugin> proxyPluginList;
+        final ProxyPlugin[] proxyPluginList;
 
-        public JdkInvocationHandler(MethodIntercept<T> intercept, List<ProxyPlugin> proxyPluginList) {
+        public JdkInvocationHandler(MethodIntercept<T> intercept, ProxyPlugin[] proxyPluginList) {
             this.intercept = intercept;
             this.proxyPluginList = proxyPluginList;
         }

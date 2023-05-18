@@ -30,7 +30,7 @@ public class ConstructBench implements Bench {
     }
 
     @Override
-    public Value<Object> executeBean(Object entity, Object... args) {
+    public Value<Object> executeBean(Object entity, Object[] args, Object... plugin) {
         return constructDescribe.invoke(entity, args);
     }
 

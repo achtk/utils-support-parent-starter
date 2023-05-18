@@ -70,7 +70,7 @@ public class FieldBench implements Bench {
     }
 
     @Override
-    public Value<Object> executeBean(Object entity, Object... args) {
+    public Value<Object> executeBean(Object entity, Object[] args, Object...plugins) {
         return fieldDescribe.get(entity);
     }
 

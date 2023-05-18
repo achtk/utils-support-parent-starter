@@ -20,7 +20,7 @@ public class DelegateMethodIntercept<T> implements MethodIntercept<T> {
     private final Function<ProxyMethod, Object> function;
 
     @Override
-    public Object invoke(Object obj, Method method, Object[] args, T proxy, List<ProxyPlugin> proxyPluginList) throws Throwable {
+    public Object invoke(Object obj, Method method, Object[] args, T proxy, ProxyPlugin[] proxyPluginList) throws Throwable {
         if (MethodIntercept.isToString(method)) {
             return type.getTypeName();
         }
@@ -45,17 +45,9 @@ public class DelegateMethodIntercept<T> implements MethodIntercept<T> {
                 .args(args)
                 .method(method)
                 .obj(obj)
+                .plugins(proxyPluginList)
                 .proxy(proxy).build();
 
-        for (ProxyPlugin proxyPlugin : proxyPluginList) {
-            if(proxyPlugin instanceof Preprocess) {
-                Object execute = proxyPlugin.execute(proxyMethod);
-                if(execute instanceof Boolean && (Boolean) execute) {
-                    return null;
-                }
-            }
-
-        }
         return function.apply(proxyMethod);
     }
 }

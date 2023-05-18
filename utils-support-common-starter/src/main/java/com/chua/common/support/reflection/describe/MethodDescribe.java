@@ -313,11 +313,13 @@ public class MethodDescribe implements MemberDescribe {
     /**
      * 执行方法
      *
-     * @param args 参数
+     * @param entity  实体
+     * @param args    参数
+     * @param plugins 插件
      */
-    public Value<Object> invoke(Object entity, Object... args) {
+    public Value<Object> invoke(Object entity, Object[] args, Object... plugins) {
         if (method != null) {
-            return Value.of(MethodAnnotationFactory.create(this).execute(entity, args));
+            return Value.of(MethodAnnotationFactory.create(this, plugins).execute(entity, args));
         }
 
         return NullValue.INSTANCE;
@@ -413,7 +415,7 @@ public class MethodDescribe implements MemberDescribe {
 
     @Override
     public void addAnnotation(Annotation annotation) {
-        if(null == this.annotationTypes) {
+        if (null == this.annotationTypes) {
             annotationTypes = new AnnotationDescribe[0];
         }
         ArrayUtils.addElement(this.annotationTypes, AnnotationDescribe.of(annotation));

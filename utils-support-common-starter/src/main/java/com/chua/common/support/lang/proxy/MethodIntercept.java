@@ -61,7 +61,7 @@ public interface MethodIntercept<T> {
      * @param proxy           用于调用父类真正的业务类方法。可以直接调用被代理类接口方法
      * @param proxyPluginList 插件
      */
-    default void before(Object obj, Method method, Object[] args, T proxy, List<ProxyPlugin> proxyPluginList) {
+    default void before(Object obj, Method method, Object[] args, T proxy, ProxyPlugin[] proxyPluginList) {
 
     }
 
@@ -77,7 +77,7 @@ public interface MethodIntercept<T> {
      * @return Object
      * @throws Throwable Throwable
      */
-    Object invoke(Object obj, Method method, Object[] args, T proxy, List<ProxyPlugin> proxyPluginList) throws Throwable;
+    Object invoke(Object obj, Method method, Object[] args, T proxy, ProxyPlugin[] proxyPluginList) throws Throwable;
 
     /**
      * 通过 method 引用实例    Object result = method.invoke(target, args); 形式反射调用被代理类方法，
@@ -89,7 +89,7 @@ public interface MethodIntercept<T> {
      * @param proxy           用于调用父类真正的业务类方法。可以直接调用被代理类接口方法
      * @param proxyPluginList
      */
-    default void after(Object obj, Method method, Object[] args, T proxy, List<ProxyPlugin> proxyPluginList) {
+    default void after(Object obj, Method method, Object[] args, T proxy, ProxyPlugin[] proxyPluginList) {
 
     }
 

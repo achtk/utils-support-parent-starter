@@ -1,5 +1,7 @@
 package com.chua.common.support.reflection.describe.factory;
 
+import com.chua.common.support.annotations.Extension;
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.reflection.describe.AnnotationDescribe;
 import com.chua.common.support.reflection.describe.MethodDescribe;
 import com.chua.common.support.reflection.describe.ParameterDescribe;
@@ -25,10 +27,11 @@ public interface MethodAnnotationFactory {
      * 注解工厂
      *
      * @param methodDescribe 方法描述
+     * @param plugins        plugins
      * @return this
      */
-    static MethodAnnotationFactory create(MethodDescribe methodDescribe) {
-        return new SimpleMethodAnnotationFactory(methodDescribe);
+    static MethodAnnotationFactory create(MethodDescribe methodDescribe, Object[] plugins) {
+        return new SimpleMethodAnnotationFactory(methodDescribe, plugins);
     }
 
     /**
@@ -52,31 +55,13 @@ public interface MethodAnnotationFactory {
         static final Map<String, MethodAnnotationPostProcessor> CACHE = new ConcurrentHashMap<>();
         static final Map<String, ParameterAnnotationPostProcessor> PARAM_CACHE = new ConcurrentHashMap<>();
 
-        static {
-            ServiceProvider<MethodAnnotationPostProcessor> serviceProvider = ServiceProvider.of(MethodAnnotationPostProcessor.class);
-            serviceProvider.forEach((k, v) -> {
-                CACHE.put(k, v);
-                Class<? extends MethodAnnotationPostProcessor> aClass = v.getClass();
-                Type[] actualTypeArguments = ClassUtils.getActualTypeArguments(aClass);
-                if (actualTypeArguments.length > 0 && actualTypeArguments[0] instanceof Class<?>) {
-                    Type type = actualTypeArguments[0];
-                    CACHE.put(type.getTypeName(), v);
-                }
-            });
-            ServiceProvider<ParameterAnnotationPostProcessor> serviceProvider1 = ServiceProvider.of(ParameterAnnotationPostProcessor.class);
-            serviceProvider1.forEach((k, v) -> {
-                PARAM_CACHE.put(k, v);
-                Class<? extends ParameterAnnotationPostProcessor> aClass = v.getClass();
-                Type[] actualTypeArguments = ClassUtils.getActualTypeArguments(aClass);
-                if (actualTypeArguments.length > 0 && actualTypeArguments[0] instanceof Class<?>) {
-                    Type type = actualTypeArguments[0];
-                    PARAM_CACHE.put(type.getTypeName(), v);
-                }
-            });
+        public SimpleMethodAnnotationFactory(MethodDescribe methodDescribe, Object[] plugins) {
+            this.methodDescribe = methodDescribe;
+            initialProcessor(plugins);
+            refreshProcessor();
         }
 
-        public SimpleMethodAnnotationFactory(MethodDescribe methodDescribe) {
-            this.methodDescribe = methodDescribe;
+        private void refreshProcessor() {
             AnnotationDescribe[] annotationDescribes = methodDescribe.annotationTypes();
             for (AnnotationDescribe annotationDescribe : annotationDescribes) {
                 String name = annotationDescribe.getName();
@@ -101,6 +86,87 @@ public interface MethodAnnotationFactory {
                     parameters.add(parameterAnnotationPostProcessor);
                 }
             }
+        }
+
+        /**
+         * 初始化插件
+         *
+         * @param plugins
+         */
+        private void initialProcessor(Object[] plugins) {
+            for (Object plugin : plugins) {
+                if (plugin instanceof MethodAnnotationPostProcessor) {
+                    initialMethodProcessor(null, (MethodAnnotationPostProcessor) plugin);
+                    continue;
+                }
+
+                if (plugin instanceof ParameterAnnotationPostProcessor) {
+                    initialParamterProcessor(null, (ParameterAnnotationPostProcessor) plugin);
+                }
+            }
+        }
+        /**
+         * 初始化属性插件
+         *@param name 名称
+         * @param plugin 插件
+         */
+        private void initialParamterProcessor(String name, ParameterAnnotationPostProcessor plugin) {
+            name = getName(name, plugin);
+            if(null == name) {
+                return;
+            }
+
+            PARAM_CACHE.put(name, plugin);
+            Class<? extends ParameterAnnotationPostProcessor> aClass = plugin.getClass();
+            Type[] actualTypeArguments = ClassUtils.getActualTypeArguments(aClass);
+            if (actualTypeArguments.length > 0 && actualTypeArguments[0] instanceof Class<?>) {
+                Type type = actualTypeArguments[0];
+                PARAM_CACHE.put(type.getTypeName(), plugin);
+            }
+        }
+
+        /**
+         * 初始化方法插件
+         * @param name 名称
+         * @param plugin 插件
+         */
+        private void initialMethodProcessor(String name, MethodAnnotationPostProcessor plugin) {
+            name = getName(name, plugin);
+            if(null == name) {
+                return;
+            }
+
+            CACHE.put(name, plugin);
+            Class<? extends MethodAnnotationPostProcessor> aClass = plugin.getClass();
+            Type[] actualTypeArguments = ClassUtils.getActualTypeArguments(aClass);
+            if (actualTypeArguments.length > 0 && actualTypeArguments[0] instanceof Class<?>) {
+                Type type = actualTypeArguments[0];
+                CACHE.put(type.getTypeName(), plugin);
+            }
+        }
+
+        /**
+         * 获取插件名称
+         *
+         * @param name   名称
+         * @param plugin 插件
+         * @return 结果
+         */
+        private String getName(String name, Object plugin) {
+            if (null != name) {
+                return name;
+            }
+
+            Class<?> aClass = plugin.getClass();
+            Spi spi = aClass.getDeclaredAnnotation(Spi.class);
+            if (null != spi) {
+                return spi.value()[0];
+            }
+            Extension extension = aClass.getDeclaredAnnotation(Extension.class);
+            if (null != extension) {
+                return extension.value();
+            }
+            return null;
         }
 
         @Override

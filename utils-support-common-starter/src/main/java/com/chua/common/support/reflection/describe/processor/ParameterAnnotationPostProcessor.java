@@ -1,6 +1,7 @@
 package com.chua.common.support.reflection.describe.processor;
 
 
+import com.chua.common.support.lang.proxy.plugin.ProxyPlugin;
 import com.chua.common.support.reflection.describe.ParameterDescribe;
 
 /**
@@ -8,16 +9,7 @@ import com.chua.common.support.reflection.describe.ParameterDescribe;
  *
  * @author CH
  */
-public interface ParameterAnnotationPostProcessor<A> {
-    /**
-     * 执行结果
-     *
-     * @param index             索引
-     * @param parameterDescribe 字段描述
-     * @param arg               参数
-     * @return 结果
-     */
-    Object proxy(int index, ParameterDescribe parameterDescribe, Object arg);
+public interface ParameterAnnotationPostProcessor<A> extends ProxyPlugin {
 
     /**
      * 注解类型

@@ -436,4 +436,20 @@ public class ObjectUtils {
     public static boolean isEmpty(Object reference) {
         return null == reference;
     }
+
+
+    /**
+     * 返回一致类型的对象
+     *
+     * @param value  对象
+     * @param target 类型
+     * @return 返回一致类型的对象
+     */
+    public static <T> T withAssignableFrom(Object value, Class<T> target) {
+        if (null == value && ClassUtils.isVoid(target)) {
+            return null;
+        }
+
+        return target.isAssignableFrom(value.getClass()) ? (T) value : null;
+    }
 }

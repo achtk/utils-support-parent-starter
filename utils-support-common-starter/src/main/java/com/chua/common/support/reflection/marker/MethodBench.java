@@ -60,9 +60,10 @@ public class MethodBench implements Bench {
     }
 
     @Override
-    public Value<Object> executeBean(Object entity, Object... args) {
-        return methodDescribe.invoke(entity, args);
+    public Value<Object> executeBean(Object entity, Object[] args, Object... plugins) {
+        return methodDescribe.invoke(entity, args, plugins);
     }
+
 
     /**
      * 执行

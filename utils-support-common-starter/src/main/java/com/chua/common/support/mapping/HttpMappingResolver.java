@@ -7,6 +7,8 @@ import com.chua.common.support.http.HttpClientInvoker;
 import com.chua.common.support.http.HttpResponse;
 import com.chua.common.support.lang.proxy.DelegateMethodIntercept;
 import com.chua.common.support.lang.proxy.ProxyUtils;
+import com.chua.common.support.lang.proxy.plugin.ProxyPlugin;
+import com.chua.common.support.mapping.annotation.MappingPlugins;
 import com.chua.common.support.mapping.builder.Request;
 import com.chua.common.support.mapping.builder.Response;
 import com.chua.common.support.placeholder.PlaceholderSupport;
@@ -14,6 +16,7 @@ import com.chua.common.support.placeholder.StringValuePropertyResolver;
 import com.chua.common.support.reflection.describe.MethodDescribe;
 import com.chua.common.support.reflection.marker.Bench;
 import com.chua.common.support.reflection.marker.Marker;
+import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.StringUtils;
 
@@ -60,11 +63,27 @@ public final class HttpMappingResolver implements MappingResolver {
 
         this.bean = ProxyUtils.newProxy(target, new DelegateMethodIntercept<>(target, (proxyMethod) -> {
             Bench bench = marker.createBench(MethodDescribe.builder().method(proxyMethod.getMethod()).build());
-            return bench.executeBean(proxy, proxyMethod.getArgs()).getValue();
-        }));
+            return bench.executeBean(proxy, proxyMethod.getArgs(), proxyMethod.getPlugins()).getValue();
+        }), createPlugin(target));
         return (T) bean;
     }
 
+    private ProxyPlugin[] createPlugin(Class<?> target) {
+        MappingPlugins mappingPlugins = target.getDeclaredAnnotation(MappingPlugins.class);
+        if(null == mappingPlugins) {
+            return new ProxyPlugin[0];
+        }
+
+        ServiceProvider<ProxyPlugin> serviceProvider = ServiceProvider.of(ProxyPlugin.class);
+        String[] value = mappingPlugins.value();
+        ProxyPlugin[] rs = new ProxyPlugin[value.length];
+        for (int i = 0; i < value.length; i++) {
+            String s = value[i];
+            rs[i] = serviceProvider.getNewExtension(s);
+        }
+
+        return rs;
+    }
 
 
 }

@@ -18,7 +18,7 @@ public class VoidMethodIntercept<T> implements MethodIntercept<T> {
 
 
     @Override
-    public Object invoke(Object obj, Method method, Object[] args, T proxy, List<ProxyPlugin> proxyPluginList) throws Throwable {
+    public Object invoke(Object obj, Method method, Object[] args, T proxy, ProxyPlugin[] proxyPluginList) throws Throwable {
         return null;
     }
 }

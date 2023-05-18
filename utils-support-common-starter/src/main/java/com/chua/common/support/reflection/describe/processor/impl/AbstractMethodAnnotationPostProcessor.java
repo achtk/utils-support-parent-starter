@@ -62,7 +62,7 @@ public abstract class AbstractMethodAnnotationPostProcessor<A> implements Method
      * @param args   参数
      * @return 结果
      */
-    abstract Object execute(Object entity, Object[] args);
+    public abstract Object execute(Object entity, Object[] args);
 
     @Override
     public A getAnnotationValue() {

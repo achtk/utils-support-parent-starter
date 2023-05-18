@@ -1,6 +1,8 @@
 package com.chua.common.support.lang.proxy;
 
 
+import com.chua.common.support.lang.proxy.plugin.ProxyPlugin;
+
 import java.lang.reflect.Method;
 import java.util.function.BiFunction;
 
@@ -26,18 +28,32 @@ public class ProxyUtils {
      * 代理
      *
      * @param target          类
-     * @param classLoader     类加载器
      * @param methodIntercept 拦截器
      * @param <T>             类型
+     * @param plugins         插件
+     * @return 代理类
+     */
+    public static <T> T newProxy(Class<T> target, MethodIntercept<T> methodIntercept, ProxyPlugin... plugins) {
+        return newProxy(target, target.getClassLoader(), methodIntercept, plugins);
+    }
+
+    /**
+     * 代理
+     *
+     * @param <T>             类型
+     * @param target          类
+     * @param classLoader     类加载器
+     * @param methodIntercept 拦截器
+     * @param plugins         插件
      * @return 代理类
      */
     @SuppressWarnings("ALL")
-    public static <T> T newProxy(Class<T> target, ClassLoader classLoader, MethodIntercept<T> methodIntercept) {
+    public static <T> T newProxy(Class<T> target, ClassLoader classLoader, MethodIntercept<T> methodIntercept, ProxyPlugin... plugins) {
         if (target.isInterface()) {
-            return (T) JdkProxyFactory.INSTANCE.proxy(target, classLoader, methodIntercept);
+            return (T) JdkProxyFactory.INSTANCE.proxy(target, classLoader, methodIntercept, plugins);
         }
 
-        return (T) JavassistProxyFactory.INSTANCE.proxy(target, classLoader, methodIntercept);
+        return (T) JavassistProxyFactory.INSTANCE.proxy(target, classLoader, methodIntercept, plugins);
     }
 
     /**

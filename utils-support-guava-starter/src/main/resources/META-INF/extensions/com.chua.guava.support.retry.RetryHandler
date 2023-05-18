@@ -1,0 +1,2 @@
+com.chua.guava.support.retry.ResultOfTypeRetryHandler
+com.chua.guava.support.retry.ExceptionOfTypeRetryHandler

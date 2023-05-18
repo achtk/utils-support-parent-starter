@@ -1,5 +1,6 @@
 package com.chua.common.support.lang.proxy;
 
+import com.chua.common.support.lang.proxy.plugin.ProxyPlugin;
 import com.chua.common.support.utils.ClassUtils;
 import lombok.Builder;
 import lombok.Data;
@@ -20,6 +21,8 @@ public class ProxyMethod {
     private Method method;
     private Object[] args;
     private Object proxy;
+
+    private ProxyPlugin[] plugins;
 
     private boolean isReload;
 
