@@ -310,7 +310,15 @@ public class ServiceProvider<T> implements InitializingAware {
         }
         return result;
     }
-
+    /**
+     * 获取实现
+     *
+     * @param args 參數
+     * @return 实现
+     */
+    public List<T> collect() {
+        return Collections.unmodifiableList(new ArrayList<>(list().values()));
+    }
     /**
      * 获取实现
      *
@@ -447,6 +455,9 @@ public class ServiceProvider<T> implements InitializingAware {
     public static <T> ServiceProviderBuilder<T> newBuilder() {
         return new ServiceProviderBuilder<T>();
     }
+
+
+
     /**
      * 构建类
      */

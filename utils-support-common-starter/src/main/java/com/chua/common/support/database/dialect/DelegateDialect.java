@@ -1,6 +1,7 @@
 package com.chua.common.support.database.dialect;
 
 
+import com.chua.common.support.database.actuator.DataSourceActuator;
 import com.chua.common.support.database.entity.Column;
 import com.chua.common.support.database.metadata.Metadata;
 
@@ -54,6 +55,11 @@ public class DelegateDialect implements Dialect{
 
     @Override
     public void dropColumn(Metadata<?> metadata, List<Column> column, DataSource dataSource) {
+
+    }
+
+    @Override
+    public void updateTable(DataSourceActuator dataSourceActuator, Metadata<?> metadata, DataSource dataSource) {
 
     }
 

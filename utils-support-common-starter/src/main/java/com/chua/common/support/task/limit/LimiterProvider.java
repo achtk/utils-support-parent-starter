@@ -2,6 +2,7 @@ package com.chua.common.support.task.limit;
 
 
 import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.spi.ServiceProvider;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -19,7 +20,7 @@ public interface LimiterProvider {
      * @return this
      */
     static LimiterProvider of() {
-        return new TokenLimitProvider(10);
+        return ServiceProvider.of(LimiterProvider.class).getNewExtension("token", 10);
     }
 
     /**

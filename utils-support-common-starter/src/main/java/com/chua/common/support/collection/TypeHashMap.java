@@ -3,6 +3,7 @@ package com.chua.common.support.collection;
 import com.chua.common.support.bean.BeanBinder;
 import com.chua.common.support.bean.ProfileHandler;
 import com.chua.common.support.constant.ValueMode;
+import com.chua.common.support.converter.Converter;
 import com.chua.common.support.lang.profile.Profile;
 import com.chua.common.support.lang.profile.value.MapProfileValue;
 import com.chua.common.support.lang.profile.value.ProfileValue;
@@ -83,5 +84,10 @@ public class TypeHashMap implements Profile {
     @Override
     public Map<String, ProfileValue> getProfile() {
         return map;
+    }
+
+    @Override
+    public <T> T getType(String name, T defaultValue, Class<T> returnType) {
+        return Converter.convertIfNecessary(Optional.ofNullable(getObject(name)).orElse((Object)defaultValue), returnType);
     }
 }

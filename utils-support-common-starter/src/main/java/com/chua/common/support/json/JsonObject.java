@@ -7,6 +7,7 @@ import com.chua.common.support.utils.MapUtils;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.BiConsumer;
 
 /**
  * json object
@@ -38,5 +39,9 @@ public class JsonObject extends TypeHashMap implements Profile {
 
     public Set<Map.Entry<String, Object>> entrySet() {
         return source.entrySet();
+    }
+
+    public void forEach(BiConsumer<String, Object> o) {
+        source.forEach(o);
     }
 }

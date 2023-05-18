@@ -3,6 +3,7 @@ package com.chua.common.support.lang.profile;
 
 import com.chua.common.support.bean.BeanBinder;
 import com.chua.common.support.constant.ValueMode;
+import com.chua.common.support.converter.Converter;
 import com.chua.common.support.lang.profile.resolver.ProfileResolver;
 import com.chua.common.support.lang.profile.value.MapProfileValue;
 import com.chua.common.support.lang.profile.value.ProfileValue;
@@ -13,6 +14,7 @@ import com.chua.common.support.utils.StringUtils;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.chua.common.support.constant.CommonConstant.SYSTEM;
@@ -97,6 +99,11 @@ public class DelegateProfile extends ServiceFactory<ProfileResolver> implements 
     @Override
     public Map<String, ProfileValue> getProfile() {
         return profileMap;
+    }
+
+    @Override
+    public <T> T getType(String name, T defaultValue, Class<T> returnType) {
+        return Converter.convertIfNecessary(Optional.ofNullable(getObject(name)).orElse(defaultValue), returnType);
     }
 
     @Override

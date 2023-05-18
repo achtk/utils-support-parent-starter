@@ -37,7 +37,7 @@ public class AggregateSpiDefinition<T> extends AggregateDefinition<T> {
 
         Set<TypeDefinition> rs = new LinkedHashSet<>();
         if(null == name) {
-            Collection<Class<? extends T>> values = serviceProvider.listType().values();
+            Collection<Class<T>> values = serviceProvider.listType().values();
             for (Class<? extends T> value : values) {
                 rs.add(new ClassDefinition(value));
             }
