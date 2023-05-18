@@ -29,6 +29,7 @@
         <module>utils-support-datasource-support</module>
         <module>utils-support-httpclient-starter</module>
         <module>utils-support-htmlunit-starter</module>
+        <module>utils-support-hibernate-starter</module>
     </modules>
 
     <!-- -Djava.net.preferIPv4Stack=true-->
@@ -146,13 +147,31 @@
 
             <dependency>
                 <groupId>com.chua</groupId>
-                <artifactId>utils-support-datasource-support</artifactId>
+                <artifactId>utils-support-datasource-starter</artifactId>
                 <version>${utils.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.chua</groupId>
-                <artifactId>utils-support-poi-support</artifactId>
+                <artifactId>utils-support-poi-starter</artifactId>
+                <version>${utils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.chua</groupId>
+                <artifactId>utils-support-htmlunit-starter</artifactId>
+                <version>${utils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.chua</groupId>
+                <artifactId>utils-support-hibernate-starter</artifactId>
+                <version>${utils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.chua</groupId>
+                <artifactId>utils-support-httpclient-starter</artifactId>
                 <version>${utils.version}</version>
             </dependency>
         </dependencies>

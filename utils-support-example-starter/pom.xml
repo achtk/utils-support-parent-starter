@@ -29,6 +29,11 @@
         </dependency>
 
         <dependency>
+            <groupId>com.chua</groupId>
+            <artifactId>utils-support-poi-starter</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>4.0.3</version>
@@ -64,6 +69,11 @@
             <groupId>io.github.karlatemp</groupId>
             <artifactId>unsafe-accessor</artifactId>
             <version>1.7.0</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.30</version>
         </dependency>
     </dependencies>
 
