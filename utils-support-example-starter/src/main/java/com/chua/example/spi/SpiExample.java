@@ -18,7 +18,7 @@ public class SpiExample {
         //3.原生的ServiceLoader
         //4.spring-factories
         ServiceProvider<ServiceAutowire> serviceProvider = ServiceProvider.of(ServiceAutowire.class);
-        Map<String, Class<? extends ServiceAutowire>> stringClassMap = serviceProvider.listType();
+        Map<String, Class<ServiceAutowire>> stringClassMap = serviceProvider.listType();
         System.out.println();
     }
 }
