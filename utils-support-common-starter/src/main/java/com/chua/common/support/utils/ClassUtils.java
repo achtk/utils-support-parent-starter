@@ -2123,4 +2123,17 @@ public class ClassUtils {
 
         return indexValue;
     }
+
+    /**
+     * 获取简单泛型
+     *
+     * @param declaredClass 类
+     * @param <T>           类型
+     * @return 泛型
+     */
+    public static <T> Class<T> resolveGenericType(Class<?> declaredClass) {
+        ParameterizedType parameterizedType = (ParameterizedType) declaredClass.getGenericSuperclass();
+        Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+        return (Class<T>) actualTypeArguments[0];
+    }
 }

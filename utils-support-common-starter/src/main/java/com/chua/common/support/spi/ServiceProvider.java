@@ -59,12 +59,13 @@ public class ServiceProvider<T> implements InitializingAware {
      * @param value 类型
      */
     public static <T> ServiceProvider<T> of(String value) {
-        if(ClassUtils.isPresent(value)) {
+        if (ClassUtils.isPresent(value)) {
             return EMPTY;
         }
         Class<?> aClass = ClassUtils.forName(value);
         return (ServiceProvider<T>) of(aClass);
     }
+
     /**
      * 初始化
      *
@@ -197,6 +198,7 @@ public class ServiceProvider<T> implements InitializingAware {
         definitions.computeIfAbsent(name, it -> new TreeSet<>(COMPARATOR)).add(serviceDefinition);
 
     }
+
     //Definition *******************************************************************************************************************
     public ServiceDefinition getDefinition(String name, Object... args) {
         SortedSet<ServiceDefinition> definitions = new TreeSet<>(COMPARATOR);
@@ -281,13 +283,16 @@ public class ServiceProvider<T> implements InitializingAware {
     }
 
     //collect *******************************************************************************************************************
+
     /**
      * 映射
+     *
      * @return 映射
      */
     public Map<String, Class<T>> mapping() {
         return listType();
     }
+
     /**
      * 获取实现
      *
@@ -310,6 +315,7 @@ public class ServiceProvider<T> implements InitializingAware {
         }
         return result;
     }
+
     /**
      * 获取实现
      *
@@ -319,6 +325,7 @@ public class ServiceProvider<T> implements InitializingAware {
     public List<T> collect() {
         return Collections.unmodifiableList(new ArrayList<>(list().values()));
     }
+
     /**
      * 获取实现
      *
@@ -389,6 +396,17 @@ public class ServiceProvider<T> implements InitializingAware {
      * 获取实现(每次初始化)
      *
      * @param name 名称
+     * @param args 参数
+     * @return 实现
+     */
+    public T getNewExtension(Enum name, Object... args) {
+        return getNewExtension(name.name(), args);
+    }
+
+    /**
+     * 获取实现(每次初始化)
+     *
+     * @param name 名称
      * @return 实现
      */
     public T getNewExtension(String name) {
@@ -398,6 +416,7 @@ public class ServiceProvider<T> implements InitializingAware {
 
         return (T) Optional.ofNullable(getDefinition(name).newInstance(serviceAutowire)).orElse(defaultImpl);
     }
+
     /**
      * 获取实现(每次初始化)
      *
@@ -406,11 +425,12 @@ public class ServiceProvider<T> implements InitializingAware {
      */
     public Optional<T> getIfPresent(String name) {
         if (null == name) {
-            return definitions.size() == 1 ? Optional.ofNullable(definitions.values().iterator().next().first().getObj(serviceAutowire)) :Optional.empty();
+            return definitions.size() == 1 ? Optional.ofNullable(definitions.values().iterator().next().first().getObj(serviceAutowire)) : Optional.empty();
         }
 
         return Optional.ofNullable(getDefinition(name).newInstance(serviceAutowire));
     }
+
     /**
      * 获取实现
      *
@@ -432,8 +452,9 @@ public class ServiceProvider<T> implements InitializingAware {
      * @return 实现
      */
     public T getExtension(Enum name) {
-        return  null == name ? defaultImpl : getExtension(name.name().toLowerCase());
+        return null == name ? defaultImpl : getExtension(name.name().toLowerCase());
     }
+
     public T getSpiService() {
         Preconditions.checkArgument(!value.isNull());
         String s = SPI_NAME.get(value.getValue());
@@ -464,7 +485,15 @@ public class ServiceProvider<T> implements InitializingAware {
         return new ServiceProviderBuilder<T>();
     }
 
-
+    /**
+     * 是否包含实现
+     *
+     * @param name 名称
+     * @return 是否包含实现
+     */
+    public boolean isSupport(String name) {
+        return definitions.containsKey(name.toUpperCase());
+    }
 
     /**
      * 构建类

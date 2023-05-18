@@ -19,6 +19,11 @@ public @interface Limit {
      * @return 重试次数
      */
     double value() default 3;
+    /**
+     * 资源的key,唯一
+     * 作用：不同的接口，不同的流量控制
+     */
+    String key() default "";
 
     /**
      * 超时时间(s)
@@ -33,7 +38,10 @@ public @interface Limit {
      * @return 实现
      */
     String type() default "guava";
-
+    /**
+     * 得不到令牌的提示语
+     */
+    String msg() default "系统繁忙,请稍后再试.";
     /**
      * 回调
      *

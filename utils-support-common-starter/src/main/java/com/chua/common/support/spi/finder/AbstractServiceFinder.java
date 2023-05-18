@@ -130,7 +130,7 @@ public abstract class AbstractServiceFinder implements ServiceFinder{
         serviceDefinition.setClassLoader(getClassLoader());
         serviceDefinition.setLoadTime(System.currentTimeMillis());
         serviceDefinition.setOrder(order);
-        serviceDefinition.setName(alias);
+        serviceDefinition.setName(alias.toUpperCase());
         serviceDefinition.setObj(obj);
         serviceDefinition.setFinderType(this.getClass());
         serviceDefinition.setImplClass(implType);
