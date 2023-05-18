@@ -26,7 +26,7 @@
         <module>utils-support-minio-starter</module>
         <module>utils-support-maven-starter</module>
         <module>utils-support-poi-starter</module>
-        <module>utils-support-datasource-support</module>
+        <module>utils-support-datasource-starter</module>
         <module>utils-support-httpclient-starter</module>
         <module>utils-support-htmlunit-starter</module>
         <module>utils-support-hibernate-starter</module>

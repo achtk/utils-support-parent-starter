@@ -47,7 +47,7 @@
 
         <dependency>
             <groupId>com.chua</groupId>
-            <artifactId>utils-support-datasource-support</artifactId>
+            <artifactId>utils-support-datasource-starter</artifactId>
             <scope>provided</scope>
         </dependency>
 
