@@ -3,16 +3,16 @@ package com.chua.common.support.database.transfer.file;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONPath;
-import com.chua.common.support.aware.DisposableAware;
-import com.chua.common.support.aware.InitializingAware;
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.bean.BeanMap;
 import com.chua.common.support.converter.Converter;
 import com.chua.common.support.database.transfer.AbstractWriterChannel;
 import com.chua.common.support.database.transfer.collection.SinkTable;
 import com.chua.common.support.file.export.ExportConfiguration;
-import com.chua.common.support.spi.Spi;
+import com.chua.common.support.function.DisposableAware;
+import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.utils.IoUtils;
-import com.google.common.base.Strings;
+import com.chua.common.support.utils.StringUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -68,7 +68,7 @@ public class JsonWriterChannel extends AbstractWriterChannel implements Initiali
     @Override
     public SinkTable createSinkTable() {
         JSONArray jsonArray = null;
-        if(Strings.isNullOrEmpty(subKey)) {
+        if(StringUtils.isNullOrEmpty(subKey)) {
             try {
                 jsonArray = JSON.parseArray(IoUtils.toString(inputStream, UTF_8));
             } catch (IOException e) {

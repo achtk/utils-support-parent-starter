@@ -58,6 +58,18 @@ public class ServiceProvider<T> implements InitializingAware {
      *
      * @param value 类型
      */
+    public static <T> ServiceProvider<T> of(String value) {
+        if(ClassUtils.isPresent(value)) {
+            return EMPTY;
+        }
+        Class<?> aClass = ClassUtils.forName(value);
+        return (ServiceProvider<T>) of(aClass);
+    }
+    /**
+     * 初始化
+     *
+     * @param value 类型
+     */
     public static <T> ServiceProvider<T> of(Class<T> value) {
         return of(value, ClassUtils.getDefaultClassLoader(), null);
     }

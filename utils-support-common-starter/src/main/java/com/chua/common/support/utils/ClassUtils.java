@@ -5,6 +5,7 @@ import com.chua.common.support.collection.ConcurrentReferenceTable;
 import com.chua.common.support.collection.Table;
 import com.chua.common.support.converter.Converter;
 import com.chua.common.support.function.MethodFilter;
+import com.chua.common.support.function.SafeConsumer;
 import com.chua.common.support.lang.proxy.BridgingMethodIntercept;
 import com.chua.common.support.lang.proxy.ProxyUtils;
 import com.chua.common.support.unit.name.NamingCase;
@@ -20,6 +21,7 @@ import java.net.URLClassLoader;
 import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import static com.chua.common.support.constant.CommonConstant.*;
 import static com.chua.common.support.converter.Converter.convertIfPrimitive;
@@ -2043,4 +2045,26 @@ public class ClassUtils {
         return (resolvedWrapper != null && lhsType.isAssignableFrom(resolvedWrapper));
     }
 
+    /**
+     * 获取方法名称与方法
+     *
+     * @param type      类型
+     * @param predicate 过滤
+     * @return 方法名称与方法
+     */
+    public static Map<String, Method> getMethodsByName(Class<?> type, Predicate<Method> predicate) {
+        Map<String, Method> rs = new LinkedHashMap<>();
+        doWithMethods(type, new SafeConsumer<Method>() {
+            @Override
+            public void safeAccept(Method method) throws Throwable {
+                if (!predicate.test(method)) {
+                    return;
+                }
+
+                rs.put(method.getName(), method);
+                rs.put(NamingCase.toCamelUnderscore(method.getName()), method);
+            }
+        });
+        return rs;
+    }
 }

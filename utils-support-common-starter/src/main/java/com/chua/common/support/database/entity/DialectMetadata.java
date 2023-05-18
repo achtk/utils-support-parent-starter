@@ -1,12 +1,9 @@
 package com.chua.common.support.database.entity;
 
-import com.chua.common.support.aware.InitializingAware;
 import com.chua.common.support.constant.Action;
 import com.chua.common.support.database.dialect.Dialect;
-import com.chua.common.support.database.executor.MetadataExecutor;
 import com.chua.common.support.database.metadata.Metadata;
-import com.chua.common.support.database.resolver.DataSourceMetadataResolver;
-import com.chua.common.support.database.resolver.MetadataResolver;
+import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.utils.StringUtils;
 import lombok.Data;
 

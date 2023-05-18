@@ -1,19 +1,19 @@
 package com.chua.common.support.database.transfer.file;
 
-import com.chua.common.support.aware.DisposableAware;
-import com.chua.common.support.aware.InitializingAware;
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.database.transfer.AbstractReaderChannel;
 import com.chua.common.support.database.transfer.collection.SinkTable;
 import com.chua.common.support.database.transfer.datasource.DataSourceReaderChannel;
 import com.chua.common.support.file.export.ExportConfiguration;
+import com.chua.common.support.file.univocity.parsers.csv.CsvWriter;
+import com.chua.common.support.file.univocity.parsers.csv.CsvWriterSettings;
+import com.chua.common.support.function.DisposableAware;
+import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.function.SafeConsumer;
-import com.chua.common.support.spi.Spi;
-import com.chua.common.support.univocity.parsers.csv.CsvWriter;
-import com.chua.common.support.univocity.parsers.csv.CsvWriterSettings;
 import com.chua.common.support.utils.IoUtils;
+import com.chua.common.support.utils.StringUtils;
 import com.chua.common.support.value.MapValue;
 import com.chua.common.support.value.Pair;
-import com.google.common.base.Strings;
 
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -71,7 +71,7 @@ public class CsvReaderChannel extends AbstractReaderChannel implements Initializ
         csvWriterSettings = new CsvWriterSettings();
 
         csvWriterSettings.setHeaders(headers);
-        if (!Strings.isNullOrEmpty(configuration.emptyValue())) {
+        if (!StringUtils.isNullOrEmpty(configuration.emptyValue())) {
             csvWriterSettings.setNullValue(configuration.emptyValue());
         }
 

@@ -1,14 +1,12 @@
 package com.chua.common.support.spi.finder;
 
 import com.chua.common.support.constant.NumberConstant;
+import com.chua.common.support.database.jdbc.springsrc.utils.StringUtils;
+import com.chua.common.support.resource.resource.UrlResource;
 import com.chua.common.support.spi.ServiceDefinition;
 import com.chua.common.support.utils.ClassUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.UrlResource;
-import org.springframework.core.io.support.PropertiesLoaderUtils;
-import org.springframework.util.StringUtils;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -16,8 +14,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
-
-import static com.chua.common.support.constant.CommonConstant.SYMBOL_LEFT_SLASH;
 
 
 /**
@@ -67,7 +63,10 @@ public class SpringServiceFinder extends AbstractServiceFinder {
             while (urls.hasMoreElements()) {
                 URL url = urls.nextElement();
                 UrlResource resource = new UrlResource(url);
-                Properties properties = PropertiesLoaderUtils.loadProperties(resource);
+                Properties properties = new Properties();
+                try (InputStreamReader reader = new InputStreamReader(resource.openStream(), StandardCharsets.UTF_8)) {
+                    properties.load(reader);
+                }
                 for (Map.Entry<?, ?> entry : properties.entrySet()) {
                     String factoryTypeName = ((String) entry.getKey()).trim();
                     String[] factoryImplementationNames =

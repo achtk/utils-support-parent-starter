@@ -1,17 +1,17 @@
 package com.chua.common.support.database.transfer.file;
 
-import com.chua.common.support.aware.DisposableAware;
-import com.chua.common.support.aware.InitializingAware;
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.database.transfer.AbstractWriterChannel;
 import com.chua.common.support.database.transfer.collection.SinkTable;
 import com.chua.common.support.file.export.ExportConfiguration;
-import com.chua.common.support.spi.Spi;
-import com.chua.common.support.univocity.parsers.common.record.Record;
-import com.chua.common.support.univocity.parsers.common.record.RecordMetaData;
-import com.chua.common.support.univocity.parsers.tsv.TsvParser;
-import com.chua.common.support.univocity.parsers.tsv.TsvParserSettings;
+import com.chua.common.support.file.univocity.parsers.common.record.Record;
+import com.chua.common.support.file.univocity.parsers.common.record.RecordMetaData;
+import com.chua.common.support.file.univocity.parsers.tsv.TsvParser;
+import com.chua.common.support.file.univocity.parsers.tsv.TsvParserSettings;
+import com.chua.common.support.function.DisposableAware;
+import com.chua.common.support.function.InitializingAware;
+import com.chua.common.support.utils.StringUtils;
 import com.chua.common.support.value.Pair;
-import com.google.common.base.Strings;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -60,7 +60,7 @@ public class TsvWriterChannel extends AbstractWriterChannel implements Initializ
         }
         tsvParserSettings = new TsvParserSettings();
 
-        if (!Strings.isNullOrEmpty(configuration.emptyValue())) {
+        if (!StringUtils.isNullOrEmpty(configuration.emptyValue())) {
             tsvParserSettings.setNullValue(configuration.emptyValue());
         }
 

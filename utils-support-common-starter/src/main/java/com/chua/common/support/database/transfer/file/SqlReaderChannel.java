@@ -1,15 +1,15 @@
 package com.chua.common.support.database.transfer.file;
 
-import com.chua.common.support.aware.DisposableAware;
-import com.chua.common.support.aware.InitializingAware;
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.database.transfer.AbstractReaderChannel;
 import com.chua.common.support.database.transfer.collection.SinkTable;
+import com.chua.common.support.function.DisposableAware;
+import com.chua.common.support.function.InitializingAware;
+import com.chua.common.support.function.Joiner;
 import com.chua.common.support.function.SafeConsumer;
-import com.chua.common.support.spi.Spi;
 import com.chua.common.support.utils.IoUtils;
 import com.chua.common.support.value.MapValue;
 import com.chua.common.support.value.Pair;
-import com.google.common.base.Joiner;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;

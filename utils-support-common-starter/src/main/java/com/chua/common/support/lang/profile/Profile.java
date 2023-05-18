@@ -184,6 +184,22 @@ public interface Profile {
     /**
      * 获取数据
      *
+     * @param name 名称
+     * @return 结果
+     */
+    default String getString(String... name) {
+        for (String s : name) {
+            Object object = getObject(s);
+            if(null != object) {
+                return Converter.convertIfNecessary(object, String.class);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 获取数据
+     *
      * @param name         名称
      * @param defaultValue 默认值
      * @return 结果

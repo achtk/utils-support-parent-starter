@@ -3,11 +3,12 @@ package com.chua.common.support.database.inquirer;
 import com.chua.common.support.bean.BeanMap;
 import com.chua.common.support.bean.BeanUtils;
 import com.chua.common.support.converter.Converter;
+import com.chua.common.support.function.Joiner;
+import com.chua.common.support.unit.name.NamingCase;
 import com.chua.common.support.utils.AnnotationUtils;
 import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.MapUtils;
-import com.google.common.base.Joiner;
-import com.google.common.base.Strings;
+import com.chua.common.support.utils.StringUtils;
 
 import javax.sql.DataSource;
 import java.io.Serializable;
@@ -98,11 +99,11 @@ public class SubstanceInquirer<T> implements SqlSubstanceInquirer<T> {
             Map<String, Object> map = AnnotationUtils.asMap(field.getDeclaredAnnotation(MYBATIS_COLUMN_TYPE));
             if (!map.isEmpty()) {
                 String value = MapUtils.getString(map, "value");
-                if (!Strings.isNullOrEmpty(value)) {
+                if (!StringUtils.isNullOrEmpty(value)) {
                     columns.add(value);
                     return;
                 }
-                columns.add(Converter.toCamelUnderscore(field.getName()));
+                columns.add(NamingCase.toCamelUnderscore(field.getName()));
             }
             return;
         }
@@ -111,17 +112,17 @@ public class SubstanceInquirer<T> implements SqlSubstanceInquirer<T> {
             Map<String, Object> map = AnnotationUtils.asMap(field.getDeclaredAnnotation(JAVAX_COLUMN_TYPE));
             if (!map.isEmpty()) {
                 String value = MapUtils.getString(map, "name");
-                if (!Strings.isNullOrEmpty(value)) {
+                if (!StringUtils.isNullOrEmpty(value)) {
                     columns.add(value);
                     return;
                 }
-                columns.add(Converter.toCamelUnderscore(field.getName()));
+                columns.add(NamingCase.toCamelUnderscore(field.getName()));
             }
             return;
         }
 
         if (convertAllToFields) {
-            columns.add(Converter.toCamelUnderscore(field.getName()));
+            columns.add(NamingCase.toCamelUnderscore(field.getName()));
         }
     }
 
@@ -135,18 +136,18 @@ public class SubstanceInquirer<T> implements SqlSubstanceInquirer<T> {
             Map<String, Object> map = AnnotationUtils.asMap(field.getDeclaredAnnotation(MYBATIS_ID_TYPE));
             if (!map.isEmpty()) {
                 String value = MapUtils.getString(map, "value");
-                if (!Strings.isNullOrEmpty(value)) {
+                if (!StringUtils.isNullOrEmpty(value)) {
                     this.primaryKey = value;
                     return;
                 }
-                this.primaryKey = Converter.toCamelUnderscore(field.getName());
+                this.primaryKey = NamingCase.toCamelUnderscore(field.getName());
             }
         }
 
         if (null != JAVAX_ID_TYPE) {
             Annotation annotation = field.getDeclaredAnnotation(JAVAX_ID_TYPE);
             if (null != annotation) {
-                this.primaryKey = Converter.toCamelUnderscore(field.getName());
+                this.primaryKey = NamingCase.toCamelUnderscore(field.getName());
             }
         }
     }
@@ -161,7 +162,7 @@ public class SubstanceInquirer<T> implements SqlSubstanceInquirer<T> {
         if (null != MYBATIS_TABLE_TYPE) {
             Map<String, Object> map = AnnotationUtils.asMap(type.getDeclaredAnnotation(MYBATIS_TABLE_TYPE));
             table = MapUtils.getString(map, "value");
-            if (!Strings.isNullOrEmpty(table)) {
+            if (!StringUtils.isNullOrEmpty(table)) {
                 return table;
             }
         }
@@ -169,12 +170,12 @@ public class SubstanceInquirer<T> implements SqlSubstanceInquirer<T> {
         if (null != JAVAX_TABLE_TYPE) {
             Map<String, Object> map = AnnotationUtils.asMap(type.getDeclaredAnnotation(JAVAX_TABLE_TYPE));
             table = MapUtils.getString(map, "name");
-            if (!Strings.isNullOrEmpty(table)) {
+            if (!StringUtils.isNullOrEmpty(table)) {
                 return table;
             }
         }
 
-        return Converter.toCamelUnderscore(type.getSimpleName());
+        return NamingCase.toCamelUnderscore(type.getSimpleName());
     }
 
     @Override
@@ -199,7 +200,7 @@ public class SubstanceInquirer<T> implements SqlSubstanceInquirer<T> {
                 key.set(v);
                 return;
             }
-            columns.add(Converter.toCamelUnderscore(k.toString()) + "= ?");
+            columns.add(NamingCase.toCamelUnderscore(k.toString()) + "= ?");
             values.add(v);
         });
 
@@ -233,13 +234,13 @@ public class SubstanceInquirer<T> implements SqlSubstanceInquirer<T> {
             }
 
             item.put(k.toString(), v);
-            columns.add(Converter.toCamelUnderscore(k.toString()));
+            columns.add(NamingCase.toCamelUnderscore(k.toString()));
             values.add(v);
         });
 
 
         sb.append(Joiner.on(',').join(columns)).append(")");
-        sb.append(" VALUES (").append(Joiner.on(',').join(Strings.repeat("?", columns.size()).split(""))).append(")");
+        sb.append(" VALUES (").append(Joiner.on(',').join(StringUtils.repeat("?", columns.size()).split(""))).append(")");
 
         Map insert = jdbcInquirer.insert(sb.toString(), values.toArray(new Object[0]), Map.class);
         item.put(primaryKey, MapUtils.getString(insert, "GENERATED_KEY"));
@@ -268,7 +269,7 @@ public class SubstanceInquirer<T> implements SqlSubstanceInquirer<T> {
                 return;
             }
 
-            columns.add(Converter.toCamelUnderscore(k.toString()));
+            columns.add(NamingCase.toCamelUnderscore(k.toString()));
             values.add(v);
         });
 

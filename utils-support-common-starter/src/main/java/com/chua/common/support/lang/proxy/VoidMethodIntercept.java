@@ -1,6 +1,5 @@
 package com.chua.common.support.lang.proxy;
 
-import com.chua.common.support.lang.proxy.plugin.Preprocess;
 import com.chua.common.support.lang.proxy.plugin.ProxyPlugin;
 import lombok.AllArgsConstructor;
 

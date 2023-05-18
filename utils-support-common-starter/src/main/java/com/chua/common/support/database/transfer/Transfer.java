@@ -1,8 +1,8 @@
 package com.chua.common.support.database.transfer;
 
-import com.chua.common.support.aware.DisposableAware;
-import com.chua.common.support.aware.InitializingAware;
 import com.chua.common.support.database.transfer.collection.SinkTable;
+import com.chua.common.support.function.DisposableAware;
+import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.utils.ThreadUtils;
 import com.chua.common.support.value.DataMapping;
 import lombok.Builder;

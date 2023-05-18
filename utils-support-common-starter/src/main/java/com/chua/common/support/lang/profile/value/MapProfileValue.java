@@ -4,7 +4,8 @@ package com.chua.common.support.lang.profile.value;
 import com.chua.common.support.constant.ValueMode;
 import com.chua.common.support.json.jsonpath.DocumentContext;
 import com.chua.common.support.json.jsonpath.JsonPath;
-import com.chua.common.support.lang.expression.parser.SpelExpressionParser;
+import com.chua.common.support.lang.expression.parser.ExpressionParser;
+import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.unit.name.NamingCase;
 import com.chua.common.support.utils.MapUtils;
 
@@ -26,7 +27,7 @@ public class MapProfileValue implements ProfileValue {
     private final Map<String, Object> map;
     private DocumentContext documentContext;
 
-    private SpelExpressionParser spelExpressionParser = new SpelExpressionParser();
+    private ExpressionParser spelExpressionParser = ServiceProvider.of(ExpressionParser.class).getNewExtension("el");
 
     public MapProfileValue(String resourceUrl) {
         this(resourceUrl, new LinkedHashMap<>());
