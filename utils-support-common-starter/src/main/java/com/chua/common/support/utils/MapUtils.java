@@ -1114,10 +1114,25 @@ public class MapUtils {
      * @return 目标
      */
     @SuppressWarnings("ALL")
+    public static Map<String, Object> asStringObjectMap(Map source) {
+        Map<String, Object> tpl = new LinkedHashMap<>(source.size());
+        source.forEach((k, v) -> {
+            tpl.put(k.toString(), v);
+        });
+        return tpl;
+    }
+
+    /**
+     * 集合转化
+     *
+     * @param source 来源
+     * @return 目标
+     */
+    @SuppressWarnings("ALL")
     public static Map<String, String> asStringMap(Map source) {
         Map<String, String> tpl = new LinkedHashMap<>(source.size());
         source.forEach((k, v) -> {
-            tpl.put(k.toString(), v.toString());
+            tpl.put(k.toString(), v == null ? null : v.toString());
         });
         return tpl;
     }

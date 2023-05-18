@@ -25,7 +25,7 @@ public class JsonObject extends TypeHashMap implements Profile {
 
     public JsonObject(Map<?, ?> source) {
         super(source);
-        this.source = MapUtils.asStringMap(source);
+        this.source = MapUtils.asStringObjectMap(source);
     }
 
 
