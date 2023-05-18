@@ -13,7 +13,7 @@ import java.util.function.BiConsumer;
  */
 public class MultiLinkedValueMap<K, V> implements MultiValueMap<K, V>, Serializable {
 
-    private Map<K, List<V>> targetMap;
+    private final Map<K, List<V>> targetMap = new LinkedHashMap<>();
 
     public MultiLinkedValueMap(Map<K, V> targetMap) {
         this();
@@ -25,7 +25,6 @@ public class MultiLinkedValueMap<K, V> implements MultiValueMap<K, V>, Serializa
     }
 
     public MultiLinkedValueMap() {
-        this.targetMap = new LinkedHashMap<>();
     }
 
     @Override

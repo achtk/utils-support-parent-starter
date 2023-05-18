@@ -13,7 +13,7 @@ import java.nio.file.Files;
  * @author CH
  */
 @Spi("xz")
-public class XzInnerCompressInputStream extends AbstractInnerCompressInputStream {
+public class XzFileInnerCompressInputStream extends AbstractFileInnerCompressInputStream {
 
     @Override
     protected InputStream createStream() throws IOException {

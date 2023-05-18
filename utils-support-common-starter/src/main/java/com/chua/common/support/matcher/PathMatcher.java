@@ -7,7 +7,7 @@ package com.chua.common.support.matcher;
  * @since 1.0
  */
 public interface PathMatcher {
-    static PathMatcher INSTANCE = AntPathMatcher.INSTANCE;
+    static PathMatcher INSTANCE = new AntPathMatcher();
     /**
      * 是否满足匹配标准
      *

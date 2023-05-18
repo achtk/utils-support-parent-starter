@@ -1,6 +1,6 @@
 package com.chua.common.support.io.inner;
 
-import com.chua.common.support.io.InnerCompressInputStream;
+import com.chua.common.support.io.FileInnerCompressInputStream;
 import com.chua.common.support.utils.IoUtils;
 
 import java.io.IOException;
@@ -11,7 +11,7 @@ import java.io.InputStream;
  *
  * @author CH
  */
-public abstract class AbstractInnerCompressInputStream implements InnerCompressInputStream {
+public abstract class AbstractFileInnerCompressInputStream implements FileInnerCompressInputStream {
 
     final Object LOCK = new Object();
 
@@ -50,14 +50,14 @@ public abstract class AbstractInnerCompressInputStream implements InnerCompressI
     }
 
     @Override
-    public InnerCompressInputStream source(String parent, String file) {
+    public FileInnerCompressInputStream source(String parent, String file) {
         this.parent = parent;
         this.file = file;
         return this;
     }
 
     @Override
-    public InnerCompressInputStream password(String password) {
+    public FileInnerCompressInputStream password(String password) {
         this.password = password;
         return this;
     }

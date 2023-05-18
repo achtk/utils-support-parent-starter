@@ -27,6 +27,16 @@ public interface MultiValueMap<K, V> {
     default void put(K key, V value) {
         add(key, value);
     }
+    /**
+     * 添加
+     * @param key k
+     * @param value v
+     */
+    default void put(K key, V[] value) {
+        for (V v : value) {
+            put(key, v);
+        }
+    }
 
     /**
      * 添加数据

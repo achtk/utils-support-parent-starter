@@ -15,7 +15,7 @@ import java.util.zip.ZipEntry;
  * @author CH
  */
 @Spi("jar")
-public class JarInnerCompressInputStream extends AbstractInnerCompressInputStream {
+public class JarFileInnerCompressInputStream extends AbstractFileInnerCompressInputStream {
 
     @Override
     protected InputStream createStream() throws IOException {

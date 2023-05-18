@@ -1,14 +1,16 @@
 package com.chua.common.support.geo;
 
 import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.constant.Projects;
 import com.chua.common.support.http.HttpClient;
 import com.chua.common.support.http.HttpClientInvoker;
 import com.chua.common.support.http.HttpResponse;
+import com.chua.common.support.io.CompressInnerInputStream;
 import com.chua.common.support.io.CompressInputStream;
 import com.chua.common.support.lang.process.ProgressBar;
 import com.chua.common.support.lang.profile.ProfileProvider;
-import com.chua.common.support.resource.ResourceProvider;
-import com.chua.common.support.resource.resource.Resource;
+import com.chua.common.support.resource.repository.Metadata;
+import com.chua.common.support.resource.repository.Repository;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
@@ -57,30 +59,39 @@ public class NameReverseGeoPosition extends ProfileProvider<ReverseGeoPosition> 
             return;
         }
 
-        String name = "classpath:**/" + CN;
-        ResourceProvider provider = ResourceProvider.of(name);
-        Set<Resource> resources = provider.getResources();
-        String sd = "download";
-        if (resources.isEmpty() && getDoubleValue(sd, 0d) == 0d) {
-            String url = DUMP + "/" + CN;
-            log.warn("未找到资源文件, 开始下载文件 DOWNLOAD....");
-            InputStream inputStream = unZip(url);
-            log.warn("下载完成");
-            try {
-                createKdTree(inputStream, false);
-            } catch (IOException ignored) {
-            }
-            return;
-        }
+        Metadata database = Repository.of(getString("database", Projects.userHome() + "/geo"))
+                .remoteResource(DUMP + "/" + CN)
+                .first(CN);
 
-        for (Resource resource : resources) {
-            try (CompressInputStream resourceInputStream = new CompressInputStream(resource, "CN.txt")) {
-                createKdTree(resourceInputStream, false);
-                break;
-            } catch (IOException ignored) {
-                log.warn(ignored.getMessage());
-            }
+        try (CompressInnerInputStream inputStream = new CompressInnerInputStream(database.openInputStream(), "zip", "CN.txt")) {
+            createKdTree(inputStream, false);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+//        String name = "classpath:**/" + CN;
+//        ResourceProvider provider = ResourceProvider.of(name);
+//        Set<Resource> resources = provider.getResources();
+//        String sd = "download";
+//        if (resources.isEmpty() && getDoubleValue(sd, 0d) == 0d) {
+//            String url = DUMP + "/" + CN;
+//            log.warn("未找到资源文件, 开始下载文件 DOWNLOAD....");
+//            InputStream inputStream = unZip(url);
+//            log.warn("下载完成");
+//            try {
+//                createKdTree(inputStream, false);
+//            } catch (IOException ignored) {
+//            }
+//            return;
+//        }
+//
+//        for (Resource resource : resources) {
+//            try (CompressInputStream resourceInputStream = new CompressInputStream(resource, "CN.txt")) {
+//                createKdTree(resourceInputStream, false);
+//                break;
+//            } catch (IOException ignored) {
+//                log.warn(ignored.getMessage());
+//            }
+//        }
     }
 
     /**

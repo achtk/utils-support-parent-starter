@@ -117,7 +117,9 @@ public class ServiceDefinition {
                     try {
                         this.obj = implClass.newInstance();
                         serviceAutowire.autowire(obj);
-                    } catch (Exception ignored) {
+                    } catch (Exception e) {
+                        stack = Thread.currentThread().getStackTrace();
+                        ex = e;
                     }
                 }
             }

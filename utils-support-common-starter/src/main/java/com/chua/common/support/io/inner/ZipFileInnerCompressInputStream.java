@@ -14,7 +14,7 @@ import java.util.zip.ZipFile;
  * @author CH
  */
 @Spi("zip")
-public class ZipInnerCompressInputStream extends AbstractInnerCompressInputStream {
+public class ZipFileInnerCompressInputStream extends AbstractFileInnerCompressInputStream {
     @Override
     protected InputStream createStream() throws IOException {
         ZipFile zipFile = new ZipFile(parent);

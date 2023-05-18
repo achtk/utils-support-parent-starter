@@ -3,18 +3,25 @@ package com.chua.common.support.resource.repository;
 import com.chua.common.support.context.environment.StandardEnvironment;
 import com.chua.common.support.context.factory.ApplicationContextBuilder;
 import com.chua.common.support.context.factory.ConfigurableBeanFactory;
+import com.chua.common.support.lang.download.Downloader;
 import com.chua.common.support.matcher.PathMatcher;
 import com.chua.common.support.resource.repository.resolver.Resolver;
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.ArrayUtils;
 import com.chua.common.support.utils.FileUtils;
 import com.chua.common.support.utils.StringUtils;
+import com.chua.common.support.utils.UrlUtils;
 
+import java.io.File;
+import java.net.URI;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.chua.common.support.constant.CommonConstant.FILE;
+import static com.chua.common.support.constant.CommonConstant.URI;
 
 /**
  * 资源仓库
@@ -25,9 +32,11 @@ public class VfsRepository implements Repository {
 
     private final ConfigurableBeanFactory beanFactory = ApplicationContextBuilder.newBuilder()
             .environment(new StandardEnvironment())
+            .openScanner(false)
             .build();
 
     protected URL[] url;
+    private String removeUrl;
 
     protected VfsRepository(URL... url) {
         this.url = url;
@@ -68,7 +77,7 @@ public class VfsRepository implements Repository {
                 continue;
             }
 
-            Resolver resolver = ServiceProvider.of(Resolver.class).getExtension(url1.getProtocol());
+            Resolver resolver = ServiceProvider.of(Resolver.class).getNewExtension(url1.getProtocol());
             if (null == resolver) {
                 continue;
             }
@@ -78,7 +87,48 @@ public class VfsRepository implements Repository {
             metadata.addAll(resolver.resolve(url1, path));
         }
 
+        if(metadata.isEmpty() && StringUtils.isNotEmpty(removeUrl)) {
+            downloadToLocal(metadata);
+        }
         return metadata;
+    }
+
+    /**
+     * 下载到本地
+     * @param metadata 结果集
+     */
+    private void downloadToLocal(List<Metadata> metadata) {
+        File temp = getFile();
+        if(null == temp) {
+            return;
+        }
+        try {
+            Downloader downloader = Downloader.newBuilder()
+                    .buffer(2 * 1024 * 1024).savePath(temp.getAbsolutePath())
+                    .build();
+            downloader.download(removeUrl);
+            metadata.add(new FileSystemMetadata(new File(temp, downloader.getFileName())));
+        } catch (Exception ignored) {
+        }
+    }
+
+    /**
+     * 获取目录
+     * @return 目录
+     */
+    private File getFile() {
+        for (URL url1 : url) {
+            if(FILE.equals(url1.getProtocol())) {
+                return new File(url1.getFile());
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Repository remoteResource(String url) {
+        this.removeUrl = url;
+        return this;
     }
 
 }

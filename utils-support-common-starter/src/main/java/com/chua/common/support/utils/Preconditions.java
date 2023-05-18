@@ -129,7 +129,18 @@ public final class Preconditions {
             throw new IllegalArgumentException(message);
         }
     }
-
+    /**
+     * 检查对象是否为空
+     *
+     * @param reference 对象
+     * @param message   提示信息
+     * @return 检查对象是否为空
+     */
+    public static void checkNotNull(Object reference, String message) {
+        if (ObjectUtils.isEmpty(reference)) {
+            throw new IllegalArgumentException(message);
+        }
+    }
     /**
      * uncheck
      *

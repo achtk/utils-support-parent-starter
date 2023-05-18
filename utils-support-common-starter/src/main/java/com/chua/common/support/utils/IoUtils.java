@@ -743,7 +743,30 @@ public class IoUtils {
         }
         return toByteArray(input, (int) size);
     }
-
+    /**
+     * 流转字节
+     *
+     * @param input 输入流
+     * @return byte[]
+     * @throws IOException IOException
+     */
+    public static byte[] toByteArrayKeepOpen(final InputStream input) throws IOException {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        copy(input, output);
+        return output.toByteArray();
+    }
+    /**
+     * 流转字节
+     *
+     * @param input 输入流
+     * @return byte[]
+     * @throws IOException IOException
+     */
+    public static ByteArrayOutputStream toByteArrayOutputStream(final InputStream input) throws IOException {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        copy(input, output);
+        return output;
+    }
     /**
      * 流转字节
      *

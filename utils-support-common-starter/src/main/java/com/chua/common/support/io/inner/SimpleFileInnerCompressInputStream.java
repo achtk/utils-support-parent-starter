@@ -14,7 +14,7 @@ import static com.chua.common.support.constant.CommonConstant.HTTP;
  *
  * @author CH
  */
-public class SimpleInnerCompressInputStream extends AbstractInnerCompressInputStream {
+public class SimpleFileInnerCompressInputStream extends AbstractFileInnerCompressInputStream {
 
 
     @Override

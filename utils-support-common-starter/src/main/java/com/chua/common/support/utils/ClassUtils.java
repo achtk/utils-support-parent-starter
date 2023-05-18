@@ -1978,6 +1978,10 @@ public class ClassUtils {
      * @return 结果
      */
     public static <A extends Annotation> A getDeclaredAnnotation(Object type, Class<? extends A> annotationType) {
+        if(null == annotationType) {
+            return null;
+        }
+
         if (type instanceof Class) {
             return ((Class<?>) type).getDeclaredAnnotation(annotationType);
         }

@@ -428,4 +428,12 @@ public class ObjectUtils {
         consumer.accept(value);
     }
 
+    /**
+     * 对象是否为空
+     * @param reference 对象
+     * @return 结果
+     */
+    public static boolean isEmpty(Object reference) {
+        return null == reference;
+    }
 }

@@ -14,7 +14,7 @@ import java.nio.file.Files;
  * @author CH
  */
 @Spi("tar")
-public class TarInnerCompressInputStream extends AbstractInnerCompressInputStream {
+public class TarFileInnerCompressInputStream extends AbstractFileInnerCompressInputStream {
 
     @Override
     protected InputStream createStream() throws IOException {

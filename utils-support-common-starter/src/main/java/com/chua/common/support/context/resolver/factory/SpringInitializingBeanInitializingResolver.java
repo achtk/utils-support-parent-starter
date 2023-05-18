@@ -13,7 +13,7 @@ import static com.chua.common.support.context.constant.ContextConstant.INITIALIZ
 public class SpringInitializingBeanInitializingResolver implements InitializingResolver {
     @Override
     public void refresh(Object bean) {
-        if (!INITIALIZING_BEAN.isAssignableFrom(bean.getClass())) {
+        if (null == INITIALIZING_BEAN || !INITIALIZING_BEAN.isAssignableFrom(bean.getClass())) {
             return;
         }
 

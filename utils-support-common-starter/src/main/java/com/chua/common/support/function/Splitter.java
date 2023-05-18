@@ -1,7 +1,6 @@
 package com.chua.common.support.function;
 
 
-import com.chua.common.support.constant.CommonConstant;
 import com.chua.common.support.utils.StringUtils;
 
 import java.util.*;
@@ -33,6 +32,15 @@ public interface Splitter {
      */
     static Splitter on(String separator) {
         return new DelegateSplitter(separator);
+    }
+    /**
+     * 初始化
+     *
+     * @param pattern 分隔符
+     * @return 拆分器
+     */
+    static Splitter onPattern(String pattern) {
+        return new DelegateSplitter(pattern);
     }
 
     /**
@@ -86,6 +94,13 @@ public interface Splitter {
     Splitter trimResults();
 
     /**
+     * 空置替换
+     * @param s 替换值
+     * @return this
+     */
+    Splitter useForNull(String s);
+
+    /**
      * 拆分为数组
      *
      * @param value 值
@@ -95,12 +110,22 @@ public interface Splitter {
 
 
     /**
+     * 拆分为数组
+     *
+     * @param value 值
+     * @return 结果
+     */
+    String[] split(String value);
+
+
+    /**
      * 拆分器
      */
     abstract class AbstractSplitter implements Splitter {
         protected boolean omitEmptyStrings;
         protected boolean trimResults;
         protected int limit;
+        protected String nullDefaultValue;
 
         @Override
         public Splitter omitEmptyStrings() {
@@ -120,10 +145,15 @@ public interface Splitter {
             return this;
         }
 
-
+        @Override
+        public Splitter useForNull(String s) {
+            this.nullDefaultValue = s;
+            return this;
+        }
     }
 
-    final class MapSplitter extends AbstractSplitter {
+    final class MapSplitter  {
+
 
         private String separator;
         private String kvSeparator;
@@ -133,15 +163,23 @@ public interface Splitter {
             this.separator = separator;
         }
 
-        @Override
-        public MapSplitter withKeyValueSeparator(String separator) {
-            this.kvSeparator = separator;
+        protected boolean omitEmptyStrings;
+        protected boolean trimResults;
+        protected int limit;
+
+        public MapSplitter omitEmptyStrings() {
+            this.omitEmptyStrings = true;
             return this;
         }
 
-        @Override
-        public List<String> splitToList(String value) {
-            return Collections.emptyList();
+        public MapSplitter trimResults() {
+            this.trimResults = true;
+            return this;
+        }
+
+        public MapSplitter limit(int limit) {
+            this.limit = limit;
+            return this;
         }
 
         /**
@@ -211,6 +249,12 @@ public interface Splitter {
                 }
 
                 rs.add(s1);
+            }
+
+            if(rs.size() < limit) {
+                for (int i = limit - rs.size() - 1; i > -1; i--) {
+                    rs.add(nullDefaultValue);
+                }
             }
             return rs;
         }

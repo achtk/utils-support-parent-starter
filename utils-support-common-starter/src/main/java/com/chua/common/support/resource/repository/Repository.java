@@ -112,6 +112,10 @@ public interface Repository {
             }
 
             File temp = new File(s);
+            if(!temp.exists()) {
+                temp.mkdirs();
+            }
+
             if (temp.exists()) {
                 urls[i] = temp.toURI().toURL();
                 continue;
@@ -266,4 +270,10 @@ public interface Repository {
     default boolean isEmpty() {
         return getMetadata().isEmpty();
     }
+
+    /**
+     * 远程路径资源
+     * @param url 地址
+     */
+    Repository remoteResource(String url);
 }

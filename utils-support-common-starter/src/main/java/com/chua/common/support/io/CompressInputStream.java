@@ -1,7 +1,7 @@
 package com.chua.common.support.io;
 
 
-import com.chua.common.support.io.inner.SimpleInnerCompressInputStream;
+import com.chua.common.support.io.inner.SimpleFileInnerCompressInputStream;
 import com.chua.common.support.resource.resource.Resource;
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.FileUtils;
@@ -19,7 +19,7 @@ import java.net.URL;
 public class CompressInputStream extends InputStream {
     private final String resource;
     private final String file;
-    private InnerCompressInputStream stream;
+    private FileInnerCompressInputStream stream;
 
     public CompressInputStream(Resource resource, String file) {
         this(resource.getUrl(), file);
@@ -36,10 +36,10 @@ public class CompressInputStream extends InputStream {
     public CompressInputStream(String resource, String file) {
         this.resource = resource;
         this.file = file;
-        this.stream = ServiceProvider.of(InnerCompressInputStream.class)
+        this.stream = ServiceProvider.of(FileInnerCompressInputStream.class)
                 .getExtension(FileUtils.getSimpleExtension(resource));
         if (null == stream) {
-            this.stream = new SimpleInnerCompressInputStream();
+            this.stream = new SimpleFileInnerCompressInputStream();
         }
         this.stream.source(resource, file);
     }

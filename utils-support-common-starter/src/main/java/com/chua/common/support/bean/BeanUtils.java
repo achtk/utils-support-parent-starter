@@ -6,6 +6,7 @@ import com.chua.common.support.unit.name.NamingCase;
 import com.chua.common.support.utils.ArrayUtils;
 import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.MapUtils;
+import com.chua.common.support.utils.Preconditions;
 import lombok.Data;
 
 import java.beans.BeanInfo;
@@ -18,8 +19,6 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-
-import static lombok.Lombok.checkNotNull;
 
 /**
  * bean tools
@@ -156,8 +155,8 @@ public class BeanUtils {
      * @param ignoreProperties 忽略字段
      */
     private static void copyPropertiesBean(Object source, Object target, String[] ignoreProperties) {
-        checkNotNull(source, "源对象不能为空");
-        checkNotNull(target, "目标对象不能为空");
+        Preconditions.checkNotNull(source, "源对象不能为空");
+        Preconditions.checkNotNull(target, "目标对象不能为空");
         Class<?> targetClass = target.getClass();
 
         if (target instanceof Map) {

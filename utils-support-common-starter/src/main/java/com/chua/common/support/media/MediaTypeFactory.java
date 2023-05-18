@@ -47,6 +47,7 @@ public class MediaTypeFactory {
                     MediaType mediaType = MediaType.parse(tokens[0]);
                     for (int i = 1; i < tokens.length; i++) {
                         String fileExtension = tokens[i].toLowerCase(Locale.ENGLISH);
+                        mediaType.addParameter("suffix", fileExtension);
                         result.add(fileExtension, mediaType);
                         FILE_EXTENSION.put(mediaType.toString(), fileExtension);
                     }

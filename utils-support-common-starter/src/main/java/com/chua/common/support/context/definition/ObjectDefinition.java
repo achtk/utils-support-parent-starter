@@ -16,6 +16,7 @@ public class ObjectDefinition<T> extends ClassDefinition<T> {
         this.isLoaded = true;
         this.scope = Scope.SINGLE;
         this.object = obj;
+        super.setObject(obj);
     }
 
 

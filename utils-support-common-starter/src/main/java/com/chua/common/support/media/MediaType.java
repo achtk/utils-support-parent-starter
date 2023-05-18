@@ -1,5 +1,6 @@
 package com.chua.common.support.media;
 
+import com.chua.common.support.collection.ImmutableCollection;
 import com.chua.common.support.collection.MultiLinkedValueMap;
 import com.chua.common.support.collection.MultiValueMap;
 import com.chua.common.support.function.Splitter;
@@ -134,7 +135,7 @@ public class MediaType {
             return ANY_TYPE;
         }
 
-        String[] split = input.split("[\t]{1}", 2);
+        String[] split = Splitter.onPattern("[\t]{1}").limit(2).useForNull("").split(input);
         String s1 = split[0];
         String[] split1 = s1.split("/");
         Map<String, String> integerMap = new LinkedHashMap<>();
@@ -768,4 +769,18 @@ public class MediaType {
      * @since 30.0
      */
     public static final MediaType FONT_WOFF2 = createConstant(FONT_TYPE, "woff2");
+
+    /**
+     * 添加参数
+     * @param name 参数名称
+     * @param s 结果
+     */
+    public void addParameter(String name, String s) {
+        parameters.put(name, s.split("\\s+"));
+    }
+
+    @Override
+    public String toString() {
+        return type + "/" + subtype;
+    }
 }
