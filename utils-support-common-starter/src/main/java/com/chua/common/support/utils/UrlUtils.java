@@ -871,6 +871,23 @@ public class UrlUtils {
         }
     }
 
+    /**
+     * 文件名称
+     * @param connection 链接
+     * @return 名称
+     */
+    public static String getFileName(URLConnection connection) {
+        String headerField = connection.getHeaderField("Content-Disposition");
+        if (StringUtils.isNullOrEmpty(headerField)) {
+            String form = connection.getURL().toExternalForm();
+            int index = form.indexOf("?");
+            form = -1 == index ? form : form.substring(0, index);
+            return FileUtils.getName(form);
+        }
+
+        return headerField.substring("attachment; filename=".length());
+    }
+
 
     static class SimpleUrlEncoder {
         /**

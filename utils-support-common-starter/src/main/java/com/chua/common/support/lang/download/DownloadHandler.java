@@ -2,6 +2,7 @@ package com.chua.common.support.lang.download;
 
 import com.chua.common.support.utils.FileUtils;
 import com.chua.common.support.utils.StringUtils;
+import com.chua.common.support.utils.UrlUtils;
 
 import java.net.URLConnection;
 
@@ -29,14 +30,6 @@ public interface DownloadHandler {
      * @return 文件名
      */
     default String createFileName(URLConnection connection) {
-        String headerField = connection.getHeaderField("Content-Disposition");
-        if (StringUtils.isNullOrEmpty(headerField)) {
-            String form = connection.getURL().toExternalForm();
-            int index = form.indexOf("?");
-            form = -1 == index ? form : form.substring(0, index);
-            return FileUtils.getName(form);
-        }
-
-        return headerField.substring("attachment; filename=".length());
+       return UrlUtils.getFileName(connection);
     }
 }
