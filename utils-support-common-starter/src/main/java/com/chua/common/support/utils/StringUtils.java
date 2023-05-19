@@ -279,7 +279,35 @@ public class StringUtils {
         }
         return new String(result);
     }
-
+    /**
+     * <p>Repeat a String <code>repeat</code> times to form a
+     * new String, with a String separator injected each time. </p>
+     *
+     * <pre>
+     * repeat(null, null, 2) = null
+     * repeat(null, "x", 2)  = null
+     * repeat("", null, 0)   = ""
+     * repeat("", "", 2)     = ""
+     * repeat("", "x", 3)    = "xxx"
+     * repeat("?", ", ", 3)  = "?, ?, ?"
+     * </pre>
+     *
+     * @param str       the String to repeat, may be null
+     * @param separator the String to inject, may be null
+     * @param repeat    number of times to repeat str, negative treated as zero
+     * @return a new String consisting of the original String repeated,
+     * <code>null</code> if null String input
+     * @since 2.5
+     */
+    public static String repeat(final String str, final String separator, final int repeat) {
+        if (str == null || separator == null) {
+            return repeat(str, repeat);
+        } else {
+            // given that repeat(String, int) is quite optimized, better to rely on it than try and splice this into it
+            String result = repeat(str + separator, repeat);
+            return removeEnd(result, separator);
+        }
+    }
     /**
      * 重复某个字符串
      *
@@ -2091,6 +2119,39 @@ public class StringUtils {
         }
 
         return resource.substring(0, resource.indexOf(s));
+    }
+    /**
+     * <p>Removes a substring only if it is at the end of a source string,
+     * otherwise returns the source string.</p>
+     *
+     * <p>A <code>null</code> source string will return <code>null</code>.
+     * An empty ("") source string will return the empty string.
+     * A <code>null</code> search string will return the source string.</p>
+     *
+     * <pre>
+     * removeEnd(null, *)      = null
+     * removeEnd("", *)        = ""
+     * removeEnd(*, null)      = *
+     * removeEnd("www.domain.com", ".com.")  = "www.domain.com"
+     * removeEnd("www.domain.com", ".com")   = "www.domain"
+     * removeEnd("www.domain.com", "domain") = "www.domain.com"
+     * removeEnd("abc", "")    = "abc"
+     * </pre>
+     *
+     * @param str    the source String to search, may be null
+     * @param remove the String to search for and remove, may be null
+     * @return the substring with the string removed if found,
+     * <code>null</code> if null String input
+     * @since 2.1
+     */
+    public static String removeEnd(final String str, final String remove) {
+        if (isEmpty(str) || isEmpty(remove)) {
+            return str;
+        }
+        if (str.endsWith(remove)) {
+            return str.substring(0, str.length() - remove.length());
+        }
+        return str;
     }
 
     /**

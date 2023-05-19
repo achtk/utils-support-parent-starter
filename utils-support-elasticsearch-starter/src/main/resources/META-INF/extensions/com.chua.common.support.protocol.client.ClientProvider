@@ -1,0 +1,2 @@
+elasticsearch=com.chua.elasticsearch.support.ElasticsearchClientProvider
+es=com.chua.elasticsearch.support.ElasticsearchClientProvider

@@ -24,9 +24,9 @@ public class FileSchemaFactory extends AbstractCalciteSchemaFactory {
 
     @Override
     @SuppressWarnings("ALL")
-    Map<String, Table> getTable() {
+    public Map<String, Table> getTable() {
         final ImmutableMap.Builder<String, Table> builder = ImmutableMap.builder();
-        builder.put(configureAttributes.getString("name"), new FileTable(configureAttributes));
+        builder.put(profile.getString("name"), new FileTable(profile));
         return builder.build();
     }
 

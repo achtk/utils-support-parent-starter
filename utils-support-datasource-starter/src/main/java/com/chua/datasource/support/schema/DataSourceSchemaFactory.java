@@ -72,7 +72,7 @@ public class DataSourceSchemaFactory extends AbstractCalciteSchemaFactory {
 
 
     @Override
-    Map<String, Table> getTable() {
+    public Map<String, Table> getTable() {
         final ImmutableMap.Builder<String, Table> builder = ImmutableMap.builder();
         for (String tableName : getSchema().getTableNames()) {
             builder.put(tableName, getSchema().getTable(tableName));

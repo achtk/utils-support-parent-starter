@@ -1,0 +1,5 @@
+com.chua.ffmpeg.support.subject.FolderToVideoConverter
+com.chua.ffmpeg.support.subject.VideoToApngConverter
+com.chua.ffmpeg.support.subject.VideoToFolderConverter
+com.chua.ffmpeg.support.subject.VideoToGifConverter
+com.chua.ffmpeg.support.subject.VideoToVideoConverter

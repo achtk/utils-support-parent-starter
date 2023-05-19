@@ -1578,6 +1578,30 @@ public class IoUtils {
 
         return null;
     }
+    /**
+     * 解析文件
+     *
+     * @param classpath 文件路径
+     * @return 文件
+     */
+    public static URL newUrl(String classpath) throws IOException {
+        URL resource = IoUtils.class.getResource(classpath);
+        if (null != resource) {
+            return resource;
+        }
+
+        resource = IoUtils.class.getResource(classpath + ".xz");
+
+        if (null != resource) {
+            return resource;
+        }
+        resource = IoUtils.class.getResource(classpath + ".gz");
+        if (null != resource) {
+            return resource;
+        }
+
+        return null;
+    }
 
 
     /**

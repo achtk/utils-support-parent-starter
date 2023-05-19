@@ -1,0 +1,3 @@
+lucene=com.chua.lucene.support.engine.LuceneFileFullTextEngine
+lucene:file=com.chua.lucene.support.engine.LuceneFileFullTextEngine
+lucene:mem=com.chua.lucene.support.engine.LuceneMemFullTextEngine

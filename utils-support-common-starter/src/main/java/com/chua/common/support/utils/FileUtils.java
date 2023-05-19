@@ -1854,6 +1854,9 @@ public class FileUtils {
      * @throws IOException IOException
      */
     public static void copyFile(URL url, String targetPath) throws IOException {
+        if(null == url) {
+            return;
+        }
         copyFile(url, targetPath, false);
     }
 

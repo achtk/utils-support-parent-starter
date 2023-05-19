@@ -1,0 +1,2 @@
+sm2=com.chua.digest.support.decode.Sm2Decode
+sm4=com.chua.digest.support.decode.Sm4Decode

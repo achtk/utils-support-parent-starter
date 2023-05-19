@@ -1,0 +1,2 @@
+lucene:mem=com.chua.lucene.support.client.LuceneMemClientProvider
+lucene:file=com.chua.lucene.support.client.LuceneFileClientProvider

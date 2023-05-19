@@ -1,0 +1,5 @@
+com.chua.apache.support.io.ArInnerCompressInputStream
+com.chua.apache.support.io.Bz2InnerCompressInputStream
+com.chua.apache.support.io.SevenzInnerCompressInputStream
+com.chua.apache.support.io.TarGzInnerCompressInputStream
+com.chua.apache.support.io.TarInnerCompressInputStream

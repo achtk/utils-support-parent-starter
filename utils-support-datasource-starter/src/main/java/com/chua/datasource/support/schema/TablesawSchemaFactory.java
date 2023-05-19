@@ -2,7 +2,6 @@ package com.chua.datasource.support.schema;
 
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.table.ConnectorMetadata;
-import com.chua.common.support.utils.MapUtils;
 import com.chua.datasource.support.TableUtils;
 import com.chua.datasource.support.adator.CalciteTable;
 import com.chua.datasource.support.table.TablesawTable;
@@ -29,11 +28,11 @@ public class TablesawSchemaFactory extends AbstractCalciteSchemaFactory {
 
     @Override
     @SuppressWarnings("ALL")
-    Map<String, Table> getTable() {
+    public Map<String, Table> getTable() {
         final ImmutableMap.Builder<String, Table> builder = ImmutableMap.builder();
-        builder.put(configureAttributes.getString("name"), new TablesawTable(configureAttributes,
-                TableUtils.createColumn(configureAttributes.getType("mapping", Collections.emptyMap(), Map.class), configureAttributes.getObject("column"))));
-        String directory = configureAttributes.getString("directory");
+        builder.put(profile.getString("name"), new TablesawTable(profile,
+                TableUtils.createColumn(profile.getType("mapping", Collections.emptyMap(), Map.class), profile.getObject("column"))));
+        String directory = profile.getString("directory");
         List<CalciteTable> tableList = TableUtils.createTable(directory, "tablesaw");
         for (CalciteTable table : tableList) {
             String[] name = table.name();

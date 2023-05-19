@@ -35,6 +35,18 @@
         <module>utils-support-redis-starter</module>
         <module>utils-support-zxing-starter</module>
         <module>utils-support-zookeeper-starter</module>
+        <module>utils-support-kafka-starter</module>
+        <module>utils-support-neo4j-starter</module>
+        <module>utils-support-influxdb-starter</module>
+        <module>utils-support-nacos-starter</module>
+        <module>utils-support-elasticsearch-starter</module>
+        <module>utils-support-jdk15on-starter</module>
+        <module>utils-support-apache-starter</module>
+        <module>utils-support-freemarker-starter</module>
+        <module>utils-support-jna-starter</module>
+        <module>utils-support-ffmpeg-starter</module>
+        <module>utils-support-ftp-starter</module>
+        <module>utils-support-lucene-starter</module>
     </modules>
 
     <!-- -Djava.net.preferIPv4Stack=true-->
@@ -60,12 +72,6 @@
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>com.chua</groupId>
-                <artifactId>utils-support-common-starter</artifactId>
-                <version>${utils.version}</version>
-            </dependency>
-
             <dependency>
                 <groupId>com.chua</groupId>
                 <artifactId>utils-support-common-starter</artifactId>
@@ -203,6 +209,79 @@
                 <artifactId>utils-support-shell-starter</artifactId>
                 <version>${utils.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.chua</groupId>
+                <artifactId>utils-support-elasticsearch-starter</artifactId>
+                <version>${utils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.chua</groupId>
+                <artifactId>utils-support-kafka-starter</artifactId>
+                <version>${utils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.chua</groupId>
+                <artifactId>utils-support-influxdb-starter</artifactId>
+                <version>${utils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.chua</groupId>
+                <artifactId>utils-support-jdk15on-starter</artifactId>
+                <version>${utils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.chua</groupId>
+                <artifactId>utils-support-nacos-starter</artifactId>
+                <version>${utils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.chua</groupId>
+                <artifactId>utils-support-neo4j-starter</artifactId>
+                <version>${utils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.chua</groupId>
+                <artifactId>utils-support-geoip2-starter</artifactId>
+                <version>${utils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.chua</groupId>
+                <artifactId>utils-support-apache-starter</artifactId>
+                <version>${utils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.chua</groupId>
+                <artifactId>utils-support-freemarker-starter</artifactId>
+                <version>${utils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.chua</groupId>
+                <artifactId>utils-support-jna-starter</artifactId>
+                <version>${utils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.chua</groupId>
+                <artifactId>utils-support-ffmpeg-starter</artifactId>
+                <version>${utils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.chua</groupId>
+                <artifactId>utils-support-ftp-starter</artifactId>
+                <version>${utils.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

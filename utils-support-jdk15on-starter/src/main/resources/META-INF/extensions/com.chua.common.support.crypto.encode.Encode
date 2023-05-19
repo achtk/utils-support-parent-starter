@@ -1,0 +1,3 @@
+sm2=com.chua.digest.support.encode.Sm2Encode
+sm3=com.chua.digest.support.encode.Sm3Encode
+sm4=com.chua.digest.support.encode.Sm4Encode

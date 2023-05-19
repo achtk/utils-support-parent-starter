@@ -7,10 +7,7 @@ import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.function.NameAware;
 import com.chua.common.support.spi.autowire.AutoServiceAutowire;
 import com.chua.common.support.spi.autowire.ServiceAutowire;
-import com.chua.common.support.spi.finder.CustomServiceFinder;
-import com.chua.common.support.spi.finder.SamePackageServiceFinder;
-import com.chua.common.support.spi.finder.ServiceFinder;
-import com.chua.common.support.spi.finder.ServiceLoaderServiceFinder;
+import com.chua.common.support.spi.finder.*;
 import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.Preconditions;
 import com.chua.common.support.utils.StringUtils;
@@ -52,6 +49,13 @@ public class ServiceProvider<T> implements InitializingAware {
     };
     private T defaultImpl;
     private static final ServiceDefinition defaultDefinition = new ServiceDefinition();
+
+    static {
+        List<ServiceEnvironment> serviceEnvironments = ServiceProvider.of(ServiceEnvironment.class).collect();
+        for (ServiceEnvironment serviceEnvironment : serviceEnvironments) {
+            serviceEnvironment.afterPropertiesSet();
+        }
+    }
 
     /**
      * 初始化
@@ -170,6 +174,8 @@ public class ServiceProvider<T> implements InitializingAware {
         rs.add(new ServiceLoaderServiceFinder());
         rs.add(new CustomServiceFinder());
         rs.add(new SamePackageServiceFinder());
+        rs.add(new SpringServiceFinder());
+        rs.add(new ScriptServiceFinder());
 
         return rs;
     }

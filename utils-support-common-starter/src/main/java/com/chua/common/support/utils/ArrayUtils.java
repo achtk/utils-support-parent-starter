@@ -1,5 +1,6 @@
 package com.chua.common.support.utils;
 
+import com.chua.common.support.bean.BeanMap;
 import com.chua.common.support.constant.CommonConstant;
 import com.chua.common.support.converter.Converter;
 
@@ -809,4 +810,43 @@ public class ArrayUtils {
         }
         return result;
     }
+
+    /**
+     * 集合转为数组
+     *
+     * @param columns    字段顺序
+     * @param collection 集合
+     * @return 数组
+     */
+    public static Object[][] toArrays(List<String> columns, List<?> collection) {
+        Object[][] rs = new Object[collection.size()][columns.size()];
+        for (int i = 0; i < collection.size(); i++) {
+            Object o = collection.get(i);
+            Object[] objects = toArray(columns, o);
+            for (int j = 0; j < columns.size(); j++) {
+                rs[i][j] = objects[j];
+            }
+        }
+
+        return rs;
+    }
+
+    /**
+     * 对象转为数组
+     *
+     * @param columns 字段顺序
+     * @param o       对象
+     * @return 数组
+     */
+    private static Object[] toArray(List<String> columns, Object o) {
+        BeanMap beanMap = BeanMap.of(o);
+        Object[] rs = new Object[columns.size()];
+        for (int i = 0; i < columns.size(); i++) {
+            String column = columns.get(i);
+            rs[i] = beanMap.get(column);
+        }
+
+        return rs;
+    }
+
 }

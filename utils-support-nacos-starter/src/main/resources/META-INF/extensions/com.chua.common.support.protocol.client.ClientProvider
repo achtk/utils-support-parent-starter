@@ -1,0 +1,2 @@
+nacos:config=com.chua.nacos.support.NacosConfigClientProvider
+nacos:name=com.chua.nacos.support.NacosNamingClientProvider

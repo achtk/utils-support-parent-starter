@@ -18,14 +18,14 @@ import java.util.Properties;
 public abstract class AbstractCalciteSchemaFactory extends AbstractSchema implements SchemaFactory<Schema> {
 
 
-    protected final Profile configureAttributes;
+    protected final Profile profile;
     private Map<String, Table> tableMap;
     protected final ConnectorMetadata connectorMetadata;
 
     public AbstractCalciteSchemaFactory(ConnectorMetadata connectorMetadata) {
         super();
         this.connectorMetadata = connectorMetadata;
-        this.configureAttributes = connectorMetadata.getConfig();
+        this.profile = connectorMetadata.getConfig();
     }
 
     @Override
@@ -35,7 +35,7 @@ public abstract class AbstractCalciteSchemaFactory extends AbstractSchema implem
 
     @Override
     public String getSchemaName() {
-        return configureAttributes.getString("name", connectorMetadata.hashCode() + "");
+        return profile.getString("name", connectorMetadata.hashCode() + "");
     }
 
     /**
@@ -43,7 +43,7 @@ public abstract class AbstractCalciteSchemaFactory extends AbstractSchema implem
      *
      * @return 表
      */
-    abstract Map<String, Table> getTable();
+    protected abstract Map<String, Table> getTable();
 
     @Override
     protected Map<String, Table> getTableMap() {
