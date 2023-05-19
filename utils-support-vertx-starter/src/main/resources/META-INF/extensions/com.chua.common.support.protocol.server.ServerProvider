@@ -1,0 +1,5 @@
+com.chua.server.support.server.socketio.SocketIoServerProvider
+com.chua.server.support.server.http.HttpVfsServerProvider
+com.chua.server.support.server.proxy.ProxyServerProvider
+com.chua.server.support.server.proxy.HttpProxyServerProvider
+com.chua.server.support.server.file.FileVfsServerProvider

@@ -8,6 +8,7 @@ import com.chua.common.support.converter.Converter;
 import com.chua.common.support.json.JsonArray;
 import com.chua.common.support.json.JsonObject;
 import com.chua.common.support.lang.profile.value.ProfileValue;
+import com.chua.common.support.protocol.server.ServerRequest;
 
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
@@ -191,7 +192,7 @@ public interface Profile extends Environment {
     default String getString(String... name) {
         for (String s : name) {
             Object object = getObject(s);
-            if(null != object) {
+            if (null != object) {
                 return Converter.convertIfNecessary(object, String.class);
             }
         }
@@ -499,6 +500,28 @@ public interface Profile extends Environment {
     /**
      * 获取数据
      *
+     * @param name 名称
+     * @return 结果
+     */
+    default String[] getStringArray(String name) {
+        return getStringArray(name, null);
+    }
+
+    /**
+     * 获取数据
+     *
+     * @param name         名称
+     * @param defaultValue 默认值
+     * @return 结果
+     */
+    default String[] getStringArray(String name, String[] defaultValue) {
+        Object object = getObject(name);
+        return Optional.ofNullable(Converter.convertIfNecessary(object, String[].class)).orElse(defaultValue);
+    }
+
+    /**
+     * 获取数据
+     *
      * @param name   名称
      * @param target 类型
      * @return 结果
@@ -629,12 +652,13 @@ public interface Profile extends Environment {
 
     /**
      * 获取值
-     * @param name 名称
+     *
+     * @param name         名称
      * @param defaultValue 默认值
-     * @param returnType 返回类型
+     * @param returnType   返回类型
      * @return T
      */
-    <T>T getType(String name, T defaultValue, Class<T> returnType);
+    <T> T getType(String name, T defaultValue, Class<T> returnType);
 
 
 }

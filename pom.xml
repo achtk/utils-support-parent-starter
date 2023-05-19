@@ -51,6 +51,7 @@
         <module>utils-support-email-starter</module>
         <module>utils-support-mongodb-starter</module>
         <module>utils-support-ojdbc6-starter</module>
+        <module>utils-support-vertx-starter</module>
     </modules>
 
     <!-- -Djava.net.preferIPv4Stack=true-->
