@@ -4,6 +4,7 @@ import com.chua.common.support.eventbus.AbstractEventbus;
 import com.chua.common.support.eventbus.Eventbus;
 import com.chua.common.support.eventbus.EventbusEvent;
 import com.chua.common.support.eventbus.EventbusType;
+import com.chua.common.support.lang.profile.Profile;
 import com.google.common.base.Strings;
 import com.google.common.eventbus.AsyncEventBus;
 
@@ -20,12 +21,16 @@ public class GuavaEventBus extends AbstractEventbus {
 
     private final Map<String, AsyncEventBus> cache = new ConcurrentHashMap<>();
 
+    public GuavaEventBus(Profile profile) {
+        super(profile);
+    }
+
     @Override
-    public Eventbus register(Set<EventbusEvent> value) {
-        value.forEach(it -> {
+    public Eventbus register(EventbusEvent[] value) {
+        for (EventbusEvent it : value) {
             AsyncEventBus asyncEventBus = cache.computeIfAbsent(it.getName(), i -> new AsyncEventBus(executor));
             asyncEventBus.register(it.getBean());
-        });
+        }
         return this;
     }
 
