@@ -1,5 +1,6 @@
 package com.chua.common.support.collection;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiFunction;
@@ -122,4 +123,10 @@ public interface Table<R, C, V> {
      * @return map
      */
     Map<C, Map<C, V>> rowMap();
+
+    /**
+     * 结果
+     * @return 结果
+     */
+    Collection<V> values();
 }

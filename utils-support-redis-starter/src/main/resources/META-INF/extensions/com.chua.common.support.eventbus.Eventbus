@@ -1,1 +1,2 @@
 com.chua.redis.support.eventbus.RedisEventbus
+com.chua.redis.support.eventbus.RedisionEventbus

@@ -25,32 +25,37 @@ public class RedissonUtils {
      * @return 客户端
      */
     public static RedissonClient create(RedisConfiguration redisConfiguration, Executor executor) {
-        String address = redisConfiguration.getAddress();
-        Config config = new Config();
-        config.setCodec(new JsonJacksonCodec());
+        try {
+            String address = redisConfiguration.getAddress();
+            Config config = new Config();
+            config.setCodec(new JsonJacksonCodec());
 
-        if (executor instanceof ExecutorService) {
-            config.setExecutor((ExecutorService) executor);
-        }
+            if (executor instanceof ExecutorService) {
+                config.setExecutor((ExecutorService) executor);
+            }
 
-        if (address.split(CUT).length == 1) {
-            config.useSingleServer()
-                    .setAddress(address)
+            if (address.split(CUT).length == 1) {
+                config.useSingleServer()
+                        .setAddress(address)
+                        .setConnectTimeout(redisConfiguration.getConnectionTimeoutMs())
+                        .setPassword(redisConfiguration.getPassword())
+                        .setDatabase(redisConfiguration.getDatabase())
+                        .setKeepAlive(true)
+                        .setTimeout(redisConfiguration.getConnectionTimeoutMs());
+
+                return Redisson.create(config);
+            }
+
+            config.useClusterServers()
+                    .addNodeAddress(address.split(CUT))
                     .setConnectTimeout(redisConfiguration.getConnectionTimeoutMs())
                     .setPassword(redisConfiguration.getPassword())
-                    .setDatabase(redisConfiguration.getDatabase())
                     .setKeepAlive(true)
                     .setTimeout(redisConfiguration.getConnectionTimeoutMs());
-
             return Redisson.create(config);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
-
-        config.useClusterServers()
-                .addNodeAddress(address.split(CUT))
-                .setConnectTimeout(redisConfiguration.getConnectionTimeoutMs())
-                .setPassword(redisConfiguration.getPassword())
-                .setKeepAlive(true)
-                .setTimeout(redisConfiguration.getConnectionTimeoutMs());
-        return Redisson.create(config);
     }
 }

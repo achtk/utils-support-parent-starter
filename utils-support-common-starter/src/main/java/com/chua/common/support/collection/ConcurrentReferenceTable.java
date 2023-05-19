@@ -137,4 +137,13 @@ public class ConcurrentReferenceTable<R, C, V> implements Table<R, C, V>{
         return rs;
     }
 
+    @Override
+    public Collection<V> values() {
+        List<V> rs = new ArrayList<>();
+        for (Map<C, V> value : rpl.values()) {
+            rs.addAll(value.values());
+        }
+        return Collections.unmodifiableList(rs);
+    }
+
 }

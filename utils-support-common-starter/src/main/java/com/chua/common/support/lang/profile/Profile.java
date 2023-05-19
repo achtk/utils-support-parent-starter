@@ -3,6 +3,7 @@ package com.chua.common.support.lang.profile;
 
 import com.chua.common.support.bean.BeanMap;
 import com.chua.common.support.constant.ValueMode;
+import com.chua.common.support.context.environment.Environment;
 import com.chua.common.support.converter.Converter;
 import com.chua.common.support.json.JsonArray;
 import com.chua.common.support.json.JsonObject;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
  *
  * @author CH
  */
-public interface Profile {
+public interface Profile extends Environment {
     /**
      * 添加配置
      *
@@ -634,4 +635,6 @@ public interface Profile {
      * @return T
      */
     <T>T getType(String name, T defaultValue, Class<T> returnType);
+
+
 }

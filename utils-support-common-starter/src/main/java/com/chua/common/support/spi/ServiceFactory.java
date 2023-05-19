@@ -41,4 +41,15 @@ public interface ServiceFactory<E> {
         return ServiceProvider.of((Class<E>) actualTypeArguments[0]).listType();
 
     }
+    /**
+     * 获取实现
+     *
+     * @param args 参数
+     * @return 实现
+     */
+    default Map<String, E> list(Object... args) {
+        Type[] actualTypeArguments = ClassUtils.getActualTypeArguments(this.getClass());
+        return ServiceProvider.of((Class<E>) actualTypeArguments[0]).list();
+
+    }
 }

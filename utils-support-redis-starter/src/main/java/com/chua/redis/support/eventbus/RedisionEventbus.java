@@ -1,13 +1,13 @@
 package com.chua.redis.support.eventbus;
 
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.eventbus.*;
-import com.chua.common.support.spi.Spi;
+import com.chua.common.support.lang.profile.Profile;
 import com.chua.common.support.utils.ArrayUtils;
 import com.chua.common.support.utils.CollectionUtils;
 import com.chua.common.support.utils.StringUtils;
 import com.chua.redis.support.config.RedisConfiguration;
 import com.chua.redis.support.util.RedissonUtils;
-import lombok.NoArgsConstructor;
 import org.redisson.api.RTopic;
 import org.redisson.api.RedissonClient;
 import org.redisson.api.listener.MessageListener;
@@ -17,6 +17,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.chua.common.support.constant.CommonConstant.SYMBOL_COMMA;
+import static com.chua.common.support.eventbus.EventbusType.REDIS;
 
 /**
  * redis
@@ -25,7 +26,6 @@ import static com.chua.common.support.constant.CommonConstant.SYMBOL_COMMA;
  * @version 1.0.0
  * @since 2021/5/25
  */
-@NoArgsConstructor
 @Spi("redission")
 public class RedisionEventbus extends AbstractEventbus {
 
@@ -35,13 +35,22 @@ public class RedisionEventbus extends AbstractEventbus {
     private final List<EventbusEvent> empty = new ArrayList<>();
     private RedissonClient redissonClient;
 
-    @Override
-    public EventbusType event() {
-        return EventbusType.REDIS;
+    public RedisionEventbus(Profile profile) {
+        super(profile);
+        RedisConfiguration redisConfiguration = profile.bind("redis", RedisConfiguration.class);
+        this.redissonClient = RedissonUtils.create(redisConfiguration, executor);
+        if(redissonClient != null) {
+            IS_RUNNING.set(true);
+        }
     }
 
     @Override
-    public Eventbus register(Set<EventbusEvent> value) {
+    public EventbusType event() {
+        return REDIS;
+    }
+
+    @Override
+    public Eventbus register(EventbusEvent[] value) {
         if (!IS_RUNNING.get()) {
             IS_RUNNING.set(true);
         }
@@ -69,13 +78,13 @@ public class RedisionEventbus extends AbstractEventbus {
     }
 
     @Override
-    public void unregister(EventbusEvent value) {
+    public Eventbus unregister(EventbusEvent value) {
         if (null == value) {
-            return;
+            return this;
         }
         Method method1 = value.getMethod();
         if (null == method1) {
-            return;
+            return this;
         }
         String name = value.getName();
 
@@ -93,6 +102,7 @@ public class RedisionEventbus extends AbstractEventbus {
                 }
             }
         }
+        return this;
     }
 
     /**
@@ -122,9 +132,9 @@ public class RedisionEventbus extends AbstractEventbus {
     }
 
     @Override
-    public void post(String name, Object message) {
-        if (StringUtils.isNullOrEmpty(name) || null == message || !IS_RUNNING.get() || configuration.isEmpty()) {
-            return;
+    public Eventbus post(String name, Object message) {
+        if (StringUtils.isNullOrEmpty(name) || null == message || !IS_RUNNING.get()) {
+            return this;
         }
 
         for (String s : name.split(SYMBOL_COMMA)) {
@@ -135,14 +145,6 @@ public class RedisionEventbus extends AbstractEventbus {
 
             topic.publish(new EventbusMessage(message));
         }
-    }
-
-    @Override
-    public Eventbus properties(EventbusConfiguration configuration) {
-        super.properties(configuration);
-        RedisConfiguration redisConfiguration = configuration.bind("redis", RedisConfiguration.class);
-        this.redissonClient = RedissonUtils.create(redisConfiguration, configuration.getExecutor());
-        IS_RUNNING.set(true);
         return this;
     }
 

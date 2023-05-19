@@ -186,29 +186,34 @@ public class JedisUtil {
      */
     public static JedisPool getJedisPool(RedisConfiguration redisConfiguration) {
         // JedisPoolConfig
-        String host = redisConfiguration.getHost();
-        String user = redisConfiguration.getUser();
-        String password = redisConfiguration.getPassword();
-        Integer database = redisConfiguration.getDatabase();
-        Integer connectionTimeoutMs = redisConfiguration.getConnectionTimeoutMs();
-        Integer port = redisConfiguration.getPort();
+        try {
+            String host = redisConfiguration.getHost();
+            String user = redisConfiguration.getUser();
+            String password = redisConfiguration.getPassword();
+            Integer database = redisConfiguration.getDatabase();
+            Integer connectionTimeoutMs = redisConfiguration.getConnectionTimeoutMs();
+            Integer port = redisConfiguration.getPort();
 
-        DefaultJedisClientConfig.Builder builder = DefaultJedisClientConfig.builder();
-        if (!StringUtils.isNullOrEmpty(password)) {
-            builder.password(password);
+            DefaultJedisClientConfig.Builder builder = DefaultJedisClientConfig.builder();
+            if (!StringUtils.isNullOrEmpty(password)) {
+                builder.password(password);
+            }
+
+            if (!StringUtils.isNullOrEmpty(user)) {
+                builder.user(user);
+            }
+
+            if (null != connectionTimeoutMs) {
+                builder.connectionTimeoutMillis(connectionTimeoutMs);
+            }
+
+            builder.database(database);
+
+            return new JedisPool(new HostAndPort(host, port), builder.build());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
-
-        if (!StringUtils.isNullOrEmpty(user)) {
-            builder.user(user);
-        }
-
-        if (null != connectionTimeoutMs) {
-            builder.connectionTimeoutMillis(connectionTimeoutMs);
-        }
-
-        builder.database(database);
-
-        return new JedisPool(new HostAndPort(host, port), builder.build());
     }
 
     /**
