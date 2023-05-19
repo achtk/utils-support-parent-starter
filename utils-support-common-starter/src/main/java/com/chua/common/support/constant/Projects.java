@@ -15,6 +15,7 @@ import com.chua.common.support.resource.resource.Resource;
 import com.chua.common.support.utils.*;
 import lombok.Builder;
 import lombok.Data;
+import lombok.SneakyThrows;
 
 import javax.management.MBeanServer;
 import javax.management.MalformedObjectNameException;
@@ -29,6 +30,9 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -1288,4 +1292,49 @@ public final class Projects {
 
         arch = normalizeArch(OPERATING_SYSTEM_ARCH);
     }
+
+
+    /**
+     * 拷贝文件到临时目录
+     *
+     * @param npzDataPath 文件
+     * @return 临时目录文件
+     */
+    @SneakyThrows
+    public static File copyTempFile(String npzDataPath) {
+
+        String md5String = Md5Utils.getInstance().getMd5String(npzDataPath);
+        Path tempDirectory = Files.createTempDirectory(md5String);
+        File temp = new File(tempDirectory.toFile(), npzDataPath);
+        if (temp.exists()) {
+            return temp;
+        }
+
+        Repository repository = Repository.of(".", "classpath:");
+        Metadata metadata = repository.first(npzDataPath);
+        if (null == metadata) {
+            return null;
+        }
+
+        if (temp.length() == metadata.getSize()) {
+            return temp;
+        }
+
+        if (temp.exists()) {
+            try (InputStream inputStream = metadata.openInputStream()) {
+                Files.copy(inputStream, temp.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                return temp;
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        try (InputStream inputStream = metadata.openInputStream()) {
+            Files.copy(inputStream, temp.toPath());
+            return temp;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

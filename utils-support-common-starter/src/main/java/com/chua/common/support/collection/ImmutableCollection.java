@@ -38,6 +38,13 @@ public class ImmutableCollection {
         return new TableBuilder<>();
     }
 
+    public static <T>List<T> newArrayList() {
+        return ImmutableCollection.<T>builder().newArrayList();
+    }
+
+    public static <K, V>Map<K, V> newHashMap() {
+        return ImmutableCollection.<K, V>newMap().newHashMap();
+    }
 
 
     public static class CollectionBuilder<E>{
@@ -73,7 +80,7 @@ public class ImmutableCollection {
             return new LinkedHashSet<>(build());
         }
 
-        public List<E> newLinkedList() {
+        public LinkedList<E> newLinkedList() {
             return new LinkedList<>(build());
         }
         public Collection<E> newCollection() {

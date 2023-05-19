@@ -55,6 +55,7 @@
         <module>utils-support-deeplearning-starter</module>
         <module>utils-support-sftp-starter</module>
         <module>utils-support-sshd-starter</module>
+        <module>utils-support-tts-support</module>
     </modules>
 
     <!-- -Djava.net.preferIPv4Stack=true-->
