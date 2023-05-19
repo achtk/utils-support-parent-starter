@@ -124,6 +124,9 @@ public class VfsRepository implements Repository {
             String fileName = UrlUtils.getFileName(url1.openConnection());
             if(null != fileName) {
                 File file = getFile();
+                if(null != file) {
+                    file = new File(file, fileName);
+                }
                 if(null != file && file.exists()) {
                     long size = UrlUtils.size(url1);
                     if(Math.abs(size - file.length()) > 10_00) {
