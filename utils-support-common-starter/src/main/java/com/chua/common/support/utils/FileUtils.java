@@ -2724,6 +2724,20 @@ public class FileUtils {
      * @param s 路径
      * @return 是否存在文件
      */
+    public static boolean exist(File s) {
+        if (null == s || !s.exists()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * 是否存在文件
+     *
+     * @param s 路径
+     * @return 是否存在文件
+     */
     public static boolean exist(String s) {
         if (null == s || !new File(s).exists()) {
             return false;

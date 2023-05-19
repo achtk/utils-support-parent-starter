@@ -1159,6 +1159,16 @@ public final class Projects {
         return "";
     }
 
+    /**
+     * 是否存在某个命令
+     * @param cmd cmd
+     * @return 是否存在某个命令
+     */
+    public static boolean exist(String cmd) {
+        String exec = CmdUtils.exec(cmd);
+        return false;
+    }
+
 
     @Data
     @Builder
