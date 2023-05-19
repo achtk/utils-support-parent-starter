@@ -1,7 +1,7 @@
 package com.chua.example.pytorch.other;
 
 import com.chua.common.support.feature.DetectionConfiguration;
-import com.chua.common.support.repository.Repository;
+import com.chua.common.support.resource.repository.Repository;
 import com.chua.pytorch.support.fire.FireSmokeDetector;
 
 import java.nio.file.Files;
