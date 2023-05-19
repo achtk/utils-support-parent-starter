@@ -29,8 +29,7 @@ import java.util.List;
 public class VideoToApngConverter extends AbstractFileConverter {
 
     @SneakyThrows
-    @Override
-    public void convert(InputStream inputStream, File output) throws Exception {
+    public void convert( InputStream inputStream, File output) throws Exception {
         FFmpegFrameGrabber fFmpegFrameGrabber = new FFmpegFrameGrabber(inputStream);
         fFmpegFrameGrabber.start();
         List<BufferedImage> bufferedImageList = new LinkedList<>();
@@ -80,7 +79,7 @@ public class VideoToApngConverter extends AbstractFileConverter {
     }
 
     @Override
-    public void convert(InputStream inputStream, String suffix, OutputStream outputStream) throws Exception {
+    public void convert(String type, InputStream inputStream, String suffix, OutputStream outputStream) throws Exception {
         if(outputStream instanceof FileOutputStream) {
             convert(inputStream, Converter.convertIfNecessary(outputStream, File.class));
         }

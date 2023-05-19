@@ -17,7 +17,7 @@ import java.util.Properties;
  */
 public class PropertiesToJsonFileConverter extends AbstractFileConverter {
     @Override
-    public void convert(InputStream sourcePath, String suffix, OutputStream targetPath) {
+    public void convert(String type, InputStream sourcePath, String suffix, OutputStream targetPath) {
         String charset = getString("charset", "utf-8");
         Properties properties;
         try (InputStreamReader isr = new InputStreamReader(sourcePath, charset)) {

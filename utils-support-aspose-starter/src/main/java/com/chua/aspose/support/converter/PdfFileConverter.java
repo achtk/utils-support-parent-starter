@@ -74,19 +74,11 @@ public class PdfFileConverter extends AbstractFileConverter {
 
     @SneakyThrows
     @Override
-    public void convert(InputStream inputStream, String suffix, OutputStream outputStream) {
+    public void convert(String type, InputStream inputStream, String suffix, OutputStream outputStream) {
         Document document = new Document(inputStream);
         document.save(outputStream, SaveFormat.fromName(suffix.toUpperCase()));
     }
 
-    @SneakyThrows
-    @Override
-    public void convert(InputStream inputStream, File output) {
-        Document document = new Document(inputStream);
-        try (FileOutputStream fileOutputStream = new FileOutputStream(output)) {
-            document.save(fileOutputStream, SaveFormat.fromName(FileUtils.getExtension(output).toUpperCase()));
-        }
-    }
 
     @Override
     public String target() {

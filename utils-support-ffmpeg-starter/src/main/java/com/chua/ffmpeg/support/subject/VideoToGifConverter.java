@@ -29,7 +29,7 @@ public class VideoToGifConverter extends AbstractFileConverter {
 
     @SneakyThrows
     @Override
-    public void convert(InputStream sourcePath, String suffix, OutputStream targetPath) {
+    public void convert(String type, InputStream sourcePath, String suffix, OutputStream targetPath) {
         FFmpegFrameGrabber fFmpegFrameGrabber = new FFmpegFrameGrabber(sourcePath);
         fFmpegFrameGrabber.start();
         List<BufferedImage> bufferedImageList = new LinkedList<>();

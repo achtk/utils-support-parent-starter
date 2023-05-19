@@ -143,9 +143,8 @@ public interface Joiner {
             }
 
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(s);
             array.forEach((k, v) -> {
-                stringBuilder.append(k).append(kvSeparator).append(ObjectUtils.defaultIfNull(v, replace));
+                stringBuilder.append(s).append(k).append(kvSeparator).append(ObjectUtils.defaultIfNull(v, replace));
             });
             return stringBuilder.substring(s.length());
         }
@@ -155,12 +154,11 @@ public interface Joiner {
             }
 
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(s);
             for (T t : array) {
                 if (null == t && StringUtils.isEmpty(replace)) {
                     continue;
                 }
-                stringBuilder.append(ObjectUtils.defaultIfNull(t, replace));
+                stringBuilder.append(s).append(ObjectUtils.defaultIfNull(t, replace));
             }
             return stringBuilder.substring(s.length());
         }
@@ -170,12 +168,11 @@ public interface Joiner {
             }
 
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(s);
             for (Object t : array) {
                 if (null == t) {
                     continue;
                 }
-                stringBuilder.append(t);
+                stringBuilder.append(s).append(t);
             }
             return stringBuilder.substring(s.length());
         }

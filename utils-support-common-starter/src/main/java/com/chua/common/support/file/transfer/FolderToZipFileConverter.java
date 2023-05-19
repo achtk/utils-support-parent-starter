@@ -18,12 +18,7 @@ import java.util.zip.ZipOutputStream;
 public class FolderToZipFileConverter extends AbstractFileConverter {
 
     @Override
-    public void convert(InputStream inputStream, String suffix, OutputStream outputStream) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void convert(InputStream inputStream, File output) {
+    public void convert(String type, InputStream inputStream, String suffix, OutputStream outputStream) {
         throw new UnsupportedOperationException();
     }
 

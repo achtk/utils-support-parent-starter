@@ -23,7 +23,7 @@ public class ImageToImageFileConverter extends AbstractFileConverter{
     }
 
     @Override
-    public void convert(InputStream inputStream, String suffix, OutputStream outputStream) throws Exception {
+    public void convert(String type, InputStream inputStream, String suffix, OutputStream outputStream) throws Exception {
         BufferedImage bufferedImage = ImageIO.read(inputStream);
         ImageIO.write(bufferedImage, suffix, outputStream);
     }

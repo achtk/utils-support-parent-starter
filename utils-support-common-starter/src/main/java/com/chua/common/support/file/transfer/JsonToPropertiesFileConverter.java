@@ -22,7 +22,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 public class JsonToPropertiesFileConverter extends AbstractFileConverter {
     @SneakyThrows
     @Override
-    public void convert(InputStream sourcePath, String suffix, OutputStream targetPath) {
+    public void convert(String type, InputStream sourcePath, String suffix, OutputStream targetPath) {
         Object value;
         try {
             value = Json.fromJson(new InputStreamReader(sourcePath, UTF_8), Map.class);

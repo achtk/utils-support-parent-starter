@@ -1166,7 +1166,7 @@ public final class Projects {
      */
     public static boolean exist(String cmd) {
         String exec = CmdUtils.exec(cmd);
-        return false;
+        return exec.startsWith( cmd.split("\\s+")[0]);
     }
 
 

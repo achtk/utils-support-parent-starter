@@ -62,18 +62,9 @@ public class ExcelFileConverter extends AbstractFileConverter {
 
     @SneakyThrows
     @Override
-    public void convert(InputStream inputStream, String suffix, OutputStream outputStream) {
+    public void convert(String type, InputStream inputStream, String suffix, OutputStream outputStream) {
         Workbook wb = new Workbook(inputStream);
         wb.save(outputStream, FileFormatUtil.extensionToSaveFormat(suffix));
-    }
-
-    @SneakyThrows
-    @Override
-    public void convert(InputStream inputStream, File output) {
-        Workbook wb = new Workbook(inputStream);
-        try (FileOutputStream fileOutputStream = new FileOutputStream(output)) {
-            wb.save(fileOutputStream, FileFormatUtil.extensionToSaveFormat(FileUtils.getExtension(output)));
-        }
     }
 
     @Override

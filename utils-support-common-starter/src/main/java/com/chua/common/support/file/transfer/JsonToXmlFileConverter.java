@@ -27,7 +27,7 @@ public class JsonToXmlFileConverter extends AbstractFileConverter {
 
     @SneakyThrows
     @Override
-    public void convert(InputStream sourcePath, String suffix, OutputStream targetPath) {
+    public void convert(String type, InputStream sourcePath, String suffix, OutputStream targetPath) {
         String charset = getString("charset", "utf-8");
 
         String xml;

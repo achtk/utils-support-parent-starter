@@ -27,12 +27,11 @@ public class VideoToFolderConverter extends AbstractFileConverter {
     private static final Java2DFrameConverter CONVERTER = new Java2DFrameConverter();
 
     @Override
-    public void convert(InputStream inputStream, String suffix, OutputStream outputStream) {
+    public void convert(String type, InputStream inputStream, String suffix, OutputStream outputStream) {
         throw new NotSupportedException();
     }
 
     @SneakyThrows
-    @Override
     public void convert(InputStream sourcePath, File targetPath) {
         String type = getString("type", "png");
 

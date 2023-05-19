@@ -29,7 +29,7 @@ public class ImageToTextFileConverter extends AbstractFileConverter {
     }
 
     @Override
-    public void convert(InputStream inputStream, String suffix, OutputStream outputStream) throws Exception {
+    public void convert(String type, InputStream inputStream, String suffix, OutputStream outputStream) throws Exception {
         OcrDetector ocrDetector = new OcrDetector(DetectionConfiguration.builder().build());
         OcrDirectionDetector directionDetector = new OcrDirectionDetector(DetectionConfiguration.builder().build());
 

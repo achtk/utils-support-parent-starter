@@ -2,10 +2,13 @@ package com.chua.common.support.file.transfer;
 
 
 import com.chua.common.support.function.OrderAware;
+import com.chua.common.support.utils.FileUtils;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
 
 /**
  * 类型转化
@@ -40,21 +43,13 @@ public interface FileConverter extends OrderAware {
     /**
      * 转化
      *
+     * @param type         输入类型
      * @param inputStream  输入
      * @param outputStream 输出
      * @param suffix       后缀
      * @throws Exception ex
      */
-    void convert(InputStream inputStream, String suffix, OutputStream outputStream) throws Exception;
-
-    /**
-     * 转化
-     *
-     * @param inputStream 输入
-     * @param output      输出
-     * @throws Exception ex
-     */
-    void convert(InputStream inputStream, File output) throws Exception;
+    void convert(String type, InputStream inputStream, String suffix, OutputStream outputStream) throws Exception;
 
     /**
      * 转化
@@ -65,4 +60,5 @@ public interface FileConverter extends OrderAware {
      * @throws Exception ex
      */
     void convert(File file, String suffix, OutputStream outputStream) throws Exception;
+
 }

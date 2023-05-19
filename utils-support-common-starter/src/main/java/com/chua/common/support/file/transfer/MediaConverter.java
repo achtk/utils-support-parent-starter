@@ -264,7 +264,7 @@ public abstract class MediaConverter {
                     return;
                 }
                 try (InputStream inputStream1 = byteSource.getInputStream()) {
-                    imageConverter.convert(inputStream1, suffix, outputStream);
+                    imageConverter.convert(type, inputStream1, suffix, outputStream);
                 }
             }
         }
@@ -296,7 +296,7 @@ public abstract class MediaConverter {
             }
 
             try {
-                fileConverter.convert(inputStream, FileUtils.getExtension(output), new FileOutputStream(output));
+                fileConverter.convert(type, inputStream, FileUtils.getExtension(output), new FileOutputStream(output));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -340,7 +340,7 @@ public abstract class MediaConverter {
                 return;
             }
             try (InputStream inputStream1 = byteSource.getInputStream()) {
-                imageConverter.convert(inputStream1, suffix, outputStream);
+                imageConverter.convert(suffix, inputStream1, suffix, outputStream);
             }
         }
 
@@ -360,7 +360,7 @@ public abstract class MediaConverter {
             }
 
             try {
-                fileConverter.convert(inputStream, FileUtils.getExtension(output), new FileOutputStream(output));
+                fileConverter.convert(type, inputStream, FileUtils.getExtension(output), new FileOutputStream(output));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }

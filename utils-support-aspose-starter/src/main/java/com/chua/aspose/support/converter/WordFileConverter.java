@@ -67,12 +67,11 @@ public class WordFileConverter extends AbstractFileConverter {
     }
 
     @Override
-    public void convert(InputStream inputStream, String suffix, OutputStream outputStream) throws Exception {
+    public void convert(String type, InputStream inputStream, String suffix, OutputStream outputStream) throws Exception {
         Document document = new Document(inputStream);
         document.save(outputStream, SaveOptions.createSaveOptions(SYMBOL_DOT + suffix));
     }
 
-    @Override
     public void convert(InputStream inputStream, File output) throws Exception {
         Document document = new Document(inputStream);
         try (FileOutputStream fileOutputStream = new FileOutputStream(output)) {

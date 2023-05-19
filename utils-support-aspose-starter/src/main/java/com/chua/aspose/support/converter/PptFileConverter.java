@@ -59,19 +59,11 @@ public class PptFileConverter extends AbstractFileConverter {
 
     @SneakyThrows
     @Override
-    public void convert(InputStream inputStream, String suffix, OutputStream outputStream) {
+    public void convert(String type, InputStream inputStream, String suffix, OutputStream outputStream) {
         Presentation presentation = new Presentation(inputStream);
         presentation.save(outputStream, SaveOptions.createSaveOptions("." + suffix).getSaveFormat());
     }
 
-    @SneakyThrows
-    @Override
-    public void convert(InputStream inputStream, File output) {
-        Presentation presentation = new Presentation(inputStream);
-        try (FileOutputStream fileOutputStream = new FileOutputStream(output)) {
-            presentation.save(fileOutputStream, SaveOptions.createSaveOptions(output.getName()).getSaveFormat());
-        }
-    }
 
     @Override
     public String target() {
