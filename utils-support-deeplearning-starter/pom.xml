@@ -45,7 +45,6 @@
         <dependency>
             <groupId>com.chua</groupId>
             <artifactId>utils-support-ffmpeg-starter</artifactId>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>
