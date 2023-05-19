@@ -47,7 +47,7 @@ public class GuavaEventBus extends AbstractEventbus {
     public Eventbus post(String name, Object message) {
         if (Strings.isNullOrEmpty(name)) {
             cache.values().forEach(it -> it.post(message));
-            return;
+            return this;
         }
 
         AsyncEventBus asyncEventBus = cache.get(name);
