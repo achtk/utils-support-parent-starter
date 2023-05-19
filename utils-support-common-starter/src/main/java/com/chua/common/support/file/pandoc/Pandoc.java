@@ -59,8 +59,8 @@ public class Pandoc implements InitializingAware, FileConverter {
         Metadata database = Repository.of(file.getPath())
                 .remoteResource(WINDOW_DOWNLOAD_PATH)
                 .first(name);
-        if(FileUtils.exist(file)) {
-            executor = new WindowExecutor(file);
+        if(database.isEqualsOrigin()) {
+            executor = new WindowExecutor(database.toFile());
             return;
         }
 
