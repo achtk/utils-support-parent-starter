@@ -21,11 +21,11 @@ import com.chua.poi.support.excel.handler.ColFilterHandler;
 import com.chua.poi.support.excel.handler.EasyExcelCustomCellWriteHandler;
 import com.chua.poi.support.excel.handler.FilterHandler;
 import com.chua.poi.support.excel.handler.FreezeHandler;
-import edu.emory.mathcs.backport.java.util.Arrays;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.IndexedColors;
 
 import java.io.OutputStream;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;

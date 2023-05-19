@@ -6,6 +6,7 @@ import com.chua.common.support.lang.expression.parser.ExpressionParser;
 import com.chua.common.support.mock.resolver.MockResolver;
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.unit.name.NamingCase;
+import com.chua.common.support.utils.CardUtils;
 import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.RandomUtils;
 
@@ -102,7 +103,8 @@ public class MockData<T> {
             try {
                 Method declaredMethod = target.getDeclaredMethod(method, field.getType());
                 ClassUtils.setAccessible(declaredMethod);
-                ClassUtils.invokeMethod(declaredMethod, forObject, Converter.convertIfNecessary(rs.toString(), field.getType()));
+                Object necessary = Converter.convertIfNecessary(rs.toString(), field.getType());
+                ClassUtils.invokeMethod(declaredMethod, forObject, necessary);
             } catch (NoSuchMethodException e) {
                 ClassUtils.setAccessible(field);
                 ClassUtils.setFieldValue(field, Converter.convertIfNecessary(rs.toString(), field.getType()), forObject);

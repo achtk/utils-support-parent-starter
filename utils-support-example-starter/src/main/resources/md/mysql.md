@@ -43,7 +43,7 @@
   ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY '<password>';
   
   -- 更新user为root，host为localhost 的密码为123456
-  ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
+  ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'root';
   ```
 
 - **IP address 'xx.xx.xx.xx' could not be resolved: Name or service not known**

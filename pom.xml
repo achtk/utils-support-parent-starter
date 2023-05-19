@@ -47,6 +47,10 @@
         <module>utils-support-ffmpeg-starter</module>
         <module>utils-support-ftp-starter</module>
         <module>utils-support-lucene-starter</module>
+        <module>utils-support-opencv-starter</module>
+        <module>utils-support-email-starter</module>
+        <module>utils-support-mongodb-starter</module>
+        <module>utils-support-ojdbc6-starter</module>
     </modules>
 
     <!-- -Djava.net.preferIPv4Stack=true-->
@@ -279,6 +283,24 @@
             <dependency>
                 <groupId>com.chua</groupId>
                 <artifactId>utils-support-ftp-starter</artifactId>
+                <version>${utils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.chua</groupId>
+                <artifactId>utils-support-opencv-starter</artifactId>
+                <version>${utils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.chua</groupId>
+                <artifactId>utils-support-email-starter</artifactId>
+                <version>${utils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.chua</groupId>
+                <artifactId>utils-support-mongodb-starter</artifactId>
                 <version>${utils.version}</version>
             </dependency>
 

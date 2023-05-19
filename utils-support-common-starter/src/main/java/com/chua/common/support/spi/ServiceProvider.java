@@ -174,7 +174,7 @@ public class ServiceProvider<T> implements InitializingAware {
         rs.add(new ServiceLoaderServiceFinder());
         rs.add(new CustomServiceFinder());
         rs.add(new SamePackageServiceFinder());
-        rs.add(new SpringServiceFinder());
+//        rs.add(new SpringServiceFinder());
         rs.add(new ScriptServiceFinder());
 
         return rs;
@@ -207,6 +207,7 @@ public class ServiceProvider<T> implements InitializingAware {
 
     //Definition *******************************************************************************************************************
     public ServiceDefinition getDefinition(String name, Object... args) {
+        name = name.toUpperCase();
         SortedSet<ServiceDefinition> definitions = new TreeSet<>(COMPARATOR);
         for (String item : name.split(SYMBOL_COMMA)) {
             SortedSet<ServiceDefinition> definitions1 = getDefinitions(item, args);
@@ -224,9 +225,8 @@ public class ServiceProvider<T> implements InitializingAware {
 
     public SortedSet<ServiceDefinition> getDefinitions(String name, Object... args) {
         SortedSet<ServiceDefinition> rs = new TreeSet<>(COMPARATOR);
-        name = name.toLowerCase();
 
-        SortedSet<ServiceDefinition> serviceDefinitions = definitions.get(name.toLowerCase());
+        SortedSet<ServiceDefinition> serviceDefinitions = definitions.get(name);
         if (null != serviceDefinitions) {
             rs.addAll(serviceDefinitions);
         }

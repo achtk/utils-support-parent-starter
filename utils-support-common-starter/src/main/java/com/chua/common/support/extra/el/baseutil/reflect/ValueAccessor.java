@@ -1,6 +1,6 @@
 package com.chua.common.support.extra.el.baseutil.reflect;
 
-import com.chua.common.support.extra.unsafeaccessor.Unsafe;
+import io.github.karlatemp.unsafeaccessor.Unsafe;
 
 import java.lang.reflect.Field;
 

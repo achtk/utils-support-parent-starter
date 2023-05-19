@@ -24,7 +24,8 @@ public class BirthdayMockResolver extends DateMockResolver {
     public String resolve(MockValue mock, ExpressionParser expressionParser) {
         String base = expressionParser.parseExpression(mock.base()).getValue(String.class);
         if(CardUtils.isValidCard(base)) {
-            return String.valueOf(CardUtils.getBirthByIdCard(base));
+            String value = String.valueOf(CardUtils.getBirthByIdCard(base));
+            return value;
         }
 
         return getRandom(NumberUtils.toInt(mock.base(), -1));
@@ -36,7 +37,7 @@ public class BirthdayMockResolver extends DateMockResolver {
      * @return 出生日期
      */
     public static String getRandom(int baseYear) {
-        if(baseYear < -1) {
+        if(baseYear <= -1) {
             baseYear = YEAR;
         }
 

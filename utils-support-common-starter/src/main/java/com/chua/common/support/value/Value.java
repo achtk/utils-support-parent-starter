@@ -20,6 +20,9 @@ public interface Value<T> extends Serializable {
      */
     @SuppressWarnings("ALL")
     static <T> Value<T> of(T value) {
+        if(value instanceof Throwable) {
+            return ofThrowable((Throwable) value);
+        }
         return null == value ? (Value<T>) NullValue.INSTANCE : new DelegateValue<>(value);
     }
 
@@ -31,7 +34,7 @@ public interface Value<T> extends Serializable {
      * @return value
      */
     @SuppressWarnings("ALL")
-    static <T> Value<T> of(Throwable throwable) {
+    static <T> Value<T> ofThrowable(Throwable throwable) {
         return null == throwable ? (Value<T>) NullValue.INSTANCE : (Value<T>) new ThrowableValue(throwable);
     }
 

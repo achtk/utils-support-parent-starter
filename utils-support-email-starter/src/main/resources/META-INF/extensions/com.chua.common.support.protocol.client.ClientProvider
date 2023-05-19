@@ -1,0 +1,3 @@
+com.chua.email.support.SmtpClientProvider
+com.chua.email.support.ImapClientProvider
+com.chua.email.support.Pop3ClientProvider
