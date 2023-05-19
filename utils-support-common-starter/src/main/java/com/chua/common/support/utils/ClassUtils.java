@@ -1580,6 +1580,21 @@ public class ClassUtils {
     /**
      * 获取字段值
      *
+     * @param fieldName 字段
+     * @param value 值
+     */
+    public static Object getFieldValue(String fieldName, Object value) {
+        if (null == fieldName || null == value) {
+            return null;
+        }
+
+        Field field = findField(value.getClass(), fieldName);
+        setAccessible(field);
+        return null == field ? null : getFieldValue(field, value);
+    }
+    /**
+     * 获取字段值
+     *
      * @param field 字段
      * @param value 值
      */

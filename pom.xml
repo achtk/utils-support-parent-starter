@@ -33,6 +33,8 @@
         <module>utils-support-shell-starter</module>
         <module>utils-support-geoip2-starter</module>
         <module>utils-support-redis-starter</module>
+        <module>utils-support-zxing-starter</module>
+        <module>utils-support-zookeeper-starter</module>
     </modules>
 
     <!-- -Djava.net.preferIPv4Stack=true-->
@@ -175,6 +177,30 @@
             <dependency>
                 <groupId>com.chua</groupId>
                 <artifactId>utils-support-httpclient-starter</artifactId>
+                <version>${utils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.chua</groupId>
+                <artifactId>utils-support-zookeeper-starter</artifactId>
+                <version>${utils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.chua</groupId>
+                <artifactId>utils-support-zxing-starter</artifactId>
+                <version>${utils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.chua</groupId>
+                <artifactId>utils-support-redis-starter</artifactId>
+                <version>${utils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.chua</groupId>
+                <artifactId>utils-support-shell-starter</artifactId>
                 <version>${utils.version}</version>
             </dependency>
         </dependencies>

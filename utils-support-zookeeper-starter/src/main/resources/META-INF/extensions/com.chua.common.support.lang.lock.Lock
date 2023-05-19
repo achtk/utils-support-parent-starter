@@ -1,0 +1,2 @@
+zookeeper=com.chua.zookeeper.support.lock.ZookeeperDistributeLock
+zk=com.chua.zookeeper.support.lock.ZookeeperDistributeLock

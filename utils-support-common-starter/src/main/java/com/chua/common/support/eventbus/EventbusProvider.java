@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
  * 时间总线
  * @author CH
  */
-@Builder
 public class EventbusProvider implements ServiceFactory<Eventbus>, InitializingAware, AutoCloseable{
 
     private static final Log log = Log.getLogger(EventbusProvider.class);
@@ -34,6 +33,22 @@ public class EventbusProvider implements ServiceFactory<Eventbus>, InitializingA
     private final Map<Object, Set<EventbusEvent>> subscribes = new IdentityHashMap<>(16);
     public EventbusProvider() {
         afterPropertiesSet();
+    }
+
+    public EventbusProvider(Profile profile) {
+        this();
+        this.profile = profile;
+    }
+
+    public EventbusProvider(Executor executor) {
+        this();
+        this.executor = executor;
+    }
+
+    public EventbusProvider(Profile profile, Executor executor) {
+        this();
+        this.profile = profile;
+        this.executor = executor;
     }
 
     @Override

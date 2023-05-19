@@ -1,0 +1,2 @@
+zookeeper=com.chua.zookeeper.support.ZookeeperProvider
+zk=com.chua.zookeeper.support.ZookeeperProvider
