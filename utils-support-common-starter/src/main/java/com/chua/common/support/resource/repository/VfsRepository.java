@@ -107,7 +107,7 @@ public class VfsRepository implements Repository {
                     .buffer(2 * 1024 * 1024).savePath(temp.getAbsolutePath())
                     .build();
             downloader.download(removeUrl);
-            metadata.add(new FileSystemMetadata(new File(temp, downloader.getFileName())));
+            metadata.add(new FileSystemMetadata(new File(temp, downloader.getFileName())).setEqualsOrigin(false));
         } catch (Exception e) {
             e.printStackTrace();
         }

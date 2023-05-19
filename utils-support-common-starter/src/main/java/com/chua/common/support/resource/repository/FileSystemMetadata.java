@@ -3,6 +3,8 @@ package com.chua.common.support.resource.repository;
 import com.chua.common.support.media.MediaType;
 import com.chua.common.support.media.MediaTypeFactory;
 import com.chua.common.support.utils.FileUtils;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,9 +19,13 @@ import java.util.Optional;
  *
  * @author CH
  */
+@Data
+@Accessors(chain = true)
 public final class FileSystemMetadata implements Metadata {
     private final File file;
     private final Optional<MediaType> mediaType;
+
+    private boolean isEqualsOrigin = true;
 
     public FileSystemMetadata(File file) {
         this.file = file;

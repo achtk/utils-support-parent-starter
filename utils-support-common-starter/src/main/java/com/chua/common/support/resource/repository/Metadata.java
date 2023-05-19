@@ -31,6 +31,13 @@ public interface Metadata {
     URL toUrl();
 
     /**
+     * 原始匹配
+     * @return 原始匹配
+     */
+    default boolean isEqualsOrigin() {
+        return true;
+    }
+    /**
      * File
      *
      * @return File
