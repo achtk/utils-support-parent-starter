@@ -8,6 +8,7 @@ import com.chua.common.support.database.transfer.file.*;
 import com.chua.common.support.value.DataMapping;
 import com.chua.common.support.value.Pair;
 import com.chua.example.DataSourceUtils;
+import com.chua.poi.support.database.transfer.file.XlsxReaderChannel;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -37,7 +38,7 @@ public class DataTransferExample {
 //        WriterChannel writerChannel = new DataSourceWriterChannel(zxb2, new MybatisMetadata<>(OssLog.class));
 //        WriterChannel jsonWriterChannel = new JsonWriterChannel("Z:/1.json");
 //        WriterChannel xlsWriterChannel = new XlsWriterChannel("我的订单.xls");
-        WriterChannel xlsWriterChannel = new XlsWriterChannel("Z:/1.xls");
+//        WriterChannel xlsWriterChannel = new XlsWriterChannel("Z:/1.xls");
 //        WriterChannel tsvWriterChannel = new TsvWriterChannel("Z:/1.tsv");
 //        WriterChannel csvWriterChannel = new CsvWriterChannel("Z:/1.csv");
 //        WriterChannel xmlWriterChannel = new XmlWriterChannel("Z:/1.xml");
@@ -50,9 +51,9 @@ public class DataTransferExample {
         ReaderChannel htmlReaderChannel = new HtmlReaderChannel(Files.newOutputStream(Paths.get("Z://1.html")));
         ReaderChannel jsonReaderChannel = new JsonReaderChannel(Files.newOutputStream(Paths.get("Z://1.json")));
 //        ReaderChannel xlsReaderChannel = new XlsReaderChannel(Files.newOutputStream(Paths.get("Z://1.xls")));
-        ReaderChannel xlsxReaderChannel = new XlsxReaderChannel(Files.newOutputStream(Paths.get("Z://1.xlsx")));
+//        ReaderChannel xlsxReaderChannel = new XlsxReaderChannel(Files.newOutputStream(Paths.get("Z://1.xlsx")));
 
         Transfer transfer = Transfer.builder().dataMapping(dataMapping).build();
-        transfer.transferTo(xlsWriterChannel, tsvReaderChannel, csvReaderChannel, sqlReaderChannel, xmlReaderChannel, htmlReaderChannel, jsonReaderChannel, xlsxReaderChannel);
+//        transfer.transferTo(tsvReaderChannel, csvReaderChannel, sqlReaderChannel, xmlReaderChannel, htmlReaderChannel, jsonReaderChannel);
     }
 }

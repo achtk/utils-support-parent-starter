@@ -3,6 +3,7 @@ package com.chua.common.support.spi;
 import com.chua.common.support.utils.ClassUtils;
 
 import java.lang.reflect.Type;
+import java.util.Map;
 
 /**
  * 服务工厂
@@ -28,5 +29,16 @@ public interface ServiceFactory<E> {
     default E getNewExtension(String name, Object... args) {
         Type[] actualTypeArguments = ClassUtils.getActualTypeArguments(this.getClass());
         return ServiceProvider.of((Class<E>) actualTypeArguments[0]).getNewExtension(name, args);
+    }
+
+    /**
+     * 获取实现
+     *
+     * @return 实现
+     */
+    default Map<String, Class<E>> listType() {
+        Type[] actualTypeArguments = ClassUtils.getActualTypeArguments(this.getClass());
+        return ServiceProvider.of((Class<E>) actualTypeArguments[0]).listType();
+
     }
 }

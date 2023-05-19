@@ -1,13 +1,13 @@
 package com.chua.example.pool;
 
-import com.chua.common.support.pool.BoundBlockingPool;
-import com.chua.common.support.pool.Pool;
-import com.chua.common.support.pool.ReflectObjectFactory;
-import com.chua.common.support.thread.ExecutorCounter;
-import com.chua.common.support.thread.ThreadProvider;
-import com.chua.common.support.thread.ThreadTask;
+import com.chua.common.support.lang.pool.BoundBlockingPool;
+import com.chua.common.support.lang.pool.Pool;
+import com.chua.common.support.lang.pool.ReflectObjectFactory;
+import com.chua.common.support.lang.thread.ExecutorCounter;
+import com.chua.common.support.lang.thread.ThreadProvider;
+import com.chua.common.support.lang.thread.ThreadTask;
 import com.chua.common.support.utils.RandomUtils;
-import com.google.common.base.Strings;
+import com.chua.common.support.utils.StringUtils;
 
 /**
  * 对象池例子
@@ -30,7 +30,7 @@ public class PoolExample {
             public Object execute(Object value) {
                 //获取对象
                 TestEntity testEntity = pool.getObject();
-                if (Strings.isNullOrEmpty(testEntity.getSuccess())) {
+                if (StringUtils.isNullOrEmpty(testEntity.getSuccess())) {
                     testEntity.setSuccess(RandomUtils.randomString(10));
                 }
                 System.out.println(testEntity);

@@ -1,8 +1,8 @@
 package com.chua.example.discovery;
 
-import com.chua.common.support.protocol.discovery.Discovery;
-import com.chua.common.support.protocol.discovery.DiscoveryOption;
-import com.chua.common.support.protocol.discovery.ServiceDiscovery;
+import com.chua.common.support.discovery.Discovery;
+import com.chua.common.support.discovery.DiscoveryOption;
+import com.chua.common.support.discovery.ServiceDiscovery;
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.ThreadUtils;
 

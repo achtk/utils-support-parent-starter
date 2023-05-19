@@ -16,7 +16,6 @@
  */
 package com.chua.datasource.support.rule;
 
-import com.chua.common.support.collection.ConfigureAttributes;
 import com.chua.common.support.lang.profile.Profile;
 import org.apache.calcite.adapter.java.AbstractQueryableTable;
 import org.apache.calcite.linq4j.Enumerable;

@@ -34,29 +34,27 @@ public interface Client<T> extends InitializingAware, AutoCloseable {
      * @param poolConfig 配置
      * @return 客户端
      */
+    @SuppressWarnings("ALL")
     default Pool<T> getClientPool(PoolConfig<T> poolConfig) {
         Class<?> argument = (Class<?>) ClassUtils.getActualTypeArguments(this.getClass())[0];
         BoundBlockingPool<T> pool = null;
         AtomicReference<BoundBlockingPool<T>> reference = new AtomicReference<>();
         try {
-            return (pool = new BoundBlockingPool<>(new ObjectFactory<T>() {
-                @Override
-                public T makeObject() throws Exception {
-                    T client = getClient();
-                    Class<?> aClass = client.getClass();
-                    T proxyClient = (T) ProxyUtils.newProxy(argument, new DelegateMethodIntercept(aClass, new Function<ProxyMethod, Object>() {
-                        @Override
-                        public Object apply(ProxyMethod proxyMethod) {
-                            if (proxyMethod.is("close")) {
-                                reference.get().releaseObject((T) proxyMethod.getObj());
-                                return null;
-                            }
-                            return proxyMethod.getValue(client);
+            return (pool = new BoundBlockingPool<>(() -> {
+                T client = getClient();
+                Class<?> aClass = client.getClass();
+                T proxyClient = (T) ProxyUtils.newProxy(argument, new DelegateMethodIntercept(aClass, new Function<ProxyMethod, Object>() {
+                    @Override
+                    public Object apply(ProxyMethod proxyMethod) {
+                        if (proxyMethod.is("close")) {
+                            reference.get().releaseObject((T) proxyMethod.getObj());
+                            return null;
                         }
-                    }));
+                        return proxyMethod.getValue(client);
+                    }
+                }));
 
-                    return proxyClient;
-                }
+                return proxyClient;
             }, poolConfig, this::closeClient));
         } finally {
             reference.set(pool);

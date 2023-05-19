@@ -1,4 +1,4 @@
-package com.chua.common.support.protocol.discovery;
+package com.chua.common.support.discovery;
 
 /**
  * 绑定类型

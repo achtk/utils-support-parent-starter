@@ -1,5 +1,6 @@
 package com.chua.datasource.support.table;
 
+import com.chua.common.support.database.factory.DelegateDataSource;
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.table.ConnectorFactory;
 import com.chua.common.support.table.ConnectorMetadata;

@@ -1,4 +1,4 @@
-package com.chua.common.support.protocol.discovery;
+package com.chua.common.support.discovery;
 
 import com.chua.common.support.utils.StringUtils;
 import lombok.Builder;
@@ -43,7 +43,7 @@ public class Discovery {
     private String address;
 
     public String getAddress() {
-        return StringUtils.defaultString(address, "127.0.0.1:" + port);
+        return StringUtils.defaultString(address,  "127.0.0.1:" + port);
     }
 
     public void setAddress(String address) {

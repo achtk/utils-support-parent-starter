@@ -1,6 +1,5 @@
 package com.chua.datasource.support.table;
 
-import com.chua.common.support.collection.ConfigureAttributes;
 import com.chua.common.support.converter.Converter;
 import com.chua.common.support.json.JsonObject;
 import com.chua.common.support.lang.profile.Profile;
@@ -18,6 +17,7 @@ import tech.tablesaw.columns.Column;
 import tech.tablesaw.selection.Selection;
 
 import java.net.URL;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -73,7 +73,7 @@ public class TablesawTable extends AbstractRuleTable {
      * @param column 字段
      */
     private void doAnalysisData(List<Column<?>> column) {
-        List data = profile.getType("data", List.class);
+        List data = profile.getType("data", Collections.emptyList(), List.class);
         if (data.isEmpty()) {
             return;
         }
@@ -143,12 +143,12 @@ public class TablesawTable extends AbstractRuleTable {
     }
 
     @Override
-    protected Enumerable<Object> find(ConfigureAttributes attributes, String filterJson, String projectJson, List<Map.Entry<String, Class>> fields) {
+    protected Enumerable<Object> find(Profile attributes, String filterJson, String projectJson, List<Map.Entry<String, Class>> fields) {
         return Linq4j.emptyEnumerable();
     }
 
     @Override
-    protected Enumerable aggregate(ConfigureAttributes configureAttributes, List<Map.Entry<String, Class>> fields, List<String> operations) {
+    protected Enumerable aggregate(Profile configureAttributes, List<Map.Entry<String, Class>> fields, List<String> operations) {
         Table table1 = table.copy();
         if (hasDirectory()) {
             table1 = doAnalysisDirectoryData(table1);
@@ -223,7 +223,7 @@ public class TablesawTable extends AbstractRuleTable {
 
         }
 
-        JsonObject match = jsonObject.getType("$match", JsonObject.class);
+        JsonObject match = jsonObject.getType("$match", new JsonObject(), JsonObject.class);
         if (null != match) {
             for (Map.Entry<String, Object> entry : match.entrySet()) {
                 String key = entry.getKey();
@@ -343,7 +343,7 @@ public class TablesawTable extends AbstractRuleTable {
     }
 
     private boolean hasDirectory() {
-        return profile.get(DIRECTORY) != null;
+        return profile.getObject(DIRECTORY) != null;
     }
 
 

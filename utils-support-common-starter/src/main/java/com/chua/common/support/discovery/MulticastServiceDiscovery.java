@@ -1,4 +1,4 @@
-package com.chua.common.support.protocol.discovery;
+package com.chua.common.support.discovery;
 
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.bean.BeanMap;
@@ -15,6 +15,7 @@ import java.util.concurrent.*;
 import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
 
+import static com.chua.common.support.discovery.Constants.*;
 
 /**
  * 组播
@@ -23,7 +24,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Spi("multicast")
-public class MulticastServiceDiscovery implements ServiceDiscovery, Runnable, Constants {
+public class MulticastServiceDiscovery implements ServiceDiscovery, Runnable {
     static String NETWORK_IGNORED_INTERFACE = "network.interface.ignored";
     private final ConcurrentMap<String, Set<NetAddress>> received = new ConcurrentHashMap<>();
     private final Set<NetAddress> registered = new CopyOnWriteArraySet<>();
@@ -345,8 +346,8 @@ public class MulticastServiceDiscovery implements ServiceDiscovery, Runnable, Co
 
 
     protected void registered(NetAddress netAddress) {
-        Set<NetAddress> urls = received.computeIfAbsent(netAddress.getParameter("discovery", "/"),
-                k -> new CopyOnWriteArraySet<>());
+        Set<NetAddress> urls = received.computeIfAbsent(
+                netAddress.getParameter("discovery", "/"), k -> new CopyOnWriteArraySet<>());
         urls.add(netAddress);
     }
 

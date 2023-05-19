@@ -9,6 +9,7 @@ import com.chua.common.support.spi.ServiceDefinition;
 import com.chua.common.support.spi.finder.SamePackageServiceFinder;
 import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.value.DelegateValue;
+import com.chua.common.support.value.Value;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -58,7 +59,7 @@ public class AbstractReflect<T> extends DelegateMethodIntercept<T> {
      * @return value
      */
     @SuppressWarnings("ALL")
-    public DelegateValue<T> getObjectValue(Object... params) {
+    public Value<T> getObjectValue(Object... params) {
         if (null == type) {
             return new DelegateValue<>(null);
         }

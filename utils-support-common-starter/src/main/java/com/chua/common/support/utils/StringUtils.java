@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -91,12 +92,73 @@ public class StringUtils {
      * <p>注意：该方法与 {@link #isBlank(CharSequence)} 的区别是：该方法不校验空白字符。</p>
      * <p>建议：</p>
      *
+     * @param str      被检测的字符串
+     * @param consumer 非空回调
+     * @return 是否为空
+     * @see #isBlank(CharSequence)
+     */
+    public static boolean isEmpty(CharSequence str, Consumer<CharSequence> consumer) {
+        if (!isEmpty(str)) {
+            consumer.accept(str);
+            return false;
+        }
+        return true;
+    }
+    /**
+     * <p>字符串是否为空，空的定义如下：</p>
+     * <ol>
+     *     <li>{@code null}</li>
+     *     <li>空字符串：{@code ""}</li>
+     * </ol>
+     *
+     * <p>例：</p>
+     * <ul>
+     *     <li>{@code StrUtil.isEmpty(null)     // true}</li>
+     *     <li>{@code StrUtil.isEmpty("")       // true}</li>
+     *     <li>{@code StrUtil.isEmpty(" \t\n")  // false}</li>
+     *     <li>{@code StrUtil.isEmpty("abc")    // false}</li>
+     * </ul>
+     *
+     * <p>注意：该方法与 {@link #isBlank(CharSequence)} 的区别是：该方法不校验空白字符。</p>
+     * <p>建议：</p>
+     *
      * @param str 被检测的字符串
      * @return 是否为空
      * @see #isBlank(CharSequence)
      */
     public static boolean isNullOrEmpty(CharSequence str) {
         return isEmpty(str);
+    }
+
+    /**
+     * <p>字符串是否为空，空的定义如下：</p>
+     * <ol>
+     *     <li>{@code null}</li>
+     *     <li>空字符串：{@code ""}</li>
+     * </ol>
+     *
+     * <p>例：</p>
+     * <ul>
+     *     <li>{@code StrUtil.isEmpty(null)     // true}</li>
+     *     <li>{@code StrUtil.isEmpty("")       // true}</li>
+     *     <li>{@code StrUtil.isEmpty(" \t\n")  // false}</li>
+     *     <li>{@code StrUtil.isEmpty("abc")    // false}</li>
+     * </ul>
+     *
+     * <p>注意：该方法与 {@link #isBlank(CharSequence)} 的区别是：该方法不校验空白字符。</p>
+     * <p>建议：</p>
+     *
+     * @param str      被检测的字符串
+     * @param consumer 非空回调
+     * @return 是否为空
+     * @see #isBlank(CharSequence)
+     */
+    public static boolean isNullOrEmpty(CharSequence str, Consumer<CharSequence> consumer) {
+        if (!isEmpty(str)) {
+            consumer.accept(str);
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -505,6 +567,7 @@ public class StringUtils {
         }
         return sub(string, fromIndex, string.length());
     }
+
     /**
      * 切割指定长度的后部分的字符串
      *
@@ -532,6 +595,7 @@ public class StringUtils {
         }
         return sub(string, -length, string.length());
     }
+
     /**
      * 切割指定位置之前部分的字符串
      *
@@ -728,6 +792,7 @@ public class StringUtils {
     public static String trim(CharSequence str) {
         return (null == str) ? null : trim(str, 0);
     }
+
     /**
      * Trim leading and trailing whitespace from the given {@code String}.
      *
@@ -753,6 +818,7 @@ public class StringUtils {
 
         return str.substring(beginIndex, endIndex + 1);
     }
+
     /**
      * 去除所有空格
      * <pre>
@@ -1144,16 +1210,17 @@ public class StringUtils {
     public static boolean startWith(CharSequence str, char c) {
         return c == str.charAt(0);
     }
+
     /**
      * <p>Check if a CharSequence starts with a specified prefix (optionally case insensitive).</p>
      *
-     * @see java.lang.String#startsWith(String)
-     * @param str  the CharSequence to check, may be null
-     * @param prefix the prefix to find, may be null
+     * @param str        the CharSequence to check, may be null
+     * @param prefix     the prefix to find, may be null
      * @param ignoreCase indicates whether the compare should ignore case
-     *  (case insensitive) or not.
+     *                   (case insensitive) or not.
      * @return {@code true} if the CharSequence starts with the prefix or
-     *  both {@code null}
+     * both {@code null}
+     * @see java.lang.String#startsWith(String)
      */
     private static boolean startsWith(final CharSequence str, final CharSequence prefix, final boolean ignoreCase) {
         if (str == null || prefix == null) {
@@ -1166,6 +1233,7 @@ public class StringUtils {
         }
         return CharUtils.regionMatches(str, ignoreCase, 0, prefix, 0, preLen);
     }
+
     /**
      * 是否以指定字符串开头
      *
@@ -1650,6 +1718,7 @@ public class StringUtils {
         }
         return str2;
     }
+
     /**
      * 是否包含其它字符
      * <pre>
@@ -1735,6 +1804,7 @@ public class StringUtils {
     public static String defaultString(String source, String defaultValue) {
         return isBlank(source) ? defaultValue : source;
     }
+
     /**
      * 当给定字符串为null时，转换为Empty
      *
@@ -1965,6 +2035,7 @@ public class StringUtils {
 
     /**
      * 标准化
+     *
      * @param token token
      * @return 标准化
      */
@@ -2032,7 +2103,6 @@ public class StringUtils {
     }
 
 
-
     /**
      * 字符串的每一个字符是否都与定义的匹配器匹配
      *
@@ -2052,6 +2122,7 @@ public class StringUtils {
         }
         return true;
     }
+
     /**
      * 替换指定字符串的指定区间内字符为"*"
      * 俗称：脱敏功能，后面其他功能，可以见：DesensitizedUtil(脱敏工具类)
@@ -2262,6 +2333,7 @@ public class StringUtils {
         }
         return splitter.splitToList(String.valueOf(str));
     }
+
     /**
      * 是否匹配
      *
@@ -2439,6 +2511,7 @@ public class StringUtils {
         }
         return result;
     }
+
     /**
      * 去除前后指定字符
      * <pre>
@@ -2548,7 +2621,7 @@ public class StringUtils {
      * @return an empty StringBuilder
      */
     public static StringBuilder borrowBuilder() {
-       return new StringBuilder();
+        return new StringBuilder();
     }
 
 
@@ -2599,6 +2672,7 @@ public class StringUtils {
     public static String join(String[] strings, String sep) {
         return join(Arrays.asList(strings), sep);
     }
+
     /**
      * Tests that a String contains only ASCII characters.
      *
@@ -2728,6 +2802,7 @@ public class StringUtils {
             return RegexConstant.VALID_URI_SCHEME.matcher(relUrl).find() ? relUrl : "";
         }
     }
+
     /**
      * Create a new absolute URL, from a provided existing absolute URL and a relative URL component.
      *
@@ -2750,21 +2825,20 @@ public class StringUtils {
         }
         return new URL(url.getProtocol(), url.getHost(), url.getPort(), fixedFile);
     }
+
     private static String stripControlChars(final String input) {
         return CONTROL_CHARS.matcher(input).replaceAll("");
     }
-
 
 
     /**
      * Prepends the prefix to the start of the string if the string does not
      * already start with any of the prefixes.
      *
-     * @param str The string.
-     * @param prefix The prefix to prepend to the start of the string.
+     * @param str        The string.
+     * @param prefix     The prefix to prepend to the start of the string.
      * @param ignoreCase Indicates whether the compare should ignore case.
-     * @param prefixes Additional prefixes that are valid (optional).
-     *
+     * @param prefixes   Additional prefixes that are valid (optional).
      * @return A new String if prefix was prepended, the same string otherwise.
      */
     private static String prependIfMissing(final String str, final CharSequence prefix, final boolean ignoreCase, final CharSequence... prefixes) {
@@ -2807,12 +2881,10 @@ public class StringUtils {
      * StringUtils.prependIfMissing("MNOabc", "xyz", "mno") = "xyzMNOabc"
      * </pre>
      *
-     * @param str The string.
-     * @param prefix The prefix to prepend to the start of the string.
+     * @param str      The string.
+     * @param prefix   The prefix to prepend to the start of the string.
      * @param prefixes Additional prefixes that are valid.
-     *
      * @return A new String if prefix was prepended, the same string otherwise.
-     *
      * @since 3.2
      */
     public static String prependIfMissing(final String str, final CharSequence prefix, final CharSequence... prefixes) {
@@ -2845,12 +2917,10 @@ public class StringUtils {
      * StringUtils.prependIfMissingIgnoreCase("MNOabc", "xyz", "mno") = "MNOabc"
      * </pre>
      *
-     * @param str The string.
-     * @param prefix The prefix to prepend to the start of the string.
+     * @param str      The string.
+     * @param prefix   The prefix to prepend to the start of the string.
      * @param prefixes Additional prefixes that are valid (optional).
-     *
      * @return A new String if prefix was prepended, the same string otherwise.
-     *
      * @since 3.2
      */
     public static String prependIfMissingIgnoreCase(final String str, final CharSequence prefix, final CharSequence... prefixes) {
@@ -3026,6 +3096,7 @@ public class StringUtils {
         }
         return str.substring(str.length() - len);
     }
+
     /**
      * 大小格式化
      *

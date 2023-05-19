@@ -10,7 +10,6 @@ import com.chua.common.support.lang.proxy.BridgingMethodIntercept;
 import com.chua.common.support.lang.proxy.ProxyUtils;
 import com.chua.common.support.unit.name.NamingCase;
 import com.chua.common.support.value.*;
-import com.sun.istack.internal.Nullable;
 
 import java.io.*;
 import java.lang.annotation.Annotation;
@@ -2050,7 +2049,7 @@ public class ClassUtils {
      * @param value 对象
      * @return 是否子类
      */
-    public static boolean isAssignableValue(Class<?> type, @Nullable Object value) {
+    public static boolean isAssignableValue(Class<?> type, Object value) {
         return (value != null ? isAssignable(type, value.getClass()) : !type.isPrimitive());
     }
 
