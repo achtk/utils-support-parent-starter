@@ -56,14 +56,14 @@ public class Pandoc implements InitializingAware, FileConverter {
         String name = "pandoc.exe";
         String userHome = Projects.userHome();
         File file = new File(userHome, "/pandoc");
+        Metadata database = Repository.of(file.getPath())
+                .remoteResource(WINDOW_DOWNLOAD_PATH)
+                .first(name);
         if(FileUtils.exist(file)) {
             executor = new WindowExecutor(file);
             return;
         }
 
-        Metadata database = Repository.of(file.getPath())
-                .remoteResource(WINDOW_DOWNLOAD_PATH)
-                .first(name);
 
         URL url = database.toUrl();
 

@@ -37,6 +37,6 @@ public interface DownloadHandler {
             return FileUtils.getName(form);
         }
 
-        return null;
+        return headerField.substring("attachment; filename=".length());
     }
 }
