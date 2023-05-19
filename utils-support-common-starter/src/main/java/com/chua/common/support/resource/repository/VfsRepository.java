@@ -128,11 +128,11 @@ public class VfsRepository implements Repository {
                     file = new File(file, fileName);
                 }
                 if(null != file && file.exists()) {
-                    long size = UrlUtils.size(url1);
-                    if(Math.abs(size - file.length()) > 10_00) {
+//                    long size = UrlUtils.size(url1);
+//                    if(Math.abs(size - file.length()) > 10_00) {
                         metadata.add(new FileSystemMetadata(file).setEqualsOrigin(false));
                         return true;
-                    }
+//                    }
                 }
             }
         } catch (IOException ignored) {
