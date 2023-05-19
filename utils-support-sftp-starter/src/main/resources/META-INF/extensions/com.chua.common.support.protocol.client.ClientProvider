@@ -1,0 +1,2 @@
+ssh=com.chua.ssh.support.SshClientProvider
+sftp=com.chua.ssh.support.SftpClientProvider

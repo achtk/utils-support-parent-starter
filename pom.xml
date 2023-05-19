@@ -53,6 +53,8 @@
         <module>utils-support-ojdbc6-starter</module>
         <module>utils-support-vertx-starter</module>
         <module>utils-support-deeplearning-starter</module>
+        <module>utils-support-sftp-starter</module>
+        <module>utils-support-sshd-starter</module>
     </modules>
 
     <!-- -Djava.net.preferIPv4Stack=true-->
