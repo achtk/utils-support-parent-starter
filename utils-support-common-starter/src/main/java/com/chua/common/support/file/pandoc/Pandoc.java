@@ -14,7 +14,6 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -26,7 +25,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Slf4j
 public class Pandoc implements InitializingAware, FileConverter {
 
-    private static final String WINDOW_DOWNLOAD_PATH = "https://objects.githubusercontent.com/github-production-release-asset-2e65be/571770/0672d2cf-e8fa-4467-9a41-2a3ee178087c?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20230519%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230519T113353Z&X-Amz-Expires=300&X-Amz-Signature=8569cb6ce7735ecbfae292e8924cd87d0f6f0956704ebd0c439586591f6305cf&X-Amz-SignedHeaders=host&actor_id=0&key_id=0&repo_id=571770&response-content-disposition=attachment%3B%20filename%3Dpandoc-3.1.2-windows-x86_64.zip&response-content-type=application%2Foctet-stream";
+    private static final String WINDOW_DOWNLOAD_PATH = "https://github.com/jgm/pandoc/releases/download/3.1.2/pandoc-3.1.2-windows-x86_64.zip";
 
     private AtomicBoolean pandoc = new AtomicBoolean();
     private Executor executor;
