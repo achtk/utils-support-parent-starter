@@ -25,7 +25,7 @@ import static com.chua.common.support.constant.CommonConstant.SYSTEM;
  *
  * @author CH
  */
-public class DelegateProfile extends ServiceFactory<ProfileResolver> implements Profile {
+public class DelegateProfile implements Profile, ServiceFactory<ProfileResolver> {
 
     private final List<ProfileValue> profiles = new LinkedList<>();
     private final Map<String, ProfileValue> profileMap = new ConcurrentHashMap<>();
@@ -59,7 +59,7 @@ public class DelegateProfile extends ServiceFactory<ProfileResolver> implements 
         String suffix = resourceUrl;
         ProfileResolver profileResolver = null;
         while (!StringUtils.isNullOrEmpty(suffix = FileUtils.getSimpleExtension(suffix))) {
-            profileResolver = provider.getExtension(suffix);
+            profileResolver = getExtension(suffix);
             if (null != profileResolver) {
                 break;
             }

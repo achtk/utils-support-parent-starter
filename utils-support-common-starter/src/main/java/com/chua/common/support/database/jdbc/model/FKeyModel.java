@@ -11,8 +11,8 @@
  */
 package com.chua.common.support.database.jdbc.model;
 
-import com.chua.common.support.database.jdbc.ArrayUtils;
 import com.chua.common.support.database.jdbc.DialectException;
+import com.chua.common.support.utils.ArrayUtils;
 
 import java.util.ArrayList;
 import java.util.List;

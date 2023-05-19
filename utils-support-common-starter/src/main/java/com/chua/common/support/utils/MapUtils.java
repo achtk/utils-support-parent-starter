@@ -1,5 +1,6 @@
 package com.chua.common.support.utils;
 
+import com.chua.common.support.bean.BeanMap;
 import com.chua.common.support.collection.MultiLinkedValueMap;
 import com.chua.common.support.collection.MultiValueMap;
 import com.chua.common.support.constant.NumberConstant;
@@ -1025,7 +1026,15 @@ public class MapUtils {
 
         return properties;
     }
-
+    /**
+     * properties
+     *
+     * @param v map
+     * @return prop
+     */
+    public static Properties asProp(Object v) {
+        return asProp(BeanMap.of(v, true));
+    }
     /**
      * prop -> map
      *

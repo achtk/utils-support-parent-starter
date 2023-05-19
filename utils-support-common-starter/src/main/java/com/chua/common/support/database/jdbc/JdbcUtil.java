@@ -28,13 +28,13 @@ import java.sql.SQLException;
  * @author Yong Zhu
  * @version 1.0.0
  */
-public abstract class JdbcUtil {//NOSONAR 
+public abstract class JdbcUtil {
 
     /**
      * Return sql query result object in first row first column
-     * @param Connection
-     * @param sql
-     * @param params
+     * @param conneciton conneciton
+     * @param sql sql
+     * @param params params
      * @return object in first row first column
      */
     @SuppressWarnings("unchecked")

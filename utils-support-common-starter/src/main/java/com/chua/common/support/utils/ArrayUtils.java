@@ -794,4 +794,19 @@ public class ArrayUtils {
 
         return obj.toString();
     }
+
+
+    /**
+     * Transfer a String array to String List
+     */
+    public static List<String> strArrayToList(String[] arr) {
+        List<String> result = new ArrayList<String>();
+        if (arr == null || arr.length == 0) {
+            return result;
+        }
+        for (String str : arr) {
+            result.add(str);
+        }
+        return result;
+    }
 }

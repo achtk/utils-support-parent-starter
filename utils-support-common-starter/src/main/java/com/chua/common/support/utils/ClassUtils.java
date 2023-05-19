@@ -1459,6 +1459,24 @@ public class ClassUtils {
         return null;
     }
 
+
+    /**
+     * 查询字段
+     * @param type 类型
+     * @param name 名称
+     * @return 字段
+     */
+    public static Field findField(Class<?> type, String name) {
+        List<Field> fields = getFields(type);
+        for (Field field : fields) {
+            if(field.getName().equals(name)) {
+                return field;
+            }
+        }
+
+        return null;
+    }
+
     private static boolean hasSameParams(Method method, Class<?>[] paramTypes) {
         if (paramTypes.length != method.getParameterCount()) {
             return false;

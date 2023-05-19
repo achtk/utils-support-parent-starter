@@ -24,7 +24,7 @@ import static com.chua.common.support.constant.CommonConstant.JAR_URL_SEPARATOR;
  * @author CH
  */
 @Spi({"tar"})
-public class TarProfileResolver extends ServiceFactory<ProfileResolver> implements ProfileResolver {
+public class TarProfileResolver implements ProfileResolver, ServiceFactory<ProfileResolver> {
 
     @Override
     public List<ProfileValue> resolve(String resourceUrl) {
@@ -89,7 +89,7 @@ public class TarProfileResolver extends ServiceFactory<ProfileResolver> implemen
         String suffix = name;
         ProfileResolver profileResolver = null;
         while (!StringUtils.isNullOrEmpty(suffix = FileUtils.getExtension(suffix))) {
-            profileResolver = provider.getExtension(suffix);
+            profileResolver = getExtension(suffix);
             if (null != profileResolver) {
                 break;
             }
