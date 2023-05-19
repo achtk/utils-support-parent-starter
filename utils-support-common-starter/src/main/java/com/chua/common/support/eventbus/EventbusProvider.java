@@ -5,9 +5,7 @@ import com.chua.common.support.lang.environment.EnvironmentProvider;
 import com.chua.common.support.lang.profile.Profile;
 import com.chua.common.support.log.Log;
 import com.chua.common.support.spi.ServiceFactory;
-import com.chua.common.support.utils.AnnotationUtils;
-import com.chua.common.support.utils.IoUtils;
-import com.chua.common.support.utils.StringUtils;
+import com.chua.common.support.utils.*;
 import lombok.Builder;
 
 import java.lang.reflect.Method;
@@ -30,10 +28,10 @@ public class EventbusProvider implements ServiceFactory<Eventbus>, InitializingA
     private Executor executor;
     private final ConcurrentMap<String, Eventbus> adaptors = new ConcurrentHashMap<>();
 
-    private final Map<Object, Set<EventbusEvent>> subscribes = new IdentityHashMap<>(16);
     public EventbusProvider() {
         afterPropertiesSet();
     }
+    private final Map<Object, Set<EventbusEvent>> subscribes = new IdentityHashMap<>(16);
 
     public EventbusProvider(Profile profile) {
         this();
@@ -54,10 +52,10 @@ public class EventbusProvider implements ServiceFactory<Eventbus>, InitializingA
     @Override
     public void afterPropertiesSet() {
         EnvironmentProvider environmentProvider = new EnvironmentProvider(profile);
-        Map<String, Eventbus> list = list();
+        Map<String, Eventbus> list = list(profile);
         for (Map.Entry<String, Eventbus> entry : list.entrySet()) {
             Eventbus eventbus = entry.getValue();
-            eventbus.executor(executor);
+            eventbus.executor(ObjectUtils.defaultIfNull(executor, ThreadUtils.newSingleThreadExecutor()));
             environmentProvider.refresh(eventbus);
             addEventbus(eventbus.event().name(), eventbus);
         }

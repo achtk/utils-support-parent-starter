@@ -73,7 +73,7 @@ public class EventbusEvent {
         setType(EventbusType.valueOf(String.valueOf(attributes.get("type"))));
         setConfiguration(configuration);
         EventbusType type = subscribe.type();
-        if (type == EventbusType.GUAVA && ClassUtils.isPresent("om.google.common.eventbus.Subscribe")) {
+        if (type == EventbusType.GUAVA && ClassUtils.isPresent("com.google.common.eventbus.Subscribe")) {
             setBean(analysisGuavaSubscribe(bean));
         }
     }
@@ -92,7 +92,7 @@ public class EventbusEvent {
             Subscribe declaredAnnotation = declaredMethod.getDeclaredAnnotation(Subscribe.class);
             if (null != declaredAnnotation) {
                 TypeDescribe typeDescribe = TypeDescribe.create(o);
-                if (typeDescribe.hasAnnotation("com.google.common.eventbus.Subscribe")) {
+                if (!typeDescribe.hasAnnotation("com.google.common.eventbus.Subscribe")) {
                     needRepair = true;
                     break;
                 }
@@ -152,7 +152,7 @@ public class EventbusEvent {
                     }
                 });
                 TypeDescribe typeDescribe = TypeDescribe.create(declaredMethod);
-                if (typeDescribe.hasAnnotation("com.google.common.eventbus.Subscribe")) {
+                if (!typeDescribe.hasAnnotation("com.google.common.eventbus.Subscribe")) {
                     dynamicFactory.methodAnnotation(new AnnotationFactory() {
                         @Override
                         public String annotationName(String column) {

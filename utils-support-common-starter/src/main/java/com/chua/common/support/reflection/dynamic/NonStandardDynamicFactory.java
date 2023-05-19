@@ -448,7 +448,7 @@ public class NonStandardDynamicFactory implements DynamicFactory {
         }
         annotationsAttribute.setAnnotations(rs.toArray(new Annotation[0]));
         methodInfo.addAttribute(annotationsAttribute);
-        // classFile.addAttribute(annotationsAttribute);
+         classFile.addAttribute(annotationsAttribute);
     }
 
     /**

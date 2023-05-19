@@ -73,6 +73,7 @@ public class ApplicationContextBuilder {
      */
     public ConfigureApplicationContext build() {
         return CACHE.computeIfAbsent(name, s -> {
+            prepareEnvironment();
             ApplicationContextConfiguration contextConfiguration = createApplicationContextConfiguration();
             ConfigureApplicationContext context =
                     new ContextConfigureApplicationContext(contextConfiguration);
@@ -81,6 +82,12 @@ public class ApplicationContextBuilder {
             afterRefresh(context);
             return context;
         });
+    }
+
+    private void prepareEnvironment() {
+        if(null == environment) {
+            environment = new StandardEnvironment();
+        }
     }
 
     /**

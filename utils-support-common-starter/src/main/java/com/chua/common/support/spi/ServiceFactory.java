@@ -49,7 +49,7 @@ public interface ServiceFactory<E> {
      */
     default Map<String, E> list(Object... args) {
         Type[] actualTypeArguments = ClassUtils.getActualTypeArguments(this.getClass());
-        return ServiceProvider.of((Class<E>) actualTypeArguments[0]).list();
+        return ServiceProvider.of((Class<E>) actualTypeArguments[0]).list(args);
 
     }
 }

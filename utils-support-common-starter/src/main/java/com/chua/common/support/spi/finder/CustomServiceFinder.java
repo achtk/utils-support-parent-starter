@@ -1,6 +1,7 @@
 package com.chua.common.support.spi.finder;
 
 import com.chua.common.support.spi.ServiceDefinition;
+import com.chua.common.support.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
@@ -127,7 +128,7 @@ public class CustomServiceFinder extends AbstractServiceFinder {
             }
             return null;
         }
-        return buildDefinition(null, tmp, Optional.ofNullable(alias).orElse(className), url);
+        return buildDefinition(null, tmp, StringUtils.defaultString(alias, className), url);
     }
 
     /**
