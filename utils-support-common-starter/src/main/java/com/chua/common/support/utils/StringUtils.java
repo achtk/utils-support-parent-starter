@@ -1658,6 +1658,20 @@ public class StringUtils {
         }
         return String.valueOf(out);
     }
+    /**
+     * 移除标识之后的数据
+     *
+     * @param resource 路径
+     * @param s        标识
+     * @return 结果
+     */
+    public static String removePrefixContains(String resource, String s) {
+        if (isEmpty(resource) || isEmpty(s) || !resource.contains(s)) {
+            return resource;
+        }
+
+        return resource.substring(resource.indexOf(s) + s.length());
+    }
 
     /**
      * 去掉指定前缀
