@@ -30,8 +30,9 @@ public class JsonObject extends TypeHashMap implements Profile {
     }
 
 
-    public void put(String key, Object value) {
+    public JsonObject put(String key, Object value) {
         addProfile(key, value);
+        return this;
     }
 
     public static JsonObject create() {

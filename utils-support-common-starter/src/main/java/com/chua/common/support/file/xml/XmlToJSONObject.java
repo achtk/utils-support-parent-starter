@@ -73,6 +73,7 @@ import java.util.regex.Pattern;
  * @author JSON.org
  * @version 2016-08-15
  */
+@SuppressWarnings("ALL")
 public class XmlToJSONObject extends JsonObject {
     /**
      * JSONObject.NULL is equivalent to the value that JavaScript calls null,
