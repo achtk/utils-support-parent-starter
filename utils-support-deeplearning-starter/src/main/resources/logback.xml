@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration scan="false" scanPeriod="60000" debug="false">
+    <!-- 状态信息监听器设置为无操作监听器-->
+    <statusListener class="ch.qos.logback.core.status.NopStatusListener"/>
+    <!-- 彩色日志 -->
+    <!-- 彩色日志依赖的渲染类 -->
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+    <conversionRule conversionWord="wex"
+                    converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
+    <conversionRule conversionWord="wEx"
+                    converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter"/>
+    <!-- 自定义输出目录 -->
+    <property name="logFileLocation" value="./logs"/>
+    <!-- 自定义变量 -->
+    <property name="app-name" value="out"/>
+
+    <!-- 彩色日志格式 -->
+    <property name="CONSOLE_LOG_PATTERN_COLOR"
+              value="%red([%date{yyyy-MM-dd HH:mm:ss}]) %highlight([%-5level]) %blue([%X{traceId}]) %red([%thread]) %boldMagenta([%logger:%L]) - %msg%n"/>
+    <property name="CONSOLE_LOG_PATTERN"
+              value="[%date{yyyy-MM-dd HH:mm:ss}] [%-5level] [%X{traceId}] [%thread] %logger:%L - %msg%n"/>
+    <!-- 设置 logger context 名称,一旦设置不可改变，默认为default -->
+    <contextName>${app-name}</contextName>
+    <!-- Console 输出设置 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- encoder class为空时, 默认也为 ch.qos.logback.classic.encoder.PatternLayoutEncoder -->
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${CONSOLE_LOG_PATTERN_COLOR}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 磁盘文件输出日志 -->
+    <appender name="disk-logs" class="ch.qos.logback.core.FileAppender">
+        <File>${logFileLocation}/${app-name}.log</File>
+        <append>true</append>
+        <prudent>false</prudent>
+        <!-- 日志输出格式 -->
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <!-- 设置字符集 -->
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 把日志异步输出到磁盘文件中，避免每次都进行磁盘IO操作 -->
+    <appender name="async-logs" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>10000</queueSize>
+        <appender-ref ref="disk-logs"/>
+    </appender>
+
+    <!-- 按照每天生成日志文件 -->
+    <appender name="day-logs" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 当前活动日志文件名：用日期命名 -->
+        <file>${logFileLocation}/${app-name}.log</file>
+        <!-- 文件滚动策略根据%d{patter}中的“patter”而定，此处为每天产生一个文件 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 归档文件名“.zip或.gz结尾”,表示归档文件自动压缩 -->
+            <FileNamePattern>${logFileLocation}/log-%d{yyyy-MM-dd}.log.gz</FileNamePattern>
+            <!--日志文件保留天数-->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <!--日志文件最大的大小-->
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>10MB</maxFileSize>
+        </triggeringPolicy>
+        <encoder>
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+    <logger name="org.zbus.net.tcp.TcpClient" level="OFF"/>
+    <logger name="io.lettuce.core" level="OFF"/>
+    <logger name="io.netty" level="OFF"/>
+    <logger name="org.apache.dubbo.config.context.ConfigManager" level="OFF"/>
+
+    <!-- 至多只能配置一个root -->
+    <root level="debug">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="day-logs"/>
+        <appender-ref ref="disk-logs"/>
+    </root>
+
+</configuration>

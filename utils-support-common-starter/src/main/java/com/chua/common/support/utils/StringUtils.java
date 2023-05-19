@@ -3200,4 +3200,24 @@ public class StringUtils {
         }
         return bytes.toString();
     }
+
+
+    /**
+     * 统计{symbol}出现的次数
+     *
+     * @param source 数据
+     * @param symbol 符号
+     * @return 次数
+     */
+    public static int count(String source, String symbol) {
+        if (isNullOrEmpty(source) || isNullOrEmpty(symbol)) {
+            return 0;
+        }
+        int index = -1;
+        int count = 0;
+        while ((index = source.indexOf(symbol, index + 1)) != -1) {
+            ++count;
+        }
+        return count;
+    }
 }

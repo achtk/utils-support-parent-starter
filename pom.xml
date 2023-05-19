@@ -52,6 +52,7 @@
         <module>utils-support-mongodb-starter</module>
         <module>utils-support-ojdbc6-starter</module>
         <module>utils-support-vertx-starter</module>
+        <module>utils-support-deeplearning-starter</module>
     </modules>
 
     <!-- -Djava.net.preferIPv4Stack=true-->
