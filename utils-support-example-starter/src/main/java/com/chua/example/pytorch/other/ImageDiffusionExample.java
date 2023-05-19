@@ -2,7 +2,7 @@ package com.chua.example.pytorch.other;
 
 import com.chua.common.support.constant.PredictResult;
 import com.chua.common.support.feature.DetectionConfiguration;
-import com.chua.common.support.tokenizer.Word;
+import com.chua.common.support.lang.tokenizer.Word;
 import com.chua.common.support.utils.BufferedImageUtils;
 import com.chua.pytorch.support.diffusion.ImageDiffusion;
 import com.chua.pytorch.support.ocr.tokenizer.LacTokenizer;
