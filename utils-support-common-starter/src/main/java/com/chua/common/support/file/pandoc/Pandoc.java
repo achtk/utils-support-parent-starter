@@ -41,10 +41,10 @@ public class Pandoc implements InitializingAware, FileConverter {
     }
 
     private void refresh() {
-        if (Projects.exist("pandoc --help")) {
-            executor = new EnvironmentExecutor();
-            return;
-        }
+//        if (Projects.exist("pandoc --help")) {
+//            executor = new EnvironmentExecutor();
+//            return;
+//        }
 
         if (Projects.isWindows()) {
             refreshWindow();

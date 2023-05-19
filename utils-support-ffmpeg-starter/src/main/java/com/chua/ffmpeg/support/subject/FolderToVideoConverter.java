@@ -30,7 +30,6 @@ public class FolderToVideoConverter extends AbstractFileConverter {
 
     private static final Java2DFrameConverter CONVERTER = new Java2DFrameConverter();
 
-
     @Override
     public void convert(File sourcePath, String suffix, OutputStream targetPath) {
         //录制器
@@ -97,7 +96,7 @@ public class FolderToVideoConverter extends AbstractFileConverter {
     }
 
     @Override
-    public void convert(InputStream inputStream, String suffix, OutputStream outputStream) {
+    public void convert(String type,InputStream inputStream, String suffix, OutputStream outputStream) {
         throw new NotSupportedException();
     }
 
@@ -110,4 +109,5 @@ public class FolderToVideoConverter extends AbstractFileConverter {
     public String source() {
         return FILE_URL_PREFIX;
     }
+
 }
