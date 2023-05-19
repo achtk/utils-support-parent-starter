@@ -124,7 +124,7 @@ public class VfsRepository implements Repository {
             String fileName = UrlUtils.getFileName(url1.openConnection());
             if(null != fileName) {
                 File file = getFile();
-                if(file.exists()) {
+                if(null != file && file.exists()) {
                     long size = UrlUtils.size(url1);
                     if(Math.abs(size - file.length()) > 10_00) {
                         metadata.add(new FileSystemMetadata(file).setEqualsOrigin(false));
@@ -132,8 +132,7 @@ public class VfsRepository implements Repository {
                     }
                 }
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (IOException ignored) {
         }
         return false;
     }
