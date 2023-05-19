@@ -225,8 +225,10 @@ public abstract class MediaConverter {
                 return;
             }
 
-            try (FileInputStream fileInputStream = new FileInputStream(file)) {
-                fileConverter.convert(fileInputStream, output);
+            try (FileInputStream fileInputStream = new FileInputStream(file);
+                 FileOutputStream fileOutputStream = new FileOutputStream(output);
+            ) {
+                fileConverter.convert(FileUtils.getExtension(file), fileInputStream, FileUtils.getExtension(output), fileOutputStream);
             } catch (Exception e) {
                 throw new IllegalStateException(extension + "转化" + targetSuffix + "异常");
             }
