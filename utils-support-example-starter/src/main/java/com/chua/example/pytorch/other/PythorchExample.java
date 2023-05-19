@@ -1,7 +1,5 @@
 package com.chua.example.pytorch.other;
 
-import com.chua.common.support.business.TestPaperExtraction;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -11,8 +9,8 @@ import java.io.IOException;
 public class PythorchExample {
 
     public static void main(String[] args) throws IOException {
-        TestPaperExtraction testPaperExtraction = new TestPaperExtraction(new File("Z:/000000000026.jpg"));
-        testPaperExtraction.backgroundWhite().write("Z:/000000000026_rm.jpg");
+//        TestPaperExtraction testPaperExtraction = new TestPaperExtraction(new File("Z:/000000000026.jpg"));
+//        testPaperExtraction.backgroundWhite().write("Z:/000000000026_rm.jpg");
 //        YoloDetector detector = new YoloDetector(DetectionConfiguration.builder()
 //                .ext("threshold", 0)
 //                .modelPath("Z:/best.torchscript")

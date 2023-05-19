@@ -1,7 +1,7 @@
 package com.chua.example.pytorch.other;
 
 import com.chua.common.support.feature.DetectionConfiguration;
-import com.chua.common.support.tokenizer.Word;
+import com.chua.common.support.lang.tokenizer.Word;
 import com.chua.pytorch.support.ocr.tokenizer.LacTokenizer;
 import com.chua.pytorch.support.translation.EnglishTranslation;
 import lombok.extern.slf4j.Slf4j;
