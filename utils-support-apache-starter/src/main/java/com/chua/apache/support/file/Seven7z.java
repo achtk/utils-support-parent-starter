@@ -6,6 +6,7 @@ import com.chua.common.support.file.AbstractCompress;
 import com.chua.common.support.file.Decompress;
 import com.chua.common.support.file.FileMedia;
 import com.chua.common.support.utils.FileUtils;
+import com.chua.common.support.utils.IoUtils;
 import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
 import org.apache.commons.compress.archivers.sevenz.SevenZFile;
 import org.apache.commons.compress.archivers.sevenz.SevenZOutputFile;
@@ -13,6 +14,7 @@ import org.apache.commons.compress.archivers.sevenz.SevenZOutputFile;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 /**
@@ -90,37 +92,25 @@ public class Seven7z extends AbstractCompress implements Decompress {
 
     @Override
     public void unFile(InputStream stream, File output) throws IOException {
-        Path tempFile = null;
-        try {
-            tempFile = Files.createTempFile("7z", ".7z");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        File file = tempFile.toFile();
-        FileUtils.write(stream, file);
+        File tempFile = FileUtils.createTempFile(UUID.randomUUID().toString() + ".7z", stream);
 
-        try (SevenZFile zFile = new SevenZFile(file)) {
+        try (SevenZFile zFile = new SevenZFile(tempFile)) {
             SevenZArchiveEntry nextEntry = null;
             while ((nextEntry = zFile.getNextEntry()) != null) {
+                File file1 = new File(output, nextEntry.getName());
                 if(nextEntry.isDirectory()) {
-                    FileUtils.forceMkdir(new File(output, nextEntry.getName()));
+                    FileUtils.forceMkdir(file1);
                     continue;
                 }
 
-                try (ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
-                    int count;
-                    byte[] data = new byte[2048];
-                    while ((count = zFile.read(data)) != -1) {
-                        bos.write(data, 0, count);
-                    }
-
-                    FileUtils.write(bos.toByteArray(), new File(output, nextEntry.getName()));
+                try (FileOutputStream fileOutputStream = new FileOutputStream(file1)) {
+                    IoUtils.write(fileOutputStream, 2048, zFile::read);
                 }
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         } finally {
-            FileUtils.forceDelete(file);
+            FileUtils.forceDelete(tempFile);
         }
     }
 

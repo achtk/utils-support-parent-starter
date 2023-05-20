@@ -2763,8 +2763,12 @@ public class FileUtils {
      */
     public static boolean isCompressFile(String name) {
         String extension = FileUtils.getSimpleExtension(name);
-        for (String compress : COMPRESS) {
-            if (compress.equalsIgnoreCase(extension)) {
+        if(ArrayUtils.containsIgnoreCase(COMPRESS, extension)) {
+            return true;
+        }
+        while (!StringUtils.isEmpty(extension)) {
+            extension = FileUtils.getSimpleExtension(extension);
+            if(ArrayUtils.containsIgnoreCase(COMPRESS, extension)) {
                 return true;
             }
         }

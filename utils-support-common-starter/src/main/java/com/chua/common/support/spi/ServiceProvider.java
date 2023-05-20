@@ -9,6 +9,7 @@ import com.chua.common.support.spi.autowire.AutoServiceAutowire;
 import com.chua.common.support.spi.autowire.ServiceAutowire;
 import com.chua.common.support.spi.finder.*;
 import com.chua.common.support.utils.ClassUtils;
+import com.chua.common.support.utils.FileUtils;
 import com.chua.common.support.utils.Preconditions;
 import com.chua.common.support.utils.StringUtils;
 import com.chua.common.support.value.Value;
@@ -421,6 +422,33 @@ public class ServiceProvider<T> implements InitializingAware {
         }
 
         return (T) Optional.ofNullable(getDefinition(name).newInstance(serviceAutowire)).orElse(defaultImpl);
+    }
+
+    /**
+     * 获取实现(每次初始化)
+     *
+     * @param name 名称
+     * @return 实现
+     */
+    public T getDeepNewExtension(String name) {
+        if (null == name) {
+            return null;
+        }
+
+        ServiceDefinition definition = getDefinition(name);
+        if(null != definition) {
+            return (T) Optional.ofNullable(definition.newInstance(serviceAutowire)).orElse(defaultImpl);
+        }
+
+        while (StringUtils.isNotEmpty(name)) {
+            name = FileUtils.getSimpleExtension(name);
+            definition = getDefinition(name);
+            if(null != definition) {
+                return (T) Optional.ofNullable(definition.newInstance(serviceAutowire)).orElse(defaultImpl);
+            }
+        }
+
+        return null;
     }
 
     /**

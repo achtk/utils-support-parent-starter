@@ -1,11 +1,15 @@
 package com.chua.common.support.file.pandoc;
 
 import com.chua.common.support.constant.Projects;
+import com.chua.common.support.file.CompressFile;
+import com.chua.common.support.file.Decompress;
 import com.chua.common.support.file.transfer.FileConverter;
 import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.function.Joiner;
+import com.chua.common.support.lang.exception.NotSupportedException;
 import com.chua.common.support.resource.repository.Metadata;
 import com.chua.common.support.resource.repository.Repository;
+import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.FileUtils;
 import com.chua.common.support.utils.IoUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -65,7 +69,17 @@ public class Pandoc implements InitializingAware, FileConverter {
         }
 
 
-        URL url = database.toUrl();
+        File file1 = database.toFile();
+        if(!FileUtils.isCompressFile(file1.getName())) {
+            executor = new WindowExecutor(file1);
+            return;
+        }
+
+        Decompress newExtension = ServiceProvider.of(Decompress.class).getDeepNewExtension(FileUtils.getSimpleExtension(file1));
+        if(null == newExtension) {
+            throw new NotSupportedException();
+        }
+
 
     }
 

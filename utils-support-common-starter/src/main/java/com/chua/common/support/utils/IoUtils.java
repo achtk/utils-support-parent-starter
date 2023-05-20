@@ -1,6 +1,7 @@
 package com.chua.common.support.utils;
 
 import com.chua.common.support.file.xz.XZInputStream;
+import com.chua.common.support.function.SafeFunction;
 import com.chua.common.support.function.Splitter;
 
 import javax.imageio.ImageIO;
@@ -19,6 +20,8 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.zip.GZIPInputStream;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -1235,6 +1238,22 @@ public class IoUtils {
     /**
      * 写数据
      *
+     * @param outputStream 数据
+     * @param byteLength   流
+     * @param function     回调
+     * @throws IOException IOException
+     */
+    public static void write(final OutputStream outputStream, final int byteLength, final SafeFunction<byte[], Integer> function) throws IOException {
+        int count;
+        byte[] data = new byte[byteLength];
+        while ((count = function.apply(data)) != -1) {
+            outputStream.write(data, 0, count);
+        }
+    }
+
+    /**
+     * 写数据
+     *
      * @param data     数据
      * @param output   流
      * @param encoding 编码
@@ -1245,7 +1264,7 @@ public class IoUtils {
         FileUtils.forceMkdirParent(output);
 
         StandardOpenOption[] standardOpenOptions = new StandardOpenOption[0];
-        if(append) {
+        if (append) {
             standardOpenOptions = new StandardOpenOption[]{StandardOpenOption.APPEND};
         }
         Files.write(output.toPath(), data.getBytes(encoding), standardOpenOptions);
@@ -1578,6 +1597,7 @@ public class IoUtils {
 
         return null;
     }
+
     /**
      * 解析文件
      *
