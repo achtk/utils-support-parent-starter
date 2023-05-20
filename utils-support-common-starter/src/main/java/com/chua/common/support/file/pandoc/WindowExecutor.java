@@ -17,5 +17,6 @@ public class WindowExecutor implements Executor{
 
     @Override
     public void execute(String inputFile, String outputFile) {
+        CmdUtils.exec(String.format("%s %s -o %s", file.getAbsolutePath(), inputFile, outputFile));
     }
 }
