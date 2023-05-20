@@ -15,10 +15,7 @@ import com.chua.common.support.utils.FileUtils;
 import com.chua.common.support.utils.IoUtils;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URL;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -227,11 +224,13 @@ public class Pandoc implements InitializingAware, FileConverter {
 
     @Override
     public void convert(String type, InputStream inputStream, String suffix, OutputStream outputStream) throws Exception {
-        File file = new File(Projects.userName(), "/temp/0" + UUID.randomUUID().toString() + "." + type);
+        File file = FileUtils.createTempFile("0" + UUID.randomUUID() + "." + type, inputStream);
         File out = new File(Projects.userName(), "/temp/1" + UUID.randomUUID().toString() + "." + suffix);
         try {
-            FileUtils.write(IoUtils.toByteArray(inputStream), file);
             executor.execute(file.getPath(), out.getAbsolutePath());
+            try (FileInputStream fileInputStream = new FileInputStream(out)) {
+                IoUtils.copy(fileInputStream, outputStream);
+            }
         } finally {
             FileUtils.delete(file);
             FileUtils.delete(out);
@@ -243,6 +242,9 @@ public class Pandoc implements InitializingAware, FileConverter {
         File out = new File(Projects.userName(), "/temp/1" + UUID.randomUUID().toString() + "." + suffix);
         try {
             executor.execute(file.getPath(), out.getAbsolutePath());
+            try (FileInputStream fileInputStream = new FileInputStream(out)) {
+                IoUtils.copy(fileInputStream, outputStream);
+            }
         } finally {
             FileUtils.delete(out);
         }
