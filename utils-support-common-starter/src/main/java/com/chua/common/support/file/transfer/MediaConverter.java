@@ -2,10 +2,7 @@ package com.chua.common.support.file.transfer;
 
 import com.chua.common.support.binary.ByteSource;
 import com.chua.common.support.binary.ByteSourceArray;
-import com.chua.common.support.collection.ConcurrentReferenceTable;
-import com.chua.common.support.collection.SortedArrayList;
-import com.chua.common.support.collection.SortedList;
-import com.chua.common.support.collection.Table;
+import com.chua.common.support.collection.*;
 import com.chua.common.support.file.filesystem.OsFileSystem;
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.*;
@@ -173,10 +170,8 @@ public abstract class MediaConverter {
         return TABLE.columnKeySet();
     }
 
-    public Set<String> inputOutput() {
-        Set<String> rs = new LinkedHashSet<>();
-        CollectionUtils.decare(inputOutput(), outputFormat());
-        return rs;
+    public List<List<String>> inputOutput() {
+        return CollectionUtils.descartes(new ArrayList<>(inputFormat()), new ArrayList<String>(outputFormat()));
     }
 
     /**

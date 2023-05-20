@@ -1,9 +1,10 @@
 package com.chua.common.support.utils;
 
+import com.chua.common.support.collection.CartesianList;
+
 import java.security.SecureRandom;
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 /**
  * 集合工具类
@@ -526,22 +527,15 @@ public class CollectionUtils {
 
     /**
      * 笛卡尔积
+     *
      * @param first first
-     * @param more more
+     * @param more  more
      * @return 笛卡尔积
      */
-    public static <T>Collection<T> descartes(Collection<T> first, Collection<T>... more) {
-        Collection<T> rs = new LinkedList<>();
-        List<Collection<T>> lists = new LinkedList<>();
+    public static <T> List<List<T>> descartes(List<T> first, List<T>... more) {
+        List<List<T>> lists = new LinkedList<>();
         lists.add(first);
         lists.addAll(Arrays.asList(more));
-        for (Collection<T> list : lists) {
-            if (rs.isEmpty()) {
-                rs = list;
-            } else {
-                rs = rs.stream().flatMap(item -> list.stream().map(item2 -> item + " " + item2)).collect(Collectors.toList());
-            }
-        }
-        return rs;
+        return CartesianList.create(lists);
     }
 }

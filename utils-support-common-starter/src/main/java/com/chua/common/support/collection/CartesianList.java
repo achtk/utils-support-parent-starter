@@ -15,7 +15,7 @@ public class CartesianList<E> extends AbstractList<List<E>> implements RandomAcc
     private final transient List<List<E>> axes;
     private final transient int[] axesSizeProduct;
 
-    static <E> List<List<E>> create(List<? extends List<? extends E>> lists) {
+    public static <E> List<List<E>> create(List<? extends List<? extends E>> lists) {
         List<List<E>> axesBuilder = new ArrayList<>(lists.size());
         for (List<? extends E> list : lists) {
             List<E> copy = new ArrayList<>(list);
