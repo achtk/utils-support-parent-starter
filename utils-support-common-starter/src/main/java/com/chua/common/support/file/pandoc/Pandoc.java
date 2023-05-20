@@ -126,6 +126,7 @@ public class Pandoc implements InitializingAware, FileConverter {
                 "latex\n" +
                 "man\n" +
                 "markdown\n" +
+                "md\n" +
                 "markdown_github\n" +
                 "markdown_mmd\n" +
                 "markdown_phpextra\n" +
@@ -183,6 +184,7 @@ public class Pandoc implements InitializingAware, FileConverter {
                 "latex\n" +
                 "man\n" +
                 "markdown\n" +
+                "md\n" +
                 "markdown_github\n" +
                 "markdown_mmd\n" +
                 "markdown_phpextra\n" +
