@@ -431,7 +431,7 @@ public class ServiceProvider<T> implements InitializingAware {
      */
     public T getDeepNewExtension(String name) {
         if (null == name) {
-            return null;
+            return defaultImpl;
         }
 
         ServiceDefinition definition = getDefinition(name);
@@ -447,7 +447,7 @@ public class ServiceProvider<T> implements InitializingAware {
             }
         }
 
-        return null;
+        return defaultImpl;
     }
 
     /**
