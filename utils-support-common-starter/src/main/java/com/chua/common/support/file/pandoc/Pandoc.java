@@ -86,7 +86,10 @@ public class Pandoc implements InitializingAware, FileConverter {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
+        database = Repository.of(file.getPath())
+                .remoteResource(WINDOW_DOWNLOAD_PATH)
+                .first("**/" + name);
+        executor = new WindowExecutor(database.toFile());
     }
 
     /**
