@@ -8,19 +8,13 @@ import com.chua.common.support.collection.SortedList;
 import com.chua.common.support.collection.Table;
 import com.chua.common.support.file.filesystem.OsFileSystem;
 import com.chua.common.support.spi.ServiceProvider;
-import com.chua.common.support.utils.FileTypeUtils;
-import com.chua.common.support.utils.FileUtils;
-import com.chua.common.support.utils.IoUtils;
-import com.chua.common.support.utils.StringUtils;
+import com.chua.common.support.utils.*;
 import lombok.SneakyThrows;
 
 import java.io.*;
 import java.net.URL;
 import java.nio.file.Path;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static com.chua.common.support.constant.CommonConstant.FILE_URL_PREFIX;
 
@@ -177,6 +171,12 @@ public abstract class MediaConverter {
 
     public Set<String> outputFormat() {
         return TABLE.columnKeySet();
+    }
+
+    public Set<String> inputOutput() {
+        Set<String> rs = new LinkedHashSet<>();
+        CollectionUtils.decare(inputOutput(), outputFormat());
+        return rs;
     }
 
     /**

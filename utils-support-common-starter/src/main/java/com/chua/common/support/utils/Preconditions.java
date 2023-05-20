@@ -11,6 +11,43 @@ import java.util.Objects;
  */
 public final class Preconditions {
     /**
+     * 检查索引
+     *
+     * @param index 索引
+     * @param size  长度
+     * @return 索引
+     */
+    public static int checkElementIndex(int index, int size) {
+        return checkElementIndex(index, size, "index");
+    }
+
+    /**
+     * 检查索引
+     *
+     * @param index 索引
+     * @param size  长度
+     * @param desc  描述
+     * @return 索引
+     */
+    public static int checkElementIndex(int index, int size, String desc) {
+        // Carefully optimized for execution by hotspot (explanatory comment above)
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException(badElementIndex(index, size, desc));
+        }
+        return index;
+    }
+
+    private static String badElementIndex(int index, int size, String desc) {
+        if (index < 0) {
+            return String.format("%s (%s) must not be negative", desc, index);
+        } else if (size < 0) {
+            throw new IllegalArgumentException("negative size: " + size);
+        } else { // index >= size
+            return String.format("%s (%s) must be less than size (%s)", desc, index, size);
+        }
+    }
+
+    /**
      * 参数是否合法
      *
      * @param expression 表达式
@@ -129,6 +166,7 @@ public final class Preconditions {
             throw new IllegalArgumentException(message);
         }
     }
+
     /**
      * 检查对象是否为空
      *
@@ -141,6 +179,7 @@ public final class Preconditions {
             throw new IllegalArgumentException(message);
         }
     }
+
     /**
      * uncheck
      *
@@ -209,16 +248,18 @@ public final class Preconditions {
             throw new ArithmeticException("overflow: " + methodName + "(" + a + ", " + b + ")");
         }
     }
+
     /**
      * 对象是否相等
      *
-     * @param o1      o1
-     * @param o2      o2
+     * @param o1 o1
+     * @param o2 o2
      */
     public static void assertEquals(Object o1, Object o2) {
 
         assertEquals(null, o1, o2);
     }
+
     /**
      * 对象是否相等
      *
@@ -241,6 +282,7 @@ public final class Preconditions {
 
     /**
      * s败
+     *
      * @param message 提示信息
      */
     public static void fail(String message) {
@@ -249,6 +291,7 @@ public final class Preconditions {
         }
         throw new IllegalArgumentException(message);
     }
+
     private static void failNotEquals(String message, Object expected,
                                       Object actual) {
         fail(format(message, expected, actual));

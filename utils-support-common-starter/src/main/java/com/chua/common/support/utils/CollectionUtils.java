@@ -3,6 +3,7 @@ package com.chua.common.support.utils;
 import java.security.SecureRandom;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * 集合工具类
@@ -521,5 +522,26 @@ public class CollectionUtils {
      */
     public static <T>Set<T> newHashSet(T... list) {
         return null == list ? Collections.emptySet() : new HashSet<>(Arrays.asList(list));
+    }
+
+    /**
+     * 笛卡尔积
+     * @param first first
+     * @param more more
+     * @return 笛卡尔积
+     */
+    public static <T>Collection<T> descartes(Collection<T> first, Collection<T>... more) {
+        Collection<T> rs = new LinkedList<>();
+        List<Collection<T>> lists = new LinkedList<>();
+        lists.add(first);
+        lists.addAll(Arrays.asList(more));
+        for (Collection<T> list : lists) {
+            if (rs.isEmpty()) {
+                rs = list;
+            } else {
+                rs = rs.stream().flatMap(item -> list.stream().map(item2 -> item + " " + item2)).collect(Collectors.toList());
+            }
+        }
+        return rs;
     }
 }
