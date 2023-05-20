@@ -2,7 +2,6 @@ package com.chua.common.support.spi;
 
 
 import com.chua.common.support.annotations.Spi;
-import com.chua.common.support.collection.SortedArrayList;
 import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.function.NameAware;
 import com.chua.common.support.spi.autowire.AutoServiceAutowire;
@@ -49,7 +48,7 @@ public class ServiceProvider<T> implements InitializingAware {
         }
     };
     private T defaultImpl;
-    private static final ServiceDefinition defaultDefinition = new ServiceDefinition();
+    private static final ServiceDefinition DEFAULT_DEFINITION = new ServiceDefinition();
 
     static {
         List<ServiceEnvironment> serviceEnvironments = ServiceProvider.of(ServiceEnvironment.class).collect();
@@ -220,7 +219,7 @@ public class ServiceProvider<T> implements InitializingAware {
         }
 
 
-        return definitions.isEmpty() ? defaultDefinition : definitions.first();
+        return definitions.isEmpty() ? DEFAULT_DEFINITION : definitions.first();
     }
 
 
@@ -436,14 +435,14 @@ public class ServiceProvider<T> implements InitializingAware {
         }
 
         ServiceDefinition definition = getDefinition(name);
-        if(null != definition) {
+        if(DEFAULT_DEFINITION != definition) {
             return (T) Optional.ofNullable(definition.newInstance(serviceAutowire)).orElse(defaultImpl);
         }
 
         while (StringUtils.isNotEmpty(name)) {
             name = FileUtils.getSimpleExtension(name);
             definition = getDefinition(name);
-            if(null != definition) {
+            if(DEFAULT_DEFINITION != definition) {
                 return (T) Optional.ofNullable(definition.newInstance(serviceAutowire)).orElse(defaultImpl);
             }
         }
