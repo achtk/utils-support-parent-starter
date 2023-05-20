@@ -7,7 +7,6 @@ import com.chua.common.support.collection.SortedArrayList;
 import com.chua.common.support.collection.SortedList;
 import com.chua.common.support.collection.Table;
 import com.chua.common.support.file.filesystem.OsFileSystem;
-import com.chua.common.support.file.transfer.FileConverter;
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.FileTypeUtils;
 import com.chua.common.support.utils.FileUtils;
@@ -19,7 +18,9 @@ import java.io.*;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static com.chua.common.support.constant.CommonConstant.FILE_URL_PREFIX;
 
@@ -168,6 +169,14 @@ public abstract class MediaConverter {
      */
     public static MediaConverter of(InputStream inputStream) {
         return new InputStreamMediaConverter(inputStream);
+    }
+
+    public Set<String> inputFormat() {
+        return TABLE.rowKeySet();
+    }
+
+    public Set<String> outputFormat() {
+        return TABLE.columnKeySet();
     }
 
     /**

@@ -146,4 +146,13 @@ public class ConcurrentReferenceTable<R, C, V> implements Table<R, C, V>{
         return Collections.unmodifiableList(rs);
     }
 
+    @Override
+    public Set<C> columnKeySet() {
+        Set<C> rs = new LinkedHashSet<>();
+        for (Map<C, V> value : rpl.values()) {
+            rs.addAll(value.keySet());
+        }
+        return rs;
+    }
+
 }

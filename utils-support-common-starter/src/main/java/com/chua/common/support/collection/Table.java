@@ -129,4 +129,10 @@ public interface Table<R, C, V> {
      * @return 结果
      */
     Collection<V> values();
+
+    /**
+     * column
+     * @return column
+     */
+    Set<C> columnKeySet();
 }
