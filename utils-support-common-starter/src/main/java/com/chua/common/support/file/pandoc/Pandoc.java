@@ -6,6 +6,8 @@ import com.chua.common.support.file.Decompress;
 import com.chua.common.support.file.transfer.FileConverter;
 import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.function.Joiner;
+import com.chua.common.support.lang.date.DateTime;
+import com.chua.common.support.lang.date.constant.DateFormatConstant;
 import com.chua.common.support.lang.exception.NotSupportedException;
 import com.chua.common.support.log.Log;
 import com.chua.common.support.resource.repository.Metadata;
@@ -19,6 +21,8 @@ import java.io.*;
 import java.net.URL;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import static com.chua.common.support.lang.date.constant.DateFormatConstant.YYYYMMDDHHMMSS;
 
 /**
  * pandoc
@@ -224,10 +228,10 @@ public class Pandoc implements InitializingAware, FileConverter {
 
     @Override
     public void convert(String type, InputStream inputStream, String suffix, OutputStream outputStream) throws Exception {
-        File file = FileUtils.createTempFile("0" + UUID.randomUUID() + "." + type, inputStream);
-        File out = new File(Projects.userName(), "/temp/1" + UUID.randomUUID().toString() + "." + suffix);
+        File file = FileUtils.createTempFile("./temp/input/" + DateTime.now().toString(YYYYMMDDHHMMSS) + "/" + UUID.randomUUID() + "." + type, inputStream);
+        File out = new File(Projects.userName(), "./temp/output/" + DateTime.now().toString(YYYYMMDDHHMMSS) + "/" + UUID.randomUUID() + "." + suffix);
         try {
-            executor.execute(file.getPath(), out.getAbsolutePath());
+            executor.execute(file.getAbsolutePath(), out.getAbsolutePath());
             try (FileInputStream fileInputStream = new FileInputStream(out)) {
                 IoUtils.copy(fileInputStream, outputStream);
             }
@@ -239,9 +243,9 @@ public class Pandoc implements InitializingAware, FileConverter {
 
     @Override
     public void convert(File file, String suffix, OutputStream outputStream) throws Exception {
-        File out = new File(Projects.userName(), "/temp/1" + UUID.randomUUID().toString() + "." + suffix);
+        File out = new File(Projects.userName(), "./temp/output/" + DateTime.now().toString(YYYYMMDDHHMMSS) + "/" + UUID.randomUUID() + "." + suffix);
         try {
-            executor.execute(file.getPath(), out.getAbsolutePath());
+            executor.execute(file.getAbsolutePath(), out.getAbsolutePath());
             try (FileInputStream fileInputStream = new FileInputStream(out)) {
                 IoUtils.copy(fileInputStream, outputStream);
             }

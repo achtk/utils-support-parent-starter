@@ -2206,12 +2206,16 @@ public class FileUtils {
      * @return 文件
      */
     public static File createTempFile(String name, byte[] bytes) {
-        File file = new File(name + ".tmp");
+        File file = new File(name);
+        try {
+            forceMkdirParent(file);
+        } catch (IOException ignored) {
+        }
         if (file.exists()) {
             return file;
         }
 
-        try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file))) {
+        try (BufferedOutputStream bos = new BufferedOutputStream(Files.newOutputStream(file.toPath()))) {
             bos.write(bytes);
         } catch (IOException e) {
             e.printStackTrace();
