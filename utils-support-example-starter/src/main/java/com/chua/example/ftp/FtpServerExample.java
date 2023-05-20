@@ -25,7 +25,7 @@ public class FtpServerExample {
                 System.out.println();
             }
         });
-        ftpServer.listen(8888);
+        ftpServer.listen(21);
         while (true) {
             ThreadUtils.sleepSecondsQuietly(10);
         }
