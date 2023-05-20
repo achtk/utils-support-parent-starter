@@ -7,6 +7,7 @@ import com.chua.common.support.file.transfer.FileConverter;
 import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.function.Joiner;
 import com.chua.common.support.lang.exception.NotSupportedException;
+import com.chua.common.support.log.Log;
 import com.chua.common.support.resource.repository.Metadata;
 import com.chua.common.support.resource.repository.Repository;
 import com.chua.common.support.spi.ServiceProvider;
@@ -27,8 +28,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *
  * @author CH
  */
-@Slf4j
 public class Pandoc implements InitializingAware, FileConverter {
+
+    private static final Log log = Log.getLogger(Pandoc.class);
 
     private static final String WINDOW_DOWNLOAD_PATH = "https://github.com/jgm/pandoc/releases/download/3.1.2/pandoc-3.1.2-windows-x86_64.zip";
 

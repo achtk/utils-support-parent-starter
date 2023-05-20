@@ -84,6 +84,14 @@ public abstract class MediaConverter {
      * @param file 输出
      */
     public abstract void convert(File file);
+    /**
+     * 转化
+     *
+     * @param file 输出
+     */
+    public void convert(String file) {
+        convert(new File(file));
+    }
 
     /**
      * 初始化
