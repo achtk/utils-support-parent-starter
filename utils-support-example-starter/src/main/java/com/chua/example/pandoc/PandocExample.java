@@ -2,7 +2,6 @@ package com.chua.example.pandoc;
 
 import com.chua.common.support.file.pandoc.Executor;
 import com.chua.common.support.file.pandoc.Pandoc;
-import com.chua.common.support.function.Joiner;
 
 /**
  * @author CH
