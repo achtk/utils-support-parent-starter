@@ -4,6 +4,8 @@ import com.chua.common.support.lang.math.IntMath;
 
 import java.util.*;
 
+import static com.chua.common.support.utils.Preconditions.checkElementIndex;
+
 /**
  * 笛卡尔积
  * @author CH
