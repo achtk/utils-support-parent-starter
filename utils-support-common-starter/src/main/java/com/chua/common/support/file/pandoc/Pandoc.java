@@ -228,8 +228,8 @@ public class Pandoc implements InitializingAware, FileConverter {
 
     @Override
     public void convert(String type, InputStream inputStream, String suffix, OutputStream outputStream) throws Exception {
-        File file = FileUtils.createTempFile("./temp/input/" + DateTime.now().toString(YYYYMMDDHHMMSS) + "/" + UUID.randomUUID() + "." + type, inputStream);
-        File out = new File(Projects.userName(), "./temp/output/" + DateTime.now().toString(YYYYMMDDHHMMSS) + "/" + UUID.randomUUID() + "." + suffix);
+        File file = FileUtils.createTempFile("./temp/input_" + DateTime.now().toString(YYYYMMDDHHMMSS) + "_" + UUID.randomUUID() + "." + type, inputStream);
+        File out =FileUtils.createTempFile("./temp/output_" + DateTime.now().toString(YYYYMMDDHHMMSS) + "_" + UUID.randomUUID() + "." + suffix, new byte[0]);
         try {
             executor.execute(file.getAbsolutePath(), out.getAbsolutePath());
             try (FileInputStream fileInputStream = new FileInputStream(out)) {
@@ -243,7 +243,7 @@ public class Pandoc implements InitializingAware, FileConverter {
 
     @Override
     public void convert(File file, String suffix, OutputStream outputStream) throws Exception {
-        File out = new File(Projects.userName(), "./temp/output/" + DateTime.now().toString(YYYYMMDDHHMMSS) + "/" + UUID.randomUUID() + "." + suffix);
+        File out = new File("./temp/output_" + DateTime.now().toString(YYYYMMDDHHMMSS) + "_" + UUID.randomUUID() + "." + suffix);
         try {
             executor.execute(file.getAbsolutePath(), out.getAbsolutePath());
             try (FileInputStream fileInputStream = new FileInputStream(out)) {

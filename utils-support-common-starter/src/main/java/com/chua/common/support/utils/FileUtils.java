@@ -2215,6 +2215,10 @@ public class FileUtils {
             return file;
         }
 
+        if(bytes.length == 0) {
+            return file;
+        }
+
         try (BufferedOutputStream bos = new BufferedOutputStream(Files.newOutputStream(file.toPath()))) {
             bos.write(bytes);
         } catch (IOException e) {
