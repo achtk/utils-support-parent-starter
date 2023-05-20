@@ -1,5 +1,6 @@
 package com.chua.common.support.utils;
 
+import com.chua.common.support.constant.CommonConstant;
 import com.chua.common.support.constant.RegexConstant;
 import com.chua.common.support.function.Splitter;
 import com.chua.common.support.jsoup.helper.Validate;
@@ -2251,7 +2252,7 @@ public class StringUtils {
      * @since 3.0.8
      */
     public static String[] splitToArray(CharSequence str, String separator, int limit, boolean isTrim, boolean ignoreEmpty) {
-        return ArrayUtils.toArray(split(str, separator, limit, isTrim, ignoreEmpty));
+        return Optional.ofNullable(ArrayUtils.toArray(split(str, separator, limit, isTrim, ignoreEmpty))).orElse(EMPTY_STRING_ARRAY);
     }
 
     /**

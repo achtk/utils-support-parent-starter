@@ -597,7 +597,10 @@ public class ArrayUtils {
     @SuppressWarnings("unchecked")
     public static <T> T[] toArray(Iterable<? extends T> iterable) {
         List<? extends T> ts = CollectionUtils.newArrayList(iterable);
-        return (T[]) ts.toArray();
+        if(null == ts || ts.isEmpty()) {
+            return null;
+        }
+        return ts.toArray((T[])Array.newInstance(ts.get(0).getClass(), 0));
     }
 
     /**

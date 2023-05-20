@@ -15,6 +15,7 @@ import com.chua.common.support.utils.IoUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
@@ -62,7 +63,7 @@ public class Pandoc implements InitializingAware, FileConverter {
         File file = new File(userHome, "/pandoc");
         Metadata database = Repository.of(file.getPath())
                 .remoteResource(WINDOW_DOWNLOAD_PATH)
-                .first(name);
+                .first("**/" + name);
         if(database.isEqualsOrigin()) {
             executor = new WindowExecutor(database.toFile());
             return;
@@ -75,11 +76,16 @@ public class Pandoc implements InitializingAware, FileConverter {
             return;
         }
 
-        Decompress newExtension = ServiceProvider.of(Decompress.class).getDeepNewExtension(FileUtils.getSimpleExtension(file1));
-        if(null == newExtension) {
+        Decompress decompress = ServiceProvider.of(Decompress.class).getDeepNewExtension(FileUtils.getSimpleExtension(file1));
+        if(null == decompress) {
             throw new NotSupportedException();
         }
 
+        try {
+            decompress.unFile(database.openInputStream(), file);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
