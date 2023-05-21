@@ -196,6 +196,7 @@ public class JavaReflection extends Reflection {
 		if ((from == Short.class || from == short.class) && (to == short.class || to == Short.class)) return true;
 		if ((from == Long.class || from == long.class) && (to == long.class || to == Long.class)) return true;
 		if ((from == Character.class || from == char.class) && (to == char.class || to == Character.class)) return true;
+		if(to == Object[].class) return true;
 		return false;
 	}
 
