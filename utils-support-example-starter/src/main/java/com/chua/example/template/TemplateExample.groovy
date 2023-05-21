@@ -171,6 +171,13 @@ The character {{'a'}} is included in the string {{"a-team"}}.
 {{for value in range(0, 4)}}
    Ranged value: {{value}}
 {{end}}
+
+
+{{i = 0}}
+{{while i < 3}}
+    {{i}}
+    {{i = i + 1}}
+{{end}}
 ''',
                 outputStream,
                 ImmutableCollection.<String, Object>newMap()
@@ -180,7 +187,7 @@ The character {{'a'}} is included in the string {{"a-team"}}.
                         .put("array", new int[] {1, 2, 3})
                         .put("map", map)
                         .put("set", set)
-                        .put("range", (java.util.function.BiFunction<Integer, Integer, Iterator<Integer>>) (from, to) -> {
+                        .put("range", (java.util.function.BiFunction<Integer, Integer, Iterator<Integer>>)(from, to) -> {
                             return new Iterator<Integer>() {
                                 int idx = from;
                                 public boolean hasNext () { return idx <= to; }
