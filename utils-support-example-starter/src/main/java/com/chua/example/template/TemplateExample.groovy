@@ -12,7 +12,8 @@ class TemplateExample {
 //        example2()
 //        example3()
 //        example4()
-        example5()
+//        example5()
+        example6()
     }
 
     static def example1() {
@@ -108,6 +109,26 @@ The character {{'a'}} is included in the string {{"a-team"}}.
                         .newHashMap());
 
         println 'Calling methods\n'
+        println StringUtils.newStringUtf8(outputStream.toByteArray())
+        println '===================================================='
+    }
+
+    static def void example6() {
+        Map<String, String> myMap = new HashMap<String, String>();
+        myMap.put("key", "value");
+        Template template = new DelegateTemplate();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        template.resolve('''{{myArray[2]}} {{myMap.get("key")}} {{myMap["key"]}}''',
+                outputStream,
+                ImmutableCollection.<String, Object>newMap()
+                        .put("myObject", new MyObject())
+                        .put("myArray", new int[] { 1, 2, 3 })
+                        .put("myMap", myMap)
+                        .put("myClass", MyObject.class)
+                        .put("String", String.class)
+                        .newHashMap());
+
+        println 'Arrays and maps\n\n'
         println StringUtils.newStringUtf8(outputStream.toByteArray())
         println '===================================================='
     }
