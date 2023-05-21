@@ -58,6 +58,7 @@
         <module>utils-support-tts-support</module>
         <module>utils-support-sharding-starter</module>
         <module>utils-support-xjar-starter</module>
+        <module>utils-support-zeromq-starter</module>
     </modules>
 
     <!-- -Djava.net.preferIPv4Stack=true-->

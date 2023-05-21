@@ -24,6 +24,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class WebsocketServer extends AbstractServer {
 
+    private VfsWebsocketServer vfsWebsocketServer;
+
     protected WebsocketServer(ServerOption serverOption, String... args) {
         super(serverOption);
     }
@@ -35,30 +37,25 @@ public class WebsocketServer extends AbstractServer {
 
     @Override
     public void run() {
-        final SimpleWsServer simpleWsServer = new SimpleWsServer(new InetSocketAddress(getHost(), getPort()));
-        simpleWsServer.start();
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            @Override
-            public void run() {
-                try {
-                    simpleWsServer.stop(0);
-                } catch (InterruptedException ignored) {
-                }
-            }
-        });
+       this.vfsWebsocketServer = new VfsWebsocketServer(new InetSocketAddress(getHost(), getPort()));
+        vfsWebsocketServer.start();
     }
 
     @Override
     public void shutdown() {
-
+        try {
+            vfsWebsocketServer.stop();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    final class SimpleWsServer extends WebSocketServer {
+    final class VfsWebsocketServer extends WebSocketServer {
 
 
         private final Map<WebSocket, BeanObject> cache = new ConcurrentHashMap<>();
 
-        public SimpleWsServer(InetSocketAddress inetSocketAddress) {
+        public VfsWebsocketServer(InetSocketAddress inetSocketAddress) {
             super(inetSocketAddress);
         }
 
