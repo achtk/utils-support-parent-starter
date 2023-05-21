@@ -98,6 +98,12 @@
         </dependency>
 
         <dependency>
+            <groupId>io.marioslab.basis</groupId>
+            <artifactId>template</artifactId>
+            <version>1.7</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.hierynomus</groupId>
             <artifactId>sshj</artifactId>
             <version>0.32.0</version>
