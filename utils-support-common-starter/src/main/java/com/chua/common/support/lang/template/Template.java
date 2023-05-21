@@ -1,9 +1,9 @@
 package com.chua.common.support.lang.template;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.Reader;
-import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**
@@ -29,7 +29,7 @@ public interface Template {
      * @param templateData 模板数据
      */
     default void resolve(String input, OutputStream outputStream, Map<String, Object> templateData) {
-        Reader reader = new StringReader(input);
-
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8));
+        resolve(byteArrayInputStream, outputStream, templateData);
     }
 }
