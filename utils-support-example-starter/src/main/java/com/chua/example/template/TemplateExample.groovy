@@ -5,8 +5,6 @@ import com.chua.common.support.lang.template.Template
 import com.chua.common.support.lang.template.basis.DelegateTemplate
 import org.apache.commons.codec.binary.StringUtils
 
-import java.util.function.DoubleFunction
-
 class TemplateExample {
 
     static void main(String[] args) throws IOException {
@@ -137,70 +135,70 @@ The character {{'a'}} is included in the string {{"a-team"}}.
     }
 
     static void example7() {
-        Map<String, String> map = new HashMap<String, String>();
-        map.put("a", "Value for key a");
-        map.put("b", "Value for key b");
-        map.put("c", "Value for key c");
-        Set<String> set = new HashSet<String>();
-        set.add("Value #1");
-        set.add("Value #2");
-        set.add("Value #3");
-        Template template = new DelegateTemplate();
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        template.resolve('''
-{{cos(3.14)}}
-
-{{if 1 > 2}}
-   This is evaluated when someCondition is true
-{{elseif 2 == 5}}
-   This is evaluated when anotherCondition is true
-{{else}}
-   Otherwise, this will be evaluated.
-{{end}}
-
-
-{{for value in array}}
-   Got {{value}} from the array
-{{end}}
-
-{{for value in map}}
-   Got {{value}} from the map
-{{end}}
-
-
-{{for value in range(0, 4)}}
-   Ranged value: {{value}}
-{{end}}
-
-
-{{i = 0}}
-{{while i < 3}}
-    {{i}}
-    {{i = i + 1}}
-{{end}}
-''',
-                outputStream,
-                ImmutableCollection.<String, Object>newMap()
-                        .put("myObject", new MyObject())
-                        .put("myArray", new int[] { 1, 2, 3 })
-                        .put("cos", (DoubleFunction<Double>)Math::cos)
-                        .put("array", new int[] {1, 2, 3})
-                        .put("map", map)
-                        .put("set", set)
-                        .put("range", (java.util.function.BiFunction<Integer, Integer, Iterator<Integer>>)(from, to) -> {
-                            return new Iterator<Integer>() {
-                                int idx = from;
-                                public boolean hasNext () { return idx <= to; }
-                                public Integer next () { return idx++; }
-                            };
-                        })
-                        .put("myClass", MyObject.class)
-                        .put("String", String.class)
-                        .newHashMap());
-
-        println 'Functions\n\n'
-        println StringUtils.newStringUtf8(outputStream.toByteArray())
-        println '===================================================='
+//        Map<String, String> map = new HashMap<String, String>();
+//        map.put("a", "Value for key a");
+//        map.put("b", "Value for key b");
+//        map.put("c", "Value for key c");
+//        Set<String> set = new HashSet<String>();
+//        set.add("Value #1");
+//        set.add("Value #2");
+//        set.add("Value #3");
+//        Template template = new DelegateTemplate();
+//        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+//        template.resolve('''
+//{{cos(3.14)}}
+//
+//{{if 1 > 2}}
+//   This is evaluated when someCondition is true
+//{{elseif 2 == 5}}
+//   This is evaluated when anotherCondition is true
+//{{else}}
+//   Otherwise, this will be evaluated.
+//{{end}}
+//
+//
+//{{for value in array}}
+//   Got {{value}} from the array
+//{{end}}
+//
+//{{for value in map}}
+//   Got {{value}} from the map
+//{{end}}
+//
+//
+//{{for value in range(0, 4)}}
+//   Ranged value: {{value}}
+//{{end}}
+//
+//
+//{{i = 0}}
+//{{while i < 3}}
+//    {{i}}
+//    {{i = i + 1}}
+//{{end}}
+//''',
+//                outputStream,
+//                ImmutableCollection.<String, Object>newMap()
+//                        .put("myObject", new MyObject())
+//                        .put("myArray", new int[] { 1, 2, 3 })
+//                        .put("cos", (DoubleFunction<Double>)Math::cos)
+//                        .put("array", new int[] {1, 2, 3})
+//                        .put("map", map)
+//                        .put("set", set)
+//                        .put("range", (java.util.function.BiFunction<Integer, Integer, Iterator<Integer>>)(from, to) -> {
+//                            return new Iterator<Integer>() {
+//                                int idx = from;
+//                                public boolean hasNext () { return idx <= to; }
+//                                public Integer next () { return idx++; }
+//                            };
+//                        })
+//                        .put("myClass", MyObject.class)
+//                        .put("String", String.class)
+//                        .newHashMap());
+//
+//        println 'Functions\n\n'
+//        println StringUtils.newStringUtf8(outputStream.toByteArray())
+//        println '===================================================='
     }
 
     static class License {
