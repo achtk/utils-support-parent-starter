@@ -243,7 +243,7 @@ public class JavaReflection extends Reflection {
 	public Object callMethod (Object obj, Object method, Object... arguments) {
 		Method javaMethod = (Method)method;
 		try {
-			return javaMethod.invoke(obj, ClassUtils.toArgs(method, arguments));
+			return javaMethod.invoke(obj, ClassUtils.toArgs(javaMethod, arguments));
 		} catch (Throwable t) {
 			throw new RuntimeException("Couldn't call method '" + javaMethod.getName() + "' with arguments '" + Arrays.toString(arguments)
 				+ "' on object of type '" + obj.getClass().getSimpleName() + "'.", t);

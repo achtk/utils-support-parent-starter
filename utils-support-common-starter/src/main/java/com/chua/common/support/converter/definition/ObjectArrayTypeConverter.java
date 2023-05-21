@@ -1,12 +1,5 @@
 package com.chua.common.support.converter.definition;
 
-import com.chua.common.support.constant.CommonConstant;
-import com.chua.common.support.json.Json;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 import static com.chua.common.support.constant.CommonConstant.*;
@@ -62,7 +55,7 @@ public class ObjectArrayTypeConverter implements TypeConverter<Object[]> {
             return stringValue.split(SYMBOL_COMMA);
         }
 
-        return new String[0];
+        return new Object[]{value};
     }
 
     @Override
