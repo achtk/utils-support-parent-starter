@@ -2177,7 +2177,7 @@ public class ClassUtils {
      */
     public static Object[] toArgs(Method method, Object[] arguments) {
         Class<?>[] parameterTypes = method.getParameterTypes();
-        Object[] rs = new Object[];
+        Object[] rs = new Object[parameterTypes.length];
         for (int i = 0; i < parameterTypes.length; i++) {
             Class<?> parameterType = parameterTypes[i];
             rs[i] = Converter.convertIfNecessary(arguments[i], parameterType);
