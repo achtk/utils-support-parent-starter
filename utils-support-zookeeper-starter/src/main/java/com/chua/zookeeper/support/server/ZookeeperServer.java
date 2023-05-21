@@ -1,5 +1,7 @@
 package com.chua.zookeeper.support.server;
 
+import com.chua.common.support.protocol.server.AbstractServer;
+import com.chua.common.support.protocol.server.ServerOption;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.zookeeper.server.admin.AdminServer;
 import org.apache.zookeeper.server.quorum.QuorumPeerConfig;
@@ -18,7 +20,7 @@ public class ZookeeperServer extends AbstractServer {
     private CustomQuorumPeerMain quorumPeerMain;
 
     protected ZookeeperServer(ServerOption serverOption, String... args) {
-        super(serverOption, args);
+        super(serverOption);
     }
 
     @Override
