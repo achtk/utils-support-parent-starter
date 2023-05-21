@@ -1,5 +1,7 @@
 package com.chua.common.support.protocol.server.request;
 
+import com.chua.common.support.lang.expression.parser.DelegateExpressionParser;
+import com.chua.common.support.lang.expression.parser.ExpressionParser;
 import com.chua.common.support.protocol.websocket.WebSocket;
 import com.chua.common.support.protocol.websocket.handshake.ClientHandshake;
 import lombok.Getter;
@@ -23,6 +25,7 @@ public class WebsocketRequest implements Request {
     @Getter
     private final Object ext;
     private Map<String, Object> param = new LinkedHashMap<>();
+    final ExpressionParser expressionParser = new DelegateExpressionParser();
 
 
     public WebsocketRequest(WebSocket request, ClientHandshake handshake, String action, Object ext) {
@@ -48,6 +51,10 @@ public class WebsocketRequest implements Request {
         }
 
         this.param.put("_source", ext);
+        this.param.put("_client", request);
+        this.param.put("_handshake", handshake);
+        this.param.put("_action", action);
+        expressionParser.setVariable(this.param);
     }
 
     @Override
@@ -62,7 +69,7 @@ public class WebsocketRequest implements Request {
             rs = param.get(value) + "";
         }
 
-        return rs;
+        return expressionParser.parseExpression(value).getStringValue();
     }
 
     @Override

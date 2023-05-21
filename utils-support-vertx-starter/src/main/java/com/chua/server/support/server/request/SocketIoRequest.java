@@ -1,6 +1,8 @@
 package com.chua.server.support.server.request;
 
 import com.chua.common.support.json.Json;
+import com.chua.common.support.lang.expression.parser.DelegateExpressionParser;
+import com.chua.common.support.lang.expression.parser.ExpressionParser;
 import com.chua.common.support.protocol.server.Constant;
 import com.chua.common.support.protocol.server.request.Request;
 import com.chua.common.support.utils.CollectionUtils;
@@ -22,20 +24,29 @@ public class SocketIoRequest implements Request, Constant {
     private final SocketIOClient request;
     private AckRequest ackSender;
     private final String action;
+    final ExpressionParser expressionParser = new DelegateExpressionParser();
 
     @Getter
     private final Map<String, Object> data = new LinkedHashMap<>();
+    private Map<String, Object> param = new LinkedHashMap<>();
 
     public SocketIoRequest(SocketIOClient request, String action) {
-        this.request = request;
-        this.action = action;
+        this(request, action, null, null);
     }
 
     public SocketIoRequest(SocketIOClient request, String action, String data, AckRequest ackSender) {
         this.request = request;
         this.action = action;
-        this.data.putAll(Json.fromJson(data, HashMap.class));
+        HashMap hashMap = Json.fromJson(data, HashMap.class);
+        if(null != hashMap) {
+            this.data.putAll(hashMap);
+        }
         this.ackSender = ackSender;
+        this.data.put("_ackSender", ackSender);
+        this.data.put("_action", action);
+        this.data.put("_request", request);
+        expressionParser.setVariable(this.data);
+
     }
 
     @Override
@@ -50,7 +61,7 @@ public class SocketIoRequest implements Request, Constant {
         if (!CollectionUtils.isEmpty(userIdList)) {
             return userIdList.get(0);
         }
-        return data.getOrDefault(value, "").toString();
+        return data.getOrDefault(value, expressionParser.parseExpression(value).getStringValue()).toString();
     }
 
     @Override
