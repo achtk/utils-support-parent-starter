@@ -1,5 +1,6 @@
 package com.chua.common.support.converter.definition;
 
+import java.util.Collection;
 import java.util.regex.Pattern;
 
 import static com.chua.common.support.constant.CommonConstant.*;
@@ -53,6 +54,10 @@ public class ObjectArrayTypeConverter implements TypeConverter<Object[]> {
             }
 
             return stringValue.split(SYMBOL_COMMA);
+        }
+
+        if(value instanceof Collection) {
+            return ((Collection<?>) value).toArray();
         }
 
         return new Object[]{value};
