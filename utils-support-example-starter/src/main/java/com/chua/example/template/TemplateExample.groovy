@@ -41,6 +41,7 @@ class TemplateExample {
                 outputStream,
                 ImmutableCollection.<String, Object>newMap()
                         .put("name", "Hotzenplotz")
+                        .put("customer", "Mr. Hotzenplotz")
                         .put("license", new License("Hotzenplotz", new String[] {"3ba34234bcffe", "5bbe77f879000", "dd3ee54324bf3"}))
                 .newHashMap());
         System.out.println(StringUtils.newStringUtf8(outputStream.toByteArray()));
