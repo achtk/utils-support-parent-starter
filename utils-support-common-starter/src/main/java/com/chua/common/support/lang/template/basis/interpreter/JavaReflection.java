@@ -1,6 +1,8 @@
 
 package com.chua.common.support.lang.template.basis.interpreter;
 
+import com.chua.common.support.utils.ClassUtils;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -241,7 +243,7 @@ public class JavaReflection extends Reflection {
 	public Object callMethod (Object obj, Object method, Object... arguments) {
 		Method javaMethod = (Method)method;
 		try {
-			return javaMethod.invoke(obj, arguments);
+			return javaMethod.invoke(obj, ClassUtils.toArgs(method, arguments));
 		} catch (Throwable t) {
 			throw new RuntimeException("Couldn't call method '" + javaMethod.getName() + "' with arguments '" + Arrays.toString(arguments)
 				+ "' on object of type '" + obj.getClass().getSimpleName() + "'.", t);

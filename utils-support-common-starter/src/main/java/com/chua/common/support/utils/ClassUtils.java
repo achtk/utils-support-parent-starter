@@ -2168,4 +2168,20 @@ public class ClassUtils {
         Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
         return (Class<T>) actualTypeArguments[0];
     }
+
+    /**
+     * 参数
+     * @param method 方法
+     * @param arguments 参数
+     * @return 结果
+     */
+    public static Object[] toArgs(Method method, Object[] arguments) {
+        Class<?>[] parameterTypes = method.getParameterTypes();
+        Object[] rs = new Object[];
+        for (int i = 0; i < parameterTypes.length; i++) {
+            Class<?> parameterType = parameterTypes[i];
+            rs[i] = Converter.convertIfNecessary(arguments[i], parameterType);
+        }
+        return rs;
+    }
 }
