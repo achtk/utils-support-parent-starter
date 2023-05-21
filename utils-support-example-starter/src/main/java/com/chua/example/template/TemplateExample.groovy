@@ -167,8 +167,9 @@ The character {{'a'}} is included in the string {{"a-team"}}.
    Got {{value}} from the map
 {{end}}
 
-{{for value in iterable}}
-   Got {{value}} from the iterable
+
+{{for value in range(0, 4)}}
+   Ranged value: {{value}}
 {{end}}
 ''',
                 outputStream,
@@ -179,6 +180,13 @@ The character {{'a'}} is included in the string {{"a-team"}}.
                         .put("array", new int[] {1, 2, 3})
                         .put("map", map)
                         .put("set", set)
+                        .put("range", (java.util.function.BiFunction<Integer, Integer, Iterator<Integer>>) (from, to) -> {
+                            return new Iterator<Integer>() {
+                                int idx = from;
+                                public boolean hasNext () { return idx <= to; }
+                                public Integer next () { return idx++; }
+                            };
+                        })
                         .put("myClass", MyObject.class)
                         .put("String", String.class)
                         .newHashMap());
