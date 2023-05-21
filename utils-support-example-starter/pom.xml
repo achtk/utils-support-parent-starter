@@ -96,6 +96,12 @@
             <artifactId>mybatis-plus-annotation</artifactId>
             <version>3.5.3.1</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.hierynomus</groupId>
+            <artifactId>sshj</artifactId>
+            <version>0.32.0</version>
+        </dependency>
     </dependencies>
 
 </project>
