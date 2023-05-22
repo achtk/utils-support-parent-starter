@@ -38,7 +38,7 @@ public class RedisionEventbus extends AbstractEventbus {
 
     public RedisionEventbus(Profile profile, Executor executor) {
         super(profile);
-        RedisConfiguration redisConfiguration = profile.bind(new String[]{"redis", "spring.redis", "spring.redis.redisson"}, RedisConfiguration.class);
+        RedisConfiguration redisConfiguration = profile.bind(new String[]{"redis", "spring.redis.redisson", "spring.redis"}, RedisConfiguration.class);
         this.redissonClient = RedissonUtils.create(redisConfiguration, executor);
         if (redissonClient != null) {
             IS_RUNNING.set(true);
