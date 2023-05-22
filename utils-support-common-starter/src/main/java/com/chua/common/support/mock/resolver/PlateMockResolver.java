@@ -1,10 +1,10 @@
 package com.chua.common.support.mock.resolver;
 
-import com.chua.common.support.collection.ImmutableCollection;
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.collection.ImmutableBuilder;
 import com.chua.common.support.function.Joiner;
 import com.chua.common.support.lang.expression.parser.ExpressionParser;
 import com.chua.common.support.mock.MockValue;
-import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.utils.RandomUtils;
 
 import java.util.ArrayList;
@@ -21,13 +21,13 @@ public class PlateMockResolver implements MockResolver {
     /**
      * 车牌号码候选字母(无I/O)
      */
-    private static final List<String> PLATE_NUMBERS_LIST = ImmutableCollection.<String>builder().add(
+    private static final List<String> PLATE_NUMBERS_LIST = ImmutableBuilder.<String>builder().add(
             "A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z").unmodifiableList();
 
     /**
      * 省份前缀
      */
-    private static final List<String> PROVINCE_PREFIX_LIST = ImmutableCollection.<String>builder().add(
+    private static final List<String> PROVINCE_PREFIX_LIST = ImmutableBuilder.<String>builder().add(
             "京", "津", "冀", "晋", "蒙",
             "辽", "吉", "黑", "沪", "苏",
             "浙", "皖", "闽", "赣", "鲁",

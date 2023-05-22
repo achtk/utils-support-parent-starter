@@ -1,8 +1,7 @@
 package com.chua.common.support.lang.proxy.plugin;
 
 import com.chua.common.support.collection.ConcurrentReferenceHashMap;
-import com.chua.common.support.collection.ImmutableCollection;
-import com.chua.common.support.collection.TypeHashMap;
+import com.chua.common.support.collection.ImmutableBuilder;
 import com.chua.common.support.lang.date.DateUtils;
 import com.chua.common.support.reflection.describe.processor.impl.AbstractMethodAnnotationPostProcessor;
 import com.chua.common.support.spi.ServiceProvider;
@@ -13,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 /**
@@ -38,7 +36,7 @@ public class CacheableMethodAnnotationPostProcessor extends AbstractMethodAnnota
             @Override
             public Cacheable apply(String s) {
                 Cacheable cacheable = ServiceProvider.of(Cacheable.class).getNewExtension(cache.type());
-                cacheable.configuration(ImmutableCollection.<String, Object>newMap().put("expireAfterWrite", DateUtils.toDuration(cache.timeout()).toMillis() * 1000).build());
+                cacheable.configuration(ImmutableBuilder.<String, Object>newMap().put("expireAfterWrite", DateUtils.toDuration(cache.timeout()).toMillis() * 1000).build());
                 return cacheable;
             }
         });

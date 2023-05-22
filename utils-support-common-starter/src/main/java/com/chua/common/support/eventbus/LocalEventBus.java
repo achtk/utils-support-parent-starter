@@ -1,6 +1,6 @@
 package com.chua.common.support.eventbus;
 
-import com.chua.common.support.collection.ImmutableCollection;
+import com.chua.common.support.collection.ImmutableBuilder;
 import com.chua.common.support.collection.Table;
 import com.chua.common.support.lang.profile.Profile;
 import com.chua.common.support.utils.StringUtils;
@@ -19,7 +19,7 @@ import static com.chua.common.support.eventbus.EventbusType.LOCAL;
  */
 public class LocalEventBus extends AbstractEventbus {
 
-    private final Table<String, Class<?>, WatchDog> listener = ImmutableCollection.<String, Class<?>, WatchDog>newTable().build();
+    private final Table<String, Class<?>, WatchDog> listener = ImmutableBuilder.<String, Class<?>, WatchDog>newTable().build();
     private final Map<EventbusEvent, WatchObserver> cache = new ConcurrentHashMap<>();
 
     public LocalEventBus(Profile profile) {

@@ -1,22 +1,23 @@
 package com.chua.common.support.collection;
 
-import com.chua.common.support.range.IpRange;
-
 import java.util.*;
 
 /**
  * 集合
+ *
  * @author CH
  */
-public class ImmutableCollection {
+public class ImmutableBuilder {
     /**
      * 创建 collection
-     * @return collection
+     *
      * @param <E> e
+     * @return collection
      */
-    public static <E>CollectionBuilder<E> builder() {
+    public static <E> CollectionBuilder<E> builder() {
         return new CollectionBuilder<>();
     }
+
     /**
      * 创建 Map
      * @return Map
@@ -39,11 +40,11 @@ public class ImmutableCollection {
     }
 
     public static <T>List<T> newArrayList() {
-        return ImmutableCollection.<T>builder().newArrayList();
+        return ImmutableBuilder.<T>builder().newArrayList();
     }
 
     public static <K, V>Map<K, V> newHashMap() {
-        return ImmutableCollection.<K, V>newMap().newHashMap();
+        return ImmutableBuilder.<K, V>newMap().newHashMap();
     }
 
 

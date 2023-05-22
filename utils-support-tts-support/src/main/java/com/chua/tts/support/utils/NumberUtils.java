@@ -1,6 +1,6 @@
 package com.chua.tts.support.utils;
 
-import com.chua.common.support.collection.ImmutableCollection;
+import com.chua.common.support.collection.ImmutableBuilder;
 import com.chua.common.support.function.Joiner;
 
 import java.util.LinkedList;
@@ -14,7 +14,7 @@ public class NumberUtils {
     static final String[] NUMBER_LEVEL = {"千", "百", "十", "万", "千", "百", "十", "亿", "千", "百", "十", "万", "千", "百", "十", "个"};
     static final String ZERO = NUMBER_CN[0];
     static final Pattern TEN_RE = Pattern.compile("^一十");
-    static final List<String> GRADE_LEVEL = ImmutableCollection.<String>builder().add("万", "亿", "个").unmodifiableList();
+    static final List<String> GRADE_LEVEL = ImmutableBuilder.<String>builder().add("万", "亿", "个").unmodifiableList();
     static final Pattern NUMBER_GROUP_RE = Pattern.compile("([0-9]+)");
 
     public static void main(String[] args) {
@@ -95,7 +95,7 @@ public class NumberUtils {
         if (postion.size() == 0) {
             return text;
         }
-        List<String> parts = ImmutableCollection.newArrayList();
+        List<String> parts = ImmutableBuilder.newArrayList();
         parts.add(text.substring(0, postion.getFirst()));
         int size = postion.size() - 1;
         for (int i = 0; i < size; i++) {

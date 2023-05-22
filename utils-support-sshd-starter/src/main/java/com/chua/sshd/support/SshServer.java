@@ -1,6 +1,6 @@
 package com.chua.sshd.support;
 
-import com.chua.common.support.collection.ImmutableCollection;
+import com.chua.common.support.collection.ImmutableBuilder;
 import com.chua.common.support.protocol.server.AbstractServer;
 import com.chua.common.support.protocol.server.ServerOption;
 import org.apache.sshd.common.cipher.BuiltinCiphers;
@@ -38,7 +38,7 @@ public class SshServer extends AbstractServer {
         VirtualFileSystemFactory fileSystemFactory = new VirtualFileSystemFactory();
         //该处参数为path  而不是String
         fileSystemFactory.setDefaultHomeDir(Paths.get(request.getString("store", ".")));
-        server.setSubsystemFactories(ImmutableCollection.<SubsystemFactory>builder().add(new SftpSubsystemFactory()).newArrayList());
+        server.setSubsystemFactories(ImmutableBuilder.<SubsystemFactory>builder().add(new SftpSubsystemFactory()).newArrayList());
         server.setFileSystemFactory(fileSystemFactory);
         server.setShellFactory(new ProcessShellFactory("/bin/sh", "-i", "-l"));
         server.setCommandFactory(new ScpCommandFactory());

@@ -2,7 +2,7 @@ package com.chua.common.support.shell.mapping;
 
 import com.chua.common.support.ansi.AnsiColor;
 import com.chua.common.support.ansi.AnsiOutput;
-import com.chua.common.support.collection.ImmutableCollection;
+import com.chua.common.support.collection.ImmutableBuilder;
 import com.chua.common.support.function.Joiner;
 import com.chua.common.support.function.Splitter;
 import com.chua.common.support.json.Json;
@@ -66,8 +66,8 @@ public class SystemCommand {
         long freeMemory = runtime.freeMemory();
 
         Map<String, Object> rs = new LinkedHashMap<>();
-        rs.put("head", ImmutableCollection.builder().add("最大内存", "已使用内存", "剩余内存").newArrayList());
-        rs.put("rows", Collections.singletonList(ImmutableCollection.builder().add(
+        rs.put("head", ImmutableBuilder.builder().add("最大内存", "已使用内存", "剩余内存").newArrayList());
+        rs.put("rows", Collections.singletonList(ImmutableBuilder.builder().add(
                 StringUtils.getNetFileSizeDescription(maxMemory, D),
                 StringUtils.getNetFileSizeDescription(totalMemory, D),
                 StringUtils.getNetFileSizeDescription(freeMemory, D)).newArrayList()

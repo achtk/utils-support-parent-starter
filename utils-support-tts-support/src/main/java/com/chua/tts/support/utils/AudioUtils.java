@@ -3,12 +3,11 @@ package com.chua.tts.support.utils;
 import ai.djl.ndarray.NDArray;
 import ai.djl.ndarray.NDManager;
 import ai.djl.ndarray.types.Shape;
-import com.chua.common.support.collection.ImmutableCollection;
+import com.chua.common.support.collection.ImmutableBuilder;
 import com.jlibrosa.audio.JLibrosa;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.LinkedList;
-import java.util.List;
 
 public class AudioUtils {
     static int mel_window_step = 10;
@@ -46,15 +45,15 @@ public class AudioUtils {
         int n_frames = (int) (Math.ceil((n_samples + 1) / samples_per_frame));
         int frame_step = Math.max((Math.round(partial_utterance_n_frames * (1 - overlap))), 1);
         // Compute the slices
-        LinkedList<LinkedList<Integer>> wav_slices = ImmutableCollection.<LinkedList<Integer>>builder().newLinkedList();
-        LinkedList<LinkedList<Integer>> mel_slices = ImmutableCollection.<LinkedList<Integer>>builder().newLinkedList();
+        LinkedList<LinkedList<Integer>> wav_slices = ImmutableBuilder.<LinkedList<Integer>>builder().newLinkedList();
+        LinkedList<LinkedList<Integer>> mel_slices = ImmutableBuilder.<LinkedList<Integer>>builder().newLinkedList();
 
         int steps = Math.max(1, n_frames - partial_utterance_n_frames + frame_step + 1);
         for (int i = 0; i < steps; i += frame_step) {
-            LinkedList<Integer> mel_range = ImmutableCollection.<Integer>builder().newLinkedList();
+            LinkedList<Integer> mel_range = ImmutableBuilder.<Integer>builder().newLinkedList();
             mel_range.add(i);
             mel_range.add(i + partial_utterance_n_frames);
-            LinkedList<Integer> wav_range = ImmutableCollection.<Integer>builder().newLinkedList();
+            LinkedList<Integer> wav_range = ImmutableBuilder.<Integer>builder().newLinkedList();
             wav_range.add(i * samples_per_frame);
             wav_range.add((i + partial_utterance_n_frames) * samples_per_frame);
             mel_slices.add(mel_range);

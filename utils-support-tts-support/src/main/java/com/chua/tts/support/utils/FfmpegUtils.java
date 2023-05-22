@@ -6,7 +6,7 @@ import ai.djl.ndarray.NDArrays;
 import ai.djl.ndarray.NDList;
 import ai.djl.ndarray.NDManager;
 import ai.djl.ndarray.types.DataType;
-import com.chua.common.support.collection.ImmutableCollection;
+import com.chua.common.support.collection.ImmutableBuilder;
 import com.chua.common.support.function.Joiner;
 import org.aspectj.util.FileUtil;
 import org.bytedeco.javacpp.Loader;
@@ -63,7 +63,7 @@ public class FfmpegUtils {
                 path);
 
         BufferedReader br = new BufferedReader(new InputStreamReader(pb1.start().getErrorStream(), StandardCharsets.UTF_8));
-        List<String> out_parts = ImmutableCollection.<String>builder().newArrayList();
+        List<String> out_parts = ImmutableBuilder.<String>builder().newArrayList();
         String ch = "";
         while ((ch = br.readLine()) != null) {
             out_parts.add(ch.toLowerCase());

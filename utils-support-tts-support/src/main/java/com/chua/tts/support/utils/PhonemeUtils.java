@@ -1,6 +1,6 @@
 package com.chua.tts.support.utils;
 
-import com.chua.common.support.collection.ImmutableCollection;
+import com.chua.common.support.collection.ImmutableBuilder;
 
 import java.text.MessageFormat;
 import java.util.LinkedHashMap;
@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class PhonemeUtils {
     // 拼音转音素映射表：420
-    static final Map<String, String> shengyun2ph_dict = ImmutableCollection.<String, String>newMap()
+    static final Map<String, String> shengyun2ph_dict = ImmutableBuilder.<String, String>newMap()
             .put("a", "aa a")
             .put("ai", "aa ai")
             .put("an", "aa an")
@@ -430,7 +430,7 @@ public class PhonemeUtils {
             .put("wong", "uu uong")
             .put("n", "n ng")
             .build();
-    static Map<String, String> diao2ph_dict = ImmutableCollection.<String, String>newMap()
+    static Map<String, String> diao2ph_dict = ImmutableBuilder.<String, String>newMap()
             .put("1", "1")
             .put("2", "2")
             .put("3", "3")
@@ -438,13 +438,13 @@ public class PhonemeUtils {
             .put("5", "5")
             .build();
 
-    static Map<String, String> pinyin2ph_dict = ImmutableCollection.newHashMap();
+    static Map<String, String> pinyin2ph_dict = ImmutableBuilder.newHashMap();
     // 字母音素：26
     static String[] _alphabet = "Aa Bb Cc Dd Ee Ff Gg Hh Ii Jj Kk Ll Mm Nn Oo Pp Qq Rr Ss Tt Uu Vv Ww Xx Yy Zz".split(" ");
     // 字母：26
     static String[] _upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
     static String[] _lower = "abcdefghijklmnopqrstuvwxyz".split("");
-    static Map<String, String> upper2ph_dict = ImmutableCollection.<String, String>newMap()
+    static Map<String, String> upper2ph_dict = ImmutableBuilder.<String, String>newMap()
             .put("A", "Aa")
             .put("B", "Bb")
             .put("C", "Cc")
@@ -472,7 +472,7 @@ public class PhonemeUtils {
             .put("Y", "Yy")
             .put("Z", "Zz")
             .build();
-    static Map<String, String> lower2ph_dict = ImmutableCollection.<String, String>newMap()
+    static Map<String, String> lower2ph_dict = ImmutableBuilder.<String, String>newMap()
             .put("a", "Aa")
             .put("b", "Bb")
             .put("c", "Cc")
@@ -501,7 +501,7 @@ public class PhonemeUtils {
             .put("z", "Zz")
             .build();
     static String[] _biaodian = "! ? . , ; : \" # ( )".split(" ");
-    static Map<String, String> biao2ph_dict = ImmutableCollection.<String, String>newMap()
+    static Map<String, String> biao2ph_dict = ImmutableBuilder.<String, String>newMap()
             .put("!", "!")
             .put("！", "!")
             .put("?", "?")
@@ -571,7 +571,7 @@ public class PhonemeUtils {
         Map<String, String> temp = new LinkedHashMap<>(upper2ph_dict);
         temp.putAll(lower2ph_dict);
         temp.putAll(biao2ph_dict);
-        char2ph_dict = ImmutableCollection.<String, String>newMap().put(temp).build();
+        char2ph_dict = ImmutableBuilder.<String, String>newMap().put(temp).build();
 
     }
 

@@ -1,6 +1,6 @@
 package com.chua.tts.support.utils;
 
-import com.chua.common.support.collection.ImmutableCollection;
+import com.chua.common.support.collection.ImmutableBuilder;
 import com.chua.common.support.function.Joiner;
 import com.github.houbb.pinyin.constant.enums.PinyinStyleEnum;
 import com.github.houbb.pinyin.util.PinyinHelper;
@@ -17,8 +17,8 @@ public class SequenceUtils {
 	static final Pattern EN_RE = Pattern.compile("([a-zA-Z]+)");
 
 
-	static final Map<String, Integer> PH_2_ID_DICT = ImmutableCollection.newHashMap();
-	static final Map<Integer, String> ID_2_PH_DICT = ImmutableCollection.newHashMap();
+	static final Map<String, Integer> PH_2_ID_DICT = ImmutableBuilder.newHashMap();
+	static final Map<Integer, String> ID_2_PH_DICT = ImmutableBuilder.newHashMap();
 
 	static {
 		int size = SymbolUtils.SYMBOL_CHINESE.length;
@@ -57,7 +57,7 @@ public class SequenceUtils {
 	}
 
 	public static List<Integer> phoneme2sequence(List<String> src) {
-		List<Integer> out = ImmutableCollection.newArrayList();
+		List<Integer> out = ImmutableBuilder.newArrayList();
 		for (String w : src) {
 			if (PH_2_ID_DICT.containsKey(w)) {
 				out.add(PH_2_ID_DICT.get(w));
@@ -74,7 +74,7 @@ public class SequenceUtils {
 	    :return: list,变调后的音素列表*/
 
 		int flag = -5;
-		List<String> out = ImmutableCollection.newArrayList();
+		List<String> out = ImmutableBuilder.newArrayList();
 		Collections.reverse(src);
 		int size = src.size();
 		for (int i = 0; i < size; i++) {
@@ -119,7 +119,7 @@ public class SequenceUtils {
 		if (postion.size() == 0) {
 			return text;
 		}
-		List<String> parts = ImmutableCollection.newArrayList();
+		List<String> parts = ImmutableBuilder.newArrayList();
 		parts.add(text.substring(0, postion.getFirst()));
 		int size = postion.size() - 1;
 		for (int i = 0; i < size; i++) {
@@ -135,9 +135,9 @@ public class SequenceUtils {
 
 	public static List<String> pinyin2phoneme(String src) {
 		String[] srcs = src.split(" ");
-		List<String> out = ImmutableCollection.newArrayList();
+		List<String> out = ImmutableBuilder.newArrayList();
 		for (String py : srcs) {
-			List<String> phs = ImmutableCollection.newArrayList();
+			List<String> phs = ImmutableBuilder.newArrayList();
 
 			if (PhonemeUtils.pinyin2ph_dict.containsKey(py)) {
 				String[] ph = PhonemeUtils.pinyin2ph_dict.get(py).split(" ");
@@ -160,7 +160,7 @@ public class SequenceUtils {
 	}
 
 	static List<String> py_errors(String text) {
-		List<String> out = ImmutableCollection.newArrayList();
+		List<String> out = ImmutableBuilder.newArrayList();
 		String[] texts = text.split("");
 		for (String p : texts) {
 			if (PhonemeUtils.char2ph_dict.containsKey(p)) {

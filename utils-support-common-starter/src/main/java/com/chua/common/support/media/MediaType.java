@@ -1,6 +1,5 @@
 package com.chua.common.support.media;
 
-import com.chua.common.support.collection.ImmutableCollection;
 import com.chua.common.support.collection.MultiLinkedValueMap;
 import com.chua.common.support.collection.MultiValueMap;
 import com.chua.common.support.function.Splitter;

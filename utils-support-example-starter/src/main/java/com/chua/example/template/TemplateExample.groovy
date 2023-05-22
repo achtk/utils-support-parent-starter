@@ -1,6 +1,6 @@
 package com.chua.example.template
 
-import com.chua.common.support.collection.ImmutableCollection
+import com.chua.common.support.collection.ImmutableBuilder
 import com.chua.common.support.lang.template.Template
 import com.chua.common.support.lang.template.basis.DelegateTemplate
 import org.apache.commons.codec.binary.StringUtils
@@ -22,7 +22,7 @@ class TemplateExample {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         template.resolve("Hello {{name}}.",
                 outputStream,
-                ImmutableCollection.<String, Object>newMap().put("name", "Hotzenplotz").newHashMap());
+                ImmutableBuilder.<String, Object> newMap().put("name", "Hotzenplotz").newHashMap());
 
         println 'Basic Usage\n'
         println StringUtils.newStringUtf8(outputStream.toByteArray())
@@ -47,7 +47,7 @@ Kind regards,
 Your friendly neighbourhood customer service employee
             ''',
                 outputStream,
-                ImmutableCollection.<String, Object>newMap()
+                ImmutableBuilder.<String, Object> newMap()
                         .put("name", "Hotzenplotz")
                         .put("a", 123)
                         .put("customer", "Mr. Hotzenplotz")
@@ -73,7 +73,7 @@ A double {{123d}}.
 The character {{'a'}} is included in the string {{"a-team"}}.
             ''',
                 outputStream,
-                ImmutableCollection.<String, Object>newMap()
+                ImmutableBuilder.<String, Object> newMap()
                         .put("name", "Hotzenplotz")
                         .put("customer", "Mr. Hotzenplotz")
                         .put("license", new License("Hotzenplotz", new String[] {"3ba34234bcffe", "5bbe77f879000", "dd3ee54324bf3"}))
@@ -88,7 +88,7 @@ The character {{'a'}} is included in the string {{"a-team"}}.
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         template.resolve("Basis-template can access private {{myObject.privateField}}, package private {{myObject.packagePrivateField}}, protected {{myObject.protectedField}}, and public {{myObject.publicField}} fields. It can also access static {{myClass.STATIC_FIELD}} fields.\n",
                 outputStream,
-                ImmutableCollection.<String, Object>newMap()
+                ImmutableBuilder.<String, Object> newMap()
                         .put("myObject", new MyObject())
                         .put("myClass", MyObject.class)
                         .newHashMap());
@@ -103,7 +103,7 @@ The character {{'a'}} is included in the string {{"a-team"}}.
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         template.resolve('''{{myObject.add(1, 2)}} {{myObject.add(1f, 2f)}} {{String.format("%010d", 93)}}''',
                 outputStream,
-                ImmutableCollection.<String, Object>newMap()
+                ImmutableBuilder.<String, Object> newMap()
                         .put("myObject", new MyObject())
                         .put("myClass", MyObject.class)
                         .put("String", String.class)
@@ -121,7 +121,7 @@ The character {{'a'}} is included in the string {{"a-team"}}.
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         template.resolve('''{{myArray[2]}} {{myMap.get("key")}} {{myMap["key"]}}''',
                 outputStream,
-                ImmutableCollection.<String, Object>newMap()
+                ImmutableBuilder.<String, Object> newMap()
                         .put("myObject", new MyObject())
                         .put("myArray", new int[] { 1, 2, 3 })
                         .put("myMap", myMap)
