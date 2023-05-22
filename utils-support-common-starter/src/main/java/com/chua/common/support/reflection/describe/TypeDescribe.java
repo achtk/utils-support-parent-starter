@@ -241,4 +241,8 @@ public class TypeDescribe implements MemberDescribe<TypeDescribe>, InitializingA
                 .map(it -> it.entity(object))
                 .collect(Collectors.toList());
     }
+
+    public GenericDescribe getActualTypeArguments() {
+        return new GenericDescribe(beanClass);
+    }
 }

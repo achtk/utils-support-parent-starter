@@ -1,14 +1,15 @@
 package com.chua.common.support.spi;
 
-import com.chua.common.support.utils.ClassUtils;
+import com.chua.common.support.reflection.describe.GenericDescribe;
+import com.chua.common.support.reflection.describe.TypeDescribe;
 
-import java.lang.reflect.Type;
 import java.util.Map;
 
 /**
  * 服务工厂
  * @author CH
  */
+@SuppressWarnings("ALL")
 public interface ServiceFactory<E> {
 
     /**
@@ -17,8 +18,9 @@ public interface ServiceFactory<E> {
      * @return 实现
      */
     default E getExtension(String name) {
-        Type[] actualTypeArguments = ClassUtils.getActualTypeArguments(this.getClass());
-        return ServiceProvider.of((Class<E>) actualTypeArguments[0]).getExtension(name);
+        TypeDescribe typeDescribe = new TypeDescribe(this);
+        GenericDescribe genericDescribe = typeDescribe.getActualTypeArguments();
+        return (E) ServiceProvider.of(genericDescribe.get(0).getActualTypeArguments()).getExtension(name);
     }
 
     /**
@@ -27,8 +29,9 @@ public interface ServiceFactory<E> {
      * @return 实现
      */
     default E getNewExtension(String name, Object... args) {
-        Type[] actualTypeArguments = ClassUtils.getActualTypeArguments(this.getClass());
-        return ServiceProvider.of((Class<E>) actualTypeArguments[0]).getNewExtension(name, args);
+        TypeDescribe typeDescribe = new TypeDescribe(this);
+        GenericDescribe genericDescribe = typeDescribe.getActualTypeArguments();
+        return (E) ServiceProvider.of(genericDescribe.get(0).getActualTypeArguments()).getNewExtension(name, args);
     }
 
     /**
@@ -37,9 +40,10 @@ public interface ServiceFactory<E> {
      * @return 实现
      */
     default Map<String, Class<E>> listType() {
-        Type[] actualTypeArguments = ClassUtils.getActualTypeArguments(this.getClass());
-        return ServiceProvider.of((Class<E>) actualTypeArguments[0]).listType();
-
+        TypeDescribe typeDescribe = new TypeDescribe(this);
+        GenericDescribe genericDescribe = typeDescribe.getActualTypeArguments();
+        Map stringClassMap = ServiceProvider.of(genericDescribe.get(0).getActualTypeArguments()).listType();
+        return stringClassMap;
     }
     /**
      * 获取实现
@@ -48,8 +52,9 @@ public interface ServiceFactory<E> {
      * @return 实现
      */
     default Map<String, E> list(Object... args) {
-        Type[] actualTypeArguments = ClassUtils.getActualTypeArguments(this.getClass());
-        return ServiceProvider.of((Class<E>) actualTypeArguments[0]).list(args);
+        TypeDescribe typeDescribe = new TypeDescribe(this);
+        GenericDescribe genericDescribe = typeDescribe.getActualTypeArguments();
+        return (Map<String, E>) ServiceProvider.of(genericDescribe.get(0).getActualTypeArguments()).list(args);
 
     }
 }
