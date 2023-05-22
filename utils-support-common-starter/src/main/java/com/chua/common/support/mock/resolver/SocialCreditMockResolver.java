@@ -22,7 +22,7 @@ public class SocialCreditMockResolver implements MockResolver {
      * 统一社会信用代码候选字符(不使用I、O、Z、S、V)
      */
     private static final List<String> SOCIAL_CREDIT_CHARACTERS_LIST = ImmutableBuilder.<String>builder().add(
-            "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "P", "Q", "R", "T", "U", "W", "X", "Y").unmodifiableList();
+            "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "P", "Q", "R", "T", "U", "W", "X", "Y").newUnmodifiableList();
 
     @Override
     public String resolve(MockValue mock, ExpressionParser expressionParser) {

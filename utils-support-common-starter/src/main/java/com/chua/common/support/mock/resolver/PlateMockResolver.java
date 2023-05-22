@@ -22,7 +22,7 @@ public class PlateMockResolver implements MockResolver {
      * 车牌号码候选字母(无I/O)
      */
     private static final List<String> PLATE_NUMBERS_LIST = ImmutableBuilder.<String>builder().add(
-            "A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z").unmodifiableList();
+            "A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z").newUnmodifiableList();
 
     /**
      * 省份前缀
@@ -33,7 +33,7 @@ public class PlateMockResolver implements MockResolver {
             "浙", "皖", "闽", "赣", "鲁",
             "豫", "鄂", "湘", "粤", "桂",
             "琼", "渝", "川", "贵", "云",
-            "藏", "陕", "甘", "宁", "青", "新").unmodifiableList();
+            "藏", "陕", "甘", "宁", "青", "新").newUnmodifiableList();
 
     @Override
     public String resolve(MockValue mock, ExpressionParser expressionParser) {

@@ -14,7 +14,7 @@ public class NumberUtils {
     static final String[] NUMBER_LEVEL = {"千", "百", "十", "万", "千", "百", "十", "亿", "千", "百", "十", "万", "千", "百", "十", "个"};
     static final String ZERO = NUMBER_CN[0];
     static final Pattern TEN_RE = Pattern.compile("^一十");
-    static final List<String> GRADE_LEVEL = ImmutableBuilder.<String>builder().add("万", "亿", "个").unmodifiableList();
+    static final List<String> GRADE_LEVEL = ImmutableBuilder.<String>builder().add("万", "亿", "个").newUnmodifiableList();
     static final Pattern NUMBER_GROUP_RE = Pattern.compile("([0-9]+)");
 
     public static void main(String[] args) {
