@@ -54,6 +54,22 @@ public interface Table<R, C, V> {
     V get(R rowKey, C columnKey);
 
     /**
+     * 获取值
+     *
+     * @param columnKey c
+     * @return v
+     */
+    Map<R, V> column(C columnKey);
+
+    /**
+     * 获取行对应数据
+     *
+     * @param rowKey r
+     * @return C, V
+     */
+    Map<C, V> row(R rowKey);
+
+    /**
      * 是否为空
      *
      * @return 是否为空
@@ -87,22 +103,6 @@ public interface Table<R, C, V> {
     V remove(R rowKey, C columnKey);
 
     /**
-     * 获取行对应数据
-     *
-     * @param rowKey r
-     * @return C, V
-     */
-    Map<C, V> row(R rowKey);
-
-    /**
-     * 获取列对应数据
-     *
-     * @param columnKey c
-     * @return R, V
-     */
-    Map<R, V> column(C columnKey);
-
-    /**
      * 存储
      *
      * @param r        r
@@ -114,18 +114,28 @@ public interface Table<R, C, V> {
 
     /**
      * row
+     *
      * @return row
      */
     Set<R> rowKeySet();
 
     /**
-     * row map
+     * column map
+     *
      * @return map
      */
-    Map<C, Map<C, V>> rowMap();
+    Map<C, Map<R, V>> columns();
+
+    /**
+     * row map
+     *
+     * @return map
+     */
+    Map<C, Map<C, V>> rows();
 
     /**
      * 结果
+     *
      * @return 结果
      */
     Collection<V> values();

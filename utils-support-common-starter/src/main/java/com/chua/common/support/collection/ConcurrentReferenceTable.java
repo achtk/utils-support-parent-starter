@@ -13,132 +13,135 @@ import static com.chua.common.support.constant.NumberConstant.DEFAULT_INITIAL_CA
  * @param <V> value
  * @author Administrator
  */
-public class ConcurrentReferenceTable<R, C, V> implements Table<R, C, V>{
+public class ConcurrentReferenceTable<R, C, V> implements Table<R, C, V> {
 
-    private final Map<R, Map<C, V>> rpl;
+    private final Map<R, Map<C, V>> rowMap;
+    private final Map<C, Map<R, V>> columnMap;
+    private final Collection<V> valueArray;
     private final int initialCapacity;
+
     public ConcurrentReferenceTable() {
         this(DEFAULT_INITIAL_CAPACITY);
     }
+
     public ConcurrentReferenceTable(int initialCapacity) {
-        this.rpl = new ConcurrentReferenceHashMap<>(initialCapacity);
+        this.rowMap = new HashMap<>(initialCapacity);
+        this.columnMap = new HashMap<>();
+        this.valueArray = new LinkedList<>();
         this.initialCapacity = initialCapacity;
     }
 
 
     @Override
     public boolean contains(R rowKey, C columnKey) {
-        boolean containsKey = rpl.containsKey(rowKey);
-        if(!containsKey) {
-            return false;
-        }
-
-        return rpl.get(rowKey).containsKey(columnKey);
+        return rowMap.containsKey(rowKey) && columnMap.containsKey(columnKey);
     }
 
     @Override
     public boolean containsRow(R rowKey) {
-        return rpl.containsKey(rowKey);
+        return rowMap.containsKey(rowKey);
     }
 
     @Override
     public boolean containsColumn(C columnKey) {
-        for (Map<C, V> cvMap : rpl.values()) {
-            if(cvMap.containsKey(columnKey)) {
-                return true;
-            }
-        }
-        return false;
+        return columnMap.containsKey(columnKey);
     }
 
     @Override
     public boolean containsValue(V value) {
-        for (Map<C, V> cvMap : rpl.values()) {
-            if(cvMap.containsValue(value)) {
-                return true;
-            }
-        }
-        return false;
+        return valueArray.contains(value);
     }
 
     @Override
     public V get(R rowKey, C columnKey) {
-        Map<C, V> cvMap = rpl.get(rowKey);
+        Map<C, V> cvMap = rowMap.get(rowKey);
         return null != cvMap ? cvMap.get(columnKey) : null;
     }
 
     @Override
     public boolean isEmpty() {
-        return rpl.isEmpty();
+        return rowMap.isEmpty();
     }
 
     @Override
     public int size() {
-        Set<R> rs = rpl.keySet();
-        int size = rs.size();
-        Collection<Map<C, V>> values = rpl.values();
-        for (Map<C, V> value : values) {
-            size *= value.size();
-        }
-        return size;
+        return rowMap.size();
     }
 
     @Override
     public V put(R rowKey, C columnKey, V value) {
-        return rpl.computeIfAbsent(rowKey, it -> new ConcurrentReferenceHashMap<>(initialCapacity)).put(columnKey, value);
+        columnMap.computeIfAbsent(columnKey, it -> new HashMap<>(initialCapacity))
+                .put(rowKey, value);
+        valueArray.add(value);
+        return rowMap.computeIfAbsent(rowKey, it -> new HashMap<>(initialCapacity))
+                .put(columnKey, value);
     }
 
     @Override
     public V remove(R rowKey, C columnKey) {
         synchronized (this) {
-            Map<C, V> cvMap = rpl.get(rowKey);
-            if(null == cvMap) {
-                return null;
-            }
-            return cvMap.remove(columnKey);
+            removeColumn(rowKey, columnKey);
+            return removeRow(rowKey, columnKey);
         }
+    }
+
+    private void removeColumn(R rowKey, C columnKey) {
+        Map<R, V> rvMap = columnMap.get(columnKey);
+        if (null == rvMap) {
+            columnMap.remove(columnKey);
+            return;
+        }
+
+        V v = rvMap.get(rowKey);
+        rvMap.remove(rowKey);
+        valueArray.remove(v);
+    }
+
+    private V removeRow(R rowKey, C columnKey) {
+        Map<C, V> cvMap = rowMap.get(rowKey);
+        if (null == cvMap) {
+            rowMap.remove(rowKey);
+            return null;
+        }
+        return cvMap.remove(columnKey);
     }
 
     @Override
     public Map<C, V> row(R rowKey) {
-        return rpl.get(rowKey);
+        return rowMap.get(rowKey);
     }
 
     @Override
     public Map<R, V> column(C columnKey) {
-        Map<R, V> rs = new LinkedHashMap<>();
-        for (Map.Entry<R, Map<C, V>> entry : rpl.entrySet()) {
-            Map<C, V> entryValue = entry.getValue();
-            R key = entry.getKey();
-            entryValue.forEach((k, v) -> {
-                rs.put(key, v);
-            });
-        }
-        return rs;
+        return columnMap.get(columnKey);
     }
 
     @Override
     public V computeIfAbsent(R r, C c, BiFunction<R, C, V> function) {
         V apply = function.apply(r, c);
-        rpl.computeIfAbsent(r, r1 -> new ConcurrentReferenceHashMap<>(initialCapacity)).putIfAbsent(c, apply);
+        rowMap.computeIfAbsent(r, r1 -> new ConcurrentReferenceHashMap<>(initialCapacity)).putIfAbsent(c, apply);
         return apply;
     }
 
     @Override
     public Set<R> rowKeySet() {
-        return new HashSet<>(rpl.keySet());
+        return new HashSet<>(rowMap.keySet());
     }
 
     @Override
-    public Map<C, Map<C, V>> rowMap() {
-        Map<C, Map<C, V>> rs = new LinkedHashMap<>();
-        return rs;
+    public Map<C, Map<R, V>> columns() {
+        return columnMap;
+    }
+
+    @Override
+    public Map<C, Map<C, V>> rows() {
+        return new LinkedHashMap<>();
     }
 
     @Override
     public Collection<V> values() {
         List<V> rs = new ArrayList<>();
-        for (Map<C, V> value : rpl.values()) {
+        for (Map<C, V> value : rowMap.values()) {
             rs.addAll(value.values());
         }
         return Collections.unmodifiableList(rs);
@@ -147,7 +150,7 @@ public class ConcurrentReferenceTable<R, C, V> implements Table<R, C, V>{
     @Override
     public Set<C> columnKeySet() {
         Set<C> rs = new LinkedHashSet<>();
-        for (Map<C, V> value : rpl.values()) {
+        for (Map<C, V> value : rowMap.values()) {
             rs.addAll(value.keySet());
         }
         return rs;
@@ -155,19 +158,6 @@ public class ConcurrentReferenceTable<R, C, V> implements Table<R, C, V>{
 
     @Override
     public String toString() {
-        List<Object> rs = new LinkedList<>();
-        for (Map.Entry<R, Map<C, V>> entry : rpl.entrySet()) {
-            for (Map<C, V> value : rpl.values()) {
-                for (Map.Entry<C, V> cvEntry : value.entrySet()) {
-                    List<Object> item = new LinkedList<>();
-                    item.add(entry.getKey());
-                    item.add(cvEntry.getKey());
-                    item.add(cvEntry.getValue());
-
-                    rs.add(item);
-                }
-            }
-        }
-        return rs.toString();
+        return rowMap.toString();
     }
 }

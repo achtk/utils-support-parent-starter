@@ -3,6 +3,7 @@ package com.chua.example.collection;
 import com.chua.common.support.collection.ImmutableBuilder;
 import com.chua.common.support.collection.Table;
 import com.chua.common.support.utils.RandomUtils;
+import com.google.common.collect.ImmutableTable;
 
 import java.util.List;
 import java.util.Map;
@@ -31,10 +32,19 @@ public class ImmutableBuilderExample {
         //创建Table
 
         Table<Integer, String, String> table = ImmutableBuilder.<Integer, String, String>builderOfTable()
-                .put(1, RandomUtils.randomString(4), RandomUtils.randomString(4))
-                .put(2, RandomUtils.randomString(4), RandomUtils.randomString(4))
+                .put(1, "a", "A")
+                .put(2, "a", "B")
+                .put(3, "b", "A")
                 .build();
 
         System.out.println(table);
+        ImmutableTable<Integer, String, String> immutableTable = ImmutableTable.<Integer, String, String>builder()
+                .put(1, "a", "A")
+                .put(2, "a", "B")
+                .put(3, "b", "A")
+                .build();
+
+
+        System.out.println(immutableTable);
     }
 }
