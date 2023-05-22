@@ -1,10 +1,6 @@
-package com.chua.alibaba.support.sms;
+package com.chua.common.support.sms;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,9 +26,8 @@ public class SmsTemplate {
         /**
          * 添加短信模板参数.
          *
-         * @param key the key
+         * @param key   the key
          * @param value the value
-         *
          * @return this
          */
         public Builder addTemplateParam(final String key, final String value) {

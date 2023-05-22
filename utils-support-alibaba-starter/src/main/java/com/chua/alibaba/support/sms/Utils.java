@@ -1,6 +1,8 @@
 package com.chua.alibaba.support.sms;
 
 import com.aliyuncs.CommonResponse;
+import com.chua.common.support.sms.SmsException;
+import com.chua.common.support.sms.SmsTemplate;
 import com.google.gson.Gson;
 
 import java.util.Collection;
@@ -93,8 +95,9 @@ class Utils {
      * 校验 SendSmsResponse 状态.
      *
      * @param response the SendSmsResponse
+     * @return res
      */
-    static void checkSmsResponse(final CommonResponse response) {
+    static Map<String, String> checkSmsResponse(final CommonResponse response) {
         if (null == response) {
             throw new SmsException("Response is null");
         }
@@ -103,6 +106,7 @@ class Utils {
         if (!SUCCESS_CODE.equalsIgnoreCase(json.get("Code"))) {
             throw new SmsException("Http status: " + response.getHttpStatus() + ", response: " + response.getData());
         }
+        return json;
     }
 
     /**

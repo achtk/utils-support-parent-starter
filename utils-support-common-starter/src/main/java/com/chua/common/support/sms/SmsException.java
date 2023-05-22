@@ -1,4 +1,4 @@
-package com.chua.alibaba.support.sms;
+package com.chua.common.support.sms;
 
 /**
  * The type SmsException.

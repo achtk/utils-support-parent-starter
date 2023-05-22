@@ -1,6 +1,6 @@
+import com.chua.alibaba.support.sms.AlibabaSmsClient;
 import com.chua.alibaba.support.sms.BatchSmsTemplate;
-import com.chua.alibaba.support.sms.SmsClient;
-import com.chua.alibaba.support.sms.SmsTemplate;
+import com.chua.common.support.sms.SmsTemplate;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -11,12 +11,12 @@ import java.util.Map;
  * @author cn-src
  */
 public class SmsClientDemo {
-    private SmsClient smsClient;
+    private AlibabaSmsClient smsClient;
 
     public void setUp() throws Exception {
         final String accessKeyId = System.getenv("aliyun.sms.accessKeyId");
         final String accessKeySecret = System.getenv("aliyun.sms.accessKeySecret");
-        this.smsClient = new SmsClient(accessKeyId, accessKeySecret);
+        this.smsClient = new AlibabaSmsClient(accessKeyId, accessKeySecret);
     }
 
     public void sendAuthenticationCode() {

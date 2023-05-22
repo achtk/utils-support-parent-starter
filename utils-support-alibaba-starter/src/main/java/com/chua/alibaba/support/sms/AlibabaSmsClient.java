@@ -8,6 +8,9 @@ import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
+import com.chua.common.support.sms.AbstractSmsClient;
+import com.chua.common.support.sms.SmsException;
+import com.chua.common.support.sms.SmsTemplate;
 import com.google.gson.Gson;
 
 import java.util.Arrays;
@@ -23,51 +26,33 @@ import static com.chua.alibaba.support.sms.Utils.*;
  *
  * @author cn-src
  */
-public class SmsClient {
+public class AlibabaSmsClient extends AbstractSmsClient<Object> {
 
-    private final IAcsClient acsClient;
-    private final Map<String, SmsTemplate> smsTemplates;
+    private IAcsClient acsClient;
     private final Gson gson = new Gson();
 
-    /**
-     * Instantiates a new SmsClient.
-     *
-     * @param accessKeyId 阿里云短信 accessKeyId
-     * @param accessKeySecret 阿里云短信 accessKeySecret
-     */
-    public SmsClient(final String accessKeyId, final String accessKeySecret) {
-        this(accessKeyId, accessKeySecret, Collections.emptyMap());
+
+    public AlibabaSmsClient(String accessKeyId, String accessKeySecret) {
+        super(accessKeyId, accessKeySecret, null);
     }
 
-    /**
-     * Instantiates a new SmsClient.
-     *
-     * @param accessKeyId 阿里云短信 accessKeyId
-     * @param accessKeySecret 阿里云短信 accessKeySecret
-     * @param smsTemplates 预置短信模板
-     */
-    public SmsClient(final String accessKeyId,
-                     final String accessKeySecret,
-                     final Map<String, SmsTemplate> smsTemplates) {
-        checkNotEmpty(accessKeyId, "'accessKeyId' must be not empty");
-        checkNotEmpty(accessKeySecret, "'accessKeySecret' must be not empty");
-
+    public AlibabaSmsClient(String accessKeyId, String accessKeySecret, Map<String, SmsTemplate> smsTemplates) {
+        super(accessKeyId, accessKeySecret, smsTemplates, null);
         final IClientProfile clientProfile = DefaultProfile.getProfile(
                 "default", accessKeyId, accessKeySecret);
 
         this.acsClient = new DefaultAcsClient(clientProfile);
-        this.smsTemplates = smsTemplates;
     }
 
     /**
      * Instantiates a new SmsClient.
      *
-     * @param acsClient IAcsClient
+     * @param acsClient    IAcsClient
      * @param smsTemplates 预置短信模板
      */
-    public SmsClient(final IAcsClient acsClient, final Map<String, SmsTemplate> smsTemplates) {
+    public AlibabaSmsClient(final IAcsClient acsClient, final Map<String, SmsTemplate> smsTemplates) {
+        super(null, null, smsTemplates, null);
         this.acsClient = acsClient;
-        this.smsTemplates = smsTemplates;
     }
 
     /**
@@ -119,8 +104,10 @@ public class SmsClient {
      * 发送短信.
      *
      * @param smsTemplate 短信模板
+     * @return
      */
-    public void send(final SmsTemplate smsTemplate) {
+    @Override
+    public Map<String, String> send(final SmsTemplate smsTemplate) {
         Objects.requireNonNull(smsTemplate);
         checkSmsTemplate(smsTemplate);
 
@@ -135,7 +122,7 @@ public class SmsClient {
         request.putQueryParameter("TemplateParam", Utils.toJsonStr(smsTemplate.getTemplateParam()));
         try {
             final CommonResponse response = this.acsClient.getCommonResponse(request);
-            checkSmsResponse(response);
+            return checkSmsResponse(response);
         }
         catch (final ClientException e) {
             throw new SmsException(e);
