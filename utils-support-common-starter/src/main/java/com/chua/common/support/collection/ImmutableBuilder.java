@@ -22,6 +22,17 @@ public class ImmutableBuilder {
     /**
      * 创建 collection
      *
+     * @param <E>        e
+     * @param comparable 比较器
+     * @return collection
+     */
+    public static <E> CollectionComparableBuilder<E> builderComparable(Comparator<E> comparator) {
+        return new CollectionComparableBuilder<>(comparator);
+    }
+
+    /**
+     * 创建 collection
+     *
      * @param <E>      e
      * @param elements elements
      * @return collection
@@ -107,63 +118,100 @@ public class ImmutableBuilder {
     }
 
 
-    public static class CollectionBuilder<E> {
-        private final List list = new LinkedList<>();
+    static final class CollectionComparableBuilder<E> extends CollectionMethodBuilder<E> {
 
-        public CollectionBuilder(Collection<E> list) {
+        private final Comparator<E> comparable;
+
+        public CollectionComparableBuilder(Comparator<E> comparator) {
+            super(Collections.emptyList());
+            this.comparable = comparator;
+        }
+
+        public TreeSet<E> build() {
+            TreeSet<E> es = new TreeSet<>(comparable);
+            es.addAll(list);
+            return es;
+        }
+
+    }
+
+    static class CollectionMethodBuilder<E> {
+        protected final List list = new LinkedList<>();
+
+        public CollectionMethodBuilder(Collection<E> list) {
             this.list.addAll(list);
         }
 
-        public CollectionBuilder(E[] elements) {
+        public CollectionMethodBuilder(E[] elements) {
             this.list.addAll(Arrays.asList(elements));
         }
 
-        public CollectionBuilder(Iterable<? extends E> elements) {
+        public CollectionMethodBuilder(Iterable<? extends E> elements) {
             add(elements);
         }
 
-        public CollectionBuilder(Iterator<? extends E> elements) {
+        public CollectionMethodBuilder(Iterator<? extends E> elements) {
             add(elements);
         }
 
 
-        public CollectionBuilder<E> add(Iterable<? extends E> elements) {
+        public CollectionMethodBuilder<E> add(Iterable<? extends E> elements) {
             return add(elements.iterator());
         }
 
-        public CollectionBuilder<E> add(Iterator<? extends E> elements) {
+        public CollectionMethodBuilder<E> add(Iterator<? extends E> elements) {
             while (elements.hasNext()) {
                 add(elements.next());
             }
             return this;
         }
 
-        public CollectionBuilder<E> add(E e) {
+        public CollectionMethodBuilder<E> add(E e) {
             list.add(e);
             return this;
         }
 
-        public CollectionBuilder<E> add(Collection<E> e) {
+        public CollectionMethodBuilder<E> add(Collection<E> e) {
             list.addAll(e);
             return this;
         }
 
 
-        public CollectionBuilder<E> add(E... e) {
+        public CollectionMethodBuilder<E> add(E... e) {
             list.addAll(Arrays.asList(e));
             return this;
         }
 
 
-        public CollectionBuilder<E> addAll(Collection<E> elements) {
+        public CollectionMethodBuilder<E> addAll(Collection<E> elements) {
             list.addAll(elements);
             return this;
+        }
+
+
+    }
+
+    static final class CollectionBuilder<E> extends CollectionMethodBuilder<E> {
+
+        public CollectionBuilder(Collection<E> list) {
+            super(list);
+        }
+
+        public CollectionBuilder(E[] elements) {
+            super(elements);
+        }
+
+        public CollectionBuilder(Iterable<? extends E> elements) {
+            super(elements);
+        }
+
+        public CollectionBuilder(Iterator<? extends E> elements) {
+            super(elements);
         }
 
         public List<E> build() {
             return list;
         }
-
 
         public Set<E> newSet() {
             return new HashSet<>(build());
@@ -196,7 +244,7 @@ public class ImmutableBuilder {
         }
     }
 
-    public static class MapBuilder<K, V> {
+    static final class MapBuilder<K, V> {
         private final Map<K, V> map = new LinkedHashMap<>();
 
         public MapBuilder(Map<K, V> map) {
@@ -233,7 +281,7 @@ public class ImmutableBuilder {
 
     }
 
-    public static class TableBuilder<R, C, V> {
+    static final class TableBuilder<R, C, V> {
         private Table<R, C, V> table1 = new ConcurrentReferenceTable();
 
 
