@@ -118,7 +118,7 @@ public class ImmutableBuilder {
     }
 
 
-    static final class CollectionComparableBuilder<E> extends CollectionMethodBuilder<E> {
+    static final class CollectionComparableBuilder<E> extends CollectionMethodBuilder<E, CollectionComparableBuilder<E>> {
 
         private final Comparator<E> comparable;
 
@@ -135,7 +135,7 @@ public class ImmutableBuilder {
 
     }
 
-    static class CollectionMethodBuilder<E> {
+    public static class CollectionMethodBuilder<E, R extends CollectionMethodBuilder<E, R>> {
         protected final List list = new LinkedList<>();
 
         public CollectionMethodBuilder(Collection<E> list) {
@@ -155,43 +155,43 @@ public class ImmutableBuilder {
         }
 
 
-        public CollectionMethodBuilder<E> add(Iterable<? extends E> elements) {
+        public R add(Iterable<? extends E> elements) {
             return add(elements.iterator());
         }
 
-        public CollectionMethodBuilder<E> add(Iterator<? extends E> elements) {
+        public R add(Iterator<? extends E> elements) {
             while (elements.hasNext()) {
                 add(elements.next());
             }
-            return this;
+            return (R) this;
         }
 
-        public CollectionMethodBuilder<E> add(E e) {
+        public R add(E e) {
             list.add(e);
-            return this;
+            return (R) this;
         }
 
-        public CollectionMethodBuilder<E> add(Collection<E> e) {
+        public R add(Collection<E> e) {
             list.addAll(e);
-            return this;
+            return (R) this;
         }
 
 
-        public CollectionMethodBuilder<E> add(E... e) {
+        public R add(E... e) {
             list.addAll(Arrays.asList(e));
-            return this;
+            return (R) this;
         }
 
 
-        public CollectionMethodBuilder<E> addAll(Collection<E> elements) {
+        public R addAll(Collection<E> elements) {
             list.addAll(elements);
-            return this;
+            return (R) this;
         }
 
 
     }
 
-    static final class CollectionBuilder<E> extends CollectionMethodBuilder<E> {
+    public static final class CollectionBuilder<E> extends CollectionMethodBuilder<E, CollectionBuilder<E>> {
 
         public CollectionBuilder(Collection<E> list) {
             super(list);
@@ -244,7 +244,7 @@ public class ImmutableBuilder {
         }
     }
 
-    static final class MapBuilder<K, V> {
+    public static final class MapBuilder<K, V> {
         private final Map<K, V> map = new LinkedHashMap<>();
 
         public MapBuilder(Map<K, V> map) {
@@ -281,7 +281,7 @@ public class ImmutableBuilder {
 
     }
 
-    static final class TableBuilder<R, C, V> {
+    public static final class TableBuilder<R, C, V> {
         private Table<R, C, V> table1 = new ConcurrentReferenceTable();
 
 
