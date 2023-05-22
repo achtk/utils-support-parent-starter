@@ -4,9 +4,11 @@ import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.lang.environment.EnvironmentProvider;
 import com.chua.common.support.lang.profile.Profile;
 import com.chua.common.support.log.Log;
-import com.chua.common.support.spi.ServiceFactory;
-import com.chua.common.support.utils.*;
-import lombok.Builder;
+import com.chua.common.support.spi.ServiceProvider;
+import com.chua.common.support.utils.AnnotationUtils;
+import com.chua.common.support.utils.ObjectUtils;
+import com.chua.common.support.utils.StringUtils;
+import com.chua.common.support.utils.ThreadUtils;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -17,9 +19,10 @@ import java.util.stream.Collectors;
 
 /**
  * 时间总线
+ *
  * @author CH
  */
-public class EventbusProvider implements ServiceFactory<Eventbus>, InitializingAware, AutoCloseable{
+public class EventbusProvider implements InitializingAware, AutoCloseable {
 
     private static final Log log = Log.getLogger(EventbusProvider.class);
 
@@ -52,7 +55,7 @@ public class EventbusProvider implements ServiceFactory<Eventbus>, InitializingA
     @Override
     public void afterPropertiesSet() {
         EnvironmentProvider environmentProvider = new EnvironmentProvider(profile);
-        Map<String, Eventbus> list = list(profile);
+        Map<String, Eventbus> list = ServiceProvider.of(Eventbus.class).list(profile);
         for (Map.Entry<String, Eventbus> entry : list.entrySet()) {
             Eventbus eventbus = entry.getValue();
             eventbus.executor(ObjectUtils.defaultIfNull(executor, ThreadUtils.newSingleThreadExecutor()));

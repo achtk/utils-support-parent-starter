@@ -2184,4 +2184,17 @@ public class ClassUtils {
         }
         return rs;
     }
+
+    /**
+     * 所有父类
+     *
+     * @param type 类型
+     * @return 类型
+     */
+    public static Set<Class<?>> getAllType(Class<?> type) {
+        Set<Class<?>> rs = new LinkedHashSet<>();
+        getSuperType(type, rs);
+
+        return rs;
+    }
 }

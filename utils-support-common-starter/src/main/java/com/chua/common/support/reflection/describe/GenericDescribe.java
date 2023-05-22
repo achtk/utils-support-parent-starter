@@ -24,11 +24,25 @@ public class GenericDescribe implements InitializingAware {
 
     @Override
     public void afterPropertiesSet() {
-        Class<?> type = beanClass;
-        while (!(ClassUtils.isObject(type))) {
-            Type genericSuperclass = type.getGenericSuperclass();
-            refreshType(type, genericSuperclass, 0);
-            type = type.getSuperclass();
+        doRefresh(beanClass, 0);
+    }
+
+    private void doRefresh(Class<?> type, int level) {
+        refreshType(type, type.getGenericSuperclass(), level);
+        Class<?> superclass = type.getSuperclass();
+        if (!ClassUtils.isObject(superclass)) {
+            refreshType(superclass, superclass.getGenericSuperclass(), level);
+            if (!ClassUtils.isObject(superclass)) {
+                doRefresh(superclass, level + 1);
+            }
+        }
+
+        Class<?>[] interfaces = type.getInterfaces();
+        for (Class<?> aClass : interfaces) {
+            refreshType(aClass, aClass.getGenericSuperclass(), level);
+            if (!ClassUtils.isObject(aClass)) {
+                doRefresh(aClass, level + 1);
+            }
         }
     }
 
@@ -37,15 +51,18 @@ public class GenericDescribe implements InitializingAware {
             refresh(type, (ParameterizedType) genericSuperclass, deep);
             return;
         }
-        if (genericSuperclass instanceof Class) {
-            attributes.add(new GenericTypeAttribute(type, genericSuperclass.getTypeName(), deep));
-        }
     }
 
     private void refresh(Class<?> type, ParameterizedType parameterizedType, int deep) {
         Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
         for (Type actualTypeArgument : actualTypeArguments) {
-            refreshType(type, actualTypeArgument, deep + 1);
+            refreshClass(type, actualTypeArgument, deep + 1);
+        }
+    }
+
+    private void refreshClass(Class<?> type, Type genericSuperclass, int deep) {
+        if (genericSuperclass instanceof Class) {
+            attributes.add(new GenericTypeAttribute(type, genericSuperclass.getTypeName(), deep));
         }
     }
 
