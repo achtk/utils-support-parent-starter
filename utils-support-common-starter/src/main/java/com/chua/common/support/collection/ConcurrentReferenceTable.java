@@ -1,7 +1,5 @@
 package com.chua.common.support.collection;
 
-import com.chua.common.support.constant.NumberConstant;
-
 import java.util.*;
 import java.util.function.BiFunction;
 
@@ -155,4 +153,21 @@ public class ConcurrentReferenceTable<R, C, V> implements Table<R, C, V>{
         return rs;
     }
 
+    @Override
+    public String toString() {
+        List<Object> rs = new LinkedList<>();
+        for (Map.Entry<R, Map<C, V>> entry : rpl.entrySet()) {
+            for (Map<C, V> value : rpl.values()) {
+                for (Map.Entry<C, V> cvEntry : value.entrySet()) {
+                    List<Object> item = new LinkedList<>();
+                    item.add(entry.getKey());
+                    item.add(cvEntry.getKey());
+                    item.add(cvEntry.getValue());
+
+                    rs.add(item);
+                }
+            }
+        }
+        return rs.toString();
+    }
 }

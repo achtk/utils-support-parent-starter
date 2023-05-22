@@ -93,7 +93,7 @@ public class ImmutableBuilder {
      * @param <V> V
      * @return Map
      */
-    public static <K, V> MapBuilder<K, V> newMap() {
+    public static <K, V> MapBuilder<K, V> builderOfMap() {
         return new MapBuilder<>(Collections.emptyMap());
     }
 
@@ -105,7 +105,7 @@ public class ImmutableBuilder {
      * @param <V> v
      * @return table
      */
-    public static <R, C, V> TableBuilder<R, C, V> newTable() {
+    public static <R, C, V> TableBuilder<R, C, V> builderOfTable() {
         return new TableBuilder<>();
     }
 
@@ -114,7 +114,7 @@ public class ImmutableBuilder {
     }
 
     public static <K, V> Map<K, V> newHashMap() {
-        return ImmutableBuilder.<K, V>newMap().newHashMap();
+        return ImmutableBuilder.<K, V>builderOfMap().newHashMap();
     }
 
 
@@ -271,11 +271,11 @@ public class ImmutableBuilder {
             return new HashMap<>(build());
         }
 
-        public Map<K, V> unmodifiableMap() {
+        public Map<K, V> asUnmodifiableMap() {
             return Collections.unmodifiableMap(build());
         }
 
-        public Map<K, V> synchronizedMap() {
+        public Map<K, V> asSynchronizedMap() {
             return Collections.synchronizedMap(build());
         }
 

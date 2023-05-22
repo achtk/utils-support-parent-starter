@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
 import java.util.Map;
-import java.util.function.Function;
 
 /**
  * 缓存注解扫描
@@ -32,13 +31,10 @@ public class CacheableMethodAnnotationPostProcessor extends AbstractMethodAnnota
         }
 
         String group = cache.value();
-        Cacheable cacheable = CACHE.computeIfAbsent(group, new Function<String, Cacheable>() {
-            @Override
-            public Cacheable apply(String s) {
-                Cacheable cacheable = ServiceProvider.of(Cacheable.class).getNewExtension(cache.type());
-                cacheable.configuration(ImmutableBuilder.<String, Object>newMap().put("expireAfterWrite", DateUtils.toDuration(cache.timeout()).toMillis() * 1000).build());
-                return cacheable;
-            }
+        Cacheable cacheable = CACHE.computeIfAbsent(group, s -> {
+            Cacheable cacheable1 = ServiceProvider.of(Cacheable.class).getNewExtension(cache.type());
+            cacheable1.configuration(ImmutableBuilder.<String, Object>builderOfMap().put("expireAfterWrite", DateUtils.toDuration(cache.timeout()).toMillis() * 1000).build());
+            return cacheable1;
         });
         if (null == cacheable) {
             return invoke(entity, args);

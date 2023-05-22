@@ -59,7 +59,7 @@ public enum Coordinate {
      * 转化器
      */
     static final Table<Coordinate, Coordinate, CoordinateConverter> CONVERTER_TABLE =
-            ImmutableBuilder.<Coordinate, Coordinate, CoordinateConverter>newTable()
+            ImmutableBuilder.<Coordinate, Coordinate, CoordinateConverter>builderOfTable()
                     .put(WGS84, GCJ02, new Wgs84ToGcj02CoordinateConverter())
                     .put(WGS84, BD09, new Wgs84ToBd09CoordinateConverter())
                     .put(WGS84, MERCATOR, new Wgs84ToMercatorCoordinateConverter())

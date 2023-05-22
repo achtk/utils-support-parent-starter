@@ -14,7 +14,7 @@ import java.util.Map;
 @Spi("el")
 public class DelegateExpressionParser implements ExpressionParser{
 
-    final Map<String, Object> context = ImmutableBuilder.<String, Object>newMap().build();
+    final Map<String, Object> context = ImmutableBuilder.<String, Object>builderOfMap().build();
 
     @Override
     public ExpressionParser setVariable(String name, Object value) {
