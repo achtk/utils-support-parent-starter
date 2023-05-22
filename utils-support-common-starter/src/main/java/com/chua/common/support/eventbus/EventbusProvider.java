@@ -32,24 +32,23 @@ public class EventbusProvider implements InitializingAware, AutoCloseable {
     private final ConcurrentMap<String, Eventbus> adaptors = new ConcurrentHashMap<>();
 
     public EventbusProvider() {
-        afterPropertiesSet();
+        this(null, null);
+
     }
     private final Map<Object, Set<EventbusEvent>> subscribes = new IdentityHashMap<>(16);
 
     public EventbusProvider(Profile profile) {
-        this();
-        this.profile = profile;
+        this(profile, null);
     }
 
     public EventbusProvider(Executor executor) {
-        this();
-        this.executor = executor;
+        this(null, executor);
     }
 
     public EventbusProvider(Profile profile, Executor executor) {
-        this();
         this.profile = profile;
         this.executor = executor;
+        afterPropertiesSet();
     }
 
     @Override
@@ -58,6 +57,9 @@ public class EventbusProvider implements InitializingAware, AutoCloseable {
         Map<String, Eventbus> list = ServiceProvider.of(Eventbus.class).list(profile);
         for (Map.Entry<String, Eventbus> entry : list.entrySet()) {
             Eventbus eventbus = entry.getValue();
+            if (null == eventbus) {
+                return;
+            }
             eventbus.executor(ObjectUtils.defaultIfNull(executor, ThreadUtils.newSingleThreadExecutor()));
             environmentProvider.refresh(eventbus);
             addEventbus(eventbus.event().name(), eventbus);

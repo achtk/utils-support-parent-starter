@@ -104,4 +104,8 @@ public class TarProfileResolver implements ProfileResolver, ServiceFactory<Profi
     }
 
 
+    @Override
+    public Class<ProfileResolver> getType() {
+        return ProfileResolver.class;
+    }
 }

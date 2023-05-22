@@ -2,13 +2,13 @@ package com.chua.common.support.lang.profile;
 
 
 import com.chua.common.support.bean.BeanMap;
+import com.chua.common.support.bean.BeanUtils;
 import com.chua.common.support.constant.ValueMode;
 import com.chua.common.support.context.environment.Environment;
 import com.chua.common.support.converter.Converter;
 import com.chua.common.support.json.JsonArray;
 import com.chua.common.support.json.JsonObject;
 import com.chua.common.support.lang.profile.value.ProfileValue;
-import com.chua.common.support.protocol.server.ServerRequest;
 
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
@@ -630,6 +630,24 @@ public interface Profile extends Environment {
      * @return E
      */
     <E> E bind(String pre, Class<E> target);
+
+    /**
+     * 对象绑定
+     *
+     * @param pre    前缀
+     * @param target 目标类型
+     * @param <E>    类型
+     * @return E
+     */
+    default <E> E bind(String[] pre, Class<E> target) {
+        Map<String, Object> tpl = new LinkedHashMap<>();
+        for (String s : pre) {
+            E bind = bind(s, target);
+            tpl.putAll(BeanMap.of(bind, true));
+        }
+
+        return BeanUtils.copyProperties(tpl, target);
+    }
 
     /**
      * 对象绑定

@@ -11,6 +11,8 @@ import com.chua.redis.support.util.JedisUtil;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPubSub;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,12 +27,12 @@ public class RedisMonitor extends AbstractMonitor {
     @Override
     public void preStart() {
         RedisConfiguration redisConfiguration = new RedisConfiguration();
-        redisConfiguration.setUser(configuration.username());
+        redisConfiguration.setUsername(configuration.username());
         redisConfiguration.setPort(netAddress.getPort(6379));
         redisConfiguration.setHost(netAddress.getHost("127.0.0.1"));
         redisConfiguration.setPassword(configuration.password());
         redisConfiguration.setDatabase(NumberUtils.toInt(configuration.database(), 0));
-        redisConfiguration.setConnectionTimeoutMs(configuration.timeout());
+        redisConfiguration.setConnectTimeout(Duration.of(configuration.timeout(), ChronoUnit.MILLIS));
 
         this.jedis = JedisUtil.getJedis(redisConfiguration);
         jedis.set("notify", "新浪微博：小叶子一点也不逗");

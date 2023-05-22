@@ -6,6 +6,7 @@ import org.redisson.api.RedissonClient;
 import org.redisson.codec.JsonJacksonCodec;
 import org.redisson.config.Config;
 
+import java.time.temporal.ChronoUnit;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 
@@ -26,7 +27,7 @@ public class RedissonUtils {
      */
     public static RedissonClient create(RedisConfiguration redisConfiguration, Executor executor) {
         try {
-            String address = redisConfiguration.getAddress();
+            String address = redisConfiguration.getUrl();
             Config config = new Config();
             config.setCodec(new JsonJacksonCodec());
 
@@ -37,21 +38,21 @@ public class RedissonUtils {
             if (address.split(CUT).length == 1) {
                 config.useSingleServer()
                         .setAddress(address)
-                        .setConnectTimeout(redisConfiguration.getConnectionTimeoutMs())
+                        .setConnectTimeout(Math.toIntExact(redisConfiguration.getConnectTimeout().get(ChronoUnit.MILLIS)))
                         .setPassword(redisConfiguration.getPassword())
                         .setDatabase(redisConfiguration.getDatabase())
                         .setKeepAlive(true)
-                        .setTimeout(redisConfiguration.getConnectionTimeoutMs());
+                        .setTimeout(Math.toIntExact(redisConfiguration.getTimeout().get(ChronoUnit.MILLIS)));
 
                 return Redisson.create(config);
             }
 
             config.useClusterServers()
                     .addNodeAddress(address.split(CUT))
-                    .setConnectTimeout(redisConfiguration.getConnectionTimeoutMs())
+                    .setConnectTimeout(Math.toIntExact(redisConfiguration.getConnectTimeout().get(ChronoUnit.MILLIS)))
                     .setPassword(redisConfiguration.getPassword())
                     .setKeepAlive(true)
-                    .setTimeout(redisConfiguration.getConnectionTimeoutMs());
+                    .setTimeout(Math.toIntExact(redisConfiguration.getTimeout().get(ChronoUnit.MILLIS)));
             return Redisson.create(config);
         } catch (Exception e) {
             e.printStackTrace();

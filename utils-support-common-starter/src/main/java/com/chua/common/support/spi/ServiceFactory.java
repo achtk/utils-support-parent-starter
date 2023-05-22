@@ -1,16 +1,19 @@
 package com.chua.common.support.spi;
 
-import com.chua.common.support.reflection.describe.GenericDescribe;
-import com.chua.common.support.reflection.describe.TypeDescribe;
-
 import java.util.Map;
 
 /**
  * 服务工厂
+ *
  * @author CH
  */
 @SuppressWarnings("ALL")
 public interface ServiceFactory<E> {
+    /**
+     * 类型
+     * @return 类型
+     */
+    Class<E> getType();
 
     /**
      * 获取实现
@@ -18,9 +21,7 @@ public interface ServiceFactory<E> {
      * @return 实现
      */
     default E getExtension(String name) {
-        TypeDescribe typeDescribe = new TypeDescribe(this);
-        GenericDescribe genericDescribe = typeDescribe.getActualTypeArguments();
-        return (E) ServiceProvider.of(genericDescribe.get(0).getActualTypeArguments()).getExtension(name);
+        return (E) ServiceProvider.of(getType()).getExtension(name);
     }
 
     /**
@@ -29,9 +30,7 @@ public interface ServiceFactory<E> {
      * @return 实现
      */
     default E getNewExtension(String name, Object... args) {
-        TypeDescribe typeDescribe = new TypeDescribe(this);
-        GenericDescribe genericDescribe = typeDescribe.getActualTypeArguments();
-        return (E) ServiceProvider.of(genericDescribe.get(0).getActualTypeArguments()).getNewExtension(name, args);
+        return (E) ServiceProvider.of(getType()).getNewExtension(name, args);
     }
 
     /**
@@ -40,9 +39,7 @@ public interface ServiceFactory<E> {
      * @return 实现
      */
     default Map<String, Class<E>> listType() {
-        TypeDescribe typeDescribe = new TypeDescribe(this);
-        GenericDescribe genericDescribe = typeDescribe.getActualTypeArguments();
-        Map stringClassMap = ServiceProvider.of(genericDescribe.get(0).getActualTypeArguments()).listType();
+        Map stringClassMap = ServiceProvider.of(getType()).listType();
         return stringClassMap;
     }
     /**
@@ -52,9 +49,7 @@ public interface ServiceFactory<E> {
      * @return 实现
      */
     default Map<String, E> list(Object... args) {
-        TypeDescribe typeDescribe = new TypeDescribe(this);
-        GenericDescribe genericDescribe = typeDescribe.getActualTypeArguments();
-        return (Map<String, E>) ServiceProvider.of(genericDescribe.get(0).getActualTypeArguments()).list(args);
+        return (Map<String, E>) ServiceProvider.of(getType()).list(args);
 
     }
 }

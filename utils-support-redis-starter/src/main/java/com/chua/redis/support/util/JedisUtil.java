@@ -61,7 +61,7 @@ public class JedisUtil {
         GenericObjectPoolConfig<Jedis> config = new GenericObjectPoolConfig<>();
         doAnalaysisPoolConfig(config, MapUtils.asProp(BeanMap.create(configuration)));
 
-        String hosts = configuration.getAddress();
+        String hosts = configuration.getUrl();
         if (null != hosts) {
             NetAddress netAddress = NetAddress.of(hosts);
             return new JedisPool(config, netAddress.getHost(), netAddress.getPort());
@@ -188,10 +188,10 @@ public class JedisUtil {
         // JedisPoolConfig
         try {
             String host = redisConfiguration.getHost();
-            String user = redisConfiguration.getUser();
+            String user = redisConfiguration.getUsername();
             String password = redisConfiguration.getPassword();
             Integer database = redisConfiguration.getDatabase();
-            Integer connectionTimeoutMs = redisConfiguration.getConnectionTimeoutMs();
+            Long connectionTimeoutMs = redisConfiguration.getConnectTimeout().get(ChronoUnit.MILLIS);
             Integer port = redisConfiguration.getPort();
 
             DefaultJedisClientConfig.Builder builder = DefaultJedisClientConfig.builder();
@@ -204,7 +204,7 @@ public class JedisUtil {
             }
 
             if (null != connectionTimeoutMs) {
-                builder.connectionTimeoutMillis(connectionTimeoutMs);
+                builder.connectionTimeoutMillis(connectionTimeoutMs.intValue());
             }
 
             builder.database(database);

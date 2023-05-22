@@ -9,11 +9,9 @@ import com.chua.common.support.utils.CollectionUtils;
 import com.chua.common.support.utils.StringUtils;
 import com.chua.redis.support.config.RedisConfiguration;
 import com.chua.redis.support.util.JedisUtil;
-import lombok.NoArgsConstructor;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -38,9 +36,10 @@ public class RedisEventbus extends AbstractEventbus {
 
     public RedisEventbus(Profile profile) {
         super(profile);
-        RedisConfiguration redisConfiguration = profile.bind("redis", RedisConfiguration.class);
+        RedisConfiguration redisConfiguration = profile.bind(new String[]{"redis", "spring.redis"}, RedisConfiguration.class);
+
         this.shardedJedisPool = JedisUtil.getJedisPool(redisConfiguration);
-        if(null != shardedJedisPool) {
+        if (null != shardedJedisPool) {
             IS_RUNNING.set(true);
         }
     }

@@ -174,4 +174,9 @@ public class DelegateProfile implements Profile, ServiceFactory<ProfileResolver>
     public void afterPropertiesSet() {
 
     }
+
+    @Override
+    public Class<ProfileResolver> getType() {
+        return ProfileResolver.class;
+    }
 }
