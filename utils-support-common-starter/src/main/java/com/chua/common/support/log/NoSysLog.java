@@ -1,10 +1,13 @@
 package com.chua.common.support.log;
 
+import com.chua.common.support.annotations.Extension;
+
 /**
  * 日志
  *
  * @author CH
  */
+@Extension("no-log")
 public class NoSysLog implements Log {
 
 

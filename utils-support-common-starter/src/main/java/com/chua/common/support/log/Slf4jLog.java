@@ -1,5 +1,6 @@
 package com.chua.common.support.log;
 
+import com.chua.common.support.annotations.Extension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,6 +9,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author CH
  */
+@Extension("slf4j")
 public class Slf4jLog implements Log {
 
     private Logger logger = LoggerFactory.getLogger(Slf4jLog.class);

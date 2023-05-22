@@ -1,5 +1,6 @@
 package com.chua.common.support.log;
 
+import com.chua.common.support.annotations.Extension;
 import com.chua.common.support.utils.StringUtils;
 
 /**
@@ -7,6 +8,7 @@ import com.chua.common.support.utils.StringUtils;
  *
  * @author CH
  */
+@Extension("sys")
 public class SysLog implements Log {
 
 

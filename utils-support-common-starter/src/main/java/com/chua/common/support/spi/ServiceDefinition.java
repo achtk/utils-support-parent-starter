@@ -1,11 +1,13 @@
 package com.chua.common.support.spi;
 
+import com.chua.common.support.converter.Converter;
 import com.chua.common.support.function.NameAware;
 import com.chua.common.support.spi.autowire.ServiceAutowire;
 import com.chua.common.support.spi.finder.ServiceFinder;
 import lombok.Data;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 
 /**
@@ -86,7 +88,13 @@ public class ServiceDefinition {
         Constructor<?>[] constructors = implClass.getConstructors();
         for (Constructor<?> constructor : constructors) {
             if(constructor.getParameterCount() != args.length) {
-                continue;
+                if (constructor.getParameterCount() > args.length) {
+                    continue;
+                }
+                try {
+                    return (T) serviceAutowire.autowire(newInstance(constructor, args));
+                } catch (Exception ignored) {
+                }
             }
             constructor.setAccessible(true);
             try {
@@ -99,6 +107,37 @@ public class ServiceDefinition {
             return (T) implClass.newInstance();
         } catch (Exception ignored) {
         }
+        return null;
+    }
+
+    private Object newInstance(Constructor<?> constructor, Object[] args) throws InstantiationException, IllegalAccessException {
+        Class<?>[] parameterTypes = constructor.getParameterTypes();
+        Object[] args1 = new Object[parameterTypes.length];
+        for (int i = 0; i < parameterTypes.length; i++) {
+            Class<?> parameterType = parameterTypes[i];
+            Object value = getValue(parameterType, args);
+            if (null == value) {
+                throw new IllegalArgumentException();
+            }
+            args1[i] = value;
+        }
+
+        constructor.setAccessible(true);
+        try {
+            return constructor.newInstance(args1);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Object getValue(Class<?> parameterType, Object[] args) {
+        for (Object arg : args) {
+            Object necessary = Converter.convertIfNecessary(arg, parameterType);
+            if (null != necessary) {
+                return necessary;
+            }
+        }
+
         return null;
     }
 

@@ -38,21 +38,21 @@ public class RedissonUtils {
             if (address.split(CUT).length == 1) {
                 config.useSingleServer()
                         .setAddress(address)
-                        .setConnectTimeout(Math.toIntExact(redisConfiguration.getConnectTimeout().get(ChronoUnit.MILLIS)))
+                        .setConnectTimeout(Math.toIntExact(redisConfiguration.getConnectTimeout().get(ChronoUnit.SECONDS) * 1000))
                         .setPassword(redisConfiguration.getPassword())
                         .setDatabase(redisConfiguration.getDatabase())
                         .setKeepAlive(true)
-                        .setTimeout(Math.toIntExact(redisConfiguration.getTimeout().get(ChronoUnit.MILLIS)));
+                        .setTimeout(Math.toIntExact(redisConfiguration.getTimeout().get(ChronoUnit.SECONDS) * 1000));
 
                 return Redisson.create(config);
             }
 
             config.useClusterServers()
                     .addNodeAddress(address.split(CUT))
-                    .setConnectTimeout(Math.toIntExact(redisConfiguration.getConnectTimeout().get(ChronoUnit.MILLIS)))
+                    .setConnectTimeout(Math.toIntExact(redisConfiguration.getConnectTimeout().get(ChronoUnit.SECONDS) * 1000))
                     .setPassword(redisConfiguration.getPassword())
                     .setKeepAlive(true)
-                    .setTimeout(Math.toIntExact(redisConfiguration.getTimeout().get(ChronoUnit.MILLIS)));
+                    .setTimeout(Math.toIntExact(redisConfiguration.getTimeout().get(ChronoUnit.SECONDS)) * 1000);
             return Redisson.create(config);
         } catch (Exception e) {
             e.printStackTrace();

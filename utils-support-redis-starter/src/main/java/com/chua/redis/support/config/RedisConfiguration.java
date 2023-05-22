@@ -5,6 +5,7 @@ import lombok.experimental.Accessors;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
+import java.util.Optional;
 
 /**
  * redis 配置
@@ -32,5 +33,10 @@ public class RedisConfiguration {
 
     public static RedisConfiguration defaultConfiguration() {
         return CONFIGURATION;
+    }
+
+
+    public String getUrl() {
+        return Optional.ofNullable(url).orElse(ssl ? "rediss://" + host + ":" + port : "redis://" + host + ":" + port);
     }
 }

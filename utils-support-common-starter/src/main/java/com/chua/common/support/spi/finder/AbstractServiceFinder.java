@@ -10,8 +10,6 @@ import java.net.URL;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.chua.common.support.spi.autowire.AutoServiceAutowire.INSTANCE;
-
 /**
  * 服务查找器
  *
@@ -83,7 +81,7 @@ public abstract class AbstractServiceFinder implements ServiceFinder{
         }
 
         List<ServiceDefinition> rs = new LinkedList<>(buildDefinitionType(obj, implType, url));
-        if (null == alias || "".equals(alias)) {
+        if (null == alias || "".equals(alias) || !rs.isEmpty()) {
             return rs;
         }
         Order order = implType.getDeclaredAnnotation(Order.class);

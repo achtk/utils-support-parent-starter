@@ -14,6 +14,7 @@ import org.redisson.api.listener.MessageListener;
 
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.chua.common.support.constant.CommonConstant.SYMBOL_COMMA;
@@ -26,7 +27,7 @@ import static com.chua.common.support.eventbus.EventbusType.REDIS;
  * @version 1.0.0
  * @since 2021/5/25
  */
-@Spi("redission")
+@Spi(value = "redis", order = -1)
 public class RedisionEventbus extends AbstractEventbus {
 
 
@@ -35,11 +36,11 @@ public class RedisionEventbus extends AbstractEventbus {
     private final List<EventbusEvent> empty = new ArrayList<>();
     private RedissonClient redissonClient;
 
-    public RedisionEventbus(Profile profile) {
+    public RedisionEventbus(Profile profile, Executor executor) {
         super(profile);
         RedisConfiguration redisConfiguration = profile.bind(new String[]{"redis", "spring.redis", "spring.redis.redisson"}, RedisConfiguration.class);
         this.redissonClient = RedissonUtils.create(redisConfiguration, executor);
-        if(redissonClient != null) {
+        if (redissonClient != null) {
             IS_RUNNING.set(true);
         }
     }
@@ -63,6 +64,9 @@ public class RedisionEventbus extends AbstractEventbus {
             temp.computeIfAbsent(name, it -> new HashSet<>()).add(eventbusEvent);
         }
 
+        if (null == redissonClient) {
+            return this;
+        }
         for (Map.Entry<String, Set<EventbusEvent>> entry : temp.entrySet()) {
             RTopic topic = redissonClient.getTopic(entry.getKey());
             topic.addListener(EventbusMessage.class, new MessageListener<EventbusMessage>() {
@@ -134,6 +138,10 @@ public class RedisionEventbus extends AbstractEventbus {
     @Override
     public Eventbus post(String name, Object message) {
         if (StringUtils.isNullOrEmpty(name) || null == message || !IS_RUNNING.get()) {
+            return this;
+        }
+
+        if (null == redissonClient) {
             return this;
         }
 
