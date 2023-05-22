@@ -29,8 +29,7 @@ public class ImmutableBuilderExample {
                 .newHashMap();
 
         System.out.println(map);
-        //创建Table
-
+        //创建guava Table, 不存在依赖则抛出异常
         Table<Integer, String, String> table = ImmutableBuilder.<Integer, String, String>builderOfTable()
                 .put(1, "a", "A")
                 .put(2, "a", "B")
