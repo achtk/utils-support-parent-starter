@@ -134,8 +134,8 @@ public class ConcurrentReferenceTable<R, C, V> implements Table<R, C, V> {
     }
 
     @Override
-    public Map<C, Map<C, V>> rows() {
-        return new LinkedHashMap<>();
+    public Map<R, Map<C, V>> rows() {
+        return rowMap;
     }
 
     @Override

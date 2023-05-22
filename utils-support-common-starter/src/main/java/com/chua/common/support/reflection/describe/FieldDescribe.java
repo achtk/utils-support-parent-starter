@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  */
 @Data
 @Accessors(fluent = true)
-public class FieldDescribe implements MemberDescribe {
+public class FieldDescribe implements MemberDescribe<FieldDescribe> {
     /**
      * 名称
      */
@@ -254,10 +254,45 @@ public class FieldDescribe implements MemberDescribe {
 
     @Override
     public void addAnnotation(Annotation annotation) {
-        if(null == this.annotationTypes) {
+        if (null == this.annotationTypes) {
             annotationTypes = new AnnotationDescribe[0];
         }
         ArrayUtils.addElement(this.annotationTypes, AnnotationDescribe.of(annotation));
+    }
+
+    @Override
+    public FieldDescribe doChainSelf(Object... args) {
+        set(entity, args);
+        return this;
+    }
+
+    @Override
+    public FieldDescribe doChain(Object... args) {
+        set(null, args);
+        return this;
+    }
+
+    @Override
+    public FieldDescribe doChain(Object bean, Object... args) {
+        set(bean, args);
+        return this;
+    }
+
+    @Override
+    public TypeDescribe isChainSelf() {
+        return new TypeDescribe(entity);
+    }
+
+    @Override
+    public TypeDescribe isChain(Object... args) {
+        set(null, args);
+        return new TypeDescribe(entity);
+    }
+
+    @Override
+    public TypeDescribe isChain(Object bean, Object... args) {
+        set(bean, args);
+        return new TypeDescribe(bean);
     }
 
     /**

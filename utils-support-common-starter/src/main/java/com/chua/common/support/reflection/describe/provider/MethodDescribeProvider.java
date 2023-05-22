@@ -69,7 +69,7 @@ public class MethodDescribeProvider extends LinkedList<MethodDescribe>
     }
 
     @Override
-    public <T> T executeThis(Class<T> target, Object... args) {
+    public <T> T executeSelf(Class<T> target, Object... args) {
         MethodDescribe methodDescribe = findMethodDescribe(args, true);
         if (null == methodDescribe) {
             methodDescribe = findMethodDescribe(args, false);

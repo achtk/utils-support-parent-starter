@@ -3,6 +3,7 @@ package com.chua.common.support.utils;
 import com.chua.common.support.bean.BeanMap;
 import com.chua.common.support.constant.CommonConstant;
 import com.chua.common.support.converter.Converter;
+import com.chua.common.support.reflection.describe.ParameterDescribe;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -426,6 +427,7 @@ public class ArrayUtils {
      * @param target 数组
      * @return 数组 = {target} 返回 true
      */
+    @SuppressWarnings("ALL")
     public static <T> boolean isEquals(T[] source, T[] target) {
         if (source == target && source == null) {
             return true;
@@ -438,7 +440,15 @@ public class ArrayUtils {
         boolean isEquals = true;
         for (int i = 0; i < source.length; i++) {
             T sourceClass = source[i];
+            if (sourceClass instanceof ParameterDescribe) {
+                sourceClass = (T) ((ParameterDescribe) sourceClass).returnClassType();
+            }
+
             T targetClass = target[i];
+            if (targetClass instanceof ParameterDescribe) {
+                targetClass = (T) ((ParameterDescribe) targetClass).returnClassType();
+            }
+
             if (null != sourceClass && !sourceClass.equals(targetClass)) {
                 isEquals = false;
                 break;

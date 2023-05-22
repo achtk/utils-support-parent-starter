@@ -1,5 +1,6 @@
 package com.chua.common.support.reflection.describe;
 
+import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.reflection.MethodStation;
 import com.chua.common.support.reflection.describe.provider.FieldDescribeProvider;
 import com.chua.common.support.reflection.describe.provider.MethodDescribeProvider;
@@ -19,11 +20,11 @@ import java.util.stream.Collectors;
  * @author CH
  */
 @Data
-public class TypeDescribe implements MemberDescribe {
+public class TypeDescribe implements MemberDescribe<TypeDescribe>, InitializingAware {
     /**
      * 对象
      */
-    private Object object;
+    protected Object object;
     /**
      * 类型
      */
@@ -31,7 +32,7 @@ public class TypeDescribe implements MemberDescribe {
     /**
      * 名称
      */
-    private final String name;
+    private String name;
 
     /**
      * 注解
@@ -47,24 +48,25 @@ public class TypeDescribe implements MemberDescribe {
     private List<FieldDescribe> fieldDescribes;
 
     public TypeDescribe(Class<?> beanClass) {
+        this.object = null;
         this.beanClass = beanClass;
-        this.name = beanClass.getName();
-        this.annotationTypes = Arrays.stream(beanClass.getDeclaredAnnotations())
-                .map(AnnotationDescribe::of)
-                .toArray(AnnotationDescribe[]::new);
-        this.methodDescribes = ClassUtils.getMethods(beanClass).stream()
-                .map(MethodDescribe::of)
-                .map(it -> it.entity(object))
-                .collect(Collectors.toList());
-        this.fieldDescribes = ClassUtils.getFields(beanClass).stream()
-                .map(FieldDescribe::of)
-                .map(it -> it.entity(object))
-                .collect(Collectors.toList());
+        afterPropertiesSet();
     }
 
     public TypeDescribe(Object object) {
-        this(object.getClass());
         this.object = object;
+        this.beanClass = ClassUtils.toType(object);
+        afterPropertiesSet();
+    }
+
+    public TypeDescribe(String beanName) {
+        this(ClassUtils.forName(beanName));
+        this.object = ClassUtils.forObject(beanName);
+        afterPropertiesSet();
+    }
+
+    public boolean isPresent() {
+        return object instanceof String && ClassUtils.isPresent(object.toString());
     }
 
     /**
@@ -101,7 +103,9 @@ public class TypeDescribe implements MemberDescribe {
 
     @Override
     public MethodDescribe getMethodDescribe(String name, String[] parameterTypes) {
-        Optional<MethodDescribe> first = methodDescribes.stream().filter(it -> it.name().equals(name) && ArrayUtils.isEquals(it.parameterDescribes(), parameterTypes)).findFirst();
+        Optional<MethodDescribe> first = methodDescribes.stream().filter(it -> {
+            return it.name().equals(name) && ArrayUtils.isEquals(Arrays.stream(it.parameterDescribes()).map(ParameterDescribe::returnType).toArray(String[]::new), parameterTypes);
+        }).findFirst();
         return first.map(methodDescribe -> methodDescribe.entity(object)).orElse(null);
     }
 
@@ -146,10 +150,40 @@ public class TypeDescribe implements MemberDescribe {
 
     @Override
     public void addAnnotation(Annotation annotation) {
-        if(null == this.annotationTypes) {
+        if (null == this.annotationTypes) {
             annotationTypes = new AnnotationDescribe[0];
         }
         ArrayUtils.addElement(this.annotationTypes, AnnotationDescribe.of(annotation));
+    }
+
+    @Override
+    public TypeDescribe doChainSelf(Object... args) {
+        return this;
+    }
+
+    @Override
+    public TypeDescribe doChain(Object... args) {
+        return this;
+    }
+
+    @Override
+    public TypeDescribe doChain(Object bean, Object... args) {
+        return this;
+    }
+
+    @Override
+    public TypeDescribe isChainSelf() {
+        return this;
+    }
+
+    @Override
+    public TypeDescribe isChain(Object... args) {
+        return this;
+    }
+
+    @Override
+    public TypeDescribe isChain(Object bean, Object... args) {
+        return new TypeDescribe(bean);
     }
 
     /**
@@ -185,10 +219,26 @@ public class TypeDescribe implements MemberDescribe {
 
     /**
      * 获取MethodStation
+     *
      * @return MethodStation
      */
     public MethodStation getMethodStation() {
         return MethodStation.of(object);
     }
 
+    @Override
+    public void afterPropertiesSet() {
+        this.name = beanClass.getName();
+        this.annotationTypes = Arrays.stream(beanClass.getDeclaredAnnotations())
+                .map(AnnotationDescribe::of)
+                .toArray(AnnotationDescribe[]::new);
+        this.methodDescribes = ClassUtils.getMethods(beanClass).stream()
+                .map(MethodDescribe::of)
+                .map(it -> it.entity(object))
+                .collect(Collectors.toList());
+        this.fieldDescribes = ClassUtils.getFields(beanClass).stream()
+                .map(FieldDescribe::of)
+                .map(it -> it.entity(object))
+                .collect(Collectors.toList());
+    }
 }

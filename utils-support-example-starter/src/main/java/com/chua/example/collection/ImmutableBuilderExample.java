@@ -35,9 +35,10 @@ public class ImmutableBuilderExample {
                 .put(1, "a", "A")
                 .put(2, "a", "B")
                 .put(3, "b", "A")
-                .build();
+                .buildGuavaOrThrow();
 
         System.out.println(table);
+        System.out.println(table.toString());
         ImmutableTable<Integer, String, String> immutableTable = ImmutableTable.<Integer, String, String>builder()
                 .put(1, "a", "A")
                 .put(2, "a", "B")
@@ -45,6 +46,6 @@ public class ImmutableBuilderExample {
                 .build();
 
 
-        System.out.println(immutableTable);
+        System.out.println(immutableTable.toString());
     }
 }

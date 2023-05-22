@@ -13,7 +13,7 @@ import java.util.Map;
  *
  * @author CH
  */
-public class TypeAttribute implements MemberDescribe {
+public class TypeAttribute implements MemberDescribe<TypeAttribute> {
     /**
      * 类型描述
      */
@@ -98,6 +98,36 @@ public class TypeAttribute implements MemberDescribe {
     @Override
     public void addAnnotation(Annotation annotation) {
         typeDescribe.addAnnotation(annotation);
+    }
+
+    @Override
+    public TypeAttribute doChainSelf(Object... args) {
+        return this;
+    }
+
+    @Override
+    public TypeAttribute doChain(Object... args) {
+        return this;
+    }
+
+    @Override
+    public TypeAttribute doChain(Object bean, Object... args) {
+        return this;
+    }
+
+    @Override
+    public TypeDescribe isChainSelf() {
+        return typeDescribe.isChainSelf();
+    }
+
+    @Override
+    public TypeDescribe isChain(Object... args) {
+        return typeDescribe.isChain(args);
+    }
+
+    @Override
+    public TypeDescribe isChain(Object bean, Object... args) {
+        return typeDescribe.isChain(bean, args);
     }
 
     /**

@@ -1,6 +1,8 @@
 package com.chua.common.support.utils;
 
 import com.chua.common.support.function.SafeConsumer;
+import com.chua.common.support.function.SafeFunction;
+import com.chua.common.support.function.SafeSupplier;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
@@ -408,12 +410,27 @@ public class ObjectUtils {
 
     /**
      * 对象是否相等
+     *
      * @param a a
      * @param b b
      * @return 对象是否相等
      */
     public static boolean equal(Object a, Object b) {
         return a == b || (a != null && a.equals(b));
+    }
+
+    /**
+     * 处理非空
+     *
+     * @param value    值
+     * @param function 回调
+     * @return
+     */
+    public static Object withNull(Object value, SafeSupplier<Object> nullCallback, SafeFunction<Object, Object> function) {
+        if (null == value) {
+            return nullCallback.get();
+        }
+        return function.apply(value);
     }
 
     /**

@@ -70,15 +70,16 @@ public interface DescribeProvider {
      * @param args   参数
      * @return T t
      */
-    <T> T executeThis(Class<T> target, Object... args);
+    <T> T executeSelf(Class<T> target, Object... args);
+
     /**
      * 执行方法
      *
-     * @param args   参数
+     * @param args 参数
      * @return value
      */
-    default Object executeThis(Object... args) {
-        return executeThis(Object.class, args);
+    default Object executeSelf(Object... args) {
+        return executeSelf(Object.class, args);
     }
 
     /**

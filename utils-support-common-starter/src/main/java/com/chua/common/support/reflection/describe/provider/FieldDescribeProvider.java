@@ -3,15 +3,10 @@ package com.chua.common.support.reflection.describe.provider;
 import com.chua.common.support.collection.CollectionProvider;
 import com.chua.common.support.lang.loader.Loadable;
 import com.chua.common.support.reflection.describe.FieldDescribe;
-import com.chua.common.support.reflection.describe.MethodDescribe;
-import com.chua.common.support.reflection.describe.TypeDescribe;
-import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.CollectionUtils;
 
 import java.util.Collection;
 import java.util.LinkedList;
-
-import static com.chua.common.support.constant.CommonConstant.EMPTY_OBJECT;
 
 
 /**
@@ -35,9 +30,9 @@ public class FieldDescribeProvider extends LinkedList<FieldDescribe>
     }
 
     @Override
-    public <T> T executeThis(Class<T> target, Object... args) {
+    public <T> T executeSelf(Class<T> target, Object... args) {
         FieldDescribe first = CollectionUtils.findFirst(this);
-        if(null == first) {
+        if (null == first) {
             return null;
         }
 

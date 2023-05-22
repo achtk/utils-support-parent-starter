@@ -2,6 +2,7 @@ package com.chua.common.support.reflection.describe;
 
 import com.chua.common.support.reflection.describe.provider.FieldDescribeProvider;
 import com.chua.common.support.reflection.describe.provider.MethodDescribeProvider;
+import com.chua.common.support.utils.ClassUtils;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  *
  * @author CH
  */
-public interface MemberDescribe {
+public interface MemberDescribe<E extends MemberDescribe<E>> {
     /**
      * 获取属性
      *
@@ -19,6 +20,7 @@ public interface MemberDescribe {
      * @return 属性
      */
     FieldDescribe getFieldDescribe(String name);
+
     /**
      * 获取属性
      *
@@ -35,6 +37,17 @@ public interface MemberDescribe {
      * @return 获取方法
      */
     MethodDescribe getMethodDescribe(String name, String[] parameterTypes);
+
+    /**
+     * 获取方法
+     *
+     * @param name           方法名
+     * @param parameterTypes 字段类型
+     * @return 获取方法
+     */
+    default MethodDescribe getMethodDescribe(String name, Class<?>... parameterTypes) {
+        return getMethodDescribe(name, ClassUtils.toTypeName(parameterTypes));
+    }
 
     /**
      * 获取方法
@@ -105,6 +118,7 @@ public interface MemberDescribe {
     default boolean hasAnnotation(Class<? extends Annotation> aClass) {
         return hasAnnotation(aClass.getTypeName());
     }
+
     /**
      * 方法包含参数
      *
@@ -115,7 +129,57 @@ public interface MemberDescribe {
 
     /**
      * 添加注解
+     *
      * @param annotation 注解
      */
     void addAnnotation(Annotation annotation);
+
+    /**
+     * 执行方法
+     *
+     * @param args 参数
+     * @return this
+     */
+    E doChainSelf(Object... args);
+
+    /**
+     * 执行方法
+     *
+     * @param args 参数
+     * @return this
+     */
+    E doChain(Object... args);
+
+    /**
+     * 执行方法
+     *
+     * @param bean bean
+     * @param args 参数
+     * @return this
+     */
+    E doChain(Object bean, Object... args);
+
+    /**
+     * 执行方法
+     *
+     * @return this
+     */
+    TypeDescribe isChainSelf();
+
+    /**
+     * 执行方法
+     *
+     * @param args 参数
+     * @return this
+     */
+    TypeDescribe isChain(Object... args);
+
+    /**
+     * 执行方法
+     *
+     * @param bean bean
+     * @param args 参数
+     * @return this
+     */
+    TypeDescribe isChain(Object bean, Object... args);
 }

@@ -34,7 +34,7 @@ public class AutoServiceAutowire implements ServiceAutowire{
         }
 
         if(null != methodDescribe) {
-            methodDescribe.executeThis(object);
+            methodDescribe.executeSelf(object);
         }
         return object;
     }

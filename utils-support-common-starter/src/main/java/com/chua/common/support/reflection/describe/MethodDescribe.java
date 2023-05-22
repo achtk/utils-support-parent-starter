@@ -6,7 +6,6 @@ import com.chua.common.support.reflection.describe.provider.MethodDescribeProvid
 import com.chua.common.support.unit.name.NamingCase;
 import com.chua.common.support.utils.ArrayUtils;
 import com.chua.common.support.utils.ClassUtils;
-import com.chua.common.support.utils.StringUtils;
 import com.chua.common.support.value.NullValue;
 import com.chua.common.support.value.Value;
 import lombok.Data;
@@ -32,7 +31,7 @@ import static com.chua.common.support.constant.CommonConstant.*;
  */
 @Data
 @Accessors(fluent = true)
-public class MethodDescribe implements MemberDescribe {
+public class MethodDescribe implements MemberDescribe<MethodDescribe> {
     /**
      * 名称
      */
@@ -419,6 +418,39 @@ public class MethodDescribe implements MemberDescribe {
             annotationTypes = new AnnotationDescribe[0];
         }
         ArrayUtils.addElement(this.annotationTypes, AnnotationDescribe.of(annotation));
+    }
+
+    @Override
+    public MethodDescribe doChainSelf(Object... args) {
+        invoke(entity, args);
+        return this;
+    }
+
+    @Override
+    public MethodDescribe doChain(Object... args) {
+        invoke(null, args);
+        return this;
+    }
+
+    @Override
+    public MethodDescribe doChain(Object bean, Object... args) {
+        invoke(bean, args);
+        return this;
+    }
+
+    @Override
+    public TypeDescribe isChainSelf() {
+        return new TypeDescribe(entity);
+    }
+
+    @Override
+    public TypeDescribe isChain(Object... args) {
+        return new TypeDescribe(invoke(null, args).getValue());
+    }
+
+    @Override
+    public TypeDescribe isChain(Object bean, Object... args) {
+        return new TypeDescribe(invoke(bean, args).getValue());
     }
 
     @Override

@@ -131,7 +131,7 @@ public interface Table<R, C, V> {
      *
      * @return map
      */
-    Map<C, Map<C, V>> rows();
+    Map<R, Map<C, V>> rows();
 
     /**
      * 结果
