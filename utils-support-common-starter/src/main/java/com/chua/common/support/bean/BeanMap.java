@@ -103,6 +103,7 @@ public class BeanMap extends LinkedHashMap<String, Object> {
             rs = new HashSet(source.size());
         }
 
+        source = new LinkedList(source);
         check(source);
         Collection finalRs = rs;
         source.forEach(item -> {
