@@ -1,5 +1,6 @@
 package com.chua.common.support.lang.treenode;
 
+import com.chua.common.support.utils.CollectionUtils;
 import com.chua.common.support.utils.StringUtils;
 import lombok.Data;
 
@@ -239,5 +240,37 @@ public class TreeNode<T> {
     private void doAnalysisNode(Set<TreeNode<T>> rs, TreeNode<T> child) {
         rs.add(child);
         doAnalysisNode(rs, child.getChildren());
+    }
+
+    public boolean hasChildren() {
+        return !CollectionUtils.isEmpty(getChildren());
+    }
+
+
+    public boolean contain(String id) {
+        List<TreeNode<T>> children1 = getChildren();
+        if (null != children1) {
+            return contain(children1, id);
+        }
+        return false;
+    }
+
+    private boolean contain(List<TreeNode<T>> children, String id) {
+        if (null == children) {
+            return false;
+        }
+
+        for (TreeNode<T> tTreeNode : children) {
+            if (tTreeNode.id.equals(id)) {
+                return true;
+            }
+
+
+            if (contain(tTreeNode.getChildren(), id)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

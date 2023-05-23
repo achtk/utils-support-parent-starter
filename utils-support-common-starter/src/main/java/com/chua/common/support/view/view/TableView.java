@@ -36,7 +36,7 @@ public class TableView implements View {
     /**
      * 是否渲染边框
      */
-    private boolean hasBorder;
+    private boolean hasBorder = true;
 
     /**
      * 边框
@@ -240,11 +240,11 @@ public class TableView implements View {
         final StringBuilder separationLineSB = new StringBuilder();
         for (int width : widthCacheArray) {
             if (width > 0) {
-                separationLineSB.append("+").append(StringUtils.repeat("-", width + 2 * padding));
+                separationLineSB.append("-").append(StringUtils.repeat("-", width + 2 * padding));
             }
         }
         return separationLineSB
-                .append("+")
+                .append("-")
                 .toString();
     }
 

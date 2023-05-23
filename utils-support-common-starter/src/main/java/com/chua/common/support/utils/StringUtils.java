@@ -1,6 +1,5 @@
 package com.chua.common.support.utils;
 
-import com.chua.common.support.constant.CommonConstant;
 import com.chua.common.support.constant.RegexConstant;
 import com.chua.common.support.function.Splitter;
 import com.chua.common.support.jsoup.helper.Validate;
@@ -3220,5 +3219,81 @@ public class StringUtils {
             ++count;
         }
         return count;
+    }
+
+    /**
+     * 得到一个字符串中双字节出现的次数
+     *
+     * @param cell cell
+     * @return 次数
+     */
+    public static Integer getCharCount(String cell) {
+        if (cell == null) {
+            return 0;
+        }
+        return cell.length() - getSingleCharCount(cell);
+    }
+
+
+    /**
+     * 得到一个字符串中单字节出现的次数
+     *
+     * @param cell
+     * @return
+     */
+    public static Integer getSingleCharCount(String cell) {
+        if (cell == null) {
+            return 0;
+        }
+        String reg = "[^\t\\x00-\\xff]";
+        cell = cell.replaceAll(reg, "");
+        //把·当做中文字符两个宽度
+        return cell.replaceAll("·", "").length();
+    }
+
+    /**
+     * 此方法主要为表格的单元格数据按照指定长度填充并居中对齐并带上分割符号
+     *
+     * @param str    原始字符串
+     * @param len    输出字符串的总长度
+     * @param symbol 分割符号
+     * @param index  传入的cell在list的索引，如果为第一个则需要在前面增加分割符号
+     * @return String
+     */
+    public static String getPadString(String str, Integer len, String symbol, int index) {
+        String origin = str + "  ";
+        if (index == 0) {
+            String tmp = getPadString(origin, len - 2);
+            return symbol + tmp + symbol;
+        } else {
+
+            String tmp = getPadString(origin, len - 1);
+            return tmp + symbol;
+        }
+    }
+
+    /**
+     * 将字符串填充到指定长度并居中对齐
+     *
+     * @param str str
+     * @param len length
+     * @return str
+     */
+    public static String getPadString(String str, Integer len) {
+        StringBuilder res = new StringBuilder();
+        str = str.trim();
+        if (str.length() < len) {
+            int diff = len - str.length();
+            int fixLen = diff / 2;
+            String fix = repeat(" ", fixLen);
+            res.append(fix).append(str).append(fix);
+            if (res.length() > len) {
+                return res.substring(0, len);
+            } else {
+                res.append(repeat(" ", len - res.length()));
+                return res.toString();
+            }
+        }
+        return str.substring(0, len);
     }
 }
