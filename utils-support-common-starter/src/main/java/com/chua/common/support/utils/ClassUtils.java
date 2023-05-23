@@ -283,7 +283,7 @@ public class ClassUtils {
      * @return 类加载器是否包含该类, 包含返回true
      */
     public static boolean isPresent(final String className) {
-        return isPresent(className, null);
+        return isPresent(className, getDefaultClassLoader());
     }
 
     /**

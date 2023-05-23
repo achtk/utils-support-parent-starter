@@ -18,8 +18,10 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.Buffer;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 import static org.bytedeco.ffmpeg.global.avcodec.AV_CODEC_ID_AAC;
 import static org.bytedeco.ffmpeg.global.avcodec.AV_CODEC_ID_H264;
@@ -268,4 +270,77 @@ public class VideoUtils {
         }
     }
 
+    /**
+     * 多个视频的合并
+     *
+     * @param videoList 地址集合
+     * @param output    合并后的视频输出地址
+     */
+    public static void videoMerge(List<String> videoList, String output) throws FrameRecorder.Exception, FrameGrabber.Exception {
+        // 帧抓取器 以第一个视频为蓝本开始抓取
+        try (FFmpegFrameGrabber grabber = new FFmpegFrameGrabber(videoList.get(0))) {
+            // 载入
+            grabber.start();
+            // 配置帧解码器
+            try (FFmpegFrameRecorder recorder = new FFmpegFrameRecorder(output, grabber.getImageWidth(),
+                    grabber.getImageHeight(), 0)) {
+                // 视频编解码器
+                recorder.setVideoCodec(avcodec.AV_CODEC_ID_H264);
+                // 单通道
+                recorder.setInterleaved(true);
+                recorder.setAudioCodec(grabber.getAudioCodec());
+                recorder.setAudioChannels(grabber.getAudioChannels());
+                recorder.setAudioBitrate(grabber.getAudioBitrate());
+                recorder.setAudioMetadata(grabber.getAudioMetadata());
+                recorder.setAudioOptions(grabber.getAudioOptions());
+                // 输出流封装格式
+                recorder.setFormat("mp4");
+                recorder.setVideoCodec(grabber.getVideoCodec());
+                recorder.setVideoMetadata(grabber.getVideoMetadata());
+                recorder.setVideoOptions(grabber.getVideoOptions());
+                // 视频帧率
+                recorder.setFrameRate(grabber.getFrameRate());
+                // 设置日志输出（error）
+                avutil.av_log_set_level(AV_LOG_ERROR);
+                // 设置分辨率格式 yuv420p
+                recorder.setPixelFormat(avutil.AV_PIX_FMT_YUV420P);
+                // 视频比特率
+                int bitrate = grabber.getVideoBitrate();
+                if (bitrate == 0) {
+                    // 音频比特率
+                    bitrate = grabber.getAudioBitrate();
+                }
+                // 设置视频比特率
+                recorder.setVideoBitrate(bitrate);
+                // 开始编码
+                recorder.start();
+                // 设置帧
+                Frame frame;
+                // 循环设置
+                for (String s : videoList) {
+                    try (FFmpegFrameGrabber grabberTemp = new FFmpegFrameGrabber(s)) {
+                        grabberTemp.start();
+                        while ((frame = grabberTemp.grab()) != null) {
+                            // 添加并编码帧
+                            recorder.record(frame);
+                        }
+                        // 关闭当前视频帧抓取器
+                    }
+                }
+                // 关闭帧编解码器
+            }
+        }
+    }
+
+    public static void main(String[] args) throws FrameRecorder.Exception, FrameGrabber.Exception {
+        List<String> file = new ArrayList<>();
+        file.add("Z://1/dcb21aef-cf56-4f4b-9238-f52ac3e292e4.mp4");
+        file.add("Z://1/f43a9065-eec1-4339-bf0f-267850e9c6ac.mp4");
+        long start = System.currentTimeMillis();
+
+        videoMerge(file, "Z://1/" + File.separator + UUID.randomUUID() + ".MP4");
+        System.out.println("耗时" + (System.currentTimeMillis() - start) + "毫秒");
+
+
+    }
 }

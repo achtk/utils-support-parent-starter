@@ -22,11 +22,14 @@ import java.util.stream.Collectors;
 @SuppressWarnings("ALL")
 public class BeanMap extends LinkedHashMap<String, Object> {
 
-    private static final Map<String, BeanMap> CACHE = new ConcurrentReferenceHashMap<>(64);
+
+    private static final Map<Object, BeanMap> CACHE = new ConcurrentReferenceHashMap<>(64);
 
     private static final BeanMap EMPTY = new BeanMap(null, false);
 
     private static final Map<Class<?>, Value<BeanInfo>> CACHE_BEAN = new ConcurrentReferenceHashMap<>(512);
+
+    private final List<Object> cache = new LinkedList<>();
 
     private BeanMap(Object source, boolean shallow) {
         if (null == source) {
@@ -54,7 +57,7 @@ public class BeanMap extends LinkedHashMap<String, Object> {
         if (null == source) {
             return EMPTY;
         }
-        return new BeanMap(source, false);
+        return CACHE.computeIfAbsent(source, it1 -> new BeanMap(source, true));
     }
 
     /**
@@ -67,7 +70,7 @@ public class BeanMap extends LinkedHashMap<String, Object> {
         if (null == source) {
             return EMPTY;
         }
-        return new BeanMap(source, false);
+        return CACHE.computeIfAbsent(source, it1 -> new BeanMap(source, true));
     }
 
     /**
@@ -88,6 +91,11 @@ public class BeanMap extends LinkedHashMap<String, Object> {
      */
     @SuppressWarnings("all")
     private Collection analysis(Collection source) {
+        if (cache.contains(source)) {
+            return Collections.emptyList();
+        }
+
+        cache.add(source);
         Collection rs = null;
         if (source instanceof List) {
             rs = new ArrayList<>(source.size());
@@ -95,6 +103,7 @@ public class BeanMap extends LinkedHashMap<String, Object> {
             rs = new HashSet(source.size());
         }
 
+        check(source);
         Collection finalRs = rs;
         source.forEach(item -> {
             if (item instanceof Collection) {
@@ -108,6 +117,30 @@ public class BeanMap extends LinkedHashMap<String, Object> {
 
     }
 
+    private void check(Collection source) {
+        List<Object> rm = new ArrayList<>(source.size());
+        for (Object o : source) {
+            if (isLogger(o)) {
+                rm.add(o);
+            }
+        }
+        source.removeAll(rm);
+    }
+
+    private boolean isLogger(Object o) {
+        String typeName = o.getClass().getTypeName();
+        return
+                typeName.contains("java.util.logging") ||
+                        typeName.contains("logging") ||
+                        typeName.contains("org.slf4j") ||
+                        typeName.contains("org.apache.log4j") ||
+                        typeName.contains("org.apache.logging") ||
+                        typeName.contains("org.apache.commons.log") ||
+                        typeName.contains("org.jboss.logging") ||
+                        typeName.contains("com.google.common.flog") ||
+                        typeName.contains("ch.qos.logback");
+    }
+
     /**
      * 分析参数
      *
@@ -115,7 +148,7 @@ public class BeanMap extends LinkedHashMap<String, Object> {
      */
     @SuppressWarnings("all")
     private Map analysisSimple(Object source) {
-        Map rs = new HashMap();
+        Map rs = new LinkedHashMap();
         if (null == source) {
             return rs;
         }
@@ -153,6 +186,13 @@ public class BeanMap extends LinkedHashMap<String, Object> {
      */
     @SuppressWarnings("all")
     private Map analysis(Object source) {
+        if (cache.contains(source)) {
+            return Collections.emptyMap();
+        }
+
+
+        cache.add(source);
+
         Map rs = new HashMap();
         if (source instanceof Map) {
             rs.putAll(openMap((Map<? extends String, ?>) source));

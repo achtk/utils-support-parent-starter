@@ -63,7 +63,7 @@ public class ServiceProvider<T> implements InitializingAware {
      * @param value 类型
      */
     public static <T> ServiceProvider<T> of(String value) {
-        if (ClassUtils.isPresent(value)) {
+        if (!ClassUtils.isPresent(value)) {
             return EMPTY;
         }
         Class<?> aClass = ClassUtils.forName(value);

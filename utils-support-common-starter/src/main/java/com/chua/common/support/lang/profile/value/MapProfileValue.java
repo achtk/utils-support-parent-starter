@@ -14,8 +14,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import static com.chua.common.support.constant.CommonConstant.SYMBOL_HASH;
-
 
 /**
  * profile value
@@ -46,11 +44,9 @@ public class MapProfileValue implements ProfileValue {
     @Override
     public ProfileValue add(String s, Object o) {
         map.put(s, o);
-        map.put(NamingCase.toUnderlineCase(s), o);
         map.put(NamingCase.toKebabCase(s), o);
         map.put(NamingCase.toCamelCase(s), o);
         spelExpressionParser.setVariable(s, o);
-        spelExpressionParser.setVariable(NamingCase.toUnderlineCase(s), o);
         spelExpressionParser.setVariable(NamingCase.toKebabCase(s), o);
         spelExpressionParser.setVariable(NamingCase.toPascalCase(s), o);
         this.documentContext = JsonPath.parse(map);

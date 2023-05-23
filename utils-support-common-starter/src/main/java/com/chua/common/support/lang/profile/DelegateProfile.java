@@ -13,6 +13,7 @@ import com.chua.common.support.lang.profile.value.MapProfileValue;
 import com.chua.common.support.lang.profile.value.ProfileValue;
 import com.chua.common.support.spi.ServiceFactory;
 import com.chua.common.support.utils.FileUtils;
+import com.chua.common.support.utils.MapUtils;
 import com.chua.common.support.utils.StringUtils;
 
 import java.util.*;
@@ -28,7 +29,7 @@ import static com.chua.common.support.constant.CommonConstant.SYSTEM;
  */
 public class DelegateProfile implements Profile, ServiceFactory<ProfileResolver> {
 
-    private final List<ProfileValue> profiles = new LinkedList<>();
+    private final Set<ProfileValue> profiles = new LinkedHashSet<>();
     private final Map<String, ProfileValue> profileMap = new ConcurrentHashMap<>();
 
     @Override
@@ -72,17 +73,21 @@ public class DelegateProfile implements Profile, ServiceFactory<ProfileResolver>
     public Profile addProfile(int index, String resourceUrl) {
         ProfileResolver profileResolver = getResolver(resourceUrl);
         List<ProfileValue> resolve = profileResolver.resolve(resourceUrl);
+        List<ProfileValue> tpl = new LinkedList<>(profiles);
         for (ProfileValue profileValue : resolve) {
-            profiles.add(index, profileValue);
+            tpl.add(index, profileValue);
             profileMap.put(profileValue.getName(), profileValue);
         }
+        profiles.clear();
+        profiles.addAll(tpl);
         return this;
     }
 
     @Override
     public synchronized Profile addProfile(String profile, String key, Object value) {
         profile = StringUtils.defaultString(profile, SYSTEM);
-        ProfileValue profileValue1 = profileMap.computeIfPresent(profile, (s, profileValue) -> new MapProfileValue(s));
+        ProfileValue profileValue1 = MapUtils.getComputeIfAbsent(profileMap, profile, new MapProfileValue(null));
+        profiles.add(profileValue1);
         profileValue1.add(key, value);
         return this;
     }
