@@ -5,10 +5,7 @@ import com.chua.common.support.lang.environment.EnvironmentProvider;
 import com.chua.common.support.lang.profile.Profile;
 import com.chua.common.support.log.Log;
 import com.chua.common.support.spi.ServiceProvider;
-import com.chua.common.support.utils.AnnotationUtils;
-import com.chua.common.support.utils.ObjectUtils;
-import com.chua.common.support.utils.StringUtils;
-import com.chua.common.support.utils.ThreadUtils;
+import com.chua.common.support.utils.*;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -95,6 +92,10 @@ public class EventbusProvider implements InitializingAware, AutoCloseable {
 
     public void register(Object entity) {
         Class<?> aClass = entity.getClass();
+        String typeName = aClass.getTypeName();
+        if (typeName.contains("CGLIB$$")) {
+            aClass = ObjectUtils.defaultIfNull(ClassUtils.forName(typeName.substring(0, typeName.indexOf("$$"))), aClass);
+        }
 
         Map<Method, Subscribe> collect = Arrays.stream(aClass.getDeclaredMethods()).filter(it -> {
             Subscribe subscribe = it.getDeclaredAnnotation(Subscribe.class);
@@ -102,7 +103,7 @@ public class EventbusProvider implements InitializingAware, AutoCloseable {
         }).collect(Collectors.toMap(it -> it, it1 -> it1.getDeclaredAnnotation(Subscribe.class)));
 
 
-        if(collect.isEmpty()) {
+        if (collect.isEmpty()) {
             return;
         }
 

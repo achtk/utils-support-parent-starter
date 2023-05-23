@@ -8,6 +8,7 @@ import com.chua.common.support.utils.CollectionUtils;
 import com.chua.common.support.utils.StringUtils;
 import com.chua.redis.support.config.RedisConfiguration;
 import com.chua.redis.support.util.RedissonUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RTopic;
 import org.redisson.api.RedissonClient;
 import org.redisson.api.listener.MessageListener;
@@ -27,6 +28,7 @@ import static com.chua.common.support.eventbus.EventbusType.REDIS;
  * @version 1.0.0
  * @since 2021/5/25
  */
+@Slf4j
 @Spi(value = "redis", order = -1)
 public class RedisionEventbus extends AbstractEventbus {
 
@@ -39,7 +41,12 @@ public class RedisionEventbus extends AbstractEventbus {
     public RedisionEventbus(Profile profile, Executor executor) {
         super(profile);
         RedisConfiguration redisConfiguration = profile.bind(new String[]{"redis", "spring.redis.redisson", "spring.redis"}, RedisConfiguration.class);
-        this.redissonClient = RedissonUtils.create(redisConfiguration, executor);
+        try {
+            this.redissonClient = RedissonUtils.create(redisConfiguration, executor);
+        } catch (Exception ignored) {
+            log.warn("redis消息总线启动失败");
+            return;
+        }
         if (redissonClient != null) {
             IS_RUNNING.set(true);
         }
