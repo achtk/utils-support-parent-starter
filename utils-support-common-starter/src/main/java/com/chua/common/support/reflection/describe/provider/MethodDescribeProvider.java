@@ -4,6 +4,7 @@ import com.chua.common.support.collection.CollectionProvider;
 import com.chua.common.support.lang.loader.Loadable;
 import com.chua.common.support.reflection.describe.MethodDescribe;
 import com.chua.common.support.reflection.describe.ParameterDescribe;
+import com.chua.common.support.reflection.describe.TypeDescribe;
 import com.chua.common.support.utils.ClassUtils;
 
 import java.util.Collection;
@@ -80,6 +81,11 @@ public class MethodDescribeProvider extends LinkedList<MethodDescribe>
         }
 
         return methodDescribe.invoke(methodDescribe.entity(), args).getValue(target);
+    }
+
+    @Override
+    public TypeDescribe isChainSelf(Object... args) {
+        return new TypeDescribe(executeSelf(Object.class, args));
     }
 
     /**

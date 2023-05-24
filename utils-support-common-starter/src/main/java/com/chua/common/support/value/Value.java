@@ -87,6 +87,9 @@ public interface Value<T> extends Serializable {
      * @return 值
      */
     default <E> E getValue(Class<E> target) {
+        if (target == Object.class) {
+            return (E) getValue();
+        }
         return Converter.convertIfNecessary(getValue(), target);
     }
 

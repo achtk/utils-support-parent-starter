@@ -100,6 +100,14 @@ public interface DescribeProvider {
      * @param args 参数
      * @return 描述
      */
+    TypeDescribe isChainSelf(Object... args);
+
+    /**
+     * 链式处理
+     *
+     * @param args 参数
+     * @return 描述
+     */
     default TypeDescribe isChain(Object... args) {
         return isChain(null, args);
     }
