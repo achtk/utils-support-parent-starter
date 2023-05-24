@@ -162,7 +162,7 @@ public class HibernateMetadataExecutor implements MetadataExecutor {
 
     private void create(JdbcInquirer jdbcInquirer, org.hibernate.dialect.Dialect d, Table table) {
         String sql = table.sqlCreateString(d, new HibernateSimpleMetadata(null), null, null);
-        log.info("\r\n {}", HighlightingFormatter.INSTANCE.format(new DdlFormatter().format(sql)));
+        log.debug("\r\n {}", HighlightingFormatter.INSTANCE.format(new DdlFormatter().format(sql)));
         try {
             jdbcInquirer.executeStatement(sql);
         } catch (Exception e) {
