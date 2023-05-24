@@ -1,10 +1,10 @@
 package com.chua.lucene.support.operator;
 
+import com.chua.common.support.function.Splitter;
 import com.chua.common.support.utils.StringUtils;
 import com.chua.common.support.utils.ThreadUtils;
 import com.chua.lucene.support.entity.DataDocument;
 import com.chua.lucene.support.entity.HitData;
-import com.google.common.base.Splitter;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.document.Document;

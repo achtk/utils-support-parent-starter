@@ -62,7 +62,7 @@ public interface IndexOperatorTemplate extends AutoCloseable{
         try {
             return getStoreIndexName(index);
         } catch (Exception e) {
-            return StringUtils.stringToAscii(index);
+            return index;
         }
     }
 
