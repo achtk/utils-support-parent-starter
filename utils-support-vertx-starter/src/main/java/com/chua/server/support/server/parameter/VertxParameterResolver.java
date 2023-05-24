@@ -1,14 +1,14 @@
 package com.chua.server.support.server.parameter;
 
 import com.chua.common.support.bean.BeanUtils;
-import com.chua.common.support.describe.describe.ParameterDescribe;
-import com.chua.common.support.server.annotations.Header;
-import com.chua.common.support.server.annotations.Param;
-import com.chua.common.support.server.annotations.Path;
-import com.chua.common.support.server.parameter.ParameterResolver;
-import com.chua.common.support.server.request.Request;
+import com.chua.common.support.protocol.server.annotations.Header;
+import com.chua.common.support.protocol.server.annotations.Param;
+import com.chua.common.support.protocol.server.annotations.Path;
+import com.chua.common.support.protocol.server.parameter.ParameterResolver;
+import com.chua.common.support.protocol.server.request.Request;
+import com.chua.common.support.reflection.describe.ParameterDescribe;
+import com.chua.common.support.utils.StringUtils;
 import com.chua.server.support.server.request.VertxRequest;
-import com.google.common.base.Strings;
 
 /**
  * vertx
@@ -21,7 +21,7 @@ public class VertxParameterResolver implements ParameterResolver {
         if(describe.hasAnnotation(Param.class)) {
             Param param = describe.getAnnotationValue(Param.class);
             String value = param.value();
-            if(Strings.isNullOrEmpty(value)) {
+            if(StringUtils.isNullOrEmpty(value)) {
                 return BeanUtils.copyProperties(vertxRequest.getParameters(), describe.returnClassType());
             }
             return vertxRequest.getRequest().getParam(value, param.defaultValue());
