@@ -5,7 +5,10 @@ import com.chua.common.support.converter.Converter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
+import java.net.URI;
+import java.net.URL;
 import java.net.*;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -26,6 +29,81 @@ import static com.chua.common.support.constant.CommonConstant.*;
  */
 @Slf4j
 public class UrlUtils {
+    /**
+     * Data URI Scheme封装，数据格式为Base64。data URI scheme 允许我们使用内联（inline-code）的方式在网页中包含数据，<br>
+     * 目的是将一些小的数据，直接嵌入到网页中，从而不用再从外部文件载入。常用于将图片嵌入网页。
+     *
+     * <p>
+     * Data URI的格式规范：
+     * <pre>
+     *     data:[&lt;mime type&gt;][;charset=&lt;charset&gt;][;&lt;encoding&gt;],&lt;encoded data&gt;
+     * </pre>
+     *
+     * @param mimeType 可选项（null表示无），数据类型（image/png、text/plain等）
+     * @param data     编码后的数据
+     * @return Data URI字符串
+     * @since 5.3.11
+     */
+    public static String getDataUriBase64(String mimeType, String data) {
+        return getDataUri(mimeType, null, "base64", data);
+    }
+
+    /**
+     * Data URI Scheme封装。data URI scheme 允许我们使用内联（inline-code）的方式在网页中包含数据，<br>
+     * 目的是将一些小的数据，直接嵌入到网页中，从而不用再从外部文件载入。常用于将图片嵌入网页。
+     *
+     * <p>
+     * Data URI的格式规范：
+     * <pre>
+     *     data:[&lt;mime type&gt;][;charset=&lt;charset&gt;][;&lt;encoding&gt;],&lt;encoded data&gt;
+     * </pre>
+     *
+     * @param mimeType 可选项（null表示无），数据类型（image/png、text/plain等）
+     * @param encoding 数据编码方式（US-ASCII，BASE64等）
+     * @param data     编码后的数据
+     * @return Data URI字符串
+     * @since 5.3.6
+     */
+    public static String getDataUri(String mimeType, String encoding, String data) {
+        return getDataUri(mimeType, null, encoding, data);
+    }
+
+    /**
+     * Data URI Scheme封装。data URI scheme 允许我们使用内联（inline-code）的方式在网页中包含数据，<br>
+     * 目的是将一些小的数据，直接嵌入到网页中，从而不用再从外部文件载入。常用于将图片嵌入网页。
+     *
+     * <p>
+     * Data URI的格式规范：
+     * <pre>
+     *     data:[&lt;mime type&gt;][;charset=&lt;charset&gt;][;&lt;encoding&gt;],&lt;encoded data&gt;
+     * </pre>
+     *
+     * @param mimeType 可选项（null表示无），数据类型（image/png、text/plain等）
+     * @param charset  可选项（null表示无），源文本的字符集编码方式
+     * @param encoding 数据编码方式（US-ASCII，BASE64等）
+     * @param data     编码后的数据
+     * @return Data URI字符串
+     * @since 5.3.6
+     */
+    public static String getDataUri(String mimeType, Charset charset, String encoding, String data) {
+        final StringBuilder builder = new StringBuilder("data:");
+        if (!StringUtils.isNullOrEmpty(mimeType)) {
+            builder.append(mimeType);
+        }
+
+        if (null != charset) {
+            builder.append(";charset=").append(charset.name());
+        }
+
+        if (!StringUtils.isNullOrEmpty(encoding)) {
+            builder.append(';').append(encoding);
+        }
+
+        builder.append(',').append(data);
+
+        return builder.toString();
+    }
+
 
     /**
      * 编码URL，默认使用UTF-8编码<br>
