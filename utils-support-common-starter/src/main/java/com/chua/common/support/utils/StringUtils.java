@@ -3341,4 +3341,38 @@ public class StringUtils {
             return str1.equals(str2);
         }
     }
+
+    /**
+     * 将字符串转成ASCII
+     *
+     * @param strValue
+     * @return
+     */
+    public static String stringToAscii(String strValue) {
+        StringBuffer sbu = new StringBuffer();
+        char[] chars = strValue.toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+            if (i != chars.length - 1) {
+                sbu.append((int) chars[i]).append(",");
+            } else {
+                sbu.append((int) chars[i]);
+            }
+        }
+        return sbu.toString();
+    }
+
+    /**
+     * ascii转字符串
+     *
+     * @param ascii ascii数据
+     * @return 字符串
+     */
+    public static String asciiToStr(String ascii) {
+        StringBuilder sbu = new StringBuilder();
+        String[] chars = ascii.split(",");
+        for (String aChar : chars) {
+            sbu.append((char) Integer.parseInt(aChar));
+        }
+        return sbu.toString();
+    }
 }
