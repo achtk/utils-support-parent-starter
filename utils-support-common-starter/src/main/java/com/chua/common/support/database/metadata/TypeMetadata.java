@@ -90,6 +90,12 @@ public class TypeMetadata<T> extends AbstractMetadata<T> {
     }
 
     @Override
+    String analysisTableCatalog(Class<?> type) {
+        Table table1 = type.getDeclaredAnnotation(Table.class);
+        return null == table1 ? null : table1.catalog();
+    }
+
+    @Override
     String analysisTable(Class<?> type, NamedStrategy tableNamedStrategy) {
         Table table1 = type.getDeclaredAnnotation(Table.class);
         return null == table1 ? tableNamedStrategy.named(type.getSimpleName()) : table1.value();
@@ -142,6 +148,11 @@ public class TypeMetadata<T> extends AbstractMetadata<T> {
         Primary primary = new Primary();
         primary.setStrategy(id.strategy());
         column.setPrimary(primary);
+    }
+
+    @Override
+    public String getCatalog() {
+        return catalog;
     }
 
     @Override

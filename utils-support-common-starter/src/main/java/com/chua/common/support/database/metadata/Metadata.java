@@ -27,12 +27,20 @@ public interface Metadata<T> {
      * @return 描述
      */
     String getTableComment();
+
     /**
      * 数据库名称
      *
      * @return 数据库名称
      */
     String getDatabase();
+
+    /**
+     * 数据库名称
+     *
+     * @return 数据库名称
+     */
+    String getCatalog();
 
     /**
      * 字段

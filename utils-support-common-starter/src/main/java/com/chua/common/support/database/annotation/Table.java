@@ -24,6 +24,14 @@ public @interface Table {
      * @return 数据库
      */
     String schema() default "";
+
+    /**
+     * 数据库
+     *
+     * @return 数据库
+     */
+    String catalog() default "";
+
     /**
      * 描述
      *
@@ -33,6 +41,7 @@ public @interface Table {
 
     /**
      * 定义
+     *
      * @return 定义
      */
     String definition() default "";

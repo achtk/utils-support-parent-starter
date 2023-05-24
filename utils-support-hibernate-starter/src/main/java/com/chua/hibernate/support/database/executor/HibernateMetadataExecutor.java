@@ -49,6 +49,8 @@ public class HibernateMetadataExecutor implements MetadataExecutor {
         Metadata metadata1 = expression.getValue(Metadata.class);
         Table table = new Table(metadata1.getTable());
         table.setComment(metadata1.getTableComment());
+        table.setSchema(metadata1.getDatabase());
+        table.setCatalog(metadata1.getCatalog());
         PrimaryKey primaryKey = new PrimaryKey(table);
 
         List<Column> column = metadata1.getColumn();
@@ -59,6 +61,10 @@ public class HibernateMetadataExecutor implements MetadataExecutor {
             itemColumn.setComment(o.getComment());
             itemColumn.setLength(o.getLength());
             itemColumn.setNullable(o.isNullable());
+            if (StringUtils.isNotEmpty(o.getDefaultValue())) {
+                itemColumn.setDefaultValue(o.getDefaultValue());
+            }
+
             itemColumn.setScale(o.getScale());
             itemColumn.setLength(o.getLength() == 0 ? (o.getJavaType() == String.class ? 255 : 11) : o.getLength());
             itemColumn.setScale(o.getScale());
@@ -124,7 +130,7 @@ public class HibernateMetadataExecutor implements MetadataExecutor {
     private void update(JdbcInquirer jdbcInquirer, org.hibernate.dialect.Dialect d, Table table, Object datasource) {
         try {
             HibernateDatabaseMetadata databaseMetadata = new HibernateDatabaseMetadata(((DataSource) datasource).getConnection(), d, null, false);
-            HibernateTableMetadata newMetadata = databaseMetadata.getTableMetadata(table.getName(), null, null, false);
+            HibernateTableMetadata newMetadata = databaseMetadata.getTableMetadata(table.getName(), table.getSchema(), table.getCatalog(), false);
             if (null == newMetadata) {
                 create(jdbcInquirer, d, table);
                 return;

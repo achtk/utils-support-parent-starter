@@ -5,9 +5,9 @@ import com.chua.common.support.context.resolver.NamedResolver;
 import com.chua.common.support.context.resolver.factory.SimpleNamedResolver;
 import com.chua.common.support.database.entity.Column;
 import com.chua.common.support.database.entity.Index;
+import com.chua.common.support.file.export.ExportProperty;
 import com.chua.common.support.function.strategy.name.CamelUnderscoreNamedStrategy;
 import com.chua.common.support.function.strategy.name.NamedStrategy;
-import com.chua.common.support.file.export.ExportProperty;
 import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.StringUtils;
 import lombok.Getter;
@@ -65,6 +65,7 @@ public abstract class AbstractMetadata<T> implements Metadata<T> {
     private String suffix = "";
     private Column primary;
     private String tableComment;
+    protected String catalog;
 
     public AbstractMetadata(Class<T> type, String prefix, String suffix) {
         this(new CamelUnderscoreNamedStrategy(), new CamelUnderscoreNamedStrategy(), new SimpleNamedResolver(), type, true, prefix, suffix);
@@ -149,6 +150,7 @@ public abstract class AbstractMetadata<T> implements Metadata<T> {
     private void analysis() {
         this.tableName = analysisTable(type, tableNamedStrategy);
         this.tableComment = analysisTableComment(type);
+        this.catalog = analysisTableCatalog(type);
         this.databaseName = analysisDatabase(type);
         this.indexs = analysisIndex(type);
         this.definition = analysisDefinition(type);
@@ -212,10 +214,18 @@ public abstract class AbstractMetadata<T> implements Metadata<T> {
     /**
      * 解析表描述
      *
-     * @param type               类型
+     * @param type 类型
      * @return 表名称
      */
     abstract String analysisTableComment(Class<?> type);
+
+    /**
+     * catalog
+     *
+     * @param type 类型
+     * @return 表名称
+     */
+    abstract String analysisTableCatalog(Class<?> type);
 
     /**
      * 解析表

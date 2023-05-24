@@ -18,6 +18,8 @@ public class SparkMetadata implements Metadata<Object> {
 
     private String database;
 
+    private String catalog;
+
 
     private List<Column> column;
 
@@ -51,6 +53,11 @@ public class SparkMetadata implements Metadata<Object> {
     @Override
     public String getTableComment() {
         return tableComment;
+    }
+
+    @Override
+    public String getCatalog() {
+        return catalog;
     }
 
     @Override
