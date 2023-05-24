@@ -1,8 +1,8 @@
 package com.chua.xjar.support.io.loadkit.loader;
 
-import com.chua.common.support.file.resource.compress.ZipCompressFile;
-import com.chua.common.support.projects.Projects;
-import com.chua.common.support.shell.ProcessFactory;
+import com.chua.common.support.constant.Projects;
+import com.chua.common.support.file.compress.ZipCompressFile;
+import com.chua.common.support.lang.cmd.ProcessFactory;
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.ArrayUtils;
 import com.chua.common.support.utils.FileUtils;
@@ -10,7 +10,6 @@ import com.chua.common.support.utils.StringUtils;
 import com.chua.xjar.support.io.xjar.XCryptos;
 import com.chua.xjar.support.io.xjar.XEntryFilter;
 import com.chua.xjar.support.io.xjar.boot.XBoot;
-import com.google.common.base.Strings;
 import org.apache.commons.compress.archivers.jar.JarArchiveEntry;
 
 import java.io.File;
@@ -182,7 +181,7 @@ public class Kit {
         this.fileName = temp.getName();
         this.outFile = outFile;
         this.folder = FileUtils.getFullPath(outFile);
-        if (Strings.isNullOrEmpty(jar)) {
+        if (StringUtils.isNullOrEmpty(jar)) {
             return;
         }
 
@@ -254,7 +253,7 @@ public class Kit {
         ProcessFactory processFactory = ServiceProvider.of(ProcessFactory.class).getSpiService();
 
         String binRoot = "";
-        if (!Strings.isNullOrEmpty(golang)) {
+        if (!StringUtils.isNullOrEmpty(golang)) {
             binRoot = StringUtils.endWithAppend(golang, File.separator + "bin");
         }
 
@@ -274,7 +273,7 @@ public class Kit {
         }
 
         String suffix1 = ".sh";
-        if (Projects.isWindow()) {
+        if (Projects.isWindows()) {
             suffix1 = ".exe";
         }
         Path path1 = Paths.get(folder, "xjar" + suffix1);

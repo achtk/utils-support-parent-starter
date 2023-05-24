@@ -1,7 +1,6 @@
 package com.chua.subtable.support;
 
 import com.chua.common.support.lang.date.DateTime;
-import com.chua.common.support.lang.date.range.DateRange;
 import com.google.common.collect.BoundType;
 import com.google.common.collect.Range;
 
@@ -21,7 +20,7 @@ import java.time.LocalDateTime;
  *
  * @author CH
  */
-public class DateRangeTime implements DateRange {
+public class DateRangeTime  {
 
     private final Range<LocalDateTime> valueRange;
 
@@ -172,7 +171,6 @@ public class DateRangeTime implements DateRange {
 
     }
 
-    @Override
     public Range<LocalDateTime> range() {
         return valueRange;
     }
