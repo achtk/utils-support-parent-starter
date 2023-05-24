@@ -1,5 +1,7 @@
 package com.chua.pcap.support.template;
 
+import com.chua.common.support.constant.Projects;
+import com.chua.common.support.utils.ByteUtils;
 import com.chua.pcap.support.operator.PcapOperator;
 import com.chua.pcap.support.operator.StandardPcapOperator;
 import com.chua.pcap.support.packet.Packet;
@@ -101,7 +103,7 @@ public class StandardPcapTemplate implements PcapTemplate {
             log.info("Packets dropped: {}", stats.getNumPacketsDropped());
             log.info("Packets dropped by interface: {}", stats.getNumPacketsDroppedByIf());
             // Supported by WinPcap only
-            if (FileUtils.isWindows()) {
+            if (Projects.isWindows()) {
                 log.info("Packets captured: {}", stats.getNumPacketsCaptured());
             }
         } catch (InterruptedException e) {
@@ -134,7 +136,7 @@ public class StandardPcapTemplate implements PcapTemplate {
             log.info("Packets dropped: {}", stats.getNumPacketsDropped());
             log.info("Packets dropped by interface: {}", stats.getNumPacketsDroppedByIf());
             // Supported by WinPcap only
-            if (FileUtils.isWindows()) {
+            if (Projects.isWindows()) {
                 log.info("Packets captured: {}", stats.getNumPacketsCaptured());
             }
         } catch (InterruptedException e) {
