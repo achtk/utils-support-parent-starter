@@ -1,6 +1,6 @@
 package com.chua.image.support.filter;
 
-import com.chua.common.support.process.ProgressBar;
+import com.chua.common.support.lang.process.ProgressBar;
 import com.chua.common.support.utils.RandomUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
