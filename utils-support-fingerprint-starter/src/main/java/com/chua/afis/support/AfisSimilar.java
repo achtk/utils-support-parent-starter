@@ -1,5 +1,6 @@
 package com.chua.afis.support;
 
+import com.chua.common.support.lang.similar.Similar;
 import com.machinezoo.sourceafis.FingerprintImage;
 import com.machinezoo.sourceafis.FingerprintMatcher;
 import com.machinezoo.sourceafis.FingerprintTemplate;
