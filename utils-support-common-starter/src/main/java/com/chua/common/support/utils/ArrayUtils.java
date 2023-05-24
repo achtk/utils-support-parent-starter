@@ -3,6 +3,7 @@ package com.chua.common.support.utils;
 import com.chua.common.support.bean.BeanMap;
 import com.chua.common.support.constant.CommonConstant;
 import com.chua.common.support.converter.Converter;
+import com.chua.common.support.matcher.PathMatcher;
 import com.chua.common.support.reflection.describe.ParameterDescribe;
 
 import java.lang.reflect.Array;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.chua.common.support.constant.CommonConstant.INDEX_NOT_FOUND;
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_ASTERISK;
 
 /**
  * array
@@ -19,6 +21,33 @@ import static com.chua.common.support.constant.CommonConstant.INDEX_NOT_FOUND;
  * @author CH
  */
 public class ArrayUtils {
+    /**
+     * 是否匹配
+     *
+     * @param array 数组
+     * @param name  名称
+     * @return 是否匹配
+     */
+    public static boolean isMatch(String[] array, String name) {
+        if (isEmpty(array)) {
+            return false;
+        }
+
+        for (String s : array) {
+            if (s.contains(SYMBOL_ASTERISK)) {
+                if (PathMatcher.INSTANCE.match(s, name)) {
+                    return true;
+                }
+                continue;
+            }
+
+            if (s.equals(name)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     /**
      * 对象是否为数组对象
