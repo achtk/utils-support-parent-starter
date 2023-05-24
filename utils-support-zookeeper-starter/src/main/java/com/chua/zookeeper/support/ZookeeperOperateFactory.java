@@ -1,6 +1,5 @@
 package com.chua.zookeeper.support;
 
-import com.chua.common.support.operate.AbstractMethodOperateFactory;
 import com.chua.common.support.router.Route;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.api.transaction.CuratorMultiTransaction;
@@ -16,7 +15,7 @@ import org.apache.zookeeper.data.Stat;
  * @author CH
  */
 @Route
-final class ZookeeperOperateFactory extends AbstractMethodOperateFactory {
+final class ZookeeperOperateFactory {
     private final CuratorFramework curatorFramework;
 
     public ZookeeperOperateFactory(CuratorFramework curatorFramework) {
