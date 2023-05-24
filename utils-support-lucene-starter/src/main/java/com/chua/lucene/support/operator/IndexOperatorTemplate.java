@@ -1,6 +1,5 @@
 package com.chua.lucene.support.operator;
 
-import com.chua.common.support.utils.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
@@ -85,7 +84,7 @@ public interface IndexOperatorTemplate extends AutoCloseable{
         try {
             return getStoreIndexName(index);
         } catch (Exception e) {
-            return StringUtils.asciiToString(index);
+            return index;
         }
     }
 
