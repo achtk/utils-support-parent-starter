@@ -11,6 +11,7 @@ import lombok.Data;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -177,7 +178,7 @@ public class TypeDescribe implements MemberDescribe<TypeDescribe>, InitializingA
     }
 
     @Override
-    public TypeDescribe isChain(Object... args) {
+    public TypeDescribe isChainStatic(Object... args) {
         return this;
     }
 
@@ -244,5 +245,9 @@ public class TypeDescribe implements MemberDescribe<TypeDescribe>, InitializingA
 
     public GenericDescribe getActualTypeArguments() {
         return new GenericDescribe(beanClass);
+    }
+
+    public Object getBean() {
+        return object;
     }
 }

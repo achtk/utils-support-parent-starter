@@ -284,7 +284,7 @@ public class FieldDescribe implements MemberDescribe<FieldDescribe> {
     }
 
     @Override
-    public TypeDescribe isChain(Object... args) {
+    public TypeDescribe isChainStatic(Object... args) {
         set(null, args);
         return new TypeDescribe(entity);
     }

@@ -172,7 +172,7 @@ public interface MemberDescribe<E extends MemberDescribe<E>> {
      * @param args 参数
      * @return this
      */
-    TypeDescribe isChain(Object... args);
+    TypeDescribe isChainStatic(Object... args);
 
     /**
      * 执行方法

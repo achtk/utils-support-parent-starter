@@ -121,8 +121,8 @@ public class TypeAttribute implements MemberDescribe<TypeAttribute> {
     }
 
     @Override
-    public TypeDescribe isChain(Object... args) {
-        return typeDescribe.isChain(args);
+    public TypeDescribe isChainStatic(Object... args) {
+        return typeDescribe.isChainStatic(args);
     }
 
     @Override

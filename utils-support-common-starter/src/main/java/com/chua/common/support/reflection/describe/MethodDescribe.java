@@ -444,7 +444,7 @@ public class MethodDescribe implements MemberDescribe<MethodDescribe> {
     }
 
     @Override
-    public TypeDescribe isChain(Object... args) {
+    public TypeDescribe isChainStatic(Object... args) {
         return new TypeDescribe(invoke(null, args).getValue());
     }
 
