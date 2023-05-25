@@ -1,6 +1,7 @@
 package com.chua.common.support.lang.robin;
 
 import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiDefault;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author CH
  */
+@SpiDefault
 @Spi({"round", "polling"})
 public class RoundRobin<T> implements Robin<T> {
     final AtomicInteger count = new AtomicInteger(0);
