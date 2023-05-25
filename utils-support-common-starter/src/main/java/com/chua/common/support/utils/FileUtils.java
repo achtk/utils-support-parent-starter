@@ -180,6 +180,31 @@ public class FileUtils {
     }
 
     /**
+     * 删除目录包括文件
+     *
+     * @param file 目录
+     * @throws IOException              in case deletion is unsuccessful
+     * @throws IllegalArgumentException if {@code directory} is not a directory
+     */
+    public static Boolean forceDeleteDirectory(File file) throws IOException {
+        if (file == null || !file.exists()) {
+            return false;
+        }
+
+        File[] files = file.listFiles();
+        //遍历该目录下的文件对象
+        for (File f : files) {
+            if (f.isDirectory()) {
+                forceDeleteDirectory(f);
+                continue;
+            }
+            f.delete();
+        }
+        file.delete();
+        return true;
+    }
+
+    /**
      * Cleans a directory without deleting it.
      *
      * @param directory directory to clean
