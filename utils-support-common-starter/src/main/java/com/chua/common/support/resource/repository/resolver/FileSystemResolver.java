@@ -32,7 +32,7 @@ import java.util.List;
 public final class FileSystemResolver implements Resolver {
 
     @AutoInject
-    private PathMatcher pathMatcher;
+    private PathMatcher pathMatcher = PathMatcher.INSTANCE;
 
     @Override
     public List<Metadata> resolve(URL root, String name) {
