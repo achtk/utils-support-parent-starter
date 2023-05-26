@@ -1,4 +1,6 @@
-- **导出**
+- ## MYSQL
+
+- ### **导出**
 
   ```bash
   mysqldump -u<user> -p<password> --node-data --all-databases <db1> > all.sql
@@ -121,4 +123,13 @@
   > )
   > ```
 
-- 
+- #### 1418
+
+- ![再次遇到这个问题](https://img-blog.csdnimg.cn/b2632aab3dc047d3b6e43657b6c0a58e.png#pic_center)
+
+```bash
+1.先查看函数功能是否开启：show variables like '%func%';
+2.开启：SET GLOBAL log_bin_trust_function_creators = 1;
+3.关闭：SET GLOBAL log_bin_trust_function_creators = 0;
+```
+
