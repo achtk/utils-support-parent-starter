@@ -144,6 +144,8 @@ public class NetAddress implements Serializable {
      */
     @Getter
     private Map<String, Object> parametric;
+    private String fullProtocol;
+    private URI uri;
 
     /**
      * 初始化
@@ -679,7 +681,7 @@ public class NetAddress implements Serializable {
         if (null == authority) {
             return;
         }
-        String path = originalAddress.substring(originalAddress.indexOf(authority) + authority.length());
+        String path = uri.getPath();
         int index = path.indexOf(CommonConstant.SYMBOL_QUESTION);
         if (index != -1) {
             this.path = path.substring(0, index);
@@ -764,19 +766,7 @@ public class NetAddress implements Serializable {
      * 分析 authority
      */
     private void analysisAuthority() {
-        if (null != protocol) {
-            int authorityOffset = protocol.length();
-            if (protocol.length() != 0) {
-                authorityOffset += 3;
-            }
-            String authority = originalAddress.substring(authorityOffset);
-            int index = authority.indexOf("/");
-
-            if (index != -1) {
-                authority = authority.substring(0, index);
-            }
-            this.authority = authority;
-        }
+        this.authority = uri.getAuthority();
         this.analysisUserInfo();
         this.analysisAddress();
         this.analysisOrigin();
@@ -857,7 +847,23 @@ public class NetAddress implements Serializable {
 
         int index = originalAddress.indexOf("://");
         if (index != -1) {
-            this.protocol = originalAddress.substring(0, index);
+            String proto = null;
+            try {
+                this.uri = new URI(originalAddress);
+                proto = uri.getScheme();
+                String tpl = proto;
+                while (!StringUtils.isEmpty(tpl)) {
+                    uri = new URI(uri.getSchemeSpecificPart());
+                    tpl = uri.getScheme();
+                    if(null != tpl) {
+                        proto = tpl;
+                    }
+                }
+            } catch (URISyntaxException ignored) {
+            }
+
+            this.protocol = proto;
+            this.fullProtocol = originalAddress.substring(0, index);
         }
     }
 
