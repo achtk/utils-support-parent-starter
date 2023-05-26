@@ -1,5 +1,6 @@
 package com.chua.common.support.geo;
 
+import com.chua.common.support.lang.profile.Profile;
 import com.chua.common.support.lang.profile.ProfileProvider;
 import com.chua.common.support.spi.ServiceProvider;
 import lombok.AccessLevel;
@@ -49,8 +50,8 @@ public class IpBuilder {
      */
     public IpPosition build(String type) {
         IpPosition position = ServiceProvider.of(IpPosition.class).getNewExtension(type);
-        if(position instanceof ProfileProvider) {
-            ((ProfileProvider<?>) position).addProfile(environment);
+        if(position instanceof Profile) {
+            ((Profile) position).addProfile(environment);
         }
         try {
             position.afterPropertiesSet();
