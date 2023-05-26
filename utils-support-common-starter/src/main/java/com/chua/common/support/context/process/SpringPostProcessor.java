@@ -55,6 +55,9 @@ public class SpringPostProcessor extends TypeBeanPostProcessor {
     @Override
     public <T> List<TypeDefinition<T>> postProcessInstantiation(Class<T> targetType) {
         List rs = new LinkedList<>();
+        if(null == typeDescribe1) {
+            return rs;
+        }
         MethodDescribe methodDescribe = typeDescribe1.getMethodDescribe("getBeansOfType", Class.class);
         Map<String, T> list = (Map<String, T>) methodDescribe.isChain(methodDescribe.entity(), targetType).getBean();
         if (null == list) {
