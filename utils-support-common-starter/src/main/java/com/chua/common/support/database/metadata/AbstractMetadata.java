@@ -3,6 +3,7 @@ package com.chua.common.support.database.metadata;
 import com.chua.common.support.context.resolver.NamePair;
 import com.chua.common.support.context.resolver.NamedResolver;
 import com.chua.common.support.context.resolver.factory.SimpleNamedResolver;
+import com.chua.common.support.database.annotation.ColumnIgnore;
 import com.chua.common.support.database.entity.Column;
 import com.chua.common.support.database.entity.Index;
 import com.chua.common.support.file.export.ExportProperty;
@@ -160,6 +161,10 @@ public abstract class AbstractMetadata<T> implements Metadata<T> {
             }
 
             if (field.getName().contains("this$")) {
+                return;
+            }
+
+            if(field.isAnnotationPresent(ColumnIgnore.class)) {
                 return;
             }
 
