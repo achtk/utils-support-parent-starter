@@ -40,6 +40,7 @@ public class IdMybatisChain implements ColumnChain{
 
         Primary primary = new Primary();
         Enum<?> type = id.getEnum("type");
+        primary.setStrategy(type.name());
         if(null == type || type.ordinal() == 0) {
             primary.setStrategy("increment");
         }

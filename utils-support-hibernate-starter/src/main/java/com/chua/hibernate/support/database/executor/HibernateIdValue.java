@@ -18,6 +18,10 @@ public class HibernateIdValue extends SimpleValue {
     @Override
     public boolean isIdentityColumn(IdentifierGeneratorFactory identifierGeneratorFactory, Dialect dialect) {
         identifierGeneratorFactory.setDialect(dialect);
-        return null != identifierGeneratorFactory.getIdentifierGeneratorClass(getIdentifierGeneratorStrategy());
+        try {
+            return null != identifierGeneratorFactory.getIdentifierGeneratorClass(getIdentifierGeneratorStrategy().replace("ASSIGN_", "").toLowerCase());
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
