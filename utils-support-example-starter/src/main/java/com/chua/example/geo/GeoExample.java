@@ -26,7 +26,7 @@ public class GeoExample {
      * 地址解析
      */
     private static void ipPosition() {
-        IpPosition ipPosition = IpBuilder.newBuilder().database("Z://").build("geo");
+        IpPosition ipPosition = IpBuilder.newBuilder().database("Z://GeoLite2-City.mmdb").build("geo");
         GeoCity city = ipPosition.getCity("112.124.44.21");
         System.out.println(city);
     }
