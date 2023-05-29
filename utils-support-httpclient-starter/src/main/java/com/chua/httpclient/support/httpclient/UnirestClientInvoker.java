@@ -390,6 +390,12 @@ public class UnirestClientInvoker extends AbstractHttpClientInvoker {
             return;
         }
 
+        //上传文件
+        if (this.request.isFormData() && this.request.hasBin()) {
+            this.request.getBody().forEach(request::field);
+            return;
+        }
+
         String contentType = CollectionUtils.findFirst(request.getHeaders().get(HttpHeaders.CONTENT_TYPE), "*");
         Render render = ServiceProvider.of(com.chua.common.support.http.render.Render.class).getNewExtension(contentType);
         byte[] bytes = render.render(this.request.getBody(), contentType);
