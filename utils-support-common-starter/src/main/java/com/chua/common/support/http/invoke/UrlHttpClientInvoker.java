@@ -3,6 +3,7 @@ package com.chua.common.support.http.invoke;
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.http.*;
 import com.chua.common.support.json.Json;
+import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.CollectionUtils;
 import com.chua.common.support.utils.IoUtils;
 import com.chua.common.support.utils.StringUtils;
@@ -12,10 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSocketFactory;
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.ProtocolException;
-import java.net.URL;
-import java.net.URLConnection;
+import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -158,9 +156,22 @@ public class UrlHttpClientInvoker extends AbstractHttpClientInvoker {
         URL realUrl = new URL(url);
         if (!isHttps) {
             // 打开和URL之间的连接
-            connection = (HttpURLConnection) realUrl.openConnection();
+            if(StringUtils.isNotEmpty(request.getProxy())) {
+                connection = (HttpURLConnection) realUrl.openConnection(
+                        ServiceProvider.of(Proxy.class).getNewExtension(request.getProxy())
+                );
+            } else {
+                connection = (HttpURLConnection) realUrl.openConnection();
+            }
         } else {
-            HttpsURLConnection urlConnection = (HttpsURLConnection) realUrl.openConnection();
+            HttpsURLConnection urlConnection = null;
+            if(StringUtils.isNotEmpty(request.getProxy())) {
+                urlConnection = (HttpsURLConnection) realUrl.openConnection(
+                        ServiceProvider.of(Proxy.class).getNewExtension(request.getProxy())
+                );
+            } else {
+                urlConnection = (HttpsURLConnection) realUrl.openConnection();
+            }
             Object sslSocketFactory = request.getSslSocketFactory();
             if (sslSocketFactory instanceof SSLSocketFactory) {
                 urlConnection.setSSLSocketFactory((SSLSocketFactory) sslSocketFactory);
