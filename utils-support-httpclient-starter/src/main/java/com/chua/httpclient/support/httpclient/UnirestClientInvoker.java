@@ -290,8 +290,6 @@ public class UnirestClientInvoker extends AbstractHttpClientInvoker {
      * @return 响应
      */
     private HttpResponse createResponseEntity(kong.unirest.HttpResponse<byte[]> response) {
-        List<String> list = response.getHeaders().get("Content-Type");
-
         byte[] content = response.getBody();
         HttpResponse.HttpResponseBuilder builder = HttpResponse.builder();
         builder.content(content);
