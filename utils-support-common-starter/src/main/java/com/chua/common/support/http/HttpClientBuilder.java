@@ -106,7 +106,13 @@ public interface HttpClientBuilder {
      * @return this
      */
     HttpClientBuilder basicAuth(String basicAuthName, String basicAuthValue);
-
+    /**
+     * body
+     *
+     * @param body  消息
+     * @return this
+     */
+    HttpClientBuilder body(String body);
     /**
      * body
      *

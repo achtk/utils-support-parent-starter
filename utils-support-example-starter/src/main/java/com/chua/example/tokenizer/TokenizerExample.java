@@ -1,11 +1,17 @@
 package com.chua.example.tokenizer;
 
+import cn.hutool.http.ContentType;
 import com.chua.common.support.collection.ImmutableBuilder;
 import com.chua.common.support.function.Joiner;
+import com.chua.common.support.http.HttpClient;
+import com.chua.common.support.http.HttpClientInvoker;
+import com.chua.common.support.http.HttpHeader;
+import com.chua.common.support.http.HttpResponse;
 import com.chua.common.support.lang.tokenizer.Tokenizer;
 import com.chua.common.support.utils.MapUtils;
 import com.chua.common.support.utils.Md5Utils;
 import com.chua.common.support.utils.UrlUtils;
+import org.apache.http.HttpHeaders;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -32,6 +38,16 @@ public class TokenizerExample {
         System.out.println(join);
         String sign = Md5Utils.getInstance().getMd5String(join).toUpperCase();
         System.out.println(sign);
+
+        HttpClientInvoker invoker = HttpClient.post()
+                .url("https://api.mch.weixin.qq.com/pay/micropay")
+                .body(param)
+                .body("sign", sign)
+                .header(HttpHeaders.CONTENT_TYPE, "text/xml")
+                .newInvoker();
+        HttpResponse httpResponse = invoker.execute();
+        System.out.println();
+
 
 //        Tokenizer tokenizer = Tokenizer.newDefault();
 //        System.out.println(tokenizer.segments("测试单词"));

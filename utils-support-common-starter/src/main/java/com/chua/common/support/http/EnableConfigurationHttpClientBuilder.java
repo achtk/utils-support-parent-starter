@@ -71,6 +71,12 @@ public class EnableConfigurationHttpClientBuilder implements HttpClientBuilder {
     }
 
     @Override
+    public HttpClientBuilder body(String body) {
+        requestBuilder.bodyStr(body);
+        return this;
+    }
+
+    @Override
     public HttpClientBuilder body(String bodyName, Object bodyValue) {
         requestBuilder.body(bodyName, bodyValue);
         return this;

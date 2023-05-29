@@ -22,6 +22,10 @@ public class HttpRequest {
     @Singular("body")
     private Map<String, Object> body;
     /**
+     * 消息体
+     */
+    private String bodyStr;
+    /**
      * 认证
      */
     @Singular("basicAuth")
