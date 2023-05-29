@@ -1,6 +1,10 @@
 package com.chua.common.support.lang.tokenizer.jieba.huaban.analysis.jieba;
 
 
+import com.chua.common.support.io.CompressInputStream;
+import com.chua.common.support.io.InnerCompressInputStream;
+import com.chua.common.support.resource.repository.Metadata;
+import com.chua.common.support.resource.repository.Repository;
 import com.chua.common.support.utils.IoUtils;
 
 import java.io.BufferedReader;
@@ -20,7 +24,7 @@ import java.util.Map.Entry;
  */
 
 public class WordDictionary {
-    private static final String MAIN_DICT = "/jieba/dict.txt";
+    private static final String MAIN_DICT = "**/jieba/dict.txt*";
     private static WordDictionary singleton;
     private static String USER_DICT_SUFFIX = ".dict";
 
@@ -105,7 +109,9 @@ public class WordDictionary {
 
     public void loadDict() {
         dict = new DictSegment((char) 0);
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(IoUtils.newClassPathStream(MAIN_DICT), StandardCharsets.UTF_8))) {
+        Metadata metadata = Repository.classpath().add(Repository.current()).first(MAIN_DICT);
+        try (BufferedReader br = new BufferedReader(
+                new InputStreamReader(metadata.openInputStream( "dict.txt"), StandardCharsets.UTF_8))) {
             doAnalysis(br.readLine());
 
             long s = System.currentTimeMillis();

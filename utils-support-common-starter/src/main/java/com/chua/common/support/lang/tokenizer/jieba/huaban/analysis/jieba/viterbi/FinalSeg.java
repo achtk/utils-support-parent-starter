@@ -1,8 +1,10 @@
 package com.chua.common.support.lang.tokenizer.jieba.huaban.analysis.jieba.viterbi;
 
+import com.chua.common.support.io.CompressInputStream;
 import com.chua.common.support.lang.tokenizer.jieba.huaban.analysis.jieba.CharacterUtil;
 import com.chua.common.support.lang.tokenizer.jieba.huaban.analysis.jieba.Node;
 import com.chua.common.support.lang.tokenizer.jieba.huaban.analysis.jieba.Pair;
+import com.chua.common.support.resource.repository.Repository;
 import com.chua.common.support.utils.IoUtils;
 
 import java.io.BufferedReader;
@@ -17,7 +19,7 @@ import java.util.regex.Matcher;
  * @author Administrator
  */
 public class FinalSeg {
-    private static final String PROB_EMIT = "/jieba/prob_emit.txt";
+    private static final String PROB_EMIT = "**/jieba/prob_emit.txt*";
     private static FinalSeg singleInstance;
     private static final Double MIN_FLOAT = -3.14e100;
     private static Map<Character, Map<Character, Double>> emit;
@@ -72,7 +74,8 @@ public class FinalSeg {
         transS.put('S', -0.6658631448798212);
         trans.put('S', transS);
 
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(IoUtils.newClassPathStream(PROB_EMIT), StandardCharsets.UTF_8))) {
+        try (BufferedReader br = new BufferedReader(
+                new InputStreamReader(Repository.classpath().add(Repository.current()).first(PROB_EMIT).openInputStream("prob_emit.txt"), StandardCharsets.UTF_8))) {
             emit = new LinkedHashMap<>();
 
             Map<Character, Double> values = new LinkedHashMap<>();

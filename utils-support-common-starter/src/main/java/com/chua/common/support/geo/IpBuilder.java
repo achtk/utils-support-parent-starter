@@ -67,7 +67,7 @@ public class IpBuilder {
      * @return 定位
      */
     public IpPosition build() {
-        return build("lite2");
+        return build("geo");
     }
 
     /**

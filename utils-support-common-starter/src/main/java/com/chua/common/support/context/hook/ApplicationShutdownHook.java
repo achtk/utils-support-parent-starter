@@ -1,5 +1,6 @@
 package com.chua.common.support.context.hook;
 
+import com.chua.common.support.context.aware.DestructionAwareBeanPostProcessor;
 import com.chua.common.support.context.factory.ConfigureApplicationContext;
 import com.chua.common.support.context.process.BeanPostProcessor;
 import com.chua.common.support.function.DisposableAware;

@@ -1,6 +1,7 @@
 package com.chua.common.support.lang.tokenizer.jieba.qianxinyao.analysis.jieba.keyword;
 
 import com.chua.common.support.lang.tokenizer.jieba.huaban.analysis.jieba.JiebaSegmenter;
+import com.chua.common.support.resource.repository.Repository;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -44,11 +45,11 @@ public class TFIDFAnalyzer {
 
         if (stopWordsSet == null) {
             stopWordsSet = new HashSet<>();
-            loadStopWords(stopWordsSet, this.getClass().getResourceAsStream("/stop_words.txt"));
+            loadStopWords(stopWordsSet, Repository.classpath().add(Repository.current()).first("**/stop_words.txt*").openInputStream("stop_words.txt"));
         }
         if (idfMap == null) {
             idfMap = new LinkedHashMap<>();
-            loadIdfMap(idfMap, this.getClass().getResourceAsStream("/idf_dict.txt"));
+            loadIdfMap(idfMap, Repository.classpath().add(Repository.current()).first("**/idf_dict.txt*").openInputStream("idf_dict.txt"));
         }
 
         Map<String, Double> tfMap = getTf(content);

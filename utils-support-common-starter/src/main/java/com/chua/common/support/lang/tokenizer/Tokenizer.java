@@ -88,6 +88,24 @@ public interface Tokenizer {
     }
 
     /**
+     * 获取分词器
+     * @return 分词器
+     */
+    static Tokenizer of(String type) {
+        ServiceProvider<Tokenizer> serviceProvider = ServiceProvider.of(Tokenizer.class);
+        return serviceProvider.getNewExtension(type);
+    }
+
+    /**
+     * 获取分词器
+     * @return 分词器
+     */
+    static Tokenizer newDefault() {
+        ServiceProvider<Tokenizer> serviceProvider = ServiceProvider.of(Tokenizer.class);
+        return serviceProvider.getNewExtension(null);
+    }
+
+    /**
      * 分词
      *
      * @param word 词性

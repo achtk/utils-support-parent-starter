@@ -10,6 +10,7 @@ import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.spi.autowire.InitializingAwareAutoServiceAutowire;
 import com.chua.common.support.utils.ClassUtils;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +39,10 @@ public class SpringPostProcessor extends TypeBeanPostProcessor {
 
     @Override
     public <T> List<TypeDefinition<T>> postProcessInstantiation(String bean, Class<T> targetType) {
+        if(null == typeDescribe1) {
+            return Collections.emptyList();
+        }
+
         List rs = new LinkedList<>();
         MethodDescribe methodDescribe = typeDescribe1.getMethodDescribe("getBean", String.class, Class.class);
         Object extension = methodDescribe.doChainSelf(bean, targetType).entity();
@@ -54,10 +59,10 @@ public class SpringPostProcessor extends TypeBeanPostProcessor {
 
     @Override
     public <T> List<TypeDefinition<T>> postProcessInstantiation(Class<T> targetType) {
-        List rs = new LinkedList<>();
         if(null == typeDescribe1) {
-            return rs;
+            return Collections.emptyList();
         }
+        List rs = new LinkedList<>();
         MethodDescribe methodDescribe = typeDescribe1.getMethodDescribe("getBeansOfType", Class.class);
         Map<String, T> list = (Map<String, T>) methodDescribe.isChain(methodDescribe.entity(), targetType).getBean();
         if (null == list) {

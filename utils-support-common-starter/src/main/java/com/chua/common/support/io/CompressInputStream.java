@@ -36,8 +36,12 @@ public class CompressInputStream extends InputStream {
     public CompressInputStream(String resource, String file) {
         this.resource = resource;
         this.file = file;
-        this.stream = ServiceProvider.of(FileInnerCompressInputStream.class)
-                .getExtension(FileUtils.getSimpleExtension(resource));
+        if(resource.endsWith(file)) {
+            this.stream = new SimpleFileInnerCompressInputStream();
+        } else {
+            this.stream = ServiceProvider.of(FileInnerCompressInputStream.class)
+                    .getDeepNewExtension(FileUtils.getSimpleExtension(resource));
+        }
         if (null == stream) {
             this.stream = new SimpleFileInnerCompressInputStream();
         }

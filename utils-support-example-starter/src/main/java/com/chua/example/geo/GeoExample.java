@@ -17,7 +17,7 @@ public class GeoExample {
     public static void main(String[] args) {
         ipPosition();
         conversion();
-        reverseGeoPosition();
+//        reverseGeoPosition();
 
 
     }

@@ -1,6 +1,7 @@
 package com.chua.common.support.resource.repository;
 
 import com.chua.common.support.file.Decompress;
+import com.chua.common.support.io.CompressInputStream;
 import com.chua.common.support.lang.exception.NotSupportedException;
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.FileUtils;
@@ -78,6 +79,15 @@ public interface Metadata {
      * @return 打开流
      */
     InputStream openInputStream();
+    /**
+     * 打开流
+     *
+     * @param compressFileName 压缩包里的文件名
+     * @return 打开流
+     */
+    default InputStream openInputStream(String compressFileName) {
+        return new CompressInputStream(toUrl(), compressFileName);
+    }
 
     /**
      * 文件大小

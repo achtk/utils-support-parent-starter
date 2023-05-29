@@ -133,3 +133,4 @@
 3.关闭：SET GLOBAL log_bin_trust_function_creators = 0;
 ```
 
+8c607ec8e8e017c17c7422564aa30237

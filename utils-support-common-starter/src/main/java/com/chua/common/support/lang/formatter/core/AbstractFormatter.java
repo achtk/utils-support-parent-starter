@@ -29,8 +29,8 @@ public abstract class AbstractFormatter implements DialectConfigurator {
     this.index = 0;
   }
 
-  public Tokenizer tokenizer() {
-    return new Tokenizer(this.dialectConfig());
+  public FormatterTokenizer tokenizer() {
+    return new FormatterTokenizer(this.dialectConfig());
   }
 
   /**

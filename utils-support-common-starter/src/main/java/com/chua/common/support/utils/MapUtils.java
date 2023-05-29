@@ -6,6 +6,7 @@ import com.chua.common.support.collection.MultiValueMap;
 import com.chua.common.support.constant.NumberConstant;
 import com.chua.common.support.converter.Converter;
 import com.chua.common.support.function.Splitter;
+import com.chua.common.support.spi.ServiceProvider;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -1244,5 +1245,28 @@ public class MapUtils {
      */
     public static <K, V>MultiValueMap<K, V> ofMultiMap() {
         return new MultiLinkedValueMap<>();
+    }
+
+    /**
+     * 保存并返回
+     * @param map cache
+     * @param key 索引
+     * @param function func
+     * @return 结果
+     * @param <K> 类型
+     * @param <V> 类型
+     */
+    public static <K, V> V computeIfAbsent(Map<K, V> map, K key, Function<K, V> function) {
+        if(null == map) {
+            return null;
+        }
+
+        V v = map.get(key);
+        if(v == null) {
+            v = function.apply(key);
+            map.put(key, v);
+        }
+
+        return v;
     }
 }

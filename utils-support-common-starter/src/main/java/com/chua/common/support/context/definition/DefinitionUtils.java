@@ -77,7 +77,7 @@ public class DefinitionUtils {
         }
 
         InitializingResolverFactory initializingResolverFactory = new InitializingResolverFactory();
-        List<DestructionAwareBeanPostProcessor> anyBean = beanFactory.getAnyBean(DestructionAwareBeanPostProcessor.class);
+//        List<DestructionAwareBeanPostProcessor> anyBean = beanFactory.getAnyBean(DestructionAwareBeanPostProcessor.class);
         for (TypeDefinition definition : value) {
             Object object = definition.getObject(beanFactory);
             if (null == object) {
@@ -85,7 +85,7 @@ public class DefinitionUtils {
             }
 
             initializingResolverFactory.refresh(object);
-            refreshBeanPostProcessor(anyBean, definition, beanFactory);
+//            refreshBeanPostProcessor(anyBean, definition, beanFactory);
         }
     }
 

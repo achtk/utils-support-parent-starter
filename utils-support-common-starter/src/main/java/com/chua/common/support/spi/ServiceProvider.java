@@ -7,10 +7,7 @@ import com.chua.common.support.function.NameAware;
 import com.chua.common.support.spi.autowire.AutoServiceAutowire;
 import com.chua.common.support.spi.autowire.ServiceAutowire;
 import com.chua.common.support.spi.finder.*;
-import com.chua.common.support.utils.ClassUtils;
-import com.chua.common.support.utils.FileUtils;
-import com.chua.common.support.utils.Preconditions;
-import com.chua.common.support.utils.StringUtils;
+import com.chua.common.support.utils.*;
 import com.chua.common.support.value.Value;
 
 import java.util.*;
@@ -100,7 +97,7 @@ public class ServiceProvider<T> implements InitializingAware {
         if (ClassUtils.isVoid(value)) {
             return EMPTY;
         }
-        return CACHE.computeIfAbsent(value, it -> {
+        return MapUtils.computeIfAbsent(CACHE, value, it -> {
             ServiceProvider<T> provider = new ServiceProvider<>(value, classLoader, serviceAutowire);
             provider.afterPropertiesSet();
             return provider;

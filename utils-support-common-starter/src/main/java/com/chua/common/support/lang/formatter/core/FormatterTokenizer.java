@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Tokenizer {
+public class FormatterTokenizer {
   // private final Pattern WHITESPACE_PATTERN;
   private final Pattern NUMBER_PATTERN;
   private final Pattern OPERATOR_PATTERN;
@@ -44,7 +44,7 @@ public class Tokenizer {
    *     cfg.lineCommentTypes Line comments to enable, like # and -- {String[]} cfg.specialWordChars
    *     Special chars that can be found inside of words, like @ and #
    */
-  public Tokenizer(DialectConfig cfg) {
+  public FormatterTokenizer(DialectConfig cfg) {
     // this.WHITESPACE_PATTERN = Pattern.compile("^(\\s+)");
     this.NUMBER_PATTERN =
         Pattern.compile(

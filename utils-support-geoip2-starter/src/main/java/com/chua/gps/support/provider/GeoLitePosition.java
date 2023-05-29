@@ -2,12 +2,14 @@ package com.chua.gps.support.provider;
 
 
 import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.converter.Converter;
 import com.chua.common.support.geo.GeoCity;
 import com.chua.common.support.geo.IpPosition;
 import com.chua.common.support.io.CompressInputStream;
 import com.chua.common.support.lang.profile.DelegateProfile;
 import com.chua.common.support.lang.profile.Profile;
 import com.chua.common.support.resource.ResourceProvider;
+import com.chua.common.support.resource.repository.Repository;
 import com.chua.common.support.utils.IoUtils;
 import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.model.CityResponse;
@@ -44,18 +46,7 @@ public class GeoLitePosition extends DelegateProfile implements IpPosition {
             return;
         }
         try {
-            if (database1 instanceof File) {
-                this.databaseReader = new DatabaseReader.Builder((File) database1).build();
-            } else if (database1 instanceof String) {
-                File file = new File((String) database1);
-                if (file.exists()) {
-                    this.databaseReader = new DatabaseReader.Builder(file).build();
-                } else {
-                    this.databaseReader = initialClasspath();
-                }
-            } else if (database1 instanceof InputStream) {
-                this.databaseReader = new DatabaseReader.Builder((InputStream) database1).build();
-            }
+            this.databaseReader = new DatabaseReader.Builder(Converter.convertIfNecessary(database1, InputStream.class)).build();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -77,7 +68,9 @@ public class GeoLitePosition extends DelegateProfile implements IpPosition {
         }
 
         try {
-            this.databaseReader = new DatabaseReader.Builder(new CompressInputStream(ResourceProvider.of("classpath*:**/GeoLite2-City.tar.gz").getResource().getUrl(), "GeoLite2-City.mmdb")).build();
+            this.databaseReader = new DatabaseReader.Builder(new CompressInputStream(Repository.classpath()
+                    .add(Repository.current())
+                    .first("**/GeoLite2-City.mmdb*").toUrl(), "GeoLite2-City.mmdb")).build();
         } catch (Throwable ignored1) {
         }
 

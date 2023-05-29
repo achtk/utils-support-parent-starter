@@ -1,5 +1,6 @@
 package com.chua.common.support.resource.repository;
 
+import com.chua.common.support.constant.Projects;
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.CollectionUtils;
 import lombok.SneakyThrows;
@@ -58,6 +59,14 @@ public interface Repository {
     }
 
     /**
+     * user home
+     * @return user home
+     */
+    static Repository userHome() {
+        return of(Projects.userHome());
+    }
+
+    /**
      * 合并资源
      *
      * @param repository 资源
@@ -112,7 +121,7 @@ public interface Repository {
             }
 
             File temp = new File(s);
-            if(!temp.exists()) {
+            if(!temp.exists() && !s.contains(":")) {
                 temp.mkdirs();
             }
 
@@ -136,7 +145,7 @@ public interface Repository {
      */
     static void doAnalysisUrl(String s, URL[] urls, int i) {
         ServiceProvider<URLStreamHandler> provider = ServiceProvider.of(URLStreamHandler.class);
-        for (URLStreamHandler streamHandler : provider.list().values()) {
+        for (URLStreamHandler streamHandler : provider.collect()) {
             try {
                 URL url1 = new URL(null, s, streamHandler);
                 urls[i] = url1;

@@ -1,6 +1,7 @@
 package com.chua.common.support.geo;
 
 import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.converter.Converter;
 import com.chua.common.support.lang.profile.ProfileProvider;
 import com.chua.common.support.resource.ResourceProvider;
 import com.chua.common.support.utils.IoUtils;
@@ -39,18 +40,7 @@ public class IpWryPosition extends ProfileProvider<IpPosition>
         if (null == database1) {
             this.data = initialClasspath();
         } else {
-            if (database1 instanceof File) {
-                this.data = Files.readAllBytes(((File) database1).toPath());
-            } else if (database1 instanceof String) {
-                File file = new File((String) database1);
-                if (file.exists()) {
-                    this.data = Files.readAllBytes(file.toPath());
-                } else {
-                    this.data = initialClasspath();
-                }
-            } else if (database1 instanceof InputStream) {
-                this.data = IoUtils.toByteArray((InputStream) database1);
-            }
+            this.data =  IoUtils.toByteArray(Converter.convertIfNecessary(database1, InputStream.class));
         }
         indexHead = readLong32(0);
         indexTail = readLong32(4);
