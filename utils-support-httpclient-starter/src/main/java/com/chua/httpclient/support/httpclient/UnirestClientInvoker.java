@@ -382,6 +382,11 @@ public class UnirestClientInvoker extends AbstractHttpClientInvoker {
             request.headers(this.request.getHeader().asSimpleMap());
         }
 
+        if (StringUtils.isNotBlank(this.request.getBodyStr())) {
+            request.body(this.request.getBodyStr());
+            return;
+        }
+
         if (!this.request.getBody().isEmpty()) {
             request.fields(this.request.getBody());
         }
