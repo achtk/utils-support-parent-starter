@@ -1,6 +1,6 @@
 package com.chua.lucene.support.resolver;
 
-import com.chua.common.support.crypto.Encrypt;
+import com.chua.common.support.crypto.Codec;
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.lucene.support.factory.DirectoryFactory;
 import com.chua.lucene.support.operator.*;
@@ -33,7 +33,7 @@ public class LuceneTemplateResolver implements AutoCloseable {
      * 加解密
      */
     @NonNull
-    private Encrypt encrypt = ServiceProvider.of(Encrypt.class).getExtension(DESEDE);
+    private Codec encrypt = ServiceProvider.of(Codec.class).getExtension(DESEDE);
     /**
      * 索引模板
      */
@@ -66,7 +66,7 @@ public class LuceneTemplateResolver implements AutoCloseable {
      * @param storePath 存储位置
      * @param encrypt   加密算法
      */
-    public LuceneTemplateResolver(@NonNull Path storePath, @NonNull Encrypt encrypt) {
+    public LuceneTemplateResolver(@NonNull Path storePath, @NonNull Codec encrypt) {
         this.storePath = storePath;
         this.encrypt = encrypt;
         this.encrypt.accessKey(this.secret);
@@ -84,7 +84,7 @@ public class LuceneTemplateResolver implements AutoCloseable {
      * @param encrypt   加密算法
      * @param secret    秘钥
      */
-    public LuceneTemplateResolver(@NonNull Path storePath, @NonNull Encrypt encrypt, String secret) {
+    public LuceneTemplateResolver(@NonNull Path storePath, @NonNull Codec encrypt, String secret) {
         this.storePath = storePath;
         this.encrypt = encrypt;
         this.secret = secret;
@@ -139,7 +139,7 @@ public class LuceneTemplateResolver implements AutoCloseable {
      * @param secret        秘钥
      * @param directoryType 目录类型
      */
-    public LuceneTemplateResolver(@NonNull Path storePath, @NonNull Encrypt encrypt, String secret, DirectoryFactory.DirectoryType directoryType) {
+    public LuceneTemplateResolver(@NonNull Path storePath, @NonNull Codec encrypt, String secret, DirectoryFactory.DirectoryType directoryType) {
         this.storePath = storePath;
         this.encrypt = encrypt;
         this.secret = secret;
@@ -161,7 +161,7 @@ public class LuceneTemplateResolver implements AutoCloseable {
      * @param secret           秘钥
      * @param directoryFactory 目录类型
      */
-    public LuceneTemplateResolver(@NonNull Path storePath, @NonNull Encrypt encrypt, String secret, DirectoryFactory directoryFactory) {
+    public LuceneTemplateResolver(@NonNull Path storePath, @NonNull Codec encrypt, String secret, DirectoryFactory directoryFactory) {
         this.storePath = storePath;
         this.encrypt = encrypt;
         this.secret = secret;

@@ -31,6 +31,14 @@ import static com.chua.common.support.constant.NumberConstant.DEFAULT_INITIAL_CA
 public class MapUtils {
 
     /**
+     * 默认初始大小
+     */
+    public static final int DEFAULT_INITIAL_CAPACITY = 16;
+    /**
+     * 默认增长因子，当Map的size达到 容量*增长因子时，开始扩充Map
+     */
+    public static final float DEFAULT_LOAD_FACTOR = 0.75f;
+    /**
      * 合并姐
      *
      * @param source 集合
@@ -121,6 +129,24 @@ public class MapUtils {
      */
     public static boolean isEmpty(Dictionary<?, ?> dictionary) {
         return (dictionary == null || dictionary.isEmpty());
+    }
+    /**
+     * 非空安全检查指定的Dictionary是否为空。 * * <p> Null返回true。
+     *
+     * @param dictionary 要检查的集合，可以为null
+     * @return 如果为空或null，则为true
+     */
+    public static boolean isNotEmpty(Dictionary<?, ?> dictionary) {
+        return !isEmpty(dictionary);
+    }
+    /**
+     * 非空安全检查指定的Dictionary是否为空。 * * <p> Null返回true。
+     *
+     * @param map 要检查的集合，可以为null
+     * @return 如果为空或null，则为true
+     */
+    public static boolean isNotEmpty(Map map) {
+        return !isEmpty(map);
     }
 
     /**
@@ -1268,5 +1294,21 @@ public class MapUtils {
         }
 
         return v;
+    }
+
+    /**
+     * ascii排序
+     * @param param 参数
+     * @return 结果
+     */
+    public static <V>Map<String, V> sortKey(Map<String, V> param) {
+        Map<String, V> rs = new LinkedHashMap<>();
+        List<String> strings = new ArrayList<>(param.keySet());
+        strings.sort(String::compareTo);
+        for (String string : strings) {
+            rs.put(string, param.get(string));
+        }
+
+        return rs;
     }
 }

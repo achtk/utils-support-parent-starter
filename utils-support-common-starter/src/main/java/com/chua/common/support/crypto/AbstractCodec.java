@@ -5,19 +5,19 @@ package com.chua.common.support.crypto;
  *
  * @author CH
  */
-public abstract class AbstractEncrypt implements Encrypt {
+public abstract class AbstractCodec implements Codec {
 
     protected String accessKey;
     protected String secretKey;
 
     @Override
-    public Encrypt accessKey(String accessKey) {
+    public Codec accessKey(String accessKey) {
         this.accessKey = accessKey;
         return this;
     }
 
     @Override
-    public Encrypt secretKey(String secretKey) {
+    public Codec secretKey(String secretKey) {
         this.secretKey = secretKey;
         return this;
     }

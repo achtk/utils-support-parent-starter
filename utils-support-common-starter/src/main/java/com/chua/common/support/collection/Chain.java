@@ -1,6 +1,7 @@
 package com.chua.common.support.collection;
 
 import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * 链式
@@ -24,4 +25,11 @@ public interface Chain<V, R> {
      * @return 添加数据
      */
     R addChains(Collection<V> v);
+
+    /**
+     * 迭代器
+     * @return 迭代器
+     */
+
+    Iterator<V> iterator();
 }

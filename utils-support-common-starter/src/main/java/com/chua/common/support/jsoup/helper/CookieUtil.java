@@ -21,7 +21,7 @@ class CookieUtil {
      Pre-request, get any applicable headers out of the Request cookies and the Cookie Store, and add them to the request
      headers. If the Cookie Store duplicates any Request cookies (same name and value), they will be discarded.
      */
-    static void applyCookiesToRequest(HttpConnection.Request req, HttpURLConnection con) throws IOException {
+    static void applyCookiesToRequest(HttpJsoupConnection.Request req, HttpURLConnection con) throws IOException {
         Set<String> cookieSet = requestCookieSet(req);
         Set<String> cookies2 = null;
 
@@ -71,7 +71,7 @@ class CookieUtil {
         }
     }
 
-    static void storeCookies(HttpConnection.Request req, URL url, Map<String, List<String>> resHeaders) throws IOException {
+    static void storeCookies(HttpJsoupConnection.Request req, URL url, Map<String, List<String>> resHeaders) throws IOException {
         req.cookieManager().put(CookieUtil.asUri(url), resHeaders);
     }
 }

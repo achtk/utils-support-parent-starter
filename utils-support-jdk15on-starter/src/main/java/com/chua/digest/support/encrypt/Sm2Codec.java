@@ -1,9 +1,7 @@
 package com.chua.digest.support.encrypt;
 
-import com.chua.common.support.crypto.AbstractEncrypt;
-import com.chua.common.support.crypto.decode.Decode;
+import com.chua.common.support.crypto.AbstractCodec;
 import com.chua.common.support.crypto.decode.KeyDecode;
-import com.chua.common.support.crypto.encode.Encode;
 import com.chua.common.support.crypto.encode.KeyEncode;
 import com.chua.digest.support.decode.Sm2Decode;
 import com.chua.digest.support.encode.Sm2Encode;
@@ -13,7 +11,7 @@ import com.chua.digest.support.encode.Sm2Encode;
  *
  * @author CH
  */
-public class Sm2Encrypt extends AbstractEncrypt {
+public class Sm2Codec extends AbstractCodec {
 
     private static final KeyDecode DECODE = new Sm2Decode();
     private static final KeyEncode ENCODE = new Sm2Encode();

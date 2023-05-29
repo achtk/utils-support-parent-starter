@@ -12,7 +12,7 @@ import com.chua.common.support.annotations.Spi;
  * @author CH
  */
 @Spi("des")
-public class DesEncrypt extends AbstractEncrypt {
+public class DesCodec extends AbstractCodec {
 
     private static final KeyDecode DECODE = new DesDecode();
     private static final KeyEncode ENCODE = new DesEncode();

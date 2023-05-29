@@ -1,8 +1,12 @@
 package com.chua.common.support.resource.resource;
 
+import com.chua.common.support.utils.FileUtils;
+import com.chua.common.support.utils.IoUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
 
 /**
@@ -58,4 +62,24 @@ public interface Resource {
      * @return 修改时间
      */
     long lastModified();
+
+    /**
+     * 资源名称
+     * @return 名称
+     */
+    default String getName() {
+        return FileUtils.getName(getUrlPath());
+    }
+
+    /**
+     * 写入数据
+     * @param out 输出
+     */
+    default void writeTo(OutputStream out) {
+        try {
+            IoUtils.copy(openStream(), out);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

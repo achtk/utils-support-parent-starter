@@ -2,6 +2,7 @@ package com.chua.common.support.utils;
 
 import com.chua.common.support.constant.CommonConstant;
 import com.chua.common.support.converter.Converter;
+import com.chua.common.support.lang.net.URLDecoder;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
@@ -9,7 +10,6 @@ import java.net.URI;
 import java.net.URL;
 import java.net.*;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
@@ -17,6 +17,8 @@ import java.util.function.Consumer;
 import java.util.zip.ZipFile;
 
 import static com.chua.common.support.constant.CommonConstant.*;
+import static com.chua.common.support.lang.net.URLEncoder.*;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 
 /**
@@ -117,7 +119,18 @@ public class UrlUtils {
     public static String encode(String url) {
         return SimpleUrlEncoder.DEFAULT.encode(url);
     }
-
+    /**
+     * 编码URL<br>
+     * 将需要转换的内容（ASCII码形式之外的内容），用十六进制表示法转换出来，并在之前加上%开头。
+     *
+     * @param url     URL
+     * @param charset 编码，为null表示不编码
+     * @return 编码后的URL
+     * @throws UnsupportedEncodingException UnsupportedEncodingException
+     */
+    public static String encodeAll(String url, Charset charset) throws UnsupportedEncodingException {
+        return ALL.encode(url, charset);
+    }
     /**
      * 单独编码URL中的空白符，空白符编码为%20
      *
@@ -142,6 +155,66 @@ public class UrlUtils {
             }
         }
         return sb.toString();
+    }
+
+
+    /**
+     * 解码URL<br>
+     * 将%开头的16进制表示的内容解码。
+     *
+     * @param url URL
+     * @return 解码后的URL
+     * @throws UnsupportedEncodingException UnsupportedEncodingException
+     * @since 3.1.2
+     */
+    public static String decode(String url) throws UnsupportedEncodingException {
+        return decode(url, UTF_8);
+    }
+
+    /**
+     * 解码application/x-www-form-urlencoded字符<br>
+     * 将%开头的16进制表示的内容解码。
+     *
+     * @param content 被解码内容
+     * @param charset 编码，null表示不解码
+     * @return 编码后的字符
+     * @since 4.4.1
+     */
+    public static String decode(String content, Charset charset) {
+        if (null == charset) {
+            return content;
+        }
+        return com.chua.common.support.lang.net.URLDecoder.decode(content, charset);
+    }
+
+    /**
+     * 解码application/x-www-form-urlencoded字符<br>
+     * 将%开头的16进制表示的内容解码。
+     *
+     * @param content       被解码内容
+     * @param charset       编码，null表示不解码
+     * @param isPlusToSpace 是否+转换为空格
+     * @return 编码后的字符
+     * @since 5.6.3
+     */
+    public static String decode(String content, Charset charset, boolean isPlusToSpace) {
+        if (null == charset) {
+            return content;
+        }
+        return URLDecoder.decode(content, charset, isPlusToSpace);
+    }
+
+    /**
+     * 解码application/x-www-form-urlencoded字符<br>
+     * 将%开头的16进制表示的内容解码。
+     *
+     * @param content URL
+     * @param charset 编码
+     * @return 解码后的URL
+     * @throws UnsupportedEncodingException UnsupportedEncodingException
+     */
+    public static String decode(String content, String charset) throws UnsupportedEncodingException {
+        return decode(content, Charset.forName(charset));
     }
 
     /**
@@ -1064,7 +1137,7 @@ public class UrlUtils {
         public String encode(String source) {
             final StringBuilder rewrittenPath = new StringBuilder(source.length());
             ByteArrayOutputStream buf = new ByteArrayOutputStream();
-            OutputStreamWriter writer = new OutputStreamWriter(buf, StandardCharsets.UTF_8);
+            OutputStreamWriter writer = new OutputStreamWriter(buf, UTF_8);
 
             int c;
             for (int i = 0; i < source.length(); i++) {
@@ -1101,5 +1174,51 @@ public class UrlUtils {
 
 
 
+    /**
+     * 将URL字符串转换为URL对象，并做必要验证
+     *
+     * @param urlStr URL字符串
+     * @return URL
+     * @since 4.1.9
+     */
+    public static URL toUrlForHttp(String urlStr) {
+        return toUrlForHttp(urlStr, null);
+    }
+
+    /**
+     * 将URL字符串转换为URL对象，并做必要验证
+     *
+     * @param urlStr  URL字符串
+     * @param handler {@link URLStreamHandler}
+     * @return URL
+     * @since 4.1.9
+     */
+    public static URL toUrlForHttp(String urlStr, URLStreamHandler handler) {
+        // 编码空白符，防止空格引起的请求异常
+        urlStr = encodeBlank(urlStr);
+        try {
+            return new URL(null, urlStr, handler);
+        } catch (MalformedURLException e) {
+            try {
+                throw new UnsupportedEncodingException();
+            } catch (UnsupportedEncodingException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+    }
+
+    /**
+     * 编码字符为URL中查询语句<br>
+     * 将需要转换的内容（ASCII码形式之外的内容），用十六进制表示法转换出来，并在之前加上%开头。<br>
+     * 此方法用于POST请求中的请求体自动编码，转义大部分特殊字符
+     *
+     * @param url     被编码内容
+     * @param charset 编码
+     * @return 编码后的字符
+     * @since 4.4.1
+     */
+    public static String encodeQuery(String url, Charset charset) {
+        return QUERY.encode(url, charset);
+    }
 
 }

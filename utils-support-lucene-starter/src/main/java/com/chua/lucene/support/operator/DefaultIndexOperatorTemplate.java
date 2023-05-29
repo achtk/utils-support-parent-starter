@@ -1,6 +1,6 @@
 package com.chua.lucene.support.operator;
 
-import com.chua.common.support.crypto.Encrypt;
+import com.chua.common.support.crypto.Codec;
 import com.chua.lucene.support.factory.DirectoryFactory;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.index.IndexReader;
@@ -24,10 +24,10 @@ import java.util.Set;
 public class DefaultIndexOperatorTemplate implements IndexOperatorTemplate {
 
     private final Path path;
-    private final Encrypt encrypt;
+    private final Codec encrypt;
     private final DirectoryFactory directoryFactory;
 
-    public DefaultIndexOperatorTemplate(Path path, Encrypt encrypt, DirectoryFactory directoryFactory) {
+    public DefaultIndexOperatorTemplate(Path path, Codec encrypt, DirectoryFactory directoryFactory) {
         this.path = path;
         this.encrypt = encrypt;
         this.directoryFactory = directoryFactory;

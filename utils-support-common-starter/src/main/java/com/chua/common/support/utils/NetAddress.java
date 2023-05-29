@@ -1,8 +1,16 @@
 package com.chua.common.support.utils;
 
+import com.chua.common.support.collection.ImmutableBuilder;
+import com.chua.common.support.collection.TableMap;
 import com.chua.common.support.constant.CommonConstant;
+import com.chua.common.support.converter.Converter;
+import com.chua.common.support.crypto.PercentCodec;
 import com.chua.common.support.function.Joiner;
 import com.chua.common.support.function.Splitter;
+import com.chua.common.support.lang.net.FormUrlencoded;
+import com.chua.common.support.lang.net.RFC3986;
+import com.chua.common.support.lang.net.UrlPath;
+import com.chua.common.support.lang.net.UrlQuery;
 import lombok.Data;
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -12,11 +20,14 @@ import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
 import static com.chua.common.support.constant.CommonConstant.*;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 
 /**
@@ -136,14 +147,15 @@ public class NetAddress implements Serializable {
      */
     private String path;
     /**
-     * 查询条件
+     * UrlPath
      */
-    private String query;
+    private UrlPath urlPath;
     /**
      * 查询条件
      */
+    private String query;
     @Getter
-    private Map<String, Object> parametric;
+    private UrlQuery urlQuery = new UrlQuery();
     private String fullProtocol;
     private URI uri;
 
@@ -154,7 +166,7 @@ public class NetAddress implements Serializable {
      */
     private NetAddress(String address) {
         this.originalAddress = address;
-        this.parametric = new LinkedHashMap<>();
+        this.urlQuery = new UrlQuery();
         this.analysisSchema();
         this.analysisAuthority();
         this.analysisPath();
@@ -198,6 +210,19 @@ public class NetAddress implements Serializable {
 
         return NetAddress.of(args[0] + ":" + args[1]);
 
+    }
+
+    /**
+     * http
+     * @param url url
+     * @return http
+     */
+    public static NetAddress ofHttp(String url) {
+        final int sepIndex = url.indexOf("://");
+        if (sepIndex < 0) {
+            url = HTTP + "://" + url.trim();
+        }
+        return NetAddress.of(UrlUtils.normalize(StringUtils.trim(url), false));
     }
 
     /**
@@ -396,8 +421,8 @@ public class NetAddress implements Serializable {
      *
      * @return 参数
      */
-    public Map<String, Object> parametric() {
-        return Optional.ofNullable(parametric).orElse(Collections.emptyMap());
+    public Map<CharSequence, CharSequence> parametric() {
+        return Optional.ofNullable(urlQuery.getQueryMap()).orElse(Collections.emptyMap());
     }
 
     /**
@@ -418,7 +443,7 @@ public class NetAddress implements Serializable {
      * @return 结果
      */
     public <T> T getParameter(String name, T defaultValue) {
-        return (T) parametric.getOrDefault(name, defaultValue);
+        return (T) Optional.ofNullable(urlQuery.get(name)).orElse((CharSequence) defaultValue);
     }
 
     /**
@@ -490,7 +515,7 @@ public class NetAddress implements Serializable {
                 ",\n\t password     = '" + password + '\'' +
                 ",\n\t path         = '" + path + '\'' +
                 ",\n\t query        = '" + query + '\'' +
-                ",\n\t parametric   = " + parametric +
+                ",\n\t parametric   = " + urlQuery.toString() +
                 '}';
     }
 
@@ -671,7 +696,8 @@ public class NetAddress implements Serializable {
         if (null == query) {
             return;
         }
-        this.parametric = this.parametric(query);
+        Map<String, Object> parametric = this.parametric(query);
+        parametric.forEach(urlQuery::add);
     }
 
     /**
@@ -682,6 +708,7 @@ public class NetAddress implements Serializable {
             return;
         }
         String path = uri.getPath();
+        urlPath = UrlPath.of(path, UTF_8);
         int index = path.indexOf(CommonConstant.SYMBOL_QUESTION);
         if (index != -1) {
             this.path = path.substring(0, index);
@@ -897,7 +924,7 @@ public class NetAddress implements Serializable {
                         "\r\n password: '******' " +
                         "\r\n path: '" + path + '\'' +
                         "\r\n query: '" + print(query, 15) + '\'' +
-                        "\r\n parametric " + analysisMap(parametric);
+                        "\r\n parametric: " + urlQuery.toString();
     }
 
     private String analysisMap(Map<String, Object> parametric) {
@@ -976,10 +1003,10 @@ public class NetAddress implements Serializable {
     }
 
     protected void buildParameters(StringBuilder buf, boolean concat, String[] parameters) {
-        if (!MapUtils.isEmpty(parametric)) {
+        if (!MapUtils.isEmpty(urlQuery.getQueryMap())) {
             List<String> includes = (ArrayUtils.isEmpty(parameters) ? null : Arrays.asList(parameters));
             boolean first = true;
-            for (Map.Entry<String, Object> entry : new TreeMap<>(parametric).entrySet()) {
+            for (Map.Entry<CharSequence, CharSequence> entry : new TreeMap<>(urlQuery.getQueryMap()).entrySet()) {
                 boolean b = !StringUtils.isEmpty(entry.getKey())
                         && (includes == null || includes.contains(entry.getKey()));
                 if (b) {
@@ -1022,7 +1049,7 @@ public class NetAddress implements Serializable {
      * @param map 参数
      */
     public void addParameter(Map<String, Object> map) {
-        parametric.putAll(map);
+        map.forEach(urlQuery::add);
     }
 
     /**
@@ -1032,10 +1059,11 @@ public class NetAddress implements Serializable {
      * @param value 值
      */
     public void addParameter(String key, Object value) {
-        parametric.put(key, value);
+        urlQuery.add(key, value);
     }
 
     public String getPath() {
         return path;
     }
+
 }

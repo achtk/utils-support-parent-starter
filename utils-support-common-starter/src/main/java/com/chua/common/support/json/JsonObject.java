@@ -50,4 +50,8 @@ public class JsonObject extends TypeHashMap implements Profile {
     public void forEach(BiConsumer<String, Object> o) {
         source.forEach(o);
     }
+
+    public Map<String, Object> toMap() {
+        return source;
+    }
 }

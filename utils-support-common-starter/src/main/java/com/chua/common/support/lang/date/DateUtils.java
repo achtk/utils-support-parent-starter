@@ -505,6 +505,20 @@ public class DateUtils {
 
     /**
      * 格式化时间
+     * <p>
+     * DateHelper.format(new Date()) =
+     * </p>
+     *
+     * @param zonedDateTime 时间
+     * @return 时间
+     */
+    public static String format(ZonedDateTime zonedDateTime, String pattern) throws ParseException {
+        DateTimeFormatter df = DateTimeFormatter.ofPattern(pattern);
+        return zonedDateTime.format(df);
+    }
+
+    /**
+     * 格式化时间
      * <br /> 默认格式： yyyy-MM-dd HH:mm:ss
      * {@link #format(Date, String)}
      * <pre>
@@ -2464,5 +2478,13 @@ public class DateUtils {
     public static int year(Date date) {
         return DateTime.of(date).getYear();
     }
-
+    /**
+     * 根据 formatter解析为 ZonedDateTime
+     * @param text 待解析字符串
+     * @param formatter DateTimeFormatter
+     * @return ZonedDateTime
+     */
+    public static ZonedDateTime parseToZonedDateTime(String text, DateTimeFormatter formatter){
+        return ZonedDateTime.parse(text, formatter);
+    }
 }

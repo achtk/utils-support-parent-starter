@@ -72,7 +72,7 @@ public class ClientOption {
     /**
      * 扩展信息
      */
-    private Map<String, Object> ream = new LinkedHashMap<>();
+    private Map ream = new LinkedHashMap<>();
     /**
      * 保留策略
      */

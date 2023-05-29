@@ -1,7 +1,7 @@
 package com.chua.common.support.jsoup;
 
 import com.chua.common.support.jsoup.helper.DataUtil;
-import com.chua.common.support.jsoup.helper.HttpConnection;
+import com.chua.common.support.jsoup.helper.HttpJsoupConnection;
 import com.chua.common.support.jsoup.nodes.Document;
 import com.chua.common.support.jsoup.nodes.Element;
 import com.chua.common.support.jsoup.parser.Parser;
@@ -88,7 +88,7 @@ public class Jsoup {
      * @see Connection#newRequest()
      */
     public static Connection connect(String url) {
-        return HttpConnection.connect(url);
+        return HttpJsoupConnection.connect(url);
     }
 
     /**
@@ -115,7 +115,7 @@ Connection con3 = session.newRequest();
      @since 1.14.1
      */
     public static Connection newSession() {
-        return new HttpConnection();
+        return new HttpJsoupConnection();
     }
 
     /**
@@ -257,7 +257,7 @@ Connection con3 = session.newRequest();
      @see #connect(String)
      */
     public static Document parse(URL url, int timeoutMillis) throws IOException {
-        Connection con = HttpConnection.connect(url);
+        Connection con = HttpJsoupConnection.connect(url);
         con.timeout(timeoutMillis);
         return con.get();
     }

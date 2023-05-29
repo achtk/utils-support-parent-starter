@@ -1,21 +1,21 @@
-package com.chua.common.support.crypto;
+package com.chua.digest.support.encrypt;
 
-import com.chua.common.support.crypto.decode.IdeaDecode;
+
+import com.chua.common.support.crypto.AbstractCodec;
 import com.chua.common.support.crypto.decode.KeyDecode;
-import com.chua.common.support.crypto.encode.IdeaEncode;
 import com.chua.common.support.crypto.encode.KeyEncode;
-import com.chua.common.support.annotations.Spi;
+import com.chua.digest.support.decode.Sm4Decode;
+import com.chua.digest.support.encode.Sm4Encode;
 
 /**
  * 加解密
  *
  * @author CH
  */
-@Spi("idea")
-public class IdeaEncrypt extends AbstractEncrypt {
+public class Sm4Codec extends AbstractCodec {
 
-    private static final KeyDecode DECODE = new IdeaDecode();
-    private static final KeyEncode ENCODE = new IdeaEncode();
+    private static final KeyDecode DECODE = new Sm4Decode();
+    private static final KeyEncode ENCODE = new Sm4Encode();
 
     @Override
     public byte[] decode(byte[] content, byte[] key) {

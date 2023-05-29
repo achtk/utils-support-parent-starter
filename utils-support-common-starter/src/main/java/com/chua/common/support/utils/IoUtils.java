@@ -1,8 +1,11 @@
 package com.chua.common.support.utils;
 
+import com.chua.common.support.converter.Converter;
 import com.chua.common.support.file.xz.XZInputStream;
 import com.chua.common.support.function.SafeFunction;
 import com.chua.common.support.function.Splitter;
+import com.chua.common.support.io.ProgressInputStream;
+import com.chua.common.support.lang.process.ProgressBar;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -20,10 +23,9 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
 import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.zip.GZIPInputStream;
 
+import static com.chua.common.support.constant.CommonConstant.EMPTY;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
@@ -34,7 +36,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  * @since 2021/1/11
  */
 public class IoUtils {
-    private static final int DEFAULT_BUFFER_SIZE = 1024 * 10;
+    public static final int DEFAULT_BUFFER_SIZE = 1024 * 10;
     private static final int EOF = -1;
     private static final String SYMBOL_LF = "\n";
     private static final String XZ = "xz";
@@ -185,7 +187,21 @@ public class IoUtils {
             // ignore
         }
     }
-
+    /**
+     * 拷贝流，拷贝后不关闭流
+     *
+     * @param in             输入流
+     * @param out            输出流
+     * @param bufferSize     缓存大小
+     * @param progressBar 进度条
+     * @return 传输的byte数
+     * @throws RuntimeException IO异常
+     * @since 5.7.8
+     */
+    public static long copy(InputStream in, OutputStream out, int bufferSize, ProgressBar progressBar) throws IOException {
+        ProgressInputStream stream = new ProgressInputStream(in, progressBar);
+        return copy(stream, out, bufferSize);
+    }
     /**
      * 输入流拷贝
      *
@@ -403,7 +419,24 @@ public class IoUtils {
     public static BufferedWriter getWriter(String path, String charsetName, boolean isAppend) throws IOException {
         return getWriter(new File(path), Charset.forName(charsetName), isAppend);
     }
+    /**
+     * 获得一个Writer
+     *
+     * @param out     输入流
+     * @param charset 字符集
+     * @return OutputStreamWriter对象
+     */
+    public static OutputStreamWriter getWriter(OutputStream out, Charset charset) {
+        if (null == out) {
+            return null;
+        }
 
+        if (null == charset) {
+            return new OutputStreamWriter(out);
+        } else {
+            return new OutputStreamWriter(out, charset);
+        }
+    }
     /**
      * 获得一个带缓存的写入对象
      *
@@ -1284,6 +1317,34 @@ public class IoUtils {
         }
     }
 
+    /**
+     * 将多部分内容写到流中，自动转换为字符串
+     *
+     * @param out        输出流
+     * @param charset    写出的内容的字符集
+     * @param isCloseOut 写入完毕是否关闭输出流
+     * @param contents   写入的内容，调用toString()方法，不包括不会自动换行
+     * @throws RuntimeException IO异常
+     * @since 3.0.9
+     */
+    public static void write(OutputStream out, Charset charset, boolean isCloseOut, Object... contents) throws RuntimeException {
+        OutputStreamWriter osw = null;
+        try {
+            osw = getWriter(out, charset);
+            for (Object content : contents) {
+                if (content != null) {
+                    osw.write(StringUtils.defaultString(Converter.convertIfNecessary(content, String.class), EMPTY));
+                }
+            }
+            osw.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (isCloseOut) {
+                IoUtils.closeQuietly(osw);
+            }
+        }
+    }
     /**
      * 将byte[]写到流中
      *

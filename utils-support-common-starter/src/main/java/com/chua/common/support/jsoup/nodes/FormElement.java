@@ -2,7 +2,7 @@ package com.chua.common.support.jsoup.nodes;
 
 import com.chua.common.support.jsoup.Connection;
 import com.chua.common.support.jsoup.Jsoup;
-import com.chua.common.support.jsoup.helper.HttpConnection;
+import com.chua.common.support.jsoup.helper.HttpJsoupConnection;
 import com.chua.common.support.jsoup.helper.Validate;
 import com.chua.common.support.jsoup.parser.Tag;
 import com.chua.common.support.jsoup.select.Elements;
@@ -107,23 +107,23 @@ public class FormElement extends Element {
                 Elements options = el.select("option[selected]");
                 boolean set = false;
                 for (Element option: options) {
-                    data.add(HttpConnection.KeyVal.create(name, option.val()));
+                    data.add(HttpJsoupConnection.KeyVal.create(name, option.val()));
                     set = true;
                 }
                 if (!set) {
                     Element option = el.selectFirst("option");
                     if (option != null) {
-                        data.add(HttpConnection.KeyVal.create(name, option.val()));
+                        data.add(HttpJsoupConnection.KeyVal.create(name, option.val()));
                     }
                 }
             } else if ("checkbox".equalsIgnoreCase(type) || "radio".equalsIgnoreCase(type)) {
                 // only add checkbox or radio if they have the checked attribute
                 if (el.hasAttr("checked")) {
                     final String val = el.val().length() >  0 ? el.val() : "on";
-                    data.add(HttpConnection.KeyVal.create(name, val));
+                    data.add(HttpJsoupConnection.KeyVal.create(name, val));
                 }
             } else {
-                data.add(HttpConnection.KeyVal.create(name, el.val()));
+                data.add(HttpJsoupConnection.KeyVal.create(name, el.val()));
             }
         }
         return data;

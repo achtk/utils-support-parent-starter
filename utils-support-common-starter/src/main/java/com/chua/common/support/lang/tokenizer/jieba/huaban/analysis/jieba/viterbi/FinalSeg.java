@@ -5,6 +5,7 @@ import com.chua.common.support.lang.tokenizer.jieba.huaban.analysis.jieba.Charac
 import com.chua.common.support.lang.tokenizer.jieba.huaban.analysis.jieba.Node;
 import com.chua.common.support.lang.tokenizer.jieba.huaban.analysis.jieba.Pair;
 import com.chua.common.support.resource.repository.Repository;
+import com.chua.common.support.utils.CollectionUtils;
 import com.chua.common.support.utils.IoUtils;
 
 import java.io.BufferedReader;
@@ -84,6 +85,8 @@ public class FinalSeg {
                 String line = br.readLine();
                 doAnalysisSegLine(values, line);
             }
+            CollectionUtils.findLast(values.keySet());
+            System.out.println();
         } catch (IOException e) {
             System.err.println(String.format(Locale.getDefault(), "%s: load model failure!", PROB_EMIT));
         }

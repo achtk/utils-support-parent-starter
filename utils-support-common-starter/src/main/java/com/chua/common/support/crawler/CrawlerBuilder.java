@@ -50,7 +50,7 @@ public class CrawlerBuilder {
      * 链接超时时间
      */
     @Builder.Default
-    private int connectionTimeoutMillis = 10_000;
+    private int connectionTimeoutMillis = 60_000;
 
     /**
      * 线程数

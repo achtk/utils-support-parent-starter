@@ -417,6 +417,44 @@ public class ArrayUtils {
     }
 
     /**
+     * 判断两个数组是否相等，判断依据包括数组长度和每个元素都相等。
+     *
+     * @param array1 数组1
+     * @param array2 数组2
+     * @return 是否相等
+     * @since 5.4.2
+     */
+    public static boolean isEquals(Object array1, Object array2) {
+        if (array1 == array2) {
+            return true;
+        }
+        if (hasNull(array1, array2)) {
+            return false;
+        }
+
+        if (array1 instanceof long[]) {
+            return Arrays.equals((long[]) array1, (long[]) array2);
+        } else if (array1 instanceof int[]) {
+            return Arrays.equals((int[]) array1, (int[]) array2);
+        } else if (array1 instanceof short[]) {
+            return Arrays.equals((short[]) array1, (short[]) array2);
+        } else if (array1 instanceof char[]) {
+            return Arrays.equals((char[]) array1, (char[]) array2);
+        } else if (array1 instanceof byte[]) {
+            return Arrays.equals((byte[]) array1, (byte[]) array2);
+        } else if (array1 instanceof double[]) {
+            return Arrays.equals((double[]) array1, (double[]) array2);
+        } else if (array1 instanceof float[]) {
+            return Arrays.equals((float[]) array1, (float[]) array2);
+        } else if (array1 instanceof boolean[]) {
+            return Arrays.equals((boolean[]) array1, (boolean[]) array2);
+        } else {
+            // Not an array of primitives
+            return Arrays.deepEquals((Object[]) array1, (Object[]) array2);
+        }
+    }
+
+    /**
      * 数据类型是否一致
      *
      * @param source 数组
@@ -559,6 +597,17 @@ public class ArrayUtils {
      * @since 2.5
      */
     public static <T> boolean isNotEmpty(final T[] array) {
+        return !isEmpty(array);
+    }
+    /**
+     * <p>Checks if an array of Objects is not empty and not {@code null}.
+     *
+     * @param <T> the component type of the array
+     * @param array  the array to test
+     * @return {@code true} if the array is not empty and not {@code null}
+     * @since 2.5
+     */
+    public static <T> boolean isNotEmpty(final byte[] array) {
         return !isEmpty(array);
     }
 

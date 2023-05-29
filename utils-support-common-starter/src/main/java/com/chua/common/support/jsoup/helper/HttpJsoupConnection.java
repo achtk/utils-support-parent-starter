@@ -32,7 +32,7 @@ import static com.chua.common.support.jsoup.internal.Normalizer.lowerCase;
  * @see com.chua.common.support.jsoup.Jsoup#connect(String)
  */
 @SuppressWarnings("CharsetObjectCanBeUsed")
-public class HttpConnection implements Connection {
+public class HttpJsoupConnection implements Connection {
     public static final String CONTENT_ENCODING = "Content-Encoding";
     /**
      * Many users would get caught by not setting a user-agent and therefore getting different responses on their desktop
@@ -55,7 +55,7 @@ public class HttpConnection implements Connection {
      @return a new Connection object
      */
     public static Connection connect(String url) {
-        Connection con = new HttpConnection();
+        Connection con = new HttpJsoupConnection();
         con.url(url);
         return con;
     }
@@ -66,7 +66,7 @@ public class HttpConnection implements Connection {
      @return a new Connection object
      */
     public static Connection connect(URL url) {
-        Connection con = new HttpConnection();
+        Connection con = new HttpJsoupConnection();
         con.url(url);
         return con;
     }
@@ -74,7 +74,7 @@ public class HttpConnection implements Connection {
     /**
      Creates a new, empty HttpConnection.
      */
-    public HttpConnection() {
+    public HttpJsoupConnection() {
         req = new Request();
     }
 
@@ -82,7 +82,7 @@ public class HttpConnection implements Connection {
      Create a new Request by deep-copying an existing Request
      @param copy the request to copy
      */
-    HttpConnection(Request copy) {
+    HttpJsoupConnection(Request copy) {
         req = new Request(copy);
     }
 
@@ -140,11 +140,11 @@ public class HttpConnection implements Connection {
     @Override
     public Connection newRequest() {
         // copy the prototype request for the different settings, cookie manager, etc
-        return new HttpConnection(req);
+        return new HttpJsoupConnection(req);
     }
 
     /** Create a new Connection that just wraps the provided Request and Response */
-    private HttpConnection(Request req, Response res) {
+    private HttpJsoupConnection(Request req, Response res) {
         this.req = req;
         this.res = res;
     }
@@ -936,7 +936,7 @@ public class HttpConnection implements Connection {
             }
             Validate.isFalse(inputStreamRead, "Input stream already read and parsed, cannot re-read.");
             Document doc = DataUtil.parseInputStream(bodyStream, charset, url.toExternalForm(), req.parser());
-            doc.connection(new HttpConnection(req, this)); // because we're static, don't have the connection obj. // todo - maybe hold in the req?
+            doc.connection(new HttpJsoupConnection(req, this)); // because we're static, don't have the connection obj. // todo - maybe hold in the req?
             charset = doc.outputSettings().charset().name(); // update charset from meta-equiv, possibly
             inputStreamRead = true;
             safeClose();

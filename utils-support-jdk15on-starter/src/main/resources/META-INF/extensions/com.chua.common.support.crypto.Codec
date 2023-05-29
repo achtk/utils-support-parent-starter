@@ -1,0 +1,2 @@
+sm2=com.chua.digest.support.encrypt.Sm2Codec
+sm4=com.chua.digest.support.encrypt.Sm4Codec

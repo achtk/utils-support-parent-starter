@@ -26,6 +26,7 @@ import static com.chua.common.support.constant.CommonConstant.*;
 import static com.chua.common.support.constant.NumberConstant.SECOND;
 import static com.chua.common.support.utils.IoUtils.toCharset;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.nio.file.Files.isDirectory;
 
 /**
  * 文件工具
@@ -2806,5 +2807,229 @@ public class FileUtils {
             }
         }
         return false;
+    }
+
+
+    /**
+     * 修改文件或目录的文件名，不变更路径，只是简单修改文件名，不保留扩展名。<br>
+     *
+     * <pre>
+     * FileUtil.rename(file, "aaa.png", true) xx/xx.png =》xx/aaa.png
+     * </pre>
+     *
+     * @param file       被修改的文件
+     * @param newName    新的文件名，如需扩展名，需自行在此参数加上，原文件名的扩展名不会被保留
+     * @param isOverride 是否覆盖目标文件
+     * @return 目标文件
+     * @since 5.3.6
+     */
+    public static File rename(File file, String newName, boolean isOverride) {
+        return rename(file, newName, false, isOverride);
+    }
+
+    /**
+     * 修改文件或目录的文件名，不变更路径，只是简单修改文件名<br>
+     * 重命名有两种模式：<br>
+     * 1、isRetainExt为true时，保留原扩展名：
+     *
+     * <pre>
+     * FileUtil.rename(file, "aaa", true) xx/xx.png =》xx/aaa.png
+     * </pre>
+     *
+     * <p>
+     * 2、isRetainExt为false时，不保留原扩展名，需要在newName中
+     *
+     * <pre>
+     * FileUtil.rename(file, "aaa.jpg", false) xx/xx.png =》xx/aaa.jpg
+     * </pre>
+     *
+     * @param file        被修改的文件
+     * @param newName     新的文件名，可选是否包括扩展名
+     * @param isRetainExt 是否保留原文件的扩展名，如果保留，则newName不需要加扩展名
+     * @param isOverride  是否覆盖目标文件
+     * @return 目标文件
+     * @since 3.0.9
+     */
+    public static File rename(File file, String newName, boolean isRetainExt, boolean isOverride) {
+        if (isRetainExt) {
+            final String extName = FileUtils.getExtension(file);
+            if (StringUtils.isNotBlank(extName)) {
+                newName = newName.concat(".").concat(extName);
+            }
+        }
+        return rename(file.toPath(), newName, isOverride).toFile();
+    }
+    /**
+     * 修改文件或目录的文件名，不变更路径，只是简单修改文件名<br>
+     *
+     * <pre>
+     * FileUtil.rename(file, "aaa.jpg", false) xx/xx.png =》xx/aaa.jpg
+     * </pre>
+     *
+     * @param path       被修改的文件
+     * @param newName    新的文件名，包括扩展名
+     * @param isOverride 是否覆盖目标文件
+     * @return 目标文件Path
+     * @since 5.4.1
+     */
+    public static Path rename(Path path, String newName, boolean isOverride) {
+        return move(path, path.resolveSibling(newName), isOverride);
+    }
+
+
+    /**
+     * 移动文件或目录<br>
+     * 当目标是目录时，会将源文件或文件夹整体移动至目标目录下<br>
+     * 例如：
+     * <ul>
+     *     <li>move("/usr/aaa/abc.txt", "/usr/bbb")结果为："/usr/bbb/abc.txt"</li>
+     *     <li>move("/usr/aaa", "/usr/bbb")结果为："/usr/bbb/aaa"</li>
+     * </ul>
+     *
+     * @param src        源文件或目录路径
+     * @param target     目标路径，如果为目录，则移动到此目录下
+     * @param isOverride 是否覆盖目标文件
+     * @return 目标文件Path
+     * @since 5.5.1
+     */
+    public static Path move(Path src, Path target, boolean isOverride) {
+        if (isDirectory(target)) {
+            target = target.resolve(src.getFileName());
+        }
+        return moveContent(src, target, isOverride);
+    }
+
+
+    /**
+     * 移动文件或目录内容到目标目录中，例如：
+     * <ul>
+     *     <li>moveContent("/usr/aaa/abc.txt", "/usr/bbb")结果为："/usr/bbb/abc.txt"</li>
+     *     <li>moveContent("/usr/aaa", "/usr/bbb")结果为："/usr/bbb"</li>
+     * </ul>
+     *
+     * @param src        源文件或目录路径
+     * @param target     目标路径，如果为目录，则移动到此目录下
+     * @param isOverride 是否覆盖目标文件
+     * @return 目标文件Path
+     * @since 5.7.9
+     */
+    public static Path moveContent(Path src, Path target, boolean isOverride) {
+        final CopyOption[] options = isOverride ? new CopyOption[]{StandardCopyOption.REPLACE_EXISTING} : new CopyOption[]{};
+
+        // 自动创建目标的父目录
+        mkParentDirs(target.toFile());
+        try {
+            return Files.move(src, target, options);
+        } catch (IOException e) {
+            // 移动失败，可能是跨分区移动导致的，采用递归移动方式
+            try {
+                Files.walkFileTree(src, new MoveVisitor(src, target, options));
+                // 移动后空目录没有删除，
+                delete(src.toFile());
+            } catch (IOException e2) {
+                throw new RuntimeException(e2);
+            }
+            return target;
+        }
+    }
+
+
+    /**
+     * 判断文件或目录是否存在
+     *
+     * @param path          文件
+     * @param isFollowLinks 是否跟踪软链（快捷方式）
+     * @return 是否存在
+     * @since 5.5.3
+     */
+    public static boolean exists(Path path, boolean isFollowLinks) {
+        final LinkOption[] options = isFollowLinks ? new LinkOption[0] : new LinkOption[]{LinkOption.NOFOLLOW_LINKS};
+        return Files.exists(path, options);
+    }
+
+
+    /**
+     * 判断是否为目录，如果file为null，则返回false<br>
+     * 此方法不会追踪到软链对应的真实地址，即软链被当作文件
+     *
+     * @param path {@link Path}
+     * @return 如果为目录true
+     * @since 5.5.1
+     */
+    public static boolean isDirectory(Path path) {
+        return isDirectory(path, false);
+    }
+
+
+    /**
+     * 判断是否为目录，如果file为null，则返回false
+     *
+     * @param path          {@link Path}
+     * @param isFollowLinks 是否追踪到软链对应的真实地址
+     * @return 如果为目录true
+     * @since 3.1.0
+     */
+    public static boolean isDirectory(Path path, boolean isFollowLinks) {
+        if (null == path) {
+            return false;
+        }
+        final LinkOption[] options = isFollowLinks ? new LinkOption[0] : new LinkOption[]{LinkOption.NOFOLLOW_LINKS};
+        return Files.isDirectory(path, options);
+    }
+
+    static class MoveVisitor extends SimpleFileVisitor<Path> {
+
+        private final Path source;
+        private final Path target;
+        private boolean isTargetCreated;
+        private final CopyOption[] copyOptions;
+
+        /**
+         * 构造
+         *
+         * @param source 源Path
+         * @param target 目标Path
+         * @param copyOptions 拷贝（移动）选项
+         */
+        public MoveVisitor(Path source, Path target, CopyOption... copyOptions) {
+            if(FileUtils.exists(target, false) && !FileUtils.isDirectory(target)){
+                throw new IllegalArgumentException("Target must be a directory");
+            }
+            this.source = source;
+            this.target = target;
+            this.copyOptions = copyOptions;
+        }
+
+        @Override
+        public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
+                throws IOException {
+            initTarget();
+            // 将当前目录相对于源路径转换为相对于目标路径
+            final Path targetDir = target.resolve(source.relativize(dir));
+            if(!Files.exists(targetDir)){
+                Files.createDirectories(targetDir);
+            } else if(!Files.isDirectory(targetDir)){
+                throw new FileAlreadyExistsException(targetDir.toString());
+            }
+            return FileVisitResult.CONTINUE;
+        }
+
+        @Override
+        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+                throws IOException {
+            initTarget();
+            Files.move(file, target.resolve(source.relativize(file)), copyOptions);
+            return FileVisitResult.CONTINUE;
+        }
+
+        /**
+         * 初始化目标文件或目录
+         */
+        private void initTarget(){
+            if(!this.isTargetCreated){
+                FileUtils.mkdir(this.target.toFile());
+                this.isTargetCreated = true;
+            }
+        }
     }
 }

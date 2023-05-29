@@ -1,5 +1,6 @@
 package com.chua.common.support.utils;
 
+import com.chua.common.support.constant.CommonConstant;
 import com.chua.common.support.constant.RegexConstant;
 import com.chua.common.support.function.Splitter;
 import com.chua.common.support.jsoup.helper.Validate;
@@ -2522,7 +2523,7 @@ public class StringUtils {
         if (clazz.isArray()) {
             StringBuilder sb = new StringBuilder(clazz.getName());
             sb.delete(0, 2);
-            if (sb.length() > 0 && sb.charAt(sb.length() - 1) == ';') {
+            if (sb.length() > 0 && sb.charAt(sb.length() - 1) == CommonConstant.SYMBOL_SEMICOLON_CHAR) {
                 sb.deleteCharAt(sb.length() - 1);
             }
             sb.append("[]");
@@ -2724,7 +2725,7 @@ public class StringUtils {
         }
 
         String start = strings.next().toString();
-        if (!strings.hasNext()) // only one, avoid builder
+        if (!strings.hasNext())
         {
             return start;
         }
@@ -2758,7 +2759,7 @@ public class StringUtils {
         Validate.notNull(string);
         for (int i = 0; i < string.length(); i++) {
             int c = string.charAt(i);
-            if (c > 127) { // ascii range
+            if (c > 127) {
                 return false;
             }
         }
@@ -2789,8 +2790,7 @@ public class StringUtils {
     }
 
     public static boolean isInvisibleChar(int c) {
-        return c == 8203 || c == 173; // zero width sp, soft hyphen
-        // previously also included zw non join, zw join - but removing those breaks semantic meaning of text
+        return c == 8203 || c == 173;
     }
 
     /**
@@ -2822,7 +2822,8 @@ public class StringUtils {
         for (int i = 0; i < len; i += Character.charCount(c)) {
             c = string.codePointAt(i);
             if (isActuallyWhitespace(c)) {
-                if ((stripLeading && !reachedNonWhite) || lastWasWhite) {
+                boolean b = (stripLeading && !reachedNonWhite) || lastWasWhite;
+                if (b) {
                     continue;
                 }
                 accum.append(' ');
@@ -2889,7 +2890,7 @@ public class StringUtils {
     public static java.net.URL resolve(URL base, String relUrl) throws MalformedURLException {
         relUrl = stripControlChars(relUrl);
         // workaround: java resolves '//path/file + ?foo' to '//path/?foo', not '//path/file?foo' as desired
-        if (relUrl.startsWith("?")) {
+        if (relUrl.startsWith(SYMBOL_QUESTION)) {
             relUrl = base.getPath() + relUrl;
         }
         // workaround: //example.com + ./foo = //example.com/./foo, not //example.com/foo
@@ -2927,7 +2928,7 @@ public class StringUtils {
                 }
             }
         }
-        return prefix.toString() + str;
+        return prefix + str;
     }
 
     /**
@@ -3374,5 +3375,180 @@ public class StringUtils {
             sbu.append((char) Integer.parseInt(aChar));
         }
         return sbu.toString();
+    }
+
+// ------------------------------------------------------------------------ contains
+
+    /**
+     * 指定字符是否在字符串中出现过
+     *
+     * @param str        字符串
+     * @param searchChar 被查找的字符
+     * @return 是否包含
+     * @since 3.1.2
+     */
+    public static boolean contains(CharSequence str, char searchChar) {
+        return indexOf(str, searchChar) > -1;
+    }
+
+    /**
+     * 指定字符串是否在字符串中出现过
+     *
+     * @param str       字符串
+     * @param searchStr 被查找的字符串
+     * @return 是否包含
+     * @since 5.1.1
+     */
+    public static boolean contains(CharSequence str, CharSequence searchStr) {
+        if (null == str || null == searchStr) {
+            return false;
+        }
+        return str.toString().contains(searchStr);
+    }
+
+    /**
+     * 查找指定字符串是否包含指定字符串列表中的任意一个字符串
+     *
+     * @param str      指定字符串
+     * @param testStrs 需要检查的字符串数组
+     * @return 是否包含任意一个字符串
+     * @since 3.2.0
+     */
+    public static boolean containsAny(CharSequence str, CharSequence... testStrs) {
+        return null != getContainsStr(str, testStrs);
+    }
+
+    /**
+     * 查找指定字符串是否包含指定字符列表中的任意一个字符
+     *
+     * @param str       指定字符串
+     * @param testChars 需要检查的字符数组
+     * @return 是否包含任意一个字符
+     * @since 4.1.11
+     */
+    public static boolean containsAny(CharSequence str, char... testChars) {
+        if (!isEmpty(str)) {
+            int len = str.length();
+            for (int i = 0; i < len; i++) {
+                if (ArrayUtils.contains(testChars, str.charAt(i))) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 检查指定字符串中是否只包含给定的字符
+     *
+     * @param str       字符串
+     * @param testChars 检查的字符
+     * @return 字符串含有非检查的字符，返回false
+     * @since 4.4.1
+     */
+    public static boolean containsOnly(CharSequence str, char... testChars) {
+        if (!isEmpty(str)) {
+            int len = str.length();
+            for (int i = 0; i < len; i++) {
+                if (!ArrayUtils.contains(testChars, str.charAt(i))) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 给定字符串是否包含空白符（空白符包括空格、制表符、全角空格和不间断空格）<br>
+     * 如果给定字符串为null或者""，则返回false
+     *
+     * @param str 字符串
+     * @return 是否包含空白符
+     * @since 4.0.8
+     */
+    public static boolean containsBlank(CharSequence str) {
+        if (null == str) {
+            return false;
+        }
+        final int length = str.length();
+        if (0 == length) {
+            return false;
+        }
+
+        for (int i = 0; i < length; i += 1) {
+            if (CharUtils.isBlankChar(str.charAt(i))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 查找指定字符串是否包含指定字符串列表中的任意一个字符串，如果包含返回找到的第一个字符串
+     *
+     * @param str      指定字符串
+     * @param testStrs 需要检查的字符串数组
+     * @return 被包含的第一个字符串
+     * @since 3.2.0
+     */
+    public static String getContainsStr(CharSequence str, CharSequence... testStrs) {
+        if (isEmpty(str) || ArrayUtils.isEmpty(testStrs)) {
+            return null;
+        }
+        for (CharSequence checkStr : testStrs) {
+            if (str.toString().contains(checkStr)) {
+                return checkStr.toString();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 是否包含特定字符，忽略大小写，如果给定两个参数都为{@code null}，返回true
+     *
+     * @param str     被检测字符串
+     * @param testStr 被测试是否包含的字符串
+     * @return 是否包含
+     */
+    public static boolean containsIgnoreCase(CharSequence str, CharSequence testStr) {
+        if (null == str) {
+            // 如果被监测字符串和
+            return null == testStr;
+        }
+        return str.toString().toLowerCase().contains(testStr.toString().toLowerCase());
+    }
+
+    /**
+     * 查找指定字符串是否包含指定字符串列表中的任意一个字符串<br>
+     * 忽略大小写
+     *
+     * @param str      指定字符串
+     * @param testStrs 需要检查的字符串数组
+     * @return 是否包含任意一个字符串
+     * @since 3.2.0
+     */
+    public static boolean containsAnyIgnoreCase(CharSequence str, CharSequence... testStrs) {
+        return null != getContainsStrIgnoreCase(str, testStrs);
+    }
+
+    /**
+     * 查找指定字符串是否包含指定字符串列表中的任意一个字符串，如果包含返回找到的第一个字符串<br>
+     * 忽略大小写
+     *
+     * @param str      指定字符串
+     * @param sequences 需要检查的字符串数组
+     * @return 被包含的第一个字符串
+     * @since 3.2.0
+     */
+    public static String getContainsStrIgnoreCase(CharSequence str, CharSequence... sequences) {
+        if (isEmpty(str) || ArrayUtils.isEmpty(sequences)) {
+            return null;
+        }
+        for (CharSequence testStr : sequences) {
+            if (containsIgnoreCase(str, testStr)) {
+                return testStr.toString();
+            }
+        }
+        return null;
     }
 }

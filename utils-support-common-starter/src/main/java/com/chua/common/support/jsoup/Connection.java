@@ -1,5 +1,6 @@
 package com.chua.common.support.jsoup;
 
+import com.chua.common.support.jsoup.helper.HttpJsoupConnection;
 import com.chua.common.support.jsoup.nodes.Document;
 import com.chua.common.support.jsoup.parser.Parser;
 
@@ -131,7 +132,7 @@ public interface Connection {
      * Set the request user-agent header.
      * @param userAgent user-agent to use
      * @return this Connection, for chaining
-     * @see com.chua.common.support.jsoup.helper.HttpConnection#DEFAULT_UA
+     * @see HttpJsoupConnection#DEFAULT_UA
      */
     Connection userAgent(String userAgent);
 

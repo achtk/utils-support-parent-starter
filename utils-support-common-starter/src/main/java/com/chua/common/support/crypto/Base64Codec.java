@@ -10,7 +10,7 @@ import com.chua.common.support.crypto.encode.Base64Encode;
  * @author CH
  */
 @Spi("base64")
-public class Base64Encrypt extends AbstractEncrypt {
+public class Base64Codec extends AbstractCodec {
 
     private static final Base64Decode DECODE = new Base64Decode();
     private static final Base64Encode ENCODE = new Base64Encode();

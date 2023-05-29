@@ -180,6 +180,10 @@ public final class CommonConstant {
      */
     public static final String SYMBOL_SEMICOLON = ";";
     /**
+     * ;
+     */
+    public static final char SYMBOL_SEMICOLON_CHAR = ';';
+    /**
      * :
      */
     public static final String SYMBOL_COLON = ":";
@@ -814,6 +818,10 @@ public final class CommonConstant {
     public static final String EMPTY_STRING = "";
     public static final String CUT = "[,;]{1}";
     public static final CharSequence POM = "pom.xml";
+    /**
+     * ' '
+     */
+    public static final char SYMBOL_SPACE_CHAR = ' ';
 
     /**
      *
@@ -1163,4 +1171,10 @@ public final class CommonConstant {
      *
      */
     public static final String SYMBOL_EMPTY_STRING = "";
+
+    /**
+     * 字符串常量：Windows 换行 {@code "\r\n"} <br>
+     * 解释：该字符串常用于表示 Windows 系统下的文本换行
+     */
+    public static final String CRLF = "\r\n";
 }

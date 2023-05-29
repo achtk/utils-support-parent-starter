@@ -25,6 +25,11 @@
 
         <dependency>
             <groupId>com.chua</groupId>
+            <artifactId>utils-support-htmlunit-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.chua</groupId>
             <artifactId>utils-support-geoip2-starter</artifactId>
         </dependency>
 

@@ -9,14 +9,14 @@ import com.chua.common.support.crypto.encode.KeyEncode;
  *
  * @author CH
  */
-public interface Encrypt extends KeyDecode, KeyEncode {
+public interface Codec extends KeyDecode, KeyEncode {
     /**
      * 设置密钥
      *
      * @param accessKey 密钥
      * @return this
      */
-    Encrypt accessKey(String accessKey);
+    Codec accessKey(String accessKey);
 
     /**
      * 设置密钥
@@ -24,5 +24,5 @@ public interface Encrypt extends KeyDecode, KeyEncode {
      * @param secretKey 密钥
      * @return this
      */
-    Encrypt secretKey(String secretKey);
+    Codec secretKey(String secretKey);
 }

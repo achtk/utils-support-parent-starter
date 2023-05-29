@@ -542,6 +542,7 @@ public class ClassUtils {
             return indexValue.get(it).getValue();
         }).toArray(Object[]::new);
     }
+
     /**
      * 参数
      *
@@ -976,6 +977,26 @@ public class ClassUtils {
     /**
      * 获取所有字段
      *
+     * @param obj       对象
+     * @param fieldName 字段名称
+     * @return 所有字段
+     */
+    public static Field getFields(final Object obj, String fieldName) {
+        if (null == obj) {
+            return null;
+        }
+
+        for (Field field : getFields(obj)) {
+            if(fieldName.equals(field.getName())) {
+                return field;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 获取所有字段
+     *
      * @param obj 对象
      * @return 所有字段
      */
@@ -1041,8 +1062,8 @@ public class ClassUtils {
     /**
      * 方法回调
      *
-     * @param aClass   类
-     * @param callback 方法回调
+     * @param aClass       类
+     * @param callback     方法回调
      * @param methodFilter 过滤器
      */
     public static void doWithMethods(final Class<?> aClass, final Consumer<Method> callback, MethodFilter methodFilter) {
@@ -1461,6 +1482,7 @@ public class ClassUtils {
 
     /**
      * 查询字段
+     *
      * @param type 类型
      * @param name 名称
      * @return 字段
@@ -1468,7 +1490,7 @@ public class ClassUtils {
     public static Field findField(Class<?> type, String name) {
         List<Field> fields = getFields(type);
         for (Field field : fields) {
-            if(field.getName().equals(name)) {
+            if (field.getName().equals(name)) {
                 return field;
             }
         }
@@ -1581,7 +1603,7 @@ public class ClassUtils {
      * 获取字段值
      *
      * @param fieldName 字段
-     * @param value 值
+     * @param value     值
      */
     public static Object getFieldValue(String fieldName, Object value) {
         if (null == fieldName || null == value) {
@@ -1592,6 +1614,7 @@ public class ClassUtils {
         setAccessible(field);
         return null == field ? null : getFieldValue(field, value);
     }
+
     /**
      * 获取字段值
      *
@@ -2022,7 +2045,7 @@ public class ClassUtils {
      * @return 结果
      */
     public static <A extends Annotation> A getDeclaredAnnotation(Object type, Class<? extends A> annotationType) {
-        if(null == annotationType) {
+        if (null == annotationType) {
             return null;
         }
 
@@ -2171,7 +2194,8 @@ public class ClassUtils {
 
     /**
      * 参数
-     * @param method 方法
+     *
+     * @param method    方法
      * @param arguments 参数
      * @return 结果
      */

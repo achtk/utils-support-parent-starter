@@ -63,7 +63,7 @@ public class JsoupCrawler implements Crawler{
         pageLoader.configure(crawlerBuilder);
 
         if (crawlerBuilder.parsers().isEmpty()) {
-            throw new RuntimeException("crawler pageParser can not be null.");
+            throw new RuntimeException("crawler parsers can not be null.");
         }
 
         log.info(">>>>>>>>>>> start ...");

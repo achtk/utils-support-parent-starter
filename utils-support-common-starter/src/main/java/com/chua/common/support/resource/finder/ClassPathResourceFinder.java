@@ -123,7 +123,7 @@ public class ClassPathResourceFinder extends AbstractResourceFinder{
         //匹配的数量
         int matchSize = result.size();
         long time = System.currentTimeMillis() - startTime;
-        parent.console(name, matchSize, size, matchSize * 1000 / time);
+        parent.console(name, matchSize, size, (time == 0 ? 0 : matchSize * 1000 / time));
     }
 
     /**

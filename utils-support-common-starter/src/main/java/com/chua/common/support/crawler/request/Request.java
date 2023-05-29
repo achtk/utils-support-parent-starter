@@ -34,7 +34,7 @@ public class Request {
      *
      */
     @Builder.Default
-    private int timeout = 10_000;
+    private int timeout = 60_000;
     /**
      * 仅htmlunit使用
      */
