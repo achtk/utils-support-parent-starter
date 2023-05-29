@@ -20,13 +20,12 @@ public class XmlRender implements Render {
     @Override
     public byte[] render(Object param, String contentType) {
         Map<String, Object> params = (Map) param;
-        StringBuffer stringBuffer = new StringBuffer();
         List<String> line = new LinkedList<>();
         for (Map.Entry<String, Object> entry : params.entrySet()) {
             doLine(line, entry);
         }
 
-        return stringBuffer.toString().getBytes(StandardCharsets.UTF_8);
+        return Joiner.on("\r\n").join(line).getBytes(StandardCharsets.UTF_8);
     }
 
     private void doLine(List<String> line, Map.Entry<String, Object> entry) {
@@ -37,6 +36,7 @@ public class XmlRender implements Render {
             line.add("<" + key + "></" + key + ">");
             return;
         }
+
         if (value instanceof Map) {
             Map<String, Object> v1 = (Map<String, Object>) value;
             List<String> line1 = new LinkedList<>();

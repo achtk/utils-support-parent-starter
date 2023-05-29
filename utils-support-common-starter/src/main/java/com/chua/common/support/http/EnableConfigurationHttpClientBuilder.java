@@ -1,7 +1,15 @@
 package com.chua.common.support.http;
 
+import com.chua.common.support.placeholder.MapMixSystemPlaceholderResolver;
+import com.chua.common.support.placeholder.PlaceholderResolver;
 import com.chua.common.support.spi.ServiceProvider;
+import com.chua.common.support.value.DynamicValue;
+import com.chua.common.support.value.MapDynamicValue;
+import com.chua.common.support.value.Value;
 import lombok.Data;
+
+import java.util.Map;
+import java.util.function.Function;
 
 /**
  * 可配置构造器
@@ -108,7 +116,24 @@ public class EnableConfigurationHttpClientBuilder implements HttpClientBuilder {
 
     @Override
     public HttpClientInvoker newInvoker(String type) {
+        HttpRequest request = requestBuilder.header(header).build();
+        Map<String, Object> body = request.getBody();
+        for (Map.Entry<String, Object> entry : body.entrySet()) {
+            if(entry.getValue() instanceof Value) {
+                body.put(entry.getKey(), createValue(body, (Value)entry.getValue()));
+            }
+        }
         return ServiceProvider.of(HttpClientInvoker.class).getNewExtension(type,
-                requestBuilder.header(header).build(), httpMethod);
+                request, httpMethod);
+    }
+
+    @SuppressWarnings("ALL")
+    public static Object createValue(Map<String, Object> body, Value value) {
+        PlaceholderResolver placeholderResolver = new MapMixSystemPlaceholderResolver(body);
+        if(value instanceof DynamicValue) {
+            Function function = ((MapDynamicValue) value).getFunction();
+            return placeholderResolver.resolvePlaceholder(function.apply(body).toString());
+        }
+        return placeholderResolver.resolvePlaceholder(value.getStringValue());
     }
 }

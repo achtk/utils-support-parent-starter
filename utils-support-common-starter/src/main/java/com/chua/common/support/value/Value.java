@@ -3,7 +3,9 @@ package com.chua.common.support.value;
 import com.chua.common.support.converter.Converter;
 
 import java.io.Serializable;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * 值
@@ -64,6 +66,20 @@ public interface Value<T> extends Serializable {
         return null == value ? (Value<T>) NullValue.INSTANCE : new DelegateValue<>(value, defaultValue);
     }
 
+    /**
+     * 回调
+     * @return 回调
+     */
+    static <R, T>Value<T> ofDynamic(Function<R, T> function) {
+        return new DynamicValue<>(function);
+    }
+    /**
+     * 回调
+     * @return 回调
+     */
+    static <T>Value<T> ofMapDynamic(Function<Map<String, Object>, T> function) {
+        return new MapDynamicValue<>(function);
+    }
     /**
      * 获取值
      *

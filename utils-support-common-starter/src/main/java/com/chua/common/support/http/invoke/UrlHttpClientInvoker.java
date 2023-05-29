@@ -3,7 +3,6 @@ package com.chua.common.support.http.invoke;
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.http.*;
 import com.chua.common.support.http.render.Render;
-import com.chua.common.support.json.Json;
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.CollectionUtils;
 import com.chua.common.support.utils.IoUtils;
@@ -85,6 +84,10 @@ public class UrlHttpClientInvoker extends AbstractHttpClientInvoker {
         HttpURLConnection connection = null;
         try {
             doAnalysisUrl(method);
+            if (log.isDebugEnabled()) {
+                log.debug("==================================================");
+            }
+            log.info("发送的URL: {}", url);
             connection = urlConnection();
             // 设定请求的方法，默认是GET
             doAnalysisRequestMethod(connection, method);
@@ -101,14 +104,7 @@ public class UrlHttpClientInvoker extends AbstractHttpClientInvoker {
             // 建立实际的连接
             // 打开到此 URL 引用的资源的通信链接（如果尚未建立这样的连接）
             // 如果在已打开连接（此时 connected 字段的值为 true）的情况下调用 connect 方法，则忽略该调用
-            if (log.isDebugEnabled()) {
-                log.debug("==================================================");
-            }
-            log.info("发送的URL: {}", url);
-            if (log.isDebugEnabled()) {
-                log.debug("消息体: {}", Json.prettyFormat(request.getBody()));
-                log.debug("==================================================");
-            }
+
             connection.connect();
             //获取结果
             int code = connection.getResponseCode();
@@ -311,10 +307,14 @@ public class UrlHttpClientInvoker extends AbstractHttpClientInvoker {
 
         //非上传文件
         String contentType = CollectionUtils.findFirst(request.getHeader().get(HTTP_HEADER_CONTENT_TYPE), "*");
-        String parameters = HttpClientUtils.createWithParameters(contentType, body);
         try (OutputStream outputStream = connection.getOutputStream();) {
             Render render = ServiceProvider.of(Render.class).getNewExtension(contentType);
-            outputStream.write(render.render(body, contentType));
+            byte[] bytes = render.render(body, contentType);
+            if (log.isDebugEnabled()) {
+                log.debug("消息体: {}", StringUtils.utf8Str(bytes));
+                log.debug("==================================================");
+            }
+            outputStream.write(bytes);
             outputStream.flush();
         } catch (IOException e) {
             e.printStackTrace();
