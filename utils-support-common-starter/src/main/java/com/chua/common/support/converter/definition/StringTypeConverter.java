@@ -2,7 +2,11 @@ package com.chua.common.support.converter.definition;
 
 
 import com.chua.common.support.function.Joiner;
+import com.chua.common.support.utils.IoUtils;
+import com.chua.common.support.utils.StringUtils;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
@@ -52,6 +56,12 @@ public class StringTypeConverter implements TypeConverter<String> {
             return "".equalsIgnoreCase(join) ? null : join;
         }
 
+        if (value instanceof InputStream) {
+            try {
+                return StringUtils.utf8Str(IoUtils.toByteArray((InputStream) value));
+            } catch (IOException ignored) {
+            }
+        }
         return value.toString();
     }
 }

@@ -4,6 +4,9 @@ import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.function.Joiner;
 import com.chua.common.support.http.*;
 import com.chua.common.support.http.invoke.AbstractHttpClientInvoker;
+import com.chua.common.support.http.render.Render;
+import com.chua.common.support.spi.ServiceProvider;
+import com.chua.common.support.utils.CollectionUtils;
 import com.chua.common.support.utils.IoUtils;
 import com.chua.common.support.utils.StringUtils;
 import com.mashape.unirest.http.Headers;
@@ -387,9 +390,10 @@ public class UnirestClientInvoker extends AbstractHttpClientInvoker {
             return;
         }
 
-        if (!this.request.getBody().isEmpty()) {
-            request.fields(this.request.getBody());
-        }
+        String contentType = CollectionUtils.findFirst(request.getHeaders().get(HttpHeaders.CONTENT_TYPE), "*");
+        Render render = ServiceProvider.of(com.chua.common.support.http.render.Render.class).getNewExtension(contentType);
+        byte[] bytes = render.render(this.request.getBody(), contentType);
+        request.body(bytes);
     }
 
     /**
