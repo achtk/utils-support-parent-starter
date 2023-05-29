@@ -2,6 +2,7 @@ package com.chua.common.support.http.invoke;
 
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.http.*;
+import com.chua.common.support.http.render.Render;
 import com.chua.common.support.json.Json;
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.CollectionUtils;
@@ -156,7 +157,7 @@ public class UrlHttpClientInvoker extends AbstractHttpClientInvoker {
         URL realUrl = new URL(url);
         if (!isHttps) {
             // 打开和URL之间的连接
-            if(StringUtils.isNotEmpty(request.getProxy())) {
+            if (StringUtils.isNotEmpty(request.getProxy())) {
                 connection = (HttpURLConnection) realUrl.openConnection(
                         ServiceProvider.of(Proxy.class).getNewExtension(request.getProxy())
                 );
@@ -165,7 +166,7 @@ public class UrlHttpClientInvoker extends AbstractHttpClientInvoker {
             }
         } else {
             HttpsURLConnection urlConnection = null;
-            if(StringUtils.isNotEmpty(request.getProxy())) {
+            if (StringUtils.isNotEmpty(request.getProxy())) {
                 urlConnection = (HttpsURLConnection) realUrl.openConnection(
                         ServiceProvider.of(Proxy.class).getNewExtension(request.getProxy())
                 );
@@ -202,7 +203,7 @@ public class UrlHttpClientInvoker extends AbstractHttpClientInvoker {
      * @param connection connection
      */
     private void doAnalysisHeader(URLConnection connection) {
-        if(isHttps && connection instanceof HttpURLConnection) {
+        if (isHttps && connection instanceof HttpURLConnection) {
             ((HttpURLConnection) connection).setInstanceFollowRedirects(false);
         }
 
@@ -211,7 +212,7 @@ public class UrlHttpClientInvoker extends AbstractHttpClientInvoker {
             header = new HttpHeader();
         }
 
-        if(!header.isEmpty()) {
+        if (!header.isEmpty()) {
             header.forEach(connection::setRequestProperty);
         }
 
@@ -297,11 +298,12 @@ public class UrlHttpClientInvoker extends AbstractHttpClientInvoker {
             return;
         }
         //非上传文件
-        String parameters = HttpClientUtils.createWithParameters(request.getHeader().get(HTTP_HEADER_CONTENT_TYPE), body);
-        try (OutputStream outputStream = connection.getOutputStream();
-             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream)) {
-            outputStreamWriter.write(parameters);
-            outputStreamWriter.flush();
+        String contentType = CollectionUtils.findFirst(request.getHeader().get(HTTP_HEADER_CONTENT_TYPE), "*");
+        String parameters = HttpClientUtils.createWithParameters(contentType, body);
+        try (OutputStream outputStream = connection.getOutputStream();) {
+            Render render = ServiceProvider.of(Render.class).getNewExtension(contentType);
+            outputStream.write(render.render(body, contentType));
+            outputStream.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -23,6 +23,7 @@ import java.util.Map;
 public class HttpClientUtils {
 
     private static final CharSequence APPLICATION_JSON = "application/json";
+    private static final CharSequence TEXT_XML = "text/xml";
 
     /**
      * 创建默认 HostnameVerifier

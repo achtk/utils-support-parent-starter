@@ -50,6 +50,7 @@ public class CollectionUtils {
         }
         return result;
     }
+
     /**
      * 获取匹配规则定义中匹配到元素的所有位置<br>
      * 此方法对于某些无序集合的位置信息，以转换为数组后的位置为准。
@@ -73,6 +74,7 @@ public class CollectionUtils {
         }
         return Converter.convertIfNecessary(indexList, int[].class);
     }
+
     /**
      * 随机获取数据
      *
@@ -125,8 +127,8 @@ public class CollectionUtils {
     /**
      * 集合是否为空
      *
-     * @param it 集合
-     * @param <E>        类型
+     * @param it  集合
+     * @param <E> 类型
      * @return 集合是否为空
      */
     public static <E> boolean isEmpty(Iterable<? extends E> it) {
@@ -206,6 +208,18 @@ public class CollectionUtils {
     /**
      * 获取索引对应的数据
      *
+     * @param source       数据
+     * @param defaultValue 默认值
+     * @param <T>          类型
+     * @return 数据
+     */
+    public static <T> T findFirst(final Collection<T> source, T defaultValue) {
+        return Optional.ofNullable(findFirst(source)).orElse(defaultValue);
+    }
+
+    /**
+     * 获取索引对应的数据
+     *
      * @param source 数据
      * @param <T>    类型
      * @return 数据
@@ -223,6 +237,18 @@ public class CollectionUtils {
     /**
      * 获取索引对应的数据
      *
+     * @param source       数据
+     * @param defaultValue 默认值
+     * @param <T>          类型
+     * @return 数据
+     */
+    public static <T> T findLast(final Collection<T> source, T defaultValue) {
+        return Optional.ofNullable(findLast(source)).orElse(defaultValue);
+    }
+
+    /**
+     * 获取索引对应的数据
+     *
      * @param source 数据
      * @param index  索引
      * @param <T>    类型
@@ -231,7 +257,17 @@ public class CollectionUtils {
     public static <T> T find(final Collection<T> source, final int index) {
         return find(source, index, null);
     }
-
+    /**
+     * 获取索引对应的数据
+     *
+     * @param source       数据
+     * @param defaultValue 默认值
+     * @param <T>          类型
+     * @return 数据
+     */
+    public static <T> T find(final Collection<T> source, T defaultValue) {
+        return Optional.ofNullable(find(source)).orElse(defaultValue);
+    }
     /**
      * 获取索引对应的数据
      *
@@ -478,8 +514,8 @@ public class CollectionUtils {
     /**
      * 添加数据
      *
-     * @param elements  元数据
-     * @param element 元素
+     * @param elements 元数据
+     * @param element  元素
      */
     public static <E> List<E> addAll(List<E> elements, E... element) {
         if (null == elements || element.length == 0) {
@@ -499,8 +535,8 @@ public class CollectionUtils {
     /**
      * 添加数据
      *
-     * @param elements  元数据
-     * @param element 元素
+     * @param elements 元数据
+     * @param element  元素
      */
     public static <E> List<E> addAll(List<E> elements, List<E> element) {
         if (null == elements || null == element) {
@@ -513,28 +549,30 @@ public class CollectionUtils {
 
     /**
      * 返回集合
+     *
      * @param elements 数组
+     * @param <T>      类型
      * @return 集合
-     * @param <T> 类型
      */
-    public static <T>List<T> newArrayList(T... elements) {
+    public static <T> List<T> newArrayList(T... elements) {
         return null == elements ? Collections.emptyList() : Arrays.asList(elements);
     }
 
     /**
      * 返回集合
+     *
      * @param elements 数组
+     * @param <E>      类型
      * @return 集合
-     * @param <E> 类型
      */
     @SuppressWarnings("all")
-    public static <E>List<E> newArrayList(Iterable<? extends E> elements) {
-        if(null == elements) {
+    public static <E> List<E> newArrayList(Iterable<? extends E> elements) {
+        if (null == elements) {
             return Collections.emptyList();
         }
 
-        if(elements instanceof Collection) {
-            return Collections.unmodifiableList(new LinkedList<>((Collection)elements));
+        if (elements instanceof Collection) {
+            return Collections.unmodifiableList(new LinkedList<>((Collection) elements));
         }
 
         return newArrayList(elements.iterator());
@@ -542,9 +580,10 @@ public class CollectionUtils {
 
     /**
      * 初始化
+     *
      * @param elements 元素
+     * @param <E>      类型
      * @return 集合
-     * @param <E> 类型
      */
     public static <E> List<E> newArrayList(Iterator<? extends E> elements) {
         if (!elements.hasNext()) {
@@ -563,22 +602,26 @@ public class CollectionUtils {
         }
         return Collections.unmodifiableList(rs);
     }
+
     /**
      * 返回集合
+     *
      * @param list 数组
+     * @param <T>  类型
      * @return 集合
-     * @param <T> 类型
      */
-    public static <T>List<T> newLinkedList(T... list) {
+    public static <T> List<T> newLinkedList(T... list) {
         return null == list ? Collections.emptyList() : new LinkedList<>(Arrays.asList(list));
     }
+
     /**
      * 返回集合
+     *
      * @param list 数组
+     * @param <T>  类型
      * @return 集合
-     * @param <T> 类型
      */
-    public static <T>Set<T> newHashSet(T... list) {
+    public static <T> Set<T> newHashSet(T... list) {
         return null == list ? Collections.emptySet() : new HashSet<>(Arrays.asList(list));
     }
 

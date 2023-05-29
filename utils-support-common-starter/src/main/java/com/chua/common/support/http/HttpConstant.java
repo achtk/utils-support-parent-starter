@@ -86,4 +86,5 @@ public interface HttpConstant {
     public static final String ANY = "*/*";
     public static final String SYMBOL_MINUS = "-";
     public static final String SYMBOL_LEFT_TRIANGLE_BRACKET = "(";
+    String TEXT_XML = "text/xml";
 }
