@@ -286,6 +286,17 @@ public class UrlHttpClientInvoker extends AbstractHttpClientInvoker {
             connection.setDoOutput(true);
         } catch (Exception ignored) {
         }
+        String bodyStr = request.getBodyStr();
+        if(StringUtils.isNotBlank(bodyStr)) {
+            try (OutputStream outputStream = connection.getOutputStream();) {
+                outputStream.write(bodyStr.getBytes(StandardCharsets.UTF_8));
+                outputStream.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return;
+        }
 
         Map<String, Object> body = new LinkedHashMap<>(request.getBody());
         //上传文件
@@ -297,6 +308,7 @@ public class UrlHttpClientInvoker extends AbstractHttpClientInvoker {
             }
             return;
         }
+
         //非上传文件
         String contentType = CollectionUtils.findFirst(request.getHeader().get(HTTP_HEADER_CONTENT_TYPE), "*");
         String parameters = HttpClientUtils.createWithParameters(contentType, body);

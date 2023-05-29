@@ -260,17 +260,6 @@ public class CollectionUtils {
     /**
      * 获取索引对应的数据
      *
-     * @param source       数据
-     * @param defaultValue 默认值
-     * @param <T>          类型
-     * @return 数据
-     */
-    public static <T> T find(final Collection<T> source, T defaultValue) {
-        return Optional.ofNullable(find(source)).orElse(defaultValue);
-    }
-    /**
-     * 获取索引对应的数据
-     *
      * @param source 数据
      * @param index  索引
      * @param <T>    类型
