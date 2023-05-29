@@ -295,12 +295,6 @@ public class UnirestClientInvoker extends AbstractHttpClientInvoker {
         byte[] content = response.getBody();
         HttpResponse.HttpResponseBuilder builder = HttpResponse.builder();
         builder.content(content);
-
-        boolean b = null != list && (list.stream().anyMatch(it -> it.contains("application/octet-stream")
-                || it.contains("application/")
-                || it.contains("application/x-")));
-        builder.content(content);
-
         builder.code(response.getStatus());
         builder.httpHeader(createHeader(response.getHeaders()));
         if (log.isDebugEnabled()) {
