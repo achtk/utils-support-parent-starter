@@ -41,7 +41,7 @@ public class ServiceProvider<T> implements InitializingAware {
     private static final Comparator<ServiceDefinition> COMPARATOR = new Comparator<ServiceDefinition>() {
         @Override
         public int compare(ServiceDefinition o1, ServiceDefinition o2) {
-            return o1.getOrder().compareTo(o2.getOrder());
+            return o2.getOrder().compareTo(o1.getOrder());
         }
     };
     private T defaultImpl;
