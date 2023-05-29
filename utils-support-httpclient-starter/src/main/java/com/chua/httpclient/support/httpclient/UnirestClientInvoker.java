@@ -2,19 +2,16 @@ package com.chua.httpclient.support.httpclient;
 
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.function.Joiner;
+import com.chua.common.support.http.HttpMethod;
+import com.chua.common.support.http.HttpRequest;
+import com.chua.common.support.http.HttpResponse;
 import com.chua.common.support.http.*;
 import com.chua.common.support.http.invoke.AbstractHttpClientInvoker;
 import com.chua.common.support.http.render.Render;
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.CollectionUtils;
-import com.chua.common.support.utils.IoUtils;
 import com.chua.common.support.utils.StringUtils;
-import com.mashape.unirest.http.Headers;
-import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.async.Callback;
-import com.mashape.unirest.http.exceptions.UnirestException;
-import com.mashape.unirest.request.GetRequest;
-import com.mashape.unirest.request.HttpRequestWithBody;
+import kong.unirest.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.config.Registry;
@@ -43,8 +40,6 @@ import org.apache.http.ssl.SSLContextBuilder;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.InetAddress;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
@@ -95,60 +90,60 @@ public class UnirestClientInvoker extends AbstractHttpClientInvoker {
 
     private void executePatchAsync(ResponseCallback<HttpResponse> responseCallback) {
         doAnalysisAsyncHttpClient();
-        HttpRequestWithBody request = new HttpRequestWithBody(com.mashape.unirest.http.HttpMethod.PATCH, this.url);
+        HttpRequestWithBody request = Unirest.patch(this.url);
         doAnalysisRequest(request);
         doAnalysisHeaders(request);
         doAnalysisBasicAuth(request);
-        request.asBinaryAsync(new CallbackFunction(responseCallback));
+        request.asBytesAsync(new CallbackFunction(responseCallback));
     }
 
     private void executeOptionAsync(ResponseCallback<HttpResponse> responseCallback) {
         doAnalysisAsyncHttpClient();
-        HttpRequestWithBody request = new HttpRequestWithBody(com.mashape.unirest.http.HttpMethod.OPTIONS, this.url);
+        GetRequest request = Unirest.options(this.url);
         doAnalysisRequest(request);
         doAnalysisHeaders(request);
         doAnalysisBasicAuth(request);
 
-        request.asBinaryAsync(new CallbackFunction(responseCallback));
+        request.asBytesAsync(new CallbackFunction(responseCallback));
     }
 
     private void executeHeadAsync(ResponseCallback<HttpResponse> responseCallback) {
         doAnalysisAsyncHttpClient();
-        HttpRequestWithBody request = new HttpRequestWithBody(com.mashape.unirest.http.HttpMethod.HEAD, this.url);
+        GetRequest request = Unirest.head(this.url);
         doAnalysisRequest(request);
         doAnalysisHeaders(request);
         request.queryString(this.request.getBody());
         doAnalysisBasicAuth(request);
-        request.asBinaryAsync(new CallbackFunction(responseCallback));
+        request.asBytesAsync(new CallbackFunction(responseCallback));
     }
 
     private void executeDeleteAsync(ResponseCallback<HttpResponse> responseCallback) {
         doAnalysisAsyncHttpClient();
-        HttpRequestWithBody request = new HttpRequestWithBody(com.mashape.unirest.http.HttpMethod.DELETE, this.url);
+        HttpRequestWithBody request = Unirest.delete(this.url);
         doAnalysisRequest(request);
         doAnalysisHeaders(request);
 
         doAnalysisBasicAuth(request);
 
-        request.asBinaryAsync(new CallbackFunction(responseCallback));
+        request.asBytesAsync(new CallbackFunction(responseCallback));
     }
 
     private void executePutAsync(ResponseCallback<HttpResponse> responseCallback) {
         doAnalysisAsyncHttpClient();
-        HttpRequestWithBody request = new HttpRequestWithBody(com.mashape.unirest.http.HttpMethod.PUT, this.url);
+        HttpRequestWithBody request = Unirest.put(this.url);
         doAnalysisRequest(request);
         doAnalysisHeaders(request);
 
         doAnalysisBasicAuth(request);
 
-        request.asBinaryAsync(new CallbackFunction(responseCallback));
+        request.asBytesAsync(new CallbackFunction(responseCallback));
     }
 
 
     @Override
     protected HttpResponse executeDelete() {
         doAnalysisHttpClient();
-        HttpRequestWithBody request = new HttpRequestWithBody(com.mashape.unirest.http.HttpMethod.DELETE, url);
+        HttpRequestWithBody request = Unirest.delete(url);
         doAnalysisRequest(request);
         doAnalysisHeaders(request);
 
@@ -160,7 +155,7 @@ public class UnirestClientInvoker extends AbstractHttpClientInvoker {
     @Override
     protected HttpResponse executePut() {
         doAnalysisHttpClient();
-        HttpRequestWithBody request = new HttpRequestWithBody(com.mashape.unirest.http.HttpMethod.PUT, url);
+        HttpRequestWithBody request = Unirest.put(url);
         doAnalysisRequest(request);
         doAnalysisHeaders(request);
         doAnalysisBasicAuth(request);
@@ -171,7 +166,7 @@ public class UnirestClientInvoker extends AbstractHttpClientInvoker {
     @Override
     protected HttpResponse executePost() {
         doAnalysisHttpClient();
-        HttpRequestWithBody request = new HttpRequestWithBody(com.mashape.unirest.http.HttpMethod.POST, url);
+        HttpRequestWithBody request = Unirest.post(url);
         doAnalysisRequest(request);
         doAnalysisHeaders(request);
 
@@ -181,18 +176,18 @@ public class UnirestClientInvoker extends AbstractHttpClientInvoker {
 
     private void executePostAsync(ResponseCallback<HttpResponse> responseCallback) {
         doAnalysisAsyncHttpClient();
-        HttpRequestWithBody request = new HttpRequestWithBody(com.mashape.unirest.http.HttpMethod.POST, this.url);
+        HttpRequestWithBody request = Unirest.post(this.url);
         doAnalysisRequest(request);
         doAnalysisHeaders(request);
         doAnalysisBasicAuth(request);
 
-        request.asBinaryAsync(new CallbackFunction(responseCallback));
+        request.asBytesAsync(new CallbackFunction(responseCallback));
     }
 
     @Override
     protected HttpResponse executeGet() {
         doAnalysisHttpClient();
-        GetRequest request = new GetRequest(com.mashape.unirest.http.HttpMethod.GET, url);
+        GetRequest request = Unirest.get(url);
         doAnalysisHeaders(request);
         doAnalysisRequest(request);
         doAnalysisBasicAuth(request);
@@ -209,17 +204,17 @@ public class UnirestClientInvoker extends AbstractHttpClientInvoker {
 
     private void executeGetAsync(ResponseCallback<HttpResponse> responseCallback) {
         doAnalysisAsyncHttpClient();
-        GetRequest request = new GetRequest(com.mashape.unirest.http.HttpMethod.GET, this.request.getUrl());
+        GetRequest request = Unirest.get(this.request.getUrl());
         doAnalysisRequest(request);
         doAnalysisHeaders(request);
         doAnalysisBasicAuth(request);
-        request.asBinaryAsync(new CallbackFunction(responseCallback));
+        request.asBytesAsync(new CallbackFunction(responseCallback));
     }
 
     @Override
     protected HttpResponse executePatch() {
         doAnalysisHttpClient();
-        HttpRequestWithBody request = new HttpRequestWithBody(com.mashape.unirest.http.HttpMethod.PATCH, url);
+        HttpRequestWithBody request = Unirest.patch(url);
         doAnalysisRequest(request);
         doAnalysisHeaders(request);
         doAnalysisBasicAuth(request);
@@ -229,7 +224,7 @@ public class UnirestClientInvoker extends AbstractHttpClientInvoker {
     @Override
     protected HttpResponse executeOption() {
         doAnalysisHttpClient();
-        HttpRequestWithBody request = new HttpRequestWithBody(com.mashape.unirest.http.HttpMethod.OPTIONS, url);
+        GetRequest request = Unirest.options(url);
         doAnalysisRequest(request);
         doAnalysisHeaders(request);
         doAnalysisBasicAuth(request);
@@ -240,7 +235,7 @@ public class UnirestClientInvoker extends AbstractHttpClientInvoker {
     @Override
     protected HttpResponse executeHead() {
         doAnalysisHttpClient();
-        HttpRequestWithBody request = new HttpRequestWithBody(com.mashape.unirest.http.HttpMethod.HEAD, url);
+        GetRequest request = Unirest.head(url);
         doAnalysisRequest(request);
         doAnalysisHeaders(request);
         request.queryString(this.request.getBody());
@@ -256,7 +251,7 @@ public class UnirestClientInvoker extends AbstractHttpClientInvoker {
      */
     private HttpResponse doAnalysisResponse(GetRequest request) {
         try {
-            return createResponseEntity(request.asBinary());
+            return createResponseEntity(request.asBytes());
         } catch (Exception e) {
             return createResponseServerErrorEntity(e);
         }
@@ -269,9 +264,9 @@ public class UnirestClientInvoker extends AbstractHttpClientInvoker {
      * @return 响应
      */
     private HttpResponse doAnalysisResponse(HttpRequestWithBody request) {
-        com.mashape.unirest.http.HttpResponse<InputStream> response = null;
+        kong.unirest.HttpResponse<byte[]> response = null;
         try {
-            response = request.asBinary();
+            response = request.asBytes();
         } catch (Exception e) {
             return createResponseServerErrorEntity(e);
         }
@@ -294,24 +289,17 @@ public class UnirestClientInvoker extends AbstractHttpClientInvoker {
      * @param response 响应
      * @return 响应
      */
-    private HttpResponse createResponseEntity(com.mashape.unirest.http.HttpResponse<InputStream> response) {
+    private HttpResponse createResponseEntity(kong.unirest.HttpResponse<byte[]> response) {
         List<String> list = response.getHeaders().get("Content-Type");
 
-        InputStream content = response.getBody();
+        byte[] content = response.getBody();
         HttpResponse.HttpResponseBuilder builder = HttpResponse.builder();
         builder.content(content);
 
         boolean b = null != list && (list.stream().anyMatch(it -> it.contains("application/octet-stream")
                 || it.contains("application/")
                 || it.contains("application/x-")));
-        try {
-            if (b) {
-                builder.content(IoUtils.toByteArray(response.getRawBody()));
-            } else {
-                builder.content(content);
-            }
-        } catch (IOException ignored) {
-        }
+        builder.content(content);
 
         builder.code(response.getStatus());
         builder.httpHeader(createHeader(response.getHeaders()));
@@ -334,7 +322,10 @@ public class UnirestClientInvoker extends AbstractHttpClientInvoker {
     private HttpHeader createHeader(Headers headers) {
         HttpHeader header =
                 new HttpHeader();
-        header.putList(headers);
+        List<Header> all = headers.all();
+        for (Header header1 : all) {
+            header.addHeader(header1.getName(), header1.getValue());
+        }
         return header;
     }
 
@@ -439,14 +430,16 @@ public class UnirestClientInvoker extends AbstractHttpClientInvoker {
      * 设置客户端
      */
     private void doAnalysisHttpClient() {
-        Unirest.setHttpClient(getClient());
+        Config config = Unirest.config();
+        config.httpClient(getClient());
     }
 
     /**
      * 设置客户端
      */
     private void doAnalysisAsyncHttpClient() {
-        Unirest.setAsyncHttpClient(getAsyncClient());
+        Config config = Unirest.config();
+        config.asyncClient(getAsyncClient());
     }
 
 
@@ -714,7 +707,7 @@ public class UnirestClientInvoker extends AbstractHttpClientInvoker {
     }
 
 
-    private class CallbackFunction implements Callback<InputStream> {
+    private class CallbackFunction implements Callback<byte[]> {
         private ResponseCallback responseCallback;
 
         public CallbackFunction(ResponseCallback responseCallback) {
@@ -722,7 +715,7 @@ public class UnirestClientInvoker extends AbstractHttpClientInvoker {
         }
 
         @Override
-        public void completed(com.mashape.unirest.http.HttpResponse<InputStream> response) {
+        public void completed(kong.unirest.HttpResponse<byte[]> response) {
             responseCallback.onResponse(createResponseEntity(response));
         }
 
