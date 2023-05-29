@@ -91,52 +91,47 @@ public class UnirestClientInvoker extends AbstractHttpClientInvoker {
     private void executePatchAsync(ResponseCallback<HttpResponse> responseCallback) {
         doAnalysisAsyncHttpClient();
         HttpRequestWithBody request = Unirest.patch(this.url);
-        doAnalysisRequest(request);
         doAnalysisHeaders(request);
         doAnalysisBasicAuth(request);
-        request.asBytesAsync(new CallbackFunction(responseCallback));
+        doAnalysisRequest(request).asBytesAsync(new CallbackFunction(responseCallback));
     }
 
     private void executeOptionAsync(ResponseCallback<HttpResponse> responseCallback) {
         doAnalysisAsyncHttpClient();
         GetRequest request = Unirest.options(this.url);
-        doAnalysisRequest(request);
         doAnalysisHeaders(request);
         doAnalysisBasicAuth(request);
 
-        request.asBytesAsync(new CallbackFunction(responseCallback));
+        doAnalysisRequest(request).asBytesAsync(new CallbackFunction(responseCallback));
     }
 
     private void executeHeadAsync(ResponseCallback<HttpResponse> responseCallback) {
         doAnalysisAsyncHttpClient();
         GetRequest request = Unirest.head(this.url);
-        doAnalysisRequest(request);
         doAnalysisHeaders(request);
         request.queryString(this.request.getBody());
         doAnalysisBasicAuth(request);
-        request.asBytesAsync(new CallbackFunction(responseCallback));
+        doAnalysisRequest(request).asBytesAsync(new CallbackFunction(responseCallback));
     }
 
     private void executeDeleteAsync(ResponseCallback<HttpResponse> responseCallback) {
         doAnalysisAsyncHttpClient();
         HttpRequestWithBody request = Unirest.delete(this.url);
-        doAnalysisRequest(request);
         doAnalysisHeaders(request);
 
         doAnalysisBasicAuth(request);
 
-        request.asBytesAsync(new CallbackFunction(responseCallback));
+        doAnalysisRequest(request).asBytesAsync(new CallbackFunction(responseCallback));
     }
 
     private void executePutAsync(ResponseCallback<HttpResponse> responseCallback) {
         doAnalysisAsyncHttpClient();
         HttpRequestWithBody request = Unirest.put(this.url);
-        doAnalysisRequest(request);
         doAnalysisHeaders(request);
 
         doAnalysisBasicAuth(request);
 
-        request.asBytesAsync(new CallbackFunction(responseCallback));
+        doAnalysisRequest(request).asBytesAsync(new CallbackFunction(responseCallback));
     }
 
 
@@ -144,44 +139,40 @@ public class UnirestClientInvoker extends AbstractHttpClientInvoker {
     protected HttpResponse executeDelete() {
         doAnalysisHttpClient();
         HttpRequestWithBody request = Unirest.delete(url);
-        doAnalysisRequest(request);
         doAnalysisHeaders(request);
 
         doAnalysisBasicAuth(request);
 
-        return doAnalysisResponse(request);
+        return doAnalysisResponse(doAnalysisRequest(request));
     }
 
     @Override
     protected HttpResponse executePut() {
         doAnalysisHttpClient();
         HttpRequestWithBody request = Unirest.put(url);
-        doAnalysisRequest(request);
         doAnalysisHeaders(request);
         doAnalysisBasicAuth(request);
 
-        return doAnalysisResponse(request);
+        return doAnalysisResponse(doAnalysisRequest(request));
     }
 
     @Override
     protected HttpResponse executePost() {
         doAnalysisHttpClient();
         HttpRequestWithBody request = Unirest.post(url);
-        doAnalysisRequest(request);
         doAnalysisHeaders(request);
 
         doAnalysisBasicAuth(request);
-        return doAnalysisResponse(request);
+        return doAnalysisResponse(doAnalysisRequest(request));
     }
 
     private void executePostAsync(ResponseCallback<HttpResponse> responseCallback) {
         doAnalysisAsyncHttpClient();
         HttpRequestWithBody request = Unirest.post(this.url);
-        doAnalysisRequest(request);
         doAnalysisHeaders(request);
         doAnalysisBasicAuth(request);
 
-        request.asBytesAsync(new CallbackFunction(responseCallback));
+        doAnalysisRequest(request).asBytesAsync(new CallbackFunction(responseCallback));
     }
 
     @Override
@@ -189,58 +180,53 @@ public class UnirestClientInvoker extends AbstractHttpClientInvoker {
         doAnalysisHttpClient();
         GetRequest request = Unirest.get(url);
         doAnalysisHeaders(request);
-        doAnalysisRequest(request);
         doAnalysisBasicAuth(request);
-        return doAnalysisResponse(request);
+        return doAnalysisResponse(doAnalysisRequest(request));
     }
 
     private void doAnalysisHeaders(GetRequest request) {
         request.headers(this.request.getHeader().asSimpleMap());
     }
 
-    private void doAnalysisHeaders(HttpRequestWithBody request) {
-        request.headers(this.request.getHeader().asSimpleMap());
+    private HttpRequestWithBody doAnalysisHeaders(HttpRequestWithBody request) {
+        return request.headers(this.request.getHeader().asSimpleMap());
     }
 
     private void executeGetAsync(ResponseCallback<HttpResponse> responseCallback) {
         doAnalysisAsyncHttpClient();
         GetRequest request = Unirest.get(this.request.getUrl());
-        doAnalysisRequest(request);
         doAnalysisHeaders(request);
         doAnalysisBasicAuth(request);
-        request.asBytesAsync(new CallbackFunction(responseCallback));
+        doAnalysisRequest(request).asBytesAsync(new CallbackFunction(responseCallback));
     }
 
     @Override
     protected HttpResponse executePatch() {
         doAnalysisHttpClient();
         HttpRequestWithBody request = Unirest.patch(url);
-        doAnalysisRequest(request);
         doAnalysisHeaders(request);
         doAnalysisBasicAuth(request);
-        return doAnalysisResponse(request);
+        return doAnalysisResponse(doAnalysisRequest(request));
     }
 
     @Override
     protected HttpResponse executeOption() {
         doAnalysisHttpClient();
         GetRequest request = Unirest.options(url);
-        doAnalysisRequest(request);
         doAnalysisHeaders(request);
         doAnalysisBasicAuth(request);
 
-        return doAnalysisResponse(request);
+        return doAnalysisResponse(doAnalysisRequest(request));
     }
 
     @Override
     protected HttpResponse executeHead() {
         doAnalysisHttpClient();
         GetRequest request = Unirest.head(url);
-        doAnalysisRequest(request);
         doAnalysisHeaders(request);
         request.queryString(this.request.getBody());
         doAnalysisBasicAuth(request);
-        return doAnalysisResponse(request);
+        return doAnalysisResponse(doAnalysisRequest(request));
     }
 
     /**
@@ -249,7 +235,7 @@ public class UnirestClientInvoker extends AbstractHttpClientInvoker {
      * @param request 请求
      * @return 响应
      */
-    private HttpResponse doAnalysisResponse(GetRequest request) {
+    private HttpResponse doAnalysisResponse(kong.unirest.HttpRequest request) {
         try {
             return createResponseEntity(request.asBytes());
         } catch (Exception e) {
@@ -351,38 +337,39 @@ public class UnirestClientInvoker extends AbstractHttpClientInvoker {
      * 设置请求参数
      *
      * @param request 请求
+     * @return kong.unirest.HttpRequest
      */
-    private void doAnalysisRequest(GetRequest request) {
-        request.queryString(recombine(this.request.getBody()));
+    private kong.unirest.HttpRequest doAnalysisRequest(kong.unirest.HttpRequest request) {
+        return request.queryString(recombine(this.request.getBody()));
     }
 
     /**
      * 设置请求参数
      *
      * @param request 请求
+     * @return
      */
-    private void doAnalysisRequest(HttpRequestWithBody request) {
+    private RequestBodyEntity doAnalysisRequest(HttpRequestWithBody request) {
         doAnalysisRequest(this.httpMethod.name());
+        request.connectTimeout((int) this.request.getConnectTimeout());
 
         if (!this.request.getHeader().isEmpty()) {
             request.headers(this.request.getHeader().asSimpleMap());
         }
 
         if (StringUtils.isNotBlank(this.request.getBodyStr())) {
-            request.body(this.request.getBodyStr());
-            return;
+            return request.body(this.request.getBodyStr());
         }
 
         //上传文件
         if (this.request.isFormData() && this.request.hasBin()) {
-            this.request.getBody().forEach(request::field);
-            return;
+            return request.body(this.request.getBody());
         }
 
         String contentType = CollectionUtils.findFirst(request.getHeaders().get(HttpHeaders.CONTENT_TYPE), "*");
         Render render = ServiceProvider.of(com.chua.common.support.http.render.Render.class).getNewExtension(contentType);
         byte[] bytes = render.render(this.request.getBody(), contentType);
-        request.body(bytes);
+        return request.body(bytes);
     }
 
     /**

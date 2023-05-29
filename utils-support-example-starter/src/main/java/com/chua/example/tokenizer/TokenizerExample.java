@@ -33,8 +33,8 @@ public class TokenizerExample {
         System.out.println(join);
         String sign = Md5Utils.getInstance().getMd5String(join).toUpperCase();
         System.out.println(sign);
-
         param.put("sign", sign);
+
         HttpClientInvoker invoker = HttpClient.post()
                 .url("https://api.mch.weixin.qq.com/pay/micropay")
                 .body(ImmutableBuilder.<String, Object>builderOfMap()

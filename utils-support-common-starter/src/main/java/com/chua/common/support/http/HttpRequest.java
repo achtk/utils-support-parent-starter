@@ -41,7 +41,8 @@ public class HttpRequest {
     /**
      * 超时时间
      */
-    private long connectTimeout;
+    @Builder.Default
+    private long connectTimeout = 30_000;
     /**
      * 代理
      */
