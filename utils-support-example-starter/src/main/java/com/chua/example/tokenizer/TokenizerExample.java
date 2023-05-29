@@ -18,8 +18,8 @@ public class TokenizerExample {
 
     public static void main(String[] args) {
         Map<String, Object> param = ImmutableBuilder.<String, Object>builderOfMap()
-                .put("appid", "wx980065354062cb26")
-                .put("mch_id", "1625485411")
+//                .put("appid", "wx980065354062cb26")
+//                .put("mch_id", "1625485411")
                 .put("device_info", "013467007045764")
                 .put("nonce_str", "5K8264ILTKCH16CQ2502SI8ZNMTM67VS")
                 .put("body", "image形象店-深圳腾大- QQ公仔")
