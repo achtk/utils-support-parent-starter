@@ -98,7 +98,7 @@ public class UrlHttpClientInvoker extends AbstractHttpClientInvoker {
             //设置缓存
             doAnalysisCache(connection, method);
             //设置消息体
-            doAlisander(connection);
+            doAnalysisBody(connection);
             //设置配置
             doAnalysisRequestConfig(connection);
             // 建立实际的连接
@@ -276,7 +276,7 @@ public class UrlHttpClientInvoker extends AbstractHttpClientInvoker {
      *
      * @param connection 链接
      */
-    private void doAlisander(HttpURLConnection connection) {
+    private void doAnalysisBody(HttpURLConnection connection) {
 
         try {
             connection.setDoOutput(true);
@@ -311,7 +311,7 @@ public class UrlHttpClientInvoker extends AbstractHttpClientInvoker {
             Render render = ServiceProvider.of(Render.class).getNewExtension(contentType);
             byte[] bytes = render.render(body, contentType);
             if (log.isDebugEnabled()) {
-                log.debug("消息体: {}", StringUtils.utf8Str(bytes));
+                log.debug("消息体: \r\n{}", StringUtils.utf8Str(bytes));
                 log.debug("==================================================");
             }
             outputStream.write(bytes);
