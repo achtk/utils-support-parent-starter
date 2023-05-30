@@ -53,7 +53,7 @@ public class CrawlerExample {
     public static void main(String[] args) throws Exception {
         String url = "http://zjfw.zwfwb.zjtz.gov.cn/egov/portals_zj_new/agencylist.jsp?type=second&currentJDBCPage=%s";
         new File("./2.txt").delete();
-        FileUtils.write(new File("./2.txt"), "公司名称,经营范围,资质等级,地址,联系电话\r\n", StandardCharsets.UTF_8, true);
+        FileUtils.write(new File("./2.txt"), "公司名称;经营范围;资质等级;地址;联系电话\r\n", StandardCharsets.UTF_8, true);
 
         UrlLoader urlLoader = new LocalUrlLoader();
         CrawlerBuilder builder = CrawlerBuilder.builder()
@@ -69,18 +69,18 @@ public class CrawlerExample {
                                 continue;
                             }
                             FileUtils.write(new File("./2.txt"),
-                                    html[0] + ","
-                                            + html[1].replace("经营范围：", "")  + ","
-                                            + html[2].replace("资质等级：", "")  + ","
-                                            + html[3].replace("地址：", "")  + ","
-                                            + html[3].replace("联系电话：", "") +
+                                    html[0] + ";"
+                                            + html[1].replace("经营范围：", "")  + ";"
+                                            + html[2].replace("资质等级：", "")  + ";"
+                                            + html[3].replace("地址：", "")  + ";"
+                                            + html[4].replace("联系电话：", "") +
                                             "\r\n", StandardCharsets.UTF_8, true);
 
                         }
                     }
                     System.out.println();
                 }))
-                .thread(1)
+                .thread(3)
                 .allowSpread(false)
                 .build();
         for (int i = 1; i < 127; i++) {
