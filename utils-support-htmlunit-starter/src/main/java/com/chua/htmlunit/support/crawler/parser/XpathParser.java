@@ -1,5 +1,6 @@
-package com.chua.common.support.crawler.node;
+package com.chua.htmlunit.support.crawler.parser;
 
+import com.chua.common.support.crawler.node.PageParser;
 import com.chua.common.support.jsoup.nodes.Document;
 import com.chua.common.support.jsoup.nodes.Element;
 import org.jsoup.Jsoup;

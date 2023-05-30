@@ -5,31 +5,25 @@ import com.chua.common.support.crawler.CrawlerBuilder;
 import com.chua.common.support.crawler.annotations.XpathQuery;
 import com.chua.common.support.crawler.listener.Listener;
 import com.chua.common.support.crawler.node.AbstractPageParser;
-import com.chua.common.support.crawler.node.JsonApiParser;
-import com.chua.common.support.crawler.node.Parser;
-import com.chua.common.support.crawler.node.impl.PageHrefParser;
-import com.chua.common.support.crawler.page.JsoupPageLoader;
-import com.chua.common.support.crawler.page.PageLoader;
-import com.chua.common.support.crawler.request.Request;
 import com.chua.common.support.crawler.request.Response;
 import com.chua.common.support.crawler.url.LocalUrlLoader;
 import com.chua.common.support.crawler.url.UrlLoader;
 import com.chua.common.support.function.Joiner;
 import com.chua.common.support.function.SafeBiConsumer;
-import com.chua.common.support.function.Splitter;
 import com.chua.common.support.jsoup.nodes.Document;
 import com.chua.common.support.jsoup.nodes.Element;
 import com.chua.common.support.jsoup.nodes.Node;
-import com.chua.common.support.lang.date.DateTime;
 import com.chua.common.support.utils.FileUtils;
 import com.chua.common.support.utils.NumberUtils;
 import com.chua.htmlunit.support.crawler.parser.SimpleXpathParser;
-import com.chua.htmlunit.support.crawler.parser.XpathParser;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author CH
@@ -59,7 +53,7 @@ public class CrawlerExample {
         CrawlerBuilder builder = CrawlerBuilder.builder()
                 .urlLoader(urlLoader)
                 .addUrl("http://zjfw.zwfwb.zjtz.gov.cn/egov/portals_zj_new/agencylist.jsp?type=second")
-                .addParser(new SimpleXpathParser(Collections.singleton("//div[@class=list_inc]/html()"), (SafeBiConsumer<Document, Map<String, List<String>>>) (document, stringListMap) -> {
+                .addParser(new SimpleXpathParser(Collections.singleton("//div[@class=list_inc_tit]/html()"), (SafeBiConsumer<Document, Map<String, List<String>>>) (document, stringListMap) -> {
                     Node node = document.childNodes().get(2).childNode(9).childNode(5).childNode(29).childNode(5).childNode(3);
                     List<Node> nodes = node.childNodes();
                     for (Node node1 : nodes) {
@@ -83,11 +77,11 @@ public class CrawlerExample {
                 .thread(3)
                 .allowSpread(false)
                 .build();
-        for (int i = 1; i < 127; i++) {
-            String format = String.format(url, i);
-            urlLoader.addUrl(format);
-
-        }
+//        for (int i = 1; i < 127; i++) {
+//            String format = String.format(url, i);
+//            urlLoader.addUrl(format);
+//
+//        }
         Crawler crawler = builder.create();
         crawler.start(true);
 
