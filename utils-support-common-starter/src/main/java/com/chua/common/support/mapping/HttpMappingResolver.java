@@ -62,7 +62,7 @@ public final class HttpMappingResolver implements MappingResolver {
                 try {
                     return request.doFilter(proxyMethod);
                 } finally {
-                    log.warn(execute.content(String.class));
+                    log.warn("{} -> {}",method.getName(), execute.content(String.class));
                 }
             }
             return new Response(execute.content(), request).getValue();
