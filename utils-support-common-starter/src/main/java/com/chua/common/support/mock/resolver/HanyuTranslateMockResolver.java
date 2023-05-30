@@ -26,12 +26,12 @@ public class HanyuTranslateMockResolver extends HanyuMockResolver {
 
         super.resolve(mock, expressionParser);
 
-        Value<Document> ifPresent = (Value<Document>) CACHEABLE.get(base);
+        Value<Object> ifPresent = CACHEABLE.get(base);
         if (null == ifPresent || ifPresent.isNull()) {
             return null;
         }
 
-        Document value = ifPresent.getValue();
+        Document value = ifPresent.getValue(Document.class);
         return value.selectXpath("//div[@id='means_zhushi_div']/div[@id='poem-detail-translation']/div[3]").text();
     }
 }

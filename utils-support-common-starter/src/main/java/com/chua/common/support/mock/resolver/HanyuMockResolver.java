@@ -36,10 +36,10 @@ public class HanyuMockResolver implements MockResolver {
             base = mock.base();
         }
 
-        Value<Document> ifPresent = (Value<Document>) CACHEABLE.get(base);
+        Value<Object> ifPresent = CACHEABLE.get(base);
         Document document = null;
         if (null != ifPresent) {
-            document = ifPresent.getValue();
+            document = ifPresent.getValue(Document.class);
         } else {
             try {
                 HttpClientInvoker httpClientInvoker = HttpClient.get().url(String.format(URL, base)).newInvoker();
