@@ -291,8 +291,8 @@ public class Request {
                 args.add(propertyResolver.resolvePlaceholders(string));
             }
         }
-        Bench bench = marker.createBench(MethodDescribe.builder().name(methodName).build());
-        return bench.executeBean(bean, args.toArray()).toString();
+        Bench bench = marker.createBench(MethodDescribe.builder().name(methodName).parameterTypes(ClassUtils.toType(args.toArray())).build());
+        return bench.executeBean(bean, args.toArray()).getStringValue();
     }
     /**
      * 地址

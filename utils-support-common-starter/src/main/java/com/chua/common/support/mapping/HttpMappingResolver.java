@@ -8,6 +8,7 @@ import com.chua.common.support.http.HttpResponse;
 import com.chua.common.support.lang.proxy.DelegateMethodIntercept;
 import com.chua.common.support.lang.proxy.ProxyUtils;
 import com.chua.common.support.lang.proxy.plugin.ProxyPlugin;
+import com.chua.common.support.log.Log;
 import com.chua.common.support.mapping.annotation.MappingPlugins;
 import com.chua.common.support.mapping.builder.Request;
 import com.chua.common.support.mapping.builder.Response;
@@ -30,6 +31,8 @@ import java.lang.reflect.Method;
 @Spi("http")
 public final class HttpMappingResolver implements MappingResolver {
     private Object bean;
+
+    private static final Log log = Log.getLogger(MappingResolver.class);
 
     @Override
     public <T> T create(Class<T> target) {
@@ -56,14 +59,19 @@ public final class HttpMappingResolver implements MappingResolver {
             HttpResponse execute = invoker.execute();
             int code = execute.code();
             if(200 != code) {
-                request.doFilter(proxyMethod);
-                throw new RuntimeException(execute.content(String.class));
+                try {
+                    return request.doFilter(proxyMethod);
+                } finally {
+                    log.warn(execute.content(String.class));
+                }
             }
             return new Response(execute.content(), request).getValue();
         }));
 
         this.bean = ProxyUtils.newProxy(target, new DelegateMethodIntercept<>(target, (proxyMethod) -> {
-            Bench bench = marker.createBench(MethodDescribe.builder().method(proxyMethod.getMethod()).build());
+            Bench bench = marker.createBench(MethodDescribe.builder()
+                    .method(proxyMethod.getMethod())
+                    .build());
             return bench.executeBean(proxy, proxyMethod.getArgs(), proxyMethod.getPlugins()).getValue();
         }), createPlugin(target));
         return (T) bean;
