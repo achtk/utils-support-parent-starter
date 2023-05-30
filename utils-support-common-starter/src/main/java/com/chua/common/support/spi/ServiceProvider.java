@@ -26,7 +26,7 @@ import static com.chua.common.support.constant.CommonConstant.SYMBOL_COMMA;
 public class ServiceProvider<T> implements InitializingAware {
 
     private static final ServiceProvider EMPTY = new ServiceProvider(null, null, null);
-    private static final Map<Class<?>, ServiceProvider> CACHE = new ConcurrentHashMap<>();
+    private static Map<Class<?>, ServiceProvider> CACHE = new ConcurrentHashMap<>();
     private final List<ServiceFinder> finders = new LinkedList<>();
 
     private final Value<Class<T>> value;
@@ -96,6 +96,9 @@ public class ServiceProvider<T> implements InitializingAware {
     public static <T> ServiceProvider<T> of(Class<T> value, ClassLoader classLoader, ServiceAutowire serviceAutowire) {
         if (ClassUtils.isVoid(value)) {
             return EMPTY;
+        }
+        if(null == CACHE) {
+            CACHE = new ConcurrentHashMap<>();
         }
         return MapUtils.computeIfAbsent(CACHE, value, it -> {
             ServiceProvider<T> provider = new ServiceProvider<>(value, classLoader, serviceAutowire);

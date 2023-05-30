@@ -16,7 +16,7 @@ import java.net.URL;
  * @author CH
  */
 @Data
-public class ServiceDefinition {
+public class ServiceDefinition implements Comparable<ServiceDefinition>{
     /**
      * 扩展接口实现类名
      */
@@ -174,5 +174,10 @@ public class ServiceDefinition {
      */
     public boolean isPresent() {
         return NameAware.class.isAssignableFrom(implClass);
+    }
+
+    @Override
+    public int compareTo(ServiceDefinition o) {
+        return Integer.compare(o.order, this.order);
     }
 }
