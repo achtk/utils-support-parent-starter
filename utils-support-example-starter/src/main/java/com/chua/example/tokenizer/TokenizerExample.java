@@ -5,6 +5,7 @@ import com.chua.common.support.function.Joiner;
 import com.chua.common.support.http.HttpClient;
 import com.chua.common.support.http.HttpClientInvoker;
 import com.chua.common.support.http.HttpResponse;
+import com.chua.common.support.lang.tokenizer.Tokenizer;
 import com.chua.common.support.utils.MapUtils;
 import com.chua.common.support.utils.Md5Utils;
 import org.apache.http.HttpHeaders;
@@ -17,6 +18,11 @@ import java.util.Map;
 public class TokenizerExample {
 
     public static void main(String[] args) {
+        Tokenizer tokenizer = Tokenizer.newDefault();
+        System.out.println(tokenizer.segments("测试单词"));
+    }
+
+    public static void main1(String[] args) {
         Map<String, Object> param = ImmutableBuilder.<String, Object>builderOfMap()
 //                .put("appid", "wx980065354062cb26")
 //                .put("mch_id", "1625485411")

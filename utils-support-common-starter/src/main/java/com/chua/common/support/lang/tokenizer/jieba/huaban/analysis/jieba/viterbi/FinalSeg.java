@@ -80,13 +80,10 @@ public class FinalSeg {
             emit = new LinkedHashMap<>();
 
             Map<Character, Double> values = new LinkedHashMap<>();
-            doAnalysisSegLine(values, br.readLine());
-            while (br.ready()) {
-                String line = br.readLine();
+            IoUtils.readLines(br, line -> {
                 doAnalysisSegLine(values, line);
-            }
-            CollectionUtils.findLast(values.keySet());
-            System.out.println();
+
+            });
         } catch (IOException e) {
             System.err.println(String.format(Locale.getDefault(), "%s: load model failure!", PROB_EMIT));
         }

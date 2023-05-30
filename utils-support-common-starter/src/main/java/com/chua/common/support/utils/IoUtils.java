@@ -23,6 +23,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.zip.GZIPInputStream;
 
 import static com.chua.common.support.constant.CommonConstant.EMPTY;
@@ -187,12 +188,13 @@ public class IoUtils {
             // ignore
         }
     }
+
     /**
      * 拷贝流，拷贝后不关闭流
      *
-     * @param in             输入流
-     * @param out            输出流
-     * @param bufferSize     缓存大小
+     * @param in          输入流
+     * @param out         输出流
+     * @param bufferSize  缓存大小
      * @param progressBar 进度条
      * @return 传输的byte数
      * @throws RuntimeException IO异常
@@ -202,6 +204,7 @@ public class IoUtils {
         ProgressInputStream stream = new ProgressInputStream(in, progressBar);
         return copy(stream, out, bufferSize);
     }
+
     /**
      * 输入流拷贝
      *
@@ -419,6 +422,7 @@ public class IoUtils {
     public static BufferedWriter getWriter(String path, String charsetName, boolean isAppend) throws IOException {
         return getWriter(new File(path), Charset.forName(charsetName), isAppend);
     }
+
     /**
      * 获得一个Writer
      *
@@ -437,6 +441,7 @@ public class IoUtils {
             return new OutputStreamWriter(out, charset);
         }
     }
+
     /**
      * 获得一个带缓存的写入对象
      *
@@ -693,6 +698,23 @@ public class IoUtils {
             }
         }
         return list;
+    }
+
+    /**
+     * 读取所有字节
+     *
+     * @param input    流
+     * @param consumer 消费者
+     * @throws IOException IOException
+     */
+    public static void readLines(final Reader input, final Consumer<String> consumer) throws IOException {
+        try (BufferedReader reader = toBufferedReader(input)) {
+            String line = reader.readLine();
+            while (line != null) {
+                consumer.accept(line);
+                line = reader.readLine();
+            }
+        }
     }
 
     /**
@@ -1345,6 +1367,7 @@ public class IoUtils {
             }
         }
     }
+
     /**
      * 将byte[]写到流中
      *
