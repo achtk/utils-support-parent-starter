@@ -1,0 +1,4 @@
+com.chua.common.support.lang.proxy.plugin.CacheableMethodAnnotationPostProcessor
+com.chua.common.support.lang.proxy.plugin.RetryMethodAnnotationPostProcessor
+com.chua.common.support.lang.proxy.plugin.TimeoutMethodAnnotationPostProcessor
+com.chua.common.support.lang.proxy.plugin.WatchTimeMethodAnnotationPostProcessor

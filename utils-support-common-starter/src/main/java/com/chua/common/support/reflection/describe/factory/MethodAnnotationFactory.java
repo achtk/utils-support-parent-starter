@@ -9,12 +9,11 @@ import com.chua.common.support.reflection.describe.executor.MethodExecutor;
 import com.chua.common.support.reflection.describe.processor.MethodAnnotationPostProcessor;
 import com.chua.common.support.reflection.describe.processor.ParameterAnnotationPostProcessor;
 import com.chua.common.support.spi.ServiceProvider;
+import com.chua.common.support.utils.AnnotationUtils;
 import com.chua.common.support.utils.ClassUtils;
 
 import java.lang.reflect.Type;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -54,11 +53,53 @@ public interface MethodAnnotationFactory {
         private final List<ParameterAnnotationPostProcessor> parameters = new LinkedList<>();
         static final Map<String, MethodAnnotationPostProcessor> CACHE = new ConcurrentHashMap<>();
         static final Map<String, ParameterAnnotationPostProcessor> PARAM_CACHE = new ConcurrentHashMap<>();
+        static final Map<String, MethodAnnotationPostProcessor> CACHE_PLUGIN = new ConcurrentHashMap<>();
+        static final Map<String, ParameterAnnotationPostProcessor> PARAM_CACHE_PLUGIN = new ConcurrentHashMap<>();
+        static {
+            List<MethodAnnotationPostProcessor> list = ServiceProvider.of(MethodAnnotationPostProcessor.class).collect();
+            for (MethodAnnotationPostProcessor methodAnnotationPostProcessor : list) {
+                CACHE_PLUGIN.put(methodAnnotationPostProcessor.getAnnotationType().getTypeName(), methodAnnotationPostProcessor);
+            }
+
+            List<ParameterAnnotationPostProcessor> list1 = ServiceProvider.of(ParameterAnnotationPostProcessor.class).collect();
+            for (ParameterAnnotationPostProcessor parameterAnnotationPostProcessor : list1) {
+                PARAM_CACHE_PLUGIN.put(parameterAnnotationPostProcessor.getAnnotationType().getTypeName(), parameterAnnotationPostProcessor);
+            }
+
+        }
 
         public SimpleMethodAnnotationFactory(MethodDescribe methodDescribe, Object[] plugins) {
             this.methodDescribe = methodDescribe;
             initialProcessor(plugins);
-            refreshProcessor();
+            checkAnnotation();
+//            refreshProcessor();
+        }
+
+        private void checkAnnotation() {
+            AnnotationDescribe[] annotationDescribes = methodDescribe.annotationTypes();
+            for (AnnotationDescribe annotationDescribe : annotationDescribes) {
+                String name = annotationDescribe.getName();
+                MethodAnnotationPostProcessor methodAnnotationPostProcessor = CACHE_PLUGIN.get(name);
+                if (null == methodAnnotationPostProcessor) {
+                    continue;
+                }
+
+                processors.add(ClassUtils.forObject(methodAnnotationPostProcessor.getClass()));
+            }
+
+            ParameterDescribe[] parameterDescribes = methodDescribe.parameterDescribes();
+            for (ParameterDescribe parameterDescribe : parameterDescribes) {
+                AnnotationDescribe[] annotationDescribes1 = parameterDescribe.annotationTypes();
+                for (AnnotationDescribe annotationDescribe : annotationDescribes1) {
+                    String name = annotationDescribe.getName();
+                    ParameterAnnotationPostProcessor parameterAnnotationPostProcessor = PARAM_CACHE_PLUGIN.get(name);
+                    if (null == parameterAnnotationPostProcessor) {
+                        continue;
+                    }
+
+                    parameters.add(ClassUtils.forObject(parameterAnnotationPostProcessor.getClass()));
+                }
+            }
         }
 
         private void refreshProcessor() {
@@ -96,13 +137,16 @@ public interface MethodAnnotationFactory {
         private void initialProcessor(Object[] plugins) {
             for (Object plugin : plugins) {
                 if (plugin instanceof MethodAnnotationPostProcessor) {
-                    initialMethodProcessor(null, (MethodAnnotationPostProcessor) plugin);
+                    processors.add((MethodAnnotationPostProcessor) plugin);
+//                    initialMethodProcessor(null, (MethodAnnotationPostProcessor) plugin);
                     continue;
                 }
 
                 if (plugin instanceof ParameterAnnotationPostProcessor) {
-                    initialParamterProcessor(null, (ParameterAnnotationPostProcessor) plugin);
+//                    initialParamterProcessor(null, (ParameterAnnotationPostProcessor) plugin);
+                    parameters.add((ParameterAnnotationPostProcessor) plugin);
                 }
+
             }
         }
         /**
@@ -117,12 +161,7 @@ public interface MethodAnnotationFactory {
             }
 
             PARAM_CACHE.put(name, plugin);
-            Class<? extends ParameterAnnotationPostProcessor> aClass = plugin.getClass();
-            Type[] actualTypeArguments = ClassUtils.getActualTypeArguments(aClass);
-            if (actualTypeArguments.length > 0 && actualTypeArguments[0] instanceof Class<?>) {
-                Type type = actualTypeArguments[0];
-                PARAM_CACHE.put(type.getTypeName(), plugin);
-            }
+            PARAM_CACHE.put(plugin.getAnnotationType().getTypeName(), plugin);
         }
 
         /**
@@ -137,12 +176,7 @@ public interface MethodAnnotationFactory {
             }
 
             CACHE.put(name, plugin);
-            Class<? extends MethodAnnotationPostProcessor> aClass = plugin.getClass();
-            Type[] actualTypeArguments = ClassUtils.getActualTypeArguments(aClass);
-            if (actualTypeArguments.length > 0 && actualTypeArguments[0] instanceof Class<?>) {
-                Type type = actualTypeArguments[0];
-                CACHE.put(type.getTypeName(), plugin);
-            }
+            CACHE.put(plugin.getAnnotationType().getTypeName(), plugin);
         }
 
         /**

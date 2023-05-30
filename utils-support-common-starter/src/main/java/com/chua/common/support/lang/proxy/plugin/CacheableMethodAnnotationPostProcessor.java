@@ -7,9 +7,12 @@ import com.chua.common.support.reflection.describe.processor.impl.AbstractMethod
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.task.cache.Cache;
 import com.chua.common.support.task.cache.Cacheable;
+import com.chua.common.support.unit.TimeSize;
 import com.chua.common.support.value.Value;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.Duration;
+import java.time.Period;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -33,23 +36,23 @@ public class CacheableMethodAnnotationPostProcessor extends AbstractMethodAnnota
         String group = cache.value();
         Cacheable cacheable = CACHE.computeIfAbsent(group, s -> {
             Cacheable cacheable1 = ServiceProvider.of(Cacheable.class).getNewExtension(cache.type());
-            cacheable1.configuration(ImmutableBuilder.<String, Object>builderOfMap().put("expireAfterWrite", DateUtils.toDuration(cache.timeout()).toMillis() * 1000).build());
+            cacheable1.configuration(ImmutableBuilder.<String, Object>builderOfMap().put("expireAfterWrite", TimeSize.of(cache.timeout()).toMillis()).build());
             return cacheable1;
         });
+
         if (null == cacheable) {
             return invoke(entity, args);
         }
 
         int code = entity.hashCode();
         int hashCode = Arrays.hashCode(args);
-
-        return ((Value) cacheable.apply(cache.value() + code + "@" + hashCode, () -> {
+        Value<Object> apply = cacheable.apply(cache.value() + code + "@" + hashCode, () -> {
             try {
                 try {
-                    return Value.of(invoke(entity, args));
+                    return invoke(entity, args);
                 } catch (Exception ignored) {
                 }
-                return Value.of(null);
+                return null;
             } finally {
                 if (log.isDebugEnabled()) {
                     log.debug("开始处理数据并加载到缓存, 缓存方法: {}, 缓存名称: {}, 缓存时间: {}, 缓存类型: {}",
@@ -59,7 +62,8 @@ public class CacheableMethodAnnotationPostProcessor extends AbstractMethodAnnota
                             cache.type());
                 }
             }
-        })).getValue();
+        });
+        return apply.getValue();
     }
 
     @Override

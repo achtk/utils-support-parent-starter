@@ -3,6 +3,7 @@ package com.chua.common.support.task.cache;
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.collection.ConcurrentReferenceHashMap;
 import com.chua.common.support.value.TimeValue;
+import com.chua.common.support.value.Value;
 
 import java.time.Duration;
 import java.util.Map;
@@ -29,17 +30,17 @@ public class JdkCacheable extends AbstractCacheable {
     }
 
     @Override
-    public Object get(String key) {
-        return CACHE.get(key).getValue();
+    public Value<Object> get(String key) {
+        return CACHE.get(key);
     }
 
     @Override
-    public Object put(String key, Object value) {
+    public Value<Object> put(String key, Object value) {
         return CACHE.put(key, TimeValue.of(value, Duration.ofMillis(expireAfterWrite)));
     }
 
     @Override
-    public Object remove(String key) {
+    public Value<Object> remove(String key) {
         return CACHE.remove(key);
     }
 }

@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.JSONObject;
 import com.chua.common.support.mapping.annotation.MappingAddress;
 import com.chua.common.support.mapping.annotation.MappingParam;
 import com.chua.common.support.mapping.annotation.MappingRequest;
+import com.chua.common.support.task.cache.Cache;
 
 /**
  * Moe IP
@@ -19,5 +20,6 @@ public interface MoeIp {
      * @return 结果
      */
     @MappingRequest("GET /")
+    @Cache
     JSONObject analysis(@MappingParam("ip") String ip);
 }

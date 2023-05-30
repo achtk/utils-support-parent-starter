@@ -75,24 +75,25 @@ public class GuavaCacheable extends AbstractCacheable {
     }
 
     @Override
-    public Object get(String key) {
+    public Value<Object> get(String key) {
         Value<Object> ifPresent = cache.getIfPresent(key);
         if (null == ifPresent) {
             return null;
         }
-        return ifPresent.getValue();
+        return ifPresent;
     }
 
 
     @Override
-    public Object put(String key, Object value) {
-        cache.put(key, Value.of(value));
-        return value;
+    public Value<Object> put(String key, Object value) {
+        Value<Object> value1 = Value.of(value);
+        cache.put(key, value1);
+        return value1;
     }
 
     @Override
-    public Object remove(String key) {
-        Object o = get(key);
+    public Value<Object> remove(String key) {
+        Value<Object> o = get(key);
         cache.invalidate(key);
         return o;
     }

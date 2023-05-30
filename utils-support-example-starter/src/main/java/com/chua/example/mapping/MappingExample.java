@@ -18,9 +18,9 @@ public class MappingExample {
 
 
     private static void testHttpMapping() {
-        testGuangdian();
+//        testGuangdian();
 //        testMp();
-//        testMoe();
+        testMoe();
 //        testIdiom();
 //       testHoliday();
     }
@@ -50,6 +50,7 @@ public class MappingExample {
         MoeIp moeIp = MappingProxy.create(MoeIp.class);
 
         JSONObject user = moeIp.analysis("221.12.111.18");
+        user = moeIp.analysis("221.12.111.18");
         System.out.println(user);
     }
 

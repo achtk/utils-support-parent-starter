@@ -36,19 +36,20 @@ public class RedisCacheable extends AbstractCacheable {
     }
 
     @Override
-    public Object get(String key) {
+    public Value<Object> get(String key) {
         String s = jedis.get(key);
-        return Json.fromJson(s, Value.class).getValue();
+        return Json.fromJson(s, Value.class);
     }
 
     @Override
-    public Object put(String key, Object value) {
-        jedis.setex(key, expireAfterWrite, Json.toJson(Value.of(value)));
-        return null;
+    public Value<Object> put(String key, Object value) {
+        Value<Object> value1 = Value.of(value);
+        jedis.setex(key, expireAfterWrite, Json.toJson(value1));
+        return value1;
     }
 
     @Override
-    public Object remove(String key) {
+    public Value<Object> remove(String key) {
         jedis.del(key);
         return null;
     }

@@ -3,6 +3,7 @@ package com.chua.common.support.task.cache;
 import com.chua.common.support.bean.BeanMap;
 import com.chua.common.support.function.DisposableAware;
 import com.chua.common.support.function.InitializingAware;
+import com.chua.common.support.value.Value;
 
 import java.util.Map;
 import java.util.function.Supplier;
@@ -31,18 +32,14 @@ public interface Cacheable extends InitializingAware, DisposableAware {
      * @param supplier 回调
      * @return this
      */
-    default Object apply(String key, Supplier<Object> supplier) {
+    default Value<Object> apply(String key, Supplier<Object> supplier) {
         if (exist(key)) {
             return get(key);
         }
 
-        Object o = supplier.get();
-        if (null == o) {
-            return null;
-        }
-
-        put(key, o);
-        return o;
+        Value<Object> value = Value.of(supplier.get());
+        put(key, value);
+        return value;
     }
 
     /**
@@ -83,7 +80,7 @@ public interface Cacheable extends InitializingAware, DisposableAware {
      * @param key 索引
      * @return 值
      */
-    Object get(String key);
+    Value<Object> get(String key);
 
     /**
      * 获取值/不存在则赋值
@@ -92,7 +89,7 @@ public interface Cacheable extends InitializingAware, DisposableAware {
      * @param value 值
      * @return 值
      */
-    default Object getOrPut(String key, Object value) {
+    default Value<Object> getOrPut(String key, Object value) {
         if (exist(key)) {
             return get(key);
         }
@@ -106,7 +103,7 @@ public interface Cacheable extends InitializingAware, DisposableAware {
      * @param value 值
      * @return 值
      */
-    Object put(String key, Object value);
+    Value<Object> put(String key, Object value);
 
     /**
      * 删除
@@ -114,5 +111,5 @@ public interface Cacheable extends InitializingAware, DisposableAware {
      * @param key 索引
      * @return 值
      */
-    Object remove(String key);
+    Value<Object> remove(String key);
 }
