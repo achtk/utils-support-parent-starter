@@ -56,7 +56,8 @@ public final class HttpMappingResolver implements MappingResolver {
             HttpResponse execute = invoker.execute();
             int code = execute.code();
             if(200 != code) {
-                return request.doFilter(proxyMethod);
+                request.doFilter(proxyMethod);
+                throw new RuntimeException(execute.content(String.class));
             }
             return new Response(execute.content(), request).getValue();
         }));

@@ -18,10 +18,10 @@ public class MappingExample {
 
 
     private static void testHttpMapping() {
-        //        testGuangdian();
+        testGuangdian();
 //        testMp();
 //        testMoe();
-        testIdiom();
+//        testIdiom();
 //       testHoliday();
     }
 

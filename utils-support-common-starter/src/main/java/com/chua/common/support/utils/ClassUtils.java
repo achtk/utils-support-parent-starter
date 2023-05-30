@@ -1413,9 +1413,15 @@ public class ClassUtils {
         }
         try {
             return method.invoke(bean, method.getParameterCount() == 0 ? EMPTY_OBJECT : args);
-        } catch (Throwable ignored) {
+        } catch (Throwable e) {
+            try {
+                throw e;
+            } catch (IllegalAccessException ex) {
+                throw new RuntimeException(ex);
+            } catch (InvocationTargetException ex) {
+                throw new RuntimeException(ex);
+            }
         }
-        return null;
     }
 
     /**

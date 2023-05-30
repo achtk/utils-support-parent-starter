@@ -38,7 +38,9 @@ public class JdkProxyFactory<T> implements ProxyFactory<T> {
             intercept.before(proxy, method, args, (T) proxy, proxyPluginList);
             try {
                 return intercept.invoke(proxy, method, args, (T) proxy, proxyPluginList);
-            } finally {
+            } catch (Exception e) {
+                throw e;
+            }finally {
                 intercept.after(proxy, method, args, (T) proxy, proxyPluginList);
             }
         }
