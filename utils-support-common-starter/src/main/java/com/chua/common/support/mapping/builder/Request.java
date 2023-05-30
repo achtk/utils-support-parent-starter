@@ -5,6 +5,7 @@ import com.chua.common.support.converter.Converter;
 import com.chua.common.support.function.Splitter;
 import com.chua.common.support.http.HttpHeader;
 import com.chua.common.support.http.HttpMethod;
+import com.chua.common.support.lang.profile.Profile;
 import com.chua.common.support.lang.proxy.ProxyMethod;
 import com.chua.common.support.lang.robin.Robin;
 import com.chua.common.support.mapping.annotation.*;
@@ -44,10 +45,10 @@ public class Request {
 
     private long timeout;
     private final Class<?> target;
-    private final StringValuePropertyResolver propertyResolver;
     private final ProxyMethod proxyMethod;
     private final MappingRequest mappingRequest;
     private final Method method;
+    private Profile profile;
     private final String path;
     private Marker marker;
     private final Object[] args;
@@ -62,14 +63,18 @@ public class Request {
     private Map<String, Object> body = new LinkedHashMap<>();
 
     private Map<String, Object> requestBody = new LinkedHashMap<>();
-    public Request(Object bean, Class<?> target, Marker marker, StringValuePropertyResolver propertyResolver, ProxyMethod proxyMethod) {
+    public Request(Object bean,
+                   Class<?> target,
+                   Marker marker,
+                   ProxyMethod proxyMethod,
+                   Profile profile) {
         this.bean = bean;
         this.target = target;
         this.marker = marker;
         this.args = proxyMethod.getArgs();
-        this.propertyResolver = propertyResolver;
         this.proxyMethod = proxyMethod;
         this.method = proxyMethod.getMethod();
+        this.profile = profile;
         this.mappingRequest = method.getDeclaredAnnotation(MappingRequest.class);
         this.mappingResponse = method.getDeclaredAnnotation(MappingResponse.class);
         this.initialResolver();
@@ -97,8 +102,7 @@ public class Request {
      * 初始化
      */
     private void initialResolver() {
-        propertyResolver.getPlaceholderSupport().setResolver(
-                new MapMixSystemPlaceholderResolver(body));
+        body.forEach(profile::addProfile);
 
         Parameter[] parameters = method.getParameters();
         for (int i = 0; i < parameters.length; i++) {
@@ -130,13 +134,13 @@ public class Request {
             return;
         }
 
-        arg = arg instanceof String ? propertyResolver.resolvePlaceholders(arg.toString()) : arg;
+        arg = arg instanceof String ? profile.resolvePlaceholders(arg.toString()) : arg;
 
         requestBody.put(name, arg);
         body.put(name, arg);
         body.put(parameter.getName(), arg);
-        propertyResolver.add(name, arg);
-        propertyResolver.add(parameter.getName(), arg);
+        profile.addProfile(name, arg);
+        profile.addProfile(parameter.getName(), arg);
 
     }
 
@@ -247,9 +251,9 @@ public class Request {
         if (null != aClass && !aClass.isInterface()) {
             MappingCondition mappingCondition = (MappingCondition) ClassUtils.forObject(aClass, MappingCondition.class);
             if (null != mappingCondition) {
-                String resolve = mappingCondition.resolve(propertyResolver, httpHeader.name(), path);
+                String resolve = mappingCondition.resolve(profile, httpHeader.name(), path);
                 header.addHeader(httpHeader.name(), resolve);
-                propertyResolver.add(httpHeader.name(), resolve);
+                profile.addProfile(httpHeader.name(), resolve);
                 return;
             }
         }
@@ -258,7 +262,7 @@ public class Request {
         if (!StringUtils.isNullOrEmpty(script)) {
             String value1 = analysisScript(script);
             header.addHeader(httpHeader.name(), value1);
-            propertyResolver.add(httpHeader.name(), value1);
+            profile.addProfile(httpHeader.name(), value1);
             return;
         }
 
@@ -267,7 +271,7 @@ public class Request {
             newValue = httpHeader.value();
         }
 
-        String placeholders = propertyResolver.resolvePlaceholders(newValue);
+        String placeholders = profile.resolvePlaceholders(newValue);
         if (null == placeholders) {
             return;
         }
@@ -288,7 +292,7 @@ public class Request {
         List<Object> args = new LinkedList<>();
         if (!strings.isEmpty()) {
             for (String string : strings) {
-                args.add(propertyResolver.resolvePlaceholders(string));
+                args.add(profile.resolvePlaceholders(string));
             }
         }
         Bench bench = marker.createBench(MethodDescribe.builder().name(methodName).parameterTypes(ClassUtils.toType(args.toArray())).build());
@@ -346,7 +350,9 @@ public class Request {
         Robin<String> stringRobin = ServiceProvider.of(Robin.class).getNewExtension(mappingAddress.balance());
 
         String[] value = mappingAddress.value();
-        stringRobin.addNode(value);
+        for (String s : value) {
+            stringRobin.addNode(profile.resolvePlaceholders(s));
+        }
 
         this.timeout = mappingAddress.timeout();
         return stringRobin;

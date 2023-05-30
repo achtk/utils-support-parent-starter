@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.JSON;
 import com.chua.common.support.converter.Converter;
 import com.chua.common.support.crypto.mac.HmacAlgorithm;
 import com.chua.common.support.crypto.utils.DigestUtils;
+import com.chua.common.support.lang.profile.Profile;
 import com.chua.common.support.mapping.condition.MappingCondition;
 import com.chua.common.support.placeholder.PropertyResolver;
 import com.chua.common.support.utils.RandomUtils;
@@ -78,19 +79,19 @@ public class CulturalAuditoriumMappingCondition implements MappingCondition {
     };
 
     @Override
-    public String resolve(PropertyResolver placeholderResolver, String name, String path) {
+    public String resolve(Profile profile, String name, String path) {
         if (log.isDebugEnabled()) {
             log.debug("======================================sign-body=====================================");
         }
         // 13位随机数
         String random = RandomUtils.randomString(13);
         //13位时间戳
-        String timestamp = placeholderResolver.resolvePlaceholders("${Timestamp}");
+        String timestamp = profile.resolvePlaceholders("${Timestamp}");
         //appSecret
-        String appSecret = placeholderResolver.resolvePlaceholders("${secret}");
+        String appSecret = profile.resolvePlaceholders("${secret}");
         // 接口地址
         // JSON格式请求参数
-        String body = getBody(path, placeholderResolver);
+        String body = getBody(path, profile);
         // 待签名的字符
         String srcStr = StringUtils.prependIfMissing(path, "/") + '&' + body + '&' + timestamp + '&' + random;
 
@@ -128,47 +129,47 @@ public class CulturalAuditoriumMappingCondition implements MappingCondition {
      * path
      *
      * @param path
-     * @param placeholderResolver
+     * @param profile
      * @return
      */
-    private String getBody(String path, PropertyResolver placeholderResolver) {
+    private String getBody(String path, Profile profile) {
         Map<String, Object> jsonObject = new LinkedHashMap<>();
         switch (path) {
             case PLACE_LIST: {
-                jsonObject.put("page", Integer.parseInt(placeholderResolver.resolvePlaceholders("${page}")));
-                jsonObject.put("size", Integer.parseInt(placeholderResolver.resolvePlaceholders("${size}")));
+                jsonObject.put("page", Integer.parseInt(profile.resolvePlaceholders("${page}")));
+                jsonObject.put("size", Integer.parseInt(profile.resolvePlaceholders("${size}")));
                 return JSON.toJSONString(jsonObject);
             }
             case ASSESS_RANKING: {
                 try {
-                    jsonObject.put("startDate", Converter.createInteger(placeholderResolver.resolvePlaceholders("${startDate:}")));
+                    jsonObject.put("startDate", Converter.createInteger(profile.resolvePlaceholders("${startDate:}")));
                 } catch (Exception ignored) {
                 }
                 try {
-                    jsonObject.put("endDate", Converter.createInteger(placeholderResolver.resolvePlaceholders("${endDate:}")));
+                    jsonObject.put("endDate", Converter.createInteger(profile.resolvePlaceholders("${endDate:}")));
                 } catch (Exception ignored) {
                 }
-                jsonObject.put("size", Integer.parseInt(placeholderResolver.resolvePlaceholders("${size}")));
+                jsonObject.put("size", Integer.parseInt(profile.resolvePlaceholders("${size}")));
                 return JSON.toJSONString(jsonObject);
             }
             case ASSESS_LIST: {
 
-                jsonObject.put("placeId", placeholderResolver.resolvePlaceholders("${placeId}"));
+                jsonObject.put("placeId", profile.resolvePlaceholders("${placeId}"));
                 try {
-                    jsonObject.put("before", Integer.valueOf(placeholderResolver.resolvePlaceholders("${before}")));
+                    jsonObject.put("before", Integer.valueOf(profile.resolvePlaceholders("${before}")));
                 } catch (Throwable e) {
                 }
-                jsonObject.put("size", Integer.parseInt(placeholderResolver.resolvePlaceholders("${size}")));
+                jsonObject.put("size", Integer.parseInt(profile.resolvePlaceholders("${size}")));
                 try {
-                    jsonObject.put("startDate", Converter.createInteger(placeholderResolver.resolvePlaceholders("${startDate:}")));
+                    jsonObject.put("startDate", Converter.createInteger(profile.resolvePlaceholders("${startDate:}")));
                 } catch (Exception ignored) {
                 }
 
                 try {
-                    jsonObject.put("endDate", Converter.createInteger(placeholderResolver.resolvePlaceholders("${endDate:}")));
+                    jsonObject.put("endDate", Converter.createInteger(profile.resolvePlaceholders("${endDate:}")));
                 } catch (Exception ignored) {
                 }
-                jsonObject.put("status", Integer.parseInt(placeholderResolver.resolvePlaceholders("${status:0}")));
+                jsonObject.put("status", Integer.parseInt(profile.resolvePlaceholders("${status:0}")));
 
                 return JSON.toJSONString(jsonObject);
             }
@@ -177,35 +178,35 @@ public class CulturalAuditoriumMappingCondition implements MappingCondition {
                 return "{}";
             }
             case ASSESS_HOT_CATS: {
-                jsonObject.put("type", Integer.parseInt(placeholderResolver.resolvePlaceholders("${type:1}")));
+                jsonObject.put("type", Integer.parseInt(profile.resolvePlaceholders("${type:1}")));
                 return JSON.toJSONString(jsonObject);
             }
             case ASSESS: {
-                jsonObject.put("type", Integer.parseInt(placeholderResolver.resolvePlaceholders("${type:1}")));
+                jsonObject.put("type", Integer.parseInt(profile.resolvePlaceholders("${type:1}")));
                 return JSON.toJSONString(jsonObject);
             }
             case ARTICLE_LIST: {
-                jsonObject.put("page", Integer.parseInt(placeholderResolver.resolvePlaceholders("${page:1}")));
-                jsonObject.put("size", Integer.parseInt(placeholderResolver.resolvePlaceholders("${size:90}")));
+                jsonObject.put("page", Integer.parseInt(profile.resolvePlaceholders("${page:1}")));
+                jsonObject.put("size", Integer.parseInt(profile.resolvePlaceholders("${size:90}")));
                 try {
-                    jsonObject.put("catId", placeholderResolver.resolvePlaceholders("${catId}"));
+                    jsonObject.put("catId", profile.resolvePlaceholders("${catId}"));
                 } catch (NumberFormatException ignored) {
                 }
 
                 try {
-                    jsonObject.put("feature", placeholderResolver.resolvePlaceholders("${feature}"));
+                    jsonObject.put("feature", profile.resolvePlaceholders("${feature}"));
                 } catch (Exception ignored) {
                 }
                 return JSON.toJSONString(jsonObject);
             }
             case IOT_PUSH_DETAIL:
             case ARTICLE_DETAIL: {
-                jsonObject.put("id", placeholderResolver.resolvePlaceholders("${id}"));
+                jsonObject.put("id", profile.resolvePlaceholders("${id}"));
                 return JSON.toJSONString(jsonObject);
             }
             case IOT_PUSH_LATEST: {
-                jsonObject.put("after", placeholderResolver.resolvePlaceholders("${after:0}"));
-                jsonObject.put("size", placeholderResolver.resolvePlaceholders("${size:20}"));
+                jsonObject.put("after", profile.resolvePlaceholders("${after:0}"));
+                jsonObject.put("size", profile.resolvePlaceholders("${size:20}"));
                 return JSON.toJSONString(jsonObject);
             }
             default:

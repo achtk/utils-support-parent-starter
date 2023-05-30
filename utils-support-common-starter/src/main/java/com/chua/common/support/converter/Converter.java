@@ -2,13 +2,12 @@ package com.chua.common.support.converter;
 
 import com.chua.common.support.converter.definition.EnumTypeConverter;
 import com.chua.common.support.converter.definition.MapTypeConverter;
+import com.chua.common.support.converter.definition.ObjectArrayTypeConverter;
 import com.chua.common.support.converter.definition.TypeConverter;
 import com.chua.common.support.spi.ServiceProvider;
-import com.chua.common.support.spi.finder.SamePackageServiceFinder;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
@@ -28,6 +27,7 @@ public final class Converter {
     private static final Map<Class<?>, TypeConverter> CONVERTER_MAP = new ConcurrentHashMap<>();
 
     private static final EnumTypeConverter ENUM_TYPE_CONVERTER = new EnumTypeConverter();
+    private static final ObjectArrayTypeConverter OBJECT_ARRAY_TYPE_CONVERTER = new ObjectArrayTypeConverter();
     private static final MapTypeConverter MAP_TYPE_CONVERTER = new MapTypeConverter();
     private static final Pattern PATTERN = Pattern.compile("(.*?)\\[(.*?)\\](.*?)");
     private static final Map<Class<?>, Object> DEFAULT_VALUE = new HashMap<Class<?>, Object>(8) {
@@ -89,6 +89,10 @@ public final class Converter {
                 return createDefaultPrimitive(type);
             }
             return convert;
+        }
+
+        if(newType.isArray()) {
+            return (E) OBJECT_ARRAY_TYPE_CONVERTER.convertFor(value, newType);
         }
 
         if (newType.isEnum()) {

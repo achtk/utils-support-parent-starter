@@ -1,5 +1,6 @@
 package com.chua.common.support.mapping;
 
+import com.chua.common.support.annotations.Extension;
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.lang.profile.Profile;
 import com.chua.common.support.lang.profile.ProfileBuilder;
@@ -35,6 +36,10 @@ public class MappingProxy<T> {
             return mappingType.value();
         }
 
+        Extension annotation = target.getDeclaredAnnotation(Extension.class);
+        if(null != annotation) {
+            return annotation.value();
+        }
 
         return "http";
     }

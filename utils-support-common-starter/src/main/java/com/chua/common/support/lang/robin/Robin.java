@@ -1,5 +1,8 @@
 package com.chua.common.support.lang.robin;
 
+import javafx.print.Collation;
+
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -49,7 +52,18 @@ public interface Robin<T> {
         }
         return this;
     }
-
+    /**
+     * 添加节点
+     *
+     * @param node 节点
+     * @return 节点
+     */
+    default Robin<T> addNode(Collection<T> node) {
+        for (T node1 : node) {
+            addNode(new Node<>(node1));
+        }
+        return this;
+    }
     /**
      * 添加节点
      *
@@ -69,7 +83,7 @@ public interface Robin<T> {
      * @param node 节点
      * @return 节点
      */
-    default Robin<T> addNodes(List<Node<T>> node) {
+    default Robin<T> addNodes(Collection<Node<T>> node) {
         for (Node<T> node1 : node) {
             addNode(node1);
         }

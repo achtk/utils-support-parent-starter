@@ -9,6 +9,7 @@ import com.chua.common.support.converter.Converter;
 import com.chua.common.support.json.JsonArray;
 import com.chua.common.support.json.JsonObject;
 import com.chua.common.support.lang.profile.value.ProfileValue;
+import com.chua.common.support.placeholder.PlaceholderResolver;
 
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
  *
  * @author CH
  */
-public interface Profile extends Environment {
+public interface Profile extends Environment, PlaceholderResolver {
     /**
      * 添加配置
      *
@@ -152,6 +153,12 @@ public interface Profile extends Environment {
      */
     Object getObject(String name, ValueMode valueMode);
 
+    /**
+     * 占位符处理
+     * @param name 值
+     * @return 值
+     */
+    String resolvePlaceholders(String name);
     /**
      * 获取数据
      *

@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * @author CH
  */
-public class MappingExample {
+public class HttpMappingExample {
 
     public static void main(String[] args) {
         testHttpMapping();

@@ -5,6 +5,7 @@ import com.chua.common.support.http.HttpClient;
 import com.chua.common.support.http.HttpClientBuilder;
 import com.chua.common.support.http.HttpClientInvoker;
 import com.chua.common.support.http.HttpResponse;
+import com.chua.common.support.lang.profile.Profile;
 import com.chua.common.support.lang.proxy.DelegateMethodIntercept;
 import com.chua.common.support.lang.proxy.ProxyUtils;
 import com.chua.common.support.lang.proxy.plugin.ProxyPlugin;
@@ -32,6 +33,12 @@ import java.lang.reflect.Method;
 public final class HttpMappingResolver implements MappingResolver {
     private Object bean;
 
+    private final Profile profile;
+
+    public HttpMappingResolver(Profile profile) {
+        this.profile = profile;
+    }
+
     private static final Log log = Log.getLogger(MappingResolver.class);
 
     @Override
@@ -43,15 +50,13 @@ public final class HttpMappingResolver implements MappingResolver {
                 return ClassUtils.invokeMethod(method, proxyMethod.getProxy(), proxyMethod.getArgs());
             }
 
-            StringValuePropertyResolver propertyResolver = new StringValuePropertyResolver(new PlaceholderSupport());
-
-            Request request = new Request(bean, target, marker, propertyResolver, proxyMethod);
+            Request request = new Request(bean, target, marker, proxyMethod, profile);
             HttpClientBuilder httpClientBuilder = HttpClient.newHttpMethod(request.getHttpMethod());
             httpClientBuilder.connectTimout(request.getTimeout())
                     .header(request.getHeader());
 
-            httpClientBuilder.url(propertyResolver.resolvePlaceholders(StringUtils.endWithMove(
-                    request.getBalance().selectNode().getContent(), "/") + request.getPath()));
+            httpClientBuilder.url(StringUtils.endWithMove(
+                    request.getBalance().selectNode().getContent(), "/") + request.getPath());
 
             httpClientBuilder.body(request.getRequestBody());
 

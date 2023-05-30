@@ -37,7 +37,7 @@ public class Response {
         }
         this.request = request;
         this.method = request.getMethod();
-        this.returnType = method.getReturnType();
+        this.returnType = ClassUtils.getActualType(method.getReturnType());
         this.mappingResponse = request.getMappingResponse();
         this.target = returnType;
         this.isList = Collection.class.isAssignableFrom(returnType);

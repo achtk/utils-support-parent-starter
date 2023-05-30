@@ -31,8 +31,8 @@ public interface XpathParser extends PageParser {
         if (null == xpath) {
             return pageVo;
         }
-        Map<String, List<String>> param = new HashMap<>(DEFAULT_INITIAL_CAPACITY);
         Document document = Jsoup.parse(html.html());
+        Map<String, List<String>> param = new HashMap<>(DEFAULT_INITIAL_CAPACITY);
         for (String s : xpath) {
             Elements elements = document.selectXpath(s);
             if (elements.isEmpty()) {

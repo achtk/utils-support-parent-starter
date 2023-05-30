@@ -2221,4 +2221,16 @@ public class ClassUtils {
 
         return rs;
     }
+
+    /**
+     * 获取真实类型
+     * @param returnType 类型
+     * @return 类型
+     */
+    public static Class<?> getActualType(Class<?> returnType) {
+        if(returnType.isArray()) {
+            return forName(returnType.getTypeName().replace("[]", ""), returnType.getClassLoader());
+        }
+        return returnType;
+    }
 }
