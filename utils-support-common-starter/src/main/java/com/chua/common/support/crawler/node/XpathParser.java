@@ -1,10 +1,9 @@
-package com.chua.htmlunit.support.crawler.parser;
+package com.chua.common.support.crawler.node;
 
-import com.chua.common.support.crawler.node.PageParser;
+import com.chua.common.support.jsoup.Jsoup;
 import com.chua.common.support.jsoup.nodes.Document;
 import com.chua.common.support.jsoup.nodes.Element;
-import org.jsoup.Jsoup;
-import org.seimicrawler.xpath.JXDocument;
+import com.chua.common.support.jsoup.select.Elements;
 
 import java.util.*;
 
@@ -33,20 +32,15 @@ public interface XpathParser extends PageParser {
             return pageVo;
         }
         Map<String, List<String>> param = new HashMap<>(DEFAULT_INITIAL_CAPACITY);
-        JXDocument jxDocument = JXDocument.create(Jsoup.parse(html.html()));
+        Document document = Jsoup.parse(html.html());
         for (String s : xpath) {
-            List<Object> list = jxDocument.sel(s);
-            if (null == list || list.size() == 0) {
+            Elements elements = document.selectXpath(s);
+            if (elements.isEmpty()) {
                 continue;
             }
-            List<String> value = new ArrayList<>(list.size());
-            for (Object o : list) {
-                if (o instanceof Element) {
-                    value.add(((Element) o).text());
-                }
-                if (o instanceof String) {
-                    value.add(o.toString());
-                }
+            List<String> value = new ArrayList<>(elements.size());
+            for (Element o : elements) {
+                value.add(o.text());
             }
             param.put(s, value);
         }

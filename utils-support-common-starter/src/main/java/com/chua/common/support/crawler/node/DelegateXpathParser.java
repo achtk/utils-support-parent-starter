@@ -1,7 +1,6 @@
-package com.chua.htmlunit.support.crawler.parser;
+package com.chua.common.support.crawler.node;
 
 import com.chua.common.support.crawler.CrawlerBuilder;
-import com.chua.common.support.crawler.node.Parser;
 import com.chua.common.support.crawler.page.PageLoader;
 import com.chua.common.support.crawler.request.Request;
 import com.chua.common.support.jsoup.nodes.Document;
@@ -18,14 +17,14 @@ import java.util.function.BiConsumer;
  * @author CH
  */
 @Data
-public class SimpleXpathParser implements XpathParser {
+public class DelegateXpathParser implements XpathParser {
 
     private Set<String> xpath;
     private BiConsumer<Document, Map<String, List<String>>> consumer;
     private Request pageRequest;
     private CrawlerBuilder crawlerBuilder;
 
-    public SimpleXpathParser(Set<String> xpath, BiConsumer<Document, Map<String, List<String>>> consumer) {
+    public DelegateXpathParser(Set<String> xpath, BiConsumer<Document, Map<String, List<String>>> consumer) {
         this.xpath = xpath;
         this.consumer = consumer;
     }
@@ -42,6 +41,6 @@ public class SimpleXpathParser implements XpathParser {
 
     @Override
     public Parser newParser(PageLoader pageLoader) {
-        return new SimpleXpathParser(xpath, consumer);
+        return new DelegateXpathParser(xpath, consumer);
     }
 }
