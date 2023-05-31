@@ -1,0 +1,2 @@
+com.chua.email.support.sender.TextMailSender
+com.chua.email.support.sender.HtmlMailSender
