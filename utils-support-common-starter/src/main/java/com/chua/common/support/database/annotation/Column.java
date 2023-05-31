@@ -42,6 +42,12 @@ public @interface Column {
     int length() default 0;
 
     /**
+     * 是否存在
+     * @return 是否存在
+     */
+    boolean exist() default true;
+
+    /**
      * 数据库类型
      *
      * @return 数据库类型

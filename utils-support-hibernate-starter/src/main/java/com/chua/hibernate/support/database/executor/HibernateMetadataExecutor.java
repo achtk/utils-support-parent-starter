@@ -57,6 +57,9 @@ public class HibernateMetadataExecutor implements MetadataExecutor {
         List<Column> primary = new LinkedList<>();
 
         for (Column o : column) {
+            if(!o.isExist()) {
+                continue;
+            }
             org.hibernate.mapping.Column itemColumn = new org.hibernate.mapping.Column(o.getName());
             itemColumn.setComment(o.getComment());
             itemColumn.setLength(o.getLength());

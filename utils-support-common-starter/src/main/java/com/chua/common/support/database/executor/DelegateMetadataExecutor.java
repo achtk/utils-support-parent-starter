@@ -37,6 +37,9 @@ public class DelegateMetadataExecutor implements MetadataExecutor {
         TableModel tableModel = new TableModel(metadata1.getTable());
         List<Column> column = metadata1.getColumn();
         for (Column column1 : column) {
+            if(!column1.isExist()) {
+                continue;
+            }
             ColumnModel columnModel = new ColumnModel(column1.getName());
             columnModel.setLength(column1.getLength());
             columnModel.setComment(column1.getComment());

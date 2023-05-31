@@ -31,6 +31,10 @@ public class Column {
      */
     private String fieldName;
     /**
+     * 字段是否存在
+     */
+    private boolean exist = true;
+    /**
      * 是否唯一
      */
     private boolean unique;
@@ -103,6 +107,12 @@ public class Column {
         return Type.valueTypeOf(javaType).name();
     }
 
+    public void setExist(boolean exist) {
+        if(!this.exist) {
+            return;
+        }
+        this.exist = exist;
+    }
 
     public Class<?> getJavaType(Dialect dialect) {
         return dialect.toJavaType(jdbcType.name());

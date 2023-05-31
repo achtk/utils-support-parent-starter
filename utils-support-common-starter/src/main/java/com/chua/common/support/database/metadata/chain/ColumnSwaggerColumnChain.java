@@ -2,6 +2,7 @@ package com.chua.common.support.database.metadata.chain;
 
 import com.chua.common.support.collection.AnnotationAttributes;
 import com.chua.common.support.database.entity.Column;
+import com.chua.common.support.utils.ClassUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -12,21 +13,16 @@ import java.lang.reflect.Field;
  * @author Administrator
  * @see com.chua.common.support.database.annotation.Column
  */
-public class ColumnColumnChain implements ColumnChain{
+public class ColumnSwaggerColumnChain implements ColumnChain{
     @Override
     public void chain(Column column, Field field, AnnotationAttributes annotationAttributes) {
-        column.setJdbcType(annotationAttributes.getEnum("jdbcType"));
-        column.setLength(annotationAttributes.getIntValue("length"));
-        column.setName(annotationAttributes.getString("value"));
-        column.setComment(annotationAttributes.getString("comment"));
-        column.setDefaultValue(annotationAttributes.getString("defaultValue"));
-        column.setExist(annotationAttributes.getBoolean("exist"));
+        column.setComment(annotationAttributes.getString("value"));
 
     }
 
     @Override
     public Class<? extends Annotation> annotationType() {
-        return com.chua.common.support.database.annotation.Column.class;
+        return (Class<? extends Annotation>) ClassUtils.forName("io.swagger.annotations.ApiModelProperty");
     }
 
 }

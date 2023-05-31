@@ -17,10 +17,7 @@ public class ColumnMybatisChain implements ColumnChain{
 
     @Override
     public void chain(Column column, Field field, AnnotationAttributes tableField) {
-        if(!tableField.getBoolean("exist", true)) {
-            return;
-        }
-
+        column.setExist(tableField.getBoolean("exist", true));
         try {
             column.setJdbcType(JdbcType.valueOf(tableField.getEnum("jdbcType").name()));
         } catch (Exception e) {
