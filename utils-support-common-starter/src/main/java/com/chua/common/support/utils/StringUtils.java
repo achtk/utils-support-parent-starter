@@ -1314,6 +1314,7 @@ public class StringUtils {
      * @return 是否以指定字符串开头
      */
     public static String startWithMove(CharSequence str, CharSequence prefix) {
+        str = null == str ? "" : str;
         return !startWith(str, prefix, false) ? str.toString() : str.subSequence(prefix.length(), str.length()).toString();
     }
 
