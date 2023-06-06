@@ -5,8 +5,14 @@ import com.chua.common.support.annotations.SpiDefault;
 import com.chua.common.support.io.CompressInputStream;
 import com.chua.common.support.lang.profile.ProfileProvider;
 import com.chua.common.support.resource.ResourceProvider;
+import com.chua.common.support.resource.repository.Metadata;
+import com.chua.common.support.resource.repository.Repository;
+import lombok.extern.slf4j.Slf4j;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.*;
 
 /**
@@ -15,9 +21,11 @@ import java.util.*;
  */
 @Spi("ip")
 @SpiDefault
+@Slf4j
 public class IpIPPosition extends ProfileProvider<IpPosition> implements IpPosition {
     private static final List<Ipv4Info> I_PV_4_INFOS = new LinkedList<>();
 
+    private static final String RESOURCE = "**/ip.xz";
     private final Ipv4Info UNKNOWN = new Ipv4Info(0, 0, "未知", "未知", "未知", "未知", 0, 0, "未知");
 
     public static final Map<String, String> COUNTRY_GEO = new HashMap<String, String>() {
@@ -357,32 +365,27 @@ public class IpIPPosition extends ProfileProvider<IpPosition> implements IpPosit
             put("台湾", "25.040000,121.516000");
         }
     };
+    private static Metadata metadata;
 
 
     @Override
     public void afterPropertiesSet() {
-        Object database1 = getString("database");
-        if (null == database1) {
-            initialClasspath();
-        } else {
-            if (database1 instanceof File) {
-                try (FileInputStream fis = new FileInputStream((File) database1)) {
-                    importTxt(fis);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            } else if (database1 instanceof String) {
-                File file = new File((String) database1);
-                if (file.exists()) {
-                    try (FileInputStream fis = new FileInputStream((File) database1)) {
-                        importTxt(fis);
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                } else {
-                    initialClasspath();
-                }
-            }
+        if (metadata == null) {
+            Object database1 = getString("database");
+            metadata = Repository.classpath()
+                    .add(Repository.current())
+                    .add(Repository.of((String) database1))
+                    .first(RESOURCE);
+        }
+        if (null == metadata) {
+            log.warn("{}不存在", RESOURCE);
+            return;
+        }
+
+        try (CompressInputStream compressInputStream = new CompressInputStream(metadata.toUrl(), "ip.txt")) {
+            importTxt(compressInputStream);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

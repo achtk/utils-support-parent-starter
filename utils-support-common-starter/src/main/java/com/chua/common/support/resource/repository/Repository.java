@@ -110,18 +110,26 @@ public interface Repository {
      */
     @SneakyThrows
     public static Repository of(String... url) {
+        if (null == url) {
+            return new VfsRepository();
+        }
+
         URL[] urls = new URL[url.length];
         for (int i = 0; i < url.length; i++) {
             urls[i] = null;
 
             String s = url[i];
+            if (null == s) {
+                continue;
+            }
+
             if (s.startsWith(HTTP)) {
                 urls[i] = new URL(s);
                 continue;
             }
 
             File temp = new File(s);
-            if(!temp.exists() && !s.contains(":")) {
+            if (!temp.exists() && !s.contains(":")) {
                 temp.mkdirs();
             }
 
