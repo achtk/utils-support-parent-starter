@@ -1,7 +1,6 @@
 package com.chua.common.support.geo;
 
 import com.chua.common.support.annotations.Spi;
-import com.chua.common.support.annotations.SpiDefault;
 import com.chua.common.support.io.CompressInputStream;
 import com.chua.common.support.lang.process.ProgressBar;
 import com.chua.common.support.lang.profile.ProfileProvider;
@@ -21,7 +20,6 @@ import java.util.*;
  * @author CH
  */
 @Spi("ip")
-@SpiDefault
 @Slf4j
 public class IpIPPosition extends ProfileProvider<IpPosition> implements IpPosition {
     private static final List<Ipv4Info> I_PV_4_INFOS = new LinkedList<>();
@@ -430,7 +428,7 @@ public class IpIPPosition extends ProfileProvider<IpPosition> implements IpPosit
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(file, "GB18030"))) {
             String line;
-            try (ProgressBar progressBar = new ProgressBar("状态geo", -1)) {
+            try (ProgressBar progressBar = new ProgressBar("装载geo", -1)) {
                 while ((line = reader.readLine()) != null) {
                     Ipv4Info info = convertToIpv4Info(line);
                     if (info == null) {
