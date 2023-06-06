@@ -3,6 +3,7 @@ package com.chua.common.support.geo;
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.annotations.SpiDefault;
 import com.chua.common.support.io.CompressInputStream;
+import com.chua.common.support.lang.process.ProgressBar;
 import com.chua.common.support.lang.profile.ProfileProvider;
 import com.chua.common.support.resource.ResourceProvider;
 import com.chua.common.support.resource.repository.Metadata;
@@ -424,15 +425,20 @@ public class IpIPPosition extends ProfileProvider<IpPosition> implements IpPosit
 
     }
 
+
     private static void importTxt(InputStream file) {
+
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(file, "GB18030"))) {
             String line;
-            while ((line = reader.readLine()) != null) {
-                Ipv4Info info = convertToIpv4Info(line);
-                if (info == null) {
-                    continue;
+            try (ProgressBar progressBar = new ProgressBar("状态geo", -1)) {
+                while ((line = reader.readLine()) != null) {
+                    Ipv4Info info = convertToIpv4Info(line);
+                    if (info == null) {
+                        continue;
+                    }
+                    progressBar.step();
+                    I_PV_4_INFOS.add(info);
                 }
-                I_PV_4_INFOS.add(info);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
