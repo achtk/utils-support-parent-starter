@@ -1,5 +1,7 @@
 package com.chua.common.support.collection;
 
+import com.chua.common.support.bean.BeanMap;
+import com.chua.common.support.bean.BeanUtils;
 import com.chua.common.support.lang.proxy.BridgingMethodIntercept;
 import com.chua.common.support.lang.proxy.ProxyUtils;
 import com.chua.common.support.reflection.describe.MethodDescribe;
@@ -22,6 +24,17 @@ public class ImmutableBuilder {
      * @return collection
      */
     public static <E> CollectionBuilder<E> builder() {
+        return new CollectionBuilder<>(Collections.emptyList());
+    }
+
+    /**
+     * 创建 collection
+     *
+     * @param elementType 类型
+     * @param <E>         e
+     * @return collection
+     */
+    public static <E> CollectionBuilder<E> builder(Class<E> elementType) {
         return new CollectionBuilder<>(Collections.emptyList());
     }
 
@@ -100,6 +113,30 @@ public class ImmutableBuilder {
      * @return Map
      */
     public static <K, V> MapBuilder<K, V> builderOfMap() {
+        return new MapBuilder<>(Collections.emptyMap());
+    }
+
+    /**
+     * 创建 Map
+     *
+     * @param keyType   类型
+     * @param valueType 类型
+     * @param <K>       K
+     * @param <V>       V
+     * @return Map
+     */
+    public static <K, V> MapBuilder<K, V> builderOfMap(Class<K> keyType, Class<V> valueType) {
+        return new MapBuilder<>(Collections.emptyMap());
+    }
+
+    /**
+     * 创建 Map
+     *
+     * @param valueType 类型
+     * @param <V>       V
+     * @return Map
+     */
+    public static <V> MapBuilder<String, V> builderOfStringMap(Class<V> valueType) {
         return new MapBuilder<>(Collections.emptyMap());
     }
 
@@ -268,6 +305,26 @@ public class ImmutableBuilder {
             return this;
         }
 
+        public MapBuilder<K, V> put(Object bean) {
+            BeanMap.of(bean, false).forEach((k, v) -> {
+                if (k == null || v == null) {
+                    return;
+                }
+                try {
+                    put((K) k, (V) v);
+                } catch (Exception e) {
+                }
+            });
+            return this;
+        }
+
+
+        public MapBuilder<K, V> remove(K... k) {
+            for (K k1 : k) {
+                this.map.remove(k1);
+            }
+            return this;
+        }
 
         public Map<K, V> build() {
             return map;
