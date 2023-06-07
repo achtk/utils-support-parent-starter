@@ -125,4 +125,5 @@ public interface Constants {
     String EMPTY_PROTOCOL = "empty";
 
     String POM = "pom.xml";
+    String CAPTCHA_SESSION_KEY = "captcha-code";
 }
