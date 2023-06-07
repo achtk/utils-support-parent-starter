@@ -52,16 +52,11 @@ public class IpBuilder {
         if(position instanceof Profile) {
             ((Profile) position).addProfile(environment);
         }
-        try {
-            position.afterPropertiesSet();
-        } catch (Exception e) {
+
+        if(position == null) {
             position = ServiceProvider.of(IpPosition.class).getNewExtension("ip");
             if (position instanceof Profile) {
                 ((Profile) position).addProfile(environment);
-            }
-            try {
-                position.afterPropertiesSet();
-            } catch (Exception ignored) {
             }
         }
         return position;
