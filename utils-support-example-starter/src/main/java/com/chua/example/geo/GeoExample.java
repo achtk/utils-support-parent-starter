@@ -27,7 +27,7 @@ public class GeoExample {
      */
     private static void ipPosition() {
         IpPosition ipPosition = IpBuilder.newBuilder().build();
-        GeoCity city = ipPosition.getCity("112.124.44.21");
+        GeoCity city = ipPosition.getCity("192.168.110.6");
         System.out.println(city);
     }
 
