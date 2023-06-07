@@ -19,6 +19,32 @@ public class CollectionUtils {
     private static final int MAX_POWER_OF_TWO = 1 << (Integer.SIZE - 2);
 
     /**
+     * 如果提供的集合为{@code null}，返回一个不可变的默认空集合，否则返回原集合<br>
+     * 空集合使用{@link Collections#emptySet()}
+     *
+     * @param <T> 集合元素类型
+     * @param set 提供的集合，可能为null
+     * @return 原集合，若为null返回空集合
+     * @since 4.6.3
+     */
+    public static <T> Set<T> emptyIfNull(Set<T> set) {
+        return (null == set) ? Collections.emptySet() : set;
+    }
+
+    /**
+     * 如果提供的集合为{@code null}，返回一个不可变的默认空集合，否则返回原集合<br>
+     * 空集合使用{@link Collections#emptyList()}
+     *
+     * @param <T>  集合元素类型
+     * @param list 提供的集合，可能为null
+     * @return 原集合，若为null返回空集合
+     * @since 4.6.3
+     */
+    public static <T> List<T> emptyIfNull(List<T> list) {
+        return (null == list) ? Collections.emptyList() : list;
+    }
+
+    /**
      * 获取集合中指定多个下标的元素值，下标可以为负数，例如-1表示最后一个元素
      *
      * @param <T>        元素类型
@@ -627,4 +653,71 @@ public class CollectionUtils {
         lists.addAll(Arrays.asList(more));
         return CartesianList.create(lists);
     }
+
+
+
+
+    /**
+     * 计算集合的单差集，即只返回【集合1】中有，但是【集合2】中没有的元素，例如：
+     *
+     * <pre>
+     *     subtractToList([1,2,3,4],[2,3,4,5]) -》 [1]
+     * </pre>
+     *
+     * @param coll1 集合1
+     * @param coll2 集合2
+     * @param <T>   元素类型
+     * @return 单差集
+     * @since 5.3.5
+     */
+    public static <T> List<T> subtractToList(Collection<T> coll1, Collection<T> coll2) {
+
+        if (isEmpty(coll1)) {
+            return Collections.emptyList();
+        }
+        if (isEmpty(coll2)) {
+            return list(true, coll1);
+        }
+
+        //将被交数用链表储存，防止因为频繁扩容影响性能
+        final List<T> result = new LinkedList<>();
+        Set<T> set = new HashSet<>(coll2);
+        for (T t : coll1) {
+            if (!set.contains(t)) {
+                result.add(t);
+            }
+        }
+        return result;
+    }
+
+
+
+    /**
+     * 新建一个List
+     *
+     * @param <T>        集合元素类型
+     * @param isLinked   是否新建LinkedList
+     * @param collection 集合
+     * @return List对象
+     * @since 4.1.2
+     */
+    public static <T> List<T> list(boolean isLinked, Collection<T> collection) {
+        if (null == collection) {
+            return list(isLinked);
+        }
+        return isLinked ? new LinkedList<>(collection) : new ArrayList<>(collection);
+    }
+
+    /**
+     * 新建一个空List
+     *
+     * @param <T>      集合元素类型
+     * @param isLinked 是否新建LinkedList
+     * @return List对象
+     * @since 4.1.2
+     */
+    public static <T> List<T> list(boolean isLinked) {
+        return isLinked ? new LinkedList<>() : new ArrayList<>();
+    }
+
 }

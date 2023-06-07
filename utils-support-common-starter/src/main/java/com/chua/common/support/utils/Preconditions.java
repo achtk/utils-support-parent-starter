@@ -333,4 +333,13 @@ public final class Preconditions {
 
         return Objects.equals(o1, o2);
     }
+
+    /**
+     * 是否是true
+     * @param b bool
+     * @param message message
+     */
+    public static void isTrue(boolean b, String message) {
+        checkArgument(b, message);
+    }
 }
