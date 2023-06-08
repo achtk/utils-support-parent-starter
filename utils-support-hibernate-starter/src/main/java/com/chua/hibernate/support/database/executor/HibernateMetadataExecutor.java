@@ -76,7 +76,7 @@ public class HibernateMetadataExecutor implements MetadataExecutor {
                 itemColumn.setDefaultValue(o.getDefaultValue());
             }
 
-            itemColumn.setValue(new HibernateIdValue(o, new HibernateSimpleMetadata(null)));
+            itemColumn.setValue(new HibernateIdValue(o, new HibernateSimpleMetadata(o.getJavaType())));
             if (o.isPrimary()) {
                 primaryKey.addColumn(itemColumn);
                 primary.add(o);
@@ -164,7 +164,7 @@ public class HibernateMetadataExecutor implements MetadataExecutor {
     }
 
     private void create(JdbcInquirer jdbcInquirer, org.hibernate.dialect.Dialect d, Table table) {
-        String sql = table.sqlCreateString(d, new HibernateSimpleMetadata(null), null, null);
+        String sql = table.sqlCreateString(d, new HibernateSimpleMetadata(), null, null);
         log.debug("\r\n {}", HighlightingFormatter.INSTANCE.format(new DdlFormatter().format(sql)));
         try {
             jdbcInquirer.executeStatement(sql);

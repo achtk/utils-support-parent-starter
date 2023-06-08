@@ -14,10 +14,26 @@ public class HibernateSimpleMetadata extends AbstractDelegatingMetadata {
     private final DefaultIdentifierGeneratorFactory identifierGeneratorFactory;
     private final TypeConfiguration typeConfiguration;
 
+    public HibernateSimpleMetadata() {
+        super(null);
+        this.identifierGeneratorFactory = new DefaultIdentifierGeneratorFactory();
+        this.typeConfiguration = new TypeConfiguration();
+    }
+
     public HibernateSimpleMetadata(MetadataImplementor delegate) {
         super(delegate);
         this.identifierGeneratorFactory = new DefaultIdentifierGeneratorFactory();
         this.typeConfiguration = new TypeConfiguration();
+    }
+
+    public HibernateSimpleMetadata(Class<?> javaType) {
+        super(null);
+        this.identifierGeneratorFactory = new DefaultIdentifierGeneratorFactory();
+        this.typeConfiguration = new TypeConfiguration();
+        if (javaType.isEnum()) {
+            HibernateEnumType type = new HibernateEnumType(javaType, new HibernateEnumTypeDescriptor(), new HibernateEnumJavaTypeDescriptor());
+            typeConfiguration.getBasicTypeRegistry().register(type);
+        }
     }
 
     @Override
