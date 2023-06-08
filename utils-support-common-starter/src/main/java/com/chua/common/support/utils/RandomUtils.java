@@ -204,4 +204,10 @@ public class RandomUtils {
 
         return elements.get(randomInt(0, elements.size()));
     }
+
+    public static <E extends Enum<E>>E randomEnum(Class<E> captchaTypeEnumClass) {
+        E[] enumConstants = captchaTypeEnumClass.getEnumConstants();
+        int anInt = RandomUtils.randomInt(0, enumConstants.length);
+        return enumConstants[anInt];
+    }
 }
