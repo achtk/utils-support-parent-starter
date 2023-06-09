@@ -720,4 +720,19 @@ public class CollectionUtils {
         return isLinked ? new LinkedList<>() : new ArrayList<>();
     }
 
+    /**
+     *
+     * 集合是否包含集合1的至少一个元素
+     * @param source 集合
+     * @param target 集合1
+     * @return 集合是否包含集合1的至少一个元素
+     */
+    public static boolean contains(List<String> source, List<String> target) {
+        for (String s : target) {
+            if(source.contains(s)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
