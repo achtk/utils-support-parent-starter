@@ -13,14 +13,14 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 public class DelegateExpirationValue<T> extends DelegateValue<T> implements ExpirationValue<T> {
 
     private final LocalDateTime expirationTime = LocalDateTime.now();
-    private int expire = 10;
+    private long expire = 10;
     private TimeUnit timeUnit = SECONDS;
 
     public DelegateExpirationValue(T object) {
         super(object);
     }
 
-    public DelegateExpirationValue(T object, int expire, TimeUnit timeUnit) {
+    public DelegateExpirationValue(T object, long expire, TimeUnit timeUnit) {
         super(object);
         this.expire = expire;
         this.timeUnit = timeUnit;
