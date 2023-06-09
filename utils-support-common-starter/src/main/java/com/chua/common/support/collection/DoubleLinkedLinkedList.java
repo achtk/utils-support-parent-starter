@@ -32,7 +32,7 @@ public class DoubleLinkedLinkedList<E> implements DoubleLinkedList<E> {
             @Override
             public E next() {
                 E data = rs.data;
-                rs = rs.next;
+                rs = null == rs ? null : rs.next;
                 return data;
             }
         };
@@ -56,7 +56,7 @@ public class DoubleLinkedLinkedList<E> implements DoubleLinkedList<E> {
             @Override
             public Node<E> next() {
                 Node<E> next = rs;
-                rs = next.next;
+                rs = null == rs ? null : next.next;
                 return next;
             }
         };
