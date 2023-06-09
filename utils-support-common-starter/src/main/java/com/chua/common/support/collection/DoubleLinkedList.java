@@ -1,5 +1,7 @@
 package com.chua.common.support.collection;
 
+import java.util.Iterator;
+
 /**
  * 双向链表
  *
@@ -21,6 +23,20 @@ public interface DoubleLinkedList<E> {
     default void add(E e) {
         addLast(e);
     }
+
+    /**
+     * 遍历
+     *
+     * @return 遍历
+     */
+    Iterator<Node<E>> iteratorNode();
+
+    /**
+     * 遍历
+     *
+     * @return 遍历
+     */
+    Iterator<E> iterator();
 
     /**
      * 添加元素

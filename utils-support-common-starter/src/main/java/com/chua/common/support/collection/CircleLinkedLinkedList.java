@@ -7,14 +7,14 @@ import java.util.Iterator;
  *
  * @author CH
  */
-public class DoubleLinkedLinkedList<E> implements DoubleLinkedList<E> {
+public class CircleLinkedLinkedList<E> implements DoubleLinkedList<E> {
 
     private Node<E> root;
 
-    public DoubleLinkedLinkedList() {
+    public CircleLinkedLinkedList() {
     }
 
-    public DoubleLinkedLinkedList(Node<E> root) {
+    public CircleLinkedLinkedList(Node<E> root) {
         this.root = root;
     }
 
@@ -23,7 +23,7 @@ public class DoubleLinkedLinkedList<E> implements DoubleLinkedList<E> {
         return new Iterator<E>() {
             @Override
             public boolean hasNext() {
-                return root.next != null;
+                return root.next != root;
             }
 
             @Override
@@ -34,16 +34,11 @@ public class DoubleLinkedLinkedList<E> implements DoubleLinkedList<E> {
     }
 
     @Override
-    public void addFirst(E e) {
-
-    }
-
-    @Override
     public Iterator<Node<E>> iteratorNode() {
         return new Iterator<Node<E>>() {
             @Override
             public boolean hasNext() {
-                return root.next != null;
+                return root.next != root;
             }
 
             @Override
@@ -54,22 +49,33 @@ public class DoubleLinkedLinkedList<E> implements DoubleLinkedList<E> {
     }
 
     @Override
-    public synchronized void addLast(E e) {
+    public synchronized void addFirst(E e) {
         if (null == root) {
             this.root = new Node<>(e);
+            this.root.prev = root;
+            this.root.next = root;
         } else {
             Node<E> newNode = new Node<>(e);
             Node<E> ele = root;
             while (true) {
                 Node<E> tpl = ele.next;
-                if (null == tpl) {
+                if (root == tpl) {
                     ele.next = newNode;
                     newNode.prev = ele;
                     break;
                 }
                 ele = tpl;
             }
+
+            newNode.next = root;
+            root.prev = newNode;
         }
+    }
+
+
+    @Override
+    public void addLast(E e) {
+
     }
 
     @Override
@@ -86,9 +92,9 @@ public class DoubleLinkedLinkedList<E> implements DoubleLinkedList<E> {
     public void add(int index, E e) {
         Node<E> newNode = new Node<>(e);
         if (index == 0) {
-            newNode.next = root;
-            root.prev = newNode;
+            add(this.root, newNode);
             this.root = newNode;
+
             return;
         }
 
@@ -97,18 +103,27 @@ public class DoubleLinkedLinkedList<E> implements DoubleLinkedList<E> {
         while (index1++ != index) {
             tpl = tpl.next;
         }
+        add(tpl, newNode);
+    }
 
-        newNode.next = tpl;
-        newNode.prev = tpl.prev;
-        tpl.prev.next = newNode;
-        tpl.prev = newNode;
+    private void add(Node<E> node, Node<E> newNode) {
+        newNode.next = node;
+        newNode.prev = node.prev;
+        Node<E> prev = node.prev;
+        node.prev = newNode;
+        prev.next = newNode;
     }
 
     @Override
     public synchronized void remove(int index) {
         if (0 == index) {
-            this.root = root.next;
-            this.root.prev = null;
+            if (this.root == root.next) {
+                this.root = null;
+                return;
+            }
+
+            link(this.root);
+            this.root = this.root.next;
             return;
         }
 
@@ -117,10 +132,14 @@ public class DoubleLinkedLinkedList<E> implements DoubleLinkedList<E> {
         while (index1++ != index) {
             tpl = tpl.next;
         }
-        tpl.prev.next = tpl.next;
-        tpl.next.prev = tpl.prev;
+        link(tpl);
     }
 
+    private void link(Node<E> tpl) {
+        Node<E> next = tpl.next;
+        next.prev = tpl.prev;
+        tpl.prev.next = next;
+    }
 
     @Override
     public void removeAllKey(E e) {
@@ -144,7 +163,7 @@ public class DoubleLinkedLinkedList<E> implements DoubleLinkedList<E> {
         }
 
         Node<E> tpl = root;
-        while (null != tpl.next) {
+        while (root != tpl.next) {
             tpl = tpl.next;
         }
         return tpl.data;
@@ -155,6 +174,5 @@ public class DoubleLinkedLinkedList<E> implements DoubleLinkedList<E> {
     public String toString() {
         return root.data + "";
     }
-
 
 }
