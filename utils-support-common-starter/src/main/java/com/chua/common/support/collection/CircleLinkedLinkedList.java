@@ -21,14 +21,17 @@ public class CircleLinkedLinkedList<E> implements DoubleLinkedList<E> {
     @Override
     public Iterator<E> iterator() {
         return new Iterator<E>() {
+            Node<E> rs = root;
             @Override
             public boolean hasNext() {
-                return root.next != root;
+                return null != rs;
             }
 
             @Override
             public E next() {
-                return root.next.data;
+                E data = rs.data;
+                rs = rs.next;
+                return data;
             }
         };
     }
@@ -36,14 +39,18 @@ public class CircleLinkedLinkedList<E> implements DoubleLinkedList<E> {
     @Override
     public Iterator<Node<E>> iteratorNode() {
         return new Iterator<Node<E>>() {
+            Node<E> rs = root;
+
             @Override
             public boolean hasNext() {
-                return root.next != root;
+                return null != rs;
             }
 
             @Override
             public Node<E> next() {
-                return root.next;
+                Node<E> next = rs.next;
+                rs = next;
+                return rs;
             }
         };
     }
