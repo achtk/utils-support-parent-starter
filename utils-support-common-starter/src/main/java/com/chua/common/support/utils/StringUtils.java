@@ -1485,25 +1485,25 @@ public class StringUtils {
         }
 
         if (o instanceof String) {
-            return "'" + o.toString() + "'";
+            return o.toString();
         }
 
         if (o instanceof Date) {
-            return "'" + DateUtils.format((Date) o) + "'";
+            return DateUtils.format((Date) o);
         }
 
 
         if (o instanceof LocalDateTime) {
-            return "'" + DateUtils.format(((LocalDateTime) o), YYYY_MM_DD_HH_MM_SS) + "'";
+            return DateUtils.format(((LocalDateTime) o), YYYY_MM_DD_HH_MM_SS);
         }
 
         if (o instanceof LocalDate) {
-            return "'" + DateUtils.format(((LocalDate) o), YYYY_MM_DD) + "'";
+            return DateUtils.format(((LocalDate) o), YYYY_MM_DD);
         }
 
 
         if (o instanceof LocalTime) {
-            return "'" + DateUtils.format(((LocalTime) o), HH_MM_SS) + "'";
+            return DateUtils.format(((LocalTime) o), HH_MM_SS);
         }
 
         return o;
