@@ -28,7 +28,7 @@ public class ServiceDefinition implements Comparable<ServiceDefinition>{
     /**
      * 扩展点排序值，大的优先级高
      */
-    private Integer order;
+    private int order = 0;
     /**
      * 文件位置
      */
@@ -173,7 +173,7 @@ public class ServiceDefinition implements Comparable<ServiceDefinition>{
      * @return 是否是NameAware子类
      */
     public boolean isPresent() {
-        return NameAware.class.isAssignableFrom(implClass);
+        return null != implClass && NameAware.class.isAssignableFrom(implClass);
     }
 
     @Override

@@ -53,7 +53,7 @@ public class FileTable extends AbstractFilterQueryTable {
                     .build().createType(FileSupport.class));
         }
         try {
-            fileSupport = serviceProvider.getNewExtension(suffix, profile, directory, suffix);
+            fileSupport = serviceProvider.getDeepNewExtension(suffix, profile, directory, suffix);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

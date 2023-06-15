@@ -41,7 +41,7 @@ public class ServiceProvider<T> implements InitializingAware {
     private static final Comparator<ServiceDefinition> COMPARATOR = new Comparator<ServiceDefinition>() {
         @Override
         public int compare(ServiceDefinition o1, ServiceDefinition o2) {
-            return o1.getOrder().compareTo(o2.getOrder());
+            return Integer.valueOf(o1.getOrder()).compareTo(o2.getOrder());
         }
     };
     private T defaultImpl;
@@ -313,8 +313,11 @@ public class ServiceProvider<T> implements InitializingAware {
         Map<String, Class<T>> result = new HashMap<>(definitions.size());
 
         for (SortedSet<ServiceDefinition> value : this.definitions.values()) {
+            if (value.isEmpty()) {
+                continue;
+            }
             ServiceDefinition noneObject = value.first();
-            if (null == noneObject) {
+            if (null == noneObject || null == noneObject.getName()) {
                 continue;
             }
             result.put(noneObject.getName(), (Class<T>) noneObject.implClass);
@@ -429,21 +432,21 @@ public class ServiceProvider<T> implements InitializingAware {
      * @param name 名称
      * @return 实现
      */
-    public T getDeepNewExtension(String name) {
+    public T getDeepNewExtension(String name, Object... args) {
         if (null == name) {
             return defaultImpl;
         }
 
         ServiceDefinition definition = getDefinition(name);
-        if(DEFAULT_DEFINITION != definition) {
-            return (T) Optional.ofNullable(definition.newInstance(serviceAutowire)).orElse(defaultImpl);
+        if (DEFAULT_DEFINITION != definition) {
+            return (T) Optional.ofNullable(definition.newInstance(serviceAutowire, args)).orElse(defaultImpl);
         }
 
         while (StringUtils.isNotEmpty(name)) {
             name = FileUtils.getSimpleExtension(name);
             definition = getDefinition(name);
             if(DEFAULT_DEFINITION != definition) {
-                return (T) Optional.ofNullable(definition.newInstance(serviceAutowire)).orElse(defaultImpl);
+                return (T) Optional.ofNullable(definition.newInstance(serviceAutowire, args)).orElse(defaultImpl);
             }
         }
 

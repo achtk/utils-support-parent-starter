@@ -2,6 +2,8 @@ package com.chua.datasource.support.schema;
 
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.table.ConnectorMetadata;
+import com.chua.common.support.utils.FileUtils;
+import com.chua.common.support.utils.StringUtils;
 import com.chua.datasource.support.table.FileTable;
 import com.google.common.collect.ImmutableMap;
 import org.apache.calcite.schema.Table;
@@ -25,6 +27,9 @@ public class FileSchemaFactory extends AbstractCalciteSchemaFactory {
     @Override
     @SuppressWarnings("ALL")
     public Map<String, Table> getTable() {
+        if (StringUtils.isBlank(profile.getString("name"))) {
+            profile.addProfile("name", FileUtils.getBaseName(profile.getString("directory")));
+        }
         final ImmutableMap.Builder<String, Table> builder = ImmutableMap.builder();
         builder.put(profile.getString("name"), new FileTable(profile));
         return builder.build();

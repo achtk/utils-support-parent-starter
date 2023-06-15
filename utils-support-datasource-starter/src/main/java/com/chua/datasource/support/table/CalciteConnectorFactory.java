@@ -161,7 +161,7 @@ public class CalciteConnectorFactory implements ConnectorFactory {
      */
     @SuppressWarnings("ALL")
     private TableFactory newTableFactory(String type, ConnectorMetadata metadata) {
-        Class<?> tableAdaptor = ADAPTOR_MAP.get(type);
+        Class<?> tableAdaptor = ADAPTOR_MAP.get(type.toUpperCase());
         if (null == tableAdaptor) {
             throw new IllegalArgumentException(type + " 表不存在");
         }
