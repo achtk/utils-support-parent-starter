@@ -285,21 +285,21 @@ public class BeanUtils {
         }
         if (source instanceof Map) {
             Map source1 = (Map) source;
-            String string = MapUtils.getString(source1, name);
+            Object string = MapUtils.getObject(source1, name);
             if (null != string) {
                 return string;
             }
 
-            string = MapUtils.getString(source1, name.toUpperCase());
+            string = MapUtils.getObject(source1, name.toUpperCase());
             if (null != string) {
                 return string;
             }
-            string = MapUtils.getString(source1,  NamingCase.toUnderlineCase(name));
+            string = MapUtils.getObject(source1,  NamingCase.toUnderlineCase(name));
             if (null != string) {
                 return string;
             }
 
-            string = MapUtils.getString(source1, NamingCase.toUnderlineCase(name).toUpperCase());
+            string = MapUtils.getObject(source1, NamingCase.toUnderlineCase(name).toUpperCase());
             if (null != string) {
                 return string;
             }

@@ -1,5 +1,7 @@
 package com.chua.common.support.converter.definition;
 
+import com.chua.common.support.converter.Converter;
+
 /**
  * 正则
  *
@@ -34,7 +36,7 @@ public class EnumTypeConverter implements TypeConverter<Enum> {
 
         T[] enumConstants = newType.getEnumConstants();
         for (T enumConstant : enumConstants) {
-            if (enumConstant.toString().equalsIgnoreCase(value.toString())) {
+            if (enumConstant.toString().equalsIgnoreCase(Converter.convertIfNecessary(value, String.class))) {
                 return enumConstant;
             }
         }

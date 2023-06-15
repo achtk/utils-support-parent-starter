@@ -1315,6 +1315,7 @@ public class FileUtils {
     public static InputStream toInputStream(File file) throws IOException {
         return IoUtils.openStream(file);
     }
+
     /**
      * 写文件
      *
@@ -1325,6 +1326,7 @@ public class FileUtils {
     public static void writeAppend(final String data, final File file) throws IOException {
         Files.write(file.toPath(), data.getBytes(UTF_8), StandardOpenOption.APPEND);
     }
+
     /**
      * 写文件
      *
@@ -1335,6 +1337,7 @@ public class FileUtils {
     public static void write(final String data, final File file) throws IOException {
         Files.write(file.toPath(), data.getBytes(UTF_8));
     }
+
     /**
      * 写文件
      *
@@ -1373,7 +1376,7 @@ public class FileUtils {
     /**
      * 写文件
      *
-     * @param file        文件
+     * @param file         文件
      * @param outputStream 数据
      * @throws IOException ex
      */
@@ -1574,6 +1577,27 @@ public class FileUtils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * 拷贝文件
+     *
+     * @param source   源文件
+     * @param destFile 目标文件
+     */
+    public static void copyFile(final InputStream source, final File destFile) {
+        if (null == source || null == destFile) {
+            return;
+        }
+        try {
+            if (!destFile.exists()) {
+                Files.copy(source, destFile.toPath());
+            } else {
+                Files.copy(source, destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -1880,7 +1904,7 @@ public class FileUtils {
      * @throws IOException IOException
      */
     public static void copyFile(URL url, String targetPath) throws IOException {
-        if(null == url) {
+        if (null == url) {
             return;
         }
         copyFile(url, targetPath, false);
@@ -2241,7 +2265,7 @@ public class FileUtils {
             return file;
         }
 
-        if(bytes.length == 0) {
+        if (bytes.length == 0) {
             return file;
         }
 
@@ -2792,17 +2816,18 @@ public class FileUtils {
 
     /**
      * 是否是压缩文件
+     *
      * @param name 名称
      * @return 是否是压缩文件
      */
     public static boolean isCompressFile(String name) {
         String extension = FileUtils.getSimpleExtension(name);
-        if(ArrayUtils.containsIgnoreCase(COMPRESS, extension)) {
+        if (ArrayUtils.containsIgnoreCase(COMPRESS, extension)) {
             return true;
         }
         while (!StringUtils.isEmpty(extension)) {
             extension = FileUtils.getSimpleExtension(extension);
-            if(ArrayUtils.containsIgnoreCase(COMPRESS, extension)) {
+            if (ArrayUtils.containsIgnoreCase(COMPRESS, extension)) {
                 return true;
             }
         }
@@ -2859,6 +2884,7 @@ public class FileUtils {
         }
         return rename(file.toPath(), newName, isOverride).toFile();
     }
+
     /**
      * 修改文件或目录的文件名，不变更路径，只是简单修改文件名<br>
      *
@@ -2987,12 +3013,12 @@ public class FileUtils {
         /**
          * 构造
          *
-         * @param source 源Path
-         * @param target 目标Path
+         * @param source      源Path
+         * @param target      目标Path
          * @param copyOptions 拷贝（移动）选项
          */
         public MoveVisitor(Path source, Path target, CopyOption... copyOptions) {
-            if(FileUtils.exists(target, false) && !FileUtils.isDirectory(target)){
+            if (FileUtils.exists(target, false) && !FileUtils.isDirectory(target)) {
                 throw new IllegalArgumentException("Target must be a directory");
             }
             this.source = source;
@@ -3006,9 +3032,9 @@ public class FileUtils {
             initTarget();
             // 将当前目录相对于源路径转换为相对于目标路径
             final Path targetDir = target.resolve(source.relativize(dir));
-            if(!Files.exists(targetDir)){
+            if (!Files.exists(targetDir)) {
                 Files.createDirectories(targetDir);
-            } else if(!Files.isDirectory(targetDir)){
+            } else if (!Files.isDirectory(targetDir)) {
                 throw new FileAlreadyExistsException(targetDir.toString());
             }
             return FileVisitResult.CONTINUE;
@@ -3025,8 +3051,8 @@ public class FileUtils {
         /**
          * 初始化目标文件或目录
          */
-        private void initTarget(){
-            if(!this.isTargetCreated){
+        private void initTarget() {
+            if (!this.isTargetCreated) {
                 FileUtils.mkdir(this.target.toFile());
                 this.isTargetCreated = true;
             }

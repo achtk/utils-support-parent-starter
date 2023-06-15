@@ -1,14 +1,20 @@
 package com.chua.common.support.spi.finder;
 
 import com.chua.common.support.annotations.*;
+import com.chua.common.support.discovery.Constants;
+import com.chua.common.support.reflection.describe.AnnotationDescribe;
 import com.chua.common.support.spi.ServiceDefinition;
 import com.chua.common.support.spi.autowire.ServiceAutowire;
+import com.chua.common.support.utils.AnnotationUtils;
 import com.chua.common.support.utils.ClassUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URL;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static com.chua.common.support.context.constant.ContextConstant.COMPONENT;
+import static com.chua.common.support.context.constant.ContextConstant.TABLE_ID;
 
 /**
  * 服务查找器
@@ -254,6 +260,13 @@ public abstract class AbstractServiceFinder implements ServiceFinder{
         Extension extension = implType.getDeclaredAnnotation(Extension.class);
         if (null != extension) {
             name.add(extension.value());
+        }
+
+        if(null != COMPONENT) {
+            Object value = AnnotationUtils.getAnnotationAttributes(implType, COMPONENT).get("value");
+            if(null != value) {
+                name.add(value.toString());
+            }
         }
 
         return name.toArray(new String[0]);
