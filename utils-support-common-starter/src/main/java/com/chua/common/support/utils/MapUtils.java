@@ -277,6 +277,18 @@ public class MapUtils {
      * @param key 查找的关键
      * @return Map中的值作为字符串，如果为null，则<code> null </ code>
      */
+    public static <K, V> String getString(final Object map, final K key) {
+        return getString((Map)BeanMap.of(map, false), key);
+    }
+
+    /**
+     * 以null安全的方式从Map获取字符串。
+     * <p>字符串是通过<code> toString </ code>获得的。
+     *
+     * @param map 集合
+     * @param key 查找的关键
+     * @return Map中的值作为字符串，如果为null，则<code> null </ code>
+     */
     public static <K, V> String getString(final Map<K, V> map, final K key) {
         Object object = getObject(map, key);
         if (null == object) {
