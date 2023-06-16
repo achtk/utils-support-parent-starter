@@ -1,5 +1,6 @@
 package com.chua.common.support.utils;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.chua.common.support.bean.BeanMap;
 import com.chua.common.support.collection.MultiLinkedValueMap;
 import com.chua.common.support.collection.MultiValueMap;
@@ -1307,6 +1308,26 @@ public class MapUtils {
         strings.sort(String::compareTo);
         for (String string : strings) {
             rs.put(string, param.get(string));
+        }
+
+        return rs;
+    }
+
+    /**
+     * 去重新数据中和老数据一致的数据
+     * @param newData 新数据
+     * @param oldData 老数据
+     */
+    public static <K, V>Map<K, V>  removeSameData(Map<K, V> newData, Map<K, V> oldData) {
+        Map<K, V> rs = new HashMap<>(newData.size());
+        for (Map.Entry<K, V> entry : newData.entrySet()) {
+            if(!oldData.containsKey(entry.getKey())) {
+                continue;
+            }
+            V o = oldData.get(entry.getKey());
+            if(!ObjectUtils.equals(o, entry.getValue())) {
+                rs.put(entry.getKey(), entry.getValue());
+            }
         }
 
         return rs;
