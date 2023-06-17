@@ -23,19 +23,22 @@ public class CustomTreeNode<T, R> {
     private final Function<T, R> idFunction;
     private final Function<T, R> pidFunction;
 
+    private final R root;
+
     private Consumer<List<T>> children;
     private final List<T> data = new LinkedList<>();
 
     private Field field;
 
-    public CustomTreeNode(Function<T, R> idFunction, Function<T, R> pidFunction) {
-        this(idFunction, pidFunction, null);
+    public CustomTreeNode(Function<T, R> idFunction, Function<T, R> pidFunction, R root) {
+        this(idFunction, pidFunction, null, root);
     }
 
-    public CustomTreeNode(Function<T, R> idFunction, Function<T, R> pidFunction, Consumer<List<T>> children) {
+    public CustomTreeNode(Function<T, R> idFunction, Function<T, R> pidFunction, Consumer<List<T>> children, R root) {
         this.idFunction = idFunction;
         this.pidFunction = pidFunction;
         this.children = children;
+        this.root = root;
     }
 
     /**
@@ -79,7 +82,7 @@ public class CustomTreeNode<T, R> {
             doChildren(datum, ts);
         }
 
-        return data.stream().filter(it -> pidFunction.apply(it).equals(0)).collect(Collectors.toList());
+        return data.stream().filter(it -> pidFunction.apply(it).equals(root)).collect(Collectors.toList());
     }
 
     private void doChildren(T datum, List<T> ts) {
