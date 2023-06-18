@@ -8,7 +8,10 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static com.chua.common.support.lang.date.constant.DateFormatConstant.YYYYMMDDHHMMSS;
@@ -131,6 +134,15 @@ public class IdUtils {
             sb.append(StringUtils.padAfter(random.nextInt() + "", 8, '0'));
         }
         return sb.toString();
+    }
+
+    /**
+     * UUID + COMPUTER_UNIQUE_IDENTIFICATION
+     *
+     * @return UUID + 时间
+     */
+    public static String createComputer() {
+        return createUuid().concat(SYMBOL_MINUS).concat(COMPUTER_UNIQUE_IDENTIFICATION);
     }
 
     /**

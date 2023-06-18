@@ -2,13 +2,13 @@ package com.chua.common.support.view;
 
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.function.strategy.name.NamedStrategy;
+import com.chua.common.support.function.strategy.name.RejectStrategy;
 import com.chua.common.support.media.MediaType;
 import com.chua.common.support.media.MediaTypeFactory;
 import com.chua.common.support.utils.FileUtils;
 import com.chua.common.support.utils.StringUtils;
 import com.chua.common.support.value.ContentTypeValue;
 import com.chua.common.support.value.Value;
-import com.chua.common.support.function.strategy.name.RejectStrategy;
 import com.chua.common.support.view.viewer.Viewer;
 
 import java.io.*;
@@ -31,9 +31,6 @@ public class LocalViewResolver extends AbstractViewResolver {
 
         if (!file.exists()) {
             RejectStrategy rejectStrategy = getRejectStrategy(config.getRejectStrategy());
-            if (null != os) {
-                rejectStrategy.reject(path, mode, os);
-            }
             return ViewPreview.of(mode);
         }
 

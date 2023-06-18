@@ -2,6 +2,7 @@ package com.chua.common.support.function.strategy.name;
 
 
 import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 
 /**
  * 原始命名策略
@@ -9,6 +10,7 @@ import com.chua.common.support.annotations.Spi;
  * @author CH
  * @since 2022/8/3 15:07
  */
+@SpiOption("原始命名")
 @Spi("original")
 public class NamedOriginalStrategy implements NamedStrategy {
     @Override

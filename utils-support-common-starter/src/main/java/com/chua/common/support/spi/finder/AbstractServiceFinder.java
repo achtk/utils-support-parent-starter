@@ -1,8 +1,6 @@
 package com.chua.common.support.spi.finder;
 
 import com.chua.common.support.annotations.*;
-import com.chua.common.support.discovery.Constants;
-import com.chua.common.support.reflection.describe.AnnotationDescribe;
 import com.chua.common.support.spi.ServiceDefinition;
 import com.chua.common.support.spi.autowire.ServiceAutowire;
 import com.chua.common.support.utils.AnnotationUtils;
@@ -14,7 +12,6 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.chua.common.support.context.constant.ContextConstant.COMPONENT;
-import static com.chua.common.support.context.constant.ContextConstant.TABLE_ID;
 
 /**
  * 服务查找器
@@ -134,6 +131,10 @@ public abstract class AbstractServiceFinder implements ServiceFinder{
         serviceDefinition.setClassLoader(getClassLoader());
         serviceDefinition.setLoadTime(System.currentTimeMillis());
         serviceDefinition.setOrder(order);
+        SpiOption spiOption = implType.getDeclaredAnnotation(SpiOption.class);
+        if (null != spiOption) {
+            serviceDefinition.setLabel(spiOption.value());
+        }
         serviceDefinition.setName(alias.toUpperCase());
         serviceDefinition.setObj(obj);
         serviceDefinition.setFinderType(this.getClass());

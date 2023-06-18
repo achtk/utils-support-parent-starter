@@ -35,13 +35,19 @@ public class ViewPreview {
     private String contentType;
 
     private static final ViewPreview VIEW_PREVIEW = new ViewPreview();
+    private static final ViewPreview VIEW_PREVIEW2 = new ViewPreview();
 
     static {
         VIEW_PREVIEW.setContentType(OCTET_STREAM);
+        VIEW_PREVIEW2.setContentType("text/plain");
     }
 
     public static ViewPreview emptyDownloader() {
         return VIEW_PREVIEW;
+    }
+
+    public static ViewPreview empty() {
+        return VIEW_PREVIEW2;
     }
 
     /**

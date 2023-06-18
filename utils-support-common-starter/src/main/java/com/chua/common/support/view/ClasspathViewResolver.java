@@ -34,9 +34,6 @@ public class ClasspathViewResolver extends AbstractViewResolver {
         Repository resolve = repository.resolve(StringUtils.startWithMove(path, "/"));
         if(resolve.isEmpty()) {
             RejectStrategy rejectStrategy = getRejectStrategy(config.getRejectStrategy());
-            if (null != os) {
-                rejectStrategy.reject(path, mode, os);
-            }
             return ViewPreview.of(mode);
         }
 

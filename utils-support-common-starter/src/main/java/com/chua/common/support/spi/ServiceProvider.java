@@ -531,6 +531,26 @@ public class ServiceProvider<T> implements InitializingAware {
         return definitions.containsKey(name.toUpperCase());
     }
 
+    public List<Option<String>> options() {
+        if (definitions.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        List<Option<String>> rs = new LinkedList<>();
+
+        for (SortedSet<ServiceDefinition> value : this.definitions.values()) {
+            if (value.isEmpty()) {
+                continue;
+            }
+            ServiceDefinition noneObject = value.first();
+            if (null == noneObject || null == noneObject.getName()) {
+                continue;
+            }
+            rs.add(new Option<String>(noneObject.getName(), noneObject.getLabel()));
+        }
+        return rs;
+    }
+
     /**
      * 构建类
      */

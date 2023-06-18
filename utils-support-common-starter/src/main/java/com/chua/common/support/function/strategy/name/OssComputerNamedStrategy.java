@@ -1,19 +1,17 @@
 package com.chua.common.support.function.strategy.name;
 
-
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.annotations.SpiOption;
+import com.chua.common.support.utils.IdUtils;
 
 /**
- * 命名策略
- *
- * @author CH
+ * oss策略
  */
-@SpiOption("小写")
-@Spi("LowerCase")
-public class LowerCaseNamedStrategy implements NamedStrategy {
+@Spi("createComputer")
+@SpiOption("uuid + 主板信息")
+public class OssComputerNamedStrategy implements OssNamedStrategy {
     @Override
     public String named(String name) {
-        return name.toLowerCase();
+        return IdUtils.createTid();
     }
 }

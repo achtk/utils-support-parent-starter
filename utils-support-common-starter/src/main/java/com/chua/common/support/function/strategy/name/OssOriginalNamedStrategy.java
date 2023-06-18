@@ -1,19 +1,16 @@
 package com.chua.common.support.function.strategy.name;
 
-
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.annotations.SpiOption;
 
 /**
- * 命名策略
- *
- * @author CH
+ * oss策略
  */
-@SpiOption("小写")
-@Spi("LowerCase")
-public class LowerCaseNamedStrategy implements NamedStrategy {
+@Spi("original")
+@SpiOption("原始命名")
+public class OssOriginalNamedStrategy implements OssNamedStrategy {
     @Override
     public String named(String name) {
-        return name.toLowerCase();
+        return name;
     }
 }

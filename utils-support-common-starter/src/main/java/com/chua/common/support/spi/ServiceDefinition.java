@@ -16,11 +16,15 @@ import java.net.URL;
  * @author CH
  */
 @Data
-public class ServiceDefinition implements Comparable<ServiceDefinition>{
+public class ServiceDefinition implements Comparable<ServiceDefinition> {
     /**
      * 扩展接口实现类名
      */
     protected Class<?> implClass;
+    /**
+     * 名称
+     */
+    private String label;
     /**
      * 扩展名称
      */

@@ -2,9 +2,8 @@ package com.chua.common.support.function.strategy.name;
 
 
 import com.chua.common.support.annotations.Spi;
-
-import java.io.IOException;
-import java.io.OutputStream;
+import com.chua.common.support.annotations.SpiOption;
+import com.chua.common.support.pojo.OssSystem;
 
 /**
  * 拒绝策略
@@ -13,14 +12,12 @@ import java.io.OutputStream;
  * @since 2022/8/3 15:07
  */
 @Spi("null")
+@SpiOption("空置")
 public class RejectNullStrategy implements RejectStrategy {
 
+
     @Override
-    public void reject(String path, String mode, OutputStream os) {
-        try {
-            os.write(new byte[0]);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public byte[] reject(OssSystem ossSystem) {
+        return new byte[0];
     }
 }

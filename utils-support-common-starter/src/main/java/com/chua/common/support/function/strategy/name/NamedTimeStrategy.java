@@ -2,6 +2,7 @@ package com.chua.common.support.function.strategy.name;
 
 
 import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.common.support.lang.date.DateTime;
 
 /**
@@ -10,6 +11,7 @@ import com.chua.common.support.lang.date.DateTime;
  * @author CH
  * @since 2022/8/3 15:07
  */
+@SpiOption("当天时间")
 @Spi("date")
 public class NamedTimeStrategy implements NamedStrategy {
     @Override

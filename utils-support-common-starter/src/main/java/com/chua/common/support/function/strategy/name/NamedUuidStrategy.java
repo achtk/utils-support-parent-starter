@@ -1,6 +1,7 @@
 package com.chua.common.support.function.strategy.name;
 
 import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.common.support.utils.FileUtils;
 
 import java.util.UUID;
@@ -11,6 +12,7 @@ import java.util.UUID;
  * @author CH
  * @since 2022/8/3 15:07
  */
+@SpiOption("uuid")
 @Spi("uuid")
 public class NamedUuidStrategy implements NamedStrategy {
     @Override
