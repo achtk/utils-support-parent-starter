@@ -1,5 +1,6 @@
 package com.chua.opencv.support.filter;
 
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.opencv.support.models.DarkChannelPriorDehaze;
 import com.chua.opencv.support.utils.OpencvUtils;
 import lombok.AllArgsConstructor;
@@ -15,6 +16,7 @@ import java.awt.image.BufferedImage;
  */
 @NoArgsConstructor
 @AllArgsConstructor
+@SpiOption("黑暗管道")
 public class DarkChannelImageFilter extends AbstractOpencvImageFilter {
 
     private double kernelRatio = 0.01;

@@ -1,5 +1,7 @@
 package com.chua.common.support.image.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.common.support.utils.BufferedImageUtils;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -11,6 +13,8 @@ import java.awt.image.BufferedImage;
  *
  * @author CH
  */
+@SpiOption("sobel")
+@Spi("sobel")
 @AllArgsConstructor
 @NoArgsConstructor
 public class ImageSobelFilter extends AbstractImageFilter {

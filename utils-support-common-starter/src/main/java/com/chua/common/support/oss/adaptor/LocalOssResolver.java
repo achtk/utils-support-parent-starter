@@ -25,8 +25,9 @@ public class LocalOssResolver extends AbstractOssResolver {
 
     @Override
     public Value<String> storage(InputStream is, OssSystem ossSystem, String name) {
+        String suffix = FileUtils.getExtension(name);
         name = getNamedStrategy(ossSystem, name);
-        String real = StringUtils.defaultString(ossSystem.getOssBucket(), "") + "/" + name;
+        String real = StringUtils.defaultString(ossSystem.getOssBucket(), "") + "/" + name + "." + suffix;
         File file = new File(ossSystem.getOssPath(), real);
         FileUtils.mkParentDirs(file);
 
@@ -91,7 +92,7 @@ public class LocalOssResolver extends AbstractOssResolver {
     }
 
     private File findFile(OssSystem ossSystem, String path) {
-        String ossPath = ossSystem.getOssPath();
+        String ossPath = ossSystem.getOssPath() + "/" + ossSystem.getOssBucket();
         if (StringUtils.isBlank(ossPath)) {
             return null;
         }

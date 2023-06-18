@@ -1,5 +1,7 @@
 package com.chua.common.support.image.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.common.support.utils.BufferedImageUtils;
 import com.chua.common.support.utils.ThreadUtils;
 import lombok.NoArgsConstructor;
@@ -15,6 +17,8 @@ import java.util.concurrent.ExecutorService;
  *
  * @author CH
  */
+@SpiOption("gaussian")
+@Spi("gray")
 @NoArgsConstructor
 public class ImageGaussianBlurFilter extends AbstractImageFilter {
 

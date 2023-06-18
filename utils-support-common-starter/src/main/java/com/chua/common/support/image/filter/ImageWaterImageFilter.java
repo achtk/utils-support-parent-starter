@@ -1,6 +1,8 @@
 package com.chua.common.support.image.filter;
 
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.common.support.constant.Position;
 import com.chua.common.support.protocol.image.ImagePoint;
 import com.chua.common.support.utils.BufferedImageUtils;
@@ -23,6 +25,8 @@ import static com.chua.common.support.constant.Position.RIGHT_BOTTOM;
  *
  * @author CH
  */
+@SpiOption("水印")
+@Spi("water")
 public class ImageWaterImageFilter extends AbstractImageFilter {
 
     private final Position direction;

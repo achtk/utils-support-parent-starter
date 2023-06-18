@@ -16,11 +16,16 @@ limitations under the License.
 
 package com.chua.common.support.image.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
+
 /**
  * A filter which converts an image to grayscale using the NTSC brightness calculation.
  *
  * @author Administrator
  */
+@SpiOption("灰度")
+@Spi("grayscale")
 public class ImageGrayscaleFilter extends AbstractImagePointFilter {
 
     public ImageGrayscaleFilter() {

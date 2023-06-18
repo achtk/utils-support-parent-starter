@@ -1,5 +1,7 @@
 package com.chua.common.support.image.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -18,6 +20,8 @@ import static java.awt.image.BufferedImage.TYPE_INT_RGB;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@SpiOption("马赛克滤镜")
+@Spi("mosaic")
 @Accessors(chain = true)
 public class ImageMosaicFilter extends AbstractImageFilter {
 

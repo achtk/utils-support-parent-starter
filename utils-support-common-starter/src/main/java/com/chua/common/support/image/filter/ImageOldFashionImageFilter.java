@@ -1,5 +1,8 @@
 package com.chua.common.support.image.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -8,6 +11,8 @@ import java.awt.image.BufferedImage;
  *
  * @author CH
  */
+@SpiOption("复古")
+@Spi("OldFashion")
 public class ImageOldFashionImageFilter extends AbstractImageFilter {
     @Override
     public BufferedImage filter(BufferedImage src, BufferedImage dst) {
