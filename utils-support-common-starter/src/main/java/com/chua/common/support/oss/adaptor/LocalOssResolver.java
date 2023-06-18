@@ -8,12 +8,11 @@ import com.chua.common.support.pojo.Mode;
 import com.chua.common.support.pojo.OssSystem;
 import com.chua.common.support.range.Range;
 import com.chua.common.support.utils.FileUtils;
+import com.chua.common.support.utils.IoUtils;
 import com.chua.common.support.utils.StringUtils;
 import com.chua.common.support.value.Value;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.util.Optional;
 
 /**
@@ -24,22 +23,22 @@ import java.util.Optional;
 public class LocalOssResolver extends AbstractOssResolver {
 
     @Override
-    public Value<String> storage(String parentPath, InputStream is, OssSystem ossSystem, String name) {
-        String suffix = FileUtils.getExtension(name);
-        name = getNamedStrategy(ossSystem, name);
-        String real = StringUtils.defaultString(ossSystem.getOssBucket(), "") + "/" + name + "." + suffix;
+    public Value<String> storage(String parentPath, byte[] is, OssSystem ossSystem, String name) {
+        String real = StringUtils.defaultString(ossSystem.getOssBucket(), "") + "/" + name;
         File file = new File(ossSystem.getOssPath() + "/" + parentPath, real);
         FileUtils.mkParentDirs(file);
 
-        StandardCopyOption[] copyOption = new StandardCopyOption[1];
         if (ossSystem.getOssCovering()) {
-            copyOption[0] = StandardCopyOption.REPLACE_EXISTING;
-        } else {
-            copyOption = new StandardCopyOption[0];
+            if (file.exists()) {
+                try {
+                    FileUtils.delete(file);
+                } catch (IOException ignored) {
+                }
+            }
         }
 
-        try {
-            Files.copy(is, file.toPath(), copyOption);
+        try (FileOutputStream outputStream = new FileOutputStream(file)) {
+            IoUtils.write(is, outputStream);
             return Value.of(real);
         } catch (IOException e) {
             e.printStackTrace();

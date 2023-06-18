@@ -11,15 +11,14 @@ import com.chua.common.support.oss.adaptor.AbstractOssResolver;
 import com.chua.common.support.pojo.Mode;
 import com.chua.common.support.pojo.OssSystem;
 import com.chua.common.support.range.Range;
-import com.chua.common.support.utils.FileUtils;
 import com.chua.common.support.utils.IoUtils;
 import com.chua.common.support.utils.MapUtils;
 import com.chua.common.support.utils.StringUtils;
 import com.chua.common.support.value.Value;
 import io.minio.*;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Map;
 import java.util.Optional;
@@ -107,10 +106,8 @@ public class MinioOssResolver extends AbstractOssResolver {
     }
 
     @Override
-    public Value<String> storage(String parentPath, InputStream is, OssSystem ossSystem, String name) {
+    public Value<String> storage(String parentPath, byte[] is, OssSystem ossSystem, String name) {
         MinioClient minioClient = initialConfig(ossSystem);
-        String suffix = FileUtils.getExtension(name);
-        name = StringUtils.defaultString(parentPath, "") + "/" + getNamedStrategy(ossSystem, name) + "." + suffix;
         String bucket = ossSystem.getOssBucket();
         try {
             boolean found = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucket).build());
@@ -122,8 +119,10 @@ public class MinioOssResolver extends AbstractOssResolver {
                     .bucket(bucket)
                     .object(name)
                     .contentType(MediaTypeFactory.getMediaType(name).get().toString());
-            PutObjectArgs putObjectArgs = builder.stream(is, is.available(), -1).build();
-            minioClient.putObject(putObjectArgs);
+            try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(is)) {
+                PutObjectArgs putObjectArgs = builder.stream(byteArrayInputStream, is.length, -1).build();
+                minioClient.putObject(putObjectArgs);
+            }
             return Value.of(endpoint + "/" + bucket + "/" + name);
         } catch (Exception e) {
             if ("1 : bucket name must be at least 3 and no more than 63 characters long".equals(e.getMessage())) {

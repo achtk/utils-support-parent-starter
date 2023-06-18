@@ -5,7 +5,6 @@ import com.chua.common.support.pojo.OssSystem;
 import com.chua.common.support.range.Range;
 import com.chua.common.support.value.Value;
 
-import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
@@ -35,11 +34,11 @@ public interface OssResolver extends AutoCloseable {
     /**
      * 保存文件
      *
-     * @param parentPath
-     * @param is         文件
+     * @param parentPath parentPath
+     * @param bytes      文件
      * @param ossSystem  ossSystem
      * @param name       名称
      * @return 结果
      */
-    Value<String> storage(String parentPath, InputStream is, OssSystem ossSystem, String name);
+    Value<String> storage(String parentPath, byte[] bytes, OssSystem ossSystem, String name);
 }

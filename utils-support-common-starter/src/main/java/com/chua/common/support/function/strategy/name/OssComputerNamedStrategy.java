@@ -11,7 +11,7 @@ import com.chua.common.support.utils.IdUtils;
 @SpiOption("uuid + 主板信息")
 public class OssComputerNamedStrategy implements OssNamedStrategy {
     @Override
-    public String named(String name) {
+    public String named(String name, byte[] bytes) {
         return IdUtils.createTid();
     }
 }

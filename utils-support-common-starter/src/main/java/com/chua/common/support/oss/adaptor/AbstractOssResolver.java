@@ -29,12 +29,13 @@ public abstract class AbstractOssResolver implements OssResolver {
      *
      * @param ossSystem preview
      * @param name      name
+     * @param bytes     bytes
      * @return 拒絕策略
      */
-    protected String getNamedStrategy(OssSystem ossSystem, String name) {
+    public static String getNamedStrategy(OssSystem ossSystem, String name, byte[] bytes) {
         String ossNameStrategy = ossSystem.getOssNameStrategy();
         OssNamedStrategy ossNamedStrategy = ServiceProvider.of(OssNamedStrategy.class).getExtension(ossNameStrategy);
-        return ossNamedStrategy.named(name);
+        return ossNamedStrategy.named(name, bytes);
 
     }
 

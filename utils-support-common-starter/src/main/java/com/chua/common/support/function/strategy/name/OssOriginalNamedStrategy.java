@@ -10,7 +10,7 @@ import com.chua.common.support.annotations.SpiOption;
 @SpiOption("原始命名")
 public class OssOriginalNamedStrategy implements OssNamedStrategy {
     @Override
-    public String named(String name) {
+    public String named(String name, byte[] bytes) {
         return name;
     }
 }
