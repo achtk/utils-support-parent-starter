@@ -35,10 +35,11 @@ public interface OssResolver extends AutoCloseable {
     /**
      * 保存文件
      *
-     * @param is        文件
-     * @param ossSystem ossSystem
-     * @param name      名称
+     * @param parentPath
+     * @param is         文件
+     * @param ossSystem  ossSystem
+     * @param name       名称
      * @return 结果
      */
-    Value<String> storage(InputStream is, OssSystem ossSystem, String name);
+    Value<String> storage(String parentPath, InputStream is, OssSystem ossSystem, String name);
 }

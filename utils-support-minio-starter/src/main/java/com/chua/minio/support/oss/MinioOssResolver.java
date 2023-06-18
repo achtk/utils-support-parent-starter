@@ -107,10 +107,10 @@ public class MinioOssResolver extends AbstractOssResolver {
     }
 
     @Override
-    public Value<String> storage(InputStream is, OssSystem ossSystem, String name) {
+    public Value<String> storage(String parentPath, InputStream is, OssSystem ossSystem, String name) {
         MinioClient minioClient = initialConfig(ossSystem);
         String suffix = FileUtils.getExtension(name);
-        name = getNamedStrategy(ossSystem, name) + "." + suffix;
+        name = StringUtils.defaultString(parentPath, "") + "/" + getNamedStrategy(ossSystem, name) + "." + suffix;
         String bucket = ossSystem.getOssBucket();
         try {
             boolean found = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucket).build());

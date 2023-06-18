@@ -24,11 +24,11 @@ import java.util.Optional;
 public class LocalOssResolver extends AbstractOssResolver {
 
     @Override
-    public Value<String> storage(InputStream is, OssSystem ossSystem, String name) {
+    public Value<String> storage(String parentPath, InputStream is, OssSystem ossSystem, String name) {
         String suffix = FileUtils.getExtension(name);
         name = getNamedStrategy(ossSystem, name);
         String real = StringUtils.defaultString(ossSystem.getOssBucket(), "") + "/" + name + "." + suffix;
-        File file = new File(ossSystem.getOssPath(), real);
+        File file = new File(ossSystem.getOssPath() + "/" + parentPath, real);
         FileUtils.mkParentDirs(file);
 
         StandardCopyOption[] copyOption = new StandardCopyOption[1];
