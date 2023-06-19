@@ -155,7 +155,7 @@ public class MinioOssResolver extends AbstractOssResolver {
                             item.objectName(),
                             item.lastModified().toLocalDateTime(),
                             !item.isDir(),
-                            true));
+                            item.isDir()));
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
