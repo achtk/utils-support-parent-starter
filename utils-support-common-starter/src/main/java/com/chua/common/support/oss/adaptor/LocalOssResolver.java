@@ -143,7 +143,7 @@ public class LocalOssResolver extends AbstractOssResolver {
     }
 
     private File findFile(OssSystem ossSystem, String path) {
-        String ossPath = ossSystem.getOssPath() + "/" + ossSystem.getOssBucket();
+        String ossPath = ossSystem.getOssPath();
         if (StringUtils.isBlank(ossPath)) {
             return null;
         }
