@@ -8,6 +8,7 @@ import com.chua.common.support.converter.Converter;
 import com.chua.common.support.media.MediaType;
 import com.chua.common.support.media.MediaTypeFactory;
 import com.chua.common.support.oss.adaptor.AbstractOssResolver;
+import com.chua.common.support.oss.node.OssNode;
 import com.chua.common.support.pojo.Mode;
 import com.chua.common.support.pojo.OssSystem;
 import com.chua.common.support.range.Range;
@@ -16,13 +17,13 @@ import com.chua.common.support.utils.MapUtils;
 import com.chua.common.support.utils.StringUtils;
 import com.chua.common.support.value.Value;
 import io.minio.*;
+import io.minio.messages.Item;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Properties;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.chua.common.support.constant.CommonConstant.HTTP;
 
@@ -93,7 +94,7 @@ public class MinioOssResolver extends AbstractOssResolver {
             contentType = response.headers().get("Content-Type");
             if (null != os) {
                 if (mode == Mode.DOWNLOAD && null != range) {
-                    rangeRead(response, ossSystem, range, byteArrayOutputStream);
+                    writeRangeToOutStream(response, ossSystem, range, byteArrayOutputStream);
                 } else {
                     IoUtils.copy(response, byteArrayOutputStream);
                 }
@@ -130,5 +131,46 @@ public class MinioOssResolver extends AbstractOssResolver {
             }
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public List<OssNode> getChildren(OssSystem ossSystem, String id, String name) {
+        MinioClient minioClient = initialConfig(ossSystem);
+        String bucket = ossSystem.getOssBucket();
+        try {
+            boolean found = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucket).build());
+            if (!found) {
+                return Collections.emptyList();
+            }
+            Iterable<Result<Item>> results = minioClient.listObjects(ListObjectsArgs.builder()
+                    .bucket(bucket)
+                    .recursive(false)
+                    .build());
+            List<OssNode> rs = new LinkedList<>();
+            results.forEach(itemResult -> {
+                try {
+                    Item item = itemResult.get();
+                    rs.add(new OssNode(name + "/" + item.objectName(),
+                            name + "/" + item.objectName(),
+                            item.objectName(),
+                            item.lastModified().toLocalDateTime(),
+                            !item.isDir(),
+                            true));
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            return rs;
+        } catch (Exception e) {
+            if ("1 : bucket name must be at least 3 and no more than 63 characters long".equals(e.getMessage())) {
+                throw new RuntimeException("bucket长度在3~63之间");
+            }
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Boolean deleteObject(OssSystem ossSystem, String id, String name) {
+        return null;
     }
 }

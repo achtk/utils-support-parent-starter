@@ -1,11 +1,13 @@
 package com.chua.common.support.oss.adaptor;
 
+import com.chua.common.support.oss.node.OssNode;
 import com.chua.common.support.pojo.Mode;
 import com.chua.common.support.pojo.OssSystem;
 import com.chua.common.support.range.Range;
 import com.chua.common.support.value.Value;
 
 import java.io.OutputStream;
+import java.util.List;
 
 /**
  * 适配器
@@ -27,7 +29,6 @@ public interface OssResolver extends AutoCloseable {
      * @param mode      模式. download/preview
      * @param range     区间(只有下载有效)
      * @param os        输出
-     * @return ViewPreview
      */
     void preview(OssSystem ossSystem, String path, Mode mode, Range<Long> range, OutputStream os);
 
@@ -41,4 +42,24 @@ public interface OssResolver extends AutoCloseable {
      * @return 结果
      */
     Value<String> storage(String parentPath, byte[] bytes, OssSystem ossSystem, String name);
+
+    /**
+     * 子目录
+     *
+     * @param ossSystem 配置
+     * @param id
+     * @param name      路径
+     * @return node
+     */
+    List<OssNode> getChildren(OssSystem ossSystem, String id, String name);
+
+    /**
+     * 删除对象
+     *
+     * @param ossSystem pei
+     * @param id        id
+     * @param name      name
+     * @return 是否删除
+     */
+    Boolean deleteObject(OssSystem ossSystem, String id, String name);
 }

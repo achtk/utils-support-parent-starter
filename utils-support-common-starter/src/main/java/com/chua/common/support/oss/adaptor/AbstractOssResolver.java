@@ -59,7 +59,7 @@ public abstract class AbstractOssResolver implements OssResolver {
      * @param range        区间
      * @param outputStream 输出
      */
-    protected void rangeRead(Object inputStream, OssSystem ossSystem, Range<Long> range, ByteArrayOutputStream outputStream) throws Exception {
+    protected void writeRangeToOutStream(Object inputStream, OssSystem ossSystem, Range<Long> range, ByteArrayOutputStream outputStream) throws Exception {
         if (inputStream instanceof RandomAccessFile) {
             rangeRandomAccessFile((RandomAccessFile) inputStream, ossSystem, range, outputStream);
             return;
