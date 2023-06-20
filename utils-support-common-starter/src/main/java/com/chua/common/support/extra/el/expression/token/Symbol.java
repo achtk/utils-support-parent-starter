@@ -5,11 +5,11 @@ import java.util.Map;
 
 public enum Symbol implements Token
 {
-    LEFT_PAREN("("), //
-    RIGHT_PAREN(")"), //
-    LEFT_BRACKET("["), //
-    RIGHT_BRACKET("]"), //
-    COMMA(",")//
+    LEFT_PAREN("("), 
+    RIGHT_PAREN(")"), 
+    LEFT_BRACKET("["), 
+    RIGHT_BRACKET("]"), 
+    COMMA(",")
     ;
 
     private static final Map<String, Symbol> symbols = new HashMap<String, Symbol>(128);

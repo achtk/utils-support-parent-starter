@@ -131,7 +131,7 @@ public class MockData<T> {
 
         boolean b = Integer.class == aClass || Short.class == aClass || Byte.class == aClass || Long.class == aClass;
         if (b) {
-            rs.append(RandomUtils.randomInt());
+            rs.append(RandomUtils.randomInt(Integer.MAX_VALUE));
             return;
         }
 

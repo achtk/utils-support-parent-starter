@@ -2,6 +2,7 @@ package com.chua.common.support.database.entity;
 
 import com.chua.common.support.bean.BeanProperty;
 import com.chua.common.support.database.dialect.Dialect;
+import com.chua.common.support.database.enums.FieldStrategy;
 import com.chua.common.support.database.jdbc.Type;
 import lombok.Data;
 
@@ -21,6 +22,12 @@ public class Column {
     private Class<?> javaType;
 
     private String tableName;
+
+    /**
+     * 字段验证策略之 where
+     * @since added v_3.1.2 @2019-5-7
+     */
+    private FieldStrategy whereStrategy;
     /**
      * 名称
      */

@@ -1,17 +1,9 @@
-/*
- * Copyright 2016 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by
- * applicable law or agreed to in writing, software distributed under the
- * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS
- * OF ANY KIND, either express or implied. See the License for the specific
- * language governing permissions and limitations under the License.
- */
+
 package com.chua.common.support.database.jdbc;
 
-import com.chua.common.support.database.jdbc.springsrc.utils.ReflectionUtils;
+import com.chua.common.support.unit.name.NamingCase;
+import com.chua.common.support.utils.ClassUtils;
+import com.chua.common.support.utils.StringUtils;
 
 import java.beans.BeanInfo;
 import java.beans.Introspector;
@@ -70,7 +62,7 @@ public abstract class ClassCacheUtils {// NOSONAR
 	 * otherwise return null
 	 */
 	public static Method checkMethodExist(Class<?> clazz, String uniqueMethodName) {
-		if (clazz == null || StrUtils.isEmpty(uniqueMethodName))
+		if (clazz == null || StringUtils.isEmpty(uniqueMethodName))
 			return null;
 		Map<String, Object> methodMap = uniqueMethodCache.get(clazz);
 		if (methodMap != null && !methodMap.isEmpty()) {
@@ -97,13 +89,9 @@ public abstract class ClassCacheUtils {// NOSONAR
 	}
 
 	private static LinkedHashMap<String, Method> sortMap(Map<String, Method> map) {
-		List<Entry<String, Method>> list = new ArrayList<Entry<String, Method>>(map.entrySet());
-		Collections.sort(list, new Comparator<Entry<String, Method>>() {
-			public int compare(Entry<String, Method> o1, Entry<String, Method> o2) {
-				return o1.getKey().compareTo(o2.getKey());
-			}
-		});
-		LinkedHashMap<String, Method> result = new LinkedHashMap<String, Method>();
+		List<Entry<String, Method>> list = new ArrayList<>(map.entrySet());
+		Collections.sort(list, Entry.comparingByKey());
+		LinkedHashMap<String, Method> result = new LinkedHashMap<>();
 		for (Entry<String, Method> entry : list) {
 			result.put(entry.getKey(), entry.getValue());
 		}
@@ -131,8 +119,7 @@ public abstract class ClassCacheUtils {// NOSONAR
 			readMethods.put(fieldName, readMtd);
 			Method writeMtd = pd.getWriteMethod();
 			if (writeMtd == null) {
-				writeMtd = ReflectionUtils.findMethod(clazz, "set" + StrUtils.toUpperCaseFirstOne(fieldName),
-						readMtd.getReturnType());
+				writeMtd = ClassUtils.findMethod(clazz, "set" + NamingCase.toFirstUpperCase(fieldName));
 			}
 			writeMethods.put(fieldName, writeMtd);
 		}

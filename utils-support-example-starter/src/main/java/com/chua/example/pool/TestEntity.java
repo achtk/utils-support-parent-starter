@@ -3,6 +3,7 @@ package com.chua.example.pool;
 import com.chua.common.support.database.annotation.Column;
 import com.chua.common.support.database.annotation.Id;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * @author CH
@@ -10,6 +11,7 @@ import lombok.Data;
  * @since 2021/6/28
  */
 @Data
+@Accessors(chain = true)
 public class TestEntity  {
 
     @Id
@@ -18,5 +20,7 @@ public class TestEntity  {
     private String success;
     @Column(length = 11)
     private Integer device;
+    @Column(length = 11)
+    private Integer device2;
 
 }

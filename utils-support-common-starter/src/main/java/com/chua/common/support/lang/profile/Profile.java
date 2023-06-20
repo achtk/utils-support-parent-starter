@@ -23,6 +23,14 @@ import java.util.stream.Collectors;
  */
 public interface Profile extends Environment, PlaceholderResolver {
     /**
+     * 初始化
+     * @return Profile
+     */
+    static Profile newDefault() {
+        return new DelegateProfile();
+    }
+
+    /**
      * 添加配置
      *
      * @param profile 配置目录
@@ -684,6 +692,39 @@ public interface Profile extends Environment, PlaceholderResolver {
      * @return T
      */
     <T> T getType(String name, T defaultValue, Class<T> returnType);
+    /**
+     * 获取类型
+     * @param name 名称
+     * @param targetType 目标类型
+     * @return 结果
+     */
+    @SuppressWarnings("ALL")
+    default Class<?> getForType(String name) {
+        return getForType(name, Object.class);
+    }
+    /**
+     * 获取类型
+     * @param name 名称
+     * @param targetType 目标类型
+     * @return 结果
+     * @param <T> 类型
+     */
+    @SuppressWarnings("ALL")
+    default <T>Class<T> getForType(String name, Class<T> targetType) {
+        Object object = getObject(name);
+        if(null == object ) {
+            return null;
+        }
 
+        if(object instanceof Class<?> && targetType.isAssignableFrom((Class<?>) object)) {
+            return (Class<T>) object;
+        }
 
+        Class<?> aClass = object.getClass();
+        if(targetType.isAssignableFrom(aClass)) {
+            return (Class<T>) aClass;
+        }
+
+        return null;
+    }
 }

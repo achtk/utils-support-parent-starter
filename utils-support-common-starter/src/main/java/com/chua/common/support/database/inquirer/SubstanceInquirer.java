@@ -3,6 +3,7 @@ package com.chua.common.support.database.inquirer;
 import com.chua.common.support.bean.BeanMap;
 import com.chua.common.support.bean.BeanUtils;
 import com.chua.common.support.converter.Converter;
+import com.chua.common.support.database.entity.Column;
 import com.chua.common.support.function.Joiner;
 import com.chua.common.support.unit.name.NamingCase;
 import com.chua.common.support.utils.AnnotationUtils;
@@ -292,6 +293,11 @@ public class SubstanceInquirer<T> implements SqlSubstanceInquirer<T> {
     @Override
     public int execute(String command, Object... args) throws Exception {
         return 0;
+    }
+
+    @Override
+    public List<Column> getColumn(String tableName) {
+        return jdbcInquirer.getColumn(tableName);
     }
 
     public void close() throws Exception {

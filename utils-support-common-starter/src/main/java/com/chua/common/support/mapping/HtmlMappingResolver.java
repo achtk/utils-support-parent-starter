@@ -36,9 +36,8 @@ import static com.chua.common.support.jsoup.nodes.Document.OutputSettings.Syntax
  */
 @Spi("jsoup")
 public class HtmlMappingResolver implements MappingResolver {
-    private Object bean;
 
-    private Profile profile;
+    private final Profile profile;
 
     public HtmlMappingResolver(Profile profile) {
         this.profile = profile;
@@ -69,7 +68,7 @@ public class HtmlMappingResolver implements MappingResolver {
             return parse(method, elements);
         }));
 
-        this.bean = ProxyUtils.newProxy(target, new DelegateMethodIntercept<>(target, (proxyMethod) -> {
+        Object bean = ProxyUtils.newProxy(target, new DelegateMethodIntercept<>(target, (proxyMethod) -> {
             Bench bench = marker.createBench(MethodDescribe.builder()
                     .method(proxyMethod.getMethod())
                     .build());

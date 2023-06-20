@@ -2,6 +2,8 @@ package com.chua.common.support.utils;
 
 import com.chua.common.support.constant.CommonConstant;
 import com.chua.common.support.constant.RegexConstant;
+import com.chua.common.support.database.SqlInjectionUtils;
+import com.chua.common.support.database.jdbc.DialectException;
 import com.chua.common.support.function.Splitter;
 import com.chua.common.support.jsoup.helper.Validate;
 import com.chua.common.support.lang.Ascii;
@@ -37,6 +39,13 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  * @author CH
  */
 public class StringUtils {
+    /**
+     * 字符串去除空白内容
+     *
+     * <ul> <li>'"<>&*+=#-; sql注入黑名单</li> <li>\n 回车</li> <li>\t 水平制表符</li> <li>\s 空格</li> <li>\r 换行</li> </ul>
+     */
+    private static final Pattern REPLACE_BLANK = Pattern.compile("'|\"|\\<|\\>|&|\\*|\\+|=|#|-|;|\\s*|\t|\r|\n");
+
     /**
      * memoised padding up to 21 (blocks 0 to 20 spaces)
      */
@@ -75,6 +84,7 @@ public class StringUtils {
     public static boolean isEmpty(CharSequence str) {
         return str == null || str.length() == 0;
     }
+
     /**
      * <p>字符串是否为空，空的定义如下：</p>
      * <ol>
@@ -105,6 +115,7 @@ public class StringUtils {
         }
         return true;
     }
+
     /**
      * <p>字符串是否为空，空的定义如下：</p>
      * <ol>
@@ -280,6 +291,7 @@ public class StringUtils {
         }
         return new String(result);
     }
+
     /**
      * <p>Repeat a String <code>repeat</code> times to form a
      * new String, with a String separator injected each time. </p>
@@ -309,6 +321,7 @@ public class StringUtils {
             return removeEnd(result, separator);
         }
     }
+
     /**
      * 重复某个字符串
      *
@@ -1688,6 +1701,7 @@ public class StringUtils {
         }
         return String.valueOf(out);
     }
+
     /**
      * 移除标识之后的数据
      *
@@ -2122,6 +2136,7 @@ public class StringUtils {
 
         return resource.substring(0, resource.indexOf(s));
     }
+
     /**
      * <p>Removes a substring only if it is at the end of a source string,
      * otherwise returns the source string.</p>
@@ -2331,6 +2346,160 @@ public class StringUtils {
      */
     public static List<String> split(CharSequence str, char separator, int limit) {
         return split(str, separator, limit, false, false);
+    }
+
+    /**
+     * <p>
+     * Splits the provided text into an array, separator specified. This is an
+     * alternative to using StringTokenizer.
+     * </p>
+     *
+     * <p>
+     * The separator is not included in the returned String array. Adjacent
+     * separators are treated as one separator. For more control over the split use
+     * the StrTokenizer class.
+     * </p>
+     *
+     * <p>
+     * A {@code null} input String returns {@code null}.
+     * </p>
+     *
+     * <pre>
+     * StringUtils.split(null, *)         = null
+     * StringUtils.split("", *)           = []
+     * StringUtils.split("a.b.c", '.')    = ["a", "b", "c"]
+     * StringUtils.split("a..b.c", '.')   = ["a", "b", "c"]
+     * StringUtils.split("a:b:c", '.')    = ["a:b:c"]
+     * StringUtils.split("a b c", ' ')    = ["a", "b", "c"]
+     * </pre>
+     *
+     * @param str           the String to parse, may be null
+     * @param separatorChar the character used as the delimiter
+     * @return an array of parsed Strings, {@code null} if null String input
+     * @since 2.0
+     */
+    public static String[] split(final String str, final char separatorChar) {
+        return splitWorker(str, separatorChar, false);
+    }
+
+    /**
+     * <p>
+     * Splits the provided text into an array, separator specified. This is an
+     * alternative to using StringTokenizer.
+     * </p>
+     *
+     * <p>
+     * The separator is not included in the returned String array. Adjacent
+     * separators are treated as one separator. For more control over the split use
+     * the StrTokenizer class.
+     * </p>
+     *
+     * <p>
+     * A {@code null} input String returns {@code null}.
+     * </p>
+     *
+     * <pre>
+     * StringUtils.split(null, *)         = null
+     * StringUtils.split("", *)           = []
+     * StringUtils.split("a.b.c", '.')    = ["a", "b", "c"]
+     * StringUtils.split("a..b.c", '.')   = ["a", "b", "c"]
+     * StringUtils.split("a:b:c", '.')    = ["a:b:c"]
+     * StringUtils.split("a b c", ' ')    = ["a", "b", "c"]
+     * </pre>
+     *
+     * @param list       the String to parse, may be null
+     * @param separators the character used as the delimiter
+     * @return an array of parsed Strings, {@code null} if null String input
+     * @since 2.0
+     */
+    public static String[] split(String separators, String list) {
+        return split(separators, list, false);
+    }
+
+    /**
+     * <p>
+     * Splits the provided text into an array, separator specified. This is an
+     * alternative to using StringTokenizer.
+     * </p>
+     *
+     * <p>
+     * The separator is not included in the returned String array. Adjacent
+     * separators are treated as one separator. For more control over the split use
+     * the StrTokenizer class.
+     * </p>
+     *
+     * <p>
+     * A {@code null} input String returns {@code null}.
+     * </p>
+     *
+     * <pre>
+     * StringUtils.split(null, *)         = null
+     * StringUtils.split("", *)           = []
+     * StringUtils.split("a.b.c", '.')    = ["a", "b", "c"]
+     * StringUtils.split("a..b.c", '.')   = ["a", "b", "c"]
+     * StringUtils.split("a:b:c", '.')    = ["a:b:c"]
+     * StringUtils.split("a b c", ' ')    = ["a", "b", "c"]
+     * </pre>
+     *
+     * @param list       the String to parse, may be null
+     * @param separators the character used as the delimiter
+     * @return an array of parsed Strings, {@code null} if null String input
+     * @since 2.0
+     */
+    public static String[] split(String separators, String list, boolean include) {
+        StringTokenizer tokens = new StringTokenizer(list, separators, include);
+        String[] result = new String[tokens.countTokens()];
+        int i = 0;
+        while (tokens.hasMoreTokens()) {
+            result[i++] = tokens.nextToken();
+        }
+        return result;
+    }
+
+    /**
+     * Performs the logic for the {@code split} and {@code splitPreserveAllTokens}
+     * methods that do not return a maximum array length.
+     *
+     * @param str               the String to parse, may be {@code null}
+     * @param separatorChar     the separate character
+     * @param preserveAllTokens if {@code true}, adjacent separators are treated as empty token
+     *                          separators; if {@code false}, adjacent separators are treated as
+     *                          one separator.
+     * @return an array of parsed Strings, {@code null} if null String input
+     */
+    private static String[] splitWorker(final String str, final char separatorChar, final boolean preserveAllTokens) {
+        // Performance tuned for 2.0 (JDK1.4)
+
+        if (str == null) {
+            return new String[0];
+        }
+        final int len = str.length();
+        if (len == 0) {
+            return new String[0];
+        }
+        final List<String> list = new ArrayList<String>();
+        int i = 0;
+        int start = 0;
+        boolean match = false;
+        boolean lastMatch = false;
+        while (i < len) {
+            if (str.charAt(i) == separatorChar) {
+                if (match || preserveAllTokens) {
+                    list.add(str.substring(start, i));
+                    match = false;
+                    lastMatch = true;
+                }
+                start = ++i;
+                continue;
+            }
+            lastMatch = false;
+            match = true;
+            i++;
+        }
+        if (match || preserveAllTokens) {
+            list.add(str.substring(start, i));
+        }
+        return list.toArray(new String[0]);
     }
 
     /**
@@ -2726,8 +2895,7 @@ public class StringUtils {
         }
 
         String start = strings.next().toString();
-        if (!strings.hasNext())
-        {
+        if (!strings.hasNext()) {
             return start;
         }
 
@@ -3347,11 +3515,11 @@ public class StringUtils {
     /**
      * 将字符串转成ASCII
      *
-     * @param strValue
-     * @return
+     * @param strValue strValue
+     * @return ASCII
      */
     public static String stringToAscii(String strValue) {
-        StringBuffer sbu = new StringBuffer();
+        StringBuilder sbu = new StringBuilder();
         char[] chars = strValue.toCharArray();
         for (int i = 0; i < chars.length; i++) {
             if (i != chars.length - 1) {
@@ -3536,7 +3704,7 @@ public class StringUtils {
      * 查找指定字符串是否包含指定字符串列表中的任意一个字符串，如果包含返回找到的第一个字符串<br>
      * 忽略大小写
      *
-     * @param str      指定字符串
+     * @param str       指定字符串
      * @param sequences 需要检查的字符串数组
      * @return 被包含的第一个字符串
      * @since 3.2.0
@@ -3552,4 +3720,290 @@ public class StringUtils {
         }
         return null;
     }
+
+
+    /**
+     * <p>
+     * Gets the substring before the first occurrence of a separator. The separator
+     * is not returned.
+     * </p>
+     *
+     * <p>
+     * A {@code null} string input will return {@code null}. An empty ("") string
+     * input will return the empty string. A {@code null} separator will return the
+     * input string.
+     * </p>
+     *
+     * <p>
+     * If nothing is found, the string input is returned.
+     * </p>
+     *
+     * <pre>
+     * StringUtils.substringBefore(null, *)      = null
+     * StringUtils.substringBefore("", *)        = ""
+     * StringUtils.substringBefore("abc", "a")   = ""
+     * StringUtils.substringBefore("abcba", "b") = "a"
+     * StringUtils.substringBefore("abc", "c")   = "ab"
+     * StringUtils.substringBefore("abc", "d")   = "abc"
+     * StringUtils.substringBefore("abc", "")    = ""
+     * StringUtils.substringBefore("abc", null)  = "abc"
+     * </pre>
+     *
+     * @param str       the String to get a substring from, may be null
+     * @param separator the String to search for, may be null
+     * @return the substring before the first occurrence of the separator,
+     * {@code null} if null String input
+     */
+    public static String substringBefore(final String str, final String separator) {
+        if (isEmpty(str) || separator == null) {
+            return str;
+        }
+        if (separator.isEmpty()) {
+            return "";
+        }
+        final int pos = str.indexOf(separator);
+        if (pos == -1) {
+            return str;
+        }
+        return str.substring(0, pos);
+    }
+
+    /**
+     * Change a Object array to "obj1,obj2...,objn" String
+     */
+    public static String arrayToString(Object[] array) {
+        if (array == null) {
+            DialectException.throwEX("StrUtils arrayToString() method do not accept null parameter");
+        }
+        StringBuilder sb = new StringBuilder();
+        for (Object object : array) {
+            sb.append(object).append(",");
+        }
+        if (sb.length() > 0) {
+            sb.setLength(sb.length() - 1);
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Change a Object array to connected string by given seperateString
+     */
+    public static String arrayToString(Object[] array, String seperateString) {
+        if (array == null) {
+            DialectException.throwEX("StrUtils arrayToString() method do not accept null parameter");
+        }
+        StringBuilder sb = new StringBuilder();
+        for (Object object : array) {
+            sb.append(object).append(seperateString);
+        }
+        if (sb.length() > 0) {
+            sb.setLength(sb.length() - seperateString.length());
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Gets the String that is nested in between two Strings. Only the first match
+     * is returned.
+     * <p>
+     * A <code>null</code> input String returns <code>null</code>. A
+     * <code>null</code> open/close returns <code>null</code> (no match). An empty
+     * ("") open and close returns an empty string.
+     *
+     * <pre>
+     * StringUtils.substringBetween("wx[b]yz", "[", "]") = "b"
+     * StringUtils.substringBetween(null, *, *)          = null
+     * StringUtils.substringBetween(*, null, *)          = null
+     * StringUtils.substringBetween(*, *, null)          = null
+     * StringUtils.substringBetween("", "", "")          = ""
+     * StringUtils.substringBetween("", "", "]")         = null
+     * StringUtils.substringBetween("", "[", "]")        = null
+     * StringUtils.substringBetween("yabcz", "", "")     = ""
+     * StringUtils.substringBetween("yabcz", "y", "z")   = "abc"
+     * StringUtils.substringBetween("yabczyabcz", "y", "z")   = "abc"
+     * </pre>
+     *
+     * @param str   the String containing the substring, may be null
+     * @param open  the String before the substring, may be null
+     * @param close the String after the substring, may be null
+     * @return the substring, <code>null</code> if no match
+     * @since 2.0
+     */
+    public static String substringBetween(String str, String open, String close) {
+        if (str == null || open == null || close == null) {
+            return null;
+        }
+        int start = str.indexOf(open);
+        if (start != -1) {
+            int end = str.indexOf(close, start + open.length());
+            if (end != -1) {
+                return str.substring(start + open.length(), end);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Join 2 String array into one
+     */
+    public static String[] joinStringArray(String[] array1, String[] array2) {
+        List<String> l = new ArrayList<String>();
+        Collections.addAll(l, array1);
+        Collections.addAll(l, array2);
+        return l.toArray(new String[0]);
+    }
+
+
+    /**
+     * Replace all sub strings ignore case <br/>
+     * replaceIgnoreCase("AbcDECd", "Cd", "FF") = "AbFFEFF"
+     */
+    public static String replaceIgnoreCase(String text, String findtxt, String replacetxt) {
+        if (text == null) {
+            return null;
+        }
+        String str = text;
+        if (findtxt == null || findtxt.length() == 0) {
+            return str;
+        }
+        if (findtxt.length() > str.length()) {
+            return str;
+        }
+        int counter = 0;
+        String thesubstr;
+        while ((counter < str.length()) && (str.substring(counter).length() >= findtxt.length())) {
+            thesubstr = str.substring(counter, counter + findtxt.length());
+            if (thesubstr.equalsIgnoreCase(findtxt)) {
+                str = str.substring(0, counter) + replacetxt + str.substring(counter + findtxt.length());
+                counter += replacetxt.length();
+            } else {
+                counter++;
+            }
+        }
+        return str;
+    }
+
+
+    /**
+     * Some column has quote chars, like `someCol` or "someCol" or [someCol] use
+     * this method to clear quote chars
+     */
+    public static String clearQuote(String columnName) {
+        if (isEmpty(columnName)) {
+            return columnName;
+        }
+        String s = replace(columnName, "`", "");
+        s = replace(s, "\"", "");
+        s = replace(s, "[", "");
+        s = replace(s, "]", "");
+        return s;
+    }
+
+    /**
+     * Change a Object List to "obj1,obj2...,objn" String
+     */
+    public static String listToString(List<?> lst) {
+        if (lst == null) {
+            DialectException.throwEX("StrUtils listToString() method do not accept null parameter");
+        }
+        StringBuilder sb = new StringBuilder();
+        for (Object object : lst) {
+            sb.append(object).append(",");
+        }
+        if (sb.length() > 0) {
+            sb.setLength(sb.length() - 1);
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Change a Object array to "obj1,obj2...,objn" String
+     */
+    public static String arrayToStringButSkipFirst(Object[] array) {
+        if (array == null) {
+            DialectException.throwEX("StrUtils arrayToString() method do not accept null parameter");
+        }
+        StringBuilder sb = new StringBuilder();
+        int i = 1;
+        for (Object object : array) {
+            if (i++ != 1) {
+                sb.append(object).append(",");
+            }
+
+        }
+        if (sb.length() > 0) {
+            sb.setLength(sb.length() - 1);
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Replace first occurrences of a substring within a string with another string.
+     *
+     * @param originString The original String
+     * @param oldPattern   old String Pattern to replace
+     * @param newPattern   new String pattern to insert
+     * @return a String with the replacements
+     */
+    public static String replaceFirst(String originString, String oldPattern, String newPattern) {
+        if (isEmpty(originString) || isEmpty(oldPattern) || newPattern == null) {
+            return originString;
+        }
+        StringBuilder sb = new StringBuilder();
+        int pos = 0;
+        int index = originString.indexOf(oldPattern);
+        int patLen = oldPattern.length();
+        if (index >= 0) {
+            sb.append(originString.substring(pos, index));
+            sb.append(newPattern);
+            pos = index + patLen;
+        }
+        sb.append(originString.substring(pos));
+        return sb.toString();
+    }
+    /**
+     * 判断对象是否不为空
+     *
+     * @param object ignore
+     * @return ignore
+     */
+    public static boolean checkValNotNull(Object object) {
+        if (object instanceof CharSequence) {
+            return isNotEmpty((CharSequence) object);
+        }
+        return object != null;
+    }
+    /**
+     * SQL 注入字符串去除空白内容：
+     * <ul>
+     *     <li>\n 回车</li>
+     *     <li>\t 水平制表符</li>
+     *     <li>\s 空格</li>
+     *     <li>\r 换行</li>
+     * </ul>
+     *
+     * @param str 字符串
+     */
+    public static String sqlInjectionReplaceBlank(String str) {
+        if (SqlInjectionUtils.check(str)) {
+            /**
+             * 过滤sql黑名单字符，存在 SQL 注入，去除空白内容
+             */
+            Matcher matcher = REPLACE_BLANK.matcher(str);
+            str = matcher.replaceAll("");
+        }
+        return str;
+    }
+
+    /**
+     * Convert a comma delimited list (e.g., a row from a CSV file) into an
+     * array of strings.
+     *
+     * @param str the input {@code String}
+     * @return an array of strings, or the empty array in case of empty input
+     */
+    public static String[] commaDelimitedListToStringArray(String str) {
+        return delimitedListToStringArray(str, ",");
+    }
+
 }

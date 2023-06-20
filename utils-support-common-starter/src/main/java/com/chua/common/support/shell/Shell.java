@@ -1,7 +1,7 @@
 package com.chua.common.support.shell;
 
-import com.chua.common.support.database.jdbc.springsrc.utils.ReflectionUtils;
 import com.chua.common.support.function.InitializingAware;
+import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.IoUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -66,7 +66,7 @@ public abstract class Shell implements InitializingAware, AutoCloseable {
             return;
         }
 
-        ReflectionUtils.doWithMethods(bean.getClass(), method -> {
+        ClassUtils.doWithMethods(bean.getClass(), method -> {
             ShellMapping shellMapping = method.getDeclaredAnnotation(ShellMapping.class);
             if (null != shellMapping) {
                 analysis(shellMapping, method, bean);

@@ -3,18 +3,38 @@ package com.chua.common.support.database.metadata;
 import com.chua.common.support.database.entity.Column;
 import com.chua.common.support.database.entity.Index;
 import com.chua.common.support.function.Joiner;
+import com.chua.common.support.utils.ClassUtils;
+import com.chua.common.support.utils.MapUtils;
 import com.chua.common.support.utils.StringUtils;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_COMMA;
+import static java.util.stream.Collectors.joining;
 
 /**
  * 表信息
  *
  * @author CH
  */
+@SuppressWarnings("ALL")
 public interface Metadata<T> {
+    static Map<Class<?>, Metadata> CACHE = new ConcurrentHashMap<>();
+
+    static <T> Metadata<Object> of(Class<T> entityClass) {
+        return MapUtils.computeIfAbsent(CACHE, entityClass, new Function<Class<?>, Metadata>() {
+            @Override
+            public Metadata apply(Class<?> aClass) {
+                return new DelegateMetadata(aClass, "", "");
+            }
+        });
+    }
+
     /**
      * 表名
      *
@@ -212,4 +232,80 @@ public interface Metadata<T> {
      * @return 索引
      */
     List<Index> getIndex();
+
+    /**
+     * 是否有主键
+     * @return 是否有主键
+     */
+    default boolean havePK() {
+        List<Column> column = getColumn();
+        for (Column column1 : column) {
+            if(column1.isPrimary()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 获取主键
+     * @return 主键
+     */
+    default String getKeyProperty() {
+        List<Column> column = getColumn();
+        for (Column column1 : column) {
+            if(column1.isPrimary()) {
+                return column1.getName();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 获取主键
+     * @return 主键
+     */
+    default Column getKeyColumn() {
+        List<Column> column = getColumn();
+        for (Column column1 : column) {
+            if(column1.isPrimary()) {
+                return column1;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 选择字段
+     * @param predicate 回调
+     * @return 结果
+     */
+    default String chooseSelect(Predicate<Column> predicate) {
+        String sqlSelect = getKeyProperty();
+        String fieldsSqlSelect = getColumn().stream().filter(predicate)
+                .map(Column::getName).collect(joining(SYMBOL_COMMA));
+        if (StringUtils.isNotBlank(sqlSelect) && StringUtils.isNotBlank(fieldsSqlSelect)) {
+            return sqlSelect + SYMBOL_COMMA + fieldsSqlSelect;
+        } else if (StringUtils.isNotBlank(fieldsSqlSelect)) {
+            return fieldsSqlSelect;
+        }
+        return sqlSelect;
+    }
+
+
+    /**
+     * 获取对象属性值
+     *
+     * @param entity   对象
+     * @param property 属性名
+     * @return 属性值
+     * @since 3.4.4
+     */
+    default Object getPropertyValue(Object entity, String property) {
+        try {
+            return ClassUtils.getFieldValue(property, entity);
+        } catch (Exception e) {
+            throw new RuntimeException(StringUtils.format("Error: Cannot read property in {}.  Cause:", e, entity.getClass().getSimpleName()));
+        }
+    }
 }

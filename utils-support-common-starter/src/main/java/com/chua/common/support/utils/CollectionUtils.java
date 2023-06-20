@@ -1,5 +1,7 @@
 package com.chua.common.support.utils;
 
+import com.chua.common.support.bean.BeanMap;
+import com.chua.common.support.bean.BeanUtils;
 import com.chua.common.support.collection.CartesianList;
 import com.chua.common.support.converter.Converter;
 import com.chua.common.support.function.Matcher;
@@ -283,6 +285,7 @@ public class CollectionUtils {
     public static <T> T find(final Collection<T> source, final int index) {
         return find(source, index, null);
     }
+
     /**
      * 获取索引对应的数据
      *
@@ -655,8 +658,6 @@ public class CollectionUtils {
     }
 
 
-
-
     /**
      * 计算集合的单差集，即只返回【集合1】中有，但是【集合2】中没有的元素，例如：
      *
@@ -691,7 +692,6 @@ public class CollectionUtils {
     }
 
 
-
     /**
      * 新建一个List
      *
@@ -721,18 +721,136 @@ public class CollectionUtils {
     }
 
     /**
-     *
      * 集合是否包含集合1的至少一个元素
+     *
      * @param source 集合
      * @param target 集合1
      * @return 集合是否包含集合1的至少一个元素
      */
     public static boolean contains(List<String> source, List<String> target) {
         for (String s : target) {
-            if(source.contains(s)) {
+            if (source.contains(s)) {
                 return true;
             }
         }
         return false;
+    }
+
+    /**
+     * Check whether the given Iterator contains the given element.
+     *
+     * @param iterator the Iterator to check
+     * @param element  the element to look for
+     * @return {@code true} if found, {@code false} else
+     */
+    public static boolean contains(Iterator<?> iterator, Object element) {
+        if (iterator != null) {
+            while (iterator.hasNext()) {
+                Object candidate = iterator.next();
+                if (ObjectUtils.nullSafeEquals(candidate, element)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Check whether the given Enumeration contains the given element.
+     *
+     * @param enumeration the Enumeration to check
+     * @param element     the element to look for
+     * @return {@code true} if found, {@code false} else
+     */
+    public static boolean contains(Enumeration<?> enumeration, Object element) {
+        if (enumeration != null) {
+            while (enumeration.hasMoreElements()) {
+                Object candidate = enumeration.nextElement();
+                if (ObjectUtils.nullSafeEquals(candidate, element)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    /**
+     * 對象轉数组
+     *
+     * @param args  参数
+     * @param names 字段
+     * @return 结果
+     */
+    public static Object[][] toArray(List<Object> args, List<String> names) {
+        return toArray(args.toArray(), names);
+    }
+    /**
+     * 對象轉数组
+     *
+     * @param args  参数
+     * @param names 字段
+     * @return 结果
+     */
+    public static Object[][] toArray(Object[] args, List<String> names) {
+        List<Object[]> rs = new LinkedList<>();
+        for (Object arg : args) {
+            if(arg instanceof  Map) {
+                rs.add(toArray((Map)arg, names));
+                continue;
+            }
+
+            if(arg instanceof Collection) {
+                rs.add(toArray((Collection)arg, names));
+                continue;
+            }
+
+            rs.add(toArray(BeanMap.of(arg, false), names));
+
+        }
+
+
+        return rs.toArray(new Object[0][]);
+    }
+
+    /**
+     * 對象轉数组
+     *
+     * @param arg  参数
+     * @param names 字段
+     * @return 结果
+     */
+    private static Object[] toArray(Collection arg, List<String> names) {
+        Object[] rs = new Object[names.size()];
+        if(CollectionUtils.isEmpty(arg)) {
+            return rs;
+        }
+        for (int i = 0; i < names.size(); i++) {
+            rs[i] = null;
+            if(arg.size() < i) {
+                rs[i] = CollectionUtils.find(arg, i);
+            }
+        }
+
+        return rs;
+    }
+
+    /**
+     * 對象轉数组
+     *
+     * @param arg  参数
+     * @param names 字段
+     * @return 结果
+     */
+    private static Object[] toArray(Map arg, List<String> names) {
+        Object[] rs = new Object[names.size()];
+        if(MapUtils.isEmpty(arg)) {
+            return rs;
+        }
+
+        for (int i = 0; i < names.size(); i++) {
+            String name = names.get(i);
+            rs[i] = MapUtils.getObject(arg, name);
+        }
+
+        return rs;
     }
 }

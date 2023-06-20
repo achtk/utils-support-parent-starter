@@ -19,25 +19,25 @@ public class MappingProxy<T> {
     private final String name;
     private final Profile profile;
 
-    public MappingProxy(Class<T> target, Profile profile) {
+    public MappingProxy(String name, Class<T> target, Profile profile) {
         this.target = target;
-        this.name = getName();
+        this.name = null != name ? name : getName();
         this.profile = profile;
     }
 
     private String getName() {
         Spi spi = target.getDeclaredAnnotation(Spi.class);
-        if(null != spi) {
+        if (null != spi) {
             return spi.value()[0];
         }
 
         MappingType mappingType = target.getDeclaredAnnotation(MappingType.class);
-        if(null != mappingType) {
+        if (null != mappingType) {
             return mappingType.value();
         }
 
         Extension annotation = target.getDeclaredAnnotation(Extension.class);
-        if(null != annotation) {
+        if (null != annotation) {
             return annotation.value();
         }
 
@@ -52,18 +52,32 @@ public class MappingProxy<T> {
      * @return 结果
      */
     public static <T> T create(Class<T> target) {
-        return new MappingProxy<>(target, ProfileBuilder.newBuilder().build()).create();
+        return new MappingProxy<>(null, target, ProfileBuilder.newBuilder().build()).create();
     }
+
     /**
      * 初始化
      *
-     * @param target 目标类型
-     * @param profile   参数
-     * @param <T>    类型
+     * @param target  目标类型
+     * @param profile 参数
+     * @param <T>     类型
      * @return 结果
      */
     public static <T> T create(Class<T> target, Profile profile) {
-        return new MappingProxy<>(target, profile).create();
+        return new MappingProxy<>(null, target, profile).create();
+    }
+
+    /**
+     * 初始化
+     *
+     * @param name    实现方式
+     * @param target  目标类型
+     * @param profile 参数
+     * @param <T>     类型
+     * @return 结果
+     */
+    public static <T> T create(String name, Class<T> target, Profile profile) {
+        return new MappingProxy<>(name, target, profile).create();
     }
 
     /**

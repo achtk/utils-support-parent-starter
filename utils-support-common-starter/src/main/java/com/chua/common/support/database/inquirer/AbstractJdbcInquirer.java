@@ -1,10 +1,14 @@
 package com.chua.common.support.database.inquirer;
 
+import com.chua.common.support.database.entity.Column;
+import com.chua.common.support.database.entity.JdbcType;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * jdbc查询器
@@ -279,4 +283,28 @@ public abstract class AbstractJdbcInquirer implements SqlInquirer, Inquirer {
         }
     }
 
+    @Override
+    public List<Column> getColumn(String tableName) {
+        List<Column> rs;
+        try (Connection connection = prepareConnection()) {
+            connection.setAutoCommit(true);
+            rs = new LinkedList<>();
+            try (ResultSet resultSet = connection.getMetaData().getColumns(null, null, tableName, null)) {
+                while (resultSet.next()) {
+                    Column column = new Column();
+                    column.setTableName(tableName);
+                    column.setName(resultSet.getString("COLUMN_NAME"));
+                    column.setLength(resultSet.getInt("COLUMN_SIZE"));
+                    column.setJdbcType(JdbcType.valueOf(resultSet.getString("TYPE_NAME")));
+                    column.setNullable(resultSet.getBoolean("NULLABLE"));
+
+                    rs.add(column);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return rs;
+    }
 }

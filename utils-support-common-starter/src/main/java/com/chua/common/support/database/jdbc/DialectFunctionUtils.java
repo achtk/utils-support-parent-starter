@@ -1,15 +1,7 @@
-/*
- * Copyright 2016 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by
- * applicable law or agreed to in writing, software distributed under the
- * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS
- * OF ANY KIND, either express or implied. See the License for the specific
- * language governing permissions and limitations under the License.
- */
+
 package com.chua.common.support.database.jdbc;
+
+import com.chua.common.support.utils.StringUtils;
 
 /**
  * Dialect function Utils, detail see render method
@@ -17,7 +9,7 @@ package com.chua.common.support.database.jdbc;
  * @author Yong Zhu
  * @since 1.0.2
  */
-public class DialectFunctionUtils {// NOSONAR
+public class DialectFunctionUtils {
 
     /**
      * The render method translate function template to real SQL piece
@@ -55,36 +47,36 @@ public class DialectFunctionUtils {// NOSONAR
         }
         char c = template.charAt(1);
         if (c != '=') {
-            if (template.indexOf("$Params") >= 0) {
-                return StrUtils.replace(template, "$Params", StrUtils.arrayToString(args, ", "));
+            if (template.contains("$Params")) {
+                return StringUtils.replace(template, "$Params", StringUtils.arrayToString(args, ", "));
             }
-            if (template.indexOf("$Compact_Params") >= 0) {
-                return StrUtils.replace(template, "$Compact_Params", StrUtils.arrayToString(args, ","));
+            if (template.contains("$Compact_Params")) {
+                return StringUtils.replace(template, "$Compact_Params", StringUtils.arrayToString(args, ","));
             }
-            if (template.indexOf("$Lined_Params") >= 0) {
-                return StrUtils.replace(template, "$Lined_Params", StrUtils.arrayToString(args, "||"));
+            if (template.contains("$Lined_Params")) {
+                return StringUtils.replace(template, "$Lined_Params", StringUtils.arrayToString(args, "||"));
             }
-            if (template.indexOf("$Add_Params") >= 0) {
-                return StrUtils.replace(template, "$Add_Params", StrUtils.arrayToString(args, "+"));
+            if (template.contains("$Add_Params")) {
+                return StringUtils.replace(template, "$Add_Params", StringUtils.arrayToString(args, "+"));
             }
-            if (template.indexOf("$IN_Params") >= 0) {
-                return StrUtils.replace(template, "$IN_Params", StrUtils.arrayToString(args, " in "));
+            if (template.contains("$IN_Params")) {
+                return StringUtils.replace(template, "$IN_Params", StringUtils.arrayToString(args, " in "));
             }
-            if (template.indexOf("$Pattern_Params") >= 0) {
-                return StrUtils.replace(template, "$Pattern_Params", StrUtils.arrayToString(args, "%pattern"));
+            if (template.contains("$Pattern_Params")) {
+                return StringUtils.replace(template, "$Pattern_Params", StringUtils.arrayToString(args, "%pattern"));
             }
-            if (template.indexOf("$Startswith_Params") >= 0) {
-                return StrUtils.replace(template, "$Startswith_Params", StrUtils.arrayToString(args, "%startswith"));
+            if (template.contains("$Startswith_Params")) {
+                return StringUtils.replace(template, "$Startswith_Params", StringUtils.arrayToString(args, "%startswith"));
             }
-            if (template.indexOf("$NVL_Params") >= 0) {
+            if (template.contains("$NVL_Params")) {
                 if (args == null || args.length < 2) {
                     DialectException.throwEX("Nvl function require at least 2 parameters");
                 } else {
-                    String s = "nvl(" + args[args.length - 2] + ", " + args[args.length - 1] + ")";
+                    StringBuilder s = new StringBuilder("nvl(" + args[args.length - 2] + ", " + args[args.length - 1] + ")");
                     for (int i = args.length - 3; i > -1; i--) {
-                        s = "nvl(" + args[i] + ", " + s + ")";
+                        s = new StringBuilder("nvl(" + args[i] + ", " + s + ")");
                     }
-                    return StrUtils.replace(template, "$NVL_Params", s);
+                    return StringUtils.replace(template, "$NVL_Params", s.toString());
                 }
             }
             return (String) DialectException.throwEX("jDialect found a template bug error, please submit this bug");
@@ -93,14 +85,14 @@ public class DialectFunctionUtils {// NOSONAR
             if (args != null) {
                 argsCount = args.length;
             }
-            String searchStr = Integer.toString(argsCount) + "=";
-            if (template.indexOf(searchStr) < 0) {
+            String searchStr = argsCount + "=";
+            if (!template.contains(searchStr)) {
                 DialectException.throwEX("Dialect " + d + "'s function \"" + functionName + "\" only support "
                         + allowedParameterQTY(template) + " parameters");
             }
-            String result = StrUtils.substringBetween(template + "|", searchStr, "|");
+            String result = StringUtils.substringBetween(template + "|", searchStr, "|");
             for (int i = 0; args != null && i < args.length; i++) {
-                result = StrUtils.replace(result, "$P" + (i + 1), "" + args[i]);
+                result = StringUtils.replace(result, "$P" + (i + 1), "" + args[i]);
             }
             return result;
         }
@@ -109,8 +101,8 @@ public class DialectFunctionUtils {// NOSONAR
     private static String allowedParameterQTY(String template) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < 5; i++) {
-            if (template.indexOf(Integer.toString(i) + "=") >= 0) {
-                sb.append(Integer.toString(i)).append(" or ");
+            if (template.contains(i + "=")) {
+                sb.append(i).append(" or ");
             }
         }
         if (sb.length() > 0) {

@@ -1,11 +1,8 @@
 package com.chua.common.support.lang.net;
 
 
-import com.chua.common.support.constant.CommonConstant;
-import com.chua.common.support.database.jdbc.StrUtils;
-import com.chua.common.support.database.jdbc.springsrc.utils.Assert;
-import com.chua.common.support.utils.CharUtils;
 import com.chua.common.support.utils.CollectionUtils;
+import com.chua.common.support.utils.Preconditions;
 import com.chua.common.support.utils.StringUtils;
 
 import java.nio.charset.Charset;
@@ -172,7 +169,7 @@ public class UrlPath {
      * @return 修正后的路径
      */
     private static String fixPath(CharSequence path) {
-        Assert.notNull(path, "Path segment must be not null!");
+        Preconditions.checkNotNull(path, "Path segment must be not null!");
         if ("/".contentEquals(path)) {
             return EMPTY;
         }

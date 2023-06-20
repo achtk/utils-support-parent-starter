@@ -39,6 +39,42 @@ public class MapUtils {
      * 默认增长因子，当Map的size达到 容量*增长因子时，开始扩充Map
      */
     public static final float DEFAULT_LOAD_FACTOR = 0.75f;
+    private static final int MAX_POWER_OF_TWO = 1 << (Integer.SIZE - 2);
+    /**
+     * 根据预期大小创建HashMap.
+     *
+     * @param expectedSize 预期大小
+     * @param <K>          K
+     * @param <V>          V
+     * @return HashMap
+     * @since 3.4.0
+     */
+    public static <K, V> HashMap<K, V> newHashMapWithExpectedSize(int expectedSize) {
+        return new HashMap<>(capacity(expectedSize));
+    }
+
+    /**
+     * Returns a capacity that is sufficient to keep the map from being resized as
+     * long as it grows no larger than expectedSize and the load factor is >= its
+     * default (0.75).
+     *
+     * @since 3.4.0
+     */
+    private static int capacity(int expectedSize) {
+        if (expectedSize < 3) {
+            if (expectedSize < 0) {
+                throw new IllegalArgumentException("expectedSize cannot be negative but was: " + expectedSize);
+            }
+            return expectedSize + 1;
+        }
+        if (expectedSize < MAX_POWER_OF_TWO) {
+            // This is the calculation used in JDK8 to resize when a putAll
+            // happens; it seems to be the most conservative calculation we
+            // can make.  0.75 is the default load factor.
+            return (int) ((float) expectedSize / 0.75F + 1.0F);
+        }
+        return Integer.MAX_VALUE; // any large value
+    }
     /**
      * 合并姐
      *
@@ -1343,5 +1379,15 @@ public class MapUtils {
         }
 
         return rs;
+    }
+
+    /**
+     * 是否包含key
+     * @param arg map
+     * @param key key
+     * @return 是否包含key
+     */
+    public static boolean hasKey(Map arg, String key) {
+        return isNotEmpty(arg) && arg.containsKey(key);
     }
 }

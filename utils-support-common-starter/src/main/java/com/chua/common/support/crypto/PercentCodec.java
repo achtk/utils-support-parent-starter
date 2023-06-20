@@ -1,9 +1,6 @@
 package com.chua.common.support.crypto;
 
 
-import com.chua.common.support.constant.CommonConstant;
-import com.chua.common.support.database.jdbc.StrUtils;
-import com.chua.common.support.utils.CharUtils;
 import com.chua.common.support.utils.StringUtils;
 
 import java.io.ByteArrayOutputStream;

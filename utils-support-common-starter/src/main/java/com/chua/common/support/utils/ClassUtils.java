@@ -18,6 +18,8 @@ import java.lang.reflect.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.function.Consumer;
@@ -323,12 +325,13 @@ public class ClassUtils {
      * 请仅在确定类存在的情况下调用该方法
      * </p>
      *
-     * @param name 类名称
+     * @param name        类名称
+     * @param classLoader 联系加载器
      * @return 返回转换后的 Class
      */
-    public static Class<?> toClassConfident(String name) {
+    public static Class<?> toClassConfident(String name, ClassLoader classLoader) {
         try {
-            return Class.forName(name, false, getDefaultClassLoader());
+            return Class.forName(name, true, classLoader);
         } catch (ClassNotFoundException e) {
             try {
                 return Class.forName(name);
@@ -340,6 +343,18 @@ public class ClassUtils {
                 }
             }
         }
+    }
+
+    /**
+     * <p>
+     * 请仅在确定类存在的情况下调用该方法
+     * </p>
+     *
+     * @param name 类名称
+     * @return 返回转换后的 Class
+     */
+    public static Class<?> toClassConfident(String name) {
+        return toClassConfident(name, getDefaultClassLoader());
     }
 
     /**
@@ -987,7 +1002,7 @@ public class ClassUtils {
         }
 
         for (Field field : getFields(obj)) {
-            if(fieldName.equals(field.getName())) {
+            if (fieldName.equals(field.getName())) {
                 return field;
             }
         }
@@ -1516,29 +1531,14 @@ public class ClassUtils {
 
 
     /**
-     * 设置可执行
+     * 设置可访问对象的可访问权限为 true
      *
-     * @param method 方法
+     * @param object 可访问的对象
+     * @param <T>    类型
+     * @return 返回设置后的对象
      */
-    public static void setAccessible(Method method) {
-        if (null == method) {
-            return;
-        }
-
-        method.setAccessible(true);
-    }
-
-    /**
-     * 设置可执行
-     *
-     * @param field 方法
-     */
-    public static void setAccessible(Field field) {
-        if (null == field) {
-            return;
-        }
-
-        field.setAccessible(true);
+    public static <T extends AccessibleObject> T setAccessible(T object) {
+        return AccessController.doPrivileged(new SetAccessibleAction<>(object));
     }
 
 
@@ -2224,13 +2224,30 @@ public class ClassUtils {
 
     /**
      * 获取真实类型
+     *
      * @param returnType 类型
      * @return 类型
      */
     public static Class<?> getActualType(Class<?> returnType) {
-        if(returnType.isArray()) {
+        if (returnType.isArray()) {
             return forName(returnType.getTypeName().replace("[]", ""), returnType.getClassLoader());
         }
         return returnType;
     }
+
+    static class SetAccessibleAction<T extends AccessibleObject> implements PrivilegedAction<T> {
+        private final T obj;
+
+        public SetAccessibleAction(T obj) {
+            this.obj = obj;
+        }
+
+        @Override
+        public T run() {
+            obj.setAccessible(true);
+            return obj;
+        }
+
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.chua.common.support.lang.expression.parser;
 
 import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiDefault;
 import com.chua.common.support.collection.ImmutableBuilder;
 import com.chua.common.support.extra.el.expression.Expression;
 import com.chua.common.support.value.Value;
@@ -12,6 +13,7 @@ import java.util.Map;
  * @author CH
  */
 @Spi("el")
+@SpiDefault
 public class DelegateExpressionParser implements ExpressionParser{
 
     final Map<String, Object> context = ImmutableBuilder.<String, Object>builderOfMap().build();

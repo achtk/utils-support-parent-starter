@@ -1,10 +1,10 @@
 package com.chua.common.support.spi.finder;
 
 import com.chua.common.support.constant.NumberConstant;
-import com.chua.common.support.database.jdbc.springsrc.utils.StringUtils;
 import com.chua.common.support.resource.resource.UrlResource;
 import com.chua.common.support.spi.ServiceDefinition;
 import com.chua.common.support.utils.ClassUtils;
+import com.chua.common.support.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;

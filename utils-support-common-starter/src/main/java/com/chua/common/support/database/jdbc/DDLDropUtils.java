@@ -1,18 +1,10 @@
-/*
- * Copyright 2016 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by
- * applicable law or agreed to in writing, software distributed under the
- * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS
- * OF ANY KIND, either express or implied. See the License for the specific
- * language governing permissions and limitations under the License.
- */
+
 package com.chua.common.support.database.jdbc;
 
 import com.chua.common.support.database.jdbc.id.*;
 import com.chua.common.support.database.jdbc.model.*;
+import com.chua.common.support.utils.ObjectUtils;
+import com.chua.common.support.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -74,7 +66,7 @@ public class DDLDropUtils {
         List<FKeyModel> fKeyConstraintList = new ArrayList<FKeyModel>();
 
         for (Object strOrObj : objectResultList) {
-            if (!StrUtils.isEmpty(strOrObj)) {
+            if (!ObjectUtils.isEmpty(strOrObj)) {
                 if (strOrObj instanceof String)
                     stringResultList.add((String) strOrObj);
                 else if (strOrObj instanceof TableIdGenerator)
@@ -102,7 +94,7 @@ public class DDLDropUtils {
 
         String[] result = stringResultList.toArray(new String[stringResultList.size()]);
         if (Dialect.getGlobalAllowShowSql())
-            log.info("Drop DDL:\r" + StrUtils.arrayToString(result, "\r"));
+            log.info("Drop DDL:\r" + StringUtils.arrayToString(result, "\r"));
         return result;
 
     }
@@ -160,8 +152,8 @@ public class DDLDropUtils {
             if (!features.supportBasicOrPooledSequence()) {
                 DialectException.throwEX("Dialect \"" + dialect + "\" does not support sequence setting on sequence \"" + seq.getName() + "\"");
             }
-            if (!DDLFeatures.NOT_SUPPORT.equals(features.dropSequenceStrings) && !StrUtils.isEmpty(features.dropSequenceStrings)) {
-                stringResultList.add(0, StrUtils.replace(features.dropSequenceStrings, "_SEQNAME", seq.getSequenceName()));
+            if (!DDLFeatures.NOT_SUPPORT.equals(features.dropSequenceStrings) && !StringUtils.isEmpty(features.dropSequenceStrings)) {
+                stringResultList.add(0, StringUtils.replace(features.dropSequenceStrings, "_SEQNAME", seq.getSequenceName()));
             } else
                 DialectException.throwEX("Dialect \"" + dialect + "\" does not support drop sequence ddl, on sequence \"" + seq.getName() + "\"");
         }
@@ -200,9 +192,9 @@ public class DDLDropUtils {
                 continue; // if ddl is false, skip
             String dropStr = dialect.ddlFeatures.dropForeignKeyString;
             String constName = t.getFkeyName();
-            if (StrUtils.isEmpty(constName))
-                constName = "fk_" + t.getTableName().toLowerCase() + "_" + StrUtils.replace(StrUtils.listToString(t.getColumnNames()), ",", "_");
-            constName = StrUtils.clearQuote(constName);
+            if (StringUtils.isEmpty(constName))
+                constName = "fk_" + t.getTableName().toLowerCase() + "_" + StringUtils.replace(StringUtils.listToString(t.getColumnNames()), ",", "_");
+            constName = StringUtils.clearQuote(constName);
             if (DDLFeatures.NOT_SUPPORT.equals(dropStr))
                 DialectException.throwEX("Dialect \"" + dialect + "\" does not support drop foreign key, for setting: \"" + "fk_" + constName + "\"");
             stringResultList.add(0, "alter table " + t.getTableName() + " " + dropStr + " " + constName);

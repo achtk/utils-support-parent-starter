@@ -3,9 +3,15 @@ package com.chua.common.support.database;
 import com.chua.common.support.database.dialect.Dialect;
 import com.chua.common.support.database.executor.MetadataExecutor;
 import com.chua.common.support.database.metadata.DelegateMetadata;
+import com.chua.common.support.database.repository.Repository;
 import com.chua.common.support.database.resolver.DelegateMetadataResolver;
 import com.chua.common.support.database.resolver.MetadataResolver;
+import com.chua.common.support.lang.profile.Profile;
+import com.chua.common.support.mapping.MappingProxy;
+import com.sun.xml.internal.bind.v2.model.core.ID;
 import lombok.Builder;
+
+import javax.sql.DataSource;
 
 /**
  * 自动建表
@@ -35,5 +41,28 @@ public class AutoMetadata {
 
     public MetadataExecutor doExecute(Class<?> type, Dialect dialect) {
         return metadataResolver.resolve(new DelegateMetadata<>(type, prefix, suffix), dialect);
+    }
+
+    @SuppressWarnings("ALL")
+    public <T> Repository<T> createRepository(DataSource dataSource,
+                                                      Class<T> type) {
+        return MappingProxy.create("database", Repository.class,
+                Profile.newDefault()
+                        .addProfile("dataSource", dataSource)
+                        .addProfile("type", type)
+                        .addProfile("suffix", suffix)
+                        .addProfile("prefix", prefix)
+        );
+    }
+    @SuppressWarnings("ALL")
+    public <T, R extends Repository<T>> R createRepository(DataSource dataSource,
+                                                      Class<T> type, Class<R> r) {
+        return MappingProxy.create("database", r,
+                Profile.newDefault()
+                        .addProfile("dataSource", dataSource)
+                        .addProfile("type", type)
+                        .addProfile("suffix", suffix)
+                        .addProfile("prefix", prefix)
+        );
     }
 }

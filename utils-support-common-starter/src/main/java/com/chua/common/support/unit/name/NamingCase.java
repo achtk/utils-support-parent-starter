@@ -197,7 +197,6 @@ public class NamingCase {
      *     <li>第一个单字首字母采用小写字母</li>
      *     <li>后续单字的首字母亦用大写字母</li>
      * </ul>
-     * 例如：hello_world=》helloWorld
      *
      * @param name 转换前的下划线大写方式命名的字符串
      * @return 转换后的驼峰式命名的字符串

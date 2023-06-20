@@ -1,18 +1,10 @@
-/*
- * Copyright 2016 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by
- * applicable law or agreed to in writing, software distributed under the
- * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS
- * OF ANY KIND, either express or implied. See the License for the specific
- * language governing permissions and limitations under the License.
- */
+
 package com.chua.common.support.database.jdbc;
 
 import com.chua.common.support.database.jdbc.id.*;
 import com.chua.common.support.database.jdbc.model.*;
+import com.chua.common.support.utils.ObjectUtils;
+import com.chua.common.support.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -82,15 +74,16 @@ public class DDLCreateUtils {
         List<FKeyModel> fKeyConstraintList = new ArrayList<FKeyModel>();
 
         for (Object strOrObj : objectResultList) {
-            if (!StrUtils.isEmpty(strOrObj)) {
-                if (strOrObj instanceof String)
+            if (!ObjectUtils.isEmpty(strOrObj)) {
+                if (strOrObj instanceof String) {
                     stringResultList.add((String) strOrObj);
-                else if (strOrObj instanceof TableIdGenerator)
+                } else if (strOrObj instanceof TableIdGenerator) {
                     tbGeneratorList.add((TableIdGenerator) strOrObj);
-                else if (strOrObj instanceof SequenceIdGenerator)
+                } else if (strOrObj instanceof SequenceIdGenerator) {
                     sequenceList.add((SequenceIdGenerator) strOrObj);
-                else if (strOrObj instanceof FKeyModel)
+                } else if (strOrObj instanceof FKeyModel) {
                     fKeyConstraintList.add((FKeyModel) strOrObj);
+                }
             }
         }
 
@@ -109,7 +102,7 @@ public class DDLCreateUtils {
         outputFKeyConstraintDDL(dialect, stringResultList, fKeyConstraintList);
         String[] result = stringResultList.toArray(new String[stringResultList.size()]);
         if (Dialect.getGlobalAllowShowSql()) {
-            log.info("Create DDL:\r" + StrUtils.arrayToString(result, "\r"));
+            log.info("Create DDL:\r" + StringUtils.arrayToString(result, "\r"));
         }
         return result;
     }
@@ -167,7 +160,7 @@ public class DDLCreateUtils {
                 continue;
             if (col.getPkey()) {
                 hasPkey = true;
-                if (StrUtils.isEmpty(pkeys))
+                if (StringUtils.isEmpty(pkeys))
                     pkeys = col.getColumnName();
                 else
                     pkeys += "," + col.getColumnName();
@@ -186,12 +179,12 @@ public class DDLCreateUtils {
             buf.append(","); //总是多加一个,号, 下面会去除
         }
         // PKEY
-        if (!StrUtils.isEmpty(pkeys)) {
+        if (!StringUtils.isEmpty(pkeys)) {
             buf.append(" primary key (").append(pkeys).append("),");
         }
 
         // Table Check
-        if (!StrUtils.isEmpty(t.getCheck())) {
+        if (!StringUtils.isEmpty(t.getCheck())) {
             if (features.supportsTableCheck)
                 buf.append(" check (").append(t.getCheck()).append("),");
             else
@@ -207,11 +200,11 @@ public class DDLCreateUtils {
         } else { //
             // Engine for MariaDB & MySql only, for example "engine=innoDB"
             String tableTypeString = features.tableTypeString; //tableTypeString determined if dialect support engine
-            if (!StrUtils.isEmpty(tableTypeString) && !DDLFeatures.NOT_SUPPORT.equals(tableTypeString)) {
+            if (!StringUtils.isEmpty(tableTypeString) && !DDLFeatures.NOT_SUPPORT.equals(tableTypeString)) {
                 buf.append(tableTypeString);
 
                 // EngineTail, for example:" DEFAULT CHARSET=utf8"
-                if (!StrUtils.isEmpty(t.getEngineTail()))
+                if (!StringUtils.isEmpty(t.getEngineTail()))
                     buf.append(t.getEngineTail());
             }
         }
@@ -219,7 +212,7 @@ public class DDLCreateUtils {
         objectResultList.add(buf.toString());
 
         // table comment on
-        if (!StrUtils.isEmpty(t.getComment())) {
+        if (!StringUtils.isEmpty(t.getComment())) {
             if (features.supportsCommentOn)
                 objectResultList.add("comment on table " + t.getTableName() + " is '" + t.getComment() + "'");
             else
@@ -247,7 +240,7 @@ public class DDLCreateUtils {
      */
     protected static void buildColumnComment(List<Object> result, String tableName, ColumnModel c, DDLFeatures features) {
         if (!c.getTransientable() && features.supportsCommentOn && c.getComment() != null
-                && StrUtils.isEmpty(features.columnComment))
+                && StringUtils.isEmpty(features.columnComment))
             result.add(
                     "comment on column " + tableName + '.' + c.getColumnName() + " is '" + c.getComment() + "'");
 
@@ -268,7 +261,7 @@ public class DDLCreateUtils {
                     + c.getColumnName() + "\" at table \"" + tableName + "\"");
 
         // Column type definition
-        if (!StrUtils.isEmpty(c.getColumnDefinition()))
+        if (!StringUtils.isEmpty(c.getColumnDefinition()))
             buf.append(c.getColumnDefinition());
         else if (GenerationType.IDENTITY.equals(c.getIdGenerationType())) {
             if (features.hasDataTypeInIdentityColumn)
@@ -293,7 +286,7 @@ public class DDLCreateUtils {
         }
 
         // Check
-        if (!StrUtils.isEmpty(c.getCheck())) {
+        if (!StringUtils.isEmpty(c.getCheck())) {
             if (features.supportsColumnCheck)
                 buf.append(" check (").append(c.getCheck()).append(")");
             else
@@ -302,16 +295,16 @@ public class DDLCreateUtils {
         }
 
         // Comments
-        if (!StrUtils.isEmpty(c.getComment())) {
-            if (StrUtils.isEmpty(features.columnComment) && !features.supportsCommentOn)
+        if (!StringUtils.isEmpty(c.getComment())) {
+            if (StringUtils.isEmpty(features.columnComment) && !features.supportsCommentOn)
                 log.warn("Ignore unsupported comment setting for dialect \"" + dialect + "\" on column \""
                         + c.getColumnName() + "\" at table \"" + tableName + "\" with value: " + c.getComment());
             else
-                buf.append(StrUtils.replace(features.columnComment, "_COMMENT", c.getComment()));
+                buf.append(StringUtils.replace(features.columnComment, "_COMMENT", c.getComment()));
         }
 
         // tail String
-        if (!StrUtils.isEmpty(c.getTail()))
+        if (!StringUtils.isEmpty(c.getTail()))
             buf.append(c.getTail());
     }
 
@@ -360,10 +353,10 @@ public class DDLCreateUtils {
             }
             if (features.supportsPooledSequences) {
                 // create sequence _SEQ start with 11 increment by 33
-                String pooledSequence = StrUtils.replace(features.createPooledSequenceStrings, "_SEQ",
+                String pooledSequence = StringUtils.replace(features.createPooledSequenceStrings, "_SEQ",
                         seq.getSequenceName());
-                pooledSequence = StrUtils.replace(pooledSequence, "11", "" + seq.getInitialValue());
-                pooledSequence = StrUtils.replace(pooledSequence, "33", "" + seq.getAllocationSize());
+                pooledSequence = StringUtils.replace(pooledSequence, "11", "" + seq.getInitialValue());
+                pooledSequence = StringUtils.replace(pooledSequence, "33", "" + seq.getAllocationSize());
                 stringList.add(pooledSequence);
             } else {
                 if (seq.getInitialValue() >= 2 || seq.getAllocationSize() >= 2)
@@ -371,7 +364,7 @@ public class DDLCreateUtils {
                             + "\" does not support initialValue and allocationSize setting on sequence \""
                             + seq.getName() + "\", try set initialValue and allocationSize to 1 to fix");
                 // "create sequence _SEQ"
-                String simepleSeq = StrUtils.replace(features.createSequenceStrings, "_SEQ", seq.getSequenceName());
+                String simepleSeq = StringUtils.replace(features.createSequenceStrings, "_SEQ", seq.getSequenceName());
                 stringList.add(simepleSeq);
             }
         }
@@ -467,10 +460,10 @@ public class DDLCreateUtils {
              * _REFTABLE (_REF1, _REF2)
              */
             String constName = t.getFkeyName();
-            if (StrUtils.isEmpty(constName))
+            if (StringUtils.isEmpty(constName))
                 constName = "fk_" + t.getTableName().toLowerCase() + "_"
-                        + StrUtils.replace(StrUtils.listToString(t.getColumnNames()), ",", "_");
-            constName = StrUtils.clearQuote(constName);
+                        + StringUtils.replace(StringUtils.listToString(t.getColumnNames()), ",", "_");
+            constName = StringUtils.clearQuote(constName);
             String[] refTableAndColumns = t.getRefTableAndColumns();
             DialectException.assureNotNull(refTableAndColumns);
             String fkeyTemplate;
@@ -479,12 +472,12 @@ public class DDLCreateUtils {
             else
                 fkeyTemplate = dialect.ddlFeatures.addForeignKeyConstraintString;
 
-            fkeyTemplate = StrUtils.replace(fkeyTemplate, "_FK1, _FK2", StrUtils.listToString(t.getColumnNames()));
-            fkeyTemplate = StrUtils.replace(fkeyTemplate, "_REF1, _REF2",
-                    StrUtils.arrayToStringButSkipFirst(t.getRefTableAndColumns()));
-            fkeyTemplate = StrUtils.replace(fkeyTemplate, "_REFTABLE", t.getRefTableAndColumns()[0]);
-            fkeyTemplate = StrUtils.replace(fkeyTemplate, "_FKEYNAME", constName);
-            String tail = StrUtils.isEmpty(t.getFkeyTail()) ? "" : " " + t.getFkeyTail();
+            fkeyTemplate = StringUtils.replace(fkeyTemplate, "_FK1, _FK2", StringUtils.listToString(t.getColumnNames()));
+            fkeyTemplate = StringUtils.replace(fkeyTemplate, "_REF1, _REF2",
+                    StringUtils.arrayToStringButSkipFirst(t.getRefTableAndColumns()));
+            fkeyTemplate = StringUtils.replace(fkeyTemplate, "_REFTABLE", t.getRefTableAndColumns()[0]);
+            fkeyTemplate = StringUtils.replace(fkeyTemplate, "_FKEYNAME", constName);
+            String tail = StringUtils.isEmpty(t.getFkeyTail()) ? "" : " " + t.getFkeyTail();
             stringList.add("alter table " + t.getTableName() + " " + fkeyTemplate + tail);
         }
     }
@@ -500,12 +493,12 @@ public class DDLCreateUtils {
             template = "create $ifUnique index $indexName on " + t.getTableName() + " ($indexValues)";
         for (IndexModel index : l) {
             String indexname = index.getName();
-            if (StrUtils.isEmpty(indexname))
-                indexname = "IX_" + t.getTableName() + "_" + StrUtils.arrayToString(index.getColumnList(), "_");
+            if (StringUtils.isEmpty(indexname))
+                indexname = "IX_" + t.getTableName() + "_" + StringUtils.arrayToString(index.getColumnList(), "_");
             String ifUnique = index.getUnique() ? "unique" : "";
-            String result = StrUtils.replace(template, "$ifUnique", ifUnique);
-            result = StrUtils.replace(result, "$indexName", indexname);
-            result = StrUtils.replace(result, "$indexValues", StrUtils.arrayToString(index.getColumnList()));
+            String result = StringUtils.replace(template, "$ifUnique", ifUnique);
+            result = StringUtils.replace(result, "$indexName", indexname);
+            result = StringUtils.replace(result, "$indexValues", StringUtils.arrayToString(index.getColumnList()));
             objectResultList.add(result);
         }
     }
@@ -524,19 +517,19 @@ public class DDLCreateUtils {
                     nullable = true;
             }
             String uniqueName = unique.getName();
-            if (StrUtils.isEmpty(uniqueName))
-                uniqueName = "UK_" + t.getTableName() + "_" + StrUtils.arrayToString(unique.getColumnList(), "_");
+            if (StringUtils.isEmpty(uniqueName))
+                uniqueName = "UK_" + t.getTableName() + "_" + StringUtils.arrayToString(unique.getColumnList(), "_");
 
             String template = "alter table $TABLE add constraint $UKNAME unique ($COLUMNS)";
-            if ((StrUtils.startsWithIgnoreCase(dialectName, "DB2")// DB2 and
+            if ((StringUtils.startsWithIgnoreCase(dialectName, "DB2")// DB2 and
                     // DERBY
-                    || StrUtils.startsWithIgnoreCase(dialectName, "DERBY")) && nullable)
+                    || StringUtils.startsWithIgnoreCase(dialectName, "DERBY")) && nullable)
                 template = "create unique index $UKNAME on $TABLE ($COLUMNS)";
-            else if (StrUtils.startsWithIgnoreCase(dialectName, "Informix"))
+            else if (StringUtils.startsWithIgnoreCase(dialectName, "Informix"))
                 template = "alter table $TABLE add constraint unique ($COLUMNS) constraint $UKNAME";
-            String result = StrUtils.replace(template, "$TABLE", t.getTableName());
-            result = StrUtils.replace(result, "$UKNAME", uniqueName);
-            result = StrUtils.replace(result, "$COLUMNS", StrUtils.arrayToString(unique.getColumnList()));
+            String result = StringUtils.replace(template, "$TABLE", t.getTableName());
+            result = StringUtils.replace(result, "$UKNAME", uniqueName);
+            result = StringUtils.replace(result, "$COLUMNS", StringUtils.arrayToString(unique.getColumnList()));
             objectResultList.add(result);
         }
     }

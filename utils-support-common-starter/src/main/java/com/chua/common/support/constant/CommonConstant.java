@@ -116,6 +116,10 @@ public final class CommonConstant {
      */
     public static final String SYMBOL_DOT = ".";
     /**
+     * AS
+     */
+    public static final String SYMBOL_AS = " AS ";
+    /**
      * ..
      */
     public static final String SYMBOL_DOUBLE_DOT = "..";
@@ -296,6 +300,11 @@ public final class CommonConstant {
      * }
      */
     public static final String SYMBOL_RIGHT_BRACE = SYMBOL_RIGHT_BIG_PARENTHESES;
+
+    /**
+     * }
+     */
+    public static final String SYMBOL_LEFT_BRACE = SYMBOL_LEFT_BIG_PARENTHESES;
 
     /**
      * ~
@@ -822,6 +831,41 @@ public final class CommonConstant {
      * ' '
      */
     public static final char SYMBOL_SPACE_CHAR = ' ';
+
+
+    /**
+     * wrapper 内部参数相关
+     */
+    public static final String SYMBOL_WRAPPER_PARAM = "MPGENVAL";
+    public static final String SYMBOL_WRAPPER_PARAM_MIDDLE = ".paramNameValuePairs" + SYMBOL_DOT;
+    /**
+     * order by
+     */
+    public static final CharSequence SYMBOL_ORDER_BY = " ORDER BY ";
+    /**
+     * limit
+     */
+    public static final CharSequence SYMBOL_LIMIT = " limit ";
+    /**
+     * ew
+     */
+    public static final String SYMBOL_WRAPPER = "ew";
+    /**
+     * select
+     */
+    public static final CharSequence SYMBOL_SELECT = " SELECT ";
+    /**
+     * INSERT
+     */
+    public static final CharSequence SYMBOL_INSERT = " INSERT INTO ";
+    /**
+     * update
+     */
+    public static final CharSequence SYMBOL_UPDATE = " UPDATE ";
+    /**
+     * DELETE
+     */
+    public static final CharSequence SYMBOL_DELETE = " DELETE FROM ";
 
     /**
      *

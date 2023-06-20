@@ -1,16 +1,7 @@
-/*
- * Copyright 2016 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by
- * applicable law or agreed to in writing, software distributed under the
- * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS
- * OF ANY KIND, either express or implied. See the License for the specific
- * language governing permissions and limitations under the License.
- */
+
 package com.chua.common.support.database.jdbc;
 
+import com.chua.common.support.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -288,11 +279,11 @@ public class DialectFunctionTranslator {
      * functions will be translate to xxx() native SQL functions
      */
     public String doTranslate(Dialect d, String sql) {
-        if (StrUtils.isEmpty(sql))
+        if (StringUtils.isEmpty(sql))
             return sql;
         // if prefix not empty and SQL not include prefix, directly return
-        if (!StrUtils.isEmpty(Dialect.getGlobalSqlFunctionPrefix())
-                && !StrUtils.containsIgnoreCase(sql, Dialect.getGlobalSqlFunctionPrefix()))
+        if (!StringUtils.isEmpty(Dialect.getGlobalSqlFunctionPrefix())
+                && !StringUtils.containsIgnoreCase(sql, Dialect.getGlobalSqlFunctionPrefix()))
             return sql;
         char[] chars = (" " + sql + " ").toCharArray();
         DialectSqlItem[] items = seperateCharsToItems(chars, 1, chars.length - 2);
@@ -327,14 +318,14 @@ public class DialectFunctionTranslator {
             String valueUpcase = valueStr.toUpperCase();
             // check is function
             String funPrefix = Dialect.getGlobalSqlFunctionPrefix();
-            if (!StrUtils.isEmpty(valueUpcase)) {
-                if (!StrUtils.isEmpty(funPrefix) && StrUtils.startsWithIgnoreCase(valueUpcase, funPrefix)
+            if (!StringUtils.isEmpty(valueUpcase)) {
+                if (!StringUtils.isEmpty(funPrefix) && StringUtils.startsWithIgnoreCase(valueUpcase, funPrefix)
                         && functionMap.containsKey(valueUpcase.substring(funPrefix.length()))) {
                     item.type = 'F';
                     item.value = valueStr.substring(funPrefix.length());
                 }
 
-                if ((StrUtils.isEmpty(funPrefix) && functionMap.containsKey(valueUpcase))) {
+                if ((StringUtils.isEmpty(funPrefix) && functionMap.containsKey(valueUpcase))) {
                     item.type = 'F';
                     item.value = valueStr;
                 }

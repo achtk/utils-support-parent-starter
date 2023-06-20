@@ -1,18 +1,9 @@
-/*
- * Copyright 2016 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by
- * applicable law or agreed to in writing, software distributed under the
- * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS
- * OF ANY KIND, either express or implied. See the License for the specific
- * language governing permissions and limitations under the License.
- */
+
 package com.chua.common.support.database.jdbc;
 
 import com.chua.common.support.database.jdbc.model.ColumnModel;
 import com.chua.common.support.database.jdbc.model.TableModel;
+import com.chua.common.support.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;
@@ -280,7 +271,7 @@ public class Dialect {
      * Otherwise return word itself.
      */
     public String checkNotEmptyReservedWords(String word, String type, String tableName) {
-        if (StrUtils.isEmpty(word))
+        if (StringUtils.isEmpty(word))
             DialectException.throwEX(type + " can not be empty");
         checkIfReservedWord(word, tableName);
         return word;
@@ -293,15 +284,15 @@ public class Dialect {
     public String translateToDDLType(ColumnModel col) {// NOSONAR
         Type type = col.getColumnType();
         String value = this.typeMappings.get(type);
-        if (StrUtils.isEmpty(value) || "N/A".equals(value) || "n/a".equals(value))
+        if (StringUtils.isEmpty(value) || "N/A".equals(value) || "n/a".equals(value))
             DialectException.throwEX("Type \"" + type + "\" is not supported by dialect \"" + this + "\"");
 
         if (value.contains("|")) {
             // format example: varchar($l)<255|lvarchar($l)<32739|varchar($l)
-            String[] typeTempls = StrUtils.split("|", value);
+            String[] typeTempls = StringUtils.split("|", value);
             for (String templ : typeTempls) {
                 if (templ.contains("<")) {// varchar($l)<255
-                    String[] limitType = StrUtils.split("<", templ);
+                    String[] limitType = StringUtils.split("<", templ);
                     if (col.getLength() > 0 && col.getLength() <= Integer.parseInt(limitType[1]))// NOSONAR
                         return replacePlaceHolders(type, limitType[0], col);
                 } else {// varchar($l)
@@ -320,11 +311,11 @@ public class Dialect {
      * inside function
      */
     private String replacePlaceHolders(Type type, String value, ColumnModel col) {
-        String newValue = StrUtils.replace(value, "$l", String.valueOf(col.getLength()));
+        String newValue = StringUtils.replace(value, "$l", String.valueOf(col.getLength()));
         if (newValue.contains("$p"))
-            newValue = StrUtils.replace(newValue, "$p", String.valueOf(col.getPrecision()));
+            newValue = StringUtils.replace(newValue, "$p", String.valueOf(col.getPrecision()));
         if (newValue.contains("$s"))
-            newValue = StrUtils.replace(newValue, "$s", String.valueOf(col.getScale()));
+            newValue = StringUtils.replace(newValue, "$s", String.valueOf(col.getScale()));
         return newValue;
     }
 
@@ -332,12 +323,12 @@ public class Dialect {
      * An example tell users how to use a top limit SQL for a dialect
      */
     private static String aTopLimitSqlExample(String template) {
-        String result = StrUtils.replaceIgnoreCase(template, "$SQL", "select * from users order by userid");
-        result = StrUtils.replaceIgnoreCase(result, "$BODY", "* from users order by userid");
-        result = StrUtils.replaceIgnoreCase(result, " " + DISTINCT_TAG, "");
-        result = StrUtils.replaceIgnoreCase(result, SKIP_ROWS, "0");
-        result = StrUtils.replaceIgnoreCase(result, PAGESIZE, "10");
-        result = StrUtils.replaceIgnoreCase(result, TOTAL_ROWS, "10");
+        String result = StringUtils.replaceIgnoreCase(template, "$SQL", "select * from users order by userid");
+        result = StringUtils.replaceIgnoreCase(result, "$BODY", "* from users order by userid");
+        result = StringUtils.replaceIgnoreCase(result, " " + DISTINCT_TAG, "");
+        result = StringUtils.replaceIgnoreCase(result, SKIP_ROWS, "0");
+        result = StringUtils.replaceIgnoreCase(result, PAGESIZE, "10");
+        result = StringUtils.replaceIgnoreCase(result, TOTAL_ROWS, "10");
         return result;
     }
 
@@ -364,7 +355,7 @@ public class Dialect {
         String trimedSql = sql.trim();
         DialectException.assureNotEmpty(trimedSql, "sql string can not be empty");
 
-        if (!StrUtils.startsWithIgnoreCase(trimedSql, "select "))
+        if (!StringUtils.startsWithIgnoreCase(trimedSql, "select "))
             return (String) DialectException.throwEX("SQL should start with \"select \".");
         String body = trimedSql.substring(7).trim();
         DialectException.assureNotEmpty(body, "SQL body can not be empty");
@@ -376,11 +367,11 @@ public class Dialect {
         String useTemplate;
         if (globalEnableTopLimitPagin && skipRows == 0) {
             useTemplate = topLimitTemplate;
-            if (SQLServer2012Dialect.equals(this) && !StrUtils.containsIgnoreCase(trimedSql, "order by "))
+            if (SQLServer2012Dialect.equals(this) && !StringUtils.containsIgnoreCase(trimedSql, "order by "))
                 useTemplate = SQLServer2005Dialect.topLimitTemplate;
         } else {
             useTemplate = sqlTemplate;
-            if (SQLServer2012Dialect.equals(this) && !StrUtils.containsIgnoreCase(trimedSql, "order by "))
+            if (SQLServer2012Dialect.equals(this) && !StringUtils.containsIgnoreCase(trimedSql, "order by "))
                 useTemplate = SQLServer2005Dialect.sqlTemplate;
         }
 
@@ -394,25 +385,25 @@ public class Dialect {
 
         if (useTemplate.contains(DISTINCT_TAG)) {
             // if distinct template use non-distinct sql, delete distinct tag
-            if (!StrUtils.startsWithIgnoreCase(body, "distinct "))
-                useTemplate = StrUtils.replace(useTemplate, DISTINCT_TAG, "");
+            if (!StringUtils.startsWithIgnoreCase(body, "distinct "))
+                useTemplate = StringUtils.replace(useTemplate, DISTINCT_TAG, "");
             else {
                 // if distinct template use distinct sql, use it
-                useTemplate = StrUtils.replace(useTemplate, DISTINCT_TAG, "distinct");
+                useTemplate = StringUtils.replace(useTemplate, DISTINCT_TAG, "distinct");
                 body = body.substring(9);
             }
         }
 
         // if have $XXX tag, replaced by real values
-        result = StrUtils.replaceIgnoreCase(useTemplate, SKIP_ROWS, String.valueOf(skipRows));
-        result = StrUtils.replaceIgnoreCase(result, PAGESIZE, String.valueOf(pageSize));
-        result = StrUtils.replaceIgnoreCase(result, TOTAL_ROWS, String.valueOf(totalRows));
+        result = StringUtils.replaceIgnoreCase(useTemplate, SKIP_ROWS, String.valueOf(skipRows));
+        result = StringUtils.replaceIgnoreCase(result, PAGESIZE, String.valueOf(pageSize));
+        result = StringUtils.replaceIgnoreCase(result, TOTAL_ROWS, String.valueOf(totalRows));
 
         // now insert the customer's real full SQL here
-        result = StrUtils.replace(result, "$SQL", trimedSql);
+        result = StringUtils.replace(result, "$SQL", trimedSql);
 
         // or only insert the body without "select "
-        result = StrUtils.replace(result, "$BODY", body);
+        result = StringUtils.replace(result, "$BODY", body);
         if (getGlobalAllowShowSql()) {
             log.info("Paginated sql: " + result);
         }
@@ -433,7 +424,7 @@ public class Dialect {
      * @return true if is MySql family
      */
     public boolean isFamily(String databaseName) {
-        return StrUtils.startsWithIgnoreCase(this.toString(), databaseName);
+        return StringUtils.startsWithIgnoreCase(this.toString(), databaseName);
     }
 
     /**
@@ -533,7 +524,7 @@ public class Dialect {
     public String[] toDropAndCreateDDL(TableModel... tables) {
         String[] drop = DDLDropUtils.toDropDDL(this, tables);
         String[] create = DDLCreateUtils.toCreateDDL(this, tables);
-        return StrUtils.joinStringArray(drop, create);
+        return StringUtils.joinStringArray(drop, create);
     }
 
     /**
@@ -548,7 +539,7 @@ public class Dialect {
      */
     public String dropSequenceDDL(String sequenceName) {
         if (DDLFeatures.isValidDDLTemplate(ddlFeatures.dropSequenceStrings))
-            return StrUtils.replace(ddlFeatures.dropSequenceStrings, "_SEQNAME", sequenceName);
+            return StringUtils.replace(ddlFeatures.dropSequenceStrings, "_SEQNAME", sequenceName);
         else
             return (String) DialectException.throwEX("Dialect \"" + this
                     + "\" does not support drop sequence ddl, on sequence \"" + sequenceName + "\"");

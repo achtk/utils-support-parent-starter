@@ -139,6 +139,7 @@ public class JdbcInquirer extends AbstractJdbcInquirer implements SqlInquirer, I
         } finally {
             close(stmt);
             if (!isAutoCommit) {
+                conn.commit();
                 conn.setAutoCommit(true);
             }
             close(conn);
