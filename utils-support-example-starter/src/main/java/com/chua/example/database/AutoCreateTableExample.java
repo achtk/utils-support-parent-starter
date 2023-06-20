@@ -41,7 +41,6 @@ public class AutoCreateTableExample {
 //        repository.deleteById(testEntity.getId());
 
         List<TestEntity> list1 = repository.list(Wrappers.<TestEntity>lambdaQuery()
-                .select(TestEntity::getDevice, TestEntity::getId)
                 .gt(TestEntity::getId, 4)
                 .lt(TestEntity::getId, 104));
         //custom sql

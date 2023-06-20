@@ -1206,7 +1206,7 @@ public final class CommonConstant {
     /**
      * where
      */
-    public static final String WHERE = "WHERE";
+    public static final String SYMBOL_WHERE = " WHERE ";
     /**
      * null
      */

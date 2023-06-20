@@ -2,7 +2,6 @@
 package com.chua.common.support.database.orm.conditions;
 
 import com.chua.common.support.database.entity.Column;
-import com.chua.common.support.database.metadata.DelegateMetadata;
 import com.chua.common.support.database.metadata.Metadata;
 import com.chua.common.support.database.orm.conditions.segments.MergeSegments;
 import com.chua.common.support.database.orm.conditions.segments.NormalSegmentList;
@@ -71,7 +70,7 @@ public abstract class Wrapper<T> implements ISqlSegment {
                 if (normal.isEmpty()) {
                     return sqlSegment;
                 } else {
-                    return WHERE + SYMBOL_SPACE + sqlSegment;
+                    return SYMBOL_WHERE + SYMBOL_SPACE + sqlSegment;
                 }
             }
         }
