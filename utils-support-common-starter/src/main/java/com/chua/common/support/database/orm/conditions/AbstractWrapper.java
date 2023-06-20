@@ -6,16 +6,14 @@ import com.chua.common.support.database.SerializationUtils;
 import com.chua.common.support.database.SqlUtils;
 import com.chua.common.support.database.StringEscape;
 import com.chua.common.support.database.orm.SqlScriptUtils;
-import com.chua.common.support.database.orm.annotation.OrderBy;
 import com.chua.common.support.database.orm.conditions.interfaces.Compare;
 import com.chua.common.support.database.orm.conditions.interfaces.Func;
 import com.chua.common.support.database.orm.conditions.interfaces.Join;
 import com.chua.common.support.database.orm.conditions.interfaces.Nested;
-import com.chua.common.support.database.orm.conditions.segments.MergeSegments;
 import com.chua.common.support.database.orm.conditions.segments.ColumnSegment;
+import com.chua.common.support.database.orm.conditions.segments.MergeSegments;
 import com.chua.common.support.database.orm.enums.SqlKeyword;
 import com.chua.common.support.database.orm.enums.SqlLike;
-import com.chua.common.support.database.orm.enums.WrapperKeyword;
 import com.chua.common.support.utils.*;
 
 import java.util.*;
@@ -567,7 +565,7 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
     }
 
     /**
-     * 是否使用默认注解 {@link OrderBy} 排序
+     * 是否使用默认注解
      *
      * @return true 使用 false 不使用
      */
