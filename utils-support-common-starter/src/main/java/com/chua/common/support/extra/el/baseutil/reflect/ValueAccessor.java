@@ -1,5 +1,6 @@
 package com.chua.common.support.extra.el.baseutil.reflect;
 
+import com.chua.common.support.utils.ClassUtils;
 import io.github.karlatemp.unsafeaccessor.Unsafe;
 
 import java.lang.reflect.Field;
@@ -19,6 +20,48 @@ public class ValueAccessor {
         primitive = field.getType().isPrimitive();
         offset = unsafe.objectFieldOffset(field);
         primitiveType = ReflectUtil.ofPrimitive(field.getType());
+    }
+    public void set(Object entity, Object value) {
+
+        if(value instanceof Integer ) {
+            set(entity, (Integer) value);
+            return;
+        }
+
+        if(value instanceof Byte ) {
+            set(entity, (Byte) value);
+            return;
+        }
+
+        if(value instanceof Short ) {
+            set(entity, (Short) value);
+            return;
+        }
+
+        if(value instanceof Character ) {
+            set(entity, (Character) value);
+            return;
+        }
+
+        if(value instanceof Long ) {
+            set(entity, (Long) value);
+            return;
+        }
+
+        if(value instanceof Float ) {
+            set(entity, (Float) value);
+            return;
+        }
+
+        if(value instanceof Double ) {
+            set(entity, (Double) value);
+            return;
+        }
+
+        if(value instanceof Boolean ) {
+            set(entity, (Boolean) value);
+            return;
+        }
     }
 
     public void set(Object entity, int value) {

@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 public class SqlResolver implements Resolver {
     private final Method method;
     private final String sql;
-    static final Pattern pattern = Pattern.compile("(.*?)#\\{(.*?)\\}(.*?)");
+    public static final Pattern PATTERN = Pattern.compile("(.*?)#\\{(.*?)\\}(.*?)");
 
     public SqlResolver(Method method, String sql) {
         this.method = method;
@@ -37,7 +37,7 @@ public class SqlResolver implements Resolver {
             expressionParser.setVariable(parameter.getName(), args[i]);
         }
 
-        Matcher matcher = pattern.matcher(sql);
+        Matcher matcher = PATTERN.matcher(sql);
         StringBuilder newSql = new StringBuilder();
         List<Object> value = new LinkedList<>();
         while (matcher.find()) {

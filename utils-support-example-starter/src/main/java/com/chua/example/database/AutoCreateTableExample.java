@@ -40,7 +40,10 @@ public class AutoCreateTableExample {
         //DELETE
 //        repository.deleteById(testEntity.getId());
 
-        List<TestEntity> list1 = repository.list();
+        List<TestEntity> list1 = repository.list(Wrappers.<TestEntity>lambdaQuery()
+                .select(TestEntity::getDevice, TestEntity::getId)
+                .gt(TestEntity::getId, 4)
+                .lt(TestEntity::getId, 104));
         //custom sql
         List<TestEntity> list = repository.list(2, 4);
         System.out.println();
