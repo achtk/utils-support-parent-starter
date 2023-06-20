@@ -55,7 +55,12 @@ public interface Repository<T> {
      * @param entity 实体
      */
     int updateById(T entity);
-
+    /**
+     * 根据ID獲取數據
+     *
+     * @param key key
+     */
+    <S extends T>S getById(Serializable key);
     /**
      * 根据ID删除
      *
