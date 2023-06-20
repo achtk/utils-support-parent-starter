@@ -129,5 +129,9 @@ public enum JdbcType {
     /**
      * timestamp
      */
-    TIMESTAMP;
+    TIMESTAMP,
+    /**
+     * nvarchar
+     */
+    NVARCHAR;
 }

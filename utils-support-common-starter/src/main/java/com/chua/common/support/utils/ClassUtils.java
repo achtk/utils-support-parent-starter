@@ -279,6 +279,17 @@ public class ClassUtils {
     }
 
     /**
+     * 判断类是否存在
+     *
+     * @param className 类名
+     * @param consumer  回调
+     */
+    public static void ifPresent(String className) {
+        if (ClassUtils.isPresent(className)) {
+        }
+    }
+
+    /**
      * 是否包含类
      *
      * @param className 类名

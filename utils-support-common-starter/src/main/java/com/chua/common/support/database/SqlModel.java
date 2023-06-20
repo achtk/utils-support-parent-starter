@@ -29,4 +29,5 @@ public final class SqlModel {
      * 参数
      */
     private List<Object> args = new LinkedList<>();
+
 }

@@ -1,8 +1,8 @@
 package com.chua.common.support.database;
 
 import com.chua.common.support.bean.BeanMap;
-import com.chua.common.support.database.dialect.Dialect;
 import com.chua.common.support.database.factory.DelegateDataSource;
+import com.chua.common.support.database.sqldialect.Dialect;
 import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.function.Joiner;
 import com.chua.common.support.reflection.MethodStation;

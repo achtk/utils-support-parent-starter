@@ -4,7 +4,9 @@ import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.constant.CommonConstant;
 import com.chua.common.support.database.SqlModel;
 import com.chua.common.support.database.entity.Column;
+import com.chua.common.support.database.entity.JdbcType;
 import com.chua.common.support.database.metadata.Metadata;
+import com.chua.common.support.utils.ClassUtils;
 
 /**
  * oracle
@@ -12,7 +14,11 @@ import com.chua.common.support.database.metadata.Metadata;
  * @author CH
  */
 @Spi("oracle")
-public class OracleDialect implements Dialect {
+public class OracleDialect extends MysqlDialect {
+
+    static {
+        JAVA_JDBC.put(String.class, JdbcType.NVARCHAR);
+    }
 
     @Override
     public SqlModel formatPageSql(String originalSql, int offset, int limit) {
@@ -41,5 +47,11 @@ public class OracleDialect implements Dialect {
         sb.append(" )");
         return sb.toString();
     }
+
+    @Override
+    public Object getHibernateDialect() {
+        return ClassUtils.forObject("org.hibernate.dialect.Oracle9iDialect");
+    }
+
 
 }

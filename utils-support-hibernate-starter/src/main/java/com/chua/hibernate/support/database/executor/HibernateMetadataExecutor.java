@@ -1,13 +1,13 @@
 package com.chua.hibernate.support.database.executor;
 
 import com.chua.common.support.constant.Action;
-import com.chua.common.support.database.dialect.Dialect;
 import com.chua.common.support.database.entity.Column;
 import com.chua.common.support.database.entity.Index;
 import com.chua.common.support.database.executor.MetadataExecutor;
 import com.chua.common.support.database.expression.Expression;
 import com.chua.common.support.database.inquirer.JdbcInquirer;
 import com.chua.common.support.database.metadata.Metadata;
+import com.chua.common.support.database.sqldialect.Dialect;
 import com.chua.common.support.lang.formatter.DdlFormatter;
 import com.chua.common.support.lang.formatter.HighlightingFormatter;
 import com.chua.common.support.utils.CollectionUtils;

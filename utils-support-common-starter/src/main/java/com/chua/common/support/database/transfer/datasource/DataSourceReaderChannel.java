@@ -1,13 +1,8 @@
 package com.chua.common.support.database.transfer.datasource;
 
-import com.chua.common.support.constant.Action;
-import com.chua.common.support.database.dialect.Dialect;
 import com.chua.common.support.database.entity.Column;
-import com.chua.common.support.database.executor.MetadataExecutor;
 import com.chua.common.support.database.inquirer.JdbcInquirer;
 import com.chua.common.support.database.metadata.Metadata;
-import com.chua.common.support.database.resolver.DataSourceMetadataResolver;
-import com.chua.common.support.database.resolver.MetadataResolver;
 import com.chua.common.support.database.transfer.AbstractReaderChannel;
 import com.chua.common.support.database.transfer.collection.SinkTable;
 import com.chua.common.support.file.export.ExportConfiguration;
@@ -30,18 +25,12 @@ import java.util.List;
 public final class DataSourceReaderChannel extends AbstractReaderChannel {
 
     private final JdbcInquirer jdbcInquirer;
-    private final Dialect dialect;
     private Metadata<?> metadata;
 
     public DataSourceReaderChannel(DataSource dataSource, Metadata<?> metadata) {
         super(new ExportConfiguration(), null);
         this.metadata = metadata;
         this.jdbcInquirer = new JdbcInquirer(dataSource, true);
-        this.dialect = Dialect.create(dataSource);
-        MetadataResolver metadataResolver = new DataSourceMetadataResolver();
-        MetadataExecutor metadataExecutor = metadataResolver.resolve(metadata, dialect);
-        metadataExecutor.execute(dataSource, Action.UPDATE);
-
     }
 
     /**

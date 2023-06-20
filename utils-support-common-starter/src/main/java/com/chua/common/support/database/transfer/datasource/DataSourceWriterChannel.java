@@ -1,8 +1,9 @@
 package com.chua.common.support.database.transfer.datasource;
 
-import com.chua.common.support.database.dialect.Dialect;
+import com.chua.common.support.database.SqlModel;
 import com.chua.common.support.database.inquirer.JdbcInquirer;
 import com.chua.common.support.database.metadata.Metadata;
+import com.chua.common.support.database.sqldialect.Dialect;
 import com.chua.common.support.database.transfer.AbstractWriterChannel;
 import com.chua.common.support.database.transfer.collection.SinkTable;
 import com.chua.common.support.file.export.ExportConfiguration;
@@ -11,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import javax.sql.DataSource;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 输出数据
@@ -22,9 +23,9 @@ public final class DataSourceWriterChannel extends AbstractWriterChannel {
 
     private final JdbcInquirer jdbcInquirer;
     private final Dialect dialect;
-    private Metadata<?> metadata;
+    private final Metadata<?> metadata;
 
-    private AtomicLong count = new AtomicLong(0);
+    private final AtomicInteger count = new AtomicInteger(0);
 
     public DataSourceWriterChannel(DataSource dataSource, Metadata<?> metadata) {
         super(new ExportConfiguration(), null);
@@ -41,10 +42,10 @@ public final class DataSourceWriterChannel extends AbstractWriterChannel {
     @Override
     public SinkTable createSinkTable() {
         String sql = createSql();
-        String pageSql = dialect.getPageSql(sql, count.get() == 0 ? sinkConfig.getOffset() : count.get(), sinkConfig.getLimit());
+        SqlModel sqlModel = dialect.formatPageSql(sql, count.get() == 0 ? sinkConfig.getOffset() : count.get(), sinkConfig.getLimit());
         List<Map<String, Object>> query = null;
         try {
-            query = jdbcInquirer.query(pageSql);
+            query = jdbcInquirer.query(sqlModel.getSql(), sqlModel.getArgs());
         } catch (Exception e) {
             log.warn("{}", e.getMessage());
             status.set(true);

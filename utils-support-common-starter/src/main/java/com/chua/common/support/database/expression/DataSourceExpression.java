@@ -1,7 +1,7 @@
 package com.chua.common.support.database.expression;
 
-import com.chua.common.support.database.dialect.Dialect;
 import com.chua.common.support.database.metadata.Metadata;
+import com.chua.common.support.database.sqldialect.Dialect;
 
 /**
  * 表达式

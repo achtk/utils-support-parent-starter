@@ -1,14 +1,15 @@
 package com.chua.common.support.database;
 
-import com.chua.common.support.database.dialect.Dialect;
 import com.chua.common.support.database.executor.MetadataExecutor;
 import com.chua.common.support.database.metadata.DelegateMetadata;
 import com.chua.common.support.database.repository.Repository;
 import com.chua.common.support.database.resolver.DelegateMetadataResolver;
 import com.chua.common.support.database.resolver.MetadataResolver;
+import com.chua.common.support.database.sqldialect.Dialect;
+import com.chua.common.support.lang.pipeline.PipelineBuilder;
 import com.chua.common.support.lang.profile.Profile;
 import com.chua.common.support.mapping.MappingProxy;
-import com.sun.xml.internal.bind.v2.model.core.ID;
+import com.chua.common.support.utils.ClassUtils;
 import lombok.Builder;
 
 import javax.sql.DataSource;
@@ -21,7 +22,17 @@ import javax.sql.DataSource;
 public class AutoMetadata {
 
     @Builder.Default
-    private MetadataResolver metadataResolver = new DelegateMetadataResolver();
+    private MetadataResolver metadataResolver = PipelineBuilder.<MetadataResolver>newBuilder()
+            .next(it -> {
+                if (null != it) {
+                    return it;
+                }
+
+                if (ClassUtils.isPresent("com.chua.hibernate.support.database.resolver.HibernateMetadataResolver")) {
+                    return (MetadataResolver) ClassUtils.forObject("com.chua.hibernate.support.database.resolver.HibernateMetadataResolver");
+                }
+                return null;
+            }).next(it -> new DelegateMetadataResolver()).execute();
 
     /**
      * 表前缀

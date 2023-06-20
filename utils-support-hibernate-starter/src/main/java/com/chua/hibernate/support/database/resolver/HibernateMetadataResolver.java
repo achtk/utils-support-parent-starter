@@ -1,10 +1,10 @@
 package com.chua.hibernate.support.database.resolver;
 
-import com.chua.common.support.database.dialect.Dialect;
 import com.chua.common.support.database.executor.MetadataExecutor;
 import com.chua.common.support.database.expression.DataSourceExpression;
 import com.chua.common.support.database.metadata.Metadata;
 import com.chua.common.support.database.resolver.MetadataResolver;
+import com.chua.common.support.database.sqldialect.Dialect;
 import com.chua.hibernate.support.database.executor.HibernateMetadataExecutor;
 
 /**

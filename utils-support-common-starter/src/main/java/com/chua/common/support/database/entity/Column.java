@@ -1,8 +1,8 @@
 package com.chua.common.support.database.entity;
 
 import com.chua.common.support.bean.BeanProperty;
-import com.chua.common.support.database.dialect.Dialect;
 import com.chua.common.support.database.enums.FieldStrategy;
+import com.chua.common.support.database.sqldialect.Dialect;
 import lombok.Data;
 
 import java.lang.reflect.Field;
@@ -110,7 +110,7 @@ public class Column {
             return jdbcType.name();
         }
 
-        return Type.valueTypeOf(javaType).name();
+        return dialect.createJdbcType(javaType).name();
     }
 
     public void setExist(boolean exist) {
