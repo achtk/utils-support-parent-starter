@@ -866,6 +866,10 @@ public final class CommonConstant {
      * DELETE
      */
     public static final CharSequence SYMBOL_DELETE = " DELETE FROM ";
+    /**
+     * create table
+     */
+    public static final CharSequence SYMBOL_CREATE_TABLE = "CREATE TABLE";
 
     /**
      *

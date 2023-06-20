@@ -44,9 +44,19 @@ public interface Metadata<T> {
 
     /**
      * 描述
+     *
      * @return 描述
      */
     String getTableComment();
+
+    /**
+     * uncode
+     *
+     * @return
+     */
+    default String getUncode() {
+        return "utf8";
+    }
 
     /**
      * 数据库名称

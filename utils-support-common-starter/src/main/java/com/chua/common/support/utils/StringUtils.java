@@ -3,7 +3,6 @@ package com.chua.common.support.utils;
 import com.chua.common.support.constant.CommonConstant;
 import com.chua.common.support.constant.RegexConstant;
 import com.chua.common.support.database.SqlInjectionUtils;
-import com.chua.common.support.database.jdbc.DialectException;
 import com.chua.common.support.function.Splitter;
 import com.chua.common.support.jsoup.helper.Validate;
 import com.chua.common.support.lang.Ascii;
@@ -3772,9 +3771,7 @@ public class StringUtils {
      * Change a Object array to "obj1,obj2...,objn" String
      */
     public static String arrayToString(Object[] array) {
-        if (array == null) {
-            DialectException.throwEX("StrUtils arrayToString() method do not accept null parameter");
-        }
+        Preconditions.notNull(array, "array不能为空");
         StringBuilder sb = new StringBuilder();
         for (Object object : array) {
             sb.append(object).append(",");
@@ -3789,9 +3786,7 @@ public class StringUtils {
      * Change a Object array to connected string by given seperateString
      */
     public static String arrayToString(Object[] array, String seperateString) {
-        if (array == null) {
-            DialectException.throwEX("StrUtils arrayToString() method do not accept null parameter");
-        }
+        Preconditions.notNull(array, "array不能为空");
         StringBuilder sb = new StringBuilder();
         for (Object object : array) {
             sb.append(object).append(seperateString);
@@ -3903,9 +3898,8 @@ public class StringUtils {
      * Change a Object List to "obj1,obj2...,objn" String
      */
     public static String listToString(List<?> lst) {
-        if (lst == null) {
-            DialectException.throwEX("StrUtils listToString() method do not accept null parameter");
-        }
+        Preconditions.notNull(lst, "array不能为空");
+
         StringBuilder sb = new StringBuilder();
         for (Object object : lst) {
             sb.append(object).append(",");
@@ -3920,9 +3914,8 @@ public class StringUtils {
      * Change a Object array to "obj1,obj2...,objn" String
      */
     public static String arrayToStringButSkipFirst(Object[] array) {
-        if (array == null) {
-            DialectException.throwEX("StrUtils arrayToString() method do not accept null parameter");
-        }
+        Preconditions.notNull(array, "array不能为空");
+
         StringBuilder sb = new StringBuilder();
         int i = 1;
         for (Object object : array) {

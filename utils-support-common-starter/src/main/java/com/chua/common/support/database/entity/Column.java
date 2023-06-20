@@ -3,7 +3,6 @@ package com.chua.common.support.database.entity;
 import com.chua.common.support.bean.BeanProperty;
 import com.chua.common.support.database.dialect.Dialect;
 import com.chua.common.support.database.enums.FieldStrategy;
-import com.chua.common.support.database.jdbc.Type;
 import lombok.Data;
 
 import java.lang.reflect.Field;
