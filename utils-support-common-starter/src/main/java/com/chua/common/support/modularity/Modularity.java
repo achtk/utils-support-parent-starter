@@ -39,6 +39,11 @@ public class Modularity {
      */
     private String moduleRequest;
     /**
+     * 请求是否缓存
+     */
+    private Integer moduleEnableCache;
+
+    /**
      * 依赖关系
      */
     private String moduleDepends;

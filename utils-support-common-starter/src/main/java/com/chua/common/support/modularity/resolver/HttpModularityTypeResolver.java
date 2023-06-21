@@ -89,6 +89,15 @@ public class HttpModularityTypeResolver implements ModularityTypeResolver {
             if(any.isCollection()) {
                 return parser.parse(moduleRequest).getStringValue().trim();
             }
+
+            Map map = Converter.convertIfNecessary(moduleRequest, Map.class);
+            map.forEach((key, value) -> {
+                if(value != null) {
+                    value = parser.parse(value.toString()).getStringValue().trim();
+                }
+                param.put(parser.parse(key.toString()).getStringValue(), value);
+            });
+            return param;
         }
 
         for (Map.Entry<String, Object> entry : args.entrySet()) {
