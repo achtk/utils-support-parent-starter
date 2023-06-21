@@ -26,18 +26,18 @@ class ModuleExample {
     static void main(String[] args) {
         ModularityFactory modularityFactory = ModularityFactory.create()
         modularityFactory.register(Modularity.builder()
-                .moduleType('http').moduleName("hk.token").moduleDesc("获取海康token")
+                .moduleType('http').moduleName("hkToken").moduleDesc("获取海康token")
                 .moduleScript("POST https://open.hikyun.com/artemis/oauth/token/v2")
-                .moduleRequest("""secretKey: #{secretKey};accessKey: #{accessKey};productCode: #{1664360485020781}""")
+                .moduleRequest("""secretKey:#{secretKey};accessKey:#{accessKey};productCode: #{1664360485020781}""")
                 .build())
 
         modularityFactory.register(Modularity.builder()
-                .moduleType("http").moduleName("hk.page").moduleDesc("分页查询海康设备数据")
+                .moduleType("http").moduleName("hk_page").moduleDesc("分页查询海康设备数据")
                 .moduleScript("POST https://open.hikyun.com/artemis/api/eits/v2/global/device/page")
-                .moduleHeader("""{access_token: #{hk.token.data.access_token}""")
-                .moduleRequest("""[ { "key": "projectId", "option": "eq", "value": 651515588253424 } ]""")
-                .moduleDepends(" http:hk.token").build());
-        ModularityResult modularityResult = modularityFactory.execute("http", "hk.page", ImmutableBuilder.builderOfStringMap().build());
+                .moduleHeader("""access_token: #{hkToken.data.access_token}""")
+                .moduleRequest("""[{"key": "projectId", "option": "eq", "value": 651515588253424 }]""")
+                .moduleDepends("http:hkToken").build());
+        ModularityResult modularityResult = modularityFactory.execute("http", "hk_page", ImmutableBuilder.builderOfStringMap().build());
 
         JsonObject jsonObject = modularityResult.getData(JsonObject.class);
         System.out.println();

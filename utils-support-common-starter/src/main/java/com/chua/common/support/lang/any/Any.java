@@ -2,6 +2,7 @@ package com.chua.common.support.lang.any;
 
 import com.chua.common.support.value.DelegateValue;
 
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -28,5 +29,9 @@ public class Any extends DelegateValue<Object> {
 
     public boolean isMap() {
         return getValue() instanceof Map;
+    }
+
+    public boolean isCollection() {
+        return getValue() instanceof Collection;
     }
 }

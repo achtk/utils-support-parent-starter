@@ -6,8 +6,7 @@ import com.chua.common.support.extra.el.expression.util.CharType;
 
 import java.util.Deque;
 
-public abstract class NodeParser
-{
+public abstract class NodeParser {
 
     /**
      * 在解析节点后返回新的偏移量
@@ -19,26 +18,21 @@ public abstract class NodeParser
      */
     public abstract int parse(String el, int offset, Deque<CalculateNode> nodes, int function, Invoker next);
 
-    protected char getChar(int offset, String sentence)
-    {
+    protected char getChar(int offset, String sentence) {
         return offset >= sentence.length() ? (char) CharType.EOI : sentence.charAt(offset);
     }
 
-    protected int skipWhiteSpace(int offset, String el)
-    {
-        while (CharType.isWhitespace(getChar(offset, el)))
-        {
+    protected int skipWhiteSpace(int offset, String el) {
+        while (CharType.isWhitespace(getChar(offset, el))) {
             offset++;
         }
         return offset;
     }
 
-    protected int getIdentifier(int offset, String el)
-    {
-        int  length = 0;
+    protected int getIdentifier(int offset, String el) {
+        int length = 0;
         char c;
-        while (CharType.isAlphabet(c = getChar(length + offset, el)) || CharType.isDigital(c))
-        {
+        while (CharType.isAlphabet(c = getChar(length + offset, el)) || CharType.isDigital(c)) {
             length++;
         }
         return length + offset;

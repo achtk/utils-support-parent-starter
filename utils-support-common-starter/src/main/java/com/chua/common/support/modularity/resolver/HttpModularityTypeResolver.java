@@ -37,13 +37,25 @@ public class HttpModularityTypeResolver implements ModularityTypeResolver {
         MsgHeaders msgHeaders = getHeaders(modularity, args);
         String url = getUrl(modularity, args, msgHeaders);
         long connectTimeout = getConnectTimeout(modularity);
-        Map<String, Object> body = analysisBody(modularity, args, msgHeaders);
+        Object body = analysisBody(modularity, args, msgHeaders);
         HttpClientBuilder httpClientBuilder = HttpClient.newHttpMethod(HttpMethod.valueOf(method.toUpperCase()));
-        HttpClientInvoker newInvoker = httpClientBuilder.body(body).header(msgHeaders.toHttpHeader())
+        HttpClientBuilder clientBuilder = httpClientBuilder
+                .header(msgHeaders.toHttpHeader())
                 .url(url)
                 .connectTimout(connectTimeout)
-                .retry(3)
-                .newInvoker();
+                .retry(3);
+        if("POST".equalsIgnoreCase(method)) {
+            clientBuilder.isJson();
+        }
+
+        if(body instanceof Map) {
+            clientBuilder.body((Map)body);
+        } else if(body instanceof String) {
+            clientBuilder.body(body.toString());
+        }
+
+
+        HttpClientInvoker newInvoker =clientBuilder.newInvoker();
         HttpResponse execute = newInvoker.execute();
         ModularityResult.ModularityResultBuilder builder = ModularityResult.builder().code(execute.code() + "").msg(execute.message());
         if(!modularity.hasResponseType()) {
@@ -53,7 +65,7 @@ public class HttpModularityTypeResolver implements ModularityTypeResolver {
         return builder.data(parse(modularity, content)).build();
     }
 
-    private Map<String, Object> analysisBody(Modularity modularity, Map<String, Object> args, MsgHeaders msgHeaders) {
+    private Object analysisBody(Modularity modularity, Map<String, Object> args, MsgHeaders msgHeaders) {
         Map<String, Object> param = new LinkedHashMap<>();
         String moduleRequest = modularity.getModuleRequest();
         ExpressionParser parser = ServiceProvider.of(ExpressionParser.class).getNewExtension("spring");
@@ -63,16 +75,20 @@ public class HttpModularityTypeResolver implements ModularityTypeResolver {
         parser.setVariable("secretKey", modularity.getModuleAppSecret());
         if(StringUtils.isNotEmpty(moduleRequest)) {
             parser.setVariable(args);
-            Map<String, String> stringStringMap = Splitter.on(";").withKeyValueSeparator(":").split(moduleRequest);
-            for (Map.Entry<String, String> entry : stringStringMap.entrySet()) {
-                String value = entry.getValue();
-                if(value != null) {
-                    value = parser.parse(value).getStringValue();
-                }
-                param.put(parser.parse(entry.getKey()).getStringValue(), value);
+            Any any = Converter.convertIfNecessary(moduleRequest, Any.class);
+            if (any.isMap()) {
+                any.getValue(Map.class).forEach((key, value) -> {
+                    if(value != null) {
+                        value = parser.parse(value.toString()).getStringValue().trim();
+                    }
+                    param.put(parser.parse(key.toString()).getStringValue(), value);
+                });
+                return param;
             }
 
-            return param;
+            if(any.isCollection()) {
+                return parser.parse(moduleRequest).getStringValue().trim();
+            }
         }
 
         for (Map.Entry<String, Object> entry : args.entrySet()) {
@@ -125,10 +141,14 @@ public class HttpModularityTypeResolver implements ModularityTypeResolver {
             return msgHeaders;
         }
         ExpressionParser parser = ServiceProvider.of(ExpressionParser.class).getNewExtension("spring");
-
-        List<MsgHeaders.MsgHeader> headers = Converter.convertIfNecessaryList(moduleHeader, MsgHeaders.MsgHeader.class);
-        for (MsgHeaders.MsgHeader header : headers) {
-            msgHeaders.add(parser.parse(header.getName()).getStringValue(), parser.parse(header.getValue()).getStringValue());
+        parser.setVariable(args);
+        Map<String, String> stringStringMap = Converter.convertIfNecessary(moduleHeader, Map.class);
+        for (Map.Entry<String, String> entry : stringStringMap.entrySet()) {
+            String value = entry.getValue();
+            if(value != null) {
+                value = parser.parse(value).getStringValue().trim();
+            }
+            msgHeaders.add(parser.parse(entry.getKey()).getStringValue(), value);
         }
 
         return msgHeaders;

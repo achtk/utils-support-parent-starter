@@ -4,6 +4,7 @@ import com.chua.common.support.utils.ClassUtils;
 import io.github.karlatemp.unsafeaccessor.Unsafe;
 
 import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
 
 public class ValueAccessor {
     protected Field field;
@@ -62,6 +63,7 @@ public class ValueAccessor {
             set(entity, (Boolean) value);
             return;
         }
+        unsafe.putReference(entity, 0, value);
     }
 
     public void set(Object entity, int value) {

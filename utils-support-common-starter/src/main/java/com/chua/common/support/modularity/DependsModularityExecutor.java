@@ -52,6 +52,7 @@ public class DependsModularityExecutor<T> implements ModularityExecutor<T> {
             @Override
             public DisruptorEventHandler<MsgEvent> getEventHandler(String name) {
                 return cache.computeIfAbsent(name, s -> (event, sequence, endOfBatch) -> {
+                    Map<String, ModularityResult> param = event.getParam();
                     try {
                         Modularity factoryModularity = modularityFactory.getModularity(name);
                         String moduleDepends = factoryModularity.getModuleDepends();
@@ -62,7 +63,6 @@ public class DependsModularityExecutor<T> implements ModularityExecutor<T> {
                             modularityTypeResolver = ServiceProvider.of(ModularityTypeResolver.class).getNewExtension(moduleType);
                         }
 
-                        Map<String, ModularityResult> param = event.getParam();
                         if (null == modularityTypeResolver) {
                             event.setName(name);
                             param.put(name, ModularityResult.INSTANCE);
@@ -86,13 +86,7 @@ public class DependsModularityExecutor<T> implements ModularityExecutor<T> {
                                     newArgs.putAll((Map<? extends String, ?>) data);
                                 } else if (data instanceof String) {
                                     Any any = Converter.convertIfNecessary(data.toString(), Any.class);
-                                    if (any.isMap()) {
-                                        newArgs.putAll((Map<? extends String, ?>) any.getValue());
-                                    } else {
-                                        newArgs.put(string, data);
-                                    }
-                                } else {
-                                    newArgs.put(string, data);
+                                    newArgs.put(Splitter.on(":").limit(2).splitToList(string).get(1), any.getValue());
                                 }
                             }
                             modularityResult = modularityTypeResolver.execute(modularityFactory, factoryModularity, newArgs);
@@ -100,6 +94,7 @@ public class DependsModularityExecutor<T> implements ModularityExecutor<T> {
                         param.put(name, modularityResult);
                         event.setName(factoryModularity.getModuleName());
                     } catch (Exception e) {
+                        param.put(name, ModularityResult.INSTANCE);
                         log.error(e.getMessage());
                     }
                 });

@@ -3,6 +3,7 @@ package com.chua.common.support.converter.definition;
 import com.chua.common.support.function.Splitter;
 import com.chua.common.support.json.Json;
 import com.chua.common.support.json.TypeReference;
+import com.chua.common.support.utils.MapUtils;
 
 import java.util.*;
 
@@ -92,17 +93,19 @@ public class MapTypeConverter implements TypeConverter<Map> {
                 }
             } catch (Throwable ignored) {
             }
-            string = string.substring(1, string.length() - 1);
-            try {
-                Map<String, String> map = Splitter.on(',').withKeyValueSeparator("=").split(string);
-                if (null != map) {
-                    return map;
-                }
-            } catch (Exception ignored) {
+            Map<String, String> map = Splitter.on(',').withKeyValueSeparator("=").split(string);
+            if (null != map && (map.size() > 1) || (map.size() == 1 && null != MapUtils.getFirst(map).getValue())) {
+                return map;
             }
-            try {
-                return Splitter.on(',').withKeyValueSeparator(':').split(string);
-            } catch (Exception ignored) {
+
+            map = Splitter.on(";").withKeyValueSeparator(":").split(string);
+            if (null != map && (map.size() > 1) || (map.size() == 1 && null != MapUtils.getFirst(map).getValue())) {
+                return map;
+            }
+
+            map = Splitter.on(',').withKeyValueSeparator(':').split(string);
+            if (null != map && (map.size() > 1) || (map.size() == 1 && null != MapUtils.getFirst(map).getValue())){
+                return map;
             }
         }
         return convertIfNecessary(value);

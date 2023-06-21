@@ -37,6 +37,9 @@ public class ObjectPropertyNode implements CalculateNode {
         if (value == null) {
             return null;
         }
+//        if(value instanceof Map) {
+//            return value;
+//        }
         try {
             return getValueAccessor(value).get(value);
         } catch (Exception e) {
