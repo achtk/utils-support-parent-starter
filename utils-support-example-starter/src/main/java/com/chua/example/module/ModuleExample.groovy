@@ -28,19 +28,11 @@ import java.util.concurrent.Executor;
                  .build())
 
          modularityFactory.register(Modularity.builder()
-                 .moduleType('database')
-                 .moduleName("getIp2")
-                 .moduleScript("select '221.12.111.18' ip")
-                 .moduleUrl("localhost:3306/websql")
-                 .moduleDriver(Driver.class.getName())
-                 .build())
-
-         modularityFactory.register(Modularity.builder()
         .moduleType("http")
         .moduleName("static")
         .moduleScript("GET https://ip-moe.zerodream.net/")
         .moduleResponse("""{country: "#{country}"}""")
-        .moduleDepends("database:getIp2, default:getIp")
+        .moduleDepends(" default:getIp")
         .build());
         ModularityResult modularityResult = modularityFactory.execute("http", "static", ImmutableBuilder.builderOfStringMap().build());
 
