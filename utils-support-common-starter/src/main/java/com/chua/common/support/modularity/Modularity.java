@@ -68,12 +68,12 @@ public class Modularity {
      * ak
      */
     @Builder.Default
-    private String moduleAppKey = "16643603898674415";
+    private String moduleAppKey = "root";
     /**
      * sk
      */
     @Builder.Default
-    private String moduleAppSecret = "VQYaHTWVmatXVdCbrKZJ";
+    private String moduleAppSecret = "root";
     /**
      * 自定义解析器
      */
