@@ -39,7 +39,7 @@ public class HttpModularityTypeResolver implements ModularityTypeResolver {
         long connectTimeout = getConnectTimeout(modularity);
         Map<String, Object> body = analysisBody(modularity, args, msgHeaders);
         HttpClientBuilder httpClientBuilder = HttpClient.newHttpMethod(HttpMethod.valueOf(method.toUpperCase()));
-        HttpClientInvoker newInvoker = httpClientBuilder.body(args).header(msgHeaders.toHttpHeader())
+        HttpClientInvoker newInvoker = httpClientBuilder.body(body).header(msgHeaders.toHttpHeader())
                 .url(url)
                 .connectTimout(connectTimeout)
                 .retry(3)
@@ -58,6 +58,9 @@ public class HttpModularityTypeResolver implements ModularityTypeResolver {
         String moduleRequest = modularity.getModuleRequest();
         ExpressionParser parser = ServiceProvider.of(ExpressionParser.class).getNewExtension("spring");
         parser.setVariable("header", msgHeaders);
+        parser.setVariable("ew", modularity);
+        parser.setVariable("accessKey", modularity.getModuleAppKey());
+        parser.setVariable("secretKey", modularity.getModuleAppSecret());
         if(StringUtils.isNotEmpty(moduleRequest)) {
             parser.setVariable(args);
             Map<String, String> stringStringMap = Splitter.on(";").withKeyValueSeparator(":").split(moduleRequest);

@@ -73,11 +73,15 @@ public class DependsModularityExecutor<T> implements ModularityExecutor<T> {
                         if (StringUtils.isEmpty(moduleDepends)) {
                             modularityResult = modularityTypeResolver.execute(modularityFactory, factoryModularity, args);
                         } else {
-                            Map<String, Object> newArgs = new LinkedHashMap<>();
+                            Map<String, Object> newArgs = new LinkedHashMap<>(args);
                             List<String> strings = Splitter.on(",").omitEmptyStrings().trimResults().splitToList(moduleDepends);
                             for (String string : strings) {
                                 ModularityResult modularityResult1 = event.getParam().get(string);
                                 Object data = modularityResult1.getData();
+                                if(data instanceof byte[]) {
+                                    data = StringUtils.utf8Str(data);
+                                }
+
                                 if (data instanceof Map) {
                                     newArgs.putAll((Map<? extends String, ?>) data);
                                 } else if (data instanceof String) {

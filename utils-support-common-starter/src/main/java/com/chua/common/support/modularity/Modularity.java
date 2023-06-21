@@ -27,6 +27,10 @@ public class Modularity {
      */
     private String moduleType;
     /**
+     * 模块描述
+     */
+    private String moduleDesc;
+    /**
      * 响应类型
      */
     private String moduleResponse;
@@ -59,12 +63,12 @@ public class Modularity {
      * ak
      */
     @Builder.Default
-    private String moduleAppKey = "root";
+    private String moduleAppKey = "16643603898674415";
     /**
      * sk
      */
     @Builder.Default
-    private String moduleAppSecret = "root";
+    private String moduleAppSecret = "VQYaHTWVmatXVdCbrKZJ";
     /**
      * 自定义解析器
      */

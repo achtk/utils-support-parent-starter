@@ -17,24 +17,27 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.concurrent.Executor;
 
 @Slf4j
- class ModuleExample {
+class ModuleExample {
 
-     static void main(String[] args) {
+    static void main2(String[] args) {
+
+    }
+
+    static void main(String[] args) {
         ModularityFactory modularityFactory = ModularityFactory.create()
-         modularityFactory.register(Modularity.builder()
-                 .moduleType('default')
-                 .moduleName("getIp")
-                 .moduleScript("""{ip: "221.12.111.18"}""")
-                 .build())
+        modularityFactory.register(Modularity.builder()
+                .moduleType('http').moduleName("hk.token").moduleDesc("获取海康token")
+                .moduleScript("POST https://open.hikyun.com/artemis/oauth/token/v2")
+                .moduleRequest("""secretKey: #{secretKey};accessKey: #{accessKey};productCode: #{1664360485020781}""")
+                .build())
 
-         modularityFactory.register(Modularity.builder()
-        .moduleType("http")
-        .moduleName("static")
-        .moduleScript("GET https://ip-moe.zerodream.net/")
-        .moduleResponse("""{country: "#{country}"}""")
-        .moduleDepends(" default:getIp")
-        .build());
-        ModularityResult modularityResult = modularityFactory.execute("http", "static", ImmutableBuilder.builderOfStringMap().build());
+        modularityFactory.register(Modularity.builder()
+                .moduleType("http").moduleName("hk.page").moduleDesc("分页查询海康设备数据")
+                .moduleScript("POST https://open.hikyun.com/artemis/api/eits/v2/global/device/page")
+                .moduleHeader("""{access_token: #{hk.token.data.access_token}""")
+                .moduleRequest("""[ { "key": "projectId", "option": "eq", "value": 651515588253424 } ]""")
+                .moduleDepends(" http:hk.token").build());
+        ModularityResult modularityResult = modularityFactory.execute("http", "hk.page", ImmutableBuilder.builderOfStringMap().build());
 
         JsonObject jsonObject = modularityResult.getData(JsonObject.class);
         System.out.println();
