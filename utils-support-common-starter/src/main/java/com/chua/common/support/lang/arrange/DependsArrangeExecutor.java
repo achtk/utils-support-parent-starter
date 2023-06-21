@@ -47,7 +47,7 @@ public class DependsArrangeExecutor implements ArrangeExecutor<ArrangeResult> {
     @Override
     @SuppressWarnings("ALL")
     public ArrangeResult execute(Map<String, Object> args) {
-        ArrangeResult msgEvent = new ArrangeResult();
+        ArrangeResult arrangeResult = new ArrangeResult();
         DisruptorFactory<ArrangeResult> disruptorFactory = null;
         AtomicReference<DisruptorFactory<ArrangeResult>> temp = new AtomicReference<>();
         temp.set(disruptorFactory = new DisruptorFactory<>(new DisruptorEventHandlerFactory<ArrangeResult>() {
@@ -100,7 +100,7 @@ public class DependsArrangeExecutor implements ArrangeExecutor<ArrangeResult> {
         }, new DisruptorObjectFactory<ArrangeResult>() {
             @Override
             public ArrangeResult newInstance() {
-                return msgEvent;
+                return arrangeResult;
             }
         }));
         String moduleDepends = arrange.getArrangeDepends();
@@ -117,10 +117,10 @@ public class DependsArrangeExecutor implements ArrangeExecutor<ArrangeResult> {
         disruptorFactory.waitFor(TimeUnit.parse(arrange.getArrangeConnectionTimeout()), new Supplier<Boolean>() {
             @Override
             public Boolean get() {
-                return null != msgEvent.getParam().get(arrange.getArrangeId());
+                return null != arrangeResult.getParam().get(arrange.getArrangeId());
             }
         });
-        return (T) msgEvent.getParam().get(arrange.getArrangeId());
+        return arrangeResult.getParam().get(arrange.getArrangeId());
     }
 
     private void doDepends(DisruptorFactory<ArrangeResult> disruptorFactory, List<String> strings) {
