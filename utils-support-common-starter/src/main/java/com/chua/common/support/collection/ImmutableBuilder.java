@@ -139,7 +139,15 @@ public class ImmutableBuilder {
     public static <V> MapBuilder<String, V> builderOfStringMap(Class<V> valueType) {
         return new MapBuilder<>(Collections.emptyMap());
     }
-
+    /**
+     * 创建 Map
+     *
+     * @param valueType 类型
+     * @return Map
+     */
+    public static MapBuilder<String, Object> builderOfStringMap() {
+        return new MapBuilder<>(Collections.emptyMap());
+    }
     /**
      * 创建table
      *

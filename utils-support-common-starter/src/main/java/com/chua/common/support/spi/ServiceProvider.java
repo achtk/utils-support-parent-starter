@@ -13,6 +13,7 @@ import com.chua.common.support.value.Value;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static com.chua.common.support.constant.CommonConstant.SYMBOL_COMMA;
@@ -368,19 +369,32 @@ public class ServiceProvider<T> implements InitializingAware {
     public void forEach(BiConsumer<String, T> consumer, Object... args) {
         list(args).forEach(consumer);
     }
-
+    /**
+     * 获取实现
+     *
+     * @param consumer 消费者
+     * @param args     參數
+     * @return 实现
+     */
+    public void forDefinitionEach(Consumer<ServiceDefinition> consumer) {
+        for (Map.Entry<String, SortedSet<ServiceDefinition>> entry : definitions.entrySet()) {
+            SortedSet<ServiceDefinition> value = entry.getValue();
+            consumer.accept(value.first());
+        }
+    }
     /**
      * 遍历
      */
     public void moreEach(BiConsumer<String, T> consumer) {
         for (Map.Entry<String, SortedSet<ServiceDefinition>> entry : definitions.entrySet()) {
             SortedSet<ServiceDefinition> value = entry.getValue();
-            for (ServiceDefinition definition : value) {
+            lo: for (ServiceDefinition definition : value) {
                 T imageConverter = definition.getObj(serviceAutowire);
                 if (null == imageConverter) {
                     continue;
                 }
                 consumer.accept(entry.getKey(), imageConverter);
+                break lo;
             }
         }
     }

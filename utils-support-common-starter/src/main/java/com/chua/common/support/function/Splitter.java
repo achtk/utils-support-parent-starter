@@ -158,14 +158,15 @@ public interface Splitter {
         private String separator;
         private String kvSeparator;
 
-        public MapSplitter(String separator) {
+        public MapSplitter(String s, String separator) {
             super();
-            this.separator = separator;
+            this.kvSeparator = separator;
+            this.separator = s;
         }
 
-        protected boolean omitEmptyStrings;
-        protected boolean trimResults;
-        protected int limit;
+        private boolean omitEmptyStrings;
+        private boolean trimResults;
+        private int limit;
 
         public MapSplitter omitEmptyStrings() {
             this.omitEmptyStrings = true;
@@ -228,7 +229,7 @@ public interface Splitter {
 
         @Override
         public MapSplitter withKeyValueSeparator(String separator) {
-            return new MapSplitter(separator);
+            return new MapSplitter(s, separator);
 
         }
         @Override

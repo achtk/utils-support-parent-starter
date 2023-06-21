@@ -201,6 +201,11 @@ public class RegexConstant {
      * 仅限：中国驾驶证档案编号
      */
     public static final Pattern CAR_DRIVING_LICENCE = Pattern.compile(CommonConstant.CAR_DRIVING_LICENCE);
+    /**
+     * #{xx}
+     */
+    public static final Pattern PLACEHOLDER = Pattern.compile("(.*?)#\\{(.*?)\\}(.*?)");
+
 
     // -------------------------------------------------------------------------------------------------------------------------------------------------------------------
     /**

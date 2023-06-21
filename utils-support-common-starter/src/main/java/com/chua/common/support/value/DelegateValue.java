@@ -10,32 +10,32 @@ import lombok.AllArgsConstructor;
  */
 @AllArgsConstructor
 public  class DelegateValue<T> implements Value<T> {
-    private T object;
+    private T value;
 
     private Throwable e;
 
     private T defaultValue;
 
-    public DelegateValue(T object, T defaultValue) {
-        this.object = object;
+    public DelegateValue(T value, T defaultValue) {
+        this.value = value;
         this.defaultValue = defaultValue;
     }
 
-    public DelegateValue(T object, Throwable e) {
-        this.object = object;
+    public DelegateValue(T value, Throwable e) {
+        this.value = value;
         this.e = e;
     }
 
-    public DelegateValue(T object) {
-        this.object = object;
+    public DelegateValue(T value) {
+        this.value = value;
     }
 
     @Override
     public T getValue() {
-        if(object instanceof Value) {
-            object = (T) ((Value<?>) object).getValue();
+        if(value instanceof Value) {
+            value = (T) ((Value<?>) value).getValue();
         }
-        return ObjectUtils.defaultIfNull(object, defaultValue);
+        return ObjectUtils.defaultIfNull(value, defaultValue);
     }
 
     @Override
@@ -45,6 +45,6 @@ public  class DelegateValue<T> implements Value<T> {
 
     @Override
     public boolean isNull() {
-        return null == object;
+        return null == value;
     }
 }

@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 import java.util.Map;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -243,5 +244,14 @@ public class Json {
         }
 
         return false;
+    }
+
+    /**
+     * list
+     * @param string json
+     * @return list
+     */
+    public static List<?> toList(String string) {
+        return JSON.parseArray(string);
     }
 }

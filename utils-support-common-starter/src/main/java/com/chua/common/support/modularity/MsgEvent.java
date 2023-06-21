@@ -17,5 +17,5 @@ public class MsgEvent {
     /**
      * 参数
      */
-    private Profile profile;
+    private Object args;
 }

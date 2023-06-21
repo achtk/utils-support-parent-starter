@@ -50,7 +50,7 @@ public enum TimeUnit {
     /**
      * 分
      */
-    MIN("M", TimeSize.ofMin(1)),
+    MIN("MIN", TimeSize.ofMin(1)),
     /**
      * 秒
      */
@@ -83,6 +83,7 @@ public enum TimeUnit {
                     .add(TimeSize.ofDay(period.getDays()));
         }
 
+        time = time.replace("MIN", "M");
         Duration duration = Duration.parse("PT" + time);
         return TimeSize.ofSecond(duration.getSeconds());
 

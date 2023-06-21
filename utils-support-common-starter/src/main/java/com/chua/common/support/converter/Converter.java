@@ -1,13 +1,12 @@
 package com.chua.common.support.converter;
 
-import com.chua.common.support.converter.definition.EnumTypeConverter;
-import com.chua.common.support.converter.definition.MapTypeConverter;
-import com.chua.common.support.converter.definition.ObjectArrayTypeConverter;
-import com.chua.common.support.converter.definition.TypeConverter;
+import com.chua.common.support.bean.BeanUtils;
+import com.chua.common.support.converter.definition.*;
 import com.chua.common.support.spi.ServiceProvider;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
@@ -63,7 +62,18 @@ public final class Converter {
         }
         return null;
     }
-
+    /**
+     * 转化
+     *
+     * @param value 数据
+     * @param type  类型
+     * @param <E>   结果类型
+     * @return 结果
+     */
+    public static <E> List<E> convertIfNecessaryList(Object value, Class<E> type) {
+        List list = convertIfNecessary(value, List.class);
+        return BeanUtils.copyPropertiesList(list, type);
+    }
     /**
      * 转化
      *
