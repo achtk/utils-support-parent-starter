@@ -1,7 +1,7 @@
 package com.chua.common.support.lang.arrange;
 
 import com.chua.common.support.function.InitializingAware;
-import com.chua.common.support.modularity.*;
+import com.chua.common.support.modularity.Modularity;
 import com.chua.common.support.utils.Preconditions;
 
 import java.util.Map;
@@ -77,21 +77,26 @@ public class DelegateArrangeFactory implements ArrangeFactory, InitializingAware
 
     /**
      * 获取模块
+     *
      * @param moduleName 模块名称
      * @param moduleType 模块类型
      * @return 模块
      */
-    public Arrange getModularity(String moduleType, String moduleName) {
+    public Arrange getArrange(String moduleType, String moduleName) {
         return MODULARITY_DATA.get(moduleType + ":" + moduleName);
     }
+
     /**
      * 获取模块
+     *
      * @param moduleId 模块类型:模块名称
      * @return 模块
      */
-    public Arrange getModularity(String moduleId) {
+    @Override
+    public Arrange getArrange(String moduleId) {
         return MODULARITY_DATA.get(moduleId);
     }
+
     /**
      * 执行模块
      *
@@ -101,7 +106,7 @@ public class DelegateArrangeFactory implements ArrangeFactory, InitializingAware
      * @return 结果
      */
     public ArrangeResult execute(String moduleType, String moduleName, Map<String, Object> args) {
-        return execute(getModularity(moduleType, moduleName), args);
+        return execute(getArrange(moduleType, moduleName), args);
     }
 
     /**
