@@ -34,13 +34,13 @@ public class DelegateArrangeFactory implements ArrangeFactory, InitializingAware
     /**
      * 注册模块
      *
-     * @param modularity 模块
+     * @param arrange 模块
      * @return 结果
      */
-    public DelegateArrangeFactory register(Modularity modularity) {
-        Preconditions.checkNotNull(modularity.getModuleType());
-        Preconditions.checkNotNull(modularity.getModuleName());
-        MODULARITY_DATA.put(modularity.getModuleType() + ":" + modularity.getModuleName(), modularity);
+    public DelegateArrangeFactory register(Arrange arrange) {
+        Preconditions.checkNotNull(arrange.getArrangeType());
+        Preconditions.checkNotNull(arrange.getArrangeName());
+        MODULARITY_DATA.put(arrange.getArrangeType() + ":" + arrange.getArrangeName(), arrange);
         return this;
     }
 
