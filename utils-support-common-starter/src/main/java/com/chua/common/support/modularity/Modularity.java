@@ -37,25 +37,52 @@ public class Modularity {
     /**
      * 依赖关系
      */
-    private String moduleDag;
+    private String moduleDepends;
     /**
      * 连接超时时间
      */
+    @Builder.Default
     private String moduleConnectionTimeout = "1min";
     /**
      * 消息头
      */
     private String moduleHeader;
+    /**
+     * url
+     */
+    private String moduleUrl;
+    /**
+     * driver
+     */
+    private String moduleDriver;
+    /**
+     * ak
+     */
+    @Builder.Default
+    private String moduleAppKey = "root";
+    /**
+     * sk
+     */
+    @Builder.Default
+    private String moduleAppSecret = "root";
+    /**
+     * 自定义解析器
+     */
+    private String moduleResolver;
 
     /**
      * 是否有依赖
      * @return 是否有依赖
      */
     public boolean hasDepends() {
-        return StringUtils.isNotEmpty(moduleDag);
+        return StringUtils.isNotEmpty(moduleDepends);
     }
 
     public boolean hasResponseType() {
         return StringUtils.isNotEmpty(moduleResponse);
+    }
+
+    public String getModuleId() {
+        return getModuleType() + ":" + getModuleName();
     }
 }

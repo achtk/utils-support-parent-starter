@@ -10,7 +10,8 @@ import com.chua.common.support.utils.ThreadUtils;
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.YieldingWaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
-import com.lmax.disruptor.dsl.ProducerType;
+import com.lmax.disruptor.dsl.ProducerType
+import com.mysql.cj.jdbc.Driver;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.Executor;
@@ -19,22 +20,36 @@ import java.util.concurrent.Executor;
  class ModuleExample {
 
      static void main(String[] args) {
-        ModularityFactory modularityFactory = ModularityFactory.create();
-        modularityFactory.register(Modularity.builder()
-                .moduleType("http")
-                .moduleName("static")
-                .moduleScript("GET https://ip-moe.zerodream.net/")
-                .moduleResponse("""{country: "#{country}"}""")
-                .build());
-        ModularityResult modularityResult = modularityFactory.execute("http", "static", ImmutableBuilder.builderOfStringMap()
-                .put("ip", "221.12.111.18").build());
+        ModularityFactory modularityFactory = ModularityFactory.create()
+         modularityFactory.register(Modularity.builder()
+                 .moduleType('default')
+                 .moduleName("getIp")
+                 .moduleScript("""{ip: "221.12.111.18"}""")
+                 .build())
+
+         modularityFactory.register(Modularity.builder()
+                 .moduleType('database')
+                 .moduleName("getIp2")
+                 .moduleScript("select '221.12.111.18' ip")
+                 .moduleUrl("localhost:3306/websql")
+                 .moduleDriver(Driver.class.getName())
+                 .build())
+
+         modularityFactory.register(Modularity.builder()
+        .moduleType("http")
+        .moduleName("static")
+        .moduleScript("GET https://ip-moe.zerodream.net/")
+        .moduleResponse("""{country: "#{country}"}""")
+        .moduleDepends("database:getIp2, default:getIp")
+        .build());
+        ModularityResult modularityResult = modularityFactory.execute("http", "static", ImmutableBuilder.builderOfStringMap().build());
 
         JsonObject jsonObject = modularityResult.getData(JsonObject.class);
         System.out.println();
 
     }
 
-    private static void test() {
+    static void main1(String[] args) {
         Executor executor = ThreadUtils.newProcessorThreadExecutor();
         Disruptor<MsgEvent> disruptor = new Disruptor<>(MsgEvent::new, 1024, executor, ProducerType.SINGLE, new YieldingWaitStrategy());
         ExampleEventHandler handler11 = ExampleEventHandler.of("11");
@@ -43,10 +58,9 @@ import java.util.concurrent.Executor;
         ExampleEventHandler handler31 = ExampleEventHandler.of("31");
         ExampleEventHandler handler32 = ExampleEventHandler.of("32");
 
-        disruptor.handleEventsWith(handler11, handler12);
-        disruptor.after(handler11).handleEventsWith(handler21);
-        disruptor.after(handler21).handleEventsWith(handler31, handler32);
-        disruptor.after(handler32).handleEventsWith(handler11);
+        disruptor.handleEventsWith(handler11);
+        disruptor.after(handler11).handleEventsWith(handler12)
+
         disruptor.start();
 
 

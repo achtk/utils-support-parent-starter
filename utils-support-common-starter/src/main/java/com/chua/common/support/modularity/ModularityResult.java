@@ -11,6 +11,7 @@ import lombok.Data;
 @Data
 @Builder
 public class ModularityResult {
+    public static final ModularityResult INSTANCE = ModularityResult.builder().build();
     /**
      * 响应码
      */

@@ -1,5 +1,7 @@
 package com.chua.common.support.lang.treenode;
 
+import com.chua.common.support.bean.BeanMap;
+import com.chua.common.support.bean.BeanUtils;
 import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.CollectionUtils;
 import lombok.Data;
@@ -29,6 +31,11 @@ public class CustomTreeNode<T, R> {
     private final List<T> data = new LinkedList<>();
 
     private Field field;
+
+    @SuppressWarnings("ALL")
+    public CustomTreeNode(String id, String pid, R root) {
+        this(t -> (R) BeanMap.of(t, false).get(id), t -> (R) BeanMap.of(t, false).get(pid), root);
+    }
 
     public CustomTreeNode(Function<T, R> idFunction, Function<T, R> pidFunction, R root) {
         this(idFunction, pidFunction, null, root);

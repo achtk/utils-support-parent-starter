@@ -3,6 +3,9 @@ package com.chua.common.support.modularity;
 import com.chua.common.support.lang.profile.Profile;
 import lombok.Data;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * 消息事件
  *
@@ -10,6 +13,7 @@ import lombok.Data;
  */
 @Data
 public class MsgEvent {
+
     /**
      * 名称
      */
@@ -18,4 +22,8 @@ public class MsgEvent {
      * 参数
      */
     private Object args;
+    /**
+     * 額外參數
+     */
+    private Map<String, ModularityResult> param = new ConcurrentHashMap<>();
 }

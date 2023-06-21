@@ -86,7 +86,7 @@ public class ModularityFactory implements InitializingAware {
             modularity.setModuleType(strings.get(0));
             ModularityDag modularityDag = it.getImplClass().getDeclaredAnnotation(ModularityDag.class);
             if (null != modularityDag) {
-                modularity.setModuleDag(modularityDag.value());
+                modularity.setModuleDepends(modularityDag.value());
             }
 
             ModularityScript modularityScript = it.getImplClass().getDeclaredAnnotation(ModularityScript.class);
@@ -106,6 +106,14 @@ public class ModularityFactory implements InitializingAware {
      */
     public Modularity getModularity(String moduleType, String moduleName) {
         return MODULARITY_DATA.get(moduleType + ":" + moduleName);
+    }
+    /**
+     * 获取模块
+     * @param moduleId 模块类型:模块名称
+     * @return 模块
+     */
+    public Modularity getModularity(String moduleId) {
+        return MODULARITY_DATA.get(moduleId);
     }
     /**
      * 执行模块

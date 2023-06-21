@@ -8,6 +8,7 @@ import com.chua.common.support.function.MethodFilter;
 import com.chua.common.support.function.SafeConsumer;
 import com.chua.common.support.lang.proxy.BridgingMethodIntercept;
 import com.chua.common.support.lang.proxy.ProxyUtils;
+import com.chua.common.support.modularity.resolver.ModularityTypeResolver;
 import com.chua.common.support.unit.name.NamingCase;
 import com.chua.common.support.value.*;
 
@@ -474,7 +475,25 @@ public class ClassUtils {
             return null;
         }
     }
-
+    /**
+     * 实例化类
+     *
+     * @param tClass 类
+     * @param params 参数
+     * @return 对象
+     * @throws Exception ex
+     */
+    public static <T> T forObjectWithType(String typeName, Class<T> type, Object... params) {
+        try {
+            T forObject = (T) forObject(forName(typeName, type.getClassLoader()), params);
+            if(null == forObject || !type.isAssignableFrom(forObject.getClass())) {
+                return null;
+            }
+            return forObject;
+        } catch (Exception e) {
+            return null;
+        }
+    }
     /**
      * 实例化类
      *
@@ -588,6 +607,10 @@ public class ClassUtils {
             }
 
             if (parameterType.isAssignableFrom(param.getClass())) {
+                continue;
+            }
+
+            if(parameterType.getTypeName().equals(param.getClass().getTypeName())) {
                 continue;
             }
 
@@ -1748,7 +1771,7 @@ public class ClassUtils {
 
         String name = "set" + NamingCase.toFirstUpperCase(field.getName());
         try {
-            Method declaredMethod = target.getDeclaredMethod(name, field.getType());
+            Method declaredMethod = findMethod(target, name,  field.getType());
             if (null != declaredMethod) {
                 declaredMethod.setAccessible(true);
                 declaredMethod.invoke(bean, value);
@@ -1768,7 +1791,7 @@ public class ClassUtils {
         }
 
         try {
-            field.setAccessible(true);
+            setAccessible(field);
             field.set(bean, value);
         } catch (IllegalAccessException e) {
         }
@@ -2245,6 +2268,7 @@ public class ClassUtils {
         }
         return returnType;
     }
+
 
     static class SetAccessibleAction<T extends AccessibleObject> implements PrivilegedAction<T> {
         private final T obj;

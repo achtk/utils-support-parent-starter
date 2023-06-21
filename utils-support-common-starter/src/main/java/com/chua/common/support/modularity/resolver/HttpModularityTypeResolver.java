@@ -16,6 +16,7 @@ import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.unit.TimeUnit;
 import com.chua.common.support.utils.StringUtils;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -53,7 +54,7 @@ public class HttpModularityTypeResolver implements ModularityTypeResolver {
     }
 
     private Map<String, Object> analysisBody(Modularity modularity, Map<String, Object> args, MsgHeaders msgHeaders) {
-        Map<String, Object> param = new ConcurrentHashMap<>();
+        Map<String, Object> param = new LinkedHashMap<>();
         String moduleRequest = modularity.getModuleRequest();
         ExpressionParser parser = ServiceProvider.of(ExpressionParser.class).getNewExtension("spring");
         parser.setVariable("header", msgHeaders);

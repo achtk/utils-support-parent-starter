@@ -11,7 +11,8 @@ import javax.sql.DataSource;
 public class AutoCreateTableExample {
 
     public static void main(String[] args) {
-        DataSource dataSource = DataSourceUtils.createDefaultMysqlDataSource(DataSourceUtils.localMysqlUrl("websql"));
+        DataSource dataSource =
+                DataSourceUtils.createDefaultMysqlDataSource(DataSourceUtils.localMysqlUrl("websql"));
         AutoMetadata autoMetadata = AutoMetadata.builder().suffix("20230315").build();
         MetadataExecutor metadataExecutor = autoMetadata.doExecute(TestEntity.class);
 

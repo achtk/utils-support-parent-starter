@@ -7,10 +7,7 @@ import com.chua.common.support.matcher.PathMatcher;
 import com.chua.common.support.reflection.describe.ParameterDescribe;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static com.chua.common.support.constant.CommonConstant.INDEX_NOT_FOUND;
 import static com.chua.common.support.constant.CommonConstant.SYMBOL_ASTERISK;
@@ -940,4 +937,18 @@ public class ArrayUtils {
         return rs;
     }
 
+    /**
+     * 转为集合
+     * @param value 数组
+     * @return 集合
+     */
+    public static Collection<?> toList(Object value) {
+        List<Object> rs = new LinkedList<>();
+        int length = Array.getLength(value);
+        for (int i = 0; i < length; i++) {
+            rs.add(Array.get(value, i));
+        }
+
+        return rs;
+    }
 }
