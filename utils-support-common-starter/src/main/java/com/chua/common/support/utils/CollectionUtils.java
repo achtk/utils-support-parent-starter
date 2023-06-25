@@ -848,7 +848,7 @@ public class CollectionUtils {
 
         for (int i = 0; i < names.size(); i++) {
             String name = names.get(i);
-            rs[i] = MapUtils.getObject(arg, name);
+            rs[i] = MapUtils.getConfig(arg, name);
         }
 
         return rs;

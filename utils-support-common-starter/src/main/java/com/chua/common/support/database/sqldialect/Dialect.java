@@ -32,10 +32,17 @@ import java.util.function.Function;
 public interface Dialect {
     static Dialect guessDialect(DataSource ds) {
         try (Connection connection = ds.getConnection()) {
-            String driverName = connection.getMetaData().getDriverName();
+            DatabaseMetaData metaData = connection.getMetaData();
+            String driverName = metaData.getDatabaseProductName();
+            if("MYSQL".equalsIgnoreCase(driverName)) {
+                String databaseProductVersion = metaData.getDatabaseProductVersion();
+                if(NumberUtils.toInt(databaseProductVersion.substring(0, databaseProductVersion.indexOf(".")), 0) >= 8) {
+                    driverName += "8";
+                }
+            }
             Map<String, Dialect> stringDialectMap = ServiceProvider.of(Dialect.class).list();
             for (Map.Entry<String, Dialect> entry : stringDialectMap.entrySet()) {
-                if (entry.getValue().driverClassName().equals(driverName)) {
+                if (entry.getKey().equalsIgnoreCase(driverName)) {
                     return entry.getValue();
                 }
             }
@@ -124,7 +131,7 @@ public interface Dialect {
         }
 
         Object extension = ServiceProvider.of("org.hibernate.dialect.Dialect").getExtension(type);
-
+        Dialect dialect = ServiceProvider.of(Dialect.class).getExtension(extension.getClass().getSimpleName().replace("Dialect", ""));
         return ProxyUtils.newProxy(Dialect.class, new DelegateMethodIntercept<>(Dialect.class, new Function<ProxyMethod, Object>() {
             @Override
             public Object apply(ProxyMethod proxyMethod) {
@@ -140,7 +147,9 @@ public interface Dialect {
                 if (null != value && proxyMethod.hasReturnValue()) {
                     return value;
                 }
-
+                if(null != dialect) {
+                    return proxyMethod.getValue(dialect);
+                }
                 return proxyMethod.getValue();
             }
         }));

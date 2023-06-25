@@ -22,6 +22,6 @@ public class PageMemData<T> implements PageData<T> {
 
     @Override
     public Page<T> find(int page, int pageSize) {
-        return Page.<T>builder().data(data).build();
+        return new Page<T>().setData(data);
     }
 }

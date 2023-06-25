@@ -47,6 +47,10 @@ public class DelegateMethodIntercept<T> implements MethodIntercept<T> {
                 .plugins(proxyPluginList)
                 .proxy(proxy).build();
 
+        if(proxyMethod.isDefault()) {
+            return proxyMethod.doDefault();
+        }
+
         return function.apply(proxyMethod);
     }
 }

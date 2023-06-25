@@ -18,7 +18,7 @@ public class AutoServiceAutowire implements ServiceAutowire {
 
     public static ServiceAutowire INSTANCE = new AutoServiceAutowire();
     static final String APPLICATION_CONTEXT = "org.springframework.context.ApplicationContext";
-    static final String UTILS = "com.chua.starter.common.support.configuration.SpringBeanUtils";
+    public static final String UTILS = "com.chua.starter.common.support.configuration.SpringBeanUtils";
     private static MethodDescribeProvider methodDescribe;
 
     public static final List<ServiceAutowire> AUTOWIRES = new LinkedList<>();

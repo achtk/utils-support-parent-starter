@@ -1,8 +1,11 @@
 package com.chua.common.support.spi.finder;
 
 import com.chua.common.support.constant.NumberConstant;
+import com.chua.common.support.reflection.describe.TypeDescribe;
+import com.chua.common.support.reflection.describe.provider.MethodDescribeProvider;
 import com.chua.common.support.resource.resource.UrlResource;
 import com.chua.common.support.spi.ServiceDefinition;
+import com.chua.common.support.spi.autowire.AutoServiceAutowire;
 import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +18,8 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
+import static com.chua.common.support.spi.autowire.AutoServiceAutowire.UTILS;
+
 
 /**
  * 自定义spi查找器
@@ -24,68 +29,21 @@ import java.util.stream.Collectors;
 @Slf4j
 public class SpringServiceFinder extends AbstractServiceFinder {
 
-    public static final String FACTORIES_RESOURCE_LOCATION = "META-INF/spring.factories";
+    private static final MethodDescribeProvider methodDescribe;
 
-    private static final AtomicBoolean status = new AtomicBoolean(false);
-    private Map<String, List<String>> stringListMap;
-
+    static  {
+        TypeDescribe typeDescribe = new TypeDescribe(UTILS);
+        methodDescribe = typeDescribe.getMethodDescribe("getApplicationContext")
+                .isChain().getMethodDescribe("getBeansOfType");
+    }
 
     @Override
     protected List<ServiceDefinition> find() {
-        if(!status.get()) {
-            status.set(true);
-            this.stringListMap = loadSpringFactories(getClassLoader());
-
-        }
-
-        List<String> strings = stringListMap.get(service.getTypeName());
-        if(null == strings) {
-            return Collections.emptyList();
-        }
-
-
         List<ServiceDefinition> rs = new LinkedList<>();
-        for (String string : strings) {
-            Class<?> aClass = ClassUtils.forName(string, getClassLoader());
-            if(null == aClass) {
-                continue;
-            }
-
-            rs.addAll(buildDefinition(aClass));
+        Map map = methodDescribe.executeSelf(Map.class, service);
+        for (Object o : map.values()) {
+            rs.addAll(buildDefinition(o));
         }
-
         return rs;
-    }
-    private static Map<String, List<String>> loadSpringFactories(ClassLoader classLoader) {
-        Map<String, List<String>> result = new HashMap<>(NumberConstant.DEFAULT_INITIAL_CAPACITY);
-        try {
-            Enumeration<URL> urls = classLoader.getResources(FACTORIES_RESOURCE_LOCATION);
-            while (urls.hasMoreElements()) {
-                URL url = urls.nextElement();
-                UrlResource resource = new UrlResource(url);
-                Properties properties = new Properties();
-                try (InputStreamReader reader = new InputStreamReader(resource.openStream(), StandardCharsets.UTF_8)) {
-                    properties.load(reader);
-                }
-                for (Map.Entry<?, ?> entry : properties.entrySet()) {
-                    String factoryTypeName = ((String) entry.getKey()).trim();
-                    String[] factoryImplementationNames =
-                            StringUtils.commaDelimitedListToStringArray((String) entry.getValue());
-                    for (String factoryImplementationName : factoryImplementationNames) {
-                        result.computeIfAbsent(factoryTypeName, key -> new ArrayList<>())
-                                .add(factoryImplementationName.trim());
-                    }
-                }
-            }
-
-            // Replace all lists with unmodifiable lists containing unique elements
-            result.replaceAll((factoryType, implementations) -> implementations.stream().distinct()
-                    .collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList)));
-        }
-        catch (IOException ex) {
-            throw new IllegalArgumentException("Unable to load factories from location [" +
-                    FACTORIES_RESOURCE_LOCATION + "]", ex);
-        }
-        return result;
     }
 }

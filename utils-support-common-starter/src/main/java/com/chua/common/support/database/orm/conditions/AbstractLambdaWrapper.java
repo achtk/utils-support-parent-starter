@@ -5,6 +5,7 @@ import com.chua.common.support.database.entity.Column;
 import com.chua.common.support.database.orm.PropertyNames;
 import com.chua.common.support.lang.lambda.LambdaMeta;
 import com.chua.common.support.lang.lambda.LambdaUtils;
+import com.chua.common.support.unit.name.NamingCase;
 import com.chua.common.support.utils.Preconditions;
 
 import java.util.Arrays;
@@ -82,6 +83,9 @@ public abstract class AbstractLambdaWrapper<T, Children extends AbstractLambdaWr
 
     private Column getColumnCache(String fieldName, Class<?> lambdaClass) {
         Column columnCache = columnMap.get(LambdaUtils.formatKey(fieldName));
+        if(null == columnCache) {
+            columnCache = columnMap.get(LambdaUtils.formatKey(NamingCase.toCamelUnderscore(fieldName)));
+        }
         Preconditions.notNull(columnCache, "can not find lambda cache for this property [%s] of entity [%s]",
             fieldName, lambdaClass.getName());
         return columnCache;

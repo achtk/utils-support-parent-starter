@@ -318,4 +318,13 @@ public interface Metadata<T> {
             throw new RuntimeException(StringUtils.format("Error: Cannot read property in {}.  Cause:", e, entity.getClass().getSimpleName()));
         }
     }
+
+    /**
+     * 获取id值
+     * @param arg 对象
+     * @return 结果
+     */
+    default Object getKeyPropertyValue(Object arg) {
+        return ClassUtils.getFieldValue(getKeyProperty(), getJavaType(), arg);
+    }
 }

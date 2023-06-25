@@ -60,4 +60,12 @@ public class ProxyMethod {
             }
         }
     }
+
+    public boolean isDefault() {
+        return method.isDefault();
+    }
+
+    public Object doDefault() {
+        return ClassUtils.invokeDefaultMethod(method, obj, args);
+    }
 }

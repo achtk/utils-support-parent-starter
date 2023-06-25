@@ -71,7 +71,7 @@ public class PageValue<T> {
      * @return 结果
      */
     public Page<T> query(int page, int pageSize) {
-        Page<T> rs = Page.<T>builder().build();
+        Page<T> rs = new Page<>();
         List<T> tpl = new LinkedList<>();
         int sum = 0;
         for (PageData<T> pageData : data) {
@@ -81,10 +81,10 @@ public class PageValue<T> {
             tpl.addAll(data1);
         }
 
-        rs.setCurrent(page);
-        rs.setSize(pageSize);
+        rs.setPageNum(page);
+        rs.setPageSize(pageSize);
         rs.setPages(PageUtils.totalPage(sum, pageSize));
-        rs.setTotal(sum);
+        rs.setTotal((long) sum);
         rs.setData(CollectionUtils.page(page - 1, pageSize, tpl));
 
         return rs;

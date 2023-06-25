@@ -7,7 +7,10 @@ import com.chua.common.support.collection.MultiValueMap;
 import com.chua.common.support.constant.NumberConstant;
 import com.chua.common.support.converter.Converter;
 import com.chua.common.support.function.Splitter;
+import com.chua.common.support.lang.expression.parser.ExpressionParser;
 import com.chua.common.support.spi.ServiceProvider;
+import com.chua.common.support.unit.name.NamingCase;
+import com.chua.common.support.value.Value;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -1389,5 +1392,26 @@ public class MapUtils {
      */
     public static boolean hasKey(Map arg, String key) {
         return isNotEmpty(arg) && arg.containsKey(key);
+    }
+
+    /**
+     * 获取配置的值
+     * @param arg map
+     * @param name 索引
+     * @return 结果
+     */
+    @SuppressWarnings("ALL")
+    public static <K, V>V getConfig(Map<K, V> arg, String name) {
+        V v = arg.get(name);
+        if(null == v) {
+            v = arg.get(NamingCase.toCamelCase(name));
+        }
+
+        if(null == v) {
+            v = arg.get(NamingCase.toCamelUnderscore(name));
+        }
+
+
+        return v;
     }
 }

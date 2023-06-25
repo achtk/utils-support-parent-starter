@@ -17,6 +17,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static com.chua.common.support.constant.CommonConstant.SYMBOL_COMMA;
+import static com.chua.common.support.spi.autowire.AutoServiceAutowire.UTILS;
 
 /**
  * spi
@@ -175,7 +176,9 @@ public class ServiceProvider<T> implements InitializingAware {
         rs.add(new ServiceLoaderServiceFinder());
         rs.add(new CustomServiceFinder());
         rs.add(new SamePackageServiceFinder());
-//        rs.add(new SpringServiceFinder());
+        if(ClassUtils.isPresent(UTILS)) {
+            rs.add(new SpringServiceFinder());
+        }
         rs.add(new ScriptServiceFinder());
 
         return rs;

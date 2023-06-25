@@ -1,7 +1,7 @@
 package com.chua.common.support.lang.page;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
+import lombok.experimental.Accessors;
 
 import java.util.List;
 
@@ -12,25 +12,25 @@ import java.util.List;
  * @since 2022/8/5 15:48
  */
 @Data
-@Builder
+@Accessors(chain = true)
 public class Page<T> {
     /**
      * 当前页
      */
-    private int current;
+    private Integer pageNum = 1;
 
     /**
      * 限制数量
      */
-    private int size;
+    private Integer pageSize = 10;
     /**
      * 总数
      */
-    private long total;
+    private Long total = 0L;
     /**
      * 页面数量
      */
-    private int pages;
+    private Integer pages = 1;
     /**
      * 数据
      */

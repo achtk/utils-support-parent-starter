@@ -300,6 +300,7 @@ public class ClassUtils {
         return isPresent(className, getDefaultClassLoader());
     }
 
+    private static final Map<String, Boolean> CACHE = new ConcurrentReferenceHashMap<>(512);
     /**
      * 是否包含类
      *
@@ -308,12 +309,14 @@ public class ClassUtils {
      * @return 类加载器是否包含该类, 包含返回true
      */
     public static boolean isPresent(final String className, final ClassLoader classLoader) {
-        try {
-            final Class<?> aClass = forName(className, classLoader);
-            return null != aClass;
-        } catch (Throwable ex) {
-            return false;
-        }
+        return MapUtils.computeIfAbsent(CACHE, className, it -> {
+            try {
+                final Class<?> aClass = forName(className, classLoader);
+                return null != aClass;
+            } catch (Throwable ex) {
+                return false;
+            }
+        });
     }
 
     /**

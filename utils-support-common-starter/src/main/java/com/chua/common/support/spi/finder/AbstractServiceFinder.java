@@ -5,6 +5,8 @@ import com.chua.common.support.spi.ServiceDefinition;
 import com.chua.common.support.spi.autowire.ServiceAutowire;
 import com.chua.common.support.utils.AnnotationUtils;
 import com.chua.common.support.utils.ClassUtils;
+import com.chua.common.support.utils.CollectionUtils;
+import com.chua.common.support.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URL;
@@ -52,7 +54,13 @@ public abstract class AbstractServiceFinder implements ServiceFinder{
      * @return 定义
      */
     public List<ServiceDefinition> buildDefinition(Object obj) {
-        return buildDefinition(obj, obj.getClass(), null, null);
+        Class<?> aClass = obj.getClass();
+        List<ServiceDefinition> serviceDefinitions = buildDefinition(obj, aClass, null, null);
+        if(CollectionUtils.isEmpty(serviceDefinitions)) {
+            return buildDefinition(obj, aClass, aClass.getTypeName(), null);
+        }
+
+        return serviceDefinitions;
     }
 
     /**
@@ -88,7 +96,9 @@ public abstract class AbstractServiceFinder implements ServiceFinder{
             return rs;
         }
         Order order = implType.getDeclaredAnnotation(Order.class);
-        rs.add(buildDefinitionAlias(obj, implType, url, alias, null == order ? 0 : order.value()));
+        if(StringUtils.isNotEmpty(alias)) {
+            rs.add(buildDefinitionAlias(obj, implType, url, alias, null == order ? 0 : order.value()));
+        }
         return rs;
     }
 
@@ -102,6 +112,9 @@ public abstract class AbstractServiceFinder implements ServiceFinder{
      * @return 结果
      */
     private List<ServiceDefinition> buildEnumDefinition(Object obj, Class<?> implType, String alias, URL url) {
+        if(StringUtils.isEmpty(alias)) {
+            return Collections.emptyList();
+        }
         List<ServiceDefinition> rs = new LinkedList<>();
         if (service.isAssignableFrom(implType)) {
             rs.add(buildDefinitionAlias(obj, implType, url, alias, 0));
@@ -178,6 +191,9 @@ public abstract class AbstractServiceFinder implements ServiceFinder{
         url = url == null ? implType.getProtectionDomain().getCodeSource().getLocation() : url;
         int order = getOrder(implType);
         for (String s : name) {
+            if(StringUtils.isBlank(s)) {
+                continue;
+            }
             rs.add(buildDefinitionAlias(obj, implType, url, s, order));
         }
 

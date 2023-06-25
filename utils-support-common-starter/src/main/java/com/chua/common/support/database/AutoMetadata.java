@@ -1,5 +1,6 @@
 package com.chua.common.support.database;
 
+import com.chua.common.support.database.annotation.Table;
 import com.chua.common.support.database.executor.MetadataExecutor;
 import com.chua.common.support.database.metadata.DelegateMetadata;
 import com.chua.common.support.database.repository.Repository;
@@ -13,6 +14,7 @@ import com.chua.common.support.utils.ClassUtils;
 import lombok.Builder;
 
 import javax.sql.DataSource;
+import java.util.Map;
 
 /**
  * 自动建表
@@ -52,6 +54,41 @@ public class AutoMetadata {
 
     public MetadataExecutor doExecute(Class<?> type, Dialect dialect) {
         return metadataResolver.resolve(new DelegateMetadata<>(type, prefix, suffix), dialect);
+    }
+
+    @SuppressWarnings("ALL")
+    public <T> Repository<T> createRepository(Map<String, DataSource> dataSources,
+                                              Class<T> type) {
+
+        return MappingProxy.create("database", Repository.class,
+                Profile.newDefault()
+                        .addProfile("dataSource", getDataSource(dataSources, type))
+                        .addProfile("type", type)
+                        .addProfile("suffix", suffix)
+                        .addProfile("prefix", prefix)
+        );
+    }
+
+    private DataSource getDataSource(Map<String, DataSource> dataSources, Class<?> type) {
+        if(dataSources.isEmpty()) {
+            throw new RuntimeException("数据源不存在");
+        }
+
+        if(dataSources.size() == 1) {
+            return dataSources.values().stream().findFirst().get();
+        }
+        Table table = type.getDeclaredAnnotation(Table.class);
+        String schema = table.schema();
+        if(dataSources.containsKey(schema)) {
+            return dataSources.get(schema);
+        }
+
+        if(dataSources.containsKey("master")) {
+            return dataSources.get("master");
+        }
+
+        return dataSources.values().stream().findFirst().get();
+
     }
 
     @SuppressWarnings("ALL")

@@ -19,7 +19,14 @@ public class HibernateIdValue extends SimpleValue {
     public boolean isIdentityColumn(IdentifierGeneratorFactory identifierGeneratorFactory, Dialect dialect) {
         identifierGeneratorFactory.setDialect(dialect);
         try {
-            return null != identifierGeneratorFactory.getIdentifierGeneratorClass(getIdentifierGeneratorStrategy().replace("ASSIGN_", "").toLowerCase());
+            try {
+                return null != identifierGeneratorFactory.getIdentifierGeneratorClass(getIdentifierGeneratorStrategy().replace("ASSIGN_", "").toLowerCase());
+            } catch (Exception e) {
+                if(getIdentifierGeneratorStrategy().equalsIgnoreCase("AUTO")) {
+                    setIdentifierGeneratorStrategy("increment");
+                }
+                return null != identifierGeneratorFactory.getIdentifierGeneratorClass(getIdentifierGeneratorStrategy());
+            }
         } catch (Exception e) {
             return false;
         }
