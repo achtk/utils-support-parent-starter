@@ -106,22 +106,42 @@
   > 	a.id,
   > 	substring_index(
   > 		substring_index(
-  > 			a.CFXFBHLB,
+  > 			a.<逗号分隔的数据>,
   > 			',',
   > 			b.help_topic_id + 1
   > 		),
   > 		',' ,- 1
-  > 	) AS CFXFBHLB,a.XH
+  > 	) AS <逗号分隔的数据>,a.<ID>
   > FROM
-  > 	 (SELECT @rownum := @rownum+1 AS id,t.XH, t.CFXFBHLB
-  >      FROM (SELECT @rownum:=0)r , t_xfcf_tq as t
+  > 	 (SELECT @rownum := @rownum+1 AS id,t.<ID>, t.<逗号分隔的数据>
+  >      FROM (SELECT @rownum:=0)r , <表> as t
   >      ) a
   > JOIN mysql.help_topic b ON b.help_topic_id < (
-  > 	length(a.CFXFBHLB) - length(
-  > 		REPLACE (a.CFXFBHLB, ',', '')
+  > 	length(a.<逗号分隔的数据>) - length(
+  > 		REPLACE (a.<逗号分隔的数据>, ',', '')
   > 	) + 1
   > )
   > ```
+
+- #### **根据传入id查询所有父节点的id**
+
+  ```sql
+  SELECT T2.<ID>, T2.<其它字段>, T2.<PID>
+  FROM ( 
+      SELECT 
+          @r AS _id, 
+          (SELECT @r := <PID> FROM <表> WHERE id = _id) AS pid, 
+          @l := @l + 1 AS l
+      FROM 
+          (SELECT @r := 4, @l := 0) vars, 
+           <表> h 
+      WHERE @r != 0) T1 
+  JOIN <表> T2 
+  ON T1._id = T2.<ID> 
+  ORDER BY T1.l;
+  ```
+
+  
 
 - #### 1418
 
@@ -132,5 +152,9 @@
 2.开启：SET GLOBAL log_bin_trust_function_creators = 1;
 3.关闭：SET GLOBAL log_bin_trust_function_creators = 0;
 ```
+- #### 指定配置
 
+```bash
+mysqld --defaults-file=<path to my.ini>
+```
 8c607ec8e8e017c17c7422564aa30237
