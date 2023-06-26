@@ -3,10 +3,7 @@ package com.chua.common.support.database.repository;
 import com.chua.common.support.annotations.Extension;
 import com.chua.common.support.database.orm.conditions.Wrapper;
 import com.chua.common.support.database.orm.conditions.Wrappers;
-import com.chua.common.support.database.orm.conditions.query.LambdaQueryWrapper;
-import com.chua.common.support.database.orm.conditions.query.QueryWrapper;
 import com.chua.common.support.lang.page.Page;
-import com.sun.xml.internal.bind.v2.model.core.ID;
 
 import java.io.Serializable;
 import java.util.List;
@@ -34,6 +31,7 @@ public interface Repository<T> {
      * @return 实体
      */
     <S extends T> List<S> list(Wrapper<S> wrapper);
+
     /**
      * 保存实体
      *
@@ -91,10 +89,11 @@ public interface Repository<T> {
      * @return 结果
      */
     Page<T> page(Page<T> page, Wrapper<T> wrapper);
+
     /**
      * 分页查询
      *
-     * @param page    页码
+     * @param page 页码
      * @return 结果
      */
     default Page<T> page(Page<T> page) {
@@ -109,4 +108,10 @@ public interface Repository<T> {
      */
     int saveOrUpdate(T entity);
 
+    /**
+     * 删除数据
+     *
+     * @param wrapper 条件
+     */
+    void delete(Wrapper<T> wrapper);
 }

@@ -21,6 +21,10 @@ public class ArrangeResult {
      */
     private Object data;
     /**
+     * 是否运行
+     */
+    private boolean isRunning = true;
+    /**
      * 各个任务结果
      */
     private Map<String, ArrangeResult> param = new LinkedHashMap<>();

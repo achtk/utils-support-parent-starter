@@ -4,17 +4,11 @@ import com.chua.common.support.converter.Converter;
 import com.chua.common.support.function.Splitter;
 import com.chua.common.support.lang.any.Any;
 import com.chua.common.support.log.Log;
-import com.chua.common.support.modularity.Modularity;
-import com.chua.common.support.modularity.ModularityResult;
-import com.chua.common.support.modularity.MsgEvent;
-import com.chua.common.support.modularity.resolver.ModularityTypeResolver;
-import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.task.lmax.DisruptorEventHandler;
 import com.chua.common.support.task.lmax.DisruptorEventHandlerFactory;
 import com.chua.common.support.task.lmax.DisruptorFactory;
 import com.chua.common.support.task.lmax.DisruptorObjectFactory;
 import com.chua.common.support.unit.TimeUnit;
-import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.CollectionUtils;
 import com.chua.common.support.utils.StringUtils;
 
@@ -95,6 +89,10 @@ public class DependsArrangeExecutor implements ArrangeExecutor<ArrangeResult> {
                         param.put(name, ArrangeResult.INSTANCE);
                         log.error(e.getMessage());
                     }
+
+                    if (arrange.getArrangeId().equals(name)) {
+                        event.setRunning(false);
+                    }
                 });
             }
         }, new DisruptorObjectFactory<ArrangeResult>() {
@@ -117,7 +115,7 @@ public class DependsArrangeExecutor implements ArrangeExecutor<ArrangeResult> {
         disruptorFactory.waitFor(TimeUnit.parse(arrange.getArrangeConnectionTimeout()), new Supplier<Boolean>() {
             @Override
             public Boolean get() {
-                return null != arrangeResult.getParam().get(arrange.getArrangeId());
+                return !arrangeResult.isRunning();
             }
         });
         return arrangeResult.getParam().get(arrange.getArrangeId());

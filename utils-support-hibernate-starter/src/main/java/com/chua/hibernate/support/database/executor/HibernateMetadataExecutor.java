@@ -10,9 +10,9 @@ import com.chua.common.support.database.metadata.Metadata;
 import com.chua.common.support.database.sqldialect.Dialect;
 import com.chua.common.support.lang.formatter.DdlFormatter;
 import com.chua.common.support.lang.formatter.HighlightingFormatter;
+import com.chua.common.support.log.Log;
 import com.chua.common.support.utils.CollectionUtils;
 import com.chua.common.support.utils.StringUtils;
-import lombok.extern.slf4j.Slf4j;
 import org.hibernate.boot.model.relational.internal.SqlStringGenerationContextImpl;
 import org.hibernate.boot.spi.MetadataImplementor;
 import org.hibernate.mapping.PrimaryKey;
@@ -30,10 +30,10 @@ import java.util.List;
  *
  * @author CH
  */
-@Slf4j
 public class HibernateMetadataExecutor implements MetadataExecutor {
 
     private final Expression expression;
+    static final Log log = Log.getLogger(MetadataExecutor.class);
 
     public HibernateMetadataExecutor(Expression expression) {
         this.expression = expression;
