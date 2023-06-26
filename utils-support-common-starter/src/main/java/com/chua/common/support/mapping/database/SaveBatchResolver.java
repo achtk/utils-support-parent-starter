@@ -36,7 +36,11 @@ public class SaveBatchResolver implements Resolver{
             if (it.isPrimary()) {
                 primaryKey = it;
             }
-            stringBuilder.append("`").append(it.getName()).append("`,");
+            if (it.getName().startsWith("`")) {
+                stringBuilder.append(it.getName()).append(",");
+            } else {
+                stringBuilder.append("`").append(it.getName()).append("`,");
+            }
         }
 
         stringBuilder.delete(stringBuilder.length() - 1, stringBuilder.length());
