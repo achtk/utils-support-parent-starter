@@ -8,9 +8,11 @@ import java.util.Map;
  */
 public class DependsNullArrangeExecutor implements ArrangeExecutor<ArrangeResult> {
     private final Arrange arrange;
+    private ArrangeLogger arrangeLogger;
 
-    public DependsNullArrangeExecutor(Arrange arrange) {
+    public DependsNullArrangeExecutor(Arrange arrange, ArrangeLogger arrangeLogger) {
         this.arrange = arrange;
+        this.arrangeLogger = arrangeLogger;
     }
 
     @Override

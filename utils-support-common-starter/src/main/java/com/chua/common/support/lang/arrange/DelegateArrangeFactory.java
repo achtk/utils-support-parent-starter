@@ -1,6 +1,7 @@
 package com.chua.common.support.lang.arrange;
 
 import com.chua.common.support.function.InitializingAware;
+import com.chua.common.support.utils.ObjectUtils;
 import com.chua.common.support.utils.Preconditions;
 import com.chua.common.support.utils.StringUtils;
 
@@ -19,8 +20,10 @@ public class DelegateArrangeFactory implements ArrangeFactory, InitializingAware
 
     final Map<String, Arrange> modularityData = new ConcurrentHashMap<>();
     AtomicBoolean status = new AtomicBoolean(false);
+    private final ArrangeLogger arrangeLogger;
 
-    private DelegateArrangeFactory() {
+    private DelegateArrangeFactory(ArrangeLogger arrangeLogger) {
+        this.arrangeLogger = ObjectUtils.defaultIfNull(arrangeLogger, (message, name, cost) -> {});
     }
 
     /**
@@ -28,8 +31,8 @@ public class DelegateArrangeFactory implements ArrangeFactory, InitializingAware
      *
      * @return 初始化
      */
-    public static DelegateArrangeFactory create() {
-        DelegateArrangeFactory arrangeFactory = new DelegateArrangeFactory();
+    public static DelegateArrangeFactory create(ArrangeLogger arrangeLogger) {
+        DelegateArrangeFactory arrangeFactory = new DelegateArrangeFactory(arrangeLogger);
         arrangeFactory.afterPropertiesSet();
         return arrangeFactory;
     }
@@ -122,9 +125,9 @@ public class DelegateArrangeFactory implements ArrangeFactory, InitializingAware
     public ArrangeResult execute(Arrange arrange, Map<String, Object> args) {
         ArrangeExecutor<ArrangeResult> executor = null;
         if (!arrange.hasDepends()) {
-            executor = new DependsNullArrangeExecutor(arrange);
+            executor = new DependsNullArrangeExecutor(arrange, arrangeLogger);
         } else {
-            executor = new DependsArrangeExecutor(arrange, this);
+            executor = new DependsArrangeExecutor(arrange, this, arrangeLogger);
         }
 
         return executor.execute(args);
@@ -132,7 +135,7 @@ public class DelegateArrangeFactory implements ArrangeFactory, InitializingAware
 
     @Override
     public ArrangeResult run(Map<String, Object> args) {
-        ArrangeExecutor<ArrangeResult> executor = new DependsFindArrangeExecutor(this);
+        ArrangeExecutor<ArrangeResult> executor = new DependsFindArrangeExecutor(this, arrangeLogger);
         return executor.execute(args);
     }
 

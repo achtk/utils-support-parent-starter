@@ -17,12 +17,13 @@ import static com.chua.common.support.constant.CommonConstant.EMPTY_ARRAY;
  * @author CH
  */
 public class DependsFindArrangeExecutor  implements ArrangeExecutor<ArrangeResult> {
-    private ArrangeFactory arrangeFactory;
+    private final ArrangeFactory arrangeFactory;
+    private final ArrangeLogger arrangeLogger;
     private final Map<String, DisruptorEventHandler<ArrangeResult>> cache = new LinkedHashMap<>();
-    private static final Log log = Log.getLogger(ArrangeExecutor.class);
 
-    public DependsFindArrangeExecutor(DelegateArrangeFactory delegateArrangeFactory) {
+    public DependsFindArrangeExecutor(DelegateArrangeFactory delegateArrangeFactory, ArrangeLogger arrangeLogger) {
         this.arrangeFactory = delegateArrangeFactory;
+        this.arrangeLogger = arrangeLogger;
     }
 
     @Override
@@ -30,8 +31,12 @@ public class DependsFindArrangeExecutor  implements ArrangeExecutor<ArrangeResul
         ArrangeResult result = new ArrangeResult();
         DisruptorFactory<ArrangeResult> disruptorFactory = null;
         AtomicReference<DisruptorFactory<ArrangeResult>> temp = new AtomicReference<>();
-        temp.set(disruptorFactory = DependsArrangeExecutor.newDisruptorFactory(cache, arrangeFactory, args, ()-> result, (name, event) -> {
-        }));
+        temp.set(disruptorFactory = DependsArrangeExecutor.newDisruptorFactory(cache,
+                arrangeLogger,
+                arrangeFactory,
+                args,
+                ()-> result,
+                (name, event) -> {}));
 
         List<Arrange> arranges = arrangeFactory.list();
         Map<String, List<String>> depends = new LinkedHashMap<>();

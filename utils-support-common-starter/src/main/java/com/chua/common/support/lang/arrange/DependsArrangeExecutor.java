@@ -1,8 +1,6 @@
 package com.chua.common.support.lang.arrange;
 
-import com.chua.common.support.converter.Converter;
 import com.chua.common.support.function.Splitter;
-import com.chua.common.support.lang.any.Any;
 import com.chua.common.support.log.Log;
 import com.chua.common.support.task.lmax.DisruptorEventHandler;
 import com.chua.common.support.task.lmax.DisruptorFactory;
@@ -17,7 +15,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
@@ -28,29 +25,37 @@ import java.util.function.Supplier;
 public class DependsArrangeExecutor implements ArrangeExecutor<ArrangeResult> {
     private final Arrange arrange;
     private ArrangeFactory arrangeFactory;
+    private ArrangeLogger arrangeLogger;
 
     private static Map<String, Class<?>> DAG = new ConcurrentHashMap<>();
     private final Map<String, DisruptorEventHandler<ArrangeResult>> cache = new LinkedHashMap<>();
 
     private static final Log log = Log.getLogger(ArrangeExecutor.class);
 
-    public DependsArrangeExecutor(Arrange arrange, ArrangeFactory arrangeFactory) {
+    public DependsArrangeExecutor(Arrange arrange, ArrangeFactory arrangeFactory, ArrangeLogger arrangeLogger) {
         this.arrange = arrange;
         this.arrangeFactory = arrangeFactory;
+        this.arrangeLogger = arrangeLogger;
     }
 
     public static DisruptorFactory<ArrangeResult> newDisruptorFactory(Map<String, DisruptorEventHandler<ArrangeResult>> cache,
+                                                                      ArrangeLogger arrangeLogger,
                                                                       ArrangeFactory arrangeFactory,
                                                                       Map<String, Object> args,
                                                                       DisruptorObjectFactory<ArrangeResult> factory,
                                                                       BiConsumer<String, ArrangeResult> consumer) {
         return new DisruptorFactory<>(name -> cache.computeIfAbsent(name, s -> (event, sequence, endOfBatch) -> {
+            long startTime = System.currentTimeMillis();
             try {
                 Arrange factoryModularity = arrangeFactory.getArrange(name);
                 String moduleDepends = factoryModularity.getArrangeDepends();
+                arrangeLogger.listen(StringUtils.format("当前执行任务: {}, 上一个任务: {}, 依赖任务: {}", name, event.getName(), moduleDepends),
+                        name,
+                        0);
                 log.info("当前执行任务: {}, 上一个任务: {}, 依赖任务: {}", name, event.getName(), moduleDepends);
                 ArrangeHandler arrangeHandler = factoryModularity.getHandler();
                 if (null == arrangeHandler) {
+                    arrangeLogger.listen(StringUtils.format("当前执行任务: {}, 处理器不存在", name), name, 0);
                     event.add(name, ArrangeResult.INSTANCE);
                     return;
                 }
@@ -68,12 +73,14 @@ public class DependsArrangeExecutor implements ArrangeExecutor<ArrangeResult> {
                 }
                 event.add(factoryModularity.getArrangeName(), result);
             } catch (Exception e) {
+                arrangeLogger.listen(StringUtils.format("当前执行任务: {}, 处理异常: {}", name, e.getMessage()), name, 0);
                 event.add(name, ArrangeResult.INSTANCE);
                 log.error(e.getMessage());
             } finally {
                 consumer.accept(name, event);
             }
-
+            long cost = System.currentTimeMillis() - startTime;
+            arrangeLogger.listen(StringUtils.format("当前执行任务: {}, 执行耗时: {}", name, cost), name, cost);
         }), factory);
     }
 
@@ -83,7 +90,7 @@ public class DependsArrangeExecutor implements ArrangeExecutor<ArrangeResult> {
         ArrangeResult arrangeResult = new ArrangeResult();
         DisruptorFactory<ArrangeResult> disruptorFactory = null;
         AtomicReference<DisruptorFactory<ArrangeResult>> temp = new AtomicReference<>();
-        temp.set(disruptorFactory = newDisruptorFactory(cache, arrangeFactory, args, () -> arrangeResult, (name, event) -> {
+        temp.set(disruptorFactory = newDisruptorFactory(cache, arrangeLogger, arrangeFactory, args, () -> arrangeResult, (name, event) -> {
             if (arrange.getArrangeId().equals(name)) {
                 event.setRunning(false);
             }
