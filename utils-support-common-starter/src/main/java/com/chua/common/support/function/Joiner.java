@@ -91,6 +91,13 @@ public interface Joiner {
     Joiner useForNull(String s);
 
     /**
+     * 前綴
+     * @param prefix 前綴
+     * @return this
+     */
+    Joiner withPrefix(String prefix);
+
+    /**
      * 拆分器
      */
     abstract class AbstractJoiner implements Joiner {
@@ -127,6 +134,7 @@ public interface Joiner {
         private String s;
         private String kvSeparator;
         private String replace;
+        private String prefix;
 
         public DelegateJoiner(String s) {
             this.s = s;
@@ -144,7 +152,7 @@ public interface Joiner {
 
             StringBuilder stringBuilder = new StringBuilder();
             array.forEach((k, v) -> {
-                stringBuilder.append(s).append(k).append(kvSeparator).append(ObjectUtils.defaultIfNull(v, replace));
+                stringBuilder.append(s).append(prefix).append(k).append(kvSeparator).append(ObjectUtils.defaultIfNull(v, replace));
             });
             return stringBuilder.substring(s.length());
         }
@@ -158,7 +166,7 @@ public interface Joiner {
                 if (null == t && StringUtils.isEmpty(replace)) {
                     continue;
                 }
-                stringBuilder.append(s).append(ObjectUtils.defaultIfNull(t, replace));
+                stringBuilder.append(s).append(prefix).append(ObjectUtils.defaultIfNull(t, replace));
             }
             return stringBuilder.substring(s.length());
         }
@@ -172,13 +180,17 @@ public interface Joiner {
                 if (null == t) {
                     continue;
                 }
-                stringBuilder.append(s).append(t);
+                stringBuilder.append(s).append(prefix).append(t);
             }
             return stringBuilder.substring(s.length());
         }
 
         @Override
         public <T> String join(T array) {
+            if(null == array) {
+                return EMPTY;
+            }
+
             if(array instanceof Map) {
                 return join((Map)array);
             }
@@ -196,6 +208,12 @@ public interface Joiner {
         @Override
         public Joiner useForNull(String s) {
             this.replace = s;
+            return this;
+        }
+
+        @Override
+        public Joiner withPrefix(String prefix) {
+            this.prefix = prefix;
             return this;
         }
 

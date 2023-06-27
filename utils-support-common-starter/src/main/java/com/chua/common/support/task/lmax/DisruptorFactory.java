@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
@@ -131,12 +132,13 @@ public class DisruptorFactory<T> implements AutoCloseable {
         }
     }
 
-    public void waitFor(TimeSize timeSize, Supplier<Boolean> supplier) {
+    public void waitFor(TimeSize timeSize, Supplier<Boolean> supplier, Consumer<Void> consumer) {
         long startTime = System.currentTimeMillis();
         while (status.get()) {
             ThreadUtils.sleepSecondsQuietly(1);
             if(supplier.get()) {
                 try {
+                    consumer.accept(null);
                     close();
                 } catch (Exception e) {
                     throw new RuntimeException(e);
@@ -145,6 +147,7 @@ public class DisruptorFactory<T> implements AutoCloseable {
             }
             if(System.currentTimeMillis() > startTime + timeSize.toMillis()) {
                 try {
+                    consumer.accept(null);
                     close();
                 } catch (Exception e) {
                     throw new RuntimeException(e);

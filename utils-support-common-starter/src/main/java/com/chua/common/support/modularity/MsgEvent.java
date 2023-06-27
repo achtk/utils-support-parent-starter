@@ -22,6 +22,8 @@ public class MsgEvent {
      * 参数
      */
     private Object args;
+
+    private boolean isRunning;
     /**
      * 額外參數
      */

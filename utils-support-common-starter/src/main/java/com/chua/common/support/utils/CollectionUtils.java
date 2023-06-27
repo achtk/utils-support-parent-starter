@@ -847,7 +847,7 @@ public class CollectionUtils {
         }
 
         for (int i = 0; i < names.size(); i++) {
-            String name = names.get(i);
+            String name = names.get(i).replace("`", "");
             rs[i] = MapUtils.getConfig(arg, name);
         }
 

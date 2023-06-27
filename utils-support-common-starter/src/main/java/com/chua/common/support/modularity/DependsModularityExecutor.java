@@ -119,9 +119,9 @@ public class DependsModularityExecutor<T> implements ModularityExecutor<T> {
         disruptorFactory.waitFor(TimeUnit.parse(modularity.getModuleConnectionTimeout()), new Supplier<Boolean>() {
             @Override
             public Boolean get() {
-                return null != msgEvent.getParam().get(modularity.getModuleId());
+                return null != msgEvent.getParam().get(modularity.getModuleId()) || !msgEvent.isRunning();
             }
-        });
+        }, it -> msgEvent.setRunning(false));
         return (T) msgEvent.getParam().get(modularity.getModuleId());
     }
 
