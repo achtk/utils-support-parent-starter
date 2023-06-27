@@ -1,5 +1,6 @@
 package com.chua.hibernate.support.database.executor;
 
+import com.chua.common.support.collection.ConcurrentReferenceHashMap;
 import com.chua.common.support.constant.Action;
 import com.chua.common.support.database.entity.Column;
 import com.chua.common.support.database.entity.Index;
@@ -8,6 +9,7 @@ import com.chua.common.support.database.expression.Expression;
 import com.chua.common.support.database.inquirer.JdbcInquirer;
 import com.chua.common.support.database.metadata.Metadata;
 import com.chua.common.support.database.sqldialect.Dialect;
+import com.chua.common.support.function.SafeFunction;
 import com.chua.common.support.lang.formatter.DdlFormatter;
 import com.chua.common.support.lang.formatter.HighlightingFormatter;
 import com.chua.common.support.log.Log;
@@ -23,6 +25,7 @@ import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -130,25 +133,23 @@ public class HibernateMetadataExecutor implements MetadataExecutor {
 
     }
 
+    private static final Map<DataSource, HibernateDatabaseMetadata> CACHE = new ConcurrentReferenceHashMap<>(4);
+
     private void update(JdbcInquirer jdbcInquirer, org.hibernate.dialect.Dialect d, Table table, Object datasource) {
-        try {
-            HibernateDatabaseMetadata databaseMetadata = new HibernateDatabaseMetadata(((DataSource) datasource).getConnection(), d, null, false);
-            HibernateTableMetadata newMetadata = databaseMetadata.getTableMetadata(table.getName(), table.getSchema(), table.getCatalog(), false);
-            if (null == newMetadata) {
-                create(jdbcInquirer, d, table);
-                return;
+        HibernateDatabaseMetadata databaseMetadata = CACHE.computeIfAbsent((DataSource) datasource, (SafeFunction<DataSource, HibernateDatabaseMetadata>) dataSource -> new HibernateDatabaseMetadata(((DataSource) datasource).getConnection(), d, null, false)) ;
+        HibernateTableMetadata newMetadata = databaseMetadata.getTableMetadata(table.getName(), table.getSchema(), table.getCatalog(), false);
+        if (null == newMetadata) {
+            create(jdbcInquirer, d, table);
+            return;
+        }
+        Iterator<String> iterator = table.sqlAlterStrings(d, null, newMetadata, SqlStringGenerationContextImpl.forBackwardsCompatibility(d, newMetadata.getCatalog(), newMetadata.getSchema()));
+        while (iterator.hasNext()) {
+            String script = iterator.next();
+            try {
+                jdbcInquirer.executeStatement(script);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
-            Iterator<String> iterator = table.sqlAlterStrings(d, null, newMetadata, SqlStringGenerationContextImpl.forBackwardsCompatibility(d, newMetadata.getCatalog(), newMetadata.getSchema()));
-            while (iterator.hasNext()) {
-                String script = iterator.next();
-                try {
-                    jdbcInquirer.executeStatement(script);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
 
     }
