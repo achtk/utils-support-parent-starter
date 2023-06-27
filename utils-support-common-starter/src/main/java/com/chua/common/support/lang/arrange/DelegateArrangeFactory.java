@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  */
 public class DelegateArrangeFactory implements ArrangeFactory, InitializingAware {
 
-    static final Map<String, Arrange> MODULARITY_DATA = new ConcurrentHashMap<>();
+    final Map<String, Arrange> modularityData = new ConcurrentHashMap<>();
     AtomicBoolean status = new AtomicBoolean(false);
 
     private DelegateArrangeFactory() {
@@ -43,7 +43,7 @@ public class DelegateArrangeFactory implements ArrangeFactory, InitializingAware
     public DelegateArrangeFactory register(Arrange arrange) {
         Preconditions.checkNotNull(arrange.getArrangeType());
         Preconditions.checkNotNull(arrange.getArrangeName());
-        MODULARITY_DATA.put(arrange.getArrangeType() + ":" + arrange.getArrangeName(), arrange);
+        modularityData.put(arrange.getArrangeType() + ":" + arrange.getArrangeName(), arrange);
         return this;
     }
 
@@ -54,7 +54,7 @@ public class DelegateArrangeFactory implements ArrangeFactory, InitializingAware
      * @return 结果
      */
     public DelegateArrangeFactory unregister(Arrange arrange) {
-        MODULARITY_DATA.remove(arrange.getArrangeType() + ":" + arrange.getArrangeName());
+        modularityData.remove(arrange.getArrangeType() + ":" + arrange.getArrangeName());
         return this;
     }
 
@@ -66,7 +66,7 @@ public class DelegateArrangeFactory implements ArrangeFactory, InitializingAware
      * @return 结果
      */
     public DelegateArrangeFactory unregister(String arrangeType, String arrangeName) {
-        MODULARITY_DATA.remove(arrangeType + ":" + arrangeName);
+        modularityData.remove(arrangeType + ":" + arrangeName);
         return this;
     }
 
@@ -86,7 +86,7 @@ public class DelegateArrangeFactory implements ArrangeFactory, InitializingAware
      * @return 模块
      */
     public Arrange getArrange(String arrangeType, String arrangeName) {
-        return MODULARITY_DATA.get(arrangeType + ":" + arrangeName);
+        return modularityData.get(arrangeType + ":" + arrangeName);
     }
 
     /**
@@ -97,7 +97,7 @@ public class DelegateArrangeFactory implements ArrangeFactory, InitializingAware
      */
     @Override
     public Arrange getArrange(String arrangeId) {
-        return MODULARITY_DATA.get(arrangeId);
+        return modularityData.get(arrangeId);
     }
 
     /**
@@ -138,12 +138,12 @@ public class DelegateArrangeFactory implements ArrangeFactory, InitializingAware
 
     @Override
     public List<Arrange> getNoDepends() {
-        return MODULARITY_DATA.values().stream().filter(it -> StringUtils.isEmpty(it.getArrangeDepends())).collect(Collectors.toList());
+        return modularityData.values().stream().filter(it -> StringUtils.isEmpty(it.getArrangeDepends())).collect(Collectors.toList());
     }
 
     @Override
     public List<Arrange> list() {
-        return new ArrayList<>(MODULARITY_DATA.values());
+        return new ArrayList<>(modularityData.values());
     }
 
 }

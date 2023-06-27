@@ -1,23 +1,16 @@
 package com.chua.common.support.lang.arrange;
 
-import com.chua.common.support.converter.Converter;
 import com.chua.common.support.function.Splitter;
-import com.chua.common.support.lang.any.Any;
 import com.chua.common.support.log.Log;
 import com.chua.common.support.task.lmax.DisruptorEventHandler;
-import com.chua.common.support.task.lmax.DisruptorEventHandlerFactory;
 import com.chua.common.support.task.lmax.DisruptorFactory;
-import com.chua.common.support.task.lmax.DisruptorObjectFactory;
 import com.chua.common.support.unit.TimeUnit;
-import com.chua.common.support.utils.CollectionUtils;
-import com.chua.common.support.utils.StringUtils;
 
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Supplier;
+import java.util.stream.Collectors;
+
+import static com.chua.common.support.constant.CommonConstant.EMPTY_ARRAY;
 
 /**
  * 查询依赖
@@ -41,26 +34,21 @@ public class DependsFindArrangeExecutor  implements ArrangeExecutor<ArrangeResul
         }));
 
         List<Arrange> arranges = arrangeFactory.list();
-        List<String> isReady = new LinkedList<>();
+        Map<String, List<String>> depends = new LinkedHashMap<>();
         for (Arrange arrange : arranges) {
             List<String> strings = Splitter.on(",").trimResults().omitEmptyStrings().splitToList(arrange.getArrangeDepends());
-            if (CollectionUtils.isEmpty(strings)) {
-                if(isReady.contains(arrange.getArrangeId())) {
-                    continue;
-                }
-                disruptorFactory.handleEventsWith(arrange.getArrangeId());
-            } else {
-                for (String string : strings) {
-                    if(!isReady.contains(string)) {
-                        isReady.add(string);
-                        disruptorFactory.handleEventsWith(string);
-                        continue;
-                    }
-                }
-                disruptorFactory.after(strings.toArray(new String[0])).handleEventsWith(arrange.getArrangeId());
+            depends.put(arrange.getArrangeId(), strings);
+        }
+
+        List<String> ids = new LinkedList<>();
+        for (Map.Entry<String, List<String>> entry : depends.entrySet()) {
+            if(entry.getValue().isEmpty()) {
+                ids.add(entry.getKey());
+                disruptorFactory.handleEventsWith(entry.getKey());
             }
         }
 
+        doDepends(disruptorFactory, ids, arranges);
 
         disruptorFactory.start();
         disruptorFactory.publish(0);
@@ -68,5 +56,33 @@ public class DependsFindArrangeExecutor  implements ArrangeExecutor<ArrangeResul
             result.setRunning(false);
         });
         return result;
+    }
+
+    private void doDepends(DisruptorFactory<ArrangeResult> disruptorFactory, List<String> ids, List<Arrange> arranges) {
+        if(arranges.isEmpty()) {
+            return;
+        }
+
+        List<Arrange> collect = arranges.stream().filter(it -> {
+            return !ids.contains(it.getArrangeType() + ":" + it.getArrangeName());
+        }).collect(Collectors.toList());
+
+        if(collect.isEmpty()) {
+            return;
+        }
+
+        for (Arrange arrange : collect) {
+            List<String> strings = Splitter.on(",").trimResults().omitEmptyStrings().splitToList(arrange.getArrangeDepends());
+            List<String> copy = new ArrayList<>(strings);
+            copy.removeAll(ids);
+            //需要的依赖都存在
+            if(copy.isEmpty()) {
+                String newId = arrange.getArrangeType() + ":" + arrange.getArrangeName();
+                ids.add(newId);
+                disruptorFactory.after(strings.toArray(EMPTY_ARRAY)).handleEventsWith(newId);
+            }
+        }
+
+        doDepends(disruptorFactory, ids, collect);
     }
 }
