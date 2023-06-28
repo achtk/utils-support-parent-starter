@@ -28,6 +28,6 @@ public class DelegateExpirationValue<T> extends DelegateValue<T> implements Expi
 
     @Override
     public boolean isExpiration() {
-        return expirationTime.plusSeconds(timeUnit.toSeconds(expire)).isBefore(LocalDateTime.now());
+        return 0 != expire && expirationTime.plusSeconds(timeUnit.toSeconds(expire)).isBefore(LocalDateTime.now());
     }
 }
