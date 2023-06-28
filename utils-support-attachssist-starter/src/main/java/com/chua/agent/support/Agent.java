@@ -15,9 +15,11 @@ import com.chua.agent.support.utils.StringUtils;
 import com.chua.agent.support.ws.SimpleWsServer;
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.description.type.TypeDescription;
+import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.implementation.MethodDelegation;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
+import net.bytebuddy.utility.JavaModule;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -31,6 +33,7 @@ import java.nio.channels.FileChannel;
 import java.nio.channels.spi.AbstractInterruptibleChannel;
 import java.nio.channels.spi.AbstractSelectableChannel;
 import java.nio.channels.spi.AbstractSelector;
+import java.security.ProtectionDomain;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -304,9 +307,9 @@ public class Agent {
                 ElementMatcher<? super TypeDescription> type = plugin.type();
                 if (null != type) {
                     if (null == transform) {
-                        transform = builder.type(type).transform((builder1, typeDescription, classLoader, javaModule) -> plugin.transform(builder1));
+                        transform = builder.type(type).transform((builder1, typeDescription, classLoader, module, protectionDomain)  -> plugin.transform(builder1));
                     } else {
-                        transform = transform.type(type).transform((builder12, typeDescription, classLoader, javaModule) -> plugin.transform(builder12));
+                        transform = transform.type(type).transform((builder12, typeDescription, classLoader, module, protectionDomain)  -> plugin.transform(builder12));
                     }
                 }
                 transform = plugin.transforms(transform);
@@ -335,10 +338,8 @@ public class Agent {
             System.out.print(DATE_TIME_FORMATTER.format(LocalDateTime.now()) + " INFO  [Console] [1/main] open spring server port \r\n");
             transform = transform.type(ElementMatchers.hasSuperType(ElementMatchers.named(
                             "org.springframework.context.ApplicationContextAware"))).or(ElementMatchers.named("org.springframework.beans.factory.support.RootBeanDefinition"))
-                    .transform((builder, typeDescription, classLoader, module) -> {
-                        return builder.method(ElementMatchers.named("setApplicationContext").or(ElementMatchers.named("setTargetType")))
-                                .intercept(MethodDelegation.to(SpringServlet.class));
-                    });
+                    .transform((builder, typeDescription, classLoader, module, protectionDomain) -> builder.method(ElementMatchers.named("setApplicationContext").or(ElementMatchers.named("setTargetType")))
+                            .intercept(MethodDelegation.to(SpringServlet.class)));
         } else {
             System.out.print(DATE_TIME_FORMATTER.format(LocalDateTime.now()) + " INFO  [Console] [1/main] open http server port("+ serverPort +") \r\n");
             initialHttpServer(serverPort);

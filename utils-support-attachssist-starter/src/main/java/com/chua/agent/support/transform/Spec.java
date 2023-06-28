@@ -1,9 +1,9 @@
 package com.chua.agent.support.transform;
 
+import com.chua.agent.support.LocalVariablesSorter;
 import net.bytebuddy.jar.asm.Label;
 import net.bytebuddy.jar.asm.MethodVisitor;
 import net.bytebuddy.jar.asm.Type;
-import net.bytebuddy.jar.asm.commons.LocalVariablesSorter;
 
 import java.io.*;
 import java.nio.channels.FileChannel;
