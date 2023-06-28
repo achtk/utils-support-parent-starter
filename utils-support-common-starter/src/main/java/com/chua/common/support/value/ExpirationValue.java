@@ -12,4 +12,11 @@ public interface ExpirationValue<T> extends Value<T> {
      * @return true 已失效 | false 未失效
      */
     boolean isExpiration();
+
+    /**
+     * 重置时间
+     *
+     * @return 重置时间
+     */
+    boolean resetExpire();
 }

@@ -12,13 +12,14 @@ import static java.util.concurrent.TimeUnit.SECONDS;
  */
 public class DelegateExpirationValue<T> extends DelegateValue<T> implements ExpirationValue<T> {
 
-    private final LocalDateTime expirationTime = LocalDateTime.now();
+    private LocalDateTime expirationTime = LocalDateTime.now();
     private long expire = 10;
     private TimeUnit timeUnit = SECONDS;
 
     public DelegateExpirationValue(T object) {
         super(object);
     }
+
 
     public DelegateExpirationValue(T object, long expire, TimeUnit timeUnit) {
         super(object);
@@ -29,5 +30,11 @@ public class DelegateExpirationValue<T> extends DelegateValue<T> implements Expi
     @Override
     public boolean isExpiration() {
         return 0 != expire && expirationTime.plusSeconds(timeUnit.toSeconds(expire)).isBefore(LocalDateTime.now());
+    }
+
+    @Override
+    public boolean resetExpire() {
+        expirationTime = LocalDateTime.now();
+        return true;
     }
 }
