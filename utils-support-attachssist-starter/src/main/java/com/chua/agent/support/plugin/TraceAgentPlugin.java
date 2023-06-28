@@ -59,7 +59,7 @@ public class TraceAgentPlugin implements HtmlAgentPlugin {
                     Interceptor instance = (Interceptor) aClass.newInstance();
                     Agent.log(Level.INFO, "注册插件: " + instance.getClass().getTypeName());
                     transform = transform.type(instance.type())
-                            .transform((builder, typeDescription, classLoader, javaModule) -> {
+                            .transform((builder, typeDescription, classLoader, javaModule, a) -> {
                                 return instance.transform(builder);
                             });
 
