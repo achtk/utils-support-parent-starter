@@ -142,6 +142,28 @@ public class BeanUtils {
      * @param source           源对象
      * @param target           目标对象
      * @param ignoreProperties 忽略字段
+     * @param features         特性
+     */
+    public static <T> T copyProperties(Object source, Class<T> target, String[] ignoreProperties, ReadFeature... features) {
+        if (void.class.isAssignableFrom(target)) {
+            return null;
+        }
+
+        T forObject = ClassUtils.forObject(target);
+        if (null == source) {
+            return forObject;
+        }
+
+        copyPropertiesBean(source, forObject, ignoreProperties, features);
+        return forObject;
+    }
+
+    /**
+     * 拷贝对象
+     *
+     * @param source           源对象
+     * @param target           目标对象
+     * @param ignoreProperties 忽略字段
      */
     public static void copyProperties(Object source, Object target, String... ignoreProperties) {
         copyPropertiesBean(source, target, ignoreProperties);
@@ -154,7 +176,7 @@ public class BeanUtils {
      * @param target           目标对象
      * @param ignoreProperties 忽略字段
      */
-    private static void copyPropertiesBean(Object source, Object target, String[] ignoreProperties) {
+    private static void copyPropertiesBean(Object source, Object target, String[] ignoreProperties, ReadFeature... features) {
         Preconditions.checkNotNull(source, "源对象不能为空");
         Preconditions.checkNotNull(target, "目标对象不能为空");
         Class<?> targetClass = target.getClass();
@@ -169,7 +191,11 @@ public class BeanUtils {
             if (ArrayUtils.contains(ignoreProperties, field.getName())) {
                 return;
             }
-            Object value = Converter.convertIfNecessary(getPropertyDescriptorValue(source, field, cnt.getAndIncrement()), field.getType());
+            Object propertyDescriptorValue = getPropertyDescriptorValue(source, field, cnt.getAndIncrement());
+            for (ReadFeature readFeature : features) {
+                propertyDescriptorValue = readFeature.handle(propertyDescriptorValue);
+            }
+            Object value = Converter.convertIfNecessary(propertyDescriptorValue, field.getType());
             if (null == value) {
                 return;
             }
@@ -294,7 +320,7 @@ public class BeanUtils {
             if (null != string) {
                 return string;
             }
-            string = MapUtils.getObject(source1,  NamingCase.toUnderlineCase(name));
+            string = MapUtils.getObject(source1, NamingCase.toUnderlineCase(name));
             if (null != string) {
                 return string;
             }
