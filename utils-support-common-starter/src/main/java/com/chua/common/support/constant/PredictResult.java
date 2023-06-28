@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class PredictResult {
 
-    private Object boundingBox;
+    private transient Object boundingBox;
 
     private String text;
     private float score = -1.0f;

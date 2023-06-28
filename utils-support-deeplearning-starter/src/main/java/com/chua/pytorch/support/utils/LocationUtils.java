@@ -16,6 +16,7 @@ import ai.djl.repository.Repository;
 import ai.djl.repository.zoo.BaseModelLoader;
 import ai.djl.repository.zoo.ModelLoader;
 import ai.djl.util.RandomUtils;
+import com.chua.common.support.bean.BeanUtils;
 import com.chua.common.support.constant.PredictRectangle;
 import com.chua.common.support.constant.PredictResult;
 import com.chua.common.support.converter.Converter;
@@ -752,6 +753,10 @@ public class LocationUtils {
         } finally {
             g.dispose();
         }
+    }
+
+    public static Object toBoundingBox(BoundingBox boundingBox) {
+        return BeanUtils.copyProperties(boundingBox, com.chua.common.support.constant.BoundingBox.class);
     }
 
 

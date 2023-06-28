@@ -90,7 +90,7 @@ public class OcrRecognizer extends AbstractPytorchRecognizer<String> {
             predictResult1.setScore((float) predictResult.getScore());
             predictResult1.setClsLabel(predictResult.getClsLabel());
             predictResult1.setClsScore((float) predictResult.getScore());
-            predictResult1.setBoundingBox(predictResult.getBoundingBox());
+            predictResult1.setBoundingBox(LocationUtils.toBoundingBox((BoundingBox) predictResult.getBoundingBox()));
 
             rs.add(predictResult1);
         } catch (TranslateException e) {
