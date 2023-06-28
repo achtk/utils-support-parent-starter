@@ -111,7 +111,7 @@
   > 			b.help_topic_id + 1
   > 		),
   > 		',' ,- 1
-  > 	) AS <逗号分隔的数据>,a.<ID>
+  > 	) AS <逗号分隔的数据别名>,a.<ID>
   > FROM
   > 	 (SELECT @rownum := @rownum+1 AS id,t.<ID>, t.<逗号分隔的数据>
   >      FROM (SELECT @rownum:=0)r , <表> as t
