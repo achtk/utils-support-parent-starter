@@ -50,6 +50,9 @@ public class StringTypeConverter implements TypeConverter<String> {
                 if (o instanceof byte[]) {
                     return new String((byte[]) o, StandardCharsets.UTF_8);
                 }
+                if(o instanceof String) {
+                    return (String) o;
+                }
             }
 
             String join = Joiner.on(",").join((Object[]) value);
