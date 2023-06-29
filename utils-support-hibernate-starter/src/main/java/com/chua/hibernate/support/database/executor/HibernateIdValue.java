@@ -43,8 +43,6 @@ public class HibernateIdValue extends SimpleValue {
     @Override
     public Type getType() throws MappingException {
         try {
-            SqlTypeDescriptor sqlTypeDescriptor = metadata.getTypeConfiguration().getSqlTypeDescriptorRegistry()
-                    .getDescriptor(getTypeCode());
             return super.getType();
         } catch (Exception ignored) {
         }
