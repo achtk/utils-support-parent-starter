@@ -871,6 +871,8 @@ public final class CommonConstant {
      */
     public static final CharSequence SYMBOL_CREATE_TABLE = "CREATE TABLE";
 
+  public static final String SYMBOL_EXCEPTION = "Exception:";
+
     /**
      *
      */

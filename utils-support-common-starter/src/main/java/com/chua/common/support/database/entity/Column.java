@@ -4,6 +4,7 @@ import com.chua.common.support.bean.BeanProperty;
 import com.chua.common.support.database.enums.FieldStrategy;
 import com.chua.common.support.database.sqldialect.Dialect;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.lang.reflect.Field;
 
@@ -13,6 +14,7 @@ import java.lang.reflect.Field;
  * @author CH
  */
 @Data
+@Accessors(chain = true)
 public class Column {
     /**
      * 是否是主键

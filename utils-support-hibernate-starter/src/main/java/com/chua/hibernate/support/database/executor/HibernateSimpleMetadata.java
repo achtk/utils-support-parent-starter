@@ -30,7 +30,7 @@ public class HibernateSimpleMetadata extends AbstractDelegatingMetadata {
         super(null);
         this.identifierGeneratorFactory = new DefaultIdentifierGeneratorFactory();
         this.typeConfiguration = new TypeConfiguration();
-        if (javaType.isEnum()) {
+        if (null != javaType && javaType.isEnum()) {
             HibernateEnumType type = new HibernateEnumType(javaType, new HibernateEnumTypeDescriptor(), new HibernateEnumJavaTypeDescriptor());
             typeConfiguration.getBasicTypeRegistry().register(type);
         }

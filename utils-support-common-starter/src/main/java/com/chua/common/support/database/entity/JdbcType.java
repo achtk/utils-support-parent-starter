@@ -39,6 +39,10 @@ public enum JdbcType {
      */
     BIGINT,
     /**
+     * biginteger
+     */
+    BIG_INTEGER,
+    /**
      * decimal
      */
     DECIMAL,
