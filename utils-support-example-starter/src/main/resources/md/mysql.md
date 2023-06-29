@@ -141,6 +141,30 @@
   ORDER BY T1.l;
   ```
 
+  #### **根据传入id查询所有子节点的id**
+
+  ```sql
+  WITH recursive deptChildren(id, dept_pid, dept_name) AS (
+  	SELECT
+  		id,
+  		dept_pid,
+  		dept_name
+  	FROM
+  		<表>
+  	WHERE
+  		id  = 5
+  		 UNION ALL
+  	SELECT
+  		t1.id,
+  		t1.dept_pid,
+  		t1.dept_name
+  	FROM
+  		<表> t1
+  		INNER JOIN deptChildren t2 ON t2.id = t1.dept_pid 
+  	)
+  	 SELECT	a.* FROM deptChildren a 
+  ```
+
   
 
 - #### 1418
