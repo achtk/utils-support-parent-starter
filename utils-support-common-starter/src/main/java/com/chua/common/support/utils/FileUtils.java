@@ -1608,6 +1608,7 @@ public class FileUtils {
     if (null == source || null == destFile) {
       return;
     }
+    mkParentDirs(destFile);
     try {
       if (!destFile.exists()) {
         Files.copy(source, destFile.toPath());

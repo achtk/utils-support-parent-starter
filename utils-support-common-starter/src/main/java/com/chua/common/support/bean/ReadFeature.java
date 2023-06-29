@@ -20,6 +20,6 @@ public enum ReadFeature implements ReadFeatureHandler {
 
     @Override
     public Object handle(Object value) {
-        return null;
+        return value;
     }
 }

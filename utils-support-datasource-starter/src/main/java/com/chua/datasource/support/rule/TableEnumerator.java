@@ -29,20 +29,24 @@ import java.util.List;
 public class TableEnumerator implements Enumerator<Object> {
 
   private final Iterator iterator;
-
+  Object next = null;
   public TableEnumerator(List rs) {
     this.iterator = rs.iterator();
   }
 
   @Override
   public Object current() {
-    Object[] next = (Object[]) iterator.next();
-    return next.length == 1 ? next[0] : next;
+    Object[] newNext = (Object[]) next;
+    return newNext.length == 1 ? newNext[0] : newNext;
   }
 
   @Override
   public boolean moveNext() {
-    return iterator.hasNext();
+    try {
+      return iterator.hasNext() && (next = iterator.next()) != null;
+    } catch (Exception e) {
+      return false;
+    }
   }
 
   @Override

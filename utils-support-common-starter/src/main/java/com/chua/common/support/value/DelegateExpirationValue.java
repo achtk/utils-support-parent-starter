@@ -1,5 +1,7 @@
 package com.chua.common.support.value;
 
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 
@@ -13,7 +15,9 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 public class DelegateExpirationValue<T> extends DelegateValue<T> implements ExpirationValue<T> {
 
     private LocalDateTime expirationTime = LocalDateTime.now();
+    @Setter
     private long expire = 10;
+    @Setter
     private TimeUnit timeUnit = SECONDS;
 
     public DelegateExpirationValue(T object) {

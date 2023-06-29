@@ -112,7 +112,7 @@ public class CalciteConnectorFactory implements ConnectorFactory {
 
     @Override
     public DataSource getDataSource() {
-        return new DelegateDataSource((Supplier<Connection>) () -> {
+        DelegateDataSource delegateDataSource = new DelegateDataSource((Supplier<Connection>) () -> {
             CalciteConnection calciteConnection = (CalciteConnection) createConnection();
             SchemaPlus rootSchema1 = calciteConnection.getRootSchema();
             for (Map.Entry<String, Object> entry : cache.entrySet()) {
@@ -128,6 +128,8 @@ public class CalciteConnectorFactory implements ConnectorFactory {
             }
             return calciteConnection;
         });
+        delegateDataSource.afterPropertiesSet();
+        return delegateDataSource;
     }
 
     /**

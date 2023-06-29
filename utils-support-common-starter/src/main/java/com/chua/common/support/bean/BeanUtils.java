@@ -192,6 +192,14 @@ public class BeanUtils {
                 return;
             }
             Object propertyDescriptorValue = getPropertyDescriptorValue(source, field, cnt.getAndIncrement());
+            if(null == propertyDescriptorValue) {
+                return;
+            }
+
+            Class<?> type = field.getType();
+            if(propertyDescriptorValue.getClass().isArray() && (!type.isArray() || Collection.class.isAssignableFrom(type))) {
+                propertyDescriptorValue = Converter.convertIfNecessary(propertyDescriptorValue, String.class);
+            }
             for (ReadFeature readFeature : features) {
                 propertyDescriptorValue = readFeature.handle(propertyDescriptorValue);
             }

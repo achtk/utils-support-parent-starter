@@ -134,7 +134,7 @@ public interface Joiner {
         private String s;
         private String kvSeparator;
         private String replace;
-        private String prefix;
+        private String prefix = "";
 
         public DelegateJoiner(String s) {
             this.s = s;

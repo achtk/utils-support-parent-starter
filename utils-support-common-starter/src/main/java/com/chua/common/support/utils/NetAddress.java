@@ -13,6 +13,7 @@ import com.chua.common.support.lang.net.UrlPath;
 import com.chua.common.support.lang.net.UrlQuery;
 import lombok.Data;
 import lombok.Getter;
+import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
 
 import java.io.IOException;
@@ -167,8 +168,8 @@ public class NetAddress implements Serializable {
     private NetAddress(String address) {
         this.originalAddress = address;
         this.urlQuery = new UrlQuery();
-        this.analysisSchema();
         this.analysisAuthority();
+        this.analysisSchema();
         this.analysisPath();
         this.analysisQuery();
         this.analysisFragment();
@@ -792,8 +793,9 @@ public class NetAddress implements Serializable {
     /**
      * 分析 authority
      */
+    @SneakyThrows
     private void analysisAuthority() {
-        this.authority = uri.getAuthority();
+        this.authority = (uri == null ? (uri = new URI(originalAddress)) : uri).getAuthority();
         this.analysisUserInfo();
         this.analysisAddress();
         this.analysisOrigin();
