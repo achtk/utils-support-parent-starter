@@ -21,14 +21,14 @@ public class Command {
     /**
      * 上一个命令处理结果
      */
-    private String pipeData;
+    private ShellResult pipeData;
 
     /**
      * 命令usage
      */
     private CommandAttribute attribute;
 
-    public String execute(Shell shell, Object obj) {
+    public ShellResult execute(Shell shell, Object obj) {
         return attribute.execute(command, pipeData, shell, obj);
     }
 }

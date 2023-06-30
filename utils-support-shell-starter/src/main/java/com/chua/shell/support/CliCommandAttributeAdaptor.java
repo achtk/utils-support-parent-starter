@@ -42,14 +42,14 @@ public class CliCommandAttributeAdaptor implements CommandAttributeAdaptor {
     }
 
     @Override
-    public String execute(CommandAttribute commandAttribute, List<String> options, String pipeData, Map<String, Object> env, Object obj) {
+    public ShellResult execute(CommandAttribute commandAttribute, List<String> options, ShellResult pipeData, Map<String, Object> env, Object obj) {
         CommandLineParser parser = new DefaultParser();
         String[] strings = options.subList(1, options.size()).toArray(new String[0]);
         CommandLine commandLine = null;
         try {
             commandLine = parser.parse(this.options, strings);
         } catch (ParseException ignored) {
-            return "命令解析失败";
+            return ShellResult.error("命令解析失败");
         }
 
         return execute(commandAttribute, options, commandLine, pipeData, env, obj);
@@ -234,11 +234,11 @@ public class CliCommandAttributeAdaptor implements CommandAttributeAdaptor {
      * @param obj              obj
      * @return 結果
      */
-    private String execute(CommandAttribute commandAttribute, List<String> options, CommandLine commandLine, String pipeData, Map<String, Object> env, Object obj) {
+    private ShellResult execute(CommandAttribute commandAttribute, List<String> options, CommandLine commandLine, ShellResult pipeData, Map<String, Object> env, Object obj) {
         Object[] args = analysisArgs(commandAttribute, options, commandLine, pipeData, env, obj);
         commandAttribute.getMethod().setAccessible(true);
         try {
-            return commandAttribute.getMethod().invoke(commandAttribute.getBean(), args).toString();
+            return (ShellResult) commandAttribute.getMethod().invoke(commandAttribute.getBean(), args);
         } catch (Exception e) {
             return null;
         }
@@ -255,7 +255,7 @@ public class CliCommandAttributeAdaptor implements CommandAttributeAdaptor {
      * @param obj              obj
      * @return
      */
-    private Object[] analysisArgs(CommandAttribute commandAttribute, List<String> options, CommandLine commandLine, String pipeData, Map<String, Object> env, Object obj) {
+    private Object[] analysisArgs(CommandAttribute commandAttribute, List<String> options, CommandLine commandLine, ShellResult pipeData, Map<String, Object> env, Object obj) {
         int index = 0;
         boolean hasOption = commandAttribute.hasOptions(options);
         Object[] args = new Object[commandAttribute.getParameters().length];

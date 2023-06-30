@@ -2,12 +2,16 @@ package com.chua.common.support.shell.mapping;
 
 import com.chua.common.support.shell.ShellMapping;
 import com.chua.common.support.shell.ShellParam;
+import com.chua.common.support.shell.ShellResult;
 import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.view.view.ClassInfoView;
 import com.sun.management.DiagnosticCommandMBean;
 import sun.management.ManagementFactoryHelper;
 
 import java.util.List;
+
+import static com.chua.common.support.shell.ShellMode.ERROR;
+import static com.chua.common.support.shell.ShellMode.TABLE;
 
 /**
  * 基础命令
@@ -21,18 +25,18 @@ public class DelegateCommand {
     DiagnosticCommandMBean diagnosticCommandMBean = ManagementFactoryHelper.getDiagnosticCommandMBean();
 
     @ShellMapping(value = {"view"}, describe = "预览")
-    public String view(
+    public ShellResult view(
             @ShellParam(value = "mode", describe = "模式", example = {"view --mode CLASS class: view --mode CLASS java.lang.String"}, numberOfArgs = 2) List<String> file
     ) {
         if (null == file || file.size() != 2) {
-            return "参数不正确, view --mode CLASS class: 模式";
+            return ShellResult.builder().mode(ERROR).result("参数不正确, view --mode CLASS class: 模式").build();
         }
 
         if ("class".equalsIgnoreCase(file.get(0))) {
-            return new ClassInfoView(ClassUtils.forName(file.get(1), ClassLoader.getSystemClassLoader()), true, 100).draw();
+            return ShellResult.builder().mode(TABLE).result(new ClassInfoView(ClassUtils.forName(file.get(1), ClassLoader.getSystemClassLoader()), true, 100).draw()).build();
         }
 
-        return "";
+        return ShellResult.error();
     }
 
 //    /**

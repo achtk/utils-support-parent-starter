@@ -115,7 +115,7 @@ public abstract class Shell implements InitializingAware, AutoCloseable {
      * @param obj     对象
      * @return 结果
      */
-    String execute(Command command, Object obj) {
+    ShellResult execute(Command command, Object obj) {
         return command.execute(this, obj);
     }
 
@@ -126,36 +126,36 @@ public abstract class Shell implements InitializingAware, AutoCloseable {
      * @param obj     对象
      * @return 结果
      */
-    public String handlerAnalysis(String command, Object obj) {
+    public ShellResult handlerAnalysis(String command, Object obj) {
         List<Command> pipe = new LinkedList<>();
         String[] split = command.split("\\|");
         for (String s : split) {
             String[] split1 = s.trim().split("\\s+");
             String command1 = split1[0];
             if (!shellCommand.containsKey(command1)) {
-                return command1 + " 命令不存在";
+                return ShellResult.error(command1 + " 命令不存在");
             }
 
             pipe.add(new Command(s, null, shellCommand.get(command1)));
         }
 
-        String result = null;
+        ShellResult result = null;
         for (Command command1 : pipe) {
             try {
                 result = execute(new Command(command1.getCommand().trim(), result, command1.getAttribute()), obj);
             } catch (Exception e) {
-                return command1 + "解析失败";
+                return ShellResult.error(command1 + "解析失败");
             }
         }
 
         if (isWriterFile(command)) {
             writer(command, result);
-            return "";
+            return ShellResult.text("");
         }
         return result;
     }
 
-    private void writer(String command, String result) {
+    private void writer(String command, ShellResult result) {
         String[] split = command.split(OUT, 2);
         String outFile = null;
         if (split.length == 1) {
@@ -172,7 +172,7 @@ public abstract class Shell implements InitializingAware, AutoCloseable {
 
 
         try {
-            IoUtils.write(result, temp, StandardCharsets.UTF_8, true);
+            IoUtils.write(result.getResult(), temp, StandardCharsets.UTF_8, true);
         } catch (IOException ignored) {
         }
     }

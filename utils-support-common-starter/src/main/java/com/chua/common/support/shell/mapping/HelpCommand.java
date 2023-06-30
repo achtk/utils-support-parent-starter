@@ -2,9 +2,7 @@ package com.chua.common.support.shell.mapping;
 
 import com.chua.common.support.ansi.AnsiColor;
 import com.chua.common.support.ansi.AnsiOutput;
-import com.chua.common.support.shell.CommandAttribute;
-import com.chua.common.support.shell.Shell;
-import com.chua.common.support.shell.ShellMapping;
+import com.chua.common.support.shell.*;
 import com.chua.common.support.utils.StringUtils;
 
 import java.util.Collection;
@@ -24,7 +22,7 @@ public class HelpCommand {
      * @return help
      */
     @ShellMapping(value = {"help"}, describe = "帮助")
-    public String help(Shell shell) {
+    public ShellResult help(Shell shell) {
         StringBuilder stringBuilder = new StringBuilder("\r\n");
         Collection<CommandAttribute> command = shell.getCommand();
         for (CommandAttribute commandAttribute : command) {
@@ -36,7 +34,7 @@ public class HelpCommand {
                     .append("\r\n");
         }
         stringBuilder.append("\r\n");
-        return stringBuilder.toString();
+        return ShellResult.builder().mode(ShellMode.OTHER).result(stringBuilder.toString()).build();
     }
 
     public static String ifx(String name, int commandLimit) {

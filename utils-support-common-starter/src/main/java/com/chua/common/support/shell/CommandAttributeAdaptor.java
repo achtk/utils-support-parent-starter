@@ -39,7 +39,7 @@ public interface CommandAttributeAdaptor {
      * @param obj              对象
      * @return 結果
      */
-    String execute(CommandAttribute commandAttribute, List<String> options, String pipeData, Map<String, Object> env, Object obj);
+    ShellResult execute(CommandAttribute commandAttribute, List<String> options, ShellResult pipeData, Map<String, Object> env, Object obj);
 
     /**
      * 执行

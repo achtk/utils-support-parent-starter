@@ -101,7 +101,7 @@ public class LineShell extends Shell implements Runnable {
                 break;
             }
 
-            String result = handlerAnalysis(Joiner.on(" ").join(split), null);
+            String result = handlerAnalysis(Joiner.on(" ").join(split), null).getResult();
             terminal.writer().println("" + result);
         }
     }

@@ -118,10 +118,10 @@ public class CommandAttribute {
      * @return 结果
      * @[param pipeData 数据
      */
-    public String execute(String command, String pipeData, Shell shell, Object obj) {
+    public ShellResult execute(String command, ShellResult pipeData, Shell shell, Object obj) {
         List<String> options = Splitter.onPattern("\\s+").splitToList(command);
         if (isHelp(options)) {
-            return helpInfo(shell);
+            return ShellResult.text(helpInfo(shell));
         }
 
         Map<String, Object> env = analysisEnv(options, shell);
@@ -137,7 +137,7 @@ public class CommandAttribute {
      * @param obj      对象
      * @return 結果
      */
-    private String execute(List<String> options, String pipeData, Map<String, Object> env, Object obj) {
+    private ShellResult execute(List<String> options, ShellResult pipeData, Map<String, Object> env, Object obj) {
         return commandAttributeAdaptor.execute(this, options, pipeData, env, obj);
     }
 
