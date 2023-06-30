@@ -8,7 +8,6 @@ import com.chua.common.support.function.MethodFilter;
 import com.chua.common.support.function.SafeConsumer;
 import com.chua.common.support.lang.proxy.BridgingMethodIntercept;
 import com.chua.common.support.lang.proxy.ProxyUtils;
-import com.chua.common.support.modularity.resolver.ModularityTypeResolver;
 import com.chua.common.support.unit.name.NamingCase;
 import com.chua.common.support.value.*;
 
@@ -2272,6 +2271,34 @@ public class ClassUtils {
         return returnType;
     }
 
+    /**
+     * 获取真实类型
+     *
+     * @param obj 类型
+     * @return 类型
+     */
+    public static Class<?> getActualType(Object obj) {
+        if (null == obj) {
+            return void.class;
+        }
+        Class<?> aClass = obj.getClass();
+        if (!Proxy.isProxyClass(aClass)) {
+            return aClass;
+        }
+        String s = obj.toString();
+        int index = s.indexOf("@");
+        String newName = s;
+        if (index > -1) {
+            newName = s.substring(0, index);
+        }
+        Class<?> aClass1 = ClassUtils.forName(newName);
+        if (null != aClass1) {
+            return aClass1;
+        }
+
+        return void.class;
+
+    }
 
     static class SetAccessibleAction<T extends AccessibleObject> implements PrivilegedAction<T> {
         private final T obj;

@@ -170,7 +170,10 @@ public abstract class Shell implements InitializingAware, AutoCloseable {
             parentFile.mkdirs();
         }
 
-
+        try {
+            temp.createNewFile();
+        } catch (IOException ignored) {
+        }
         try {
             IoUtils.write(result.getResult(), temp, StandardCharsets.UTF_8, true);
         } catch (IOException ignored) {
