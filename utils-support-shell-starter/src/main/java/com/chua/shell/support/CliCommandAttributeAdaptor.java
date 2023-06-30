@@ -294,6 +294,9 @@ public class CliCommandAttributeAdaptor implements CommandAttributeAdaptor {
                 }
                 args[i] = converter(commandLine.getOptionValues(shellParam.value()), parameter.getType(), env);
                 continue;
+            } else if (i1 == -1) {
+                args[i] = converter(commandLine.getArgList().toArray(), parameter.getType(), env);
+                continue;
             }
             if (!hasOption) {
                 List<String> argList = commandLine.getArgList();

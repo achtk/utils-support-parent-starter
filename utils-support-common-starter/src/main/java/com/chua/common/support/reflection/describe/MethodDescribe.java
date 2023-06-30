@@ -1,11 +1,15 @@
 package com.chua.common.support.reflection.describe;
 
+import com.chua.common.support.converter.Converter;
+import com.chua.common.support.json.Json;
 import com.chua.common.support.reflection.describe.factory.MethodAnnotationFactory;
 import com.chua.common.support.reflection.describe.provider.FieldDescribeProvider;
 import com.chua.common.support.reflection.describe.provider.MethodDescribeProvider;
 import com.chua.common.support.unit.name.NamingCase;
 import com.chua.common.support.utils.ArrayUtils;
 import com.chua.common.support.utils.ClassUtils;
+import com.chua.common.support.utils.CollectionUtils;
+import com.chua.common.support.utils.MapUtils;
 import com.chua.common.support.value.NullValue;
 import com.chua.common.support.value.Value;
 import lombok.Data;
@@ -15,13 +19,11 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.chua.common.support.constant.CommonConstant.*;
+import static com.chua.common.support.spi.autowire.AutoServiceAutowire.UTILS;
 
 
 /**
@@ -53,13 +55,13 @@ public class MethodDescribe implements MemberDescribe<MethodDescribe> {
      */
     private Class<?>[] parameterClassTypes;
     /**
-     * 字段信息
-     */
-    private ParameterDescribe[] parameterDescribes;
-    /**
      * 异常类型
      */
     private String[] exceptionTypes;
+    /**
+     * 字段信息
+     */
+    private ParameterDescribe[] parameterDescribes;
     /**
      * 注解类型
      */
@@ -508,6 +510,79 @@ public class MethodDescribe implements MemberDescribe<MethodDescribe> {
         }
 
         return false;
+    }
+
+    /**
+     * 获取参数
+     *
+     * @param subList 参数
+     * @return 结果
+     */
+    public Object[] getParam(List<String> subList) {
+        if (parameterDescribes.length == 0) {
+            return EMPTY_OBJECT;
+        }
+        Object[] objects = new Object[parameterDescribes.length];
+        for (int i = 0; i < parameterDescribes.length; i++) {
+            ParameterDescribe parameterClassType = parameterDescribes[i];
+            objects[i] = guess(subList, parameterClassType);
+        }
+
+        return objects;
+    }
+
+    private static final MethodDescribeProvider methodDescribe;
+
+    static {
+        TypeDescribe typeDescribe = new TypeDescribe(UTILS);
+        methodDescribe = typeDescribe.getMethodDescribe("getApplicationContext")
+                .isChain().getMethodDescribe("getBeansOfType");
+    }
+
+    private Object guess(List<String> subList, ParameterDescribe parameterClassType) {
+        if (subList.isEmpty()) {
+            Object forObject = ClassUtils.forObject(parameterClassType.returnClassType());
+            if (null != forObject) {
+                return forObject;
+            }
+
+            Map map = methodDescribe.executeSelf(Map.class, parameterClassType.returnClassType());
+            return MapUtils.getFirst(map).getValue();
+        }
+        int index = parameterClassType.index();
+        String s = CollectionUtils.find(subList, index);
+        if (null != s) {
+            Object value = guessConverter(s, parameterClassType.returnClassType());
+            if (null != value) {
+                return value;
+            }
+        }
+
+        for (String s1 : subList) {
+            Object o = guessConverter(s1, parameterClassType.returnClassType());
+            if (null != o) {
+                return o;
+            }
+        }
+
+        return null;
+    }
+
+    private Object guessConverter(String s, Class<?> returnClassType) {
+        Object convertIfNecessary = Converter.convertIfNecessary(s, returnClassType);
+        if (null != convertIfNecessary) {
+            return convertIfNecessary;
+        }
+
+        try {
+            Object fromJson = Json.fromJson(s, returnClassType);
+            if (null != fromJson) {
+                return fromJson;
+            }
+        } catch (Exception ignored) {
+        }
+
+        return null;
     }
 
     /**
