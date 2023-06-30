@@ -2508,6 +2508,9 @@ public class NumberUtils {
         for (int i = 0; i < lists.size(); i++) {
             Integer highLevelIndex = lists.size() - i - 1;
             String single = lists.get(i);
+            if (single.equalsIgnoreCase(chinese)) {
+                throw new NumberFormatException("");
+            }
             String nextResult = getNumberFromChinese(single);
             if (SYMBOL_EOF.equals(nextResult)) {
                 throw new NumberFormatException();

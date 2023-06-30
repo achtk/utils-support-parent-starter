@@ -11,7 +11,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Parameter;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  * cli
@@ -204,16 +206,7 @@ public class CliCommandAttributeAdaptor implements CommandAttributeAdaptor {
                 rs.put("group", commandAttribute.getGroup());
                 rs.put("description", commandAttribute.getDescribe());
                 rs.put("usage", toString.split("\r")[0]);
-                List<Map<String, String>> ex = new LinkedList<>();
-                rs.put("example", ex);
-                for (Map.Entry<String, String> entry : commandAttribute.getExample().entrySet()) {
-                    Map<String, String> item = new HashMap<>(2);
-                    item.put("cmd", entry.getKey());
-                    item.put("desc", entry.getValue());
-
-                    ex.add(item);
-                }
-
+                rs.put("example", commandAttribute.getExample());
                 return rs;
             } catch (IOException ignored) {
             }
