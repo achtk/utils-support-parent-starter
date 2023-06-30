@@ -1,5 +1,6 @@
 package com.chua.common.support.shell;
 
+import com.chua.common.support.collection.ImmutableBuilder;
 import com.chua.common.support.function.Splitter;
 import com.chua.common.support.spi.ServiceProvider;
 import lombok.Data;
@@ -42,7 +43,7 @@ public class CommandAttribute {
     /**
      * 例子
      */
-    private Map<String, String> example = new LinkedHashMap<>();
+    private List<Map<String, Object>> example = new LinkedList<>();
 
     private List<String> required = new LinkedList<>();
     final CommandAttributeAdaptor commandAttributeAdaptor = ServiceProvider.of(CommandAttributeAdaptor.class)
@@ -77,7 +78,10 @@ public class CommandAttribute {
                     if (split.length != 2) {
                         continue;
                     }
-                    this.example.put(split[0], split[1]);
+                    this.example.add(ImmutableBuilder.builderOfStringMap()
+                            .put("cmd", split[0])
+                            .put("des", split[1])
+                            .build());
                 }
                 String value = shellParam.value();
                 commandAttributeAdaptor.addOption(shellParam);
