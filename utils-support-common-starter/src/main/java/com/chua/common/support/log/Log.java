@@ -62,6 +62,14 @@ public interface Log {
      * @param args    参数
      */
     void error(String message, Object... args);
+    /**
+     * error
+     *
+     * @param e e
+     */
+    default void error(Throwable e) {
+       error("{}", e);
+    }
 
     /**
      * debug
