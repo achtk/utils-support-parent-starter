@@ -2,6 +2,7 @@ package com.chua.common.support.converter.definition;
 
 import com.chua.common.support.function.Splitter;
 import com.chua.common.support.json.Json;
+import com.chua.common.support.utils.ArrayUtils;
 
 import java.util.*;
 
@@ -69,6 +70,10 @@ public class ListTypeConverter implements TypeConverter<List> {
                 return Splitter.on(SYMBOL_COMMA).omitEmptyStrings().trimResults().splitToList(string);
             } catch (Exception ignored) {
             }
+        }
+
+        if (value.getClass().isArray()) {
+            return (List) ArrayUtils.toList(value);
         }
 
         return convertIfNecessary(value);
