@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 
 /**
  * node
+ *
  * @author CH
  */
 @Data
@@ -14,6 +15,9 @@ import java.time.LocalDateTime;
 public class OssNode {
 
     private String id;
+
+    private final String type;
+    private final String subtype;
 
     private String parent;
     private String name;

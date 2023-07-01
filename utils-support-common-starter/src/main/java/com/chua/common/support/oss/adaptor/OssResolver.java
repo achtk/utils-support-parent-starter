@@ -1,5 +1,6 @@
 package com.chua.common.support.oss.adaptor;
 
+import com.chua.common.support.lang.page.Page;
 import com.chua.common.support.oss.node.OssNode;
 import com.chua.common.support.pojo.Mode;
 import com.chua.common.support.pojo.OssSystem;
@@ -7,7 +8,6 @@ import com.chua.common.support.range.Range;
 import com.chua.common.support.value.Value;
 
 import java.io.OutputStream;
-import java.util.List;
 
 /**
  * 适配器
@@ -47,11 +47,13 @@ public interface OssResolver extends AutoCloseable {
      * 子目录
      *
      * @param ossSystem 配置
-     * @param id
+     * @param id        配置ID
      * @param name      路径
+     * @param pageNum   页码
+     * @param pageSize  每页数量
      * @return node
      */
-    List<OssNode> getChildren(OssSystem ossSystem, String id, String name);
+    Page<OssNode> getChildren(OssSystem ossSystem, String id, String name, Integer pageNum, Integer pageSize);
 
     /**
      * 删除对象

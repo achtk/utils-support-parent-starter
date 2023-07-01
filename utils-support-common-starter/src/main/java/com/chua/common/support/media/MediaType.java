@@ -8,6 +8,7 @@ import com.chua.common.support.utils.MapUtils;
 import com.chua.common.support.utils.ObjectUtils;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -26,7 +27,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  * @author CH
  */
 @EqualsAndHashCode
-public class MediaType {
+public class MediaType implements Serializable {
     private static final String CHARSET_ATTRIBUTE = "charset";
     private static final String APPLICATION_TYPE = "application";
     private static final String AUDIO_TYPE = "audio";

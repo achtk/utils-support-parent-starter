@@ -1,5 +1,7 @@
 package com.chua.common.support.lang.page;
 
+import com.chua.common.support.utils.CollectionUtils;
+
 import java.util.List;
 
 /**
@@ -22,6 +24,12 @@ public class PageMemData<T> implements PageData<T> {
 
     @Override
     public Page<T> find(int page, int pageSize) {
-        return new Page<T>().setData(data);
+        int total = data.size();
+        return new Page<T>()
+                .setPageNum(page)
+                .setPageNum(pageSize)
+                .setPages((total / pageSize) + (total % pageSize == 0 ? 0 : 1))
+                .setData(CollectionUtils.page(page - 1, pageSize, data))
+                .setTotal((long) total);
     }
 }

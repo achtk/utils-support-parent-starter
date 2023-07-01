@@ -5,6 +5,8 @@ import com.chua.common.support.annotations.SpiOption;
 import com.chua.common.support.collection.ConcurrentReferenceTable;
 import com.chua.common.support.collection.Table;
 import com.chua.common.support.converter.Converter;
+import com.chua.common.support.lang.page.Page;
+import com.chua.common.support.lang.page.PageMemData;
 import com.chua.common.support.media.MediaType;
 import com.chua.common.support.media.MediaTypeFactory;
 import com.chua.common.support.oss.adaptor.AbstractOssResolver;
@@ -23,7 +25,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.chua.common.support.constant.CommonConstant.HTTP;
 
@@ -134,13 +135,15 @@ public class MinioOssResolver extends AbstractOssResolver {
     }
 
     @Override
-    public List<OssNode> getChildren(OssSystem ossSystem, String id, String name) {
+    public Page<OssNode> getChildren(OssSystem ossSystem, String id, String name, Integer pageNum, Integer pageSize) {
         MinioClient minioClient = initialConfig(ossSystem);
         String bucket = ossSystem.getOssBucket();
+        Page<OssNode> rs1 = new Page<>();
+
         try {
             boolean found = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucket).build());
             if (!found) {
-                return Collections.emptyList();
+                return rs1;
             }
             Iterable<Result<Item>> results = minioClient.listObjects(ListObjectsArgs.builder()
                     .bucket(bucket)
@@ -150,7 +153,10 @@ public class MinioOssResolver extends AbstractOssResolver {
             results.forEach(itemResult -> {
                 try {
                     Item item = itemResult.get();
+                    MediaType mediaType = MediaTypeFactory.getMediaTypeNullable(item.objectName());
                     rs.add(new OssNode(name + "/" + item.objectName(),
+                            mediaType.type(),
+                            mediaType.subtype(),
                             name + "/" + item.objectName(),
                             item.objectName(),
                             item.lastModified().toLocalDateTime(),
@@ -160,7 +166,7 @@ public class MinioOssResolver extends AbstractOssResolver {
                     throw new RuntimeException(e);
                 }
             });
-            return rs;
+            return PageMemData.of(rs).find(pageNum, pageSize);
         } catch (Exception e) {
             if ("1 : bucket name must be at least 3 and no more than 63 characters long".equals(e.getMessage())) {
                 throw new RuntimeException("bucket长度在3~63之间");

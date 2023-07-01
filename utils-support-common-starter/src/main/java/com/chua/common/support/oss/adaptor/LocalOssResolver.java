@@ -3,6 +3,9 @@ package com.chua.common.support.oss.adaptor;
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.annotations.SpiOption;
 import com.chua.common.support.lang.date.DateTime;
+import com.chua.common.support.lang.page.Page;
+import com.chua.common.support.lang.page.PageData;
+import com.chua.common.support.lang.page.PageMemData;
 import com.chua.common.support.media.MediaType;
 import com.chua.common.support.media.MediaTypeFactory;
 import com.chua.common.support.oss.node.OssNode;
@@ -16,11 +19,6 @@ import com.chua.common.support.value.Value;
 
 import java.io.*;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.LongAdder;
 import java.util.stream.Collectors;
 
 /**
@@ -55,28 +53,34 @@ public class LocalOssResolver extends AbstractOssResolver {
     }
 
     @Override
-    public List<OssNode> getChildren(OssSystem ossSystem, String id, String name) {
+    public Page<OssNode> getChildren(OssSystem ossSystem, String id, String name, Integer pageNum, Integer pageSize) {
         String ossPath = ossSystem.getOssPath().replace("\\", "/");
         File file = new File(ossPath, name);
-        if(!file.exists()) {
-            return Collections.emptyList();
+        Page<OssNode> rs = new Page<>();
+        if (!file.exists()) {
+            return rs;
         }
         File[] files = file.listFiles();
-        if(null == files || files.length == 0) {
-            return Collections.emptyList();
+        if (null == files || files.length == 0) {
+            return rs;
         }
 
-        return Arrays.stream(files).map(it -> {
+        PageData<OssNode> pageData = PageMemData.of(Arrays.stream(files).map(it -> {
             File[] files1 = it.listFiles();
+            MediaType mediaType = MediaTypeFactory.getMediaTypeNullable(it.getName());
             return new OssNode(
                     name + "/" + it.getName(),
+                    mediaType.type(),
+                    mediaType.subtype(),
                     name + "/" + it.getName(),
                     it.getName(),
                     DateTime.of(it.lastModified()).toLocalDateTime(),
-                                it.isFile(),
-                   null != files1 && files1.length != 0
+                    it.isFile(),
+                    null != files1 && files1.length != 0
             );
-        }).collect(Collectors.toList());
+        }).collect(Collectors.toList()));
+
+        return pageData.find(pageNum, pageSize);
     }
 
     @Override
@@ -124,8 +128,8 @@ public class LocalOssResolver extends AbstractOssResolver {
                 } catch (Exception ignored) {
                 }
             }
-            Optional<MediaType> mediaType = MediaTypeFactory.getMediaType(path);
-            writeTo(mediaType.get(), mode, range, byteArrayOutputStream.toByteArray(), os, ossSystem);
+            MediaType mediaType = MediaTypeFactory.getMediaTypeNullable(path);
+            writeTo(mediaType, mode, range, byteArrayOutputStream.toByteArray(), os, ossSystem);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

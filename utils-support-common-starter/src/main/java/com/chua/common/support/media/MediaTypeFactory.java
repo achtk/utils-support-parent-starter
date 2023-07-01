@@ -89,6 +89,17 @@ public class MediaTypeFactory {
      * 获取媒体
      *
      * @param filename 文件名
+     * @return the corresponding media type, or {@code null} if none found
+     */
+    public static MediaType getMediaTypeNullable(String filename) {
+        Optional<MediaType> mediaType = getMediaType(filename);
+        return mediaType.orElse(MediaType.ANY_TYPE);
+    }
+
+    /**
+     * 获取媒体
+     *
+     * @param filename 文件名
      * @return the corresponding media types, or an empty list if none found
      */
     public static List<MediaType> getMediaTypes(String filename) {
