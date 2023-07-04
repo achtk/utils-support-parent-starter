@@ -14,10 +14,7 @@ import com.chua.common.support.oss.node.OssNode;
 import com.chua.common.support.pojo.Mode;
 import com.chua.common.support.pojo.OssSystem;
 import com.chua.common.support.range.Range;
-import com.chua.common.support.utils.IoUtils;
-import com.chua.common.support.utils.MapUtils;
-import com.chua.common.support.utils.PageUtils;
-import com.chua.common.support.utils.StringUtils;
+import com.chua.common.support.utils.*;
 import com.chua.common.support.value.Value;
 import io.minio.*;
 import io.minio.messages.Item;
@@ -147,10 +144,14 @@ public class MinioOssResolver extends AbstractOssResolver {
             if (!found) {
                 return rs1;
             }
-            Iterable<Result<Item>> results = minioClient.listObjects(ListObjectsArgs.builder()
+            ListObjectsArgs.Builder recursive = ListObjectsArgs.builder()
                     .bucket(bucket)
-                    .recursive(false)
-                    .build());
+                    .recursive(false);
+
+            if(StringUtils.isNotEmpty(name)) {
+                recursive.prefix(StringUtils.removePrefix(name, "/"));
+            }
+            Iterable<Result<Item>> results = minioClient.listObjects(recursive.build());
             List<OssNode> rs = new LinkedList<>();
             int[] ints = PageUtils.transToStartEnd(pageNum - 1, pageSize);
             int start = ints[0];
@@ -161,11 +162,11 @@ public class MinioOssResolver extends AbstractOssResolver {
                     try {
                         Item item = itemResult.get();
                         MediaType mediaType = MediaTypeFactory.getMediaTypeNullable(item.objectName());
-                        rs.add(new OssNode(name + "/" + item.objectName(),
+                        rs.add(new OssNode(item.objectName(),
                                 mediaType.type(),
                                 mediaType.subtype(),
                                 name + "/" + item.objectName(),
-                                item.objectName(),
+                                FileUtils.getBaseName( item.objectName()),
                                 LocalDateTime.now(),
                                 !item.isDir(),
                                 item.isDir()));
