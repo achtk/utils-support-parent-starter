@@ -6,6 +6,7 @@ import com.chua.common.support.file.FileMedia;
 import com.chua.common.support.file.zip.Zip;
 import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.function.SafeConsumer;
+import com.chua.common.support.function.SafeFunction;
 import com.chua.common.support.lang.depends.GrapeFileResolver;
 import com.chua.common.support.lang.depends.Surroundings;
 import com.chua.common.support.spi.ServiceProvider;
@@ -88,10 +89,13 @@ public class JarAggregate implements Aggregate, InitializingAware {
         if(FileUtils.isZip(FileUtils.getExtension(file.getName()))) {
             Zip zip = new Zip();
             try (FileInputStream fileInputStream = new FileInputStream(file)) {
-                zip.unFile(fileInputStream, (SafeConsumer<FileMedia>) fileMedia -> {
+                zip.unFile(fileInputStream, (SafeFunction<FileMedia, Boolean>) fileMedia -> {
                     if(fileMedia.getName().contains(CommonConstant.POM)) {
                         JarAggregate.this.stream = fileMedia.getStream();
+                        return true;
                     }
+
+                    return false;
                 }, true);
             } catch (IOException e) {
                 throw new RuntimeException(e);

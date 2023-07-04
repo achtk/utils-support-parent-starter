@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * 解压
@@ -29,7 +30,7 @@ public interface Decompress {
      * @param needStream 是否需要流
      * @throws IOException ex
      */
-    void unFile(InputStream stream, Consumer<FileMedia> consumer, boolean needStream) throws IOException;
+    void unFile(InputStream stream, Function<FileMedia, Boolean> consumer, boolean needStream) throws IOException;
 
     /**
      * 解压
@@ -38,7 +39,7 @@ public interface Decompress {
      * @param consumer 名称
      * @throws IOException ex
      */
-    default void unFile(InputStream stream, Consumer<FileMedia> consumer) throws IOException {
+    default void unFile(InputStream stream, Function<FileMedia, Boolean> consumer) throws IOException {
         unFile(stream, consumer, false);
     }
 

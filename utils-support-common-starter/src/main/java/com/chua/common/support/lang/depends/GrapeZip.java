@@ -4,6 +4,7 @@ import com.chua.common.support.file.FileMedia;
 import com.chua.common.support.file.zip.Zip;
 import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.function.SafeConsumer;
+import com.chua.common.support.function.SafeFunction;
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.FileUtils;
 
@@ -42,10 +43,13 @@ public class GrapeZip implements InitializingAware {
         if(FileUtils.isZip(file.getName())) {
             Zip zip = new Zip();
             try (FileInputStream fileInputStream = new FileInputStream(file)) {
-                zip.unFile(fileInputStream, (SafeConsumer<FileMedia>) fileMedia -> {
+                zip.unFile(fileInputStream, (SafeFunction<FileMedia, Boolean>) fileMedia -> {
                     if("pom.xml".equals(fileMedia.getName())) {
                         GrapeZip.this.stream = fileMedia.getStream();
+                        return true;
                     }
+
+                    return false;
                 }, true);
             } catch (IOException e) {
                 throw new RuntimeException(e);

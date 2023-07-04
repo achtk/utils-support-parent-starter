@@ -16,6 +16,7 @@ import com.chua.common.support.pojo.OssSystem;
 import com.chua.common.support.range.Range;
 import com.chua.common.support.utils.IoUtils;
 import com.chua.common.support.utils.MapUtils;
+import com.chua.common.support.utils.PageUtils;
 import com.chua.common.support.utils.StringUtils;
 import com.chua.common.support.value.Value;
 import io.minio.*;
@@ -69,7 +70,7 @@ public class MinioOssResolver extends AbstractOssResolver {
     }
 
     @Override
-    public void preview(OssSystem ossSystem, String path, Mode mode, Range<Long> range, OutputStream os) {
+    public void preview(OssSystem ossSystem, String path, Mode mode, Range<Long> range, OutputStream os, String fromPath) {
         MinioClient minioClient = initialConfig(ossSystem);
         String endpoint = ossSystem.getOssPath();
         if (!endpoint.startsWith(HTTP)) {
@@ -150,23 +151,29 @@ public class MinioOssResolver extends AbstractOssResolver {
                     .recursive(false)
                     .build());
             List<OssNode> rs = new LinkedList<>();
+            int[] ints = PageUtils.transToStartEnd(pageNum - 1, pageSize);
+            int start = ints[0];
+            int end = ints[1];
+            int index = 0;
             results.forEach(itemResult -> {
-                try {
-                    Item item = itemResult.get();
-                    MediaType mediaType = MediaTypeFactory.getMediaTypeNullable(item.objectName());
-                    rs.add(new OssNode(name + "/" + item.objectName(),
-                            mediaType.type(),
-                            mediaType.subtype(),
-                            name + "/" + item.objectName(),
-                            item.objectName(),
-                            item.lastModified().toLocalDateTime(),
-                            !item.isDir(),
-                            item.isDir()));
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
+                if(start <= index && index < end) {
+                    try {
+                        Item item = itemResult.get();
+                        MediaType mediaType = MediaTypeFactory.getMediaTypeNullable(item.objectName());
+                        rs.add(new OssNode(name + "/" + item.objectName(),
+                                mediaType.type(),
+                                mediaType.subtype(),
+                                name + "/" + item.objectName(),
+                                item.objectName(),
+                                item.lastModified().toLocalDateTime(),
+                                !item.isDir(),
+                                item.isDir()));
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             });
-            return PageMemData.of(rs).find(pageNum, pageSize);
+            return PageMemData.of(rs).find(1, pageSize);
         } catch (Exception e) {
             if ("1 : bucket name must be at least 3 and no more than 63 characters long".equals(e.getMessage())) {
                 throw new RuntimeException("bucket长度在3~63之间");

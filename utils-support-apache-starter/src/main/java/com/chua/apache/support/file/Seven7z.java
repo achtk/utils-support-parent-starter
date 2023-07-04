@@ -16,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.UUID;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * 7z
@@ -116,7 +117,7 @@ public class Seven7z extends AbstractCompress implements Decompress {
 
 
     @Override
-    public void unFile(InputStream stream, Consumer<FileMedia> consumer, boolean needStream) throws IOException {
+    public void unFile(InputStream stream, Function<FileMedia, Boolean> consumer, boolean needStream) throws IOException {
         Path tempFile = null;
         try {
             tempFile = Files.createTempFile("7z", ".7z");
@@ -130,11 +131,13 @@ public class Seven7z extends AbstractCompress implements Decompress {
             SevenZArchiveEntry nextEntry = null;
             while ((nextEntry = zFile.getNextEntry()) != null) {
                 String name = nextEntry.getName();
-                consumer.accept(FileMedia.builder()
+                if(consumer.apply(FileMedia.builder()
                         .name(name)
                         .fileType(nextEntry.isDirectory() ? FileType.FOLDER: FileType.FILE)
                         .size(nextEntry.getSize())
-                        .build());
+                        .build())) {
+                    break;
+                }
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

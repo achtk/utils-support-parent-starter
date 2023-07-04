@@ -19,6 +19,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * XZ constants.
@@ -111,12 +112,12 @@ public class Xz extends AbstractCompress implements Decompress {
     }
 
     @Override
-    public void unFile(InputStream stream, Consumer<FileMedia> consumer, boolean needStream) throws IOException {
+    public void unFile(InputStream stream, Function<FileMedia, Boolean> consumer, boolean needStream) throws IOException {
 
     }
 
     @Override
-    public void unFile(InputStream stream, Consumer<FileMedia> consumer) throws IOException {
+    public void unFile(InputStream stream, Function<FileMedia, Boolean> consumer) throws IOException {
 
     }
 

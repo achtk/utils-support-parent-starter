@@ -13,6 +13,7 @@ import com.chua.common.support.lang.process.ProgressBar;
 import java.io.*;
 import java.nio.file.Files;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * tar
@@ -22,7 +23,7 @@ import java.util.function.Consumer;
 @Spi("tar")
 public class Tar extends AbstractCompress implements Decompress {
 
-    public static void unTar(TarInputStream tarInputStream, Consumer<FileMedia> consumer, boolean needStream) throws IOException {
+    public static void unTar(TarInputStream tarInputStream, Function<FileMedia, Boolean> consumer, boolean needStream) throws IOException {
         TarEntry nextEntry = null;
         while ((nextEntry = tarInputStream.getNextEntry()) != null) {
             String name = nextEntry.getName();
@@ -42,7 +43,9 @@ public class Tar extends AbstractCompress implements Decompress {
                 } catch (Exception ignored) {
                 }
             }
-            consumer.accept(builder.build());
+            if(consumer.apply(builder.build())) {
+                break;
+            }
         }
     }
 
@@ -140,7 +143,7 @@ public class Tar extends AbstractCompress implements Decompress {
     }
 
     @Override
-    public void unFile(InputStream stream, Consumer<FileMedia> consumer, boolean needStream) throws IOException {
+    public void unFile(InputStream stream, Function<FileMedia, Boolean> consumer, boolean needStream) throws IOException {
         try (TarInputStream tarInputStream = new TarInputStream(stream)) {
             unTar(tarInputStream, consumer, needStream);
         }

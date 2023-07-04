@@ -9,7 +9,7 @@ import com.chua.common.support.utils.IoUtils;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -68,10 +68,10 @@ public class Zip extends AbstractCompress implements Decompress {
      * 解压
      *
      * @param zipInputStream zip
-     * @param consumer       输出
+     * @param function       输出
      * @param needStream     是否需要流
      */
-    public static void unZip(ZipInputStream zipInputStream, Consumer<FileMedia> consumer, boolean needStream) throws IOException {
+    public static void unZip(ZipInputStream zipInputStream, Function<FileMedia, Boolean> function, boolean needStream) throws IOException {
         ZipEntry nextEntry = null;
         while ((nextEntry = zipInputStream.getNextEntry()) != null) {
             String name = nextEntry.getName();
@@ -92,7 +92,9 @@ public class Zip extends AbstractCompress implements Decompress {
                 } catch (Exception ignored) {
                 }
             }
-            consumer.accept(builder.build());
+            if(function.apply(builder.build())) {
+                break;
+            }
         }
     }
 
@@ -166,7 +168,7 @@ public class Zip extends AbstractCompress implements Decompress {
     }
 
     @Override
-    public void unFile(InputStream stream, Consumer<FileMedia> consumer, boolean needStream) throws IOException {
+    public void unFile(InputStream stream, Function<FileMedia, Boolean> consumer, boolean needStream) throws IOException {
         try (ZipInputStream zipInputStream = new ZipInputStream(stream)) {
             unZip(zipInputStream, consumer, needStream);
         }

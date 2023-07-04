@@ -585,22 +585,24 @@ public class ArrayUtils {
     }
 
     // ----------------------------------------------------------------------
+
     /**
      * <p>Checks if an array of Objects is not empty and not {@code null}.
      *
-     * @param <T> the component type of the array
-     * @param array  the array to test
+     * @param <T>   the component type of the array
+     * @param array the array to test
      * @return {@code true} if the array is not empty and not {@code null}
      * @since 2.5
      */
     public static <T> boolean isNotEmpty(final T[] array) {
         return !isEmpty(array);
     }
+
     /**
      * <p>Checks if an array of Objects is not empty and not {@code null}.
      *
-     * @param <T> the component type of the array
-     * @param array  the array to test
+     * @param <T>   the component type of the array
+     * @param array the array to test
      * @return {@code true} if the array is not empty and not {@code null}
      * @since 2.5
      */
@@ -682,10 +684,10 @@ public class ArrayUtils {
     @SuppressWarnings("unchecked")
     public static <T> T[] toArray(Iterable<? extends T> iterable) {
         List<? extends T> ts = CollectionUtils.newArrayList(iterable);
-        if(null == ts || ts.isEmpty()) {
+        if (null == ts || ts.isEmpty()) {
             return null;
         }
-        return ts.toArray((T[])Array.newInstance(ts.get(0).getClass(), 0));
+        return ts.toArray((T[]) Array.newInstance(ts.get(0).getClass(), 0));
     }
 
     /**
@@ -939,6 +941,7 @@ public class ArrayUtils {
 
     /**
      * 转为集合
+     *
      * @param value 数组
      * @return 集合
      */
@@ -950,5 +953,45 @@ public class ArrayUtils {
         }
 
         return rs;
+    }
+
+    /**
+     * 截取数组
+     *
+     * @param arr    数组
+     * @param offset 位置
+     * @return 截取数组
+     */
+    @SuppressWarnings("ALL")
+    public static <T>T[] subArray(T[] arr, int offset) {
+        if(arr.length < offset) {
+            return null;
+        }
+
+        T[] v = (T[]) Array.newInstance(arr[0].getClass(), arr.length - offset);
+        System.arraycopy(arr, offset, v, 0, v.length);
+        return v;
+    }
+    /**
+     * 截取数组
+     *
+     * @param arr    数组
+     * @param offset 位置1
+     * @param offset2 位置2
+     * @return 截取数组
+     */
+    @SuppressWarnings("ALL")
+    public static <T>T[] subArray(T[] arr, int offset, int offset2) {
+        if(arr.length < offset) {
+            return null;
+        }
+
+        if(offset2 <= offset) {
+            return null;
+        }
+
+        T[] v = (T[]) Array.newInstance(arr[0].getClass(), arr.length - offset);
+        System.arraycopy(arr, offset, v, 0, offset2 - offset);
+        return v;
     }
 }

@@ -3,15 +3,22 @@ package com.chua.common.support.resource.repository.resolver;
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.constant.Projects;
 import com.chua.common.support.context.annotation.AutoInject;
+import com.chua.common.support.file.Decompress;
+import com.chua.common.support.file.FileMedia;
 import com.chua.common.support.matcher.PathMatcher;
 import com.chua.common.support.resource.repository.FileSystemMetadata;
 import com.chua.common.support.resource.repository.Metadata;
+import com.chua.common.support.resource.repository.StreamMetadata;
 import com.chua.common.support.resource.repository.UrlMetadata;
 import com.chua.common.support.resource.resource.FileSystemResource;
 import com.chua.common.support.resource.resource.Resource;
+import com.chua.common.support.spi.ServiceProvider;
+import com.chua.common.support.utils.FileUtils;
 import com.chua.common.support.utils.StringUtils;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.FileVisitResult;
@@ -37,6 +44,32 @@ public final class FileSystemResolver implements Resolver {
     @Override
     public List<Metadata> resolve(URL root, String name) {
         File file = new File(root.getFile());
+        if(FileUtils.isCompressFile(file.getName())) {
+            Decompress decompress = ServiceProvider.of(Decompress.class).getDeepNewExtension(file.getName());
+            if(null == decompress) {
+                return Collections.emptyList();
+            }
+
+            List<FileMedia> fileMedia = new LinkedList<>();
+            try (FileInputStream fileInputStream = new FileInputStream(file)) {
+                String newName = StringUtils.removeStart(name, "/");
+                decompress.unFile(fileInputStream, it -> {
+                    if (newName.endsWith(it.getName())) {
+                        fileMedia.add(it);
+                        return true;
+                    }
+                    return false;
+                }, true);
+            } catch (Exception ignored) {
+            }
+
+            if(fileMedia.isEmpty()) {
+                return Collections.emptyList();
+            }
+            FileMedia fileMedia1 = fileMedia.get(0);
+            return Collections.singletonList(new StreamMetadata(fileMedia1.getStream(), fileMedia1.getMediaType().toString()));
+        }
+
         if (!pathMatcher.isPattern(name)) {
             File file1 = new File(file, name);
             if (file1.exists()) {

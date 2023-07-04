@@ -29,8 +29,9 @@ public interface OssResolver extends AutoCloseable {
      * @param mode      模式. download/preview
      * @param range     区间(只有下载有效)
      * @param os        输出
+     * @param fromPath
      */
-    void preview(OssSystem ossSystem, String path, Mode mode, Range<Long> range, OutputStream os);
+    void preview(OssSystem ossSystem, String path, Mode mode, Range<Long> range, OutputStream os, String fromPath);
 
     /**
      * 保存文件

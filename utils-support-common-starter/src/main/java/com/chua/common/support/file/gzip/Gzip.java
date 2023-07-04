@@ -10,6 +10,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -70,7 +71,7 @@ public class Gzip extends AbstractCompress implements Decompress {
     }
 
     @Override
-    public void unFile(InputStream stream, Consumer<FileMedia> consumer, boolean needStream) throws IOException {
+    public void unFile(InputStream stream, Function<FileMedia, Boolean> consumer, boolean needStream) throws IOException {
 
     }
 

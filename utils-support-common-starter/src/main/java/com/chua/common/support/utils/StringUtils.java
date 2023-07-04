@@ -3,6 +3,7 @@ package com.chua.common.support.utils;
 import com.chua.common.support.constant.CommonConstant;
 import com.chua.common.support.constant.RegexConstant;
 import com.chua.common.support.database.SqlInjectionUtils;
+import com.chua.common.support.function.Joiner;
 import com.chua.common.support.function.Splitter;
 import com.chua.common.support.jsoup.helper.Validate;
 import com.chua.common.support.lang.Ascii;
@@ -3954,6 +3955,7 @@ public class StringUtils {
         sb.append(originString.substring(pos));
         return sb.toString();
     }
+
     /**
      * 判断对象是否不为空
      *
@@ -3966,6 +3968,7 @@ public class StringUtils {
         }
         return object != null;
     }
+
     /**
      * SQL 注入字符串去除空白内容：
      * <ul>
@@ -3999,4 +4002,91 @@ public class StringUtils {
         return delimitedListToStringArray(str, ",");
     }
 
+    /**
+     * 根据符号获取结果offset之后的字符串
+     *
+     * @param str       字符串
+     * @param separator 符号
+     * @param offset    位置
+     * @return 根据符号获取结果offset之后的字符串
+     */
+    public static String after(String str, String separator, int offset) {
+        String[] split = str.split(separator);
+        if (split.length < offset) {
+            return EMPTY;
+        }
+
+        return Joiner.on(separator).join(ArrayUtils.subArray(split, offset));
+    }
+    /**
+     * 根据符号获取结果offset之后的字符串
+     *
+     * @param str       字符串
+     * @param separator 符号
+     * @param offset    位置1
+     * @param offset2    位置2
+     * @return 根据符号获取结果offset之后的字符串
+     */
+    public static String between(String str, String separator, int offset, int offset2) {
+        String[] split = str.split(separator);
+        if (split.length < offset) {
+            return EMPTY;
+        }
+
+        if(offset2 <= offset) {
+            return EMPTY;
+        }
+
+        return Joiner.on(separator).join(ArrayUtils.subArray(split, offset, offset2));
+    }
+    /**
+     * 比较字符串是否相等
+     *
+     * @param source 来源
+     * @param target 目标
+     * @return 比较字符串是否相等
+     */
+    public static boolean equals(String source, String target) {
+        if(null == source || null == target) {
+            return false;
+        }
+
+        if(source.length() != target.length()) {
+            return false;
+        }
+        int length = source.length();
+        for (int i = 0; i < length; i++) {
+            char s = source.charAt(i);
+            if((s ^ target.charAt(i)) == 1) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 比较字符串是否相等
+     *
+     * @param source 来源
+     * @param target 目标
+     * @return 比较字符串是否相等
+     */
+    public static boolean safeEquals(String source, String target) {
+        if(null == source || null == target) {
+            return false;
+        }
+        
+        if(source.length() != target.length()) {
+            return false;
+        }
+
+        int equal = 0;
+        int length = source.length();
+        for (int i = 0; i < length; i++) {
+            char s = source.charAt(i);
+            equal |= s ^ target.charAt(i);
+        }
+
+        return equal == 0;
+    }
 }

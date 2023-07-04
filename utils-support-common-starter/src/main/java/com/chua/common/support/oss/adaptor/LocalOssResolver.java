@@ -4,7 +4,6 @@ import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.annotations.SpiOption;
 import com.chua.common.support.lang.date.DateTime;
 import com.chua.common.support.lang.page.Page;
-import com.chua.common.support.lang.page.PageData;
 import com.chua.common.support.lang.page.PageMemData;
 import com.chua.common.support.media.MediaType;
 import com.chua.common.support.media.MediaTypeFactory;
@@ -12,13 +11,19 @@ import com.chua.common.support.oss.node.OssNode;
 import com.chua.common.support.pojo.Mode;
 import com.chua.common.support.pojo.OssSystem;
 import com.chua.common.support.range.Range;
+import com.chua.common.support.resource.repository.Repository;
 import com.chua.common.support.utils.FileUtils;
 import com.chua.common.support.utils.IoUtils;
+import com.chua.common.support.utils.PageUtils;
 import com.chua.common.support.utils.StringUtils;
 import com.chua.common.support.value.Value;
 
 import java.io.*;
+import java.net.URL;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -65,22 +70,30 @@ public class LocalOssResolver extends AbstractOssResolver {
             return rs;
         }
 
-        PageData<OssNode> pageData = PageMemData.of(Arrays.stream(files).map(it -> {
-            File[] files1 = it.listFiles();
-            MediaType mediaType = MediaTypeFactory.getMediaTypeNullable(it.getName());
-            return new OssNode(
-                    name + "/" + it.getName(),
-                    mediaType.type(),
-                    mediaType.subtype(),
-                    name + "/" + it.getName(),
-                    it.getName(),
-                    DateTime.of(it.lastModified()).toLocalDateTime(),
-                    it.isFile(),
-                    null != files1 && files1.length != 0
-            );
-        }).collect(Collectors.toList()));
+        int[] ints = PageUtils.transToStartEnd(pageNum - 1, pageSize);
+        int start = ints[0];
+        int end = ints[1];
+        AtomicInteger index = new AtomicInteger();
+        List<OssNode> collect = Arrays.stream(files).map(it -> {
+            if(start <= index.get() && index.get() < end) {
+                File[] files1 = it.listFiles();
+                MediaType mediaType = MediaTypeFactory.getMediaTypeNullable(it.getName());
+                return new OssNode(
+                        name + "/" + it.getName(),
+                        mediaType.type(),
+                        mediaType.subtype(),
+                        name + "/" + it.getName(),
+                        it.getName(),
+                        DateTime.of(it.lastModified()).toLocalDateTime(),
+                        it.isFile(),
+                        null != files1 && files1.length != 0
+                );
+            }
+            index.incrementAndGet();
+            return null;
+        }).filter(Objects::nonNull).collect(Collectors.toList());
 
-        return pageData.find(pageNum, pageSize);
+        return PageMemData.of(collect).find(1, pageSize).setTotal((long) files.length);
     }
 
     @Override
@@ -103,8 +116,8 @@ public class LocalOssResolver extends AbstractOssResolver {
     }
 
     @Override
-    public void preview(OssSystem ossSystem, String path, Mode mode, Range<Long> range, OutputStream os) {
-        File file = findFile(ossSystem, path);
+    public void preview(OssSystem ossSystem, String path, Mode mode, Range<Long> range, OutputStream os, String fromPath) {
+        File file = findFile(ossSystem, path, fromPath);
         if (isValidFile(file)) {
             writeToReject(reject(ossSystem), os);
             return;
@@ -121,11 +134,21 @@ public class LocalOssResolver extends AbstractOssResolver {
                     throw new RuntimeException(e);
                 }
             } else {
-                try (FileInputStream fis = new FileInputStream(file)) {
-                    while ((read = fis.read(bytes)) != -1) {
-                        byteArrayOutputStream.write(bytes, 0, read);
+                if(StringUtils.isNotEmpty(fromPath) && StringUtils.isNotEmpty(path)) {
+                    try (InputStream is = Repository.of(file).first(path).openInputStream()) {
+                        while ((read = is.read(bytes)) != -1) {
+                            byteArrayOutputStream.write(bytes, 0, read);
+                        }
+                    } catch (Exception ignored) {
                     }
-                } catch (Exception ignored) {
+
+                } else {
+                    try (FileInputStream fis = new FileInputStream(file)) {
+                        while ((read = fis.read(bytes)) != -1) {
+                            byteArrayOutputStream.write(bytes, 0, read);
+                        }
+                    } catch (Exception ignored) {
+                    }
                 }
             }
             MediaType mediaType = MediaTypeFactory.getMediaTypeNullable(path);
@@ -146,10 +169,13 @@ public class LocalOssResolver extends AbstractOssResolver {
         return null == file || !file.exists();
     }
 
-    private File findFile(OssSystem ossSystem, String path) {
+    private File findFile(OssSystem ossSystem, String path, String fromPath) {
         String ossPath = ossSystem.getOssPath();
         if (StringUtils.isBlank(ossPath)) {
             return null;
+        }
+        if(StringUtils.isNotBlank(fromPath )) {
+            return new File(ossPath, fromPath);
         }
         return new File(ossPath, path);
     }
