@@ -166,7 +166,7 @@ public class MinioOssResolver extends AbstractOssResolver {
                                 mediaType.type(),
                                 mediaType.subtype(),
                                 name + "/" + item.objectName(),
-                                FileUtils.getBaseName( item.objectName()),
+                                FileUtils.getBaseName( StringUtils.removeEnd(item.objectName(), "/")),
                                 LocalDateTime.now(),
                                 !item.isDir(),
                                 item.isDir()));
