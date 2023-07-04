@@ -13,4 +13,6 @@ import java.lang.annotation.*;
 public @interface SpiOption {
 
     String value();
+
+    String type() default "default";
 }
