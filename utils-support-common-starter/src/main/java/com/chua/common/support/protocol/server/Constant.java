@@ -7,6 +7,8 @@ package com.chua.common.support.protocol.server;
  */
 public interface Constant {
 
+    String STRING_REDIS = "string-redis-template";
+
     String PARAM = "param";
     String CONNECT = "connect";
     String DISCONNECT = "disconnect";

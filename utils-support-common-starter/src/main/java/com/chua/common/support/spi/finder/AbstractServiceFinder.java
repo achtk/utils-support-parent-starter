@@ -147,6 +147,7 @@ public abstract class AbstractServiceFinder implements ServiceFinder{
         SpiOption spiOption = implType.getDeclaredAnnotation(SpiOption.class);
         if (null != spiOption) {
             serviceDefinition.setLabel(spiOption.value());
+            serviceDefinition.setLabelType(spiOption.type());
         }
         serviceDefinition.setName(alias.toUpperCase());
         serviceDefinition.setObj(obj);

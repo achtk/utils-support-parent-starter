@@ -26,6 +26,10 @@ public class ServiceDefinition implements Comparable<ServiceDefinition> {
      */
     private String label;
     /**
+     * 名称
+     */
+    private String labelType;
+    /**
      * 扩展名称
      */
     private String name;

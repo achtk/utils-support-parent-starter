@@ -20,15 +20,30 @@ public class Option<T> {
         this.label = label;
     }
 
+    public Option(T value, String label, String type) {
+        this.value = value;
+        this.label = label;
+        this.type = type;
+    }
+
     public Option(T value, String label, List<Option> children) {
         this.value = value;
         this.label = label;
         this.children = children;
     }
 
+    public Option(T value, String label, String type, List<Option> children) {
+        this.value = value;
+        this.label = label;
+        this.type = type;
+        this.children = children;
+    }
+
     private T value;
 
     private String label;
+
+    private String type;
 
     private List<Option> children;
 
