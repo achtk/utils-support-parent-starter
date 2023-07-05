@@ -32,4 +32,9 @@ public class InitializingAwareAutoServiceAutowire implements ServiceAutowire {
         }
         return null;
     }
+
+    @Override
+    public Object createBean(Class<?> implClass) {
+        return null;
+    }
 }

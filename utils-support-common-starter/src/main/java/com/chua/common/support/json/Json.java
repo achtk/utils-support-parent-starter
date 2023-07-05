@@ -3,11 +3,13 @@ package com.chua.common.support.json;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONWriter;
 import com.chua.common.support.utils.IoUtils;
+import com.chua.common.support.utils.StringUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -96,6 +98,9 @@ public class Json {
      * @return JsonObject
      */
     public static Map<String, Object> toMapStringObject(String json) {
+        if(StringUtils.isEmpty(json)) {
+            return Collections.emptyMap();
+        }
         return fromJson(json, new TypeReference<Map<String, Object>>() {
         });
     }

@@ -87,7 +87,7 @@ public class ServiceDefinition implements Comparable<ServiceDefinition> {
      * @param args            参数
      * @param <T>             类型
      * @return 实现
-     */
+     */@SuppressWarnings("ALL")
     public <T> T newInstance(ServiceAutowire serviceAutowire, Object... args) {
         if(null == implClass) {
             return null;
@@ -108,6 +108,7 @@ public class ServiceDefinition implements Comparable<ServiceDefinition> {
             try {
                 return (T) serviceAutowire.autowire(constructor.newInstance(args));
             } catch (Exception ignored) {
+                return (T) serviceAutowire.createBean(implClass);
             }
         }
 

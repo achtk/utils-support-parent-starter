@@ -13,4 +13,11 @@ public interface ServiceAutowire {
      * @return 对象
      */
     Object autowire(Object object);
+
+    /**
+     * 创建对象
+     * @param implClass 实现
+     * @return 对象
+     */
+    Object createBean(Class<?> implClass);
 }

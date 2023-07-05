@@ -23,6 +23,8 @@ public class AutoServiceAutowire implements ServiceAutowire {
 
     public static final List<ServiceAutowire> AUTOWIRES = new LinkedList<>();
 
+    private static MethodDescribeProvider createMethodDescribe;
+
     static {
         AUTOWIRES.add(new InitializingAwareAutoServiceAutowire());
         if (ClassUtils.isPresent(APPLICATION_CONTEXT) && ClassUtils.isPresent(UTILS)) {
@@ -32,6 +34,12 @@ public class AutoServiceAutowire implements ServiceAutowire {
                     .getMethodDescribe("getAutowireCapableBeanFactory")
                     .isChainSelf()
                     .getMethodDescribe("autowireBean");
+
+            createMethodDescribe = typeDescribe.getMethodDescribe("getApplicationContext")
+                    .isChain()
+                    .getMethodDescribe("getAutowireCapableBeanFactory")
+                    .isChainSelf()
+                    .getMethodDescribe("createBean");
 
         }
     }
@@ -50,5 +58,10 @@ public class AutoServiceAutowire implements ServiceAutowire {
             serviceAutowire.autowire(object);
         }
         return object;
+    }
+
+    @Override
+    public Object createBean(Class<?> implClass) {
+        return null == createMethodDescribe ? null : createMethodDescribe.executeSelf(implClass);
     }
 }
