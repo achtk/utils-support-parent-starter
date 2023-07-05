@@ -16,6 +16,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_COLON;
 import static com.chua.common.support.constant.CommonConstant.SYMBOL_COMMA;
 import static com.chua.common.support.spi.autowire.AutoServiceAutowire.UTILS;
 
@@ -212,6 +213,23 @@ public class ServiceProvider<T> implements InitializingAware {
     //Definition *******************************************************************************************************************
     public ServiceDefinition getDefinition(String name, Object... args) {
         name = name.toUpperCase();
+        if(name.contains(SYMBOL_COLON)) {
+            String[] split = name.split(SYMBOL_COLON, 2);
+            String type = split[0];
+            String name1 = split[1];
+            SortedSet<ServiceDefinition> definitions = new TreeSet<>(COMPARATOR);
+            SortedSet<ServiceDefinition> serviceDefinitions = this.definitions.get(name);
+            for (Map.Entry<String, SortedSet<ServiceDefinition>> entry :this. definitions.entrySet()) {
+                SortedSet<ServiceDefinition> entryValue = entry.getValue();
+                for (ServiceDefinition serviceDefinition : entryValue) {
+                    if(type.equalsIgnoreCase(serviceDefinition.getLabelType()) && name1.equalsIgnoreCase(serviceDefinition.getName())) {
+                        definitions.add(serviceDefinition);
+                    }
+                }
+            }
+
+            return definitions.isEmpty() ? DEFAULT_DEFINITION : definitions.first();
+        }
         SortedSet<ServiceDefinition> definitions = new TreeSet<>(COMPARATOR);
         for (String item : name.split(SYMBOL_COMMA)) {
             SortedSet<ServiceDefinition> definitions1 = getDefinitions(item, args);
