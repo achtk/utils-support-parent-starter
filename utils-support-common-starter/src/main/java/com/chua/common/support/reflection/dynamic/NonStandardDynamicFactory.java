@@ -437,10 +437,16 @@ public class NonStandardDynamicFactory implements DynamicFactory {
         javassist.bytecode.MethodInfo methodInfo = ctMethod.getMethodInfo();
         for (AnnotationFactory annotationFactory : methdAnnotationFactory) {
             String column = annotationFactory.annotationName(ctMethod.getName());
-
             String annotationName = annotationFactory.annotationName(column);
             if (StringUtils.isNullOrEmpty(annotationName)) {
                 return;
+            }
+
+            try {
+                if (!annotationFactory.isMath(ctMethod.getName(), JavassistUtils.toTypeName(ctMethod.getParameterTypes()))) {
+                    return;
+                }
+            } catch (NotFoundException ignored) {
             }
             Annotation annotation1 = new Annotation(annotationName, constPool);
             this.addAnnotationValue(annotation1, annotationFactory.annotationValues(column), constPool);

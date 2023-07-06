@@ -23,4 +23,13 @@ public interface AnnotationFactory {
      * @return 注解名称
      */
     Map<String, Object> annotationValues(String column);
+
+    /**
+     * 是否匹配
+     *
+     * @param name       方法名
+     * @param toTypeName 参数
+     * @return 结果
+     */
+    boolean isMath(String name, String[] toTypeName);
 }

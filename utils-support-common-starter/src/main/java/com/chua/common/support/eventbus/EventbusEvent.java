@@ -1,13 +1,11 @@
 package com.chua.common.support.eventbus;
 
-import com.chua.common.support.collection.AnnotationAttributes;
-import com.chua.common.support.reflection.describe.AnnotationDescribe;
 import com.chua.common.support.reflection.describe.TypeDescribe;
 import com.chua.common.support.reflection.dynamic.AnnotationFactory;
 import com.chua.common.support.reflection.dynamic.DynamicFactory;
 import com.chua.common.support.reflection.dynamic.NonStandardDynamicFactory;
-import com.chua.common.support.reflection.dynamic.attribute.AnnotationAttribute;
 import com.chua.common.support.utils.AnnotationUtils;
+import com.chua.common.support.utils.ArrayUtils;
 import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.StringUtils;
 import lombok.AllArgsConstructor;
@@ -116,7 +114,12 @@ public class EventbusEvent {
      */
     private Object repair(Object o, Class<?> aClass, Method[] declaredMethods) {
         DynamicFactory dynamicFactory = new NonStandardDynamicFactory();
-        dynamicFactory.interfaces(Arrays.stream(aClass.getInterfaces()).map(Class::getTypeName).toArray(value -> EMPTY));
+        Class<?>[] interfaces = aClass.getInterfaces();
+        Set<String> rs = new HashSet<>(interfaces.length);
+        for (Class<?> anInterface : interfaces) {
+            rs.add(anInterface.getTypeName());
+        }
+        dynamicFactory.interfaces(rs.toArray(EMPTY));
         dynamicFactory.superType(aClass.getSuperclass().getTypeName());
         ClassUtils.doWithLocalFields(aClass, field -> {
             dynamicFactory.field(field.getName(), field.getType().getTypeName());
@@ -150,6 +153,11 @@ public class EventbusEvent {
                         values.put("value", subscribe.value());
                         return values;
                     }
+
+                    @Override
+                    public boolean isMath(String name, String[] toTypeName) {
+                        return name.equals(declaredMethod.getName()) && ArrayUtils.isEquals(declaredMethod.getParameterTypes(), toTypeName);
+                    }
                 });
                 TypeDescribe typeDescribe = TypeDescribe.create(declaredMethod);
                 if (!typeDescribe.hasAnnotation("com.google.common.eventbus.Subscribe")) {
@@ -165,6 +173,11 @@ public class EventbusEvent {
                         @Override
                         public Map<String, Object> annotationValues(String column) {
                             return Collections.emptyMap();
+                        }
+
+                        @Override
+                        public boolean isMath(String name, String[] toTypeName) {
+                            return name.equals(declaredMethod.getName()) && ArrayUtils.isEquals(declaredMethod.getParameterTypes(), toTypeName);
                         }
                     });
                 }

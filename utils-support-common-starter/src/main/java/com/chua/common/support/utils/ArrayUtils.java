@@ -545,6 +545,30 @@ public class ArrayUtils {
     }
 
     /**
+     * 参数是否一致
+     *
+     * @param params 参数类型
+     * @param args   值
+     * @return 是否一致
+     */
+    public static boolean isEquals(Class<?>[] params, String[] args) {
+        if (params.length != args.length) {
+            return false;
+        }
+
+        int index = 0;
+        for (Object arg : args) {
+            Class<?> item = params[index];
+            boolean rs = null != arg && item.getTypeName().equals(args[index]);
+            index++;
+            if (!rs) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * 是空集合
      *
      * @param array 集合
