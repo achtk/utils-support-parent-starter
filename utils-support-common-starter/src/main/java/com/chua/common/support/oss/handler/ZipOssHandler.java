@@ -55,11 +55,15 @@ public class ZipOssHandler implements OssHandler {
                         if (count == 0) {
                             if (start <= index && index < end) {
                                 MediaType mediaType = it.getMediaType();
+                                String removeSuffix = StringUtils.removeSuffix(it.getName().replace(newName, ""), "/");
+                                if(StringUtils.isBlank(removeSuffix)) {
+                                    return false;
+                                }
                                 rs.add(new OssNode(it.getName(),
                                         mediaType.type(),
                                         mediaType.subtype(),
                                         name + it.getName(),
-                                        StringUtils.removeSuffix(it.getName().replace(newName, ""), "/"),
+                                        removeSuffix,
                                         LocalDateTime.now(),
                                         it.getFileType() == FileType.FILE,
                                         false));
