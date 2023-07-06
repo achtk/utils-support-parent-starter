@@ -444,7 +444,7 @@ public class NonStandardDynamicFactory implements DynamicFactory {
 
             try {
                 if (!annotationFactory.isMath(ctMethod.getName(), JavassistUtils.toTypeName(ctMethod.getParameterTypes()))) {
-                    return;
+                    continue;
                 }
             } catch (NotFoundException ignored) {
             }
