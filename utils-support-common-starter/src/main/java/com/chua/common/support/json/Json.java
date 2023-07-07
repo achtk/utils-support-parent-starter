@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import static com.alibaba.fastjson2.JSONWriter.Feature.WriteEnumsUsingName;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
@@ -199,7 +200,7 @@ public class Json {
      * @return Json
      */
     public static String toJson(Object object) {
-        return JSON.toJSONString(object, "yyyy-MM-dd HH:mm:ss");
+        return JSON.toJSONString(object, "yyyy-MM-dd HH:mm:ss", WriteEnumsUsingName);
     }
 
     /**
