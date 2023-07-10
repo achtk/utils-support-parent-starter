@@ -258,12 +258,10 @@ public interface Dialect {
         String hibernatePackage = "org.hibernate.dialect";
         String type = hibernatePackage + "." + getProtocol() + "dialect";
         Object extension = ServiceProvider.of("org.hibernate.dialect.Dialect").getExtension(type);
-        Dialect dialect = ServiceProvider.of(Dialect.class).getExtension(extension.getClass().getSimpleName()
-                .replace("Dialect", ""));
-        if(null != dialect) {
-            return dialect;
+        if(null != extension) {
+            return extension;
         }
-       return ServiceProvider.of(Dialect.class).getExtension(getProtocol());
+       return ServiceProvider.of("org.hibernate.dialect.Dialect").getExtension(getProtocol());
 
     }
 
