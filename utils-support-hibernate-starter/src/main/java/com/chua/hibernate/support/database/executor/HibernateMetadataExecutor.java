@@ -53,8 +53,8 @@ public class HibernateMetadataExecutor implements MetadataExecutor {
         Metadata metadata1 = expression.getValue(Metadata.class);
         Table table = new Table(metadata1.getTable());
         table.setComment(metadata1.getTableComment());
-        table.setSchema(metadata1.getDatabase());
-        table.setCatalog(metadata1.getCatalog());
+//        table.setSchema(metadata1.getDatabase());
+//        table.setCatalog(metadata1.getCatalog());
         PrimaryKey primaryKey = new PrimaryKey(table);
 
         List<Column> column = metadata1.getColumn();
