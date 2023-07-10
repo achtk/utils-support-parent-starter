@@ -14,6 +14,7 @@ import com.chua.common.support.lang.formatter.DdlFormatter;
 import com.chua.common.support.lang.formatter.HighlightingFormatter;
 import com.chua.common.support.log.Log;
 import com.chua.common.support.utils.CollectionUtils;
+import com.chua.common.support.utils.ObjectUtils;
 import com.chua.common.support.utils.StringUtils;
 import org.hibernate.boot.model.relational.internal.SqlStringGenerationContextImpl;
 import org.hibernate.boot.spi.MetadataImplementor;
@@ -47,7 +48,7 @@ public class HibernateMetadataExecutor implements MetadataExecutor {
     @SuppressWarnings("ALL")
     public void execute(Object datasource, Action action) {
         DataSource ds = (DataSource) datasource;
-        Dialect dialect = Dialect.create(ds);
+        Dialect dialect = ObjectUtils.defaultIfNull(Dialect.create(ds), Dialect.guessDialect(ds));
 
         Metadata metadata1 = expression.getValue(Metadata.class);
         Table table = new Table(metadata1.getTable());
