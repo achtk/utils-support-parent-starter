@@ -90,11 +90,6 @@ public class MysqlDialect implements Dialect {
     }
 
     @Override
-    public Object getHibernateDialect() {
-        return ClassUtils.forObject("org.hibernate.dialect.MySQLDialect");
-    }
-
-    @Override
     public String getProtocol() {
         return "Mysql";
     }
