@@ -13,4 +13,10 @@ public class SqliteDialect extends MysqlDialect {
     public String driverClassName() {
         return "org.sqlite.JDBC";
     }
+    @Override
+    public String getProtocol() {
+        return "Mysql";
+    }
+
+
 }

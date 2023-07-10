@@ -19,7 +19,10 @@ public class PostgreDialect extends OracleDialect {
         }
         return new SqlModel(sql.toString(), limit);
     }
-
+    @Override
+    public String getProtocol() {
+        return "PostgreSQL";
+    }
     @Override
     public String driverClassName() {
         return "org.postgresql.Driver";

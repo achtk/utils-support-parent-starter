@@ -254,8 +254,24 @@ public interface Dialect {
      *
      * @return dialect
      */
-    Object getHibernateDialect();
+    default Object getHibernateDialect() {
+        String hibernatePackage = "org.hibernate.dialect";
+        String type = hibernatePackage + "." + getProtocol() + "dialect";
+        Object extension = ServiceProvider.of("org.hibernate.dialect.Dialect").getExtension(type);
+        Dialect dialect = ServiceProvider.of(Dialect.class).getExtension(extension.getClass().getSimpleName()
+                .replace("Dialect", ""));
+        if(null != dialect) {
+            return dialect;
+        }
+       return ServiceProvider.of(Dialect.class).getExtension(getProtocol());
 
+    }
+
+    /**
+     * 协议
+     * @return 协议
+     */
+    String getProtocol();
     /**
      * 数据库类型
      *

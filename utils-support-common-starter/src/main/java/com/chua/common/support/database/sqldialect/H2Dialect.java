@@ -13,4 +13,9 @@ public class H2Dialect extends MysqlDialect {
     public String driverClassName() {
         return "org.h2.Driver";
     }
+
+    @Override
+    public String getProtocol() {
+        return "H2";
+    }
 }

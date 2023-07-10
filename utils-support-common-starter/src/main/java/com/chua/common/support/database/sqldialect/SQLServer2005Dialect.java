@@ -58,4 +58,10 @@ public class SQLServer2005Dialect extends OracleDialect {
             return CommonConstant.EMPTY;
         }
     }
+
+    @Override
+    public String getProtocol() {
+        return "SQLServer2005";
+    }
+
 }

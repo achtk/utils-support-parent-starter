@@ -13,4 +13,8 @@ public class Mysql8Dialect extends MysqlDialect {
     public String driverClassName() {
         return "com.mysql.cj.jdbc.Driver";
     }
+    @Override
+    public String getProtocol() {
+        return "Mysql8";
+    }
 }

@@ -20,6 +20,11 @@ public class InformixDialect extends OracleDialect {
     }
 
     @Override
+    public String getProtocol() {
+        return "Informix";
+    }
+
+    @Override
     public String driverClassName() {
         return "com.informix.jdbc.IfxDriver";
     }

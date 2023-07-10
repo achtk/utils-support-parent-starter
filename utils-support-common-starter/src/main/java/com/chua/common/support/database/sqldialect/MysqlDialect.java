@@ -95,6 +95,11 @@ public class MysqlDialect implements Dialect {
     }
 
     @Override
+    public String getProtocol() {
+        return "Mysql";
+    }
+
+    @Override
     public JdbcType createJdbcType(Class<?> javaType) {
         return JAVA_JDBC.get(javaType);
     }

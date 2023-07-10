@@ -16,7 +16,10 @@ public class Oracle12cDialect extends OracleDialect {
         String sql = originalSql + " OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
         return new SqlModel(sql, offset, limit);
     }
-
+    @Override
+    public String getProtocol() {
+        return "Oracle12c";
+    }
     @Override
     public String driverClassName() {
         return "oracle.jdbc.driver.OracleDriver";

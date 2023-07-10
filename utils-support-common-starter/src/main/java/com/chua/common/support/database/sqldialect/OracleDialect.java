@@ -34,6 +34,11 @@ public class OracleDialect extends MysqlDialect {
     }
 
     @Override
+    public String getProtocol() {
+        return "Oracle10g";
+    }
+
+    @Override
     public String createCreateSql(Metadata<?> metadata) {
         StringBuilder sb = new StringBuilder();
         sb.append(CommonConstant.SYMBOL_CREATE_TABLE)
