@@ -15,7 +15,7 @@ public class SqliteDialect extends MysqlDialect {
     }
     @Override
     public String getProtocol() {
-        return "Mysql";
+        return "Sqlite";
     }
 
 

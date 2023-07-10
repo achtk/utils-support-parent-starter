@@ -5,6 +5,8 @@ import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.function.SQLFunctionTemplate;
 import org.hibernate.dialect.function.StandardSQLFunction;
 import org.hibernate.dialect.function.VarArgsSQLFunction;
+import org.hibernate.dialect.identity.H2IdentityColumnSupport;
+import org.hibernate.dialect.identity.IdentityColumnSupport;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.StringType;
 
@@ -38,6 +40,12 @@ public class SQLiteDialect extends Dialect {
         registerFunction("mod", new SQLFunctionTemplate(IntegerType.INSTANCE, "?1 % ?2"));
         registerFunction("substr", new StandardSQLFunction("substr", StringType.INSTANCE));
         registerFunction("substring", new StandardSQLFunction("substr", StringType.INSTANCE));
+    }
+
+
+    @Override
+    public IdentityColumnSupport getIdentityColumnSupport() {
+        return SQLiteDialectIdentityColumnSupport.INSTANCE;
     }
 
     public boolean supportsIdentityColumns() {
