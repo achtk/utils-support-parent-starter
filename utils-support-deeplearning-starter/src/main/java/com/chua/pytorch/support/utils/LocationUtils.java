@@ -576,8 +576,18 @@ public class LocationUtils {
 
     }
 
-    public static BoundingBox extendRect(BoundingBox boundingBox) {
-        return boundingBox;
+    public static BoundingBox extendRect(Object boundingBox) {
+        if (boundingBox instanceof BoundingBox) {
+            return (BoundingBox) boundingBox;
+        }
+        if (boundingBox instanceof com.chua.common.support.constant.BoundingBox) {
+            java.awt.Point point = ((com.chua.common.support.constant.BoundingBox) boundingBox).getCorners().get(0);
+            return new Rectangle(point.getX(), point.getY(),
+                    ((com.chua.common.support.constant.BoundingBox) boundingBox).getWidth(),
+                    ((com.chua.common.support.constant.BoundingBox) boundingBox).getHeight());
+        }
+
+        return null;
     }
 
     public static double[] extendRect(double xmin, double ymin, double width, double height) {
@@ -675,7 +685,7 @@ public class LocationUtils {
         for (PredictResult predictResult : predictResults) {
             names.add(predictResult.getText());
             prob.add((double) predictResult.getScore());
-            rect.add(extendRect((BoundingBox) predictResult.getBoundingBox()));
+            rect.add(extendRect(predictResult.getBoundingBox()));
         }
 
         try {
