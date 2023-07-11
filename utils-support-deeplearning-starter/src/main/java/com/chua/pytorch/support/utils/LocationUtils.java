@@ -16,7 +16,6 @@ import ai.djl.repository.Repository;
 import ai.djl.repository.zoo.BaseModelLoader;
 import ai.djl.repository.zoo.ModelLoader;
 import ai.djl.util.RandomUtils;
-import com.chua.common.support.bean.BeanUtils;
 import com.chua.common.support.constant.PredictRectangle;
 import com.chua.common.support.constant.PredictResult;
 import com.chua.common.support.converter.Converter;
@@ -581,7 +580,7 @@ public class LocationUtils {
             return (BoundingBox) boundingBox;
         }
         if (boundingBox instanceof com.chua.common.support.constant.BoundingBox) {
-            java.awt.Point point = ((com.chua.common.support.constant.BoundingBox) boundingBox).getCorners().get(0);
+            com.chua.common.support.pojo.Shape point = ((com.chua.common.support.constant.BoundingBox) boundingBox).getCorners().get(0);
             return new Rectangle(point.getX(), point.getY(),
                     ((com.chua.common.support.constant.BoundingBox) boundingBox).getWidth(),
                     ((com.chua.common.support.constant.BoundingBox) boundingBox).getHeight());
@@ -766,7 +765,17 @@ public class LocationUtils {
     }
 
     public static Object toBoundingBox(BoundingBox boundingBox) {
-        return BeanUtils.copyProperties(boundingBox, com.chua.common.support.constant.BoundingBox.class);
+        com.chua.common.support.constant.BoundingBox item = new com.chua.common.support.constant.BoundingBox();
+        item.setHeight(boundingBox.getBounds().getHeight());
+        item.setWidth(boundingBox.getBounds().getWidth());
+        Spliterator<Point> spliterator = boundingBox.getBounds().getPath().spliterator();
+        List<com.chua.common.support.pojo.Shape> points = new LinkedList<>();
+        spliterator.forEachRemaining(it -> {
+            points.add(new com.chua.common.support.pojo.Shape(it.getX(), it.getY()));
+        });
+
+        item.setCorners(points);
+        return item;
     }
 
 
