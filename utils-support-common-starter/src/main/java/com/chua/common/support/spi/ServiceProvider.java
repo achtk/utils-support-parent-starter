@@ -581,7 +581,7 @@ public class ServiceProvider<T> implements InitializingAware {
             if (null == noneObject || null == noneObject.getName()) {
                 continue;
             }
-            rs.add(new Option<String>(noneObject.getName(), noneObject.getLabel(), noneObject.getLabelType()));
+            rs.add(new Option<String>(noneObject.getName(), noneObject.getLabel(), noneObject.getLabelType()).setImpl(noneObject.implClass));
         }
         return rs;
     }

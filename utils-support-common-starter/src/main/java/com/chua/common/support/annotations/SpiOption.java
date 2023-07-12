@@ -14,5 +14,7 @@ public @interface SpiOption {
 
     String value();
 
+    String url() default "";
+
     String type() default "default";
 }

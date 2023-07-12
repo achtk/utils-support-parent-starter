@@ -23,7 +23,6 @@ import com.chua.common.support.resource.ResourceProvider;
 import com.chua.common.support.resource.resource.Resource;
 import com.chua.common.support.utils.*;
 import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.imageio.ImageIO;
@@ -394,7 +393,7 @@ public class LocationUtils {
 
         if (urls.isEmpty()) {
             log.info("【未检测到】本地缓存模型");
-            return Lists.newArrayList(defaultAddress);
+            throw new IllegalArgumentException("【未检测到】本地缓存模型");
         }
         log.info("【检测到】本地缓存模型");
         return urls;

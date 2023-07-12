@@ -2,6 +2,8 @@ package com.chua.common.support.spi;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import java.util.List;
 
@@ -44,6 +46,10 @@ public class Option<T> {
     private String label;
 
     private String type;
+
+    @Setter
+    @Accessors(chain = true)
+    private transient Class<?> impl;
 
     private List<Option> children;
 
