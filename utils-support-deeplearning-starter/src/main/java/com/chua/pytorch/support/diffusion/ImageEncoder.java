@@ -22,7 +22,7 @@ public class ImageEncoder  extends AbstractPytorchIODetector<Image, NDArray> {
         super(configuration,
                 new EncoderTranslator(),
                 "PyTorch",
-                "vae_encoder_model_gpu0",
+                "vae_encoder_model",
                 StringUtils.defaultString(configuration.modelPath(), "pytorch_cpu"),
                 "",
                 true);

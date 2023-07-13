@@ -16,12 +16,12 @@ public class ImageDiffusionExample {
 
     public static void main(String[] args) throws Exception {
         String input = "根据这个图片画出三只猫";
-        LacTokenizer lacTokenizer = new LacTokenizer(DetectionConfiguration.DEFAULT);
+        LacTokenizer lacTokenizer = new LacTokenizer(DetectionConfiguration.builder().cachePath("E:\\workspace\\environment").build());
         List<Word> segments = lacTokenizer.segments(input);
-        try (EnglishTranslation translation = new EnglishTranslation(DetectionConfiguration.DEFAULT)) {
+        try (EnglishTranslation translation = new EnglishTranslation(DetectionConfiguration.builder().cachePath("E:\\workspace\\environment").build())) {
             List<PredictResult> detect = translation.detect(segments.stream().map(Word::getWord).toArray(String[]::new));
             String text = detect.get(0).getText();
-            ImageDiffusion diffusion = new ImageDiffusion(DetectionConfiguration.builder().device("GPU").build());
+            ImageDiffusion diffusion = new ImageDiffusion(DetectionConfiguration.builder().cachePath("E:\\workspace\\environment").build());
             List<PredictResult> detect1 = diffusion.detect(new Object[]{"Z:/cat.jpg", text, ""});
             BufferedImageUtils.writeToFile(detect1.get(0).getValue(BufferedImage.class), "Z://1.png");
         } catch (Exception e) {
