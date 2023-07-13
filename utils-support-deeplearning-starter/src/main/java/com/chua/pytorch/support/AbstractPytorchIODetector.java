@@ -63,10 +63,14 @@ public abstract class AbstractPytorchIODetector<I, O> extends AbstractDetector {
         List<String> model1 = LocationUtils.getUrl(StringUtils.defaultString(configuration.modelPath(), model + "," + model + ".zip"), defaultModel, isDirector);
         Criteria.Builder<I, O> imageOBuilder = Criteria.builder()
                 .setTypes(inType(), this.outType())
-                .optModelUrls(Joiner.on(',').join(model1))
                 .optTranslator(translator)
                 .optEngine(engine)
                 .optProgress(new ProgressBar());
+        if(configuration.groupId() != null) {
+            imageOBuilder.optGroupId(configuration.groupId());
+        } else {
+            imageOBuilder.optModelUrls(Joiner.on(',').join(model1));
+        }
 
         if("GPU".equalsIgnoreCase(configuration.device())) {
             imageOBuilder.optDevice(Device.gpu(configuration.deviceId()));

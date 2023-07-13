@@ -21,7 +21,7 @@ import java.util.List;
 @Spi("Light")
 public class LightFaceDetector extends AbstractPytorchDetector<DetectedObjects> {
 
-    public LightFaceDetector(DetectionConfiguration configuration) throws Exception {
+    public LightFaceDetector(DetectionConfiguration configuration) {
         super(configuration,
                 new FaceDetectionTranslator(),
                 "PyTorch",

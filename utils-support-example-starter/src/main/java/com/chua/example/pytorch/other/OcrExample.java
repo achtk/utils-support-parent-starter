@@ -15,7 +15,7 @@ import java.util.List;
 public class OcrExample {
 
     public static void main(String[] args) {
-        OcrDetector ocrDetector = new OcrDetector(DetectionConfiguration.builder().cachePath("Z:\\works\\environment").build());
+        OcrDetector ocrDetector = new OcrDetector(DetectionConfiguration.builder().cachePath("E:\\workspace\\environment").build());
         OcrDirectionDetector directionDetector = new OcrDirectionDetector(DetectionConfiguration.builder().cachePath("Z:\\works\\environment").build());
 
         OcrRecognizer recognizer = new OcrRecognizer(directionDetector, ocrDetector, DetectionConfiguration.builder().cachePath("Z:\\works\\environment").build());

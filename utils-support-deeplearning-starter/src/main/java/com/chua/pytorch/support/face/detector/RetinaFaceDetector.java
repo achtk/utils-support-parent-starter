@@ -22,7 +22,7 @@ import java.util.List;
 public class RetinaFaceDetector extends AbstractPytorchDetector<DetectedObjects> {
 
 
-    public RetinaFaceDetector(DetectionConfiguration configuration) throws Exception {
+    public RetinaFaceDetector(DetectionConfiguration configuration) {
         super(configuration,
                 new FaceDetectionTranslator(),
                 "PyTorch",

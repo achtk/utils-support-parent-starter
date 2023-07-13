@@ -4,6 +4,7 @@ import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.utils.CollectionUtils;
 import com.chua.common.support.utils.NumberUtils;
 import com.chua.common.support.utils.StringUtils;
+import com.google.common.base.Strings;
 import lombok.Data;
 import lombok.Getter;
 import org.apache.commons.io.IOUtils;
@@ -11,6 +12,7 @@ import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFPicture;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -45,7 +47,7 @@ public class SubjectWord implements InitializingAware, AutoCloseable {
     final Map<Integer, Subject> rSign = new ConcurrentHashMap<>();
     final Map<Integer, String> title = new HashMap<>();
     @Getter
-    final Map<String, Set<Subject>> text = new LinkedHashMap<>();
+    final Map<String, List<Subject>> text = new LinkedHashMap<>();
 
     final AtomicInteger subjectIndex = new AtomicInteger(0);
     private static final String RESULT_SIGN = "参考答案及解析";
@@ -101,7 +103,7 @@ public class SubjectWord implements InitializingAware, AutoCloseable {
             Subject subject = new Subject();
             subject.setSeq(subjectIndex.get());
             subject.setTitle(text1.substring((subjectIndex.get() + "").length() + 1));
-            text.computeIfAbsent(RESULT_SIGN, it -> new LinkedHashSet<>())
+            text.computeIfAbsent(RESULT_SIGN, it -> new LinkedList<>())
                     .add(subject);
             rSign.put(subjectIndex.get(), subject);
             return;
@@ -124,15 +126,13 @@ public class SubjectWord implements InitializingAware, AutoCloseable {
             Subject subject = new Subject();
             subject.setSeq(subjectIndex.get());
             subject.setTitle(text1.substring((subjectIndex.get() + "").length() + 1));
-            text.computeIfAbsent(title.get(index.intValue()), it -> new LinkedHashSet<>())
+            text.computeIfAbsent(title.get(index.intValue()), it -> new LinkedList<>())
                     .add(subject);
             sign.add(subject);
             return;
         }
         Subject subject = CollectionUtils.find(sign, subjectIndex.get() - 1);
-        if (StringUtils.isNotEmpty(text1)) {
-            subject.getResult().add(text1);
-        }
+        subject.getResult().add(text1);
         checkImage(paragraph, subject);
     }
 
@@ -185,6 +185,28 @@ public class SubjectWord implements InitializingAware, AutoCloseable {
         List<Element> elements = root.elements();
         for (Element element : elements) {
             String asXML = element.asXML();
+            if (asXML.startsWith("<w:pPr")) {
+                Element xPathResult = (Element) element.getXPathResult(0);
+                Attribute firstLineChars = xPathResult.attribute("firstLineChars");
+                int first = 0;
+                if(null != firstLineChars) {
+                    first = NumberUtils.toInt(firstLineChars.getValue());
+                }
+                Attribute firstLine = xPathResult.attribute("firstLine");
+                int first2 = 0;
+                if(null != firstLineChars) {
+                    first2 = NumberUtils.toInt(firstLine.getValue());
+                }
+                if(first2 != first) {
+                    sb.append(Strings.repeat("\r\n", first2 / first));
+                }
+                if (asXML.contains("<w:em w:val=\"dot\"/>")) {
+                    sb.append("<ruby class=\"underdot\">").append(element.getStringValue()).append("<rt></rt></ruby>");
+                } else {
+                    sb.append(element.getStringValue());
+                }
+                continue;
+            }
             if (asXML.startsWith("<w:r")) {
                 if (asXML.contains("<w:em w:val=\"dot\"/>")) {
                     sb.append("<ruby class=\"underdot\">").append(element.getStringValue()).append("<rt></rt></ruby>");

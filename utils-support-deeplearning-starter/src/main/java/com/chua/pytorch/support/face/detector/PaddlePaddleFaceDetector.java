@@ -19,7 +19,7 @@ import java.util.List;
 @Spi("paddlepaddle")
 public class PaddlePaddleFaceDetector extends AbstractPytorchDetector<DetectedObjects> {
 
-    public PaddlePaddleFaceDetector(DetectionConfiguration configuration) throws Exception {
+    public PaddlePaddleFaceDetector(DetectionConfiguration configuration) {
         super(configuration,
                 new PaddlePaddleFaceTranslator(0.5f, 0.7f),
                 "PaddlePaddle",

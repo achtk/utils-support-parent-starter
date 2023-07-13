@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class SentaExample {
     public static void main(String[] args) {
-        LacTokenizer tokenizer = new LacTokenizer(DetectionConfiguration.builder().build());
+        LacTokenizer tokenizer = new LacTokenizer(DetectionConfiguration.builder().modelPath("E:\\workspace\\environment").build());
         String input = "这家餐厅很好吃";
         SentaLstmSentaDetector detector = new SentaLstmSentaDetector(DetectionConfiguration.builder().build(), tokenizer);
         List<PredictResult> detect = detector.detect(input);

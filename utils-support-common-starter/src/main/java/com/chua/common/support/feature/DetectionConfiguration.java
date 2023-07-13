@@ -24,6 +24,8 @@ public class DetectionConfiguration implements Serializable {
 
     @Builder.Default
     private String cachePath = "../environment";
+
+    private String groupId;
     /**
      * 使用的模型路径
      */
