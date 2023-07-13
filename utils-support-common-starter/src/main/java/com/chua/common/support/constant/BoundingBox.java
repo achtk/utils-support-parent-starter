@@ -1,6 +1,7 @@
 package com.chua.common.support.constant;
 
 import com.chua.common.support.pojo.Shape;
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
  * @author CH
  */
 @Data
+@Builder
 public class BoundingBox {
     private List<Shape> corners;
 

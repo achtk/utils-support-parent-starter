@@ -621,7 +621,17 @@ public class LocationUtils {
 
         predictResult.setScore((float) item.getProbability());
         predictResult.setClsScore((float) item.getProbability());
-        predictResult.setBoundingBox(item.getBoundingBox());
+        BoundingBox boundingBox = item.getBoundingBox();
+        List<com.chua.common.support.pojo.Shape> rs = new LinkedList<>();
+        boundingBox.getPath().forEach(it -> {
+            rs.add(new com.chua.common.support.pojo.Shape(it.getX(), it.getY()));
+        });
+        predictResult.setBoundingBox(com.chua.common.support.constant.BoundingBox
+                .builder()
+                .corners(rs)
+                .width(boundingBox.getBounds().getWidth())
+                .height(boundingBox.getBounds().getHeight())
+                .build());
         predictResult.setText(item.getClassName());
         predictResult.setClsLabel(item.getClassName());
         return predictResult;
@@ -764,17 +774,15 @@ public class LocationUtils {
     }
 
     public static Object toBoundingBox(BoundingBox boundingBox) {
-        com.chua.common.support.constant.BoundingBox item = new com.chua.common.support.constant.BoundingBox();
-        item.setHeight(boundingBox.getBounds().getHeight());
-        item.setWidth(boundingBox.getBounds().getWidth());
         Spliterator<Point> spliterator = boundingBox.getBounds().getPath().spliterator();
         List<com.chua.common.support.pojo.Shape> points = new LinkedList<>();
         spliterator.forEachRemaining(it -> {
             points.add(new com.chua.common.support.pojo.Shape(it.getX(), it.getY()));
         });
-
-        item.setCorners(points);
-        return item;
+        return com.chua.common.support.constant.BoundingBox.builder()
+                .height(boundingBox.getBounds().getHeight())
+                .width(boundingBox.getBounds().getWidth())
+                        .corners(points).build();
     }
 
 

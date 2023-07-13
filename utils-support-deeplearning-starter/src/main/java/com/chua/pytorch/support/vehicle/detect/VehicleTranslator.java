@@ -59,8 +59,10 @@ public class VehicleTranslator implements Translator<Image, DetectedObjects> {
         array = array.div(255f);
         NDArray mean =
                 ctx.getNDManager().create(new float[]{0.485f, 0.456f, 0.406f}, new Shape(1, 1, 3));
+        mean = mean.getNDArrayInternal().getArray();
         NDArray std =
                 ctx.getNDManager().create(new float[]{0.229f, 0.224f, 0.225f}, new Shape(1, 1, 3));
+        std = std.getNDArrayInternal().getArray();
         array = array.sub(mean);
         array = array.div(std);
 
