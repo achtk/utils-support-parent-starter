@@ -15,7 +15,7 @@ import com.chua.pytorch.support.utils.LocationUtils;
 public class AmazonFeature extends FloatArrayPytorchFeature<float[]> {
 
 
-    public AmazonFeature(DetectionConfiguration configuration) throws Exception {
+    public AmazonFeature(DetectionConfiguration configuration) {
         super(configuration,
                 new FaceFeatureTranslator(),
                 "PyTorch",

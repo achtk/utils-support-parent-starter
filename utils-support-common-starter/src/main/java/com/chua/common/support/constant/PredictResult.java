@@ -17,6 +17,8 @@ public class PredictResult {
     private transient Object boundingBox;
 
     private String text;
+    private Object sign1;
+    private Object sign2;
     private float score = -1.0f;
     private float clsScore;
     private String clsLabel;

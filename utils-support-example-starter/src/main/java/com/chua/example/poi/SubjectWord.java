@@ -8,10 +8,7 @@ import com.google.common.base.Strings;
 import lombok.Data;
 import lombok.Getter;
 import org.apache.commons.io.IOUtils;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import org.apache.poi.xwpf.usermodel.XWPFPicture;
-import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.apache.poi.xwpf.usermodel.*;
 import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -25,7 +22,6 @@ import javax.xml.transform.*;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -158,7 +154,8 @@ public class SubjectWord implements InitializingAware, AutoCloseable {
      */
     private void checkPicture(List<XWPFPicture> embeddedPictures, Subject subject) {
         for (XWPFPicture embeddedPicture : embeddedPictures) {
-            subject.getResult().add(StringUtils.str(embeddedPicture.getPictureData().getData(), StandardCharsets.UTF_8));
+            XWPFPictureData pictureData = embeddedPicture.getPictureData();
+            subject.getResult().add("data:" + pictureData.getPackagePart().getContentType() + ";base64,"+Base64.getEncoder().encodeToString(pictureData.getData()));
         }
     }
 
@@ -186,44 +183,69 @@ public class SubjectWord implements InitializingAware, AutoCloseable {
         for (Element element : elements) {
             String asXML = element.asXML();
             if (asXML.startsWith("<w:pPr")) {
-                Element xPathResult = (Element) element.getXPathResult(0);
-                Attribute firstLineChars = xPathResult.attribute("firstLineChars");
-                int first = 0;
-                if(null != firstLineChars) {
-                    first = NumberUtils.toInt(firstLineChars.getValue());
-                }
-                Attribute firstLine = xPathResult.attribute("firstLine");
-                int first2 = 0;
-                if(null != firstLineChars) {
-                    first2 = NumberUtils.toInt(firstLine.getValue());
-                }
-                if(first2 != first) {
-                    sb.append(Strings.repeat("\r\n", first2 / first));
-                }
-                if (asXML.contains("<w:em w:val=\"dot\"/>")) {
-                    sb.append("<ruby class=\"underdot\">").append(element.getStringValue()).append("<rt></rt></ruby>");
-                } else {
-                    sb.append(element.getStringValue());
-                }
+                doAnalysisPr(asXML, sb, element);
                 continue;
             }
             if (asXML.startsWith("<w:r")) {
-                if (asXML.contains("<w:em w:val=\"dot\"/>")) {
-                    sb.append("<ruby class=\"underdot\">").append(element.getStringValue()).append("<rt></rt></ruby>");
-                } else {
-                    sb.append(element.getStringValue());
+                doAnalysisText(asXML, sb, element);
+                if (asXML.contains("<w:object>")) {
+                    doAnalysisObject(asXML, sb, element);
                 }
                 continue;
             }
+
             if (asXML.startsWith("<m:oMath")) {
-                //xml转 mathml
-                String mathml = convertOMML2MML(asXML);
-                //mathml转latx
-                String latex = convertMML2Latex(mathml);
-                sb.append(doAnalysis(latex));
+                doAnalysisMath(asXML, sb, element);
+                continue;
+            }
+
+            if (asXML.contains("<w:object>")) {
+                doAnalysisObject(asXML, sb, element);
             }
         }
         return sb.toString();
+    }
+
+    private void doAnalysisObject(String asXML, StringBuilder sb, Element element) {
+
+    }
+
+    private void doAnalysisMath(String asXML, StringBuilder sb, Element element) {
+        //xml转 mathml
+        String mathml = convertOMML2MML(asXML);
+        //mathml转latx
+        String latex = convertMML2Latex(mathml);
+        sb.append(doAnalysis(latex));
+    }
+
+    private void doAnalysisText(String asXML, StringBuilder sb, Element element) {
+        if (asXML.contains("<w:em w:val=\"dot\"/>")) {
+            sb.append("<ruby class=\"underdot\">").append(element.getStringValue()).append("<rt></rt></ruby>");
+        } else {
+            sb.append(element.getStringValue());
+        }
+    }
+
+    private void doAnalysisPr(String asXML, StringBuilder sb, Element element) {
+        Element xPathResult = (Element) element.getXPathResult(0);
+        Attribute firstLineChars = xPathResult.attribute("firstLineChars");
+        int first = 0;
+        if(null != firstLineChars) {
+            first = NumberUtils.toInt(firstLineChars.getValue());
+        }
+        Attribute firstLine = xPathResult.attribute("firstLine");
+        int first2 = 0;
+        if(null != firstLineChars) {
+            first2 = NumberUtils.toInt(firstLine.getValue());
+        }
+        if(first2 != first) {
+            sb.append(Strings.repeat("\r\n", first2 / first));
+        }
+        if (asXML.contains("<w:em w:val=\"dot\"/>")) {
+            sb.append("<ruby class=\"underdot\">").append(element.getStringValue()).append("<rt></rt></ruby>");
+        } else {
+            sb.append(element.getStringValue());
+        }
     }
 
     /**

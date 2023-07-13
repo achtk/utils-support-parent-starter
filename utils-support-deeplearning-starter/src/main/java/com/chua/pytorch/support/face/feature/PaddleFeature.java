@@ -10,7 +10,7 @@ import com.chua.pytorch.support.utils.LocationUtils;
 
 public class PaddleFeature extends FloatArrayPytorchFeature<float[]> {
 
-    public PaddleFeature(DetectionConfiguration configuration) throws Exception {
+    public PaddleFeature(DetectionConfiguration configuration) {
         super(configuration,
                 new PaddlePaddleFaceFeatureTranslator(),
                 "PaddlePaddle",
