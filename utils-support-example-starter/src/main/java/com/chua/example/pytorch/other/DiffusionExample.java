@@ -16,13 +16,13 @@ public class DiffusionExample {
 
     public static void main(String[] args) throws Exception {
         String input = "1";
-        LacTokenizer lacTokenizer = new LacTokenizer(DetectionConfiguration.DEFAULT);
+        LacTokenizer lacTokenizer = new LacTokenizer(DetectionConfiguration.builder().cachePath("E:\\workspace\\environment").build());
         List<Word> segments = lacTokenizer.segments(input);
-        try (EnglishTranslation translation = new EnglishTranslation(DetectionConfiguration.DEFAULT)) {
+        try (EnglishTranslation translation = new EnglishTranslation(DetectionConfiguration.builder().cachePath("E:\\workspace\\environment").build())) {
             List<PredictResult> detect = translation.detect(new String[]{input});
             String text = detect.get(0).getText();
             text = "woman";
-            Diffusion diffusion = new Diffusion(DetectionConfiguration.DEFAULT);
+            Diffusion diffusion = new Diffusion(DetectionConfiguration.builder().cachePath("E:\\workspace\\environment").build());
             List<PredictResult> detect1 = diffusion.detect(text);
             BufferedImageUtils.writeToFile(detect1.get(0).getValue(BufferedImage.class), "Z://1.png");
         } catch (Exception e) {

@@ -1,6 +1,7 @@
 package com.chua.pytorch.support.diffusion;
 
 import ai.djl.Device;
+import ai.djl.engine.Engine;
 import ai.djl.huggingface.tokenizers.HuggingFaceTokenizer;
 import ai.djl.modality.cv.BufferedImageFactory;
 import ai.djl.modality.cv.Image;
@@ -28,12 +29,14 @@ import java.util.Map;
  */
 public class Diffusion {
 
-    private final int MAX_LENGTH = 77;
-    private NDManager manager =null;
+    private static final int MAX_LENGTH = 77;
+    private static final Engine engine = Engine.getEngine("PyTorch");//PyTorch OnnxRuntime
 
-    private final HuggingFaceTokenizer tokenizer;
+    private static final NDManager manager =
+            NDManager.newBaseManager(Device.cpu(), engine.getEngineName());
+    private static final HuggingFaceTokenizer tokenizer;
 
-    {
+    static {
         try {
             tokenizer =
                     HuggingFaceTokenizer.builder()
@@ -60,11 +63,6 @@ public class Diffusion {
 
 
     public Diffusion(DetectionConfiguration detectionConfiguration) {
-        if("GPU".equalsIgnoreCase(detectionConfiguration.device())) {
-            this.manager = NDManager.newBaseManager(Device.of(detectionConfiguration.device(), detectionConfiguration.deviceId()), "PyTorch");
-        } else {
-            this.manager = NDManager.newBaseManager(Device.cpu(), "PyTorch");
-        }
         this.textEncoder = new TextEncoder(detectionConfiguration);
         this.textNetEncoder = new TextNetEncoder(detectionConfiguration);
         this.textDecoder = new TextDecoder(detectionConfiguration);
