@@ -35,12 +35,13 @@ import java.util.Map;
  */
 public class ImageDiffusion {
 
-    private final int MAX_LENGTH = 77;
-    private static final Engine engine = Engine.getEngine("PyTorch");
-    private NDManager manager = null;
-    private final HuggingFaceTokenizer tokenizer;
+    private static  final int MAX_LENGTH = 77;
+    private static final Engine engine = Engine.getEngine("PyTorch");//PyTorch OnnxRuntime
+    private static final NDManager manager =
+            NDManager.newBaseManager(Device.cpu(), engine.getEngineName());
+    private static HuggingFaceTokenizer tokenizer;
 
-    {
+    static {
         try {
             tokenizer =
                     HuggingFaceTokenizer.builder()
@@ -69,7 +70,6 @@ public class ImageDiffusion {
 
 
     public ImageDiffusion(DetectionConfiguration detectionConfiguration) {
-        this.manager = NDManager.newBaseManager(Device.of(detectionConfiguration.device(), 0), engine.getEngineName());
         this.textEncoder = new TextEncoder(detectionConfiguration);
         this.imageEncoder = new ImageEncoder(detectionConfiguration);
         this.textNetEncoder = new TextNetEncoder(detectionConfiguration);

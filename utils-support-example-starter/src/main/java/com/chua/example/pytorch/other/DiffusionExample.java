@@ -21,7 +21,7 @@ public class DiffusionExample {
         try (EnglishTranslation translation = new EnglishTranslation(DetectionConfiguration.DEFAULT)) {
             List<PredictResult> detect = translation.detect(new String[]{input});
             String text = detect.get(0).getText();
-            text = "naked nipple woman";
+            text = "woman";
             Diffusion diffusion = new Diffusion(DetectionConfiguration.DEFAULT);
             List<PredictResult> detect1 = diffusion.detect(text);
             BufferedImageUtils.writeToFile(detect1.get(0).getValue(BufferedImage.class), "Z://1.png");
