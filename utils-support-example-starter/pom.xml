@@ -135,6 +135,12 @@
             <artifactId>sshj</artifactId>
             <version>0.32.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.chua</groupId>
+            <artifactId>utils-support-anpr-starter</artifactId>
+            <version>3.1.0</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
 </project>

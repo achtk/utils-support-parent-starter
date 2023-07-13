@@ -8,7 +8,10 @@ import com.chua.anpr.support.domain.BorderMat;
 import com.chua.anpr.support.domain.ImageMat;
 import com.chua.anpr.support.domain.PlateInfo;
 import com.chua.anpr.support.utils.ReleaseUtil;
-import org.opencv.core.*;
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import org.opencv.core.Scalar;
+import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
 import java.util.*;
@@ -109,9 +112,7 @@ public class TorchPlateDetection extends BaseOnnxInfer implements PlateDetection
         //对预测的候选框进行预处理
         List<float[]> boxesForPretreatment = pretreatmentBoxes(result, scoreTh);
         //根据iou进行车牌框过滤
-        List<float[]> boxesForNms = filterByNmsForIou(boxesForPretreatment, iouTh);
-        //返回
-        return boxesForNms;
+        return filterByNmsForIou(boxesForPretreatment, iouTh);
     }
 
 

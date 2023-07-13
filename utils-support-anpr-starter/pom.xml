@@ -33,6 +33,11 @@
         </dependency>
 
         <dependency>
+            <groupId>com.chua</groupId>
+            <artifactId>utils-support-common-starter</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.microsoft.onnxruntime</groupId>
             <artifactId>onnxruntime</artifactId>
             <version>${onnxruntime.version}</version>

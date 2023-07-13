@@ -2300,6 +2300,10 @@ public class ClassUtils {
 
     }
 
+    public static InputStream getResourceAsStream(String s) {
+        return getDefaultClassLoader().getResourceAsStream(s);
+    }
+
     static class SetAccessibleAction<T extends AccessibleObject> implements PrivilegedAction<T> {
         private final T obj;
 
