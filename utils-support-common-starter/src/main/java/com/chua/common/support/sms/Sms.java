@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Singular;
 
+import java.util.Set;
+
 /**
  * 短信
  * @author CH
@@ -13,7 +15,7 @@ import lombok.Singular;
 public class Sms {
 
     @Singular("phone")
-    private String[] phone;
+    private Set<String> phone;
     /**
      * 服务器地址
      */
