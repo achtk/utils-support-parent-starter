@@ -60,6 +60,7 @@
         <module>utils-support-xjar-starter</module>
         <module>utils-support-zeromq-starter</module>
         <module>utils-support-anpr-starter</module>
+        <module>utils-support-sms-support</module>
     </modules>
 
     <!-- -Djava.net.preferIPv4Stack=true-->

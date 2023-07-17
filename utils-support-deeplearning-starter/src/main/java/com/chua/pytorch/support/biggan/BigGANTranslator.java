@@ -15,10 +15,16 @@ import ai.djl.translate.TranslatorContext;
 public final class BigGANTranslator implements Translator<Long, Image> {
 
     private final float truncation;
-    private final int size;
+    private int size = 120;
 
     public BigGANTranslator(int size, float truncation) {
-        this.size = size;
+        if (size == 128) {
+            this.size = 120;
+        } else if (size == 256) {
+            this.size = 140;
+        } else if (size == 512) {
+            this.size = 128;
+        }
         this.truncation = truncation;
     }
 

@@ -9,7 +9,7 @@ import java.util.List;
 public class BigGanExample {
 
     public static void main(String[] args) {
-        BigGAN512 gan = new BigGAN512(DetectionConfiguration.DEFAULT);
+        BigGAN512 gan = new BigGAN512(DetectionConfiguration.builder().cachePath("E:\\workspace\\environment").build());
         List<PredictResult> detect = gan.detect(156);
         System.out.println();
     }
