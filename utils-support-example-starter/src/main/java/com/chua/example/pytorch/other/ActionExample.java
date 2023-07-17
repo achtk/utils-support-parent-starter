@@ -9,7 +9,7 @@ import java.util.List;
 public class ActionExample {
 
     public static void main(String[] args) {
-        InceptionV3ActionRecognizer v3ActionRecognizer = new InceptionV3ActionRecognizer(DetectionConfiguration.builder().modelPath("E:\\workspace\\environment").build());
+        InceptionV3ActionRecognizer v3ActionRecognizer = new InceptionV3ActionRecognizer(DetectionConfiguration.builder().cachePath("E:\\workspace\\environment").build());
         List<PredictResult> detect = v3ActionRecognizer.detect("underwater_images/action.jpeg");
         System.out.println();
     }

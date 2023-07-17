@@ -58,7 +58,7 @@ public class FaceLandmarkDetector extends AbstractPytorchDetector<float[][]> {
         for (PredictResult predictResult : detect) {
 
             try (Predictor<Image, float[][]> predictor = model.newPredictor()) {
-                Image subImage = LocationUtils.getSubImage(img, LocationUtils.getBoundingBox(predictResult));
+                Image subImage = LocationUtils.getSubImage(img, LocationUtils.getBoundingBox(predictResult), 0f);
                 float[][] o = predictor.predict(subImage);
                 PredictResult item = new PredictResult();
                 BeanUtils.copyProperties(predictResult, item);

@@ -13,7 +13,7 @@ public class AnimalsExample {
 
     public static void main(String[] args) {
         AnimalsClassDetector dectection = new AnimalsClassDetector(DetectionConfiguration.builder().cachePath("E:\\workspace\\environment").build());
-        List<PredictResult> detection = dectection.detect("Z:\\works\\resource\\f62e02b5eb39e55b4d4c3b91be6dc58.jpg");
+        List<PredictResult> detection = dectection.detect("Z:\\works\\resource\\000000000312.jpg");
         System.out.println();
     }
 }
