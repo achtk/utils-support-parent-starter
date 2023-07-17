@@ -39,6 +39,7 @@ import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 文件资源
@@ -650,9 +651,20 @@ public class LocationUtils {
     }
 
     public static BoundingBox getBoundingBox(PredictResult predictResult) {
-        if (predictResult.getBoundingBox() instanceof BoundingBox) {
-            return (BoundingBox) predictResult.getBoundingBox();
+        Object boundingBox = predictResult.getBoundingBox();
+        if (boundingBox instanceof BoundingBox) {
+            return (BoundingBox) boundingBox;
         }
+
+        if(boundingBox instanceof com.chua.common.support.constant.BoundingBox) {
+            com.chua.common.support.constant.BoundingBox b = (com.chua.common.support.constant.BoundingBox) boundingBox;
+            List<com.chua.common.support.pojo.Shape> corners = b.getCorners();
+            com.chua.common.support.pojo.Shape shape = corners.get(0);
+            return new Landmark(shape.getX(), shape.getY(), b.getWidth(), b.getHeight(), corners.stream()
+                    .map(it -> new Point(it.getX(), it.getY())).collect(Collectors.toList())
+            );
+        }
+
 
         PredictRectangle predictRectangle = (PredictRectangle) predictResult.getBoundingBox();
         return new Rectangle(predictRectangle.getX(), predictRectangle.getY(), predictRectangle.getWidth(), predictRectangle.getHeight());

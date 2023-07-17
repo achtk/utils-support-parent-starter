@@ -2,7 +2,6 @@ package com.chua.pytorch.support.face.land;
 
 import ai.djl.inference.Predictor;
 import ai.djl.modality.cv.Image;
-import ai.djl.modality.cv.output.BoundingBox;
 import ai.djl.translate.TranslateException;
 import com.chua.common.support.bean.BeanUtils;
 import com.chua.common.support.constant.PredictResult;
@@ -59,11 +58,11 @@ public class FaceLandmarkDetector extends AbstractPytorchDetector<float[][]> {
         for (PredictResult predictResult : detect) {
 
             try (Predictor<Image, float[][]> predictor = model.newPredictor()) {
-                Image subImage = LocationUtils.getSubImage(img, (BoundingBox) predictResult.getBoundingBox());
+                Image subImage = LocationUtils.getSubImage(img, LocationUtils.getBoundingBox(predictResult));
                 float[][] o = predictor.predict(subImage);
                 PredictResult item = new PredictResult();
                 BeanUtils.copyProperties(predictResult, item);
-                item.setText(Json.toJson(o));
+                item.setNdArray(Json.toJson(o));
 
                 results.add(item);
             } catch (TranslateException e) {
@@ -86,9 +85,9 @@ public class FaceLandmarkDetector extends AbstractPytorchDetector<float[][]> {
         for (PredictResult predictResult : detect) {
 
             try (Predictor<Image, float[][]> predictor = model.newPredictor()) {
-                Image subImage = LocationUtils.getSubImage(img, (BoundingBox) predictResult.getBoundingBox(), 0f);
+                Image subImage = LocationUtils.getSubImage(img, LocationUtils.getBoundingBox(predictResult), 0f);
                 float[][] o = predictor.predict(subImage);
-                LocationUtils.drawLandmark(image, (BoundingBox) predictResult.getBoundingBox(), o[0]);
+                LocationUtils.drawLandmark(image, LocationUtils.getBoundingBox(predictResult), o[0]);
 
             } catch (TranslateException e) {
                 throw new RuntimeException(e);
