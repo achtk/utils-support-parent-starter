@@ -77,33 +77,35 @@ public abstract class AbstractImageFilter implements ImageFilter {
 
     @Override
     public OutputStream converter(InputStream image) throws IOException {
-        String imageFormat = getImageFormat();
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        if (ImageType.GIF.name().equalsIgnoreCase(imageFormat) && !StringUtils.isNullOrEmpty(imageFormat)) {
+        try(InputStream is = image) {
+            String imageFormat = getImageFormat();
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            if (ImageType.GIF.name().equalsIgnoreCase(imageFormat) && !StringUtils.isNullOrEmpty(imageFormat)) {
 
-            GifDecoder gifDecoder = new GifDecoder();
-            GifEncoder gifEncoder = new GifEncoder();
+                GifDecoder gifDecoder = new GifDecoder();
+                GifEncoder gifEncoder = new GifEncoder();
 
-            gifDecoder.read(image);
+                gifDecoder.read(image);
 
-            gifEncoder.setRepeat(gifDecoder.getLoopCount());
-            gifEncoder.start(out);
+                gifEncoder.setRepeat(gifDecoder.getLoopCount());
+                gifEncoder.start(out);
 
-            int frameCount = gifDecoder.getFrameCount();
-            for (int i = 0; i < frameCount; i++) {
-                BufferedImage frame = gifDecoder.getFrame(i);
-                gifEncoder.setDelay(gifDecoder.getDelay(i));
-                gifEncoder.addFrame(converter(frame));
+                int frameCount = gifDecoder.getFrameCount();
+                for (int i = 0; i < frameCount; i++) {
+                    BufferedImage frame = gifDecoder.getFrame(i);
+                    gifEncoder.setDelay(gifDecoder.getDelay(i));
+                    gifEncoder.addFrame(converter(frame));
 
+                }
+                gifEncoder.finish();
+
+            } else {
+                BufferedImage read = ImageIO.read(image);
+                BufferedImage bufferedImage = converter(read);
+                ImageIO.write(bufferedImage, getImageFormat(), out);
             }
-            gifEncoder.finish();
-
-        } else {
-            BufferedImage read = ImageIO.read(image);
-            BufferedImage bufferedImage = converter(read);
-            ImageIO.write(bufferedImage, getImageFormat(), out);
+            return out;
         }
-        return out;
     }
 
     @Override
