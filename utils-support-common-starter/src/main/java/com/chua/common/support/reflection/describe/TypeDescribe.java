@@ -9,10 +9,7 @@ import com.chua.common.support.utils.ClassUtils;
 import lombok.Data;
 
 import java.lang.annotation.Annotation;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -30,6 +27,7 @@ public class TypeDescribe implements MemberDescribe<TypeDescribe>, InitializingA
      * 类型
      */
     private final Class<?> beanClass;
+    private boolean isDeep;
     /**
      * 名称
      */
@@ -47,6 +45,10 @@ public class TypeDescribe implements MemberDescribe<TypeDescribe>, InitializingA
      * 字段描述
      */
     private List<FieldDescribe> fieldDescribes;
+    private List<FieldDescribe> fieldAllDescribes = new LinkedList<>();
+    private List<MethodDescribe> methodAllDescribes = new LinkedList<>();
+    final Set<Class<?>> cache = new LinkedHashSet<>();
+    final Set<Class<?>> methodCache = new LinkedHashSet<>();
 
     public TypeDescribe(Class<?> beanClass) {
         this.object = null;
@@ -54,10 +56,15 @@ public class TypeDescribe implements MemberDescribe<TypeDescribe>, InitializingA
         afterPropertiesSet();
     }
 
-    public TypeDescribe(Object object) {
+    public TypeDescribe(Object object, boolean isDeep) {
         this.object = object;
         this.beanClass = ClassUtils.toType(object);
+        this.isDeep = isDeep;
         afterPropertiesSet();
+    }
+
+    public TypeDescribe(Object object) {
+        this(object, false);
     }
 
     public TypeDescribe(String beanName) {
@@ -90,11 +97,27 @@ public class TypeDescribe implements MemberDescribe<TypeDescribe>, InitializingA
         return new TypeDescribe(bean);
     }
 
+    /**
+     * 类型描述
+     *
+     * @param bean bean
+     * @param deep 深度解析
+     * @return this
+     */
+    public static TypeDescribe create(Object bean, boolean deep) {
+        return new TypeDescribe(bean, deep);
+    }
+
     @Override
     public FieldDescribe getFieldDescribe(String name) {
         Optional<FieldDescribe> first = fieldDescribes.stream().filter(it -> it.name().equals(name))
                 .findFirst();
-        return first.map(it -> it.entity(object)).orElse(null);
+        FieldDescribe fieldDescribe = first.map(it -> it.entity(object)).orElse(FieldDescribe.INSTANCE);
+        if (fieldDescribe == FieldDescribe.INSTANCE) {
+            return fieldAllDescribes.stream().filter(it -> it.name().equals(name))
+                    .findFirst().orElse(FieldDescribe.INSTANCE);
+        }
+        return fieldDescribe;
     }
 
     @Override
@@ -107,12 +130,19 @@ public class TypeDescribe implements MemberDescribe<TypeDescribe>, InitializingA
         Optional<MethodDescribe> first = methodDescribes.stream().filter(it -> {
             return it.name().equals(name) && ArrayUtils.isEquals(Arrays.stream(it.parameterDescribes()).map(ParameterDescribe::returnType).toArray(String[]::new), parameterTypes);
         }).findFirst();
-        return first.map(methodDescribe -> methodDescribe.entity(object)).orElse(null);
+        MethodDescribe methodDescribe1 = first.map(methodDescribe -> methodDescribe.entity(object)).orElse(MethodDescribe.INSTANCE);
+        if(methodDescribe1 != MethodDescribe.INSTANCE) {
+            return methodDescribe1;
+        }
+
+        return methodAllDescribes.stream().filter(it -> {
+            return it.name().equals(name) && ArrayUtils.isEquals(Arrays.stream(it.parameterDescribes()).map(ParameterDescribe::returnType).toArray(String[]::new), parameterTypes);
+        }).findFirst().map(methodDescribe -> methodDescribe.entity(object)).orElse(MethodDescribe.INSTANCE);
     }
 
     @Override
     public MethodDescribeProvider getMethodDescribe(String name) {
-        return new MethodDescribeProvider()
+       return new MethodDescribeProvider()
                 .addChains(methodDescribes.stream().filter(it -> it.name().equals(name)).collect(Collectors.toList()));
     }
 
@@ -241,6 +271,90 @@ public class TypeDescribe implements MemberDescribe<TypeDescribe>, InitializingA
                 .map(FieldDescribe::of)
                 .map(it -> it.entity(object))
                 .collect(Collectors.toList());
+        if(isDeep) {
+            doField(beanClass, object);
+            doMethod(beanClass, object);
+        }
+    }
+
+    private void doMethod(Class<?> beanClass, Object bean) {
+        if (methodCache.contains(beanClass)) {
+            return;
+        }
+
+        methodCache.add(beanClass);
+
+        ClassUtils.doWithMethods(beanClass, method -> {
+            this.methodAllDescribes.add(MethodDescribe.of(method)
+                    .entity(bean)
+            );
+            method.setAccessible(true);
+            Object o = null;
+            try {
+                o = method.invoke(bean);
+            } catch (Exception ignored) {
+                return;
+            }
+
+            if (null == o) {
+                return;
+            }
+            Class<?> type = o.getClass();
+            if (type.isInterface()) {
+                return;
+            }
+
+            if (ClassUtils.isJavaType(type)) {
+                return;
+            }
+
+            if (Object.class == type) {
+                return;
+            }
+
+            doMethod(type, o);
+        });
+    }
+
+
+
+    private void doField(Class<?> beanClass, Object bean) {
+        if (cache.contains(beanClass)) {
+            return;
+        }
+
+        cache.add(beanClass);
+
+        ClassUtils.doWithFields(beanClass, field -> {
+            this.fieldAllDescribes.add(FieldDescribe.of(field)
+                    .entity(bean)
+            );
+            field.setAccessible(true);
+            Object o = null;
+            try {
+                o = field.get(bean);
+            } catch (IllegalAccessException ignored) {
+                return;
+            }
+
+            if (null == o) {
+                return;
+            }
+            Class<?> type = o.getClass();
+            if (type.isInterface()) {
+                return;
+            }
+
+            if (ClassUtils.isJavaType(type)) {
+                return;
+            }
+
+            if (Object.class == type) {
+                return;
+            }
+
+            doField(type, o);
+        });
     }
 
     public GenericDescribe getActualTypeArguments() {
@@ -250,4 +364,6 @@ public class TypeDescribe implements MemberDescribe<TypeDescribe>, InitializingA
     public Object getBean() {
         return object;
     }
+
+
 }

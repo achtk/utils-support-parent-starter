@@ -22,7 +22,6 @@ import org.hibernate.mapping.PrimaryKey;
 import org.hibernate.mapping.Table;
 
 import javax.sql.DataSource;
-import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -43,7 +42,6 @@ public class HibernateMetadataExecutor implements MetadataExecutor {
         this.expression = expression;
     }
 
-
     @Override
     @SuppressWarnings("ALL")
     public void execute(Object datasource, Action action) {
@@ -54,7 +52,7 @@ public class HibernateMetadataExecutor implements MetadataExecutor {
         Table table = new Table(metadata1.getTable());
         table.setComment(metadata1.getTableComment());
 //        table.setSchema(metadata1.getDatabase());
-//        table.setCatalog(metadata1.getCatalog());
+        table.setCatalog(metadata1.getCatalog());
         PrimaryKey primaryKey = new PrimaryKey(table);
 
         List<Column> column = metadata1.getColumn();

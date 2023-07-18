@@ -34,6 +34,7 @@ import static com.chua.common.support.spi.autowire.AutoServiceAutowire.UTILS;
 @Data
 @Accessors(fluent = true)
 public class MethodDescribe implements MemberDescribe<MethodDescribe> {
+    public static final MethodDescribe INSTANCE = new MethodDescribe();
     /**
      * 名称
      */

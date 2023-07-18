@@ -1,5 +1,7 @@
 package com.chua.hibernate.support.database.executor;
 
+import com.chua.common.support.reflection.describe.TypeDescribe;
+import com.chua.common.support.utils.StringUtils;
 import org.hibernate.HibernateException;
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.cfg.Configuration;
@@ -18,6 +20,7 @@ public class HibernateDatabaseMetadata {
     private final Map tables = new HashMap();
     private final Set sequences = new HashSet();
     private final boolean extras;
+    private final String globalSchema;
 
     private DatabaseMetaData meta;
 
@@ -46,6 +49,8 @@ public class HibernateDatabaseMetadata {
     public HibernateDatabaseMetadata(Connection connection, org.hibernate.dialect.Dialect dialect, Configuration config, boolean extras)
             throws SQLException {
         meta = connection.getMetaData();
+        this.globalSchema = TypeDescribe.create(meta, true)
+                .getFieldDescribe("database").getSelf().getValue(String.class);
         this.extras = extras;
         initSequences(connection, dialect);
         if (config != null
@@ -57,7 +62,7 @@ public class HibernateDatabaseMetadata {
     }
 
     public HibernateTableMetadata getTableMetadata(String name, String schema, String catalog, boolean isQuoted) throws HibernateException {
-
+        catalog = StringUtils.defaultString(catalog, globalSchema);
         Object identifier = identifier(catalog, schema, name);
         HibernateTableMetadata table = (HibernateTableMetadata) tables.get(identifier);
         if (table != null) {

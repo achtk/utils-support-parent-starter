@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 @Data
 @Accessors(fluent = true)
 public class FieldDescribe implements MemberDescribe<FieldDescribe> {
+    public static final FieldDescribe INSTANCE = new FieldDescribe();
     /**
      * 名称
      */
@@ -147,6 +148,22 @@ public class FieldDescribe implements MemberDescribe<FieldDescribe> {
      * @return 结果
      */
     public Value<Object> get(Object entity) {
+        if (null == field) {
+            return Value.of(null);
+        }
+
+        try {
+            return Value.of(field.get(entity));
+        } catch (Exception e) {
+            return Value.of(null, e);
+        }
+    }
+    /**
+     * 执行
+     *
+     * @return 结果
+     */
+    public Value<Object> getSelf() {
         if (null == field) {
             return Value.of(null);
         }
