@@ -273,7 +273,7 @@ public class TypeDescribe implements MemberDescribe<TypeDescribe>, InitializingA
                 .collect(Collectors.toList());
         if(isDeep) {
             doField(beanClass, object);
-            doMethod(beanClass, object);
+//            doMethod(beanClass, object);
         }
     }
 
