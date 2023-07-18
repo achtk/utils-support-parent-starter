@@ -58,6 +58,8 @@ public class StringUtils {
             return new Stack<>();
         }
     };
+    private static final String NONE = "NONE";
+    private static final String NULL = "NULL";
 
     /**
      * <p>字符串是否为空，空的定义如下：</p>
@@ -4018,13 +4020,14 @@ public class StringUtils {
 
         return Joiner.on(separator).join(ArrayUtils.subArray(split, offset));
     }
+
     /**
      * 根据符号获取结果offset之后的字符串
      *
      * @param str       字符串
      * @param separator 符号
      * @param offset    位置1
-     * @param offset2    位置2
+     * @param offset2   位置2
      * @return 根据符号获取结果offset之后的字符串
      */
     public static String between(String str, String separator, int offset, int offset2) {
@@ -4033,12 +4036,13 @@ public class StringUtils {
             return EMPTY;
         }
 
-        if(offset2 <= offset) {
+        if (offset2 <= offset) {
             return EMPTY;
         }
 
         return Joiner.on(separator).join(ArrayUtils.subArray(split, offset, offset2));
     }
+
     /**
      * 比较字符串是否相等
      *
@@ -4047,17 +4051,17 @@ public class StringUtils {
      * @return 比较字符串是否相等
      */
     public static boolean equals(String source, String target) {
-        if(null == source || null == target) {
+        if (null == source || null == target) {
             return false;
         }
 
-        if(source.length() != target.length()) {
+        if (source.length() != target.length()) {
             return false;
         }
         int length = source.length();
         for (int i = 0; i < length; i++) {
             char s = source.charAt(i);
-            if((s ^ target.charAt(i)) == 1) {
+            if ((s ^ target.charAt(i)) == 1) {
                 return false;
             }
         }
@@ -4072,11 +4076,11 @@ public class StringUtils {
      * @return 比较字符串是否相等
      */
     public static boolean safeEquals(String source, String target) {
-        if(null == source || null == target) {
+        if (null == source || null == target) {
             return false;
         }
-        
-        if(source.length() != target.length()) {
+
+        if (source.length() != target.length()) {
             return false;
         }
 
@@ -4088,5 +4092,28 @@ public class StringUtils {
         }
 
         return equal == 0;
+    }
+
+    /**
+     * 判断数据是否无效
+     *
+     * @param value        数据
+     * @param defaultValue 默认值
+     * @return 结果
+     */
+    public static String ifValid(String value, String defaultValue) {
+        if(null == value) {
+            return defaultValue;
+        }
+
+        if(isEmpty(value)) {
+            return defaultValue;
+        }
+
+        if(NONE.equals(value) || NULL.equals(value)) {
+            return defaultValue;
+        }
+
+        return value;
     }
 }
