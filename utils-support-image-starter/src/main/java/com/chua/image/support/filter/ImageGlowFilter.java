@@ -16,16 +16,20 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.image.support.utils.PixelUtils;
 
 import java.awt.image.BufferedImage;
 
 /**
- * A filter which adds Gaussian blur to an image, producing a glowing effect.
+ * 一种滤镜，它给图像添加高斯模糊，产生发光效果。
  *
  * @author Jerry Huxtable
  * @author Administrator
  */
+@Spi("Glow")
+@SpiOption("高斯发光滤镜")
 public class ImageGlowFilter extends ImageGaussianFilter {
 
     private float amount = 0.5f;

@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -31,6 +33,8 @@ import java.awt.image.WritableRaster;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
+@Spi("Block")
+@SpiOption("像素化图像")
 public class ImageBlockFilter extends AbstractImageFilter {
 
     private int blockSize = 2;

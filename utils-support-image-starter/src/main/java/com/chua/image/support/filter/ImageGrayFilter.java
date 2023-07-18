@@ -1,5 +1,8 @@
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
+
 import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorConvertOp;
@@ -11,6 +14,8 @@ import java.awt.image.ColorConvertOp;
  * @version 1.0.0
  * @since 2021/6/11
  */
+@Spi("gray")
+@SpiOption("灰度滤镜")
 public class ImageGrayFilter extends AbstractImageFilter {
 
     @Override

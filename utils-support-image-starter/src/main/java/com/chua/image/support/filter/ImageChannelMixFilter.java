@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.image.support.utils.PixelUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -28,6 +30,8 @@ import lombok.experimental.Accessors;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@Spi("ChannelMix")
+@SpiOption("红色、绿色和蓝色通道相互混合滤镜")
 @Accessors(chain = true)
 public class ImageChannelMixFilter extends AbstractImagePointFilter {
 

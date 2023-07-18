@@ -17,6 +17,8 @@ limitations under the License.
 package com.chua.image.support.filter;
 
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.image.support.utils.ImageMath;
 
 /**
@@ -24,6 +26,8 @@ import com.chua.image.support.utils.ImageMath;
  *
  * @author Administrator
  */
+@Spi("Crystallize")
+@SpiOption("结晶滤镜")
 public class ImageCrystallizeFilter extends ImageCellularFilter {
 
     private float edgeThickness = 0.4f;

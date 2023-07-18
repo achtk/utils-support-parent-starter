@@ -1,5 +1,8 @@
 package com.chua.common.support.image.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
+
 import java.awt.image.BufferedImage;
 
 /**
@@ -7,6 +10,8 @@ import java.awt.image.BufferedImage;
  *
  * @author CH
  */
+@Spi("SepiaTone")
+@SpiOption("老照片滤镜")
 public class SepiaToneImageFilter extends AbstractImageFilter {
     public static int clamp(int c) {
         return c > 255 ? 255 : ((c < 0) ? 0 : c);

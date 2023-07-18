@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.image.support.utils.ImageMath;
 
 /**
@@ -23,6 +25,8 @@ import com.chua.image.support.utils.ImageMath;
  *
  * @author Administrator
  */
+@Spi("Gain")
+@SpiOption("反差滤镜")
 public class ImageGainFilter extends AbstractImageTransferFilter {
 
     private float gain = 0.5f;

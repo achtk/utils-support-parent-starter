@@ -16,6 +16,9 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
+
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
@@ -30,6 +33,8 @@ import java.awt.image.ColorModel;
  *
  * @author Administrator
  */
+@Spi("Shadow")
+@SpiOption("阴影滤镜")
 public class ImageShadowFilter extends AbstractImageFilter {
 
     private float radius = 5;

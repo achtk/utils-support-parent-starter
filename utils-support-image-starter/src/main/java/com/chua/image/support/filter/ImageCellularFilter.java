@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.image.support.map.Colormap;
 import com.chua.image.support.map.Gradient;
 import com.chua.image.support.math.Function2D;
@@ -38,6 +40,8 @@ import static com.chua.common.support.constant.NumberConstant.*;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@Spi("Cellular")
+@SpiOption("细胞纹理滤镜")
 @Accessors(chain = true)
 public class ImageCellularFilter extends ImageWholeImageFilter implements Function2D, Cloneable {
 

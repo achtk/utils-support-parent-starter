@@ -16,6 +16,9 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -24,6 +27,8 @@ import java.awt.image.BufferedImage;
  *
  * @author Administrator
  */
+@Spi("Mirror")
+@SpiOption("镜像滤镜")
 public class ImageMirrorFilter extends AbstractImageFilter {
     private float opacity = 1.0f;
     private float centreY = 0.5f;

@@ -17,6 +17,8 @@ limitations under the License.
 package com.chua.image.support.filter;
 
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.image.support.utils.ImageMath;
 
 import java.awt.image.BufferedImage;
@@ -26,6 +28,8 @@ import java.awt.image.BufferedImage;
  *
  * @author Administrator
  */
+@Spi("ErodeAlpha")
+@SpiOption("图像侵蚀滤镜")
 public class ImageErodeAlphaFilter extends AbstractImagePointFilter {
 
     protected float radius = 5;

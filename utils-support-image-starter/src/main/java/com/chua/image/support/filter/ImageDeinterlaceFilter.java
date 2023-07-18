@@ -16,15 +16,20 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
+
 import java.awt.image.BufferedImage;
 
 import static com.chua.common.support.constant.NumberConstant.TWE;
 
 /**
- * A filter for de-interlacing video frames.
+ * 用于去隔行视频帧的过滤器。
  *
  * @author Administrator
  */
+@Spi("Deinterlace")
+@SpiOption("去隔行视频帧滤镜")
 public class ImageDeinterlaceFilter extends AbstractImageFilter {
 
     public final static int EVEN = 0;

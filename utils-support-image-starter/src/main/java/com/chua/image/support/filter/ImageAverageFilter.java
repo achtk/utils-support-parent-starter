@@ -17,11 +17,16 @@ limitations under the License.
 package com.chua.image.support.filter;
 
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
+
 /**
  * 平均每个像素的 3x3 邻域的过滤器，提供简单的模糊。
  *
  * @author CH
  */
+@Spi("Average")
+@SpiOption("简单模糊")
 public class ImageAverageFilter extends ImageConvolveFilter {
 
     /**

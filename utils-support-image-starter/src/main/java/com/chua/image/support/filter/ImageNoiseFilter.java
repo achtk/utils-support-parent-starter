@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.image.support.utils.PixelUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,12 +25,14 @@ import lombok.EqualsAndHashCode;
 import java.security.SecureRandom;
 
 /**
- * A filter which adds random noise into an image.
+ * 将随机噪声加到图像中的滤波器。
  *
  * @author Administrator
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@Spi("Noise")
+@SpiOption("噪点滤镜")
 public class ImageNoiseFilter extends AbstractImagePointFilter {
 
     /**

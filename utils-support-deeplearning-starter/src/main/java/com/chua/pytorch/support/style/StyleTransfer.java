@@ -3,10 +3,13 @@ package com.chua.pytorch.support.style;
 import ai.djl.modality.cv.Image;
 import ai.djl.repository.zoo.Criteria;
 import ai.djl.training.util.ProgressBar;
+import com.chua.common.support.function.InitializingAware;
+import com.chua.pytorch.support.common.LearningConfig;
 import com.chua.pytorch.support.utils.LocationUtils;
 import com.google.common.base.Joiner;
-import lombok.Getter;
+import lombok.Setter;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -14,14 +17,45 @@ import java.util.List;
  *
  * @author CH
  */
-public class StyleTransfer implements AutoCloseable {
+public class StyleTransfer implements AutoCloseable, InitializingAware {
 
-    @Getter
-    private final Criteria<Image, Image> criteria;
+    private Criteria<Image, Image> criteria;
+
+    @Setter
+    private LearningConfig learningConfiguration;
+    private Artist artist;
 
     public StyleTransfer(Artist artist) {
+        this.artist = artist;
+    }
+
+    @Override
+    public void close() throws Exception {
+    }
+
+    public Criteria<Image, Image> getCriteria() {
+        if(null == criteria) {
+            synchronized (this) {
+                if(null == criteria) {
+                    afterPropertiesSet();
+                }
+            }
+        }
+        return criteria;
+    }
+
+    @Override
+    public void afterPropertiesSet() {
         String modelName = "style_" + artist.toString().toLowerCase() + ".zip";
-        List<String> url = LocationUtils.getUrl(modelName, "https://aias-home.oss-cn-beijing.aliyuncs.com/models/gan_models/" + modelName);
+        List<String> url = new LinkedList<>();
+        try {
+            List<String> url1 = LocationUtils.getUrl(modelName, "https://aias-home.oss-cn-beijing.aliyuncs.com/models/gan_models/" + modelName);
+            url.addAll(url1);
+        } catch (Exception ignored) {
+        }
+        if(null != learningConfiguration) {
+            url.addAll(LocationUtils.doAnalysis(learningConfiguration.getModulePath(), new String[]{modelName, "style_" + artist.toString().toLowerCase() + ".pt"}, false));
+        }
 
         this.criteria =
                 Criteria.builder()
@@ -32,11 +66,6 @@ public class StyleTransfer implements AutoCloseable {
                         .optTranslatorFactory(new StyleTransferTranslatorFactory())
                         .build();
 
-
-    }
-
-    @Override
-    public void close() throws Exception {
     }
 
     public enum Artist {

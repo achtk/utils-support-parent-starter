@@ -17,6 +17,8 @@ limitations under the License.
 package com.chua.image.support.filter;
 
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.image.support.map.Colormap;
 import com.chua.image.support.map.LinearColormap;
 import com.chua.image.support.utils.PixelUtils;
@@ -28,6 +30,8 @@ import java.awt.image.BufferedImage;
  *
  * @author Administrator
  */
+@Spi("Glint")
+@SpiOption("闪烁滤镜")
 public class ImageGlintFilter extends AbstractImageFilter {
 
     private float threshold = 1.0f;

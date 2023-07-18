@@ -1,5 +1,7 @@
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.common.support.lang.process.ProgressBar;
 import com.chua.common.support.utils.RandomUtils;
 import lombok.Data;
@@ -24,6 +26,8 @@ import java.util.*;
 @Data
 @Slf4j
 @Accessors(fluent = true)
+@Spi("GraphicsMosaic")
+@SpiOption("马赛克滤镜")
 public class ImageGraphicsMosaicFilter extends AbstractImageFilter {
 
     /**

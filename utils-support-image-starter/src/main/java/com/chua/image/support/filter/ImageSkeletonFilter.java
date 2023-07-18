@@ -16,6 +16,9 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
+
 import java.awt.*;
 
 import static com.chua.common.support.constant.NumberConstant.TWE;
@@ -27,6 +30,8 @@ import static com.chua.common.support.constant.NumberConstant.TWE;
  *
  * @author Administrator
  */
+@Spi("Skeleton")
+@SpiOption("骨架滤镜")
 public class ImageSkeletonFilter extends AbstractImageBinary2Filter {
 
     private final static byte[] SKELETON_TABLE = {

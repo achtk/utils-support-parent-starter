@@ -16,6 +16,9 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
+
 import java.awt.image.BufferedImage;
 
 /**
@@ -23,6 +26,8 @@ import java.awt.image.BufferedImage;
  *
  * @author CH
  */
+@Spi("Chrome")
+@SpiOption("模拟铬滤镜")
 public class ImageChromeFilter extends ImageLightFilter {
     private float amount = 0.5f;
     private float exposure = 1.0f;

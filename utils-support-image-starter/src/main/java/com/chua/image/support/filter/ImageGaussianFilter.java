@@ -17,6 +17,8 @@ limitations under the License.
 package com.chua.image.support.filter;
 
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.image.support.utils.ImageMath;
 import com.chua.image.support.utils.PixelUtils;
 
@@ -29,6 +31,8 @@ import java.awt.image.Kernel;
  *
  * @author Jerry Huxtable
  */
+@Spi("Gaussian")
+@SpiOption("高斯模糊滤镜")
 public class ImageGaussianFilter extends ImageConvolveFilter {
 
     /**

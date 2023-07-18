@@ -17,6 +17,8 @@ limitations under the License.
 package com.chua.image.support.filter;
 
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.image.support.composite.AddComposite;
 
 import java.awt.*;
@@ -27,6 +29,8 @@ import java.awt.image.BufferedImage;
  *
  * @author Administrator
  */
+@Spi("Shine")
+@SpiOption("闪耀滤镜")
 public class ImageShineFilter extends AbstractImageFilter {
 
     private float radius = 5;

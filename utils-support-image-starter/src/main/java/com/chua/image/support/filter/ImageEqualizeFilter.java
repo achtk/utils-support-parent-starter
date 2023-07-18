@@ -17,6 +17,8 @@ limitations under the License.
 package com.chua.image.support.filter;
 
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.image.support.map.Histogram;
 
 import java.awt.*;
@@ -28,6 +30,8 @@ import static com.chua.common.support.constant.NumberConstant.THIRD;
  *
  * @author Administrator
  */
+@Spi("Equalize")
+@SpiOption("自动均衡滤镜")
 public class ImageEqualizeFilter extends ImageWholeImageFilter {
 
     private int[][] lut;

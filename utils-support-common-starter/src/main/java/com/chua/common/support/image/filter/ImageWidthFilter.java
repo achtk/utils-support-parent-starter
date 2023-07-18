@@ -1,5 +1,6 @@
 package com.chua.common.support.image.filter;
 
+import com.chua.common.support.annotations.SpiIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,7 @@ import static com.chua.common.support.image.filter.ImageSizedFilter.zoomByScale;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@SpiIgnore
 @Accessors(chain = true)
 @NoArgsConstructor
 public class ImageWidthFilter extends AbstractImageFilter {

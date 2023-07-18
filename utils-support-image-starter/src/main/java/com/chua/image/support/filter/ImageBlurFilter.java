@@ -17,11 +17,16 @@ limitations under the License.
 package com.chua.image.support.filter;
 
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
+
 /**
  * 一个简单的模糊过滤器。您可能应该改用 BoxBlurFilter。
  *
  * @author CH
  */
+@Spi("Blur")
+@SpiOption("模糊滤镜")
 public class ImageBlurFilter extends ImageConvolveFilter {
 
     /**

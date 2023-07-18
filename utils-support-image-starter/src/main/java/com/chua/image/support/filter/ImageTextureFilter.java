@@ -17,6 +17,8 @@ limitations under the License.
 package com.chua.image.support.filter;
 
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.image.support.map.Colormap;
 import com.chua.image.support.map.Gradient;
 import com.chua.image.support.math.Function2D;
@@ -29,6 +31,8 @@ import com.chua.image.support.utils.PixelUtils;
  *
  * @author Administrator
  */
+@Spi("Texture")
+@SpiOption("文本滤镜")
 public class ImageTextureFilter extends AbstractImagePointFilter {
 
     public float amount = 1.0f;

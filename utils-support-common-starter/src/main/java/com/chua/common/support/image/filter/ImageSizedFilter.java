@@ -1,6 +1,7 @@
 package com.chua.common.support.image.filter;
 
 import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiIgnore;
 import com.chua.common.support.annotations.SpiOption;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,6 +24,7 @@ import java.awt.image.BufferedImage;
 @Spi("size")
 @Accessors(chain = true)
 @NoArgsConstructor
+@SpiIgnore
 public class ImageSizedFilter extends AbstractImageFilter {
 
 

@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -28,6 +30,8 @@ import java.awt.*;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@Spi("Shear")
+@SpiOption("剪切滤镜")
 public class ImageShearFilter extends AbstractImageTransformFilter {
 
     private float angleX = 0.0f;

@@ -1,6 +1,8 @@
 package com.chua.common.support.image.filter;
 
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.common.support.utils.IoUtils;
 
 import java.awt.*;
@@ -11,6 +13,8 @@ import java.awt.image.BufferedImage;
  *
  * @author CH
  */
+@Spi("AntiAliasing")
+@SpiOption("抗锯齿滤镜")
 public class ImageAntiAliasingImageFilter extends AbstractImageFilter {
     @Override
     public BufferedImage filter(BufferedImage src, BufferedImage dst) {

@@ -16,13 +16,18 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
+
 import java.awt.image.BufferedImage;
 
 /**
- * Edge detection via the Laplacian operator.
+ * 通过拉普拉斯算子进行边缘检测。
  *
  * @author Jerry Huxtable
  */
+@Spi("Laplace")
+@SpiOption("边缘检测滤镜")
 public class ImageLaplaceFilter extends AbstractImageFilter {
 
     @Override

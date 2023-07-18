@@ -1,6 +1,7 @@
 package com.chua.common.support.image.filter;
 
 
+import com.chua.common.support.annotations.SpiIgnore;
 import com.chua.common.support.constant.Position;
 import com.chua.common.support.protocol.image.ImagePoint;
 import com.chua.common.support.utils.BufferedImageUtils;
@@ -18,6 +19,7 @@ import java.io.InputStream;
  *
  * @author CH
  */
+@SpiIgnore
 public class TextImgWaterImageFilter extends AbstractImageFilter {
 
     private static final int DEFAULT_FONT_SIZE = 18;

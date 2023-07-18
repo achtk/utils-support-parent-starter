@@ -16,6 +16,9 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
+
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
@@ -25,6 +28,8 @@ import java.awt.image.BufferedImage;
  *
  * @author Administrator
  */
+@Spi("Composite")
+@SpiOption("变换滤镜")
 public class ImageCompositeFilter extends AbstractImageFilter {
 
     private Composite composite;

@@ -1,5 +1,7 @@
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.common.support.utils.ImageUtils;
 import com.chua.image.support.composite.ColorDodgeComposite;
 
@@ -14,6 +16,8 @@ import java.awt.image.WritableRaster;
  * @version 1.0.0
  * @since 2021/6/16
  */
+@Spi("Sketch")
+@SpiOption("素描滤镜")
 public class ImageSketchFilter extends AbstractImageFilter {
     @Override
     public BufferedImage filter(BufferedImage src, BufferedImage dst) {

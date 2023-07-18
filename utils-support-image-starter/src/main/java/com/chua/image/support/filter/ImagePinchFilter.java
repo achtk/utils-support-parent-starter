@@ -16,14 +16,19 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
+
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
 /**
- * A filter which performs the popular whirl-and-pinch distortion effect.
+ *一个过滤器，执行流行的旋转和挤压失真效果。
  *
  * @author Administrator
  */
+@Spi("Pinch")
+@SpiOption("旋转和挤压失真滤镜")
 public class ImagePinchFilter extends AbstractImageTransformFilter {
 
     private float angle = 0;

@@ -16,12 +16,17 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
+
 /**
  * A filter for changing the gamma of an image.
  * γ滤镜
  *
  * @author Administrator
  */
+@Spi("Gamma")
+@SpiOption("γ滤镜")
 public class ImageGammaFilter extends AbstractImageTransferFilter {
 
     private float rGamma, gGamma, bGamma;

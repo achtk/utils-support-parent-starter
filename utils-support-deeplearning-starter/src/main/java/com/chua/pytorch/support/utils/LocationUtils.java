@@ -433,7 +433,39 @@ public class LocationUtils {
         }
 
     }
+    public static  List<String> doAnalysis(String property, String[] url, boolean isDirector) {
+        List<String> urls = new LinkedList<>();
+        log.info("检测当前目录是否存在模型 : {}", new File(property).getAbsolutePath());
+        try {
+            Files.walkFileTree(Paths.get(property), new SimpleFileVisitor<Path>() {
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    if (isDirector) {
+                        return FileVisitResult.CONTINUE;
+                    }
 
+                    if (ArrayUtils.contains(url, file.toFile().getName().replace("\\", "/"))) {
+                        urls.add(file.toUri().toString());
+                    }
+                    return super.visitFile(file, attrs);
+                }
+
+                @Override
+                public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                    if (!isDirector) {
+                        return FileVisitResult.CONTINUE;
+                    }
+
+                    if (ArrayUtils.contains(url, dir.toFile().getName().replace("\\", "/"))) {
+                        urls.add(dir.toUri().toString());
+                    }
+                    return super.preVisitDirectory(dir, attrs);
+                }
+            });
+        } catch (IOException ignored) {
+        }
+        return urls;
+    }
     private static void doAnalysisCurrent(List<String> urls, String[] url, boolean isDirector) {
         String property = ".";
         log.info("检测当前目录是否存在模型 : {}", new File(property).getAbsolutePath());

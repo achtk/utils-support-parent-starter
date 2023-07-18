@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -28,6 +30,8 @@ import java.awt.image.BufferedImage;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@Spi("Offset")
+@SpiOption("偏移滤镜")
 public class ImageOffsetFilter extends AbstractImageTransformFilter {
 
     private int width, height;

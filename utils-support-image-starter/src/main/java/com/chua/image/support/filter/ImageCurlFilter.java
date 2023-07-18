@@ -17,6 +17,8 @@ limitations under the License.
 package com.chua.image.support.filter;
 
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.image.support.utils.ImageMath;
 import com.chua.image.support.utils.ImageUtils;
 import com.chua.image.support.utils.PixelUtils;
@@ -31,6 +33,8 @@ import java.awt.image.WritableRaster;
  *
  * @author Administrator
  */
+@Spi("Curl")
+@SpiOption("页面卷曲滤镜")
 public class ImageCurlFilter extends AbstractImageTransformFilter {
 
     private float angle = 0;

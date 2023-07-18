@@ -16,6 +16,9 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
+
 import java.awt.*;
 
 /**
@@ -24,6 +27,8 @@ import java.awt.*;
  *
  * @author Administrator
  */
+@Spi("Oil")
+@SpiOption("优化滤镜")
 public class ImageOilFilter extends ImageWholeImageFilter {
 
     private int range = 3;

@@ -17,6 +17,8 @@ limitations under the License.
 package com.chua.image.support.filter;
 
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.image.support.math.Function2D;
 import com.chua.image.support.math.ImageFunction2D;
 import com.chua.image.support.utils.ImageMath;
@@ -31,10 +33,12 @@ import java.util.Vector;
 import static com.chua.common.support.constant.NumberConstant.*;
 
 /**
- * A filter which produces lighting and embossing effects.
+ * 一种产生照明和压纹效果的滤镜。
  *
  * @author Administrator
  */
+@Spi("Light")
+@SpiOption("照明压纹滤镜")
 public class ImageLightFilter extends ImageWholeImageFilter {
 
     /**

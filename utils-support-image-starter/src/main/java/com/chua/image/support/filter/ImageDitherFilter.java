@@ -16,12 +16,17 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
+
 /**
  * A filter which performs ordered dithering on an image.
  * 抖动滤镜
  *
  * @author Administrator
  */
+@Spi("Dither")
+@SpiOption("抖动滤镜")
 public class ImageDitherFilter extends AbstractImagePointFilter {
 
     /**

@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.image.support.utils.ImageMath;
 
 import static com.chua.common.support.constant.NumberConstant.*;
@@ -25,6 +27,8 @@ import static com.chua.common.support.constant.NumberConstant.*;
  *
  * @author Administrator
  */
+@Spi("Fade")
+@SpiOption("淡入淡出滤镜")
 public class ImageFadeFilter extends AbstractImagePointFilter {
 
     private int width, height;

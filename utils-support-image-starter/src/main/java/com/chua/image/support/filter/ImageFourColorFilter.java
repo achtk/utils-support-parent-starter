@@ -16,11 +16,16 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
+
 /**
  * A filter which draws a gradient interpolated between four colors defined at the corners of the image.
  *
  * @author Administrator
  */
+@Spi("FourColor")
+@SpiOption("渐变插值滤镜")
 public class ImageFourColorFilter extends AbstractImagePointFilter {
 
     private int width;

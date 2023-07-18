@@ -17,6 +17,8 @@ limitations under the License.
 package com.chua.image.support.filter;
 
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.image.support.utils.ImageMath;
 
 import java.awt.geom.Point2D;
@@ -27,6 +29,8 @@ import java.awt.image.BufferedImage;
  *
  * @author Administrator
  */
+@Spi("Circle")
+@SpiOption("圆弧周滤镜")
 public class ImageCircleFilter extends AbstractImageTransformFilter {
 
     private float radius = 10;

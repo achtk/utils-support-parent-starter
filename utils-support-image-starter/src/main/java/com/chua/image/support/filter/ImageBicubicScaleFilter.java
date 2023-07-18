@@ -16,6 +16,9 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
@@ -25,6 +28,8 @@ import java.awt.image.ColorModel;
  *
  * @author CH
  */
+@Spi("BicubicScale")
+@SpiOption("双三次插值缩放图像")
 public class ImageBicubicScaleFilter extends AbstractImageFilter {
 
     private final int width;

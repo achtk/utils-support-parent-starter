@@ -17,6 +17,8 @@ limitations under the License.
 package com.chua.image.support.filter;
 
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.image.support.utils.ImageMath;
 
 import java.awt.image.BufferedImage;
@@ -30,6 +32,8 @@ import static com.chua.common.support.constant.NumberConstant.THIRD;
  *
  * @author Administrator
  */
+@Spi("ColorHalftone")
+@SpiOption("像素化滤镜")
 public class ImageColorHalftoneFilter extends AbstractImageFilter {
 
     private float dotRadius = 2;

@@ -17,6 +17,8 @@ limitations under the License.
 package com.chua.image.support.filter;
 
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.image.support.map.Colormap;
 import com.chua.image.support.map.LinearColormap;
 import com.chua.image.support.utils.ImageMath;
@@ -29,6 +31,8 @@ import java.security.SecureRandom;
  *
  * @author Administrator
  */
+@Spi("Smear")
+@SpiOption("图像拖尾滤镜")
 public class ImageSmearFilter extends ImageWholeImageFilter {
 
     public final static int CROSSES = 0;

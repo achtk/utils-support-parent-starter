@@ -1,5 +1,7 @@
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -15,6 +17,8 @@ import java.awt.image.BufferedImage;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@Spi("Correde")
+@SpiOption("腐蚀滤镜")
 @Accessors(chain = true)
 public class ImageCorredeFilter extends AbstractImageFilter {
 

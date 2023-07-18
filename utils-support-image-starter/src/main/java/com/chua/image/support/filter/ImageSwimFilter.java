@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.image.support.math.Noise;
 
 import static com.chua.common.support.constant.NumberConstant.ONE_FLOAT;
@@ -25,6 +27,8 @@ import static com.chua.common.support.constant.NumberConstant.ONE_FLOAT;
  *
  * @author Administrator
  */
+@Spi("Swim")
+@SpiOption("水纹滤镜")
 public class ImageSwimFilter extends AbstractImageTransformFilter {
 
     private float scale = 32;

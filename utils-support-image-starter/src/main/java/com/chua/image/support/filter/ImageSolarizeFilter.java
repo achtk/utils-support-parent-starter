@@ -16,11 +16,16 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
+
 /**
  * 日光化滤镜
  *
  * @author Administrator
  */
+@Spi("Solarize")
+@SpiOption("日光化滤镜")
 public class ImageSolarizeFilter extends AbstractImageTransferFilter {
 
     @Override

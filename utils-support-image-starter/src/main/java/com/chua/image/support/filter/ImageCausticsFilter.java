@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.image.support.math.Noise;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -34,6 +36,8 @@ import static com.chua.common.support.constant.NumberConstant.TWE;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@Spi("Caustics")
+@SpiOption("水下焦散滤镜")
 @Accessors(chain = true)
 public class ImageCausticsFilter extends ImageWholeImageFilter {
 

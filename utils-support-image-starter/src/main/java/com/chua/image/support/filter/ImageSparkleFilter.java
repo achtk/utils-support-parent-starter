@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.image.support.utils.ImageMath;
 
 import java.security.SecureRandom;
@@ -25,6 +27,8 @@ import java.security.SecureRandom;
  *
  * @author Administrator
  */
+@Spi("Sparkle")
+@SpiOption("火花滤镜")
 public class ImageSparkleFilter extends AbstractImagePointFilter {
 
     private int rays = 50;

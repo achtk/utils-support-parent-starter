@@ -1,5 +1,7 @@
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.common.support.utils.RandomUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,6 +21,8 @@ import java.util.LinkedList;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(fluent = true)
+@Spi("Reorganization")
+@SpiOption("重组滤镜")
 public class ImageReorganizationFilter extends AbstractImageFilter {
 
     private int cols;

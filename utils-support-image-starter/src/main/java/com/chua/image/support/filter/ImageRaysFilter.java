@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.image.support.composite.MiscComposite;
 import com.chua.image.support.map.Colormap;
 import com.chua.image.support.utils.PixelUtils;
@@ -29,6 +31,8 @@ import java.awt.image.BufferedImage;
  *
  * @author Administrator
  */
+@Spi("Rays")
+@SpiOption("光线滤镜")
 public class ImageRaysFilter extends AbstractImageMotionBlurOp {
 
     private float opacity = 1.0f;

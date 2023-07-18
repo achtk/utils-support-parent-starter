@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.image.support.utils.ImageMath;
 
 import java.awt.*;
@@ -27,6 +29,8 @@ import java.security.SecureRandom;
  *
  * @author Administrator
  */
+@Spi("Scratc")
+@SpiOption("划痕滤镜")
 public class ImageScratchFilter extends AbstractImageFilter {
     private float density = 0.1f;
     private float angle;

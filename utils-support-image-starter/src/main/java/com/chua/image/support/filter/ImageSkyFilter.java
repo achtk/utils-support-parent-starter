@@ -17,6 +17,8 @@ limitations under the License.
 package com.chua.image.support.filter;
 
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.common.support.utils.ImageUtils;
 import com.chua.image.support.math.Fbm;
 import com.chua.image.support.math.Function2D;
@@ -31,6 +33,8 @@ import java.security.SecureRandom;
  *
  * @author Administrator
  */
+@Spi("Sky")
+@SpiOption("sky滤镜")
 public class ImageSkyFilter extends AbstractImagePointFilter {
 
     private final static float R_255 = 1.0f / 255.0f;

@@ -17,11 +17,16 @@ limitations under the License.
 package com.chua.image.support.filter;
 
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
+
 /**
  * 一个简单的压花过滤器。
  *
  * @author CH
  */
+@Spi("Bump")
+@SpiOption("压花滤镜")
 public class ImageBumpFilter extends ImageConvolveFilter {
 
     private static final float[] EMBOSS_MATRIX = {

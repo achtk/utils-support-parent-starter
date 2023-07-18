@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.image.support.utils.ImageMath;
 
 /**
@@ -23,6 +25,8 @@ import com.chua.image.support.utils.ImageMath;
  *
  * @author Administrator
  */
+@Spi("JavaLnf")
+@SpiOption("点画滤镜")
 public class ImageJavaLnfFilter extends AbstractImagePointFilter {
 
     public ImageJavaLnfFilter() {

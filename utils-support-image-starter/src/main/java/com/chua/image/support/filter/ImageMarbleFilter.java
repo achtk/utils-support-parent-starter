@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.image.support.math.Noise;
 import com.chua.image.support.utils.ImageMath;
 import com.chua.image.support.utils.PixelUtils;
@@ -26,11 +28,14 @@ import java.awt.image.BufferedImage;
 
 /**
  * This filter applies a marbling effect to an image, displacing pixels by random amounts.
+ * 该滤镜对图像应用大理石花纹效果，随机置换像素。
  *
  * @author Administrator
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@Spi("Marble")
+@SpiOption("大理石花纹滤镜")
 public class ImageMarbleFilter extends AbstractImageTransformFilter {
 
     private float[] sinTable, cosTable;

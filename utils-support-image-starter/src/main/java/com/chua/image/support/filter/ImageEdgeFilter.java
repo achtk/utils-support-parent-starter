@@ -17,15 +17,19 @@ limitations under the License.
 package com.chua.image.support.filter;
 
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.image.support.utils.PixelUtils;
 
 import java.awt.*;
 
 /**
- * An edge-detection filter.
+ *边缘检测滤波器。
  *
  * @author Administrator
  */
+@Spi("Edge")
+@SpiOption("边缘检测滤镜")
 public class ImageEdgeFilter extends ImageWholeImageFilter {
 
     public final static float R2 = (float) Math.sqrt(2);

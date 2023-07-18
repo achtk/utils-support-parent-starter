@@ -17,16 +17,20 @@ limitations under the License.
 package com.chua.image.support.filter;
 
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.image.support.math.Noise;
 import com.chua.image.support.utils.ImageMath;
 
 import java.awt.geom.Point2D;
 
 /**
- * An experimental filter for rendering lens flares.
+ *一个用于渲染透镜耀斑的实验性滤镜。
  *
  * @author Administrator
  */
+@Spi("Flare")
+@SpiOption("耀斑滤镜")
 public class ImageFlareFilter extends AbstractImagePointFilter {
 
     private final int rays = 50;

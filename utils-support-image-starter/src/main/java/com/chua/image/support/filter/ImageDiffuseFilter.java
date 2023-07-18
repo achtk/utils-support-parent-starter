@@ -17,15 +17,19 @@ limitations under the License.
 package com.chua.image.support.filter;
 
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.image.support.utils.ImageMath;
 
 import java.awt.image.BufferedImage;
 
 /**
- * This filter diffuses an image by moving its pixels in random directions.
+ * 这个过滤器通过在随机方向上移动像素来扩散图像。
  *
  * @author Administrator
  */
+@Spi("Diffuse")
+@SpiOption("随机扩散滤镜")
 public class ImageDiffuseFilter extends AbstractImageTransformFilter {
 
     private float[] sinTable, cosTable;

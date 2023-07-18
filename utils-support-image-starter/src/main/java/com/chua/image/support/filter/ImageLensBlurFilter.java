@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.image.support.math.Fft;
 import com.chua.image.support.utils.ImageMath;
 import lombok.Data;
@@ -26,12 +28,14 @@ import java.awt.image.BufferedImage;
 import static com.chua.common.support.constant.NumberConstant.TWE;
 
 /**
- * A filter which use FFTs to simulate lens blur on an image.
+ * 一种滤镜，它使用fft来模拟图像上的镜头模糊。
  *
  * @author Administrator
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@Spi("LensBlur")
+@SpiOption("镜头模糊滤镜")
 public class ImageLensBlurFilter extends AbstractImageFilter {
 
     private float radius = 10;

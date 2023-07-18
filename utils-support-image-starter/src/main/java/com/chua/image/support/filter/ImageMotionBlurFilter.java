@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.image.support.utils.ImageMath;
 import com.chua.image.support.utils.PixelUtils;
 
@@ -28,6 +30,8 @@ import java.awt.image.BufferedImage;
  *
  * @author Administrator
  */
+@Spi("MotionBlur")
+@SpiOption("运动模糊滤镜")
 public class ImageMotionBlurFilter extends AbstractImageFilter {
 
     private float angle = 0.0f;

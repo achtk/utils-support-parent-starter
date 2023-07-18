@@ -16,6 +16,9 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
+
 import java.awt.image.BufferedImage;
 
 /**
@@ -24,6 +27,8 @@ import java.awt.image.BufferedImage;
  *
  * @author Administrator
  */
+@Spi("Displace")
+@SpiOption("毛玻璃滤镜")
 public class ImageDisplaceFilter extends AbstractImageTransformFilter {
 
     private float amount = 1;

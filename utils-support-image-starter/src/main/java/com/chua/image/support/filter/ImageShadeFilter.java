@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.image.support.math.Function2D;
 import com.chua.image.support.math.ImageFunction2D;
 import com.chua.image.support.utils.ImageMath;
@@ -31,6 +33,8 @@ import java.awt.image.Kernel;
  *
  * @author Administrator
  */
+@Spi("Shad")
+@SpiOption("阴影滤镜")
 public class ImageShadeFilter extends ImageWholeImageFilter {
 
     public final static int COLORS_FROM_IMAGE = 0;

@@ -17,16 +17,20 @@ limitations under the License.
 package com.chua.image.support.filter;
 
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.image.support.utils.ImageMath;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
- * A class which warps an image using a field Warp algorithm.
+ *一个使用字段扭曲算法扭曲图像的类。
  *
  * @author Administrator
  */
+@Spi("FieldWarp")
+@SpiOption("扭曲滤镜")
 public class ImageFieldWarpFilter extends AbstractImageTransformFilter {
 
     private float amount = 1.0f;

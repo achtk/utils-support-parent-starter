@@ -16,13 +16,19 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 
 /**
- * 一种过滤器，可用于通过将目标图像的亮度传输到源的 Alpha 通道来生成擦除。@author CH
+ * 一种过滤器，可用于通过将目标图像的亮度传输到源的 Alpha 通道来生成擦除。
+ * @author CH
  */
+@Spi("ChromaKey")
+@SpiOption("擦除滤镜")
 public class ImageChromaKeyFilter extends AbstractImageFilter {
 
     private float toleranceH = 0;

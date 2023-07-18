@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.image.support.utils.ImageMath;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,12 +27,14 @@ import java.awt.image.BufferedImage;
 import java.security.SecureRandom;
 
 /**
- * A filter which "dissolves" an image by thresholding the alpha channel with random numbers.
+ * 一种通过用随机数对alpha通道设置阈值来“溶解”图像的滤波器。
  *
  * @author Administrator
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@Spi("Dissolve")
+@SpiOption("溶解滤镜")
 @Accessors(fluent = true)
 public class ImageDissolveFilter extends AbstractImagePointFilter {
 

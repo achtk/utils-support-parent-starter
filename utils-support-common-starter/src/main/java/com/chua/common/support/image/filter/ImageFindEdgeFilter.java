@@ -1,6 +1,8 @@
 package com.chua.common.support.image.filter;
 
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.common.support.utils.BufferedImageUtils;
 
 import java.awt.image.BufferedImage;
@@ -10,6 +12,8 @@ import java.awt.image.BufferedImage;
  *
  * @author CH
  */
+@Spi("FindEdge")
+@SpiOption("边缘检测滤镜")
 public class ImageFindEdgeFilter extends AbstractImageFilter {
 
     /**

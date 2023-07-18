@@ -16,6 +16,9 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
+
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
@@ -27,6 +30,8 @@ import java.awt.image.BufferedImage;
  *
  * @author Administrator
  */
+@Spi("Twirl")
+@SpiOption("中心向外扭曲滤镜")
 public class ImageTwirlFilter extends AbstractImageTransformFilter {
 
     private float angle = 0;

@@ -16,6 +16,9 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
@@ -25,6 +28,8 @@ import java.awt.image.ColorModel;
  *
  * @author Administrator
  */
+@Spi("TileImage")
+@SpiOption("平铺滤镜")
 public class ImageTileImageFilter extends AbstractImageFilter {
 
     private int width;

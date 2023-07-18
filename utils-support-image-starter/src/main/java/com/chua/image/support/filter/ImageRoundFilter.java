@@ -1,5 +1,7 @@
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -16,6 +18,8 @@ import java.awt.image.BufferedImage;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@Spi("Round")
+@SpiOption("圆形滤镜")
 public class ImageRoundFilter extends AbstractImageFilter {
 
     @Override

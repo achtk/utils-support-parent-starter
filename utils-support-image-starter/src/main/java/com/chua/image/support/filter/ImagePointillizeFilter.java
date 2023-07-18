@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.image.support.utils.ImageMath;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -27,6 +29,8 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@Spi("Pointillize")
+@SpiOption("点彩化滤镜")
 public class ImagePointillizeFilter extends ImageCellularFilter {
 
     private float edgeThickness = 0.4f;

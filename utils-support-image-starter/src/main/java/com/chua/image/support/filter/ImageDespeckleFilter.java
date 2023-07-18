@@ -16,13 +16,18 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
+
 import java.awt.*;
 
 /**
- * A filter which removes noise from an image using a "pepper and salt" algorithm.
+ * 去除噪声的过滤器。
  *
  * @author Administrator
  */
+@Spi("Despeckle")
+@SpiOption("去除噪声滤镜")
 public class ImageDespeckleFilter extends ImageWholeImageFilter {
 
     public ImageDespeckleFilter() {

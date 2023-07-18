@@ -1,6 +1,8 @@
 package com.chua.image.support.filter;
 
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.common.support.image.AsciiImage;
 import com.chua.common.support.image.converter.AsciiToImageConverter;
 import com.chua.common.support.image.strategy.ColorSquareErrorFitStrategy;
@@ -15,6 +17,8 @@ import java.awt.image.BufferedImage;
  * @version 1.0.0
  * @since 2021/6/11
  */
+@Spi("Txt")
+@SpiOption("文本滤镜")
 public class ImageTxtFilter extends AbstractImageFilter {
     @Override
     public BufferedImage filter(BufferedImage image, BufferedImage image1) {

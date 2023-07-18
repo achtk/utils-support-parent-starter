@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -32,6 +34,8 @@ import java.security.SecureRandom;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@Spi("Shatter")
+@SpiOption("粉碎滤镜")
 public class ImageShatterFilter extends AbstractImageFilter {
     private float centreX = 0.5f, centreY = 0.5f;
     private float distance;

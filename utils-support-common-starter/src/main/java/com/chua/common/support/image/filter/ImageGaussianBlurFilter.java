@@ -17,7 +17,7 @@ import java.util.concurrent.ExecutorService;
  *
  * @author CH
  */
-@SpiOption("gaussian")
+@SpiOption("高斯模糊")
 @Spi("gray")
 @NoArgsConstructor
 public class ImageGaussianBlurFilter extends AbstractImageFilter {

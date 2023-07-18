@@ -17,6 +17,8 @@ limitations under the License.
 package com.chua.image.support.filter;
 
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.image.support.utils.ImageMath;
 
 import java.awt.*;
@@ -24,10 +26,12 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
 /**
- * A filter which priduces a video feedback effect by repeated transformations.
+ * 通过重复变换产生视频反馈效果的滤波器。
  *
  * @author Administrator
  */
+@Spi("Feedback")
+@SpiOption("反馈滤镜")
 public class ImageFeedbackFilter extends AbstractImageFilter {
     private float centreX = 0.5f, centreY = 0.5f;
     private float distance;

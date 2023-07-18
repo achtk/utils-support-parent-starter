@@ -16,11 +16,16 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
+
 /**
  * A filter which changes the exposure of an image.
  *
  * @author Administrator
  */
+@Spi("Exposure")
+@SpiOption("曝光滤镜")
 public class ImageExposureFilter extends AbstractImageTransferFilter {
 
     private float exposure = 1.0f;

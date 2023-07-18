@@ -16,11 +16,16 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
+
 /**
  * 反色滤镜。
  *
  * @author CH
  */
+@Spi("Invert")
+@SpiOption("反色滤镜")
 public class ImageInvertFilter extends AbstractImagePointFilter {
 
     public ImageInvertFilter() {

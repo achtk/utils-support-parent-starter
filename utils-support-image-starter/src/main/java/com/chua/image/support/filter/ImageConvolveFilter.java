@@ -17,6 +17,8 @@ limitations under the License.
 package com.chua.image.support.filter;
 
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.image.support.utils.ImageMath;
 import com.chua.image.support.utils.PixelUtils;
 
@@ -32,6 +34,8 @@ import java.awt.image.Kernel;
  *
  * @author Jerry Huxtable
  */
+@Spi("Convolve")
+@SpiOption("卷积核滤镜")
 public class ImageConvolveFilter extends AbstractImageFilter {
 
     /**

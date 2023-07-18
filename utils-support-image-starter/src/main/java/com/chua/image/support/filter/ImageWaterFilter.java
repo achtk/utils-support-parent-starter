@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.chua.image.support.filter;
 
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiOption;
 import com.chua.image.support.utils.ImageMath;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -32,6 +34,8 @@ import java.awt.image.BufferedImage;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@Spi("Water")
+@SpiOption("波纹滤镜")
 @Accessors(fluent = true)
 public class ImageWaterFilter extends AbstractImageTransformFilter {
 
