@@ -61,6 +61,7 @@
         <module>utils-support-zeromq-starter</module>
         <module>utils-support-anpr-starter</module>
         <module>utils-support-sms-support</module>
+        <module>utils-support-easyai-starter</module>
     </modules>
 
     <!-- -Djava.net.preferIPv4Stack=true-->
