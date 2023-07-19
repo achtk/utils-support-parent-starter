@@ -4110,7 +4110,7 @@ public class StringUtils {
             return defaultValue;
         }
 
-        if(NONE.equals(value) || NULL.equals(value)) {
+        if(NONE.equals(value) || NULL.equalsIgnoreCase(value)) {
             return defaultValue;
         }
 

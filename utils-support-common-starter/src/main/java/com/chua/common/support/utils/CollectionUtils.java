@@ -1,10 +1,10 @@
 package com.chua.common.support.utils;
 
 import com.chua.common.support.bean.BeanMap;
-import com.chua.common.support.bean.BeanUtils;
 import com.chua.common.support.collection.CartesianList;
 import com.chua.common.support.converter.Converter;
 import com.chua.common.support.function.Matcher;
+import com.chua.common.support.function.Splitter;
 
 import java.security.SecureRandom;
 import java.util.*;
@@ -727,8 +727,69 @@ public class CollectionUtils {
      * @param target 集合1
      * @return 集合是否包含集合1的至少一个元素
      */
-    public static boolean contains(List<String> source, List<String> target) {
+    public static boolean contains(String source, Collection<String> target) {
+        if(StringUtils.isEmpty(source)) {
+            return false;
+        }
+
+        List<String> sourceList = Splitter.on(',').trimResults().omitEmptyStrings().splitToList(source);
+        return contains(sourceList, target);
+    }
+    /**
+     * 至少不存在一个元素
+     *
+     * @param source 集合
+     * @param target 集合1
+     * @return 至少不存在一个元素
+     */
+    public static boolean notContains(List<String> source, Collection<String> target) {
         for (String s : target) {
+            if (!source.contains(s)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    /**
+     * 集合是否包含集合1的至少一个元素
+     *
+     * @param source 集合
+     * @param target 集合1
+     * @return 集合是否包含集合1的至少一个元素
+     */
+    public static boolean contains(List<String> source, Collection<String> target) {
+        for (String s : target) {
+            if (source.contains(s)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 集合是否包含集合1的至少一个元素
+     *
+     * @param source 集合
+     * @param target 集合1
+     * @return 集合是否包含集合1的至少一个元素
+     */
+    public static boolean contains(Set<String> source, Collection<String> target) {
+        for (String s : target) {
+            if (source.contains(s)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    /**
+     * 集合是否包含集合1的至少一个元素
+     *
+     * @param source 集合
+     * @param target 集合1
+     * @return 集合是否包含集合1的至少一个元素
+     */
+    public static boolean contains(Set<String> source, String target) {
+        for (String s : target.split(",")) {
             if (source.contains(s)) {
                 return true;
             }

@@ -108,6 +108,16 @@ public interface Splitter {
      */
     List<String> splitToList(String value);
 
+    /**
+     * 拆分为数组
+     *
+     * @param value 值
+     * @return 结果
+     */
+    default Set<String> splitToSet(String value) {
+        return new HashSet<>(splitToList(value));
+    }
+
 
     /**
      * 拆分为数组
