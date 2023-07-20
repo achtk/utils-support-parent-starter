@@ -28,6 +28,13 @@ public @interface Column {
     String comment() default "";
 
     /**
+     * columnDefinition
+     *
+     * @return columnDefinition
+     */
+    String columnDefinition() default "";
+
+    /**
      * 默认值
      *
      * @return 默认值

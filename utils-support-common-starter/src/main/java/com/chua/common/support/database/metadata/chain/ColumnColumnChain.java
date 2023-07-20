@@ -21,6 +21,7 @@ public class ColumnColumnChain implements ColumnChain{
         column.setComment(annotationAttributes.getString("comment"));
         column.setDefaultValue(annotationAttributes.getString("defaultValue"));
         column.setExist(annotationAttributes.getBoolean("exist"));
+        column.setColumnDefinition(annotationAttributes.getString("columnDefinition"));
 
     }
 

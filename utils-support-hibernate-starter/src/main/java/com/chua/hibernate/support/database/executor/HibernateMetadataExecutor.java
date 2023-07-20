@@ -78,12 +78,17 @@ public class HibernateMetadataExecutor implements MetadataExecutor {
                 itemColumn.setDefaultValue(o.getDefaultValue());
             }
 
-            itemColumn.setValue(new HibernateIdValue(o, new HibernateSimpleMetadata(o.getJavaType())));
-            if (o.isPrimary()) {
-                primaryKey.addColumn(itemColumn);
-                primary.add(o);
+            if (StringUtils.isNotBlank(o.getColumnDefinition())) {
+                itemColumn.setSqlType(o.getColumnDefinition());
+            } else {
+                itemColumn.setValue(new HibernateIdValue(o, new HibernateSimpleMetadata(o.getJavaType())));
+                if (o.isPrimary()) {
+                    primaryKey.addColumn(itemColumn);
+                    primary.add(o);
+                }
+                itemColumn.setSqlType(null);
             }
-            itemColumn.setSqlType(null);
+
             table.addColumn(itemColumn);
         }
 
