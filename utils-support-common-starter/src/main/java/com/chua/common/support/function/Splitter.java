@@ -1,10 +1,13 @@
 package com.chua.common.support.function;
 
 
+import com.chua.common.support.converter.Converter;
+import com.chua.common.support.json.Json;
 import com.chua.common.support.utils.StringUtils;
 
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static com.chua.common.support.constant.CommonConstant.EMPTY_ARRAY;
 
@@ -246,6 +249,11 @@ public interface Splitter {
         public List<String> splitToList(String value) {
             if (StringUtils.isEmpty(value)) {
                 return Collections.emptyList();
+            }
+
+            if(value.startsWith("[")) {
+                List<?> objects = Json.toList(value);
+                return objects.stream().map(it -> Converter.convertIfNecessary(it, String.class)).collect(Collectors.toList());
             }
 
             List<String> rs = new LinkedList<>();

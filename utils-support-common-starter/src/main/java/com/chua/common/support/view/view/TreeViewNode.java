@@ -1,5 +1,7 @@
 package com.chua.common.support.view.view;
 
+import lombok.Setter;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +21,8 @@ public class TreeViewNode {
     /**
      * 节点数据
      */
-    final String data;
+    @Setter
+    String data;
 
     /**
      * 子节点
@@ -31,12 +34,12 @@ public class TreeViewNode {
     /**
      * 开始时间戳
      */
-    private long beginTimestamp;
+    public long beginTimestamp;
 
     /**
      * 结束时间戳
      */
-    private long endTimestamp;
+    public long endTimestamp;
 
     /**
      * 备注
@@ -86,7 +89,7 @@ public class TreeViewNode {
      *
      * @return true / false
      */
-    boolean isRoot() {
+    protected boolean isRoot() {
         return null == parent;
     }
 
@@ -156,6 +159,6 @@ public class TreeViewNode {
     private long minCost = Long.MAX_VALUE;
     private long maxCost = Long.MIN_VALUE;
     public long totalCost = 0;
-    private long times = 0;
+    public long times = 0;
     public long marks = 0;
 }
