@@ -1004,6 +1004,17 @@ public class ClassUtils {
                 type.isPrimitive()
                 ;
     }
+    /**
+     *spring类
+     *
+     * @param type 类型
+     * @return java类
+     */
+    public static boolean isSpringType(Class<?> type) {
+        return type.getTypeName().startsWith("org.springframework.") ||
+                type.isPrimitive()
+                ;
+    }
 
 
     /**
