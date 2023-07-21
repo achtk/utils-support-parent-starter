@@ -31,6 +31,7 @@ public class ProxyMethod {
     }
 
     public <T> Object getValue(T client) {
+        method.setAccessible(true);
         return ClassUtils.invokeMethod(method, client, args);
     }
 

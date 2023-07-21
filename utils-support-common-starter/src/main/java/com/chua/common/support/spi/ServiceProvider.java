@@ -4,6 +4,11 @@ package com.chua.common.support.spi;
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.function.NameAware;
+import com.chua.common.support.function.SafeFunction;
+import com.chua.common.support.function.Splitter;
+import com.chua.common.support.lang.proxy.DelegateMethodIntercept;
+import com.chua.common.support.lang.proxy.ProxyMethod;
+import com.chua.common.support.lang.proxy.ProxyUtils;
 import com.chua.common.support.spi.autowire.AutoServiceAutowire;
 import com.chua.common.support.spi.autowire.ServiceAutowire;
 import com.chua.common.support.spi.finder.*;
@@ -100,7 +105,7 @@ public class ServiceProvider<T> implements InitializingAware {
         if (ClassUtils.isVoid(value)) {
             return EMPTY;
         }
-        if(null == CACHE) {
+        if (null == CACHE) {
             CACHE = new ConcurrentHashMap<>();
         }
         return MapUtils.computeIfAbsent(CACHE, value, it -> {
@@ -177,7 +182,7 @@ public class ServiceProvider<T> implements InitializingAware {
         rs.add(new ServiceLoaderServiceFinder());
         rs.add(new CustomServiceFinder());
         rs.add(new SamePackageServiceFinder());
-        if(ClassUtils.isPresent(UTILS)) {
+        if (ClassUtils.isPresent(UTILS)) {
             rs.add(new SpringServiceFinder());
         }
         rs.add(new ScriptServiceFinder());
@@ -213,16 +218,16 @@ public class ServiceProvider<T> implements InitializingAware {
     //Definition *******************************************************************************************************************
     public ServiceDefinition getDefinition(String name, Object... args) {
         name = name.toUpperCase();
-        if(name.contains(SYMBOL_COLON)) {
+        if (name.contains(SYMBOL_COLON)) {
             String[] split = name.split(SYMBOL_COLON, 2);
             String type = split[0];
             String name1 = split[1];
             SortedSet<ServiceDefinition> definitions = new TreeSet<>(COMPARATOR);
             SortedSet<ServiceDefinition> serviceDefinitions = this.definitions.get(name);
-            for (Map.Entry<String, SortedSet<ServiceDefinition>> entry :this. definitions.entrySet()) {
+            for (Map.Entry<String, SortedSet<ServiceDefinition>> entry : this.definitions.entrySet()) {
                 SortedSet<ServiceDefinition> entryValue = entry.getValue();
                 for (ServiceDefinition serviceDefinition : entryValue) {
-                    if(type.equalsIgnoreCase(serviceDefinition.getLabelType()) && name1.equalsIgnoreCase(serviceDefinition.getName())) {
+                    if (type.equalsIgnoreCase(serviceDefinition.getLabelType()) && name1.equalsIgnoreCase(serviceDefinition.getName())) {
                         definitions.add(serviceDefinition);
                     }
                 }
@@ -390,6 +395,7 @@ public class ServiceProvider<T> implements InitializingAware {
     public void forEach(BiConsumer<String, T> consumer, Object... args) {
         list(args).forEach(consumer);
     }
+
     /**
      * 获取实现
      *
@@ -403,13 +409,15 @@ public class ServiceProvider<T> implements InitializingAware {
             consumer.accept(value.first());
         }
     }
+
     /**
      * 遍历
      */
     public void moreEach(BiConsumer<String, T> consumer) {
         for (Map.Entry<String, SortedSet<ServiceDefinition>> entry : definitions.entrySet()) {
             SortedSet<ServiceDefinition> value = entry.getValue();
-            lo: for (ServiceDefinition definition : value) {
+            lo:
+            for (ServiceDefinition definition : value) {
                 T imageConverter = definition.getObj(serviceAutowire);
                 if (null == imageConverter) {
                     continue;
@@ -480,7 +488,7 @@ public class ServiceProvider<T> implements InitializingAware {
         while (StringUtils.isNotEmpty(name)) {
             name = FileUtils.getSimpleExtension(name);
             definition = getDefinition(name);
-            if(DEFAULT_DEFINITION != definition) {
+            if (DEFAULT_DEFINITION != definition) {
                 return (T) Optional.ofNullable(definition.newInstance(serviceAutowire, args)).orElse(defaultImpl);
             }
         }
@@ -514,6 +522,22 @@ public class ServiceProvider<T> implements InitializingAware {
         }
 
         return (T) Optional.ofNullable(getDefinition(name).getObj(serviceAutowire)).orElse(defaultImpl);
+    }
+
+    /**
+     * 获取实现
+     *
+     * @param name 名称
+     * @return 实现
+     */
+    public T getExtension(String... name) {
+        for (String s : name) {
+            ServiceDefinition definition = getDefinition(s);
+            if(null != definition) {
+                return definition.getObj(serviceAutowire);
+            }
+        }
+        return defaultImpl;
     }
 
     /**
@@ -584,6 +608,38 @@ public class ServiceProvider<T> implements InitializingAware {
             rs.add(new Option<String>(noneObject.getName(), noneObject.getLabel(), noneObject.getLabelType()).setImpl(noneObject.implClass));
         }
         return rs;
+    }
+
+    /**
+     * 获取多个实现的合集
+     *
+     * @param names 实现方式
+     * @param args  参数
+     * @return
+     */
+    public T createProvider(String names, Object... args) {
+        List<T> impl = new LinkedList<>();
+        for (String name : Splitter.on(',').omitEmptyStrings().trimResults().splitToSet(names)) {
+            T deepNewExtension = getNewExtension(name, args);
+            if (null != deepNewExtension) {
+                impl.add(deepNewExtension);
+            }
+        }
+        Class<T> service = this.value.getValue();
+        return ProxyUtils.proxy(service, classLoader, new DelegateMethodIntercept<>(service, new SafeFunction<ProxyMethod, Object>() {
+            @Override
+            public Object safeApply(ProxyMethod proxyMethod) throws Throwable {
+                Object rs = null;
+                for (T t : impl) {
+                  rs = invoke(t, proxyMethod);
+                }
+                return rs;
+            }
+
+            private Object invoke(T t, ProxyMethod proxyMethod) {
+                return proxyMethod.getValue(t);
+            }
+        }));
     }
 
     /**

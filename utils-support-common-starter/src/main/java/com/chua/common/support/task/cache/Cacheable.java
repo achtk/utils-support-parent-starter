@@ -97,6 +97,16 @@ public interface Cacheable extends InitializingAware, DisposableAware {
     }
 
     /**
+     * 获取值/不存在则赋值
+     *
+     * @param key   索引
+     * @param value 值
+     * @return 值
+     */
+    default Value<Object> getOrPut(String key, Supplier<?> value) {
+        return getOrPut(key, value.get());
+    }
+    /**
      * 赋值
      *
      * @param key   索引

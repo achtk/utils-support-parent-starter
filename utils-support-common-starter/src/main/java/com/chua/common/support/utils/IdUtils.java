@@ -3,6 +3,7 @@ package com.chua.common.support.utils;
 
 import com.chua.common.support.constant.Projects;
 import com.chua.common.support.lang.date.DateTime;
+import com.chua.common.support.lang.id.SnowFlake;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -217,5 +218,14 @@ public class IdUtils {
      */
     public static String uuid() {
         return createUuid();
+    }
+
+    /**
+     * 雪花算法
+     * @return  雪花算法
+     */
+    public static String snowFlake() {
+        SnowFlake snowFlake = new SnowFlake(System.nanoTime(), COMPUTER_UNIQUE_IDENTIFICATION.hashCode());
+        return snowFlake.getNextId() + "";
     }
 }
