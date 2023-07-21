@@ -225,7 +225,7 @@ public class IdUtils {
      * @return  雪花算法
      */
     public static String snowFlake() {
-        SnowFlake snowFlake = new SnowFlake(System.nanoTime(), COMPUTER_UNIQUE_IDENTIFICATION.hashCode());
+        SnowFlake snowFlake = new SnowFlake(System.nanoTime() % 31, Math.abs(COMPUTER_UNIQUE_IDENTIFICATION.hashCode() % 31));
         return snowFlake.getNextId() + "";
     }
 }

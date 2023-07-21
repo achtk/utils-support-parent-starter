@@ -3,13 +3,14 @@ package com.chua.common.support.utils;
 import com.chua.common.support.crypto.mac.HashMac;
 import com.chua.common.support.crypto.mac.HmacAlgorithm;
 
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
+import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
 
 /**
  * 加解密
@@ -727,5 +728,57 @@ public class DigestUtils {
      */
     public static HashMac hmac(HmacAlgorithm algorithm, SecretKey key) {
         return new HashMac(algorithm, key);
+    }
+
+
+    /**
+     * AES解密
+     *
+     * @param encryptStr 密文
+     * @param decryptKey 秘钥，必须为16个字符组成
+     * @return 明文
+     * @throws Exception Exception
+     */
+    public static String aesDecrypt(String encryptStr, String decryptKey) {
+        if (StringUtils.isEmpty(encryptStr) || StringUtils.isEmpty(decryptKey)) {
+            return null;
+        }
+
+        byte[] encryptByte = Base64.getDecoder().decode(encryptStr);
+        byte[] decryptBytes = new byte[0];
+        try {
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(decryptKey.getBytes(), "AES"));
+            decryptBytes = cipher.doFinal(encryptByte);
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException |
+                 BadPaddingException e) {
+            throw new RuntimeException(e);
+        }
+        return new String(decryptBytes);
+    }
+
+    /**
+     * AES加密
+     *
+     * @param content    明文
+     * @param encryptKey 秘钥，必须为16个字符组成
+     * @return 密文
+     * @throws Exception Exception
+     */
+    public static String aesEncrypt(String content, String encryptKey) {
+        if (StringUtils.isEmpty(content) || StringUtils.isEmpty(encryptKey)) {
+            return null;
+        }
+
+        byte[] encryptStr = new byte[0];
+        try {
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(encryptKey.getBytes(), "AES"));
+
+            encryptStr = cipher.doFinal(content.getBytes(StandardCharsets.UTF_8));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return Base64.getEncoder().encodeToString(encryptStr);
     }
 }
