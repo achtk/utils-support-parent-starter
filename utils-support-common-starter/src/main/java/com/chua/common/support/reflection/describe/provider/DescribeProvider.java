@@ -1,6 +1,8 @@
 package com.chua.common.support.reflection.describe.provider;
 
+import com.chua.common.support.converter.Converter;
 import com.chua.common.support.reflection.describe.TypeDescribe;
+import com.chua.common.support.utils.ClassUtils;
 
 import static com.chua.common.support.constant.CommonConstant.EMPTY_OBJECT;
 
@@ -80,6 +82,24 @@ public interface DescribeProvider {
      */
     default Object executeSelf(Object... args) {
         return executeSelf(Object.class, args);
+    }
+
+    /**
+     * 执行方法
+     *
+     * @param targetType 参数
+     * @return 返回类型
+     */
+    @SuppressWarnings("ALL")
+    default <T> T executeSelf(Class<T> targetType) {
+        try {
+            return Converter.convertIfNecessary(executeSelf(Object.class, new Object[0]), targetType);
+        } catch (Exception e) {
+            if (targetType.isMemberClass()) {
+                return (T) ClassUtils.memberDefault(targetType);
+            }
+        }
+        return null;
     }
 
     /**

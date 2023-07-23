@@ -1880,6 +1880,24 @@ public class ClassUtils {
         }
     }
 
+    /**
+     * 类型是否一致
+     *
+     * @param value  对象
+     * @param target 类型
+     * @return 类型是否一致
+     */
+    public static boolean isAssignableFrom(Object value, String target) {
+        if (null == target) {
+            return false;
+        }
+
+        if (!isPresent(target)) {
+            return false;
+        }
+
+        return isAssignableFrom(value, forName(target));
+    }
 
     /**
      * 类型是否一致
@@ -1896,7 +1914,6 @@ public class ClassUtils {
         if (null == value) {
             return false;
         }
-
         return target.isAssignableFrom(value.getClass());
     }
 
@@ -2313,6 +2330,45 @@ public class ClassUtils {
 
     public static InputStream getResourceAsStream(String s) {
         return getDefaultClassLoader().getResourceAsStream(s);
+    }
+
+    /**
+     * 默认值
+     *
+     * @param targetType 原子类型
+     * @param <T>        类型
+     * @return 结果
+     */
+    public static Object memberDefault(Class<?> targetType) {
+        if (targetType == int.class) {
+            return 0;
+        }
+
+        if (targetType == long.class) {
+            return 0L;
+        }
+
+        if (targetType == float.class) {
+            return 0f;
+        }
+
+        if (targetType == double.class) {
+            return 0d;
+        }
+
+        if (targetType == boolean.class) {
+            return false;
+        }
+
+        if (targetType == char.class) {
+            return ' ';
+        }
+
+        if (targetType == short.class) {
+            return (short) 0;
+        }
+
+        return (byte) 0;
     }
 
     static class SetAccessibleAction<T extends AccessibleObject> implements PrivilegedAction<T> {
