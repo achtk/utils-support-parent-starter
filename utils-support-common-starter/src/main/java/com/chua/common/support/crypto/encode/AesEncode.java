@@ -25,7 +25,7 @@ public class AesEncode implements KeyEncode {
             // 创建密码器
             Cipher cipher = Cipher.getInstance(DEFAULT_CIPHER_ALGORITHM);
             // 初始化为加密模式的密码器
-            cipher.init(Cipher.ENCRYPT_MODE, DigestUtils.createSimpleSecretKey(KEY_ALGORITHM, key));
+            cipher.init(Cipher.ENCRYPT_MODE, DigestUtils.getSecretKey(KEY_ALGORITHM, key, 128));
             // 加密
             return cipher.doFinal(content);
         } catch (Exception ignored) {
