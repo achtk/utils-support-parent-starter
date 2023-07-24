@@ -21,10 +21,11 @@ public class AesDecode implements KeyDecode {
             // 实例化
             Cipher cipher = Cipher.getInstance(DEFAULT_CIPHER_ALGORITHM);
             // 使用密钥初始化，设置为解密模式
-            cipher.init(Cipher.DECRYPT_MODE, DigestUtils.getSecretKey(KEY_ALGORITHM, key, 128));
+            cipher.init(Cipher.DECRYPT_MODE, DigestUtils.createSimpleSecretKey(KEY_ALGORITHM, key));
             //执行操作
             return cipher.doFinal(content);
         } catch (Exception ignored) {
+            System.out.println();
         }
         return null;
     }

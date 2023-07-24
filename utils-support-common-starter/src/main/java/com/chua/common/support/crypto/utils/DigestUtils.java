@@ -694,6 +694,17 @@ public class DigestUtils {
     }
 
     /**
+     * 生成加密秘钥
+     *
+     * @param algorithm 算法
+     * @param key       seed
+     * @return SecretKeySpec
+     */
+    public static SecretKeySpec createSimpleSecretKey(final String algorithm, final byte[] key) {
+        return new SecretKeySpec(key, algorithm);
+    }
+
+    /**
      * rsa生成密钥对
      *
      * @return key
