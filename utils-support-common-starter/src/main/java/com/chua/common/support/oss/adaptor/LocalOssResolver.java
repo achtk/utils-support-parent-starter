@@ -2,7 +2,7 @@ package com.chua.common.support.oss.adaptor;
 
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.annotations.SpiOption;
-import com.chua.common.support.lang.date.DateTime;
+import com.chua.common.support.lang.date.DateUtils;
 import com.chua.common.support.lang.page.Page;
 import com.chua.common.support.lang.page.PageMemData;
 import com.chua.common.support.media.MediaType;
@@ -19,7 +19,6 @@ import com.chua.common.support.utils.StringUtils;
 import com.chua.common.support.value.Value;
 
 import java.io.*;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -84,7 +83,7 @@ public class LocalOssResolver extends AbstractOssResolver {
                         mediaType.subtype(),
                         name + "/" + it.getName(),
                         it.getName(),
-                        DateTime.of(it.lastModified()).toLocalDateTime(),
+                        DateUtils.format(it.lastModified()),
                         it.isFile(),
                         null != files1 && files1.length != 0
                 );

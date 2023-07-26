@@ -17,7 +17,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -64,7 +63,7 @@ public class ZipOssHandler implements OssHandler {
                                         mediaType.subtype(),
                                         name + it.getName(),
                                         removeSuffix,
-                                        LocalDateTime.now(),
+                                        "",
                                         it.getFileType() == FileType.FILE,
                                         false));
                             }

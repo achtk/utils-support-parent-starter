@@ -4,7 +4,6 @@ import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.annotations.SpiOption;
 import com.chua.common.support.constant.FileType;
 import com.chua.common.support.file.tar.Tar;
-import com.chua.common.support.file.zip.Zip;
 import com.chua.common.support.lang.page.Page;
 import com.chua.common.support.lang.page.PageMemData;
 import com.chua.common.support.media.MediaType;
@@ -18,7 +17,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -61,7 +59,7 @@ public class TarOssHandler implements OssHandler {
                                         mediaType.subtype(),
                                         name + it.getName(),
                                         StringUtils.removeSuffix(it.getName().replace(newName, ""), "/"),
-                                        LocalDateTime.now(),
+                                        "",
                                         it.getFileType() == FileType.FILE,
                                         false));
                             }

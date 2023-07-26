@@ -22,7 +22,6 @@ import io.minio.messages.Item;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
-import java.time.LocalDateTime;
 import java.util.*;
 
 import static com.chua.common.support.constant.CommonConstant.HTTP;
@@ -166,8 +165,8 @@ public class MinioOssResolver extends AbstractOssResolver {
                                 mediaType.type(),
                                 mediaType.subtype(),
                                 name + "/" + item.objectName(),
-                                FileUtils.getBaseName( StringUtils.removeEnd(item.objectName(), "/")),
-                                LocalDateTime.now(),
+                                FileUtils.getBaseName(StringUtils.removeEnd(item.objectName(), "/")),
+                                "",
                                 !item.isDir(),
                                 item.isDir()));
                     } catch (Exception e) {

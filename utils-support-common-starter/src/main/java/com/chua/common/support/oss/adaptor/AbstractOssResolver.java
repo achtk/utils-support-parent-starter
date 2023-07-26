@@ -135,6 +135,7 @@ public abstract class AbstractOssResolver implements OssResolver {
             String ossPlugins = ossSystem.getOssPlugins();
             if (null == mediaType || !mediaType.type().startsWith("image") || StringUtils.isBlank(ossPlugins)) {
                 os.write(bytes);
+                os.flush();
                 return;
             }
             String format = mediaType.subtype();
