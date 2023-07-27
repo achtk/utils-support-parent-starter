@@ -94,7 +94,9 @@ public class XlsExportFile extends AbstractExportFile {
 
 
         if (typeAttribute.hasAnyAnnotation(DEFAULT_ANNOTATION)) {
-            this.excelWriter = EasyExcel.write(outputStream, aClass)
+            this.excelWriter = EasyExcel.write()
+                    .head(aClass)
+                    .file(outputStream)
                     .registerWriteHandler(horizontalCellStyleStrategy)
                     .registerWriteHandler(new FreezeHandler())
                     .registerWriteHandler(new FilterHandler("A1:Z1"))
@@ -104,7 +106,7 @@ public class XlsExportFile extends AbstractExportFile {
                     .autoCloseStream(true)
                     .autoTrim(true)
                     .excelType(getExcelTypeEnum()).build();
-            this.excelWriter.write(data, EasyExcel.write().sheet().build());
+            this.excelWriter.write(data, EasyExcel.write().sheet(0).build());
             return;
         }
         int size = 0;
@@ -115,8 +117,9 @@ public class XlsExportFile extends AbstractExportFile {
             tpl.add(Collections.singletonList(header));
         }
 
-        this.excelWriter = EasyExcel.write(outputStream)
+        this.excelWriter = EasyExcel.write()
                 .head(tpl)
+                .file(outputStream)
                 .registerWriteHandler(new EasyExcelCustomCellWriteHandler())
                 .registerWriteHandler(new FreezeHandler())
                 .registerWriteHandler(new ColFilterHandler(0, 0, 0, size - 1))
@@ -126,7 +129,7 @@ public class XlsExportFile extends AbstractExportFile {
                 .autoCloseStream(true)
                 .autoTrim(true)
                 .excelType(getExcelTypeEnum()).build();
-        this.excelWriter.write(rs, EasyExcel.write().sheet().build());
+        this.excelWriter.write(rs, EasyExcel.write().sheet(0).build());
 
     }
 
@@ -145,10 +148,17 @@ public class XlsExportFile extends AbstractExportFile {
     @Override
     public <T> void append(List<T> records) {
         if (typeAttribute.hasAnyAnnotation(DEFAULT_ANNOTATION)) {
-            this.excelWriter.write(records, EasyExcel.write().sheet().build());
+            this.excelWriter.write(records, EasyExcel.write().sheet(0).build());
             return;
         }
         List<List<Object>> rs = create(records);
-        this.excelWriter.write(rs, EasyExcel.write().sheet().build());
+        this.excelWriter.write(rs, EasyExcel.write().sheet(0).build());
+    }
+
+
+    @Override
+    public void close() throws Exception {
+        this.excelWriter.finish();
+        this.excelWriter.close();
     }
 }
