@@ -209,4 +209,16 @@ public class DelegateProfile implements  Profile, ServiceFactory<ProfileResolver
     public String resolvePlaceholder(String placeholderName) {
         return null;
     }
+
+    public Map<String, Object> asMap(String profileName) {
+        ProfileValue profileValue = profileMap.get(profileName);
+        if(null != profileValue) {
+            Map<String, Object> rs = new LinkedHashMap<>();
+            for (String key : profileValue.keys()) {
+                rs.put(key, profileValue.getValue(key));
+            }
+            return rs;
+        }
+        return Collections.emptyMap();
+    }
 }
