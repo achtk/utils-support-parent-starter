@@ -58,6 +58,7 @@ public class TsvExportFile extends AbstractExportFile {
                     tsvWriter.writeRow(array);
                 }
             }
+            tsvWriter.flush();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -71,6 +72,7 @@ public class TsvExportFile extends AbstractExportFile {
                 tsvWriter.writeRow(array);
             }
         }
+        tsvWriter.flush();
     }
 
     @Override
