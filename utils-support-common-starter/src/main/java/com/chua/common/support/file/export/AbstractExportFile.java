@@ -93,4 +93,8 @@ public abstract class AbstractExportFile implements ExportFile, InitializingAwar
         export(outputStream, Collections.singletonList(data));
     }
 
+    @Override
+    public void close() throws Exception {
+
+    }
 }

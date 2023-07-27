@@ -8,7 +8,7 @@ import java.util.List;
  *
  * @author CH
  */
-public interface ExportFile {
+public interface ExportFile extends AutoCloseable {
 
 
     /**
@@ -27,4 +27,12 @@ public interface ExportFile {
      * @param data         数据
      */
     <T> void export(OutputStream outputStream, T data);
+
+    /**
+     * 追加
+     *
+     * @param records 记录
+     * @param <T>     类型
+     */
+    <T> void append(List<T> records);
 }

@@ -2,21 +2,23 @@ package com.chua.common.support.file.export;
 
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.bean.BeanMap;
-import com.chua.common.support.converter.Converter;
 import com.chua.common.support.function.Joiner;
-import com.chua.common.support.function.NameAware;
 import com.chua.common.support.unit.name.NamingCase;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.List;
 
 /**
  * sql
+ *
  * @author CH
  */
 @Spi("sql")
-public class SqlExportFile extends AbstractExportFile{
+public class SqlExportFile extends AbstractExportFile {
+    private OutputStreamWriter writer;
+
     public SqlExportFile(ExportConfiguration configuration) {
         super(configuration);
     }
@@ -34,18 +36,33 @@ public class SqlExportFile extends AbstractExportFile{
             buffer.append(";\r\n");
         }
 
-        try (OutputStreamWriter writer = new OutputStreamWriter(outputStream, configuration.charset())) {
+        try {
+            this.writer = new OutputStreamWriter(outputStream, configuration.charset());
             writer.write(buffer.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    @Override
+    public <T> void append(List<T> records) {
+        StringBuffer buffer = new StringBuffer();
+        for (T datum : records) {
+            buffer.append(createSql(datum));
+            buffer.append(";\r\n");
+        }
+        try {
+            writer.write(buffer.toString());
+        } catch (IOException ignored) {
+        }
+    }
+
     /**
      * 创建sql
+     *
      * @param datum 数据
+     * @param <T>   类型
      * @return 结果
-     * @param <T> 类型
      */
     private <T> String createSql(T datum) {
         StringBuffer stringBuffer = new StringBuffer();

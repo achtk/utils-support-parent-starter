@@ -4,6 +4,7 @@ import com.chua.common.support.file.xz.LZMA2Options;
 import com.chua.common.support.file.xz.XZOutputStream;
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.ClassUtils;
+import com.chua.common.support.utils.IoUtils;
 import com.chua.common.support.value.Pair;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import java.lang.reflect.Field;
 import java.nio.charset.Charset;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.zip.GZIPOutputStream;
 
 import static com.chua.common.support.constant.CommonConstant.GZ;
@@ -25,13 +27,16 @@ import static com.chua.common.support.constant.CommonConstant.XZ;
  * @author CH
  */
 @RequiredArgsConstructor(staticName = "read")
-public class ExportFileBuilder {
+public class ExportFileBuilder implements AutoCloseable {
 
     private final ExportConfiguration exportConfiguration = new ExportConfiguration();
 
     @NonNull
     private OutputStream outputStream;
     private String type;
+
+    private final AtomicBoolean state = new AtomicBoolean(false);
+    private ExportFile exportFile;
 
     /**
      * 表头
@@ -122,6 +127,7 @@ public class ExportFileBuilder {
      */
     @SneakyThrows
     public <T> void doRead(List<T> data) {
+        state.set(true);
         if (type.endsWith(GZ)) {
             type = type.replace(GZ, "");
             outputStream = new GZIPOutputStream(outputStream);
@@ -133,8 +139,31 @@ public class ExportFileBuilder {
         }
 
 
-        ExportFile exportFile = ServiceProvider.of(ExportFile.class).getNewExtension(type, exportConfiguration);
+        this.exportFile = ServiceProvider.of(ExportFile.class).getNewExtension(type, exportConfiguration);
         exportFile.export(outputStream, data);
     }
 
+    /**
+     * 是否已经初始化
+     *
+     * @return 是否已经初始化
+     */
+    public boolean isLoad() {
+        return state.get();
+    }
+
+    /**
+     * 追加
+     *
+     * @param records 数据
+     */
+    public <T> void doAppend(List<T> records) {
+        exportFile.append(records);
+    }
+
+    @Override
+    public void close() throws Exception {
+        exportFile.close();
+        IoUtils.closeQuietly(outputStream);
+    }
 }

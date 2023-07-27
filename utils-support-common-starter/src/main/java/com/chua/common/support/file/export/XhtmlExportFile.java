@@ -9,6 +9,7 @@ import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.StringUtils;
 import com.chua.common.support.value.Pair;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Field;
@@ -26,6 +27,8 @@ import static com.chua.common.support.constant.CommonConstant.HTTP;
  */
 @Spi("html")
 public class XhtmlExportFile extends AbstractExportFile {
+
+    private OutputStreamWriter writer;
 
     public XhtmlExportFile(ExportConfiguration configuration) {
         super(configuration);
@@ -124,14 +127,36 @@ public class XhtmlExportFile extends AbstractExportFile {
             doAnalysis(buffer, datum);
             buffer.append("</tr>");
         }
-        buffer.append("</tbody></table></body>");
-        buffer.append("</html>");
 
-        try (OutputStreamWriter writer = new OutputStreamWriter(outputStream, configuration.charset())) {
+        try {
+            this.writer = new OutputStreamWriter(outputStream, configuration.charset());
             writer.write(buffer.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+    }
+
+    @Override
+    public <T> void append(List<T> records) {
+        StringBuffer buffer = new StringBuffer();
+        for (T datum : records) {
+            buffer.append("<tr>");
+            doAnalysis(buffer, datum);
+            buffer.append("</tr>");
+        }
+        try {
+            writer.write(buffer.toString());
+        } catch (IOException ignored) {
+        }
+    }
+
+    @Override
+    public void close() throws Exception {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("</tbody></table></body>");
+        buffer.append("</html>");
+        writer.write(buffer.toString());
 
     }
 

@@ -9,6 +9,7 @@ import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.StringUtils;
 import com.chua.common.support.value.Pair;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Field;
@@ -24,6 +25,8 @@ import java.util.Map;
  */
 @Spi("xml")
 public class XmlExportFile extends AbstractExportFile {
+
+    private OutputStreamWriter writer;
 
     public XmlExportFile(ExportConfiguration configuration) {
         super(configuration);
@@ -44,9 +47,10 @@ public class XmlExportFile extends AbstractExportFile {
             doAnalysis(buffer, datum);
             buffer.append("</item>");
         }
-        buffer.append("</data>");
 
-        try (OutputStreamWriter writer = new OutputStreamWriter(outputStream, configuration.charset())) {
+
+        try {
+            this.writer = new OutputStreamWriter(outputStream, configuration.charset());
             writer.write(buffer.toString());
         } catch (Exception e) {
             e.printStackTrace();
@@ -54,8 +58,29 @@ public class XmlExportFile extends AbstractExportFile {
 
     }
 
+    @Override
+    public <T> void append(List<T> records) {
+        StringBuffer buffer = new StringBuffer();
+        for (T datum : records) {
+            buffer.append("<item>");
+            doAnalysis(buffer, datum);
+            buffer.append("</item>");
+        }
+        try {
+            writer.write(buffer.toString());
+        } catch (IOException ignored) {
+        }
+    }
+
+    @Override
+    public void close() throws Exception {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("</data>");
+        writer.write(buffer.toString());
+    }
+
     public void doAnalysis(StringBuffer buffer, Object datum) {
-        if(datum instanceof Map) {
+        if (datum instanceof Map) {
             ((Map<?, ?>) datum).forEach((k, v) -> {
                 doAnalysisValue(buffer, new Pair(k.toString(), v == null ? null : v.toString()), v);
             });

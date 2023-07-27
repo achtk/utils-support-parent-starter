@@ -21,6 +21,7 @@ public class CsvExportFile extends AbstractExportFile {
 
     CsvParserSettings csvParserSettings;
     CsvWriterSettings csvWriterSettings;
+    private CsvWriter csvWriter;
 
     public CsvExportFile(ExportConfiguration configuration) {
         super(configuration);
@@ -46,8 +47,9 @@ public class CsvExportFile extends AbstractExportFile {
 
     @Override
     public <T> void export(OutputStream outputStream, List<T> data) {
-        try (OutputStreamWriter writer = new OutputStreamWriter(outputStream, configuration.charset())) {
-            CsvWriter csvWriter = new CsvWriter(writer, csvWriterSettings);
+        try {
+            OutputStreamWriter writer = new OutputStreamWriter(outputStream, configuration.charset());
+            this.csvWriter = new CsvWriter(writer, csvWriterSettings);
             csvWriter.writeHeaders(headers);
             for (T datum : data) {
                 Object[] array = createArray(datum, true);
@@ -55,10 +57,25 @@ public class CsvExportFile extends AbstractExportFile {
                     csvWriter.writeRow(array);
                 }
             }
+            csvWriter.flush();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    @Override
+    public <T> void append(List<T> records) {
+        for (T datum : records) {
+            Object[] array = createArray(datum, true);
+            if (null != array) {
+                csvWriter.writeRow(array);
+            }
+        }
+        csvWriter.flush();
+    }
 
+    @Override
+    public void close() throws Exception {
+        csvWriter.close();
+    }
 }

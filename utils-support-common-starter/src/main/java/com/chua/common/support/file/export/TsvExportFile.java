@@ -21,6 +21,8 @@ public class TsvExportFile extends AbstractExportFile {
 
     TsvParserSettings tsvParserSettings;
     TsvWriterSettings tsvWriterSettings;
+    private OutputStreamWriter writer;
+    private TsvWriter tsvWriter;
 
     public TsvExportFile(ExportConfiguration configuration) {
         super(configuration);
@@ -46,8 +48,9 @@ public class TsvExportFile extends AbstractExportFile {
 
     @Override
     public <T> void export(OutputStream outputStream, List<T> data) {
-        try (OutputStreamWriter writer = new OutputStreamWriter(outputStream, configuration.charset())) {
-            TsvWriter tsvWriter = new TsvWriter(writer, tsvWriterSettings);
+        try {
+            this.writer = new OutputStreamWriter(outputStream, configuration.charset());
+            this.tsvWriter = new TsvWriter(writer, tsvWriterSettings);
             tsvWriter.writeHeaders(headers);
             for (T datum : data) {
                 Object[] array = createArray(datum, true);
@@ -60,5 +63,18 @@ public class TsvExportFile extends AbstractExportFile {
         }
     }
 
+    @Override
+    public <T> void append(List<T> records) {
+        for (T datum : records) {
+            Object[] array = createArray(datum, true);
+            if (null != array) {
+                tsvWriter.writeRow(array);
+            }
+        }
+    }
 
+    @Override
+    public void close() throws Exception {
+        tsvWriter.close();
+    }
 }

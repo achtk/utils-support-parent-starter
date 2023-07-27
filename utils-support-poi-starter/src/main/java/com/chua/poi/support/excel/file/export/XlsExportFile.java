@@ -1,6 +1,7 @@
 package com.chua.poi.support.excel.file.export;
 
 import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
@@ -54,6 +55,8 @@ public class XlsExportFile extends AbstractExportFile {
             HeadStyle.class.getTypeName(),
             OnceAbsoluteMerge.class.getTypeName(),
     };
+    private ExcelWriter excelWriter;
+    private TypeAttribute typeAttribute;
 
     public XlsExportFile(ExportConfiguration configuration) {
         super(configuration);
@@ -71,7 +74,7 @@ public class XlsExportFile extends AbstractExportFile {
     @Override
     public <T> void export(OutputStream outputStream, List<T> data) {
         Class<?> aClass = data.get(0).getClass();
-        TypeAttribute typeAttribute = TypeAttribute.create(aClass);
+        this.typeAttribute = TypeAttribute.create(aClass);
         // 头的策略
         WriteCellStyle headWriteCellStyle = new WriteCellStyle();
         // 背景颜色
@@ -91,7 +94,7 @@ public class XlsExportFile extends AbstractExportFile {
 
 
         if (typeAttribute.hasAnyAnnotation(DEFAULT_ANNOTATION)) {
-            EasyExcel.write(outputStream, aClass)
+            this.excelWriter = EasyExcel.write(outputStream, aClass)
                     .registerWriteHandler(horizontalCellStyleStrategy)
                     .registerWriteHandler(new FreezeHandler())
                     .registerWriteHandler(new FilterHandler("A1:Z1"))
@@ -100,27 +103,19 @@ public class XlsExportFile extends AbstractExportFile {
                     .registerWriteHandler(new SimpleRowHeightStyleStrategy((short) 30, (short) 20))
                     .autoCloseStream(true)
                     .autoTrim(true)
-                    .excelType(getExcelTypeEnum())
-                    .sheet()
-                    .doWrite(data);
+                    .excelType(getExcelTypeEnum()).build();
+            this.excelWriter.write(data, EasyExcel.write().sheet().build());
             return;
         }
-
-
         int size = 0;
-        List<List<Object>> rs = new LinkedList<>();
-        for (T datum : data) {
-            Object[] array = createArray(datum, true);
-            size = array.length;
-            rs.add(Arrays.asList(array));
-        }
-
+        List<List<Object>> rs = create(data);
+        size = rs.get(0).size();
         List<List<String>> tpl = new LinkedList<>();
         for (String header : headers) {
             tpl.add(Collections.singletonList(header));
         }
 
-        EasyExcel.write(outputStream)
+        this.excelWriter = EasyExcel.write(outputStream)
                 .head(tpl)
                 .registerWriteHandler(new EasyExcelCustomCellWriteHandler())
                 .registerWriteHandler(new FreezeHandler())
@@ -130,9 +125,30 @@ public class XlsExportFile extends AbstractExportFile {
                 .registerWriteHandler(new SimpleRowHeightStyleStrategy((short) 30, (short) 20))
                 .autoCloseStream(true)
                 .autoTrim(true)
-                .excelType(getExcelTypeEnum())
-                .sheet()
-                .doWrite(rs);
+                .excelType(getExcelTypeEnum()).build();
+        this.excelWriter.write(rs, EasyExcel.write().sheet().build());
 
+    }
+
+    private <T> List<List<Object>> create(List<T> data) {
+        int size = 0;
+        List<List<Object>> rs = new LinkedList<>();
+        for (T datum : data) {
+            Object[] array = createArray(datum, true);
+            size = array.length;
+            rs.add(Arrays.asList(array));
+        }
+
+        return rs;
+    }
+
+    @Override
+    public <T> void append(List<T> records) {
+        if (typeAttribute.hasAnyAnnotation(DEFAULT_ANNOTATION)) {
+            this.excelWriter.write(records, EasyExcel.write().sheet().build());
+            return;
+        }
+        List<List<Object>> rs = create(records);
+        this.excelWriter.write(rs, EasyExcel.write().sheet().build());
     }
 }

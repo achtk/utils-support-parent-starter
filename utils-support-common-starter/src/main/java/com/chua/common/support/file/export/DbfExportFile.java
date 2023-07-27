@@ -1,6 +1,7 @@
 package com.chua.common.support.file.export;
 
 import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.file.javadbf.DbfException;
 import com.chua.common.support.file.javadbf.DbfField;
 import com.chua.common.support.file.javadbf.DbfWriter;
 import com.chua.common.support.value.Pair;
@@ -16,6 +17,9 @@ import java.util.List;
  */
 @Spi("dbf")
 public class DbfExportFile extends AbstractExportFile {
+    private DbfWriter dbfWriter;
+    private OutputStream outputStream;
+
     public DbfExportFile(ExportConfiguration configuration) {
         super(configuration);
     }
@@ -27,6 +31,7 @@ public class DbfExportFile extends AbstractExportFile {
 
     @Override
     public <T> void export(OutputStream outputStream, List<T> data) {
+        this.outputStream = outputStream;
         DbfField[] headerFields = new DbfField[headers.length];
         for (int i = 0; i < pairs.length; i++) {
             Pair pair = pairs[i];
@@ -47,8 +52,8 @@ public class DbfExportFile extends AbstractExportFile {
             headerFields[i] = item;
         }
 
-        try (OutputStream writer = outputStream) {
-            DbfWriter dbfWriter = new DbfWriter();
+        try {
+            this.dbfWriter = new DbfWriter();
             dbfWriter.setCharacterSetName(configuration.charset());
             dbfWriter.setFields(headerFields);
             for (T datum : data) {
@@ -60,10 +65,33 @@ public class DbfExportFile extends AbstractExportFile {
                     }
                 }
             }
-            dbfWriter.write(writer);
+            dbfWriter.write(outputStream);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public <T> void append(List<T> records) {
+        for (T datum : records) {
+            Object[] array = createArray(datum, false);
+            if (null != array) {
+                try {
+                    dbfWriter.addRecord(array);
+                } catch (Exception ignored) {
+                }
+            }
+        }
+        try {
+            dbfWriter.write(outputStream);
+        } catch (DbfException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void close() throws Exception {
+        dbfWriter.close();
     }
 }

@@ -5,6 +5,7 @@ import com.chua.common.support.utils.NetAddress;
 import com.chua.common.support.utils.StringUtils;
 import com.chua.common.support.value.Pair;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.List;
@@ -18,6 +19,8 @@ import java.util.List;
 public class RdfExportFile extends XmlExportFile {
 
     private static final String META = "meta";
+    private OutputStreamWriter writer;
+    private String rdfUri;
 
     public RdfExportFile(ExportConfiguration configuration) {
         super(configuration);
@@ -30,7 +33,7 @@ public class RdfExportFile extends XmlExportFile {
 
     @Override
     public <T> void export(OutputStream outputStream, List<T> data) {
-        String rdfUri = configuration.rdfUri();
+        this.rdfUri = configuration.rdfUri();
         NetAddress netAddress = NetAddress.of(rdfUri);
 
         StringBuffer buffer = new StringBuffer();
@@ -47,12 +50,27 @@ public class RdfExportFile extends XmlExportFile {
             buffer.append("</rdf:Description>");
         }
 
-        try (OutputStreamWriter writer = new OutputStreamWriter(outputStream, configuration.charset())) {
+        try {
+            this.writer = new OutputStreamWriter(outputStream, configuration.charset());
             writer.write(buffer.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public <T> void append(List<T> records) {
+        StringBuffer buffer = new StringBuffer();
+        for (T datum : records) {
+            buffer.append("<rdf:Description rdf:about=\"").append(rdfUri).append("\">");
+            doAnalysis(buffer, datum);
+            buffer.append("</rdf:Description>");
+        }
+        try {
+            writer.write(buffer.toString());
+        } catch (IOException ignored) {
+        }
     }
 
     /**

@@ -3,6 +3,7 @@ package com.chua.common.support.file.export;
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.function.Joiner;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.List;
@@ -15,6 +16,8 @@ import java.util.List;
 @Spi("json")
 public class JsonExportFile extends AbstractExportFile {
 
+    private OutputStreamWriter writer;
+
     public JsonExportFile(ExportConfiguration configuration) {
         super(configuration);
     }
@@ -26,7 +29,8 @@ public class JsonExportFile extends AbstractExportFile {
 
     @Override
     public <T> void export(OutputStream outputStream, List<T> data) {
-        try (OutputStreamWriter writer = new OutputStreamWriter(outputStream, configuration.charset())) {
+        try {
+            this.writer = new OutputStreamWriter(outputStream, configuration.charset());
             writer.write("[");
             writer.write("[\"");
             writer.write(Joiner.on("\",\"").join(headers));
@@ -41,11 +45,32 @@ public class JsonExportFile extends AbstractExportFile {
                     writer.write("\"]");
                 }
             }
-            writer.write("]");
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    @Override
+    public <T> void append(List<T> records) {
+        try {
+            for (int i = 0; i < records.size(); i++) {
+                T datum = records.get(i);
+                Object[] array = createArray(datum, true);
+                if (null != array) {
+                    writer.write(",");
+                    writer.write("[\"");
+                    writer.write(Joiner.on("\",\"").useForNull("").join(array));
+                    writer.write("\"]");
+                }
+            }
+        } catch (IOException ignored) {
+        }
+    }
 
+    @Override
+    public void close() throws Exception {
+        writer.write("]");
+        writer.flush();
+    }
 }
