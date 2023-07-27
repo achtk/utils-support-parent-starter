@@ -1,7 +1,6 @@
 package com.chua.common.support.file.export;
 
 import com.chua.common.support.annotations.Spi;
-import com.chua.common.support.file.javadbf.DbfException;
 import com.chua.common.support.file.javadbf.DbfField;
 import com.chua.common.support.file.javadbf.DbfWriter;
 import com.chua.common.support.value.Pair;
@@ -65,8 +64,6 @@ public class DbfExportFile extends AbstractExportFile {
                     }
                 }
             }
-            dbfWriter.write(outputStream);
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -83,15 +80,11 @@ public class DbfExportFile extends AbstractExportFile {
                 }
             }
         }
-        try {
-            dbfWriter.write(outputStream);
-        } catch (DbfException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Override
     public void close() throws Exception {
+        dbfWriter.write(outputStream);
         dbfWriter.close();
     }
 }
