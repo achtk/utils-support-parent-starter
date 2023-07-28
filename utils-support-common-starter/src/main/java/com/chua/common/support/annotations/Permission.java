@@ -13,9 +13,9 @@ import java.lang.annotation.*;
 @Documented
 public @interface Permission {
     /**
-     * 权限
+     * 按钮权限
      *
-     * @return 权限
+     * @return 按钮权限
      */
     String[] value() default {};
 
@@ -25,4 +25,10 @@ public @interface Permission {
      * @return 角色
      */
     String[] role() default {};
+
+    /**
+     * 数据权限
+     * @return 数据权限
+     */
+    String[] permission() default {};
 }

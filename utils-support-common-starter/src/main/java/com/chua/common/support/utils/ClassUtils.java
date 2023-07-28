@@ -760,7 +760,14 @@ public class ClassUtils {
 
         Class<?> aClass = object.getClass();
         if (!Proxy.isProxyClass(aClass)) {
-            return ObjectUtils.defaultIfNull(aClass, void.class);
+            String typeName = aClass.getTypeName();
+            if(!typeName.contains("$$EnhancerBySpringCGLIB$$")) {
+                return ObjectUtils.defaultIfNull(aClass, void.class);
+            }
+
+            String realTypeName = typeName.substring(0, typeName.indexOf("$$"));
+            Class<?> aClass1 = forName(realTypeName, object.getClass().getClassLoader());
+            return null == aClass1 ? void.class : ObjectUtils.defaultIfNull(aClass1, void.class);
         }
 
         String toString = object.toString();

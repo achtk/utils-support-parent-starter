@@ -54,7 +54,7 @@ public abstract class AbstractServiceFinder implements ServiceFinder{
      * @return 定义
      */
     public List<ServiceDefinition> buildDefinition(Object obj) {
-        Class<?> aClass = obj.getClass();
+        Class<?> aClass = ClassUtils.toType(obj);
         List<ServiceDefinition> serviceDefinitions = buildDefinition(obj, aClass, null, null);
         if(CollectionUtils.isEmpty(serviceDefinitions)) {
             return buildDefinition(obj, aClass, aClass.getTypeName(), null);
