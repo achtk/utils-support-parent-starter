@@ -41,6 +41,22 @@ public abstract class AbstractExportFile implements ExportFile, InitializingAwar
     }
 
     /**
+     * 是否需要
+     * @param fieldName 字段
+     * @return 是否需要
+     */
+    protected boolean isNeed(String fieldName) {
+        if(null == header || header.length == 0) {
+            return true;
+        }
+        for (Pair pair : header) {
+            if(pair.getName().equals(fieldName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    /**
      * 创建数据
      *
      * @param item       数据
@@ -84,6 +100,9 @@ public abstract class AbstractExportFile implements ExportFile, InitializingAwar
     }
 
     protected Object converter(Pair pair, Object o) {
+        if(null == pair.getJavaType()) {
+            return o;
+        }
         return Converter.convertIfNecessary(o, pair.getJavaType());
     }
 

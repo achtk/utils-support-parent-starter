@@ -103,7 +103,6 @@ public class XlsExportFile extends AbstractExportFile {
                     .registerWriteHandler(new EasyExcelCustomCellWriteHandler())
                     .registerWriteHandler(new SimpleColumnWidthStyleStrategy(20))
                     .registerWriteHandler(new SimpleRowHeightStyleStrategy((short) 30, (short) 20))
-                    .autoCloseStream(true)
                     .autoTrim(true)
                     .excelType(getExcelTypeEnum()).build();
             this.excelWriter.write(data, EasyExcel.write().sheet(0).build());
@@ -126,7 +125,6 @@ public class XlsExportFile extends AbstractExportFile {
                 .registerWriteHandler(horizontalCellStyleStrategy)
                 .registerWriteHandler(new SimpleColumnWidthStyleStrategy(20))
                 .registerWriteHandler(new SimpleRowHeightStyleStrategy((short) 30, (short) 20))
-                .autoCloseStream(true)
                 .autoTrim(true)
                 .excelType(getExcelTypeEnum()).build();
         this.excelWriter.write(rs, EasyExcel.write().sheet(0).build());
@@ -158,7 +156,9 @@ public class XlsExportFile extends AbstractExportFile {
 
     @Override
     public void close() throws Exception {
-        this.excelWriter.finish();
+        synchronized (this) {
+            this.excelWriter.finish();
+        }
         this.excelWriter.close();
     }
 }

@@ -42,12 +42,8 @@ public class DbfExportFile extends AbstractExportFile {
             } else {
                 item.setName(name);
             }
-//            if (Date.class.isAssignableFrom(pair.getJavaType())) {
-//                item.setDataType((byte) 'D');
-//            } else {
             item.setDataType((byte) 'C');
             item.setFieldLength(254);
-//            }
             headerFields[i] = item;
         }
 

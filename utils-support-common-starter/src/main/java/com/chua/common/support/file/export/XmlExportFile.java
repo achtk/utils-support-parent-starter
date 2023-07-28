@@ -6,6 +6,7 @@ import com.chua.common.support.file.export.resolver.DateValueResolver;
 import com.chua.common.support.file.export.resolver.ValueResolver;
 import com.chua.common.support.reflection.describe.FieldDescribe;
 import com.chua.common.support.utils.ClassUtils;
+import com.chua.common.support.utils.ObjectUtils;
 import com.chua.common.support.utils.StringUtils;
 import com.chua.common.support.value.Pair;
 
@@ -52,6 +53,7 @@ public class XmlExportFile extends AbstractExportFile {
         try {
             this.writer = new OutputStreamWriter(outputStream, configuration.charset());
             writer.write(buffer.toString());
+            writer.flush();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -68,15 +70,15 @@ public class XmlExportFile extends AbstractExportFile {
         }
         try {
             writer.write(buffer.toString());
+            writer.flush();
         } catch (IOException ignored) {
         }
     }
 
     @Override
     public void close() throws Exception {
-        StringBuffer buffer = new StringBuffer();
-        buffer.append("</data>");
-        writer.write(buffer.toString());
+        writer.write("</data>");
+        writer.flush();
     }
 
     public void doAnalysis(StringBuffer buffer, Object datum) {
@@ -97,6 +99,9 @@ public class XmlExportFile extends AbstractExportFile {
                 return;
             }
             String name = it.getName();
+            if(!isNeed(name)) {
+                return;
+            }
             Class<?> type = it.getType();
             Pair pair = createPair(it);
             if (Collection.class.isAssignableFrom(type)) {
@@ -127,13 +132,16 @@ public class XmlExportFile extends AbstractExportFile {
      * @param value  数据
      */
     public void doAnalysisValue(StringBuffer buffer, Pair pair, Object value) {
+        if(!isNeed(pair.getName())) {
+            return;
+        }
         buffer.append("<").append(pair.getName());
         String label = pair.getLabel();
         if (!StringUtils.isNullOrEmpty(label) && !pair.getName().equals(label)) {
             buffer.append(" describe=\"").append(pair.getLabel()).append("\"");
         }
         buffer.append(">");
-        buffer.append(converterType(pair, value));
+        buffer.append(ObjectUtils.defaultIfNull(converterType(pair, value), ""));
         buffer.append("</").append(pair.getName());
         buffer.append(">");
     }

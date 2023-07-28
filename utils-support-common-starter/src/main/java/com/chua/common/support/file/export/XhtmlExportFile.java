@@ -131,6 +131,7 @@ public class XhtmlExportFile extends AbstractExportFile {
         try {
             this.writer = new OutputStreamWriter(outputStream, configuration.charset());
             writer.write(buffer.toString());
+            writer.flush();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -147,6 +148,7 @@ public class XhtmlExportFile extends AbstractExportFile {
         }
         try {
             writer.write(buffer.toString());
+            writer.flush();
         } catch (IOException ignored) {
         }
     }
@@ -157,6 +159,7 @@ public class XhtmlExportFile extends AbstractExportFile {
         buffer.append("</tbody></table></body>");
         buffer.append("</html>");
         writer.write(buffer.toString());
+        writer.flush();
 
     }
 
@@ -168,6 +171,9 @@ public class XhtmlExportFile extends AbstractExportFile {
                 return;
             }
             String name = it.getName();
+            if(!isNeed(name)) {
+                return ;
+            }
             Class<?> type = it.getType();
             Pair pair = createPair(it);
             if (Collection.class.isAssignableFrom(type)) {
