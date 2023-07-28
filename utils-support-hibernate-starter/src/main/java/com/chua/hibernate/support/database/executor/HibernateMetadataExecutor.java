@@ -174,6 +174,7 @@ public class HibernateMetadataExecutor implements MetadataExecutor {
         try {
             jdbcInquirer.executeStatement(sql);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
 
