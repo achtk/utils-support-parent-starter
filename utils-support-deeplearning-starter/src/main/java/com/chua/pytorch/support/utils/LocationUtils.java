@@ -591,6 +591,9 @@ public class LocationUtils {
         }
     }
 
+    public static Image getSubImage(Image img, Object box) {
+       return getSubImage(img, extendRect(box));
+    }
     public static Image getSubImage(Image img, BoundingBox box) {
         Rectangle rect = box.getBounds();
         double[] extended = extendRect(rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
@@ -603,8 +606,6 @@ public class LocationUtils {
                 (int) (extended[3] * height)
         };
         return img.getSubImage(recovered[0], recovered[1], recovered[2], recovered[3]);
-
-
     }
 
     public static BoundingBox extendRect(Object boundingBox) {
