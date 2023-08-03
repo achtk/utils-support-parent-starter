@@ -19,6 +19,7 @@ import ai.djl.util.RandomUtils;
 import com.chua.common.support.constant.PredictRectangle;
 import com.chua.common.support.constant.PredictResult;
 import com.chua.common.support.converter.Converter;
+import com.chua.common.support.reflection.FieldStation;
 import com.chua.common.support.resource.ResourceProvider;
 import com.chua.common.support.resource.resource.Resource;
 import com.chua.common.support.utils.*;
@@ -819,11 +820,19 @@ public class LocationUtils {
     }
 
     public static Object toBoundingBox(BoundingBox boundingBox) {
-        Spliterator<Point> spliterator = boundingBox.getBounds().getPath().spliterator();
         List<com.chua.common.support.pojo.Shape> points = new LinkedList<>();
-        spliterator.forEachRemaining(it -> {
-            points.add(new com.chua.common.support.pojo.Shape(it.getX(), it.getY()));
-        });
+        if(boundingBox instanceof Landmark) {
+            List<Point> corners = (List<Point>) FieldStation.of(boundingBox).getValue("corners");
+            for (Point corner : corners) {
+                points.add(new com.chua.common.support.pojo.Shape(corner.getX(), corner.getY()));
+            }
+        } else {
+            Spliterator<Point> spliterator = boundingBox.getBounds().getPath().spliterator();
+            spliterator.forEachRemaining(it -> {
+                points.add(new com.chua.common.support.pojo.Shape(it.getX(), it.getY()));
+            });
+        }
+
         return com.chua.common.support.constant.BoundingBox.builder()
                 .height(boundingBox.getBounds().getHeight())
                 .width(boundingBox.getBounds().getWidth())

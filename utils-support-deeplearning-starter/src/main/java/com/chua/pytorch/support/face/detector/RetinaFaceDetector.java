@@ -46,7 +46,7 @@ public class RetinaFaceDetector extends AbstractPytorchDetector<DetectedObjects>
             Classifications.Classification classification = detectedObjects.item(i);
             PredictResult result = LocationUtils.convertPredictResult(classification, img);
             BoundingBox boundingBox = ((DetectedObjects.DetectedObject) (classification)).getBoundingBox();
-            result.setBoundingBox(boundingBox);
+            result.setBoundingBox(LocationUtils.toBoundingBox(boundingBox));
 
             results.add(result);
         }
