@@ -11,7 +11,10 @@ import com.chua.common.support.lang.proxy.ProxyMethod;
 import com.chua.common.support.lang.proxy.ProxyUtils;
 import com.chua.common.support.spi.autowire.AutoServiceAutowire;
 import com.chua.common.support.spi.autowire.ServiceAutowire;
-import com.chua.common.support.spi.finder.*;
+import com.chua.common.support.spi.finder.CustomServiceFinder;
+import com.chua.common.support.spi.finder.SamePackageServiceFinder;
+import com.chua.common.support.spi.finder.ServiceFinder;
+import com.chua.common.support.spi.finder.ServiceLoaderServiceFinder;
 import com.chua.common.support.utils.*;
 import com.chua.common.support.value.Value;
 
@@ -23,7 +26,6 @@ import java.util.function.Function;
 
 import static com.chua.common.support.constant.CommonConstant.SYMBOL_COLON;
 import static com.chua.common.support.constant.CommonConstant.SYMBOL_COMMA;
-import static com.chua.common.support.spi.autowire.AutoServiceAutowire.UTILS;
 
 /**
  * spi
@@ -37,6 +39,8 @@ public class ServiceProvider<T> implements InitializingAware {
     private static Map<Class<?>, ServiceProvider> CACHE = new ConcurrentHashMap<>();
     private final List<ServiceFinder> finders = new LinkedList<>();
 
+
+    public static final List<ServiceFinder> DEFAULT = new LinkedList<>();
     private final Value<Class<T>> value;
     private ClassLoader classLoader;
     private ServiceAutowire serviceAutowire;
@@ -182,10 +186,15 @@ public class ServiceProvider<T> implements InitializingAware {
         rs.add(new ServiceLoaderServiceFinder());
         rs.add(new CustomServiceFinder());
         rs.add(new SamePackageServiceFinder());
-        if (ClassUtils.isPresent(UTILS)) {
-            rs.add(new SpringServiceFinder());
+        if(null != DEFAULT) {
+            for (ServiceFinder finder : DEFAULT) {
+                rs.add(finder);
+            }
         }
-        rs.add(new ScriptServiceFinder());
+//        if (ClassUtils.isPresent(UTILS)) {
+//            rs.add(new SpringServiceFinder());
+//        }
+//        rs.add(new ScriptServiceFinder());
 
         return rs;
     }
