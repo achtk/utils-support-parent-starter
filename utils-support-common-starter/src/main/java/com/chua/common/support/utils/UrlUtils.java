@@ -17,7 +17,8 @@ import java.util.function.Consumer;
 import java.util.zip.ZipFile;
 
 import static com.chua.common.support.constant.CommonConstant.*;
-import static com.chua.common.support.lang.net.URLEncoder.*;
+import static com.chua.common.support.lang.net.URLEncoder.ALL;
+import static com.chua.common.support.lang.net.URLEncoder.QUERY;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 
@@ -119,6 +120,7 @@ public class UrlUtils {
     public static String encode(String url) {
         return SimpleUrlEncoder.DEFAULT.encode(url);
     }
+
     /**
      * 编码URL<br>
      * 将需要转换的内容（ASCII码形式之外的内容），用十六进制表示法转换出来，并在之前加上%开头。
@@ -131,6 +133,7 @@ public class UrlUtils {
     public static String encodeAll(String url, Charset charset) throws UnsupportedEncodingException {
         return ALL.encode(url, charset);
     }
+
     /**
      * 单独编码URL中的空白符，空白符编码为%20
      *
@@ -524,7 +527,7 @@ public class UrlUtils {
      */
     public static long lastModified(String file) {
         File file2 = Converter.convertIfNecessary(file, File.class);
-        if(null != file2 && file2.exists()) {
+        if (null != file2 && file2.exists()) {
             return file2.lastModified();
         }
         try {
@@ -670,6 +673,52 @@ public class UrlUtils {
             preUrl = preUrl.substring(0, preUrl.length() - 1);
         }
         return parseUrl(preUrl);
+    }
+
+    /**
+     * 拼接url
+     *
+     * @param url       url
+     * @param cachePath 缓存路径
+     * @return URL
+     */
+    public static File toFile(String url, String cachePath) {
+        File tempFile = FileUtils.createTempFile(cachePath, IdUtils.createTimeId());
+        if (url.startsWith(HTTP)) {
+            try (InputStream inputStream = new URL(url).openStream();
+                 FileOutputStream fos = new FileOutputStream(tempFile);
+            ) {
+                IoUtils.copy(inputStream, fos);
+                return tempFile;
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        File file = new File(url);
+        if (file.exists()) {
+            return file;
+        }
+
+        try {
+            //Base64解码
+            byte[] b = Base64.getDecoder().decode(url);
+            for (int i = 0; i < b.length; ++i) {
+                if (b[i] < 0) {
+                    b[i] += 256;
+                }
+            }
+            //生成文件
+            try (OutputStream out = new FileOutputStream(tempFile);) {
+                out.write(b);
+                return tempFile;
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        } catch (Exception ignore) {
+
+        }
+        return null;
     }
 
     /**
@@ -1024,6 +1073,7 @@ public class UrlUtils {
 
     /**
      * 文件名称
+     *
      * @param connection 链接
      * @return 名称
      */
@@ -1170,8 +1220,8 @@ public class UrlUtils {
             }
             return rewrittenPath.toString();
         }
-    }
 
+    }
 
 
     /**
