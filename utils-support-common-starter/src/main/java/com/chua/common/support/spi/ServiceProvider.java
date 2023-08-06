@@ -39,7 +39,7 @@ public class ServiceProvider<T> implements InitializingAware {
     private static Map<Class<?>, ServiceProvider> CACHE = new ConcurrentHashMap<>();
     private final List<ServiceFinder> finders = new LinkedList<>();
 
-
+    final List<ServiceFinder> rs = new LinkedList<>();
     public static final List<ServiceFinder> DEFAULT = new LinkedList<>();
     private final Value<Class<T>> value;
     private ClassLoader classLoader;
@@ -64,6 +64,9 @@ public class ServiceProvider<T> implements InitializingAware {
         for (ServiceEnvironment serviceEnvironment : serviceEnvironments) {
             serviceEnvironment.afterPropertiesSet();
         }
+        DEFAULT.add(new ServiceLoaderServiceFinder());
+        DEFAULT.add(new CustomServiceFinder());
+        DEFAULT.add(new SamePackageServiceFinder());
     }
 
     /**
@@ -182,20 +185,9 @@ public class ServiceProvider<T> implements InitializingAware {
      * @return 查找器
      */
     private List<ServiceFinder> getFinders() {
-        List<ServiceFinder> rs = new LinkedList<>();
-        rs.add(new ServiceLoaderServiceFinder());
-        rs.add(new CustomServiceFinder());
-        rs.add(new SamePackageServiceFinder());
-        if(null != DEFAULT) {
-            for (ServiceFinder finder : DEFAULT) {
-                rs.add(finder);
-            }
+        if (rs.isEmpty()) {
+            rs.addAll(DEFAULT);
         }
-//        if (ClassUtils.isPresent(UTILS)) {
-//            rs.add(new SpringServiceFinder());
-//        }
-//        rs.add(new ScriptServiceFinder());
-
         return rs;
     }
 
