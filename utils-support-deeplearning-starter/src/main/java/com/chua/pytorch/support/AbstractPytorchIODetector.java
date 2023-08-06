@@ -66,13 +66,16 @@ public abstract class AbstractPytorchIODetector<I, O> extends AbstractDetector {
                 .optTranslator(translator)
                 .optEngine(engine)
                 .optProgress(new ProgressBar());
-        if(configuration.groupId() != null) {
+        if (null != configuration.options()) {
+            imageOBuilder.optOption("Tags", configuration.options());
+        }
+        if (configuration.groupId() != null) {
             imageOBuilder.optGroupId(configuration.groupId());
         } else {
             imageOBuilder.optModelUrls(Joiner.on(',').join(model1));
         }
 
-        if("GPU".equalsIgnoreCase(configuration.device())) {
+        if ("GPU".equalsIgnoreCase(configuration.device())) {
             imageOBuilder.optDevice(Device.gpu(configuration.deviceId()));
         }
 

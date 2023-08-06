@@ -7,6 +7,7 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 人脸
@@ -21,7 +22,16 @@ public class DetectionConfiguration implements Serializable {
     public static final DetectionConfiguration DEFAULT = DetectionConfiguration.builder().build();
     private float shrink;
     private float threshold;
-
+    @Builder.Default
+    private int height = 224;
+    @Builder.Default
+    private int width = 224;
+    @Builder.Default
+    private boolean centerCrop = true;
+    @Builder.Default
+    private boolean resize = true;
+    @Builder.Default
+    private boolean applySoftmax = true;
     @Builder.Default
     private String cachePath = "../environment";
 
@@ -92,6 +102,26 @@ public class DetectionConfiguration implements Serializable {
      * 处理类型
      */
     private Option option;
+    /**
+     * option
+     */
+    private String options;
+
+    @Builder.Default
+    private int top = 10;
+
+    public Map<String, Object> toMap() {
+        Map<String, Object> arguments = new ConcurrentHashMap<>();
+        arguments.put("width", width);
+        arguments.put("height", height);
+        arguments.put("centerCrop", centerCrop);
+        arguments.put("resize", resize);
+        arguments.put("applySoftmax", applySoftmax);
+        arguments.put("synsetFileName", synset);
+        arguments.put("threshold", threshold);
+        return arguments;
+    }
+
 
     /**
      * 模式
