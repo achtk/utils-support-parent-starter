@@ -25,6 +25,7 @@ import com.chua.common.support.resource.resource.Resource;
 import com.chua.common.support.utils.*;
 import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
+import net.coobird.thumbnailator.Thumbnails;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -295,8 +296,10 @@ public class LocationUtils {
             } else if (fileName instanceof URI) {
                 return ImageFactory.getInstance().fromUrl(((URI) fileName).toURL());
             } else if (fileName instanceof File) {
-                BufferedImage read = ImageIO.read((File) fileName);
-                return ImageFactory.getInstance().fromImage(compressPicMin(read,  600, 800));
+                return ImageFactory.getInstance().fromImage(Thumbnails
+                        .of((File) fileName)
+                        .scale(0.85).asBufferedImage()
+                );
             } else if (fileName instanceof Path) {
                 return ImageFactory.getInstance().fromFile(((Path) fileName));
             } else if (fileName instanceof InputStream) {
