@@ -702,7 +702,7 @@ public class UrlUtils {
 
         try {
             //Base64解码
-            byte[] b = Base64.getDecoder().decode(url);
+            byte[] b = Base64.getDecoder().decode(url.startsWith("data:") ? url.substring(url.indexOf("base64,") + 7) : url);
             for (int i = 0; i < b.length; ++i) {
                 if (b[i] < 0) {
                     b[i] += 256;

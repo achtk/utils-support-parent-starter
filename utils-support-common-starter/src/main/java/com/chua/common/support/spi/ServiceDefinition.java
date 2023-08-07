@@ -164,7 +164,9 @@ public class ServiceDefinition implements Comparable<ServiceDefinition> {
                     isLoaded = true;
                     try {
                         this.obj = implClass.newInstance();
-                        serviceAutowire.autowire(obj);
+                        if(null != serviceAutowire) {
+                            serviceAutowire.autowire(obj);
+                        }
                     } catch (Exception e) {
                         stack = Thread.currentThread().getStackTrace();
                         ex = e;

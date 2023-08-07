@@ -40,7 +40,7 @@ public class ServiceProvider<T> implements InitializingAware {
     private final List<ServiceFinder> finders = new LinkedList<>();
 
     final List<ServiceFinder> rs = new LinkedList<>();
-    public static final List<ServiceFinder> DEFAULT = new LinkedList<>();
+    private static List<ServiceFinder> DEFAULT;
     private final Value<Class<T>> value;
     private ClassLoader classLoader;
     private ServiceAutowire serviceAutowire;
@@ -60,13 +60,32 @@ public class ServiceProvider<T> implements InitializingAware {
     private static final ServiceDefinition DEFAULT_DEFINITION = new ServiceDefinition();
 
     static {
-        List<ServiceEnvironment> serviceEnvironments = ServiceProvider.of(ServiceEnvironment.class).collect();
-        for (ServiceEnvironment serviceEnvironment : serviceEnvironments) {
-            serviceEnvironment.afterPropertiesSet();
+        {
+            List<ServiceEnvironment> serviceEnvironments = ServiceProvider.of(ServiceEnvironment.class).collect();
+            for (ServiceEnvironment serviceEnvironment : serviceEnvironments) {
+                serviceEnvironment.afterPropertiesSet();
+            }
         }
-        DEFAULT.add(new ServiceLoaderServiceFinder());
-        DEFAULT.add(new CustomServiceFinder());
-        DEFAULT.add(new SamePackageServiceFinder());
+    }
+
+    {
+
+        {
+            if(null == DEFAULT) {
+                DEFAULT = new LinkedList<>();
+            }
+            if(DEFAULT.isEmpty()) {
+                ServiceLoaderServiceFinder finder = new ServiceLoaderServiceFinder();
+                List<ServiceDefinition> analyze = finder.analyze(ServiceFinder.class, Thread.currentThread().getContextClassLoader());
+                for (ServiceDefinition serviceDefinition : analyze) {
+                    DEFAULT.add(serviceDefinition.getObj(serviceAutowire));
+                }
+                DEFAULT.add(new ServiceLoaderServiceFinder());
+                DEFAULT.add(new CustomServiceFinder());
+                DEFAULT.add(new SamePackageServiceFinder());
+            }
+        }
+
     }
 
     /**
@@ -185,7 +204,11 @@ public class ServiceProvider<T> implements InitializingAware {
      * @return 查找器
      */
     private List<ServiceFinder> getFinders() {
-        if (rs.isEmpty()) {
+        if (!rs.isEmpty()) {
+            return rs;
+        }
+
+        if (rs.isEmpty() && null != DEFAULT) {
             rs.addAll(DEFAULT);
         }
         return rs;
@@ -534,7 +557,7 @@ public class ServiceProvider<T> implements InitializingAware {
     public T getExtension(String... name) {
         for (String s : name) {
             ServiceDefinition definition = getDefinition(s);
-            if(null != definition) {
+            if (null != definition) {
                 return definition.getObj(serviceAutowire);
             }
         }
@@ -632,7 +655,7 @@ public class ServiceProvider<T> implements InitializingAware {
             public Object safeApply(ProxyMethod proxyMethod) throws Throwable {
                 Object rs = null;
                 for (T t : impl) {
-                  rs = invoke(t, proxyMethod);
+                    rs = invoke(t, proxyMethod);
                 }
                 return rs;
             }
