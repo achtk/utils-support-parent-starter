@@ -23,6 +23,9 @@ public class DetectionConfiguration implements Serializable {
     private float shrink;
     private float threshold;
     @Builder.Default
+    private boolean normalize = true;
+    private float nmsThreshold;
+    @Builder.Default
     private int height = 224;
     @Builder.Default
     private int width = 224;
@@ -30,6 +33,8 @@ public class DetectionConfiguration implements Serializable {
     private boolean centerCrop = true;
     @Builder.Default
     private boolean resize = true;
+    @Builder.Default
+    private boolean rescale = true;
     @Builder.Default
     private boolean applySoftmax = true;
     @Builder.Default
@@ -122,7 +127,12 @@ public class DetectionConfiguration implements Serializable {
         return arguments;
     }
 
-
+    private static int[] scale(int h, int w) {
+        int min = Math.min(h, w);
+        float scale = 1.0F;
+        scale = (float) 416 * 1.0F / (float) min;
+        return new int[] {(int) ((float) h * scale), (int) ((float) w * scale)};
+    }
     /**
      * 模式
      */

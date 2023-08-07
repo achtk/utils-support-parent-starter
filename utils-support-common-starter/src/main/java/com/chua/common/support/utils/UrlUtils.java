@@ -683,7 +683,7 @@ public class UrlUtils {
      * @return URL
      */
     public static File toFile(String url, String cachePath) {
-        File tempFile = FileUtils.createTempFile(cachePath, IdUtils.createTimeId());
+        File tempFile = FileUtils.createTempFile(cachePath, IdUtils.createTimeId() + ".jpg");
         if (url.startsWith(HTTP)) {
             try (InputStream inputStream = new URL(url).openStream();
                  FileOutputStream fos = new FileOutputStream(tempFile);
@@ -711,6 +711,7 @@ public class UrlUtils {
             //生成文件
             try (OutputStream out = new FileOutputStream(tempFile);) {
                 out.write(b);
+                out.flush();
                 return tempFile;
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);

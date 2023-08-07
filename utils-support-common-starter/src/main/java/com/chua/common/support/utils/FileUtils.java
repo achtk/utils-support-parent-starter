@@ -251,6 +251,9 @@ public class FileUtils {
    * @throws IOException 删除异常
    */
   public static void forceDelete(final File file) throws IOException {
+    if(null == file) {
+      return;
+    }
     Objects.requireNonNull(file, "file");
     try {
       PathUtils.delete(file.toPath(), PathUtils.EMPTY_LINK_OPTION_ARRAY);
