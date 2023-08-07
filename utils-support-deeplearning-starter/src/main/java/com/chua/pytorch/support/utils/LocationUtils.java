@@ -298,7 +298,7 @@ public class LocationUtils {
             } else if (fileName instanceof File) {
                 return ImageFactory.getInstance().fromImage(Thumbnails
                         .of((File) fileName)
-                        .scale(0.85).asBufferedImage()
+                        .scale(1d).asBufferedImage()
                 );
             } else if (fileName instanceof Path) {
                 return ImageFactory.getInstance().fromFile(((Path) fileName));
