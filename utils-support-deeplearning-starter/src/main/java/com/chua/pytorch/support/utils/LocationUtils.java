@@ -106,7 +106,7 @@ public class LocationUtils {
         }
     }
 
-  
+
     /**
      * 保存图片,含检测框
      *
@@ -279,11 +279,11 @@ public class LocationUtils {
                 }
 
                 File file2 = Converter.convertIfNecessary(fileName.toString(), File.class);
-                if(null != file2 ) {
+                if (null != file2) {
                     return ImageFactory.getInstance().fromFile(file2.toPath());
                 }
 
-                Resource resource = ResourceProvider.of("classpath*:**/" + fileName.toString()).getResource();
+                Resource resource = ResourceProvider.of("classpath*:**/" + fileName).getResource();
                 if (null != resource) {
                     return ImageFactory.getInstance().fromInputStream(resource.openStream());
                 }
@@ -295,7 +295,8 @@ public class LocationUtils {
             } else if (fileName instanceof URI) {
                 return ImageFactory.getInstance().fromUrl(((URI) fileName).toURL());
             } else if (fileName instanceof File) {
-                return ImageFactory.getInstance().fromFile(((File) fileName).toPath());
+                BufferedImage read = ImageIO.read((File) fileName);
+                return ImageFactory.getInstance().fromImage(compressPicMin(read,  600, 800));
             } else if (fileName instanceof Path) {
                 return ImageFactory.getInstance().fromFile(((Path) fileName));
             } else if (fileName instanceof InputStream) {
@@ -306,6 +307,42 @@ public class LocationUtils {
         } catch (Exception ignored) {
         }
         return null;
+    }
+
+    /**
+     * 图片等比缩放
+     *
+     * @param image        图片输入缓存流
+     * @param outputWidth  图片压缩到的宽
+     * @param outputHeight 图片压缩到的高
+     * @return BufferedImage
+     */
+    private static BufferedImage compressPicMin(BufferedImage image,
+                                         int outputWidth, int outputHeight) {
+        // TODO Auto-generated method stub
+        if (image == null) {
+            return null;
+        }
+
+        //如果图片本身的宽和高均小于要压缩到的宽和高，则不压缩直接返回
+        if (outputWidth > image.getWidth(null) && outputHeight > image.getHeight(null)) {
+            return image;
+        }
+
+        int newWidth;
+        int newHeight;
+        //宽和高等比缩放的率
+        double rate1 = (double) image.getWidth(null) / (double) outputWidth;
+        double rate2 = (double) image.getHeight(null) / (double) outputHeight;
+        //控制缩放大小
+        double rate = rate1 < rate2 ? rate1 : rate2;
+        newWidth = (int) (image.getWidth(null) / rate);
+        newHeight = (int) (image.getHeight(null) / rate);
+
+        BufferedImage newImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB);
+        newImage.createGraphics().drawImage(image.getScaledInstance(newWidth, outputHeight, java.awt.Image.SCALE_SMOOTH), 0, 0, null);
+
+        return newImage;
     }
 
     public static String parseLocation(String locations, String defaultValue) {
@@ -384,7 +421,7 @@ public class LocationUtils {
         }
 
         doAnalysisCache(urls, split, isDirector);
-        if(urls.isEmpty()) {
+        if (urls.isEmpty()) {
             doAnalysisUserHome(urls, split, isDirector);
 //            doAnalysisCurrent(urls, split, isDirector);
         }
@@ -403,7 +440,7 @@ public class LocationUtils {
 
     private static void doAnalysisCache(List<String> urls, String[] url, boolean isDirector) {
         String djlCacheDir = System.getProperty("DJL_CACHE_DIR");
-        if(Strings.isNullOrEmpty(djlCacheDir)) {
+        if (Strings.isNullOrEmpty(djlCacheDir)) {
             return;
         }
         log.info("检查缓存目录 : {}", new File(djlCacheDir).getAbsolutePath());
@@ -420,7 +457,7 @@ public class LocationUtils {
                 @Override
                 public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
                     String path = dir.toFile().getPath();
-                    if(path.contains(".svn") || path.contains(".idea")|| path.contains(".log")) {
+                    if (path.contains(".svn") || path.contains(".idea") || path.contains(".log")) {
                         return FileVisitResult.CONTINUE;
                     }
 
@@ -434,7 +471,8 @@ public class LocationUtils {
         }
 
     }
-    public static  List<String> doAnalysis(String property, String[] url, boolean isDirector) {
+
+    public static List<String> doAnalysis(String property, String[] url, boolean isDirector) {
         List<String> urls = new LinkedList<>();
         log.info("检测当前目录是否存在模型 : {}", new File(property).getAbsolutePath());
         try {
@@ -467,6 +505,7 @@ public class LocationUtils {
         }
         return urls;
     }
+
     private static void doAnalysisCurrent(List<String> urls, String[] url, boolean isDirector) {
         String property = ".";
         log.info("检测当前目录是否存在模型 : {}", new File(property).getAbsolutePath());
@@ -592,9 +631,18 @@ public class LocationUtils {
         }
     }
 
-    public static Image getSubImage(Image img, Object box) {
-       return getSubImage(img, extendRect(box));
+    public static Image getSubImage(Object img, Object box) {
+        return getSubImage(getImage(img), extendRect(box));
     }
+
+    public static Image getSubImage(Image img, Object box) {
+        return getSubImage(img, extendRect(box));
+    }
+
+    public static Image getSubImage(Object img, BoundingBox box) {
+        return getSubImage(getImage(img), extendRect(box));
+    }
+
     public static Image getSubImage(Image img, BoundingBox box) {
         Rectangle rect = box.getBounds();
         double[] extended = extendRect(rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
@@ -690,7 +738,7 @@ public class LocationUtils {
             return (BoundingBox) boundingBox;
         }
 
-        if(boundingBox instanceof com.chua.common.support.constant.BoundingBox) {
+        if (boundingBox instanceof com.chua.common.support.constant.BoundingBox) {
             com.chua.common.support.constant.BoundingBox b = (com.chua.common.support.constant.BoundingBox) boundingBox;
             List<com.chua.common.support.pojo.Shape> corners = b.getCorners();
             com.chua.common.support.pojo.Shape shape = corners.get(0);
@@ -707,7 +755,7 @@ public class LocationUtils {
     public static BoundingBox getBoundingBox(Image img) {
         return new Rectangle(0, 0, img.getWidth(), img.getHeight());
     }
-    
+
     public static BufferedImage saveBoundingBoxImage(List<PredictResult> predictResults, BufferedImage src) {
         Image image = getImage(src);
         Image duplicate = image.duplicate();
@@ -821,7 +869,7 @@ public class LocationUtils {
 
     public static Object toBoundingBox(BoundingBox boundingBox) {
         List<com.chua.common.support.pojo.Shape> points = new LinkedList<>();
-        if(boundingBox instanceof Landmark) {
+        if (boundingBox instanceof Landmark) {
             List<Point> corners = (List<Point>) FieldStation.of(boundingBox).getValue("corners");
             for (Point corner : corners) {
                 points.add(new com.chua.common.support.pojo.Shape(corner.getX(), corner.getY()));
@@ -836,7 +884,7 @@ public class LocationUtils {
         return com.chua.common.support.constant.BoundingBox.builder()
                 .height(boundingBox.getBounds().getHeight())
                 .width(boundingBox.getBounds().getWidth())
-                        .corners(points).build();
+                .corners(points).build();
     }
 
 
