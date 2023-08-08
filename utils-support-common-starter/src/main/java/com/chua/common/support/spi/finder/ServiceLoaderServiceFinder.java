@@ -2,9 +2,9 @@ package com.chua.common.support.spi.finder;
 
 
 import com.chua.common.support.spi.ServiceDefinition;
-import com.chua.common.support.spi.finder.AbstractServiceFinder;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
 
@@ -19,8 +19,15 @@ public class ServiceLoaderServiceFinder extends AbstractServiceFinder {
     protected List<ServiceDefinition> find() {
         List<ServiceDefinition> result = new ArrayList<>();
         ServiceLoader<?> serviceLoader = ServiceLoader.load(service, getClassLoader());
-        for (Object t : serviceLoader) {
-            result.addAll(buildDefinition(t));
+        Iterator<?> iterator = serviceLoader.iterator();
+        while (iterator.hasNext()) {
+            Object next = null;
+            try {
+                next = iterator.next();
+            } catch (Throwable e) {
+                continue;
+            }
+            result.addAll(buildDefinition(next));
         }
         return result;
     }

@@ -27,6 +27,7 @@ public class FeatureComparison {
         return (float) ((ret / Math.sqrt(mod1) / Math.sqrt(mod2) + 1) / 2.0f);
     }
 
+
     /**
      * 余弦相似度
      *

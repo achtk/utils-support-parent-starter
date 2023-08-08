@@ -368,5 +368,17 @@ public class BufferedImageUtils {
         return (int) p;
     }
 
-
+    /**
+     * 写入流
+     * @param bufferedImage 图片
+     * @param stream 流
+     * @param imageType 类型
+     */
+    public static void writeToStream(BufferedImage bufferedImage, OutputStream stream, String imageType) {
+        try {
+            ImageIO.write(bufferedImage, imageType, stream);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

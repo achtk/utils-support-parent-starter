@@ -25,17 +25,17 @@ public class BigGAN128 extends AbstractPytorchIODetector<Long, Image> {
                 new BigGANTranslator(size, truncation),
                 "PyTorch",
                 null,
-                 "biggan" + size + ".pt",
+                 "biggan" + (size % 2 == 0 ? size : size + 1) + ".pt",
                 "https://aias-home.oss-cn-beijing.aliyuncs.com/models/biggan"+ size +".zip",
                 false);
     }
 
 
     @Override
-    public List<PredictResult> detect(Object face) {
+    public List<PredictResult> detect(Object type) {
         List<PredictResult> results = new LinkedList<>();
         try (Predictor<Long, Image> predictor = model.newPredictor()) {
-            Image image = predictor.predict(Converter.convertIfNecessary(face, Long.class));
+            Image image = predictor.predict(Converter.convertIfNecessary(type, Long.class));
             PredictResult predictResult = new PredictResult().setNdArray(image.getWrappedImage());
             results.add(predictResult);
         } catch (TranslateException e) {

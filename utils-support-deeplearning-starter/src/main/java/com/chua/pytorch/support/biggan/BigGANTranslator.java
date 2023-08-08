@@ -30,7 +30,9 @@ public final class BigGANTranslator implements Translator<Long, Image> {
 
     @Override
     public Image processOutput(TranslatorContext ctx, NDList list) {
-        NDArray output = list.get(0).addi(1).muli(128).clip(0, 255).toType(DataType.UINT8, false);
+        NDArray ndArray = list.get(0);
+        NDArray output = ctx.getNDManager().create(ndArray.toFloatArray(), ndArray.getShape());
+        output.addi(1).muli(128).clip(0, 255).toType(DataType.UINT8, false);
 
         Image image = ImageFactory.getInstance().fromNDArray(output.get(0));
 
