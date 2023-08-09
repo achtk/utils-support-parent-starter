@@ -62,6 +62,11 @@
         <module>utils-support-anpr-starter</module>
         <module>utils-support-sms-support</module>
         <module>utils-support-easyai-starter</module>
+        <module>utils-support-deeplearning-arc-starter</module>
+        <module>utils-support-deeplearning-pytorch-starter</module>
+        <module>utils-support-deeplearning-mxnet-starter</module>
+        <module>utils-support-deeplearning-paddlepaddle-starter</module>
+        <module>utils-support-deeplearning-tensorFlow-starter</module>
     </modules>
 
     <!-- -Djava.net.preferIPv4Stack=true-->

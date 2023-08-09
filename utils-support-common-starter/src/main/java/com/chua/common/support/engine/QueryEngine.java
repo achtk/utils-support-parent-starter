@@ -7,7 +7,7 @@ import java.util.List;
  *
  * @author CH
  */
-public interface QueryEngine<T> extends Engine<T> {
+public interface QueryEngine<T> extends SearchEngine<T> {
 
     /**
      * 查询数据

@@ -7,7 +7,7 @@ import java.util.List;
  *
  * @author CH
  */
-public interface FullTextEngine<T> extends Engine<T> {
+public interface FullTextEngine<T> extends SearchEngine<T> {
 
     /**
      * 查询数据

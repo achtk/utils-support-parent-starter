@@ -5,7 +5,6 @@ import com.chua.common.support.annotations.SpiDefault;
 import com.chua.common.support.database.Database;
 import com.chua.common.support.database.inquirer.JdbcInquirer;
 import com.chua.common.support.engine.config.EngineConfig;
-import com.chua.common.support.engine.config.EngineConfig;
 import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.function.Joiner;
 import com.chua.common.support.utils.*;
@@ -89,7 +88,7 @@ public class SqliteQueryEngine<T> extends AbstractEngine<T> implements QueryEngi
     }
 
     @Override
-    public Engine<T> config(EngineConfig engineConfig) {
+    public SearchEngine<T> config(EngineConfig engineConfig) {
         return this;
     }
 

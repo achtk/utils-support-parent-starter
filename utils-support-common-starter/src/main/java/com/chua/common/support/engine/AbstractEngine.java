@@ -9,7 +9,7 @@ import java.util.Arrays;
  *
  * @author CH
  */
-public abstract class AbstractEngine<T> implements Engine<T> {
+public abstract class AbstractEngine<T> implements SearchEngine<T> {
     protected EngineConfig engineConfig = new EngineConfig();
     protected Class<T> target;
 
@@ -19,7 +19,7 @@ public abstract class AbstractEngine<T> implements Engine<T> {
     }
 
     @Override
-    public Engine<T> config(EngineConfig engineConfig) {
+    public SearchEngine<T> config(EngineConfig engineConfig) {
         this.engineConfig = engineConfig;
         return this;
     }

@@ -43,15 +43,6 @@
         </dependency>
 
         <dependency>
-            <groupId>arcsoft-sdk-face</groupId>
-            <artifactId>arcsoft-sdk-face</artifactId>
-            <version>3.0.0.0</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/src/main/resources/lib/arcsoft-sdk-face-3.0.0.0.jar</systemPath>
-        </dependency>
-
-
-        <dependency>
             <groupId>ai.djl.huggingface</groupId>
             <artifactId>tokenizers</artifactId>
             <version>0.19.0</version>
@@ -62,35 +53,10 @@
             <artifactId>utils-support-ffmpeg-starter</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>ai.djl.pytorch</groupId>
-            <artifactId>pytorch-jni</artifactId>
-            <version>1.13.0-0.20.0</version>
-            <scope>runtime</scope>
-        </dependency>
-
 
         <dependency>
             <groupId>ai.djl</groupId>
             <artifactId>api</artifactId>
-        </dependency>
-
-        <!-- paddlepaddle -->
-        <dependency>
-            <groupId>ai.djl.paddlepaddle</groupId>
-            <artifactId>paddlepaddle-model-zoo</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>ai.djl.paddlepaddle</groupId>
-            <artifactId>paddlepaddle-engine</artifactId>
-        </dependency>
-
-
-        <dependency>
-            <groupId>ai.djl.paddlepaddle</groupId>
-            <artifactId>paddlepaddle-native-auto</artifactId>
-            <version>2.0.2</version>
         </dependency>
 
 
@@ -104,78 +70,6 @@
             <artifactId>model-zoo</artifactId>
         </dependency>
 
-        <!-- pytorch -->
-        <dependency>
-            <groupId>ai.djl.pytorch</groupId>
-            <artifactId>pytorch-engine</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>ai.djl.pytorch</groupId>
-            <artifactId>pytorch-model-zoo</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>ai.djl.pytorch</groupId>
-            <artifactId>pytorch-native-cpu</artifactId>
-            <classifier>win-x86_64</classifier>
-            <scope>runtime</scope>
-            <version>1.13.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>ai.djl.pytorch</groupId>
-            <artifactId>pytorch-native-cu101</artifactId>
-            <version>1.7.1</version>
-            <classifier>win-x86_64</classifier>
-        </dependency>
-
-        <dependency>
-            <groupId>ai.djl.pytorch</groupId>
-            <artifactId>pytorch-jni</artifactId>
-            <version>1.13.0-0.20.0</version>
-            <scope>runtime</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>ai.djl.pytorch</groupId>
-            <artifactId>pytorch-native-cu101</artifactId>
-            <version>1.7.1</version>
-            <classifier>linux-x86_64</classifier>
-        </dependency>
-
-
-        <dependency>
-            <groupId>ai.djl.pytorch</groupId>
-            <artifactId>pytorch-native-cpu</artifactId>
-            <classifier>linux-x86_64</classifier>
-            <scope>runtime</scope>
-            <version>1.13.0</version>
-        </dependency>
-
-
-        <!-- MXNet -->
-        <dependency>
-            <groupId>ai.djl.mxnet</groupId>
-            <artifactId>mxnet-model-zoo</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>ai.djl.mxnet</groupId>
-            <artifactId>mxnet-native-auto</artifactId>
-            <version>1.8.0</version>
-        </dependency>
-
-        <!-- Tensorflow -->
-        <dependency>
-            <groupId>ai.djl.tensorflow</groupId>
-            <artifactId>tensorflow-engine</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>ai.djl.tensorflow</groupId>
-            <artifactId>tensorflow-model-zoo</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>org.apache.commons</groupId>
