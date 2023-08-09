@@ -425,8 +425,7 @@ public class LocationUtils {
 
         doAnalysisCache(urls, split, isDirector);
         if (urls.isEmpty()) {
-            doAnalysisUserHome(urls, split, isDirector);
-//            doAnalysisCurrent(urls, split, isDirector);
+            FileUtils.doAnalysisUserHome(urls, split, isDirector);
         }
 
         if (urls.isEmpty()) {
@@ -576,38 +575,7 @@ public class LocationUtils {
         }
     }
 
-    private static void doAnalysisUserHome(List<String> urls, String[] url, boolean isDirector) {
-        String property = System.getProperty("user.home") + "/model/";
-        log.info("检测当前目录是否存在模型 : {}", new File(property).getAbsolutePath());
-        try {
-            Files.walkFileTree(Paths.get(property), new SimpleFileVisitor<Path>() {
-                @Override
-                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                    if (isDirector) {
-                        return FileVisitResult.CONTINUE;
-                    }
 
-                    if (ArrayUtils.contains(url, file.toFile().getName().replace("\\", "/"))) {
-                        urls.add(file.toUri().toString());
-                    }
-                    return super.visitFile(file, attrs);
-                }
-
-                @Override
-                public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-                    if (!isDirector) {
-                        return FileVisitResult.CONTINUE;
-                    }
-
-                    if (ArrayUtils.contains(url, dir.toFile().getName().replace("\\", "/"))) {
-                        urls.add(dir.toUri().toString());
-                    }
-                    return super.preVisitDirectory(dir, attrs);
-                }
-            });
-        } catch (IOException ignored) {
-        }
-    }
 
     private static void doAnalysisClasspath(List<String> urls, String[] url) {
         log.info("检测类加载器下是否存在模型 : classpath*:**/{}", url);

@@ -15,24 +15,26 @@ public class SharedLoader {
     private Path libraryPath;
 
     private SharedLoader(String nativeLibraryName) {
-        try {
-            System.loadLibrary(nativeLibraryName);
-            log.info("Loaded existing OpenCV library \"{}\" from library path.", nativeLibraryName);
-        } catch (final UnsatisfiedLinkError ule) {
+        for (String s : nativeLibraryName.split(",")) {
+            try {
+                System.loadLibrary(nativeLibraryName);
+                log.info("Loaded existing OpenCV library \"{}\" from library path.", nativeLibraryName);
+            } catch (final UnsatisfiedLinkError ule) {
 
-            if (Double.parseDouble(System.getProperty("java.specification.version")) >= 12) {
-                log.warn("loadShared() is not supported in Java >= 12. Falling back to loadLocally().");
-                loadLocally(nativeLibraryName);
-                return;
+                if (Double.parseDouble(System.getProperty("java.specification.version")) >= 12) {
+                    log.warn("loadShared() is not supported in Java >= 12. Falling back to loadLocally().");
+                    loadLocally(nativeLibraryName);
+                    return;
+                }
+
+                /* Retain this path for cleaning up the library path later. */
+                this.libraryPath = Platform.extractNativeBinary(nativeLibraryName);
+
+                addLibraryPath(libraryPath.getParent());
+                System.loadLibrary(nativeLibraryName);
+
+                log.info("library \"{}\" loaded from extracted copy at \"{}\".", nativeLibraryName, System.mapLibraryName(nativeLibraryName));
             }
-
-            /* Retain this path for cleaning up the library path later. */
-            this.libraryPath = Platform.extractNativeBinary(nativeLibraryName);
-
-            addLibraryPath(libraryPath.getParent());
-            System.loadLibrary(nativeLibraryName);
-
-            log.info("library \"{}\" loaded from extracted copy at \"{}\".", nativeLibraryName, System.mapLibraryName(nativeLibraryName));
         }
     }
 

@@ -42,6 +42,14 @@
             <version>0.4.19</version>
         </dependency>
 
+        <dependency>
+            <groupId>arcsoft-sdk-face</groupId>
+            <artifactId>arcsoft-sdk-face</artifactId>
+            <version>3.0.0.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/src/main/resources/lib/arcsoft-sdk-face-3.0.0.0.jar</systemPath>
+        </dependency>
+
 
         <dependency>
             <groupId>ai.djl.huggingface</groupId>

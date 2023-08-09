@@ -3,6 +3,8 @@ package com.chua.common.support.os;
 import com.chua.common.support.lang.exception.UnsupportedPlatformException;
 import com.chua.common.support.resource.ResourceProvider;
 import com.chua.common.support.resource.resource.Resource;
+import com.chua.common.support.utils.FileUtils;
+import com.chua.common.support.utils.StringUtils;
 import com.chua.common.support.utils.UrlUtils;
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,7 +29,7 @@ public enum Platform {
     private static final String PRE = "library";
     static final String PRE_PREFIX = "library_openpnp";
 
-    private static Path extractNativeBinary(final OS os, final Arch arch, String dll) {
+    private static Path extractNativeBinary(final OS os, final Arch arch, String dll, String root) {
         final Set<String> location = new LinkedHashSet<>();
 
         switch (os) {
@@ -91,23 +93,37 @@ public enum Platform {
                 throw new UnsupportedPlatformException(os, arch);
         }
 
+        if(StringUtils.isNotEmpty(root)) {
+            location.addAll(FileUtils.find(root, dll));
+        }
         log.info("Selected native binary \"{}\".", location);
 
         Path destination = null;
         for (String s : location) {
 
             final InputStream binary = Platform.load(s);
-            if(null == binary) {
+            if (null == binary) {
                 continue;
             }
-            if (OS.WINDOWS.equals(os)) {
-                destination = new TemporaryDirectory().deleteOldInstancesOnStart().getPath().resolve("./" + s).normalize();
-            } else {
-                destination = new TemporaryDirectory().markDeleteOnExit().getPath().resolve("./" + s).normalize();
+
+            try {
+                destination = new File(s).toPath();
+            } catch (Exception ignored) {
+            }
+
+            if(null == destination) {
+                if (OS.WINDOWS.equals(os)) {
+                    destination = new TemporaryDirectory().deleteOldInstancesOnStart().getPath().resolve("./" + s).normalize();
+                } else {
+                    destination = new TemporaryDirectory().markDeleteOnExit().getPath().resolve("./" + s).normalize();
+                }
             }
 
             try {
                 log.info("Copying native binary to \"{}\".", destination);
+                if(Files.exists(destination)) {
+                    return destination;
+                }
                 Files.createDirectories(destination.getParent());
                 Files.copy(binary, destination);
                 binary.close();
@@ -131,7 +147,7 @@ public enum Platform {
 
         try {
             InputStream resourceAsStream = Platform.class.getResourceAsStream(s);
-            if(null != resourceAsStream) {
+            if (null != resourceAsStream) {
                 return resourceAsStream;
             }
         } catch (Exception ignored) {
@@ -145,10 +161,34 @@ public enum Platform {
         }
     }
 
+    /**
+     * 解析动态库地址
+     *
+     * @param dll 动态库名称
+     * @return 地址
+     */
     public static Path extractNativeBinary(String dll) {
         final OS os = OS.getCurrent();
         final Arch arch = Arch.getCurrent();
-        return extractNativeBinary(os, arch, dll);
+        return extractNativeBinary(os, arch, dll, "");
+    }
+
+    /**
+     * 解析动态库地址
+     *
+     * @param dll  动态库名称
+     * @param root 根目录
+     * @return 地址
+     */
+    public static Path extractNativeBinary(String dll, String root) {
+        final OS os = OS.getCurrent();
+        final Arch arch = Arch.getCurrent();
+        Path path = extractNativeBinary(os, arch, dll, root);
+        if(null == path) {
+            log.info("【未检测到】本地缓存模型");
+            throw new IllegalArgumentException("【未检测到】本地缓存模型");
+        }
+        return path;
     }
 
 

@@ -14,6 +14,25 @@ public class FeatureComparison {
      * @param feature2 feature2
      * @return 返回相似度比例
      */
+    public static float calculateSimilar(byte[] feature1, byte[] feature2) {
+        float ret = 0.0f;
+        float mod1 = 0.0f;
+        float mod2 = 0.0f;
+        int length = feature1.length;
+        for (int i = 0; i < length; ++i) {
+            ret += feature1[i] * feature2[i];
+            mod1 += feature1[i] * feature1[i];
+            mod2 += feature2[i] * feature2[i];
+        }
+        return (float) ((ret / Math.sqrt(mod1) / Math.sqrt(mod2) + 1) / 2.0f);
+    }
+    /**
+     * cosin相似度比较(cpu版本)
+     *
+     * @param feature1 feature1
+     * @param feature2 feature2
+     * @return 返回相似度比例
+     */
     public static float calculateSimilar(float[] feature1, float[] feature2) {
         float ret = 0.0f;
         float mod1 = 0.0f;
