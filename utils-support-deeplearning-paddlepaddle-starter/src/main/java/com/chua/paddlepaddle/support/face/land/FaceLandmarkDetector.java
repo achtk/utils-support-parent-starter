@@ -11,6 +11,7 @@ import com.chua.common.support.feature.detector.Detector;
 import com.chua.common.support.json.Json;
 import com.chua.common.support.utils.CollectionUtils;
 import com.chua.common.support.utils.StringUtils;
+import com.chua.paddlepaddle.support.face.detector.PaddlePaddleFaceDetector;
 import com.chua.pytorch.support.AbstractPytorchDetector;
 import com.chua.pytorch.support.utils.LocationUtils;
 
@@ -32,6 +33,9 @@ public class FaceLandmarkDetector extends AbstractPytorchDetector<float[][]> {
 
     private final Detector detector;
 
+    public FaceLandmarkDetector(DetectionConfiguration configuration) {
+        this(configuration, new PaddlePaddleFaceDetector(configuration));
+    }
     public FaceLandmarkDetector(DetectionConfiguration configuration, Detector detector) {
         super(configuration,
                 new FaceLandmarkTranslator(),

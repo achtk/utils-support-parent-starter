@@ -666,6 +666,22 @@ public class ServiceProvider<T> implements InitializingAware {
         }));
     }
 
+    public T getObjectProvider(Object... args) {
+        Map<String, T> list = list(args);
+        return ProxyUtils.newProxy(value.getValue(), classLoader, new DelegateMethodIntercept<>(value.getValue(), new Function<ProxyMethod, Object>() {
+            @Override
+            public Object apply(ProxyMethod proxyMethod) {
+                for (T t : list.values()) {
+                    try {
+                        return proxyMethod.invoke(t, proxyMethod.getArgs());
+                    } catch (Exception ignore) {
+                    }
+                }
+                return null;
+            }
+        }));
+    }
+
     /**
      * 构建类
      */

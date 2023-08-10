@@ -3,6 +3,7 @@ package com.chua.pytorch.support.feature;
 import ai.djl.inference.Predictor;
 import ai.djl.modality.cv.Image;
 import ai.djl.translate.TranslateException;
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.feature.DetectionConfiguration;
 import com.chua.common.support.utils.StringUtils;
 import com.chua.pytorch.support.FloatArrayPytorchFeature;
@@ -13,6 +14,7 @@ import com.chua.pytorch.support.utils.LocationUtils;
  *
  * @author CH
  */
+@Spi("ImageFeature")
 public class ImageFeature extends FloatArrayPytorchFeature<float[]> {
 
     public ImageFeature(DetectionConfiguration configuration) {

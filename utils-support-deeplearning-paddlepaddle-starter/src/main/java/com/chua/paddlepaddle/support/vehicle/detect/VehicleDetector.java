@@ -18,7 +18,7 @@ import java.util.List;
  *
  * @author CH
  */
-@Spi("VehicleDetector")
+@Spi({"VehicleDetector", "Vehicle"})
 public class VehicleDetector extends AbstractPytorchDetector<DetectedObjects> {
 
     @SneakyThrows

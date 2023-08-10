@@ -2,6 +2,7 @@ package com.chua.pytorch.support.feature;
 
 import ai.djl.inference.Predictor;
 import ai.djl.translate.TranslateException;
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.feature.DetectionConfiguration;
 import com.chua.common.support.utils.StringUtils;
 import com.chua.pytorch.support.FloatArrayPytorchIOFeature;
@@ -11,6 +12,7 @@ import com.chua.pytorch.support.FloatArrayPytorchIOFeature;
  *
  * @author CH
  */
+@Spi("TextFeature")
 public class TextFeature extends FloatArrayPytorchIOFeature<String, float[]> {
 
     public TextFeature(DetectionConfiguration configuration) {
