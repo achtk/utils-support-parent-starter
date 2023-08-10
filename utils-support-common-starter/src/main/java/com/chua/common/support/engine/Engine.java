@@ -22,6 +22,16 @@ public interface Engine extends AutoCloseable {
     /**
      * 初始化引擎
      *
+     * @param configuration 配置
+     * @return 初始化引擎
+     */
+    static Engine of(DetectionConfiguration configuration) {
+        return auto(configuration);
+    }
+
+    /**
+     * 初始化引擎
+     *
      * @param engine        名称
      * @param configuration 配置
      * @return 初始化引擎
@@ -36,5 +46,16 @@ public interface Engine extends AutoCloseable {
      * @param target 目标类型
      * @param <T>    类型
      */
-    <T> T get(Class<T> target);
+    default <T> T get(Class<T> target) {
+        return get(null, target);
+    }
+
+    /**
+     * 获取实现
+     *
+     * @param name   实现
+     * @param target 目标类型
+     * @param <T>    类型
+     */
+    <T> T get(String name, Class<T> target);
 }

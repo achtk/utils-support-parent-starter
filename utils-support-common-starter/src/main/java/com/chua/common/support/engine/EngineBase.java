@@ -41,7 +41,7 @@ public abstract class EngineBase implements Engine {
 
     @Override
     @SuppressWarnings("ALL")
-    public <T> T get(Class<T> target) {
+    public <T> T get(String name, Class<T> target) {
         Map<String, SortedSet<ServiceDefinition>> stringSortedSetMap = definitions.get(target);
         if(MapUtils.isEmpty(stringSortedSetMap)) {
             stringSortedSetMap = new ConcurrentHashMap<>();
@@ -69,7 +69,7 @@ public abstract class EngineBase implements Engine {
                         .add(serviceDefinition);
             }
         }
-        Object obj = newInstance(stringSortedSetMap, target, configuration.type());
+        Object obj = newInstance(name, stringSortedSetMap, target, configuration.type());
 
         if(null != obj) {
             return (T) obj;
@@ -84,7 +84,11 @@ public abstract class EngineBase implements Engine {
 
     public abstract  <T> T newFailureInstance(Class<T> target, String type);
 
-    private Object newInstance(Map<String, SortedSet<ServiceDefinition>> stringSortedSetMap, Class<?> target, String type) {
+    private Object newInstance(String name, Map<String, SortedSet<ServiceDefinition>> stringSortedSetMap, Class<?> target, String type) {
+        if(StringUtils.isNotEmpty(name)) {
+            return stringSortedSetMap.get(name).first().newInstance(new AutoServiceAutowire(), configuration);
+        }
+
         if(StringUtils.isNotEmpty(type)) {
             return stringSortedSetMap.get(target).first().newInstance(new AutoServiceAutowire(), configuration);
         }

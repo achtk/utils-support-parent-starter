@@ -3,6 +3,7 @@ package com.chua.pytorch.support.biggan;
 import ai.djl.inference.Predictor;
 import ai.djl.modality.cv.Image;
 import ai.djl.translate.TranslateException;
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.constant.PredictResult;
 import com.chua.common.support.converter.Converter;
 import com.chua.common.support.feature.DetectionConfiguration;
@@ -16,6 +17,7 @@ import java.util.List;
  *
  * @author CH
  */
+@Spi("gan128")
 public class BigGAN128 extends AbstractPytorchIODetector<Long, Image> {
     public BigGAN128(DetectionConfiguration configuration) {
         this(configuration, 127, 0.4f);

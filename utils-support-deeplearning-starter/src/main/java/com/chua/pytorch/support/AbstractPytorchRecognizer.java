@@ -85,13 +85,13 @@ public abstract class AbstractPytorchRecognizer<O> extends AbstractRecognizer {
 
 
     @Override
-    public List<PredictResult> recognize(Object face) {
-        List<PredictResult> predict = detector.detect(face);
+    public List<PredictResult> predict(Object face) {
+        List<PredictResult> predict = detector.predict(face);
 
         Image image = LocationUtils.getImage(face);
 
         List<PredictResult> rs = new LinkedList<>();
-        for (PredictResult predictResult : detect) {
+        for (PredictResult predictResult : predict) {
             PredictResult result = createPredictResult(LocationUtils.getSubImage(image, (BoundingBox) predictResult.getBoundingBox()));
             if (null == result) {
                 continue;
