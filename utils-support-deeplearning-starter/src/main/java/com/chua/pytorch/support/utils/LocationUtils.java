@@ -32,6 +32,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.*;
+import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -268,6 +269,14 @@ public class LocationUtils {
     }
 
     public static Image getImage(Object fileName) {
+        if(null == fileName) {
+            return null;
+        }
+
+        if(ArrayUtils.isArray(fileName)) {
+            fileName = Array.get(fileName, 0);
+        }
+
         if (fileName instanceof Image) {
             return (Image) fileName;
         }
