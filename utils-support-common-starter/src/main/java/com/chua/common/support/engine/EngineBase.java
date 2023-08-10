@@ -3,6 +3,8 @@ package com.chua.common.support.engine;
 import com.chua.common.support.feature.DetectionConfiguration;
 import com.chua.common.support.lang.function.CosinSimilar;
 import com.chua.common.support.lang.function.Similar;
+import com.chua.common.support.lang.proxy.ProxyUtils;
+import com.chua.common.support.lang.proxy.VoidMethodIntercept;
 import com.chua.common.support.spi.ServiceDefinition;
 import com.chua.common.support.spi.autowire.AutoServiceAutowire;
 import com.chua.common.support.spi.finder.SamePackageServiceFinder;
@@ -79,7 +81,8 @@ public abstract class EngineBase implements Engine {
             return (T) new CosinSimilar();
         }
 
-        return newFailureInstance(target, configuration.type());
+        T t = newFailureInstance(target, configuration.type());
+        return null != t ? t : ProxyUtils.proxy(target, ClassLoader.getSystemClassLoader(), new VoidMethodIntercept<>());
     }
 
     public abstract  <T> T newFailureInstance(Class<T> target, String type);
@@ -90,7 +93,11 @@ public abstract class EngineBase implements Engine {
         }
 
         if(StringUtils.isNotEmpty(type)) {
-            return stringSortedSetMap.get(target).first().newInstance(new AutoServiceAutowire(), configuration);
+            try {
+                return stringSortedSetMap.get(type).first().newInstance(new AutoServiceAutowire(), configuration);
+            } catch (Exception e) {
+                return null;
+            }
         }
         return MapUtils.getFirst(stringSortedSetMap).getValue().first().newInstance(new AutoServiceAutowire(), configuration);
     }

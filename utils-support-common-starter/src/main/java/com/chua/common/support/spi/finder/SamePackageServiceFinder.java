@@ -69,7 +69,7 @@ public class SamePackageServiceFinder extends AbstractServiceFinder {
 
         ConfigurationBuilder configurationBuilder = new ConfigurationBuilder()
                 .setParallel(true)
-                .setExpandSuperTypes(false)
+                .setExpandSuperTypes(true)
                 .setScanners(Scanners.SubTypes)
                 .setClassLoaders(new ClassLoader[]{getClassLoader()});
         if(FILE.equals(resource.getProtocol())) {
