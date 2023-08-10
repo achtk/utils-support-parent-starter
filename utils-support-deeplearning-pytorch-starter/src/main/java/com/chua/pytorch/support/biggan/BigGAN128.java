@@ -33,7 +33,7 @@ public class BigGAN128 extends AbstractPytorchIODetector<Long, Image> {
 
 
     @Override
-    public List<PredictResult> detect(Object type) {
+    public List<PredictResult> predict(Object type) {
         List<PredictResult> results = new LinkedList<>();
         try (Predictor<Long, Image> predictor = model.newPredictor()) {
             Image image = predictor.predict(Converter.convertIfNecessary(type, Long.class));

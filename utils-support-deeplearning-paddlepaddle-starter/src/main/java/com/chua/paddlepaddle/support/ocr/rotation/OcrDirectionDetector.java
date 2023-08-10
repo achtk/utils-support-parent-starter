@@ -2,6 +2,7 @@ package com.chua.paddlepaddle.support.ocr.rotation;
 
 import ai.djl.modality.Classifications;
 import ai.djl.modality.cv.Image;
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.constant.PredictResult;
 import com.chua.common.support.feature.DetectionConfiguration;
 import com.chua.pytorch.support.AbstractPytorchDetector;
@@ -15,6 +16,7 @@ import java.util.List;
  *
  * @author CH
  */
+@Spi("ocr-director")
 public class OcrDirectionDetector extends AbstractPytorchDetector<Classifications> {
     public OcrDirectionDetector(DetectionConfiguration configuration) {
         super(configuration,

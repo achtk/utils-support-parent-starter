@@ -77,7 +77,7 @@ public class ImageDiffusion {
     }
 
 
-    public List<PredictResult> detect(Object face) throws Exception {
+    public List<PredictResult> predict(Object face) throws Exception {
         if (!face.getClass().isArray()) {
             throw new NotSupportedException("必须是字符串数组[0]: 图片, [1]:查询关键词, [2]: 非查询关键词");
         }

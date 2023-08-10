@@ -3,11 +3,14 @@ package com.chua.paddlepaddle.support.face.feature;
 import ai.djl.inference.Predictor;
 import ai.djl.modality.cv.Image;
 import ai.djl.translate.TranslateException;
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.feature.DetectionConfiguration;
 import com.chua.paddlepaddle.support.face.recognizer.PaddlePaddleFaceFeatureTranslator;
 import com.chua.pytorch.support.FloatArrayPytorchFeature;
 import com.chua.pytorch.support.utils.LocationUtils;
 
+
+@Spi("FaceFeature")
 public class PaddleFeature extends FloatArrayPytorchFeature<float[]> {
 
     public PaddleFeature(DetectionConfiguration configuration) {

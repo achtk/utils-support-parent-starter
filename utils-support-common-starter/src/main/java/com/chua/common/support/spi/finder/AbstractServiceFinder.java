@@ -7,6 +7,7 @@ import com.chua.common.support.utils.AnnotationUtils;
 import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.CollectionUtils;
 import com.chua.common.support.utils.StringUtils;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URL;
@@ -23,6 +24,7 @@ import static com.chua.common.support.context.constant.ContextConstant.COMPONENT
 @Slf4j
 public abstract class AbstractServiceFinder implements ServiceFinder{
     private final Map<ClassLoader, Map<Class<?>, List<ServiceDefinition>>> CACHE = new ConcurrentHashMap<>();
+    @Setter
     protected Class<?> service;
     private ClassLoader classLoader;
     protected ServiceAutowire serviceAutowire;

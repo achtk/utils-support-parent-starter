@@ -2,6 +2,7 @@ package com.chua.paddlepaddle.support.translation;
 
 import ai.djl.inference.Predictor;
 import ai.djl.translate.TranslateException;
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.constant.PredictResult;
 import com.chua.common.support.feature.DetectionConfiguration;
 import com.chua.common.support.utils.StringUtils;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
  *
  * @author CH
  */
+@Spi("EnglishTranslation")
 public class EnglishTranslation extends AbstractPytorchIODetector<String[], String[]> {
 
 
@@ -30,7 +32,7 @@ public class EnglishTranslation extends AbstractPytorchIODetector<String[], Stri
     }
 
     @Override
-    public List<PredictResult> detect(Object face) {
+    public List<PredictResult> predict(Object face) {
         try (Predictor<String[], String[]> predictor = model.newPredictor()) {
             String[] o = predictor.predict((String[]) face);
             return Arrays.stream(o).map(it -> new PredictResult().setText(it)).collect(Collectors.toList());

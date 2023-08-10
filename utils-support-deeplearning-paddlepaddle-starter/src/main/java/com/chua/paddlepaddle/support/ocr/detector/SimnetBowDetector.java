@@ -2,6 +2,7 @@ package com.chua.paddlepaddle.support.ocr.detector;
 
 import ai.djl.inference.Predictor;
 import ai.djl.translate.TranslateException;
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.constant.PredictResult;
 import com.chua.common.support.feature.DetectionConfiguration;
 import com.chua.common.support.lang.algorithm.MatchingAlgorithm;
@@ -21,6 +22,7 @@ import java.util.List;
  * @author CH
  */
 @Slf4j
+@Spi("SimnetBowDetector")
 public class SimnetBowDetector extends AbstractPytorchIODetector<String[][], Float> implements MatchingAlgorithm {
     private Tokenizer tokenizer;
 
@@ -36,7 +38,7 @@ public class SimnetBowDetector extends AbstractPytorchIODetector<String[][], Flo
     }
 
     @Override
-    public List<PredictResult> detect(Object face) {
+    public List<PredictResult> predict(Object face) {
         throw new NotSupportedException();
     }
 

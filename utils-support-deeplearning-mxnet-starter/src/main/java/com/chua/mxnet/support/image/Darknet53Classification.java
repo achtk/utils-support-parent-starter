@@ -2,6 +2,7 @@ package com.chua.mxnet.support.image;
 
 import ai.djl.modality.Classifications;
 import ai.djl.modality.cv.Image;
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.constant.PredictResult;
 import com.chua.common.support.feature.DetectionConfiguration;
 import com.chua.common.support.utils.StringUtils;
@@ -11,11 +12,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * 图片检测
+ * 图片检测(那些物体在图片中)
  * Darknet53Classification
  *
  * @author CH
  */
+@Spi("Darknet53Classification")
 public class Darknet53Classification extends AbstractPytorchDetector<Classifications> {
     public Darknet53Classification(DetectionConfiguration configuration) {
         super(configuration,

@@ -2,6 +2,7 @@ package com.chua.pytorch.support.fire;
 
 import ai.djl.modality.cv.Image;
 import ai.djl.modality.cv.output.DetectedObjects;
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.constant.PredictResult;
 import com.chua.common.support.feature.DetectionConfiguration;
 import com.chua.common.support.utils.MapUtils;
@@ -20,6 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author CH
  */
+@Spi("FireSmokeDetector")
 public class FireSmokeDetector extends AbstractPytorchDetector<DetectedObjects> {
 
     static final Map<String, Object> DEFAULT_ARGUMENTS = new ConcurrentHashMap<>();

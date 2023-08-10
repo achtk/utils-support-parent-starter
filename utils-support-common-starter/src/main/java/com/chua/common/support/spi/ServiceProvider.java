@@ -47,8 +47,8 @@ public class ServiceProvider<T> implements InitializingAware {
     private static final Map<Class<?>, String> SPI_NAME = new HashMap<>();
     protected static final CustomServiceFinder DEFAULT_FINDER = new CustomServiceFinder();
 
-    private final Map<String, SortedSet<ServiceDefinition>> definitions = new ConcurrentHashMap<>();
     private static final Map<ClassLoader, Map<Class<?>, ServiceProvider>> SERVICE_PROVIDER_MAP = new ConcurrentHashMap<>();
+    private final Map<String, SortedSet<ServiceDefinition>> definitions = new ConcurrentHashMap<>();
 
     private static final Comparator<ServiceDefinition> COMPARATOR = new Comparator<ServiceDefinition>() {
         @Override

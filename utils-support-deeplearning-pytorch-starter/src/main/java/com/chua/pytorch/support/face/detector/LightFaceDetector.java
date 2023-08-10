@@ -18,7 +18,7 @@ import java.util.List;
  *
  * @author CH
  */
-@Spi("Light")
+@Spi("LightFaceDetector")
 public class LightFaceDetector extends AbstractPytorchDetector<DetectedObjects> {
 
     public LightFaceDetector(DetectionConfiguration configuration) {

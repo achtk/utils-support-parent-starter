@@ -3,6 +3,7 @@ package com.chua.paddlepaddle.support.face.land;
 import ai.djl.inference.Predictor;
 import ai.djl.modality.cv.Image;
 import ai.djl.translate.TranslateException;
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.bean.BeanUtils;
 import com.chua.common.support.constant.PredictResult;
 import com.chua.common.support.feature.DetectionConfiguration;
@@ -26,6 +27,7 @@ import java.util.List;
  *
  * @author CH
  */
+@Spi("FaceLandmark")
 public class FaceLandmarkDetector extends AbstractPytorchDetector<float[][]> {
 
     private final Detector detector;
@@ -47,8 +49,8 @@ public class FaceLandmarkDetector extends AbstractPytorchDetector<float[][]> {
     }
 
     @Override
-    public List<PredictResult> detect(Object face) {
-        List<PredictResult> detect = detector.detect(face);
+    public List<PredictResult> predict(Object face) {
+        List<PredictResult> detect = detector.predict(face);
         if (CollectionUtils.isEmpty(detect)) {
             return Collections.emptyList();
         }
@@ -75,7 +77,7 @@ public class FaceLandmarkDetector extends AbstractPytorchDetector<float[][]> {
 
     @Override
     public void detect(Object face, OutputStream outputStream) throws Exception {
-        List<PredictResult> detect = detector.detect(face);
+        List<PredictResult> detect = detector.predict(face);
         if (CollectionUtils.isEmpty(detect)) {
             return;
         }

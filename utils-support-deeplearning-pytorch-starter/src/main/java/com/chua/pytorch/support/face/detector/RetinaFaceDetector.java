@@ -18,7 +18,7 @@ import java.util.List;
  *
  * @author CH
  */
-@Spi("Retina")
+@Spi("FaceDetector")
 public class RetinaFaceDetector extends AbstractPytorchDetector<DetectedObjects> {
 
 

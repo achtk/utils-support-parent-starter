@@ -105,7 +105,7 @@ public class PaddlePaddleMaskDetector extends AbstractPytorchDetector<DetectedOb
 
 
     @Override
-    public List<PredictResult> detect(Object face) {
+    public List<PredictResult> predict(Object face) {
         Image img = LocationUtils.getImage(face);
         if (null == img) {
             return Collections.emptyList();
@@ -115,7 +115,7 @@ public class PaddlePaddleMaskDetector extends AbstractPytorchDetector<DetectedOb
         try (
                 Predictor<Image, Classifications> predictor = maskModel.newPredictor();
         ) {
-            List<PredictResult> faces = detector.detect(img);
+            List<PredictResult> faces = detector.predict(img);
 
             for (PredictResult face1 : faces) {
                 Image subImg = getSubImage(img, LocationUtils.getBoundingBox(face1));

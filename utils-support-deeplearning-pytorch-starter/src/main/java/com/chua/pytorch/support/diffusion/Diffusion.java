@@ -69,7 +69,7 @@ public class Diffusion {
     }
 
 
-    public List<PredictResult> detect(Object face) throws Exception {
+    public List<PredictResult> predict(Object face) throws Exception {
         if (!face.getClass().isArray()) {
             face = new String[]{face.toString()};
         }

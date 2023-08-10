@@ -1,4 +1,4 @@
-package com.chua.pytorch.support.objects;
+package com.chua.tensorflow.support.objects;
 
 import ai.djl.tensorflow.zoo.cv.objectdetction.TfSsdTranslator;
 import com.chua.common.support.feature.DetectionConfiguration;

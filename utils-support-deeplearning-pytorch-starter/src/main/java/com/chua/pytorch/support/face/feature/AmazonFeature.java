@@ -11,7 +11,7 @@ import com.chua.pytorch.support.utils.LocationUtils;
 /**
  * 特征值
  */
-@Spi("amazon")
+@Spi({"amazon", "FaceFeature"})
 public class AmazonFeature extends FloatArrayPytorchFeature<float[]> {
 
 

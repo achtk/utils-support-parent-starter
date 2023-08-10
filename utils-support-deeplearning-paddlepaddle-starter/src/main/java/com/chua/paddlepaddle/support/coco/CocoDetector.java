@@ -2,6 +2,7 @@ package com.chua.paddlepaddle.support.coco;
 
 import ai.djl.modality.cv.Image;
 import ai.djl.modality.cv.output.DetectedObjects;
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.constant.PredictResult;
 import com.chua.common.support.feature.DetectionConfiguration;
 import com.chua.common.support.utils.StringUtils;
@@ -16,6 +17,7 @@ import java.util.List;
  *
  * @author CH
  */
+@Spi("coco")
 public class CocoDetector extends AbstractPytorchDetector<DetectedObjects> {
     public CocoDetector(DetectionConfiguration configuration) {
         super(configuration,

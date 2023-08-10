@@ -1,7 +1,6 @@
 package com.chua.common.support.feature.recognizer;
 
 import com.chua.common.support.constant.PredictResult;
-import com.chua.common.support.feature.Feature;
 
 import java.util.List;
 
@@ -10,7 +9,7 @@ import java.util.List;
  *
  * @author CH
  */
-public interface Recognizer extends AutoCloseable, Feature {
+public interface Recognizer extends AutoCloseable {
 
     /**
      * 识别
@@ -18,6 +17,6 @@ public interface Recognizer extends AutoCloseable, Feature {
      * @param image 检测
      * @return 检测
      */
-    List<PredictResult> recognize(Object image);
+    List<PredictResult> predict(Object image);
 
 }

@@ -54,7 +54,7 @@ public class ImageDetector extends AbstractPytorchTrain<ImageDetector> implement
     }
 
     @Override
-    public List<PredictResult> detect(Object face) {
+    public List<PredictResult> predict(Object face) {
 
         Image image = LocationUtils.getImage(face);
         if (null == image) {

@@ -18,7 +18,7 @@ public interface Detector extends AutoCloseable {
      * @param face 检测
      * @return 检测
      */
-    List<PredictResult> detect(Object face);
+    List<PredictResult> predict(Object face);
 
     /**
      * 检测

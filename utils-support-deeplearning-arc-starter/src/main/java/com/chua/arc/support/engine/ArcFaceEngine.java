@@ -7,6 +7,7 @@ import com.arcsoft.face.enums.DetectMode;
 import com.arcsoft.face.enums.DetectOrient;
 import com.arcsoft.face.enums.ErrorInfo;
 import com.chua.common.support.engine.Engine;
+import com.chua.common.support.engine.EngineBase;
 import com.chua.common.support.feature.DetectionConfiguration;
 import com.chua.common.support.feature.detector.Detector;
 import com.chua.common.support.function.InitializingAware;
@@ -24,14 +25,13 @@ import java.nio.file.Path;
  * @author CH
  */
 @Slf4j
-public class ArcFaceEngine implements Engine, InitializingAware {
+public class ArcFaceEngine extends EngineBase implements Engine, InitializingAware {
 
-    private DetectionConfiguration configuration;
     private FaceEngine faceEngine;
-    private static String model = "libarcsoft_face";
+    private static final String model = "libarcsoft_face";
 
     public ArcFaceEngine(DetectionConfiguration configuration) {
-        this.configuration = configuration;
+        super(configuration);
         this.afterPropertiesSet();
 
     }
@@ -78,6 +78,7 @@ public class ArcFaceEngine implements Engine, InitializingAware {
         if (Detector.class.isAssignableFrom(target)) {
             return (T) new ArcDetector(faceEngine);
         }
+
         if (Similar.class.isAssignableFrom(target)) {
             return (T) new ArcSimilar(faceEngine);
         }

@@ -2,11 +2,13 @@ package com.chua.paddlepaddle.support.ocr.senta;
 
 import ai.djl.inference.Predictor;
 import ai.djl.translate.TranslateException;
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.constant.PredictResult;
 import com.chua.common.support.feature.DetectionConfiguration;
 import com.chua.common.support.lang.tokenizer.Tokenizer;
 import com.chua.common.support.lang.tokenizer.Word;
 import com.chua.common.support.utils.StringUtils;
+import com.chua.paddlepaddle.support.ocr.tokenizer.LacTokenizer;
 import com.chua.pytorch.support.AbstractPytorchIODetector;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,14 +17,17 @@ import java.util.List;
 
 /**
  * Senta
- *
+ * 短语相似度
  * @author CH
  */
 @Slf4j
+@Spi("SentaBilsSenta")
 public class SentaBilsSentaDetector extends AbstractPytorchIODetector<String[], float[]> {
 
     private Tokenizer tokenizer;
-
+    public SentaBilsSentaDetector(DetectionConfiguration configuration) {
+        this(configuration, new LacTokenizer(configuration));
+    }
     public SentaBilsSentaDetector(DetectionConfiguration configuration, Tokenizer tokenizer) {
         super(configuration,
                 new SentaTranslator(),
@@ -36,7 +41,7 @@ public class SentaBilsSentaDetector extends AbstractPytorchIODetector<String[], 
     }
 
     @Override
-    public List<PredictResult> detect(Object face) {
+    public List<PredictResult> predict(Object face) {
         List<PredictResult> results = new LinkedList<>();
 
         List<Word> segments1 = tokenizer.segments(face.toString());

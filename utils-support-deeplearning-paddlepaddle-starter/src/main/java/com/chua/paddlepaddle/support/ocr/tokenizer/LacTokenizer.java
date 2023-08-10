@@ -2,6 +2,7 @@ package com.chua.paddlepaddle.support.ocr.tokenizer;
 
 import ai.djl.inference.Predictor;
 import ai.djl.translate.TranslateException;
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.constant.PredictResult;
 import com.chua.common.support.feature.DetectionConfiguration;
 import com.chua.common.support.json.Json;
@@ -19,6 +20,7 @@ import java.util.List;
  *
  * @author CH
  */
+@Spi("LacTokenizer")
 public class LacTokenizer extends AbstractPytorchIODetector<String, String[][]> implements Tokenizer {
     public LacTokenizer(DetectionConfiguration configuration) {
         super(configuration,
@@ -42,7 +44,7 @@ public class LacTokenizer extends AbstractPytorchIODetector<String, String[][]> 
 
 
     @Override
-    public List<PredictResult> detect(Object face) {
+    public List<PredictResult> predict(Object face) {
         try (Predictor<String, String[][]> predictor = model.newPredictor()) {
             String[][] predict = predictor.predict(face.toString());
             return Collections.singletonList(new PredictResult(Json.toJson(predict)));

@@ -2,6 +2,7 @@ package com.chua.paddlepaddle.support.review;
 
 import ai.djl.inference.Predictor;
 import ai.djl.translate.TranslateException;
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.constant.PredictResult;
 import com.chua.common.support.feature.DetectionConfiguration;
 import com.chua.pytorch.support.AbstractPytorchIODetector;
@@ -14,6 +15,7 @@ import java.util.List;
  *
  * @author CH
  */
+@Spi("review")
 public class Review extends AbstractPytorchIODetector<String, float[]> {
     public Review(DetectionConfiguration configuration) {
         super(configuration,
@@ -26,7 +28,7 @@ public class Review extends AbstractPytorchIODetector<String, float[]> {
     }
 
     @Override
-    public List<PredictResult> detect(Object face) {
+    public List<PredictResult> predict(Object face) {
         try (Predictor<String, float[]> predictor = model.newPredictor()) {
             float[] o = predictor.predict((String) face);
             return Collections.singletonList(new PredictResult().setText((String) face).setScore(o[0]));

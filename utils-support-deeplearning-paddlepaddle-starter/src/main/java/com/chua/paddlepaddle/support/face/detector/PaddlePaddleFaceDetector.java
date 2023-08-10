@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @author CH
  */
-@Spi("paddlepaddle")
+@Spi("FaceDetector")
 public class PaddlePaddleFaceDetector extends AbstractPytorchDetector<DetectedObjects> {
 
     public PaddlePaddleFaceDetector(DetectionConfiguration configuration) {

@@ -4,6 +4,7 @@ import ai.djl.modality.Classifications;
 import ai.djl.modality.cv.Image;
 import ai.djl.modality.cv.translator.ImageClassificationTranslator;
 import ai.djl.translate.Translator;
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.constant.PredictResult;
 import com.chua.common.support.feature.DetectionConfiguration;
 import com.chua.common.support.utils.StringUtils;
@@ -19,6 +20,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * 动作识别
  * @author CH
  */
+@Spi("InceptionV3ActionRecognizer")
+@Deprecated
 public final class InceptionV3ActionRecognizer extends AbstractPytorchDetector<Classifications> {
     public InceptionV3ActionRecognizer(DetectionConfiguration configuration) {
         super(configuration,

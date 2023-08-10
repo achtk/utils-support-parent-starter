@@ -3,6 +3,7 @@ package com.chua.pytorch.support.pytorch;
 import ai.djl.modality.cv.Image;
 import ai.djl.modality.cv.output.DetectedObjects;
 import com.alibaba.fastjson2.JSONObject;
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.constant.PredictResult;
 import com.chua.common.support.feature.DetectionConfiguration;
 import com.chua.common.support.file.yaml.YamlReader;
@@ -32,6 +33,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  *
  * @author CH
  */
+@Spi("FireSmokeDetector")
 public class YoloDetector extends AbstractPytorchDetector<DetectedObjects> {
 
     static final Map<String, Object> DEFAULT_ARGUMENTS = new ConcurrentHashMap<>();

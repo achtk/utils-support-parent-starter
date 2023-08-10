@@ -2,6 +2,7 @@ package com.chua.paddlepaddle.support.vehicle.detect;
 
 import ai.djl.modality.cv.Image;
 import ai.djl.modality.cv.output.DetectedObjects;
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.constant.PredictResult;
 import com.chua.common.support.feature.DetectionConfiguration;
 import com.chua.common.support.utils.StringUtils;
@@ -17,6 +18,7 @@ import java.util.List;
  *
  * @author CH
  */
+@Spi("VehicleDetector")
 public class VehicleDetector extends AbstractPytorchDetector<DetectedObjects> {
 
     @SneakyThrows

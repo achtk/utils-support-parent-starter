@@ -8,9 +8,12 @@ import ai.djl.modality.cv.util.NDImageUtils;
 import ai.djl.ndarray.NDArray;
 import ai.djl.ndarray.NDManager;
 import ai.djl.translate.TranslateException;
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.constant.PredictResult;
 import com.chua.common.support.feature.DetectionConfiguration;
 import com.chua.common.support.feature.detector.Detector;
+import com.chua.paddlepaddle.support.ocr.detector.OcrDetector;
+import com.chua.paddlepaddle.support.ocr.rotation.OcrDirectionDetector;
 import com.chua.pytorch.support.AbstractPytorchRecognizer;
 import com.chua.pytorch.support.utils.LocationUtils;
 
@@ -24,10 +27,13 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author CH
  */
+@Spi("ocr")
 public class OcrRecognizer extends AbstractPytorchRecognizer<String> {
 
-    private Detector directionDetector;
-
+    private final Detector directionDetector;
+    public OcrRecognizer(DetectionConfiguration configuration) {
+        this(new OcrDirectionDetector(configuration), new OcrDetector(configuration), configuration);
+    }
     public OcrRecognizer(Detector directionDetector, Detector detector, DetectionConfiguration configuration) {
         super(detector, configuration,
                 new PpWordRecognitionTranslator(new ConcurrentHashMap<>()),
@@ -41,13 +47,8 @@ public class OcrRecognizer extends AbstractPytorchRecognizer<String> {
     }
 
     @Override
-    public float[] predict(Object img) {
-        return new float[0];
-    }
-
-    @Override
-    public List<PredictResult> recognize(Object face) {
-        List<PredictResult> detect = detector.detect(face);
+    public List<PredictResult> predict(Object face) {
+        List<PredictResult> detect = detector.predict(face);
 
         if (detect.isEmpty()) {
             return Collections.emptyList();
@@ -72,7 +73,7 @@ public class OcrRecognizer extends AbstractPytorchRecognizer<String> {
             subImg = LocationUtils.rotateImg(subImg);
         }
 
-        List<PredictResult> detect = directionDetector.detect(subImg);
+        List<PredictResult> detect = directionDetector.predict(subImg);
         if (detect.isEmpty()) {
             return;
         }

@@ -86,7 +86,7 @@ public abstract class AbstractPytorchRecognizer<O> extends AbstractRecognizer {
 
     @Override
     public List<PredictResult> recognize(Object face) {
-        List<PredictResult> detect = detector.detect(face);
+        List<PredictResult> predict = detector.detect(face);
 
         Image image = LocationUtils.getImage(face);
 

@@ -15,6 +15,7 @@ import ai.djl.repository.zoo.ModelZoo;
 import ai.djl.repository.zoo.ZooModel;
 import ai.djl.training.util.ProgressBar;
 import ai.djl.translate.TranslateException;
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.constant.PredictResult;
 import com.chua.common.support.feature.DetectionConfiguration;
 import com.chua.pytorch.support.AbstractPytorchDetector;
@@ -33,6 +34,7 @@ import java.util.List;
  *
  * @author CH
  */
+@Spi("facemask")
 public class PaddlePaddleFaceMaskDetector extends AbstractPytorchDetector<DetectedObjects> {
     private ZooModel<Image, Classifications> maskModel;
 
@@ -107,7 +109,7 @@ public class PaddlePaddleFaceMaskDetector extends AbstractPytorchDetector<Detect
 
 
     @Override
-    public List<PredictResult> detect(Object face) {
+    public List<PredictResult> predict(Object face) {
         Image img = LocationUtils.getImage(face);
         if (null == img) {
             return Collections.emptyList();

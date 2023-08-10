@@ -1,7 +1,8 @@
-package com.chua.pytorch.support.objects;
+package com.chua.tensorflow.support.objects;
 
 import ai.djl.modality.cv.Image;
 import ai.djl.modality.cv.output.DetectedObjects;
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.constant.PredictResult;
 import com.chua.common.support.feature.DetectionConfiguration;
 import com.chua.common.support.utils.StringUtils;
@@ -17,6 +18,7 @@ import java.util.List;
  *
  * @author CH
  */
+@Spi("ObjectsClassification")
 public class ObjectsClassification extends AbstractPytorchDetector<DetectedObjects> {
     /**
      * width: 256
@@ -25,7 +27,7 @@ public class ObjectsClassification extends AbstractPytorchDetector<DetectedObjec
      */
     public ObjectsClassification(DetectionConfiguration configuration) {
         super(configuration,
-                new ObjectsTranslator(configuration),
+                new com.chua.pytorch.support.objects.ObjectsTranslator(configuration),
                 "TensorFlow",
                 null,
                 StringUtils.defaultString(configuration.modelPath(), "tf_mobilenetv2"),

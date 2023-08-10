@@ -6,6 +6,7 @@ import ai.djl.repository.zoo.Criteria;
 import ai.djl.repository.zoo.ZooModel;
 import ai.djl.training.util.ProgressBar;
 import ai.djl.translate.TranslateException;
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.feature.DetectionConfiguration;
 import com.chua.common.support.feature.resolver.AbstractResolver;
 import com.chua.common.support.utils.StringUtils;
@@ -16,9 +17,11 @@ import java.util.List;
 
 /**
  * SuperResolution
+ * 分辨率提升到4K
  *
  * @author CH
  */
+@Spi("SuperResolver")
 public class SuperResolver extends AbstractResolver<Image> {
 
     private final ZooModel<Image, Image> model;

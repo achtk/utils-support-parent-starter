@@ -32,7 +32,7 @@ public class ArcDetector implements Detector {
     }
 
     @Override
-    public List<PredictResult> detect(Object face) {
+    public List<PredictResult> predict(Object face) {
         List<PredictResult> rs = new LinkedList<>();
         ImageInfo imageInfo = getRGBData(Converter.convertIfNecessary(face, File.class));
         List<FaceInfo> faceInfoList = new ArrayList<FaceInfo>();

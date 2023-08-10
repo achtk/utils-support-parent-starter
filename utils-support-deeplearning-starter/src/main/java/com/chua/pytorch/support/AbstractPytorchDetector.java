@@ -53,7 +53,7 @@ public abstract class AbstractPytorchDetector<O> extends AbstractPytorchIODetect
 
 
     @Override
-    public List<PredictResult> detect(Object face) {
+    public List<PredictResult> predict(Object face) {
         Image img = LocationUtils.getImage(face);
         if (null == img) {
             return Collections.emptyList();
@@ -72,7 +72,7 @@ public abstract class AbstractPytorchDetector<O> extends AbstractPytorchIODetect
     @Override
     @SuppressWarnings("ALL")
     public void detect(Object face, OutputStream outputStream) throws Exception {
-        List<PredictResult> detect = detect(face);
+        List<PredictResult> detect = predict(face);
         if (CollectionUtils.isEmpty(detect)) {
             return;
         }

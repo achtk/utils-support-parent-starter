@@ -30,7 +30,7 @@ public class ImageEncoder extends AbstractPytorchIODetector<Image, NDArray> {
     }
 
     @Override
-    public List<PredictResult> detect(Object face) {
+    public List<PredictResult> predict(Object face) {
         try (Predictor<Image, NDArray> predictor = model.newPredictor()) {
             NDArray predict = predictor.predict(LocationUtils.getImage(face));
             return Collections.singletonList(new PredictResult().setNdArray(predict));

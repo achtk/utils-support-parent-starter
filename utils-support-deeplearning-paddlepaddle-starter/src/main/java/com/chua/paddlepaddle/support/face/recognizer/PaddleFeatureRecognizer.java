@@ -3,6 +3,7 @@ package com.chua.paddlepaddle.support.face.recognizer;
 import ai.djl.inference.Predictor;
 import ai.djl.modality.cv.Image;
 import ai.djl.translate.TranslateException;
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.constant.PredictResult;
 import com.chua.common.support.feature.DetectionConfiguration;
 import com.chua.common.support.feature.detector.Detector;
@@ -10,11 +11,15 @@ import com.chua.pytorch.support.AbstractPytorchRecognizer;
 import com.chua.pytorch.support.face.net.FaceLabelNet;
 import com.chua.pytorch.support.utils.LocationUtils;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * PaddlePaddle
  *
  * @author CH
  */
+@Spi("FeatureRecognizer")
 public class PaddleFeatureRecognizer extends AbstractPytorchRecognizer<float[]> {
     private final FaceLabelNet faceLabelNet;
 
@@ -30,23 +35,7 @@ public class PaddleFeatureRecognizer extends AbstractPytorchRecognizer<float[]> 
         this.faceLabelNet = faceLabelNet;
     }
 
-    @Override
-    public float[] predict(Object img) {
-        Image image = LocationUtils.getImage(img);
 
-        if (null == image) {
-            return null;
-        }
-
-        try (Predictor<Image, float[]> predictor = model.newPredictor()) {
-            try {
-                return predictor.predict(image);
-            } catch (TranslateException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
 
     @Override
     protected PredictResult createPredictResult(Image subImage) {
@@ -83,5 +72,23 @@ public class PaddleFeatureRecognizer extends AbstractPytorchRecognizer<float[]> 
     @Override
     protected Class<float[]> type() {
         return float[].class;
+    }
+
+    @Override
+    public List<PredictResult> predict(Object img) {
+        Image image = LocationUtils.getImage(img);
+
+        if (null == image) {
+            return Collections.emptyList();
+        }
+
+        try (Predictor<Image, float[]> predictor = model.newPredictor()) {
+            try {
+                return Collections.singletonList(new PredictResult().setNdArray(predictor.predict(image)));
+            } catch (TranslateException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 }

@@ -24,7 +24,7 @@ public class TextEncoder extends AbstractPytorchIODetector<NDList, NDList> {
     }
 
     @Override
-    public List<PredictResult> detect(Object face) {
+    public List<PredictResult> predict(Object face) {
         try (Predictor<NDList, NDList> predictor = model.newPredictor()) {
             NDList predict = predictor.predict((NDList) face);
             return Collections.singletonList(new PredictResult().setNdArray(predict));
