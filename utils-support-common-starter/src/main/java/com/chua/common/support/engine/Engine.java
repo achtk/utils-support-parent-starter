@@ -2,6 +2,7 @@ package com.chua.common.support.engine;
 
 import com.chua.common.support.feature.DetectionConfiguration;
 import com.chua.common.support.spi.ServiceProvider;
+import com.chua.common.support.utils.StringUtils;
 
 /**
  * 引擎
@@ -16,7 +17,10 @@ public interface Engine extends AutoCloseable {
      * @return 初始化引擎
      */
     static Engine auto(DetectionConfiguration configuration) {
-        return ServiceProvider.of(Engine.class).getObjectProvider(configuration);
+        if(StringUtils.isEmpty(configuration.engine())) {
+            return ServiceProvider.of(Engine.class).getObjectProvider(configuration);
+        }
+        return ServiceProvider.of(Engine.class).getNewExtension(configuration.engine(), configuration);
     }
 
     /**
