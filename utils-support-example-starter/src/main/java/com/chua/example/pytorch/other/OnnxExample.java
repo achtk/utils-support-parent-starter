@@ -17,7 +17,7 @@ public class OnnxExample {
                 .modelPath("Z:\\works\\env\\yolov5-7.0\\runs\\train\\exp\\weights\\best.onnx")
                 .synset("Z:\\works\\env\\yolov5-7.0\\data\\coco128.yaml")
                 .build());
-        List<PredictResult> detection = detector.detect("Z:\\works\\resource\\000000000138.jpg");
+        List<PredictResult> detection = detector.predict("Z:\\works\\resource\\000000000138.jpg");
         LocationUtils.saveBoundingBoxImage(detection, "Z:\\works\\resource\\000000000138.jpg", "Z:\\works\\resource\\000000000138_out.jpg");
         System.out.println(detection);
     }

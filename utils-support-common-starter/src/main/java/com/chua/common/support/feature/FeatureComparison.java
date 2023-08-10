@@ -8,6 +8,26 @@ package com.chua.common.support.feature;
  */
 public class FeatureComparison {
     /**
+     * 简单比较(cpu版本)
+     *
+     * @param feature1 feature1
+     * @param feature2 feature2
+     * @return 返回相似度比例
+     */
+    public static float calculateSimpleSimilar(byte[] feature1, byte[] feature2) {
+        float cnt = 0;
+        int length = feature1.length;
+        for (int i = 0; i < feature1.length; i++) {
+            byte b = feature1[i];
+            byte b1 = feature2[i];
+            if(b != b1) {
+                cnt ++;
+            }
+        }
+
+        return (length - cnt) / length;
+    }
+    /**
      * cosin相似度比较(cpu版本)
      *
      * @param feature1 feature1

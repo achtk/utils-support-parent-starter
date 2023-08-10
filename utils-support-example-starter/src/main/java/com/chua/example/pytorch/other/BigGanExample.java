@@ -13,7 +13,7 @@ public class BigGanExample {
 
     public static void main(String[] args) {
         BigGAN512 gan = new BigGAN512(DetectionConfiguration.builder().cachePath("E:\\workspace\\environment").build());
-        List<PredictResult> detect = gan.detect(11);
+        List<PredictResult> detect = gan.predict(11);
         System.out.println(BufferedImageUtils.writeToFile((BufferedImage) detect.get(0).getNdArray(), "Z://1.jpg"));
     }
 }

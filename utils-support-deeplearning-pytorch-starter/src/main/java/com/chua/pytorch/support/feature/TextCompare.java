@@ -1,10 +1,14 @@
 package com.chua.pytorch.support.feature;
 
 import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.constant.PredictResult;
 import com.chua.common.support.feature.DetectionConfiguration;
 import com.chua.common.support.lang.function.Compare;
 import com.chua.common.support.lang.function.CosinSimilar;
 import com.chua.common.support.lang.function.Similar;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * 文本相似度
@@ -20,7 +24,7 @@ public class TextCompare implements Compare {
         this.textFeature = new TextFeature(configuration);
     }
     @Override
-    public float calculateSimilar(Object t1, Object t2) {
-        return similar.calculateSimilar(textFeature.predict(t1), textFeature.predict(t1));
+    public List<PredictResult> calculateSimilar(Object t1, Object t2) {
+        return Collections.singletonList(new PredictResult().setScore(similar.calculateSimilar(textFeature.predict(t1), textFeature.predict(t1))));
     }
 }

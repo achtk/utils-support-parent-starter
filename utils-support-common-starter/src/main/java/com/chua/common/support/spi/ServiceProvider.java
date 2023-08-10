@@ -2,6 +2,8 @@ package com.chua.common.support.spi;
 
 
 import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.collection.SortedArrayList;
+import com.chua.common.support.collection.SortedList;
 import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.function.NameAware;
 import com.chua.common.support.function.SafeFunction;
@@ -18,6 +20,8 @@ import com.chua.common.support.spi.finder.ServiceLoaderServiceFinder;
 import com.chua.common.support.utils.*;
 import com.chua.common.support.value.Value;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
@@ -48,7 +52,7 @@ public class ServiceProvider<T> implements InitializingAware {
     protected static final CustomServiceFinder DEFAULT_FINDER = new CustomServiceFinder();
 
     private static final Map<ClassLoader, Map<Class<?>, ServiceProvider>> SERVICE_PROVIDER_MAP = new ConcurrentHashMap<>();
-    private final Map<String, SortedSet<ServiceDefinition>> definitions = new ConcurrentHashMap<>();
+    private final Map<String, SortedList<ServiceDefinition>> definitions = new ConcurrentHashMap<>();
 
     private static final Comparator<ServiceDefinition> COMPARATOR = new Comparator<ServiceDefinition>() {
         @Override
@@ -182,7 +186,7 @@ public class ServiceProvider<T> implements InitializingAware {
      */
     private void registerDefinition(List<ServiceDefinition> analyze) {
         for (ServiceDefinition serviceDefinition : analyze) {
-            definitions.computeIfAbsent(serviceDefinition.getName(), it -> new TreeSet<>(COMPARATOR)).add(serviceDefinition);
+            definitions.computeIfAbsent(serviceDefinition.getName(), it -> new SortedArrayList<>(COMPARATOR)).add(serviceDefinition);
             if (serviceDefinition.isDefault()) {
                 registerDefault(serviceDefinition);
             }
@@ -219,7 +223,7 @@ public class ServiceProvider<T> implements InitializingAware {
         List<ServiceDefinition> serviceDefinitions = DEFAULT_FINDER.buildDefinition(ref);
         for (ServiceDefinition serviceDefinition : serviceDefinitions) {
             String name = serviceDefinition.getName();
-            definitions.computeIfAbsent(name, it -> new TreeSet<>(COMPARATOR)).add(serviceDefinition);
+            definitions.computeIfAbsent(name, it -> new SortedArrayList<>(COMPARATOR)).add(serviceDefinition);
         }
     }
 
@@ -228,14 +232,14 @@ public class ServiceProvider<T> implements InitializingAware {
         serviceDefinition.setObj(ref);
         serviceDefinition.setType(value.getValue());
         serviceDefinition.setImplClass(ref.getClass());
-        definitions.computeIfAbsent(name, it -> new TreeSet<>(COMPARATOR)).add(serviceDefinition);
+        definitions.computeIfAbsent(name, it -> new SortedArrayList<>(COMPARATOR)).add(serviceDefinition);
     }
 
     public void register(String name, Class<T> ref) {
         ServiceDefinition serviceDefinition = new ServiceDefinition();
         serviceDefinition.setImplClass(ref);
         serviceDefinition.setType(value.getValue());
-        definitions.computeIfAbsent(name, it -> new TreeSet<>(COMPARATOR)).add(serviceDefinition);
+        definitions.computeIfAbsent(name, it -> new SortedArrayList<>(COMPARATOR)).add(serviceDefinition);
 
     }
 
@@ -246,10 +250,10 @@ public class ServiceProvider<T> implements InitializingAware {
             String[] split = name.split(SYMBOL_COLON, 2);
             String type = split[0];
             String name1 = split[1];
-            SortedSet<ServiceDefinition> definitions = new TreeSet<>(COMPARATOR);
-            SortedSet<ServiceDefinition> serviceDefinitions = this.definitions.get(name);
-            for (Map.Entry<String, SortedSet<ServiceDefinition>> entry : this.definitions.entrySet()) {
-                SortedSet<ServiceDefinition> entryValue = entry.getValue();
+            SortedList<ServiceDefinition> definitions = new SortedArrayList<>(COMPARATOR);
+            SortedList<ServiceDefinition> serviceDefinitions = this.definitions.get(name);
+            for (Map.Entry<String, SortedList<ServiceDefinition>> entry : this.definitions.entrySet()) {
+                SortedList<ServiceDefinition> entryValue = entry.getValue();
                 for (ServiceDefinition serviceDefinition : entryValue) {
                     if (type.equalsIgnoreCase(serviceDefinition.getLabelType()) && name1.equalsIgnoreCase(serviceDefinition.getName())) {
                         definitions.add(serviceDefinition);
@@ -259,9 +263,9 @@ public class ServiceProvider<T> implements InitializingAware {
 
             return definitions.isEmpty() ? DEFAULT_DEFINITION : definitions.first();
         }
-        SortedSet<ServiceDefinition> definitions = new TreeSet<>(COMPARATOR);
+        SortedList<ServiceDefinition> definitions = new SortedArrayList<>(COMPARATOR);
         for (String item : name.split(SYMBOL_COMMA)) {
-            SortedSet<ServiceDefinition> definitions1 = getDefinitions(item, args);
+            SortedList<ServiceDefinition> definitions1 = getDefinitions(item, args);
             if (null == definitions1) {
                 continue;
             }
@@ -274,20 +278,20 @@ public class ServiceProvider<T> implements InitializingAware {
     }
 
 
-    public SortedSet<ServiceDefinition> getDefinitions(String name, Object... args) {
-        SortedSet<ServiceDefinition> rs = new TreeSet<>(COMPARATOR);
+    public SortedList<ServiceDefinition> getDefinitions(String name, Object... args) {
+        SortedList<ServiceDefinition> rs = new SortedArrayList<>(COMPARATOR);
 
-        SortedSet<ServiceDefinition> serviceDefinitions = definitions.get(name);
+        SortedList<ServiceDefinition> serviceDefinitions = definitions.get(name);
         if (null != serviceDefinitions) {
             rs.addAll(serviceDefinitions);
         }
 
-        for (Map.Entry<String, SortedSet<ServiceDefinition>> entry : definitions.entrySet()) {
+        for (Map.Entry<String, SortedList<ServiceDefinition>> entry : definitions.entrySet()) {
             if (name.equals(entry.getKey())) {
                 continue;
             }
 
-            SortedSet<ServiceDefinition> entryValue = entry.getValue();
+            SortedList<ServiceDefinition> entryValue = entry.getValue();
             rs.addAll(createNameAware(name, entryValue, args));
         }
 
@@ -302,7 +306,7 @@ public class ServiceProvider<T> implements InitializingAware {
      * @param args        参数
      * @return 命名
      */
-    private <T> Collection<? extends ServiceDefinition> createNameAware(String name, SortedSet<ServiceDefinition> definitions, Object[] args) {
+    private <T> Collection<? extends ServiceDefinition> createNameAware(String name, SortedList<ServiceDefinition> definitions, Object[] args) {
         List<ServiceDefinition> rs = new ArrayList<>(definitions.size());
         for (ServiceDefinition definition : definitions) {
             if (!definition.isPresent()) {
@@ -363,7 +367,7 @@ public class ServiceProvider<T> implements InitializingAware {
 
         Map<String, Class<T>> result = new HashMap<>(definitions.size());
 
-        for (SortedSet<ServiceDefinition> value : this.definitions.values()) {
+        for (SortedList<ServiceDefinition> value : this.definitions.values()) {
             if (value.isEmpty()) {
                 continue;
             }
@@ -385,7 +389,28 @@ public class ServiceProvider<T> implements InitializingAware {
     public List<T> collect() {
         return Collections.unmodifiableList(new ArrayList<>(list().values()));
     }
+    /**
+     * 获取实现定义
+     *
+     * @param args 參數
+     * @return 实现
+     */
+    private Map<String, ServiceDefinition> listDefinition(Object[] args) {
+        if (definitions.isEmpty()) {
+            return Collections.emptyMap();
+        }
 
+        Map<String, ServiceDefinition> result = new HashMap<>(definitions.size());
+
+        for (SortedList<ServiceDefinition> value : this.definitions.values()) {
+            ServiceDefinition noneObject = value.first();
+            if (null == noneObject) {
+                continue;
+            }
+            result.put(noneObject.getName(), noneObject);
+        }
+        return result;
+    }
     /**
      * 获取实现
      *
@@ -399,7 +424,7 @@ public class ServiceProvider<T> implements InitializingAware {
 
         Map<String, T> result = new HashMap<>(definitions.size());
 
-        for (SortedSet<ServiceDefinition> value : this.definitions.values()) {
+        for (SortedList<ServiceDefinition> value : this.definitions.values()) {
             ServiceDefinition noneObject = value.first();
             if (null == noneObject) {
                 continue;
@@ -428,8 +453,8 @@ public class ServiceProvider<T> implements InitializingAware {
      * @return 实现
      */
     public void forDefinitionEach(Consumer<ServiceDefinition> consumer) {
-        for (Map.Entry<String, SortedSet<ServiceDefinition>> entry : definitions.entrySet()) {
-            SortedSet<ServiceDefinition> value = entry.getValue();
+        for (Map.Entry<String, SortedList<ServiceDefinition>> entry : definitions.entrySet()) {
+            SortedList<ServiceDefinition> value = entry.getValue();
             consumer.accept(value.first());
         }
     }
@@ -438,8 +463,8 @@ public class ServiceProvider<T> implements InitializingAware {
      * 遍历
      */
     public void moreEach(BiConsumer<String, T> consumer) {
-        for (Map.Entry<String, SortedSet<ServiceDefinition>> entry : definitions.entrySet()) {
-            SortedSet<ServiceDefinition> value = entry.getValue();
+        for (Map.Entry<String, SortedList<ServiceDefinition>> entry : definitions.entrySet()) {
+            SortedList<ServiceDefinition> value = entry.getValue();
             lo:
             for (ServiceDefinition definition : value) {
                 T imageConverter = definition.getObj(serviceAutowire);
@@ -621,7 +646,7 @@ public class ServiceProvider<T> implements InitializingAware {
 
         List<Option<String>> rs = new LinkedList<>();
 
-        for (SortedSet<ServiceDefinition> value : this.definitions.values()) {
+        for (SortedList<ServiceDefinition> value : this.definitions.values()) {
             if (value.isEmpty()) {
                 continue;
             }
@@ -667,13 +692,24 @@ public class ServiceProvider<T> implements InitializingAware {
     }
 
     public T getObjectProvider(Object... args) {
-        Map<String, T> list = list(args);
+        Map<String, ServiceDefinition> list = listDefinition(args);
+        SortedList<ServiceDefinition> values = new SortedArrayList<>(COMPARATOR);
+        values.addAll(list.values());
         return ProxyUtils.newProxy(value.getValue(), classLoader, new DelegateMethodIntercept<>(value.getValue(), new Function<ProxyMethod, Object>() {
             @Override
             public Object apply(ProxyMethod proxyMethod) {
-                for (T t : list.values()) {
+                for (ServiceDefinition serviceDefinition : values) {
+                    Object t = serviceDefinition.newInstance(serviceAutowire, args);
+                    if(null == t) {
+                        continue;
+                    }
                     try {
-                        return proxyMethod.invoke(t, proxyMethod.getArgs());
+                        Method method = proxyMethod.getMethod();
+                        method.setAccessible(true);
+                        Object invoke = method.invoke(t, proxyMethod.getArgs());
+                        if(null != invoke && !Proxy.isProxyClass(invoke.getClass())) {
+                            return invoke;
+                        }
                     } catch (Exception ignore) {
                     }
                 }
@@ -681,6 +717,7 @@ public class ServiceProvider<T> implements InitializingAware {
             }
         }));
     }
+
 
     /**
      * 构建类

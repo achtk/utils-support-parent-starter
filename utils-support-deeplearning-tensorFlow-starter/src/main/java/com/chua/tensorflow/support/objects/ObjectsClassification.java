@@ -27,7 +27,7 @@ public class ObjectsClassification extends AbstractPytorchDetector<DetectedObjec
      */
     public ObjectsClassification(DetectionConfiguration configuration) {
         super(configuration,
-                new com.chua.pytorch.support.objects.ObjectsTranslator(configuration),
+                new ObjectsTranslator(configuration),
                 "TensorFlow",
                 null,
                 StringUtils.defaultString(configuration.modelPath(), "tf_mobilenetv2"),

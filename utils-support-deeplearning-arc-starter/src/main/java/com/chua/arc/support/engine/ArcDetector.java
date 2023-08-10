@@ -12,7 +12,7 @@ import com.chua.common.support.feature.detector.Detector;
 import com.chua.common.support.pojo.Shape;
 import com.google.common.collect.Lists;
 
-import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -33,7 +33,7 @@ public class ArcDetector implements Detector {
     @Override
     public List<PredictResult> predict(Object face) {
         List<PredictResult> rs = new LinkedList<>();
-        ImageInfo imageInfo = ImageFactory.bufferedImage2ImageInfo(Converter.convertIfNecessary(face, BufferedImage.class));
+        ImageInfo imageInfo = ImageFactory.getRGBData(Converter.convertIfNecessary(face, File.class));
         List<FaceInfo> faceInfoList = new ArrayList<FaceInfo>();
         faceEngine.detectFaces(imageInfo.getImageData(), imageInfo.getWidth(), imageInfo.getHeight(), imageInfo.getImageFormat(), faceInfoList);
         for (FaceInfo faceInfo : faceInfoList) {

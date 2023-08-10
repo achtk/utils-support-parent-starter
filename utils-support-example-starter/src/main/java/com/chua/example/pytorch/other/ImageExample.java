@@ -18,7 +18,7 @@ public class ImageExample {
         detection.modelName("car");
         detection.afterPropertiesSet();
 
-        List<PredictResult> detection1 = detection.detect("Z:\\works\\resource\\car1.png");
+        List<PredictResult> detection1 = detection.predict("Z:\\works\\resource\\car1.png");
         System.out.println();
     }
 }

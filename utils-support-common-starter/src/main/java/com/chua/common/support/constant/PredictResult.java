@@ -14,8 +14,14 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class PredictResult {
 
+    private static final PredictResult EMPTY = new PredictResult();
+    static {
+        EMPTY.setScore(-1);
+    }
+
     private transient Object boundingBox;
 
+    private int index = 0;
     private String text;
     private Object sign1;
     private Object sign2;
@@ -40,6 +46,10 @@ public class PredictResult {
         this.clsLabel = text;
         this.clsScore = clsScore;
         this.score = clsScore;
+    }
+
+    public static PredictResult empty() {
+        return EMPTY;
     }
 
     public <T>T getValue(Class<T> type) {

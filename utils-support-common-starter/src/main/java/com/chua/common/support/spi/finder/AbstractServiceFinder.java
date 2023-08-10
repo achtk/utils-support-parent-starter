@@ -145,7 +145,7 @@ public abstract class AbstractServiceFinder implements ServiceFinder{
         ServiceDefinition serviceDefinition = new ServiceDefinition();
         serviceDefinition.setClassLoader(getClassLoader());
         serviceDefinition.setLoadTime(System.currentTimeMillis());
-        serviceDefinition.setOrder(order);
+        serviceDefinition.setOrder(order == 0 ? getOrder(implType) : order);
         SpiOption spiOption = implType.getDeclaredAnnotation(SpiOption.class);
         if (null != spiOption) {
             serviceDefinition.setLabel(spiOption.value());

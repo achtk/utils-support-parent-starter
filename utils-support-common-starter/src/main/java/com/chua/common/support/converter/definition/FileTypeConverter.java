@@ -1,11 +1,13 @@
 package com.chua.common.support.converter.definition;
 
+import com.chua.common.support.utils.ArrayUtils;
 import com.chua.common.support.utils.IdUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
@@ -32,6 +34,17 @@ public class FileTypeConverter implements TypeConverter<File> {
     public File convert(Object value) {
         if (null == value) {
             return null;
+        }
+
+        if(ArrayUtils.isArray(value)) {
+            int length = Array.getLength(value);
+            for (int i = 0; i < length; i++) {
+                Object o = Array.get(value, i);
+                if(null != o && o instanceof File) {
+                    return (File) o;
+                }
+            }
+            value = Array.get(value, 0);
         }
 
         if (value instanceof File) {

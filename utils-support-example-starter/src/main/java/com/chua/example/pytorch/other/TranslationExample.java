@@ -2,8 +2,8 @@ package com.chua.example.pytorch.other;
 
 import com.chua.common.support.feature.DetectionConfiguration;
 import com.chua.common.support.lang.tokenizer.Word;
-import com.chua.pytorch.support.ocr.tokenizer.LacTokenizer;
-import com.chua.pytorch.support.translation.EnglishTranslation;
+import com.chua.paddlepaddle.support.ocr.tokenizer.LacTokenizer;
+import com.chua.paddlepaddle.support.translation.EnglishTranslation;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -24,7 +24,7 @@ public class TranslationExample {
         log.info("Words : {}", segments);
 
         try (EnglishTranslation translation = new EnglishTranslation(DetectionConfiguration.DEFAULT)) {
-            System.out.println(translation.detect(segments.stream().map(Word::getWord).toArray(String[]::new)));
+            System.out.println(translation.predict(segments.stream().map(Word::getWord).toArray(String[]::new)));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -6,8 +6,10 @@ import com.arcsoft.face.FunctionConfiguration;
 import com.arcsoft.face.enums.DetectMode;
 import com.arcsoft.face.enums.DetectOrient;
 import com.arcsoft.face.enums.ErrorInfo;
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.engine.Engine;
 import com.chua.common.support.feature.DetectionConfiguration;
+import com.chua.common.support.feature.Feature;
 import com.chua.common.support.feature.detector.Detector;
 import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.lang.function.BodyAttribute;
@@ -26,6 +28,7 @@ import java.nio.file.Path;
  * @author CH
  */
 @Slf4j
+@Spi(order = -1)
 public class ArcFaceEngine implements Engine, InitializingAware {
 
     private FaceEngine faceEngine;
@@ -81,6 +84,10 @@ public class ArcFaceEngine implements Engine, InitializingAware {
     public <T> T get(Class<T> target) {
         if (Detector.class.isAssignableFrom(target)) {
             return (T) new ArcDetector(faceEngine);
+        }
+
+        if(Feature.class.isAssignableFrom(target)) {
+            return (T) new ArcFeature(faceEngine);
         }
 
         if (Compare.class.isAssignableFrom(target)) {
