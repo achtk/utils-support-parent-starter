@@ -101,7 +101,7 @@ public class ImageDiffusion {
         int timesteps = scheduler.timesteps.get(new NDIndex("-" + initTimestep)).toIntArray()[0];
 
 
-        NDArray latent = imageEncoder.detect(args[0]).get(0).getValue(NDArray.class);
+        NDArray latent = imageEncoder.predict(args[0]).get(0).getValue(NDArray.class);
         NDArray noise = manager.randomNormal(latent.getShape());
         latent = scheduler.addNoise(latent, noise, timesteps);
 
@@ -116,7 +116,7 @@ public class ImageDiffusion {
             // t tensor 981
             // latentModelOutput 2,4,64,64
 
-            NDArray noisePred = textNetEncoder.detect(buildUnetInput(embeddings, t, latentModelInput)).get(0).getValue(NDArray.class).get(0);
+            NDArray noisePred = textNetEncoder.predict(buildUnetInput(embeddings, t, latentModelInput)).get(0).getValue(NDArray.class).get(0);
 
             NDList splitNoisePred = noisePred.split(2);
             NDArray noisePredUncond = splitNoisePred.get(0);
@@ -157,13 +157,13 @@ public class ImageDiffusion {
 
     @SneakyThrows
     private NDList textEncoder(NDList input) {
-        List<PredictResult> detect = textEncoder.detect(input);
+        List<PredictResult> detect = textEncoder.predict(input);
         return detect.get(0).getValue(NDList.class);
     }
 
     @SneakyThrows
     private NDList sdDecoderPredictor(NDList input) throws TranslateException {
-        List<PredictResult> detect = textDecoder.detect(input);
+        List<PredictResult> detect = textDecoder.predict(input);
         return detect.get(0).getValue(NDList.class);
     }
 

@@ -35,7 +35,7 @@ public class FaceImageFilter extends AbstractImageFilter {
         if(null == lightFaceDetector) {
             return src;
         }
-        List<PredictResult> detect = lightFaceDetector.detect(src);
+        List<PredictResult> detect = lightFaceDetector.predict(src);
         return LocationUtils.saveBoundingBoxImage(detect, src);
     }
 }

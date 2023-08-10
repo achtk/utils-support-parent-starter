@@ -79,7 +79,22 @@
 
         <dependency>
             <groupId>com.chua</groupId>
-            <artifactId>utils-support-deeplearning-starter</artifactId>
+            <artifactId>utils-support-deeplearning-arc-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.chua</groupId>
+            <artifactId>utils-support-deeplearning-paddlepaddle-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.chua</groupId>
+            <artifactId>utils-support-deeplearning-pytorch-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.chua</groupId>
+            <artifactId>utils-support-deeplearning-mxnet-starter</artifactId>
         </dependency>
 
         <dependency>

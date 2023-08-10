@@ -102,7 +102,7 @@ public class Diffusion {
             // t tensor 981
             // latentModelOutput 2,4,64,64
 
-            NDArray noisePred = textNetEncoder.detect(buildUnetInput(embeddings, t, latentModelInput)).get(0).getValue(NDList.class).get(0);
+            NDArray noisePred = textNetEncoder.predict(buildUnetInput(embeddings, t, latentModelInput)).get(0).getValue(NDList.class).get(0);
 
             NDList splitNoisePred = noisePred.split(2);
             NDArray noisePredUncond = splitNoisePred.get(0);
@@ -142,12 +142,12 @@ public class Diffusion {
     }
 
     private NDList textEncoder(NDList input) {
-        List<PredictResult> detect = textEncoder.detect(input);
+        List<PredictResult> detect = textEncoder.predict(input);
         return detect.get(0).getValue(NDList.class);
     }
 
     private NDList sdDecoderPredictor(NDList input) {
-        List<PredictResult> detect = textDecoder.detect(input);
+        List<PredictResult> detect = textDecoder.predict(input);
         return detect.get(0).getValue(NDList.class);
     }
 

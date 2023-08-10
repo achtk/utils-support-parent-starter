@@ -1,8 +1,9 @@
 package com.chua.example.pytorch;
 
+import com.chua.arc.support.engine.ArcFaceEngine;
 import com.chua.common.support.feature.DetectionConfiguration;
+import com.chua.common.support.feature.Feature;
 import com.chua.common.support.feature.FeatureComparison;
-import com.chua.pytorch.support.engine.ArcFaceEngine;
 
 import java.io.File;
 
@@ -20,9 +21,10 @@ public class FaceExample {
         System.out.println();
 
         ArcFaceEngine arcFaceFeature = new ArcFaceEngine(DetectionConfiguration.builder().cachePath("Z:\\works\\environment").build());
+        Feature<byte[]> feature = arcFaceFeature.get(Feature.class);
 
-        byte[] predict = arcFaceFeature.predict(new File("Z:\\works\\data\\c-profile-7-designify.jpg"));
-        byte[] predict1 = arcFaceFeature.predict(new File("Z:\\works\\data\\20230808_8139568638251905970.jpg"));
+        byte[] predict = feature.predict(new File("Z:\\works\\data\\c-profile-7-designify.jpg"));
+        byte[] predict1 = feature.predict(new File("Z:\\works\\data\\20230808_8139568638251905970.jpg"));
         System.out.println(FeatureComparison.calculateSimilar(predict1, predict));
     }
 }
