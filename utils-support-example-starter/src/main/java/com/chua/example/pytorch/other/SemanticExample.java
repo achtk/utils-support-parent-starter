@@ -1,8 +1,8 @@
 package com.chua.example.pytorch.other;
 
 import com.chua.common.support.feature.DetectionConfiguration;
-import com.chua.pytorch.support.ocr.detector.SimnetBowDetector;
-import com.chua.pytorch.support.ocr.tokenizer.LacTokenizer;
+import com.chua.paddlepaddle.support.ocr.detector.SimnetBowDetector;
+import com.chua.paddlepaddle.support.ocr.tokenizer.LacTokenizer;
 
 /**
  * @author CH

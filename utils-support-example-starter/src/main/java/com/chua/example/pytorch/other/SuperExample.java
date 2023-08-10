@@ -2,8 +2,8 @@ package com.chua.example.pytorch.other;
 
 import ai.djl.modality.cv.Image;
 import com.chua.common.support.feature.DetectionConfiguration;
-import com.chua.pytorch.support.resolution.SuperResolver;
 import com.chua.pytorch.support.utils.LocationUtils;
+import com.chua.tensorflow.support.resolution.SuperResolver;
 
 /**
  * @author CH

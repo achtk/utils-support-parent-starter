@@ -89,6 +89,11 @@
 
         <dependency>
             <groupId>com.chua</groupId>
+            <artifactId>utils-support-deeplearning-tensorFlow-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.chua</groupId>
             <artifactId>utils-support-deeplearning-pytorch-starter</artifactId>
         </dependency>
 

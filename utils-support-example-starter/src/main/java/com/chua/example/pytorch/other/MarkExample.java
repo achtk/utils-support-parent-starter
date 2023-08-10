@@ -1,8 +1,8 @@
 package com.chua.example.pytorch.other;
 
 import com.chua.common.support.feature.DetectionConfiguration;
-import com.chua.pytorch.support.face.detector.PaddlePaddleFaceDetector;
-import com.chua.pytorch.support.face.mask.PaddlePaddleMaskDetector;
+import com.chua.paddlepaddle.support.face.detector.PaddlePaddleFaceDetector;
+import com.chua.paddlepaddle.support.face.mask.PaddlePaddleMaskDetector;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;

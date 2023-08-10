@@ -7,14 +7,15 @@ import com.arcsoft.face.enums.DetectMode;
 import com.arcsoft.face.enums.DetectOrient;
 import com.arcsoft.face.enums.ErrorInfo;
 import com.chua.common.support.engine.Engine;
-import com.chua.common.support.engine.EngineBase;
 import com.chua.common.support.feature.DetectionConfiguration;
 import com.chua.common.support.feature.detector.Detector;
 import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.lang.function.BodyAttribute;
+import com.chua.common.support.lang.function.Compare;
 import com.chua.common.support.lang.function.Ir;
 import com.chua.common.support.lang.function.Similar;
 import com.chua.common.support.os.Platform;
+import com.chua.common.support.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.file.Path;
@@ -25,13 +26,14 @@ import java.nio.file.Path;
  * @author CH
  */
 @Slf4j
-public class ArcFaceEngine extends EngineBase implements Engine, InitializingAware {
+public class ArcFaceEngine implements Engine, InitializingAware {
 
     private FaceEngine faceEngine;
     private static final String model = "libarcsoft_face";
+    private DetectionConfiguration configuration;
 
     public ArcFaceEngine(DetectionConfiguration configuration) {
-        super(configuration);
+        this.configuration = configuration;
         this.afterPropertiesSet();
 
     }
@@ -42,7 +44,9 @@ public class ArcFaceEngine extends EngineBase implements Engine, InitializingAwa
         Path path = Platform.extractNativeBinary(model, configuration.cachePath());
         this.faceEngine = new FaceEngine(path.getParent().toFile().getPath());
         //激活引擎
-        int errorCode = faceEngine.activeOnline("9gN1dRr4QVGZztS8iqwc2sBiLDGRUjRgfj3BiZsX21wk", "25TpjKV5ZRgthaJtCJWuGTonCDs7pBTRkVmHm4DKNzH9");
+        int errorCode = faceEngine.activeOnline(
+                StringUtils.defaultString(configuration.appId(), "9gN1dRr4QVGZztS8iqwc2sBiLDGRUjRgfj3BiZsX21wk"),
+                StringUtils.defaultString(configuration.appKey(), "25TpjKV5ZRgthaJtCJWuGTonCDs7pBTRkVmHm4DKNzH9"));
 
         if (errorCode != ErrorInfo.MOK.getValue() && errorCode != ErrorInfo.MERR_ASF_ALREADY_ACTIVATED.getValue()) {
             System.out.println("引擎激活失败");
@@ -79,6 +83,10 @@ public class ArcFaceEngine extends EngineBase implements Engine, InitializingAwa
             return (T) new ArcDetector(faceEngine);
         }
 
+        if (Compare.class.isAssignableFrom(target)) {
+            return (T) new ArcCompare(faceEngine);
+        }
+
         if (Similar.class.isAssignableFrom(target)) {
             return (T) new ArcSimilar(faceEngine);
         }
@@ -91,6 +99,11 @@ public class ArcFaceEngine extends EngineBase implements Engine, InitializingAwa
             return (T) new ArcIr(faceEngine);
         }
         return null;
+    }
+
+    @Override
+    public <T> T get(String name, Class<T> target) {
+        return get(target);
     }
 
     @Override

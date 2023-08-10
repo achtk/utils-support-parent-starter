@@ -2,8 +2,8 @@ package com.chua.example.pytorch.other;
 
 import com.chua.common.support.constant.PredictResult;
 import com.chua.common.support.feature.DetectionConfiguration;
-import com.chua.pytorch.support.ocr.senta.SentaLstmSentaDetector;
-import com.chua.pytorch.support.ocr.tokenizer.LacTokenizer;
+import com.chua.paddlepaddle.support.ocr.senta.SentaLstmSentaDetector;
+import com.chua.paddlepaddle.support.ocr.tokenizer.LacTokenizer;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class SentaExample {
         LacTokenizer tokenizer = new LacTokenizer(DetectionConfiguration.builder().modelPath("E:\\workspace\\environment").build());
         String input = "这家餐厅很好吃";
         SentaLstmSentaDetector detector = new SentaLstmSentaDetector(DetectionConfiguration.builder().build(), tokenizer);
-        List<PredictResult> detect = detector.detect(input);
+        List<PredictResult> detect = detector.predict(input);
         System.out.println(detect);
     }
 }

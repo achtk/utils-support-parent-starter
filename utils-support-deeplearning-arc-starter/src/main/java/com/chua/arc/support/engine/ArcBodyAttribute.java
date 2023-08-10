@@ -10,7 +10,7 @@ import com.chua.common.support.lang.function.*;
 import com.chua.common.support.pojo.Shape;
 import com.google.common.collect.Lists;
 
-import java.io.File;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +38,7 @@ public class ArcBodyAttribute implements BodyAttribute {
     @Override
     public List<Body> detect(Object face) {
         List<FaceInfo> faceInfoList = new ArrayList<>();
-        ImageInfo imageInfo = ImageFactory.getRGBData(Converter.convertIfNecessary(face, File.class));
+        ImageInfo imageInfo = ImageFactory.bufferedImage2ImageInfo(Converter.convertIfNecessary(face, BufferedImage.class));
         ImageInfoEx imageInfoEx = new ImageInfoEx();
         imageInfoEx.setHeight(imageInfo.getHeight());
         imageInfoEx.setWidth(imageInfo.getWidth());

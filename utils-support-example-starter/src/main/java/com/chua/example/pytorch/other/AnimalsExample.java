@@ -2,7 +2,7 @@ package com.chua.example.pytorch.other;
 
 import com.chua.common.support.constant.PredictResult;
 import com.chua.common.support.feature.DetectionConfiguration;
-import com.chua.pytorch.support.animals.AnimalsClassDetector;
+import com.chua.paddlepaddle.support.animals.AnimalsClassDetector;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ public class AnimalsExample {
 
     public static void main(String[] args) {
         AnimalsClassDetector dectection = new AnimalsClassDetector(DetectionConfiguration.builder().cachePath("E:\\workspace\\environment").build());
-        List<PredictResult> detection = dectection.detect("Z:\\works\\resource\\000000000312.jpg");
+        List<PredictResult> detection = dectection.predict("Z:\\works\\resource\\000000000312.jpg");
         System.out.println();
     }
 }

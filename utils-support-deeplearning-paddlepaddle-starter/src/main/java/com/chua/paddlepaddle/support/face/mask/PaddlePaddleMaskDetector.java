@@ -144,7 +144,7 @@ public class PaddlePaddleMaskDetector extends AbstractPytorchDetector<DetectedOb
         try (
                 Predictor<Image, Classifications> predictor = maskModel.newPredictor();
         ) {
-            List<PredictResult> faces = detector.detect(img);
+            List<PredictResult> faces = detector.predict(img);
             List<String> names = new ArrayList<>();
             List<Double> prob = new ArrayList<>();
             List<BoundingBox> rect = new ArrayList<>();

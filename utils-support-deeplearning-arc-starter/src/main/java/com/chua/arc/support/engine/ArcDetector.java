@@ -3,6 +3,7 @@ package com.chua.arc.support.engine;
 import com.arcsoft.face.FaceEngine;
 import com.arcsoft.face.FaceInfo;
 import com.arcsoft.face.Rect;
+import com.arcsoft.face.toolkit.ImageFactory;
 import com.arcsoft.face.toolkit.ImageInfo;
 import com.chua.common.support.constant.BoundingBox;
 import com.chua.common.support.constant.PredictResult;
@@ -11,13 +12,11 @@ import com.chua.common.support.feature.detector.Detector;
 import com.chua.common.support.pojo.Shape;
 import com.google.common.collect.Lists;
 
-import java.io.File;
+import java.awt.image.BufferedImage;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
-import static com.arcsoft.face.toolkit.ImageFactory.getRGBData;
 
 /**
  * 人脸检测
@@ -34,7 +33,7 @@ public class ArcDetector implements Detector {
     @Override
     public List<PredictResult> predict(Object face) {
         List<PredictResult> rs = new LinkedList<>();
-        ImageInfo imageInfo = getRGBData(Converter.convertIfNecessary(face, File.class));
+        ImageInfo imageInfo = ImageFactory.bufferedImage2ImageInfo(Converter.convertIfNecessary(face, BufferedImage.class));
         List<FaceInfo> faceInfoList = new ArrayList<FaceInfo>();
         faceEngine.detectFaces(imageInfo.getImageData(), imageInfo.getWidth(), imageInfo.getHeight(), imageInfo.getImageFormat(), faceInfoList);
         for (FaceInfo faceInfo : faceInfoList) {

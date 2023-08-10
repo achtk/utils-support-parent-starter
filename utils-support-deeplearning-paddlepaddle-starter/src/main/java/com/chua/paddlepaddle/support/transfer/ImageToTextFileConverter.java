@@ -34,7 +34,7 @@ public class ImageToTextFileConverter extends AbstractFileConverter {
 
         StringBuffer stringBuffer = new StringBuffer();
         OcrRecognizer recognizer = new OcrRecognizer(directionDetector, ocrDetector, DetectionConfiguration.builder().build());
-        List<PredictResult> recognize = recognizer.recognize(inputStream);
+        List<PredictResult> recognize = recognizer.predict(inputStream);
         for (PredictResult predictResult : recognize) {
             stringBuffer.append(predictResult.getText()).append("\r\n");
         }

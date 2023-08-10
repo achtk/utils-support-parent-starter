@@ -2,9 +2,9 @@ package com.chua.example.pytorch.other;
 
 import com.chua.common.support.feature.DetectionConfiguration;
 import com.chua.common.support.feature.FeatureComparison;
-import com.chua.pytorch.support.face.detector.PaddlePaddleFaceDetector;
+import com.chua.paddlepaddle.support.face.detector.PaddlePaddleFaceDetector;
+import com.chua.paddlepaddle.support.face.land.FaceLandmarkDetector;
 import com.chua.pytorch.support.face.feature.AmazonFeature;
-import com.chua.pytorch.support.face.land.FaceLandmarkDetector;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;

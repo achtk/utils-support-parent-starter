@@ -93,6 +93,14 @@ public class DetectionConfiguration implements Serializable {
      */
     private String type;
     /**
+     * 部分使用
+     */
+    private String appId;
+    /**
+     * 部分使用
+     */
+    private String appKey;
+    /**
      * <p>trainHeight -> 以什么像素训练图片</p>
      * <p>trainWidth > 以什么像素训练图片</p>
      * <p>model -> 真实模型名称</p>

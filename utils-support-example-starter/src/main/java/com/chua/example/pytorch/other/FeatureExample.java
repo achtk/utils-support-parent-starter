@@ -2,7 +2,7 @@ package com.chua.example.pytorch.other;
 
 import com.chua.common.support.feature.DetectionConfiguration;
 import com.chua.common.support.feature.FloatArrayFeature;
-import com.chua.pytorch.support.face.feature.PaddleFeature;
+import com.chua.paddlepaddle.support.face.feature.PaddleFeature;
 
 import java.util.Arrays;
 
