@@ -46,9 +46,11 @@ public class MapProfileValue implements ProfileValue {
         map.put(s, o);
         map.put(NamingCase.toKebabCase(s), o);
         map.put(NamingCase.toCamelCase(s), o);
-        spelExpressionParser.setVariable(s, o);
-        spelExpressionParser.setVariable(NamingCase.toKebabCase(s), o);
-        spelExpressionParser.setVariable(NamingCase.toPascalCase(s), o);
+        if(null != spelExpressionParser) {
+            spelExpressionParser.setVariable(s, o);
+            spelExpressionParser.setVariable(NamingCase.toKebabCase(s), o);
+            spelExpressionParser.setVariable(NamingCase.toPascalCase(s), o);
+        }
         this.documentContext = JsonPath.parse(map);
         return this;
     }
