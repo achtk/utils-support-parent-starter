@@ -190,6 +190,23 @@ public enum Platform {
         }
         return path;
     }
+    /**
+     *  linux
+     * @param key key
+     * @return this
+     */
+    public static PlatformKey isWindow(String key) {
+        return new PlatformKey(OS.WINDOWS, key);
+    }
+
+    /**
+     *  linux
+     * @param key key
+     * @return this
+     */
+    public PlatformKey isLinux(String key) {
+        return new PlatformKey(OS.LINUX, key);
+    }
 
 
     private static class TemporaryDirectory {

@@ -11,6 +11,7 @@ import com.chua.common.support.function.Splitter;
 import com.chua.common.support.lang.proxy.DelegateMethodIntercept;
 import com.chua.common.support.lang.proxy.ProxyMethod;
 import com.chua.common.support.lang.proxy.ProxyUtils;
+import com.chua.common.support.lang.proxy.VoidMethodIntercept;
 import com.chua.common.support.spi.autowire.AutoServiceAutowire;
 import com.chua.common.support.spi.autowire.ServiceAutowire;
 import com.chua.common.support.spi.finder.CustomServiceFinder;
@@ -713,7 +714,7 @@ public class ServiceProvider<T> implements InitializingAware {
                     } catch (Exception ignore) {
                     }
                 }
-                return null;
+                return ProxyUtils.proxy(value.getValue(), classLoader, new VoidMethodIntercept<>());
             }
         }));
     }

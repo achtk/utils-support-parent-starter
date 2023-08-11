@@ -25,6 +25,6 @@ public class ImageCompare implements Compare {
     }
     @Override
     public List<PredictResult> calculateSimilar(Object t1, Object t2) {
-        return Collections.singletonList(new PredictResult().setScore(similar.calculateSimilar(imageFeature.predict(t1), imageFeature.predict(t1))));
+        return Collections.singletonList(new PredictResult().setScore(similar.calculateSimilar(imageFeature.predict(t1), imageFeature.predict(t2))));
     }
 }

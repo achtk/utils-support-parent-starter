@@ -48,7 +48,9 @@ public class ArcFaceEngine implements Engine, InitializingAware {
         this.faceEngine = new FaceEngine(path.getParent().toFile().getPath());
         //激活引擎
         int errorCode = faceEngine.activeOnline(
-                StringUtils.defaultString(configuration.appId(), "9gN1dRr4QVGZztS8iqwc2sBiLDGRUjRgfj3BiZsX21wk"),
+                StringUtils.defaultString(configuration.appId(), Platform
+                        .isWindow("9gN1dRr4QVGZztS8iqwc2sBiLDGRUjRgfj3BiZsX21wk")
+                        .isLinux("25TpjKV5ZRgthaJtCJWuGTon47HyWNUC9VtSbjz1pqTa").toString()),
                 StringUtils.defaultString(configuration.appKey(), "25TpjKV5ZRgthaJtCJWuGTonCDs7pBTRkVmHm4DKNzH9"));
 
         if (errorCode != ErrorInfo.MOK.getValue() && errorCode != ErrorInfo.MERR_ASF_ALREADY_ACTIVATED.getValue()) {
@@ -58,7 +60,7 @@ public class ArcFaceEngine implements Engine, InitializingAware {
         EngineConfiguration engineConfiguration = new EngineConfiguration();
         engineConfiguration.setDetectMode(DetectMode.ASF_DETECT_MODE_IMAGE);
         engineConfiguration.setDetectFaceOrientPriority(DetectOrient.ASF_OP_ALL_OUT);
-        engineConfiguration.setDetectFaceMaxNum(10);
+        engineConfiguration.setDetectFaceMaxNum(100);
         engineConfiguration.setDetectFaceScaleVal(16);
         //功能配置
         FunctionConfiguration functionConfiguration = new FunctionConfiguration();
@@ -110,6 +112,9 @@ public class ArcFaceEngine implements Engine, InitializingAware {
 
     @Override
     public <T> T get(String name, Class<T> target) {
+        if(StringUtils.isNotEmpty(name) && !name.toLowerCase().contains("face")) {
+            return null;
+        }
         return get(target);
     }
 

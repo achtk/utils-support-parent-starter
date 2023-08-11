@@ -86,7 +86,7 @@ public abstract class EngineBase implements Engine {
 
     private Object newInstance(String name, Map<String, SortedSet<ServiceDefinition>> stringSortedSetMap, Class<?> target, String type) {
         if(StringUtils.isNotEmpty(name)) {
-            return stringSortedSetMap.get(name).first().newInstance(new AutoServiceAutowire(), configuration);
+            return stringSortedSetMap.get(name.toUpperCase()).first().newInstance(new AutoServiceAutowire(), configuration);
         }
 
         if(StringUtils.isNotEmpty(type)) {
