@@ -1,0 +1,2 @@
+Get-ChildItem 'C:\Program Files\WindowsApps'|where-object {$_.Name -like "*WindowsStore*"}
+Get-AppXPackage *WindowsStore* -AllUsers | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register “$($_.InstallLocation)\AppXManifest.xml”}
