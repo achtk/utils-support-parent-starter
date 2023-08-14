@@ -2,10 +2,13 @@ package com.chua.redis.support.cache;
 
 import com.chua.common.support.json.Json;
 import com.chua.common.support.task.cache.AbstractCacheable;
+import com.chua.common.support.task.cache.CacheConfiguration;
 import com.chua.common.support.utils.MapUtils;
 import com.chua.common.support.value.Value;
 import com.chua.redis.support.util.JedisUtil;
 import redis.clients.jedis.Jedis;
+
+import java.util.Map;
 
 /**
  * redis
@@ -15,6 +18,21 @@ import redis.clients.jedis.Jedis;
 public class RedisCacheable extends AbstractCacheable {
 
     private Jedis jedis;
+
+    public RedisCacheable() {
+    }
+
+    public RedisCacheable(Jedis jedis) {
+        this.jedis = jedis;
+    }
+
+    public RedisCacheable(Map<String, Object> config) {
+        super(config);
+    }
+
+    public RedisCacheable(CacheConfiguration config) {
+        super(config);
+    }
 
     @Override
     public void afterPropertiesSet() {

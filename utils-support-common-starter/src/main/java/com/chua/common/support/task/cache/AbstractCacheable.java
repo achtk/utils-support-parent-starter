@@ -53,6 +53,17 @@ public abstract class AbstractCacheable implements Cacheable {
     protected String cacheName;
     protected Map<String, Object> config;
 
+    public AbstractCacheable(){}
+
+    public AbstractCacheable(Map<String, Object> config) {
+        this.configuration(config);
+    }
+
+    public AbstractCacheable(CacheConfiguration config) {
+        this.configuration(config);
+    }
+
+
     @Override
     public Cacheable configuration(Map<String, Object> config) {
         this.config = config;

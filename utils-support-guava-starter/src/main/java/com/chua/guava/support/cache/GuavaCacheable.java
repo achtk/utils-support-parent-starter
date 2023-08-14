@@ -3,6 +3,7 @@ package com.chua.guava.support.cache;
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.annotations.SpiDefault;
 import com.chua.common.support.task.cache.AbstractCacheable;
+import com.chua.common.support.task.cache.CacheConfiguration;
 import com.chua.common.support.task.cache.Cacheable;
 import com.chua.common.support.value.Value;
 import com.google.common.cache.Cache;
@@ -21,6 +22,21 @@ import java.util.concurrent.TimeUnit;
 @Spi("guava")
 @SpiDefault
 public class GuavaCacheable extends AbstractCacheable {
+
+    public GuavaCacheable() {
+    }
+
+    public GuavaCacheable(Cache<Object, Value<Object>> cache) {
+        this.cache = cache;
+    }
+
+    public GuavaCacheable(Map<String, Object> config) {
+        super(config);
+    }
+
+    public GuavaCacheable(CacheConfiguration config) {
+        super(config);
+    }
 
     private Cache<Object, Value<Object>> cache;
 

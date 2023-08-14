@@ -16,6 +16,17 @@ import java.util.Map;
 @Spi("juc")
 public class JdkCacheable extends AbstractCacheable {
 
+    public JdkCacheable() {
+    }
+
+    public JdkCacheable(Map<String, Object> config) {
+        super(config);
+    }
+
+    public JdkCacheable(CacheConfiguration config) {
+        super(config);
+    }
+
     private final Map<Object, TimeValue<Object>> CACHE = new ConcurrentReferenceHashMap<>(512);
 
     @Override
