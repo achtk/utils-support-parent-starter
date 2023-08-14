@@ -1,7 +1,5 @@
 package com.chua.common.support.resource.finder;
 
-import com.chua.common.support.collection.ConcurrentReferenceTable;
-import com.chua.common.support.collection.Table;
 import com.chua.common.support.reflection.reflections.Reflections;
 import com.chua.common.support.resource.ResourceConfiguration;
 import com.chua.common.support.resource.resource.ClassResource;
@@ -20,15 +18,13 @@ import static com.chua.common.support.reflection.reflections.scanners.Scanners.M
  */
 public class MethodAnnotationResourceFinder extends AbstractResourceFinder {
 
-    private static final Table<ClassLoader, String, Reflections> CACHE = new ConcurrentReferenceTable<>(128);
-
     public MethodAnnotationResourceFinder(ResourceConfiguration configuration) {
         super(configuration);
     }
 
     @Override
     public Set<Resource> find(String name) {
-        Reflections reflections = SubtypeResourceFinder.getReflections(CACHE, configuration, classLoader, MethodsAnnotated, name);
+        Reflections reflections = SubtypeResourceFinder.getReflections(configuration, classLoader, MethodsAnnotated, name);
         Set<Resource> resources = new LinkedHashSet<>();
         Collection<Set<String>> values = reflections.getStore().get(MethodsAnnotated.name()).values();
         for (Set<String> value : values) {

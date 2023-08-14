@@ -17,8 +17,18 @@ import lombok.Setter;
 @Builder
 public class CacheConfiguration {
     /**
+     * 容量
+     */
+    @Builder.Default
+    private int capacity = 100_000;
+    /**
      * 超时时间
      */
-    private long expireAfterWrite;
+    private int expireAfterWrite;
+    /**
+     * 超时时间
+     */
+    @Builder.Default
+    private int expireAfterAccess = -1;
 
 }

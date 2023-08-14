@@ -1,7 +1,5 @@
 package com.chua.common.support.resource.finder;
 
-import com.chua.common.support.collection.ConcurrentReferenceTable;
-import com.chua.common.support.collection.Table;
 import com.chua.common.support.reflection.reflections.Reflections;
 import com.chua.common.support.reflection.reflections.scanners.Scanners;
 import com.chua.common.support.reflection.reflections.util.ClasspathHelper;
@@ -25,7 +23,6 @@ import static com.chua.common.support.reflection.reflections.scanners.Scanners.S
  */
 public class SubtypeResourceFinder extends AbstractResourceFinder {
 
-    private static final Table<ClassLoader, String, Reflections> CACHE = new ConcurrentReferenceTable<>(128);
 
     public SubtypeResourceFinder(ResourceConfiguration configuration) {
         super(configuration);
@@ -33,7 +30,7 @@ public class SubtypeResourceFinder extends AbstractResourceFinder {
 
     @Override
     public Set<Resource> find(String name) {
-        Reflections reflections = getReflections(CACHE, configuration, classLoader, SubTypes, name);
+        Reflections reflections = getReflections(configuration, classLoader, SubTypes, name);
 
         Set<Resource> resources = new LinkedHashSet<>();
         Collection<Set<String>> values = reflections.getStore().get(SubTypes.name()).values();
@@ -46,29 +43,27 @@ public class SubtypeResourceFinder extends AbstractResourceFinder {
         return resources;
     }
 
-    public static Reflections getReflections(Table<ClassLoader, String, Reflections> cache,
+    public static Reflections getReflections(
                                              ResourceConfiguration configuration,
                                              ClassLoader classLoader,
                                              Scanners subTypes,
                                              String name) {
-        return cache.computeIfAbsent(classLoader, name, (c, n) -> {
-            URL resource = classLoader.getResource(name.replace(".", "/"));
-            ConfigurationBuilder configurationBuilder = new ConfigurationBuilder()
-                    .setParallel(configuration.isParallel())
-                    .setExpandSuperTypes(false)
-                    .setScanners(subTypes)
-                    .setClassLoaders(new ClassLoader[]{classLoader});
-            if("file".equals(resource.getProtocol())) {
-                configurationBuilder.setUrls(resource);
-            } else {
-                configurationBuilder.filterInputsBy(new Predicate<String>() {
-                    @Override
-                    public boolean test(String s) {
-                        return s.startsWith(name);
-                    }
-                }).setUrls(ClasspathHelper.forPackage(name, c));
-            }
-            return new Reflections(configurationBuilder);
-        });
+        URL resource = classLoader.getResource(name.replace(".", "/"));
+        ConfigurationBuilder configurationBuilder = new ConfigurationBuilder()
+                .setParallel(configuration.isParallel())
+                .setExpandSuperTypes(false)
+                .setScanners(subTypes)
+                .setClassLoaders(new ClassLoader[]{classLoader});
+        if("file".equals(resource.getProtocol())) {
+            configurationBuilder.setUrls(resource);
+        } else {
+            configurationBuilder.filterInputsBy(new Predicate<String>() {
+                @Override
+                public boolean test(String s) {
+                    return s.startsWith(name);
+                }
+            }).setUrls(ClasspathHelper.forPackage(name, classLoader));
+        }
+        return new Reflections(configurationBuilder);
     }
 }

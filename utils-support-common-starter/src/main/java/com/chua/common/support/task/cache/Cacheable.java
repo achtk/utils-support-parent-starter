@@ -35,6 +35,14 @@ public interface Cacheable extends InitializingAware, DisposableAware {
     }
 
     /**
+     * 缓存器
+     * @return 缓存器
+     */
+    static Cacheable auto(CacheConfiguration configuration) {
+        return ServiceProvider.of(Cacheable.class).getNewExtension(new String[]{"guava", "juc"}, configuration);
+    }
+
+    /**
      * 配置
      *
      * @param key      配置

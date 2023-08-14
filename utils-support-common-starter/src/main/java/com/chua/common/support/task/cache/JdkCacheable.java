@@ -46,7 +46,9 @@ public class JdkCacheable extends AbstractCacheable {
 
     @Override
     public Value<Object> put(Object key, Object value) {
-        return CACHE.put(key, TimeValue.of(value, Duration.ofMillis(expireAfterWrite)));
+        TimeValue<Object> timeValue = TimeValue.of(value, Duration.ofMillis(expireAfterWrite));
+        CACHE.put(key, timeValue);
+        return timeValue;
     }
 
     @Override

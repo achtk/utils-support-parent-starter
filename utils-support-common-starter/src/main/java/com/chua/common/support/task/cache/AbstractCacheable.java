@@ -51,7 +51,7 @@ public abstract class AbstractCacheable implements Cacheable {
      * ehcache缓存名称
      */
     protected String cacheName;
-    protected Map<String, Object> config;
+    protected CacheConfiguration config;
 
     public AbstractCacheable(){}
 
@@ -63,15 +63,13 @@ public abstract class AbstractCacheable implements Cacheable {
         this.configuration(config);
     }
 
-
     @Override
     public Cacheable configuration(Map<String, Object> config) {
-        this.config = config;
         this.capacity = MapUtils.getInteger(config, "capacity", 10000);
         this.maximumSize = MapUtils.getInteger(config, "maximumSize", 10000);
-        this.expireAfterAccess = MapUtils.getInteger(config, "expireAfterAccess", 30000);
+        this.expireAfterAccess = MapUtils.getInteger(config, "expireAfterAccess", -1);
         this.expireAfterWrite = MapUtils.getInteger(config, "expireAfterWrite", 30000);
-        this.refreshAfterWrite = MapUtils.getInteger(config, "refreshAfterWrite", 30000);
+        this.refreshAfterWrite = MapUtils.getInteger(config, "refreshAfterWrite", -1);
         this.removeListener = MapUtils.getType(config, "removeListener", BiConsumer.class);
         this.updateListener = MapUtils.getType(config, "updateListener", BiConsumer.class);
         this.state = MapUtils.getBoolean(config, "state", false);
@@ -80,7 +78,6 @@ public abstract class AbstractCacheable implements Cacheable {
         afterPropertiesSet();
         return this;
     }
-
     @Override
     public void afterPropertiesSet() {
 
