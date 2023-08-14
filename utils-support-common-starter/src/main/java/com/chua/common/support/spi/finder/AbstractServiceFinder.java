@@ -85,6 +85,10 @@ public abstract class AbstractServiceFinder implements ServiceFinder{
      * @return 定义
      */
     public List<ServiceDefinition> buildDefinition(Object obj, Class<?> implType, String alias, URL url) {
+        if(null == implType) {
+            implType = ClassUtils.toType(obj);
+        }
+
         if (implType.getDeclaredAnnotation(SpiIgnore.class) != null) {
             return Collections.emptyList();
         }

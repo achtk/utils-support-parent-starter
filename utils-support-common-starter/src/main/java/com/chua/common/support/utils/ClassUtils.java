@@ -773,6 +773,9 @@ public class ClassUtils {
         String toString = object.toString();
         if (!toString.contains("$Proxy")) {
             Class<?> aClass1 = forName(StringUtils.removeSuffixContains(toString.replace("@", ""), "("), object.getClass().getClassLoader());
+            if(null == aClass1) {
+                aClass1 = forName(toString.substring(0, toString.indexOf("@")), object.getClass().getClassLoader());
+            }
             return null == aClass1 ? void.class : ObjectUtils.defaultIfNull(aClass1, void.class);
         }
         return void.class;

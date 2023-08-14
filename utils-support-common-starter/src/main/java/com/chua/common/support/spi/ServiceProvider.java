@@ -737,6 +737,15 @@ public class ServiceProvider<T> implements InitializingAware {
         }));
     }
 
+    /**
+     * 是否存在
+     * @param extension 名称
+     * @return 是否存在
+     */
+    public boolean has(String extension) {
+        return definitions.containsKey(extension);
+    }
+
 
     /**
      * 构建类

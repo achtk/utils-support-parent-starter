@@ -62,6 +62,15 @@ public class ExpressionProvider implements Expression{
         return new ExpressionProviderBuilder("source");
     }
 
+    /**
+     * 是否支持文件
+     * @param extension 后缀
+     * @return 结果
+     */
+    public static boolean isMatch(String extension) {
+        return ServiceProvider.of(ExpressionMarker.class).has(extension);
+    }
+
     @Override
     public <T> T createProxy(Class<T> type) {
         return expression.createProxy(type);
