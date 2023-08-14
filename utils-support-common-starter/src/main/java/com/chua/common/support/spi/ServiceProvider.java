@@ -412,6 +412,30 @@ public class ServiceProvider<T> implements InitializingAware {
         }
         return result;
     }
+
+    /**
+     * 获取实现
+     *
+     * @param args 參數
+     * @return 实现
+     */
+    public Map<String, T> list() {
+        if (definitions.isEmpty()) {
+            return Collections.emptyMap();
+        }
+
+        Map<String, T> result = new HashMap<>(definitions.size());
+
+        for (SortedList<ServiceDefinition> value : this.definitions.values()) {
+            ServiceDefinition noneObject = value.first();
+            if (null == noneObject) {
+                continue;
+            }
+            result.put(noneObject.getName(), noneObject.getObj(serviceAutowire));
+        }
+        return result;
+    }
+
     /**
      * 获取实现
      *
