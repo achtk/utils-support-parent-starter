@@ -9,6 +9,7 @@ import com.chua.common.support.database.sqldialect.Dialect;
 import com.chua.common.support.lang.formatter.DdlFormatter;
 import com.chua.common.support.lang.formatter.HighlightingFormatter;
 import com.chua.common.support.log.Log;
+import com.chua.common.support.task.cache.Cacheable;
 
 import javax.sql.DataSource;
 import java.util.LinkedList;
@@ -22,6 +23,7 @@ public class DelegateMetadataExecutor implements MetadataExecutor {
     private final Expression expression;
 
     private static final Log log = Log.getLogger(MetadataExecutor.class);
+    private static final Cacheable CACHEABLE = Cacheable.auto();
 
     public DelegateMetadataExecutor(Expression expression) {
         this.expression = expression;
@@ -32,7 +34,7 @@ public class DelegateMetadataExecutor implements MetadataExecutor {
         DataSource ds = (DataSource) datasource;
 
         Metadata<?> metadata1 = expression.getValue(Metadata.class);
-        Dialect guessDialect = Dialect.guessDialect(ds);
+        Dialect guessDialect = CACHEABLE.getOrPut(ds, Dialect.guessDialect(ds));
         JdbcInquirer jdbcInquirer = new JdbcInquirer(ds, true);
         if (action == Action.CREATE) {
             create(jdbcInquirer, guessDialect, metadata1);

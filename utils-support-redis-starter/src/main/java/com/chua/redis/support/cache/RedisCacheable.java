@@ -31,26 +31,26 @@ public class RedisCacheable extends AbstractCacheable {
     }
 
     @Override
-    public boolean exist(String key) {
-        return jedis.exists(key);
+    public boolean exist(Object key) {
+        return jedis.exists(key.toString());
     }
 
     @Override
-    public Value<Object> get(String key) {
-        String s = jedis.get(key);
+    public Value<Object> get(Object key) {
+        String s = jedis.get(key.toString());
         return Json.fromJson(s, Value.class);
     }
 
     @Override
-    public Value<Object> put(String key, Object value) {
+    public Value<Object> put(Object key, Object value) {
         Value<Object> value1 = Value.of(value);
-        jedis.setex(key, expireAfterWrite, Json.toJson(value1));
+        jedis.setex(key.toString(), expireAfterWrite, Json.toJson(value1));
         return value1;
     }
 
     @Override
-    public Value<Object> remove(String key) {
-        jedis.del(key);
+    public Value<Object> remove(Object key) {
+        jedis.del(key.toString());
         return null;
     }
 }

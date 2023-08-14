@@ -1,6 +1,7 @@
 package com.chua.guava.support.cache;
 
 import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.annotations.SpiDefault;
 import com.chua.common.support.task.cache.AbstractCacheable;
 import com.chua.common.support.task.cache.Cacheable;
 import com.chua.common.support.value.Value;
@@ -18,6 +19,7 @@ import java.util.concurrent.TimeUnit;
  * @since 2022-04-22
  */
 @Spi("guava")
+@SpiDefault
 public class GuavaCacheable extends AbstractCacheable {
 
     private Cache<Object, Value<Object>> cache;
@@ -70,12 +72,12 @@ public class GuavaCacheable extends AbstractCacheable {
     }
 
     @Override
-    public boolean exist(String key) {
+    public boolean exist(Object key) {
         return cache.asMap().containsKey(key);
     }
 
     @Override
-    public Value<Object> get(String key) {
+    public Value<Object> get(Object key) {
         Value<Object> ifPresent = cache.getIfPresent(key);
         if (null == ifPresent) {
             return null;
@@ -85,14 +87,14 @@ public class GuavaCacheable extends AbstractCacheable {
 
 
     @Override
-    public Value<Object> put(String key, Object value) {
+    public Value<Object> put(Object key, Object value) {
         Value<Object> value1 = Value.of(value);
         cache.put(key, value1);
         return value1;
     }
 
     @Override
-    public Value<Object> remove(String key) {
+    public Value<Object> remove(Object key) {
         Value<Object> o = get(key);
         cache.invalidate(key);
         return o;

@@ -13,6 +13,7 @@ import com.chua.common.support.function.SafeFunction;
 import com.chua.common.support.lang.formatter.DdlFormatter;
 import com.chua.common.support.lang.formatter.HighlightingFormatter;
 import com.chua.common.support.log.Log;
+import com.chua.common.support.task.cache.Cacheable;
 import com.chua.common.support.utils.CollectionUtils;
 import com.chua.common.support.utils.ObjectUtils;
 import com.chua.common.support.utils.StringUtils;
@@ -37,6 +38,7 @@ public class HibernateMetadataExecutor implements MetadataExecutor {
 
     private final Expression expression;
     static final Log log = Log.getLogger(MetadataExecutor.class);
+    private static final Cacheable CACHEABLE = Cacheable.auto();
 
     public HibernateMetadataExecutor(Expression expression) {
         this.expression = expression;
@@ -46,7 +48,7 @@ public class HibernateMetadataExecutor implements MetadataExecutor {
     @SuppressWarnings("ALL")
     public void execute(Object datasource, Action action) {
         DataSource ds = (DataSource) datasource;
-        Dialect dialect = ObjectUtils.defaultIfNull(Dialect.create(ds), Dialect.guessDialect(ds));
+        Dialect dialect = CACHEABLE.getOrPut(ds, ObjectUtils.defaultIfNull(Dialect.create(ds), Dialect.guessDialect(ds)));
 
         Metadata metadata1 = expression.getValue(Metadata.class);
         Table table = new Table(metadata1.getTable());

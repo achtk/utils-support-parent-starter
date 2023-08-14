@@ -7,7 +7,6 @@ import com.chua.common.support.value.Value;
 
 import java.time.Duration;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * jdk
@@ -17,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Spi("juc")
 public class JdkCacheable extends AbstractCacheable {
 
-    private final Map<String, TimeValue<Object>> CACHE = new ConcurrentReferenceHashMap<>(512);
+    private final Map<Object, TimeValue<Object>> CACHE = new ConcurrentReferenceHashMap<>(512);
 
     @Override
     public void clear() {
@@ -25,22 +24,22 @@ public class JdkCacheable extends AbstractCacheable {
     }
 
     @Override
-    public boolean exist(String key) {
+    public boolean exist(Object key) {
         return CACHE.containsKey(key);
     }
 
     @Override
-    public Value<Object> get(String key) {
+    public Value<Object> get(Object key) {
         return CACHE.get(key);
     }
 
     @Override
-    public Value<Object> put(String key, Object value) {
+    public Value<Object> put(Object key, Object value) {
         return CACHE.put(key, TimeValue.of(value, Duration.ofMillis(expireAfterWrite)));
     }
 
     @Override
-    public Value<Object> remove(String key) {
+    public Value<Object> remove(Object key) {
         return CACHE.remove(key);
     }
 }
