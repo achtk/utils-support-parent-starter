@@ -738,6 +738,51 @@ public class ArrayUtils {
      * @return 能够转化返回T[], 反之返回 null
      */
     @SuppressWarnings("all")
+    public static byte[] transToByteArray(String[] value) {
+        if(value == null) {
+            return new byte[0];
+        }
+
+        byte[] bytes = new byte[value.length];
+        for (int i = 0; i < value.length; i++) {
+            String s = value[i];
+            try {
+                bytes[i] = Converter.convertIfNecessary(s, byte.class);
+            } catch (Exception e) {
+                break;
+            }
+        }
+        return new byte[0];
+    }
+    /**
+     * 转化为 byte[]
+     *
+     * @param value 待转化值
+     * @return 能够转化返回T[], 反之返回 null
+     */
+    @SuppressWarnings("all")
+    public static byte[] transToByteArray(Object value) {
+        if(value == null) {
+            return new byte[0];
+        }
+
+        if(value.getClass().isArray()) {
+            return transToByteArray((Object[])value);
+        }
+
+        if(value instanceof Collection) {
+            return transToByteArray(new LinkedList((Collection) value));
+        }
+        return new byte[0];
+    }
+
+    /**
+     * 转化为 byte[]
+     *
+     * @param value 待转化值
+     * @return 能够转化返回T[], 反之返回 null
+     */
+    @SuppressWarnings("all")
     public static byte[] transToByteArray(List value) {
         byte[] newInstance = new byte[value.size()];
         if (newInstance.length == 0) {

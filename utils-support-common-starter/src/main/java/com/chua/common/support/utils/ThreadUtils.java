@@ -549,6 +549,14 @@ public class ThreadUtils {
         return newSingleThreadScheduledExecutor(new NamedThreadFactory("schedule"));
     }
 
+    /**
+     * 默认线程池
+     * @return 默认线程池
+     */
+    public static Executor getDefaultThreadPool() {
+        return newStaticThreadPool();
+    }
+
     static class DelegatedScheduledExecutorService
             extends DelegatedExecutorService
             implements ScheduledExecutorService {

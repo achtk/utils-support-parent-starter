@@ -296,6 +296,9 @@ public class ClassUtils {
      * @return 类加载器是否包含该类, 包含返回true
      */
     public static boolean isPresent(final String className) {
+        if(StringUtils.isEmpty(className)) {
+            return false;
+        }
         return isPresent(className, getDefaultClassLoader());
     }
 
@@ -841,6 +844,25 @@ public class ClassUtils {
             }
         }
         return target;
+    }
+
+    /**
+     * 是否是基础类
+     * @param target 类
+     * @param <T>    类型
+     * @return 封装类
+     * @see java.lang.Boolean#TYPE
+     * @see java.lang.Character#TYPE
+     * @see java.lang.Byte#TYPE
+     * @see java.lang.Short#TYPE
+     * @see java.lang.Integer#TYPE
+     * @see java.lang.Long#TYPE
+     * @see java.lang.Float#TYPE
+     * @see java.lang.Double#TYPE
+     * @see java.lang.Void#TYPE
+     */
+    public static boolean isPrimitive(Class<?> target) {
+        return target.isPrimitive();
     }
 
     /**

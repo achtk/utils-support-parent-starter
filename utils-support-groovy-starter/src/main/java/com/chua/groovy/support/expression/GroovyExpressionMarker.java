@@ -4,9 +4,12 @@ import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.lang.expression.listener.Listener;
 import com.chua.common.support.lang.expression.make.ExpressionMarker;
 import com.chua.common.support.utils.ClassUtils;
+import com.chua.common.support.utils.ObjectUtils;
 import groovy.lang.GroovyClassLoader;
 import org.codehaus.groovy.control.CompilationFailedException;
 import org.codehaus.groovy.control.CompilerConfiguration;
+
+import java.io.IOException;
 
 /**
  * groovy
@@ -25,11 +28,14 @@ public class GroovyExpressionMarker implements ExpressionMarker {
 
     @Override
     public Object createObject(Listener listener, ClassLoader classLoader, Object[] args) {
-        GroovyClassLoader groovyClassLoader = new GroovyClassLoader(classLoader, config);
-        try {
-            this.aClass = groovyClassLoader.parseClass(listener.getSource());
-            return ClassUtils.forObject(aClass, args);
-        } catch (CompilationFailedException e) {
+        try (GroovyClassLoader groovyClassLoader = new GroovyClassLoader(ObjectUtils.defaultIfNull(classLoader, ClassUtils.getDefaultClassLoader()), config)) {
+            try {
+                this.aClass = groovyClassLoader.parseClass(listener.getSource());
+                return ClassUtils.forObject(aClass, args);
+            } catch (CompilationFailedException e) {
+                e.printStackTrace();
+            }
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return null;

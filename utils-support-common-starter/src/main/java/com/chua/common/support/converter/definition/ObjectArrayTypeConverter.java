@@ -1,6 +1,7 @@
 package com.chua.common.support.converter.definition;
 
 import com.chua.common.support.bean.BeanUtils;
+import com.chua.common.support.converter.Converter;
 import com.chua.common.support.utils.ArrayUtils;
 import com.chua.common.support.utils.ClassUtils;
 
@@ -9,7 +10,6 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.IntFunction;
 import java.util.regex.Pattern;
 
 import static com.chua.common.support.constant.CommonConstant.*;
@@ -87,6 +87,10 @@ public class ObjectArrayTypeConverter implements TypeConverter<Object[]> {
         Class<?> actualType = ClassUtils.getActualType(newType);
         if (value instanceof Collection) {
             ((Collection<?>) value).forEach(it -> {
+                if(ClassUtils.isPrimitive(actualType)) {
+                    tpl.add(Converter.convertIfNecessary(it, actualType));
+                    return;
+                }
                 tpl.add(BeanUtils.copyProperties(it, actualType));
             });
 

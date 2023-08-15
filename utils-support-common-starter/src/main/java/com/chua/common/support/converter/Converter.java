@@ -1,8 +1,12 @@
 package com.chua.common.support.converter;
 
 import com.chua.common.support.bean.BeanUtils;
-import com.chua.common.support.converter.definition.*;
+import com.chua.common.support.converter.definition.EnumTypeConverter;
+import com.chua.common.support.converter.definition.MapTypeConverter;
+import com.chua.common.support.converter.definition.ObjectArrayTypeConverter;
+import com.chua.common.support.converter.definition.TypeConverter;
 import com.chua.common.support.spi.ServiceProvider;
+import com.chua.common.support.utils.ClassUtils;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -10,8 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
-
-import static com.chua.common.support.utils.ClassUtils.fromPrimitive;
 
 /**
  * 转换器
@@ -133,7 +135,7 @@ public final class Converter {
         if (!target.isPrimitive()) {
             return target;
         }
-        return fromPrimitive(target);
+        return ClassUtils.fromPrimitive(target);
     }
 
     /**

@@ -1,5 +1,7 @@
 package com.chua.groovy.support.example
+
 import groovy.xml.MarkupBuilder
+import groovy.xml.XmlSlurper;
 /**
  * 基础信息
  * @author CH* @since 2021/2/22
@@ -8,7 +10,7 @@ import groovy.xml.MarkupBuilder
 class XmlExample {
     static void main(String[] args) {
         //解析XML
-        parseXML();
+//        parseXML();
         //创建XML
         createXML();
     }
@@ -52,7 +54,7 @@ class XmlExample {
      * 解析XML
      */
     static void parseXML() {
-        def xmlParser = new groovy.xml.XmlSlurper();
+        def xmlParser = new XmlSlurper();
         def response = xmlParser.parseText(getXml());
         println "获取[books[0].book[0].title]的值" + response.value.books[0].book[0].title.text()
         println "获取[books[0].book[0].author]的值" + response.value.books[0].book[0].author.text()
@@ -67,12 +69,12 @@ class XmlExample {
         //创建 <root type="demo"></root>
         xmlMarker.root(type: 'demo') {
             //创建 <element id="1"></element>
-            element(id: 1) {
+            name(id: 1) {
                 //创建 <text id="1">value</text>
                 text(id: 1, 'value')
             }
             //创建 <element id="2" />
-            element(id: 2)
+            name(id: 2)
         }
         println pw
     }

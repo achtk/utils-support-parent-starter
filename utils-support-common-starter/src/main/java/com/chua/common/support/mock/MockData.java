@@ -6,7 +6,6 @@ import com.chua.common.support.lang.expression.parser.ExpressionParser;
 import com.chua.common.support.mock.resolver.MockResolver;
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.unit.name.NamingCase;
-import com.chua.common.support.utils.CardUtils;
 import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.RandomUtils;
 
