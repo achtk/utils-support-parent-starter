@@ -1,5 +1,6 @@
 package com.chua.agent.support.plugin;
 
+import com.chua.agent.support.store.TransPointStore;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.implementation.MethodDelegation;
@@ -152,7 +153,13 @@ public class LogPlugin implements Plugin {
             } else if (value instanceof StringBuilder) {
                 msg = value.toString();
             }
+
+            if (msg.contains("org.zbus.net.tcp.TcpClient")) {
+                return;
+            }
+            TransPointStore.INSTANCE.publish(msg);
         }
+
     }
 
 

@@ -18,6 +18,8 @@ public class TransPointStore implements TransPoint {
 
     private static TransPoint transPoint;
 
+    public static final TransPointStore INSTANCE = new TransPointStore();
+
     private static final int thread = Runtime.getRuntime().availableProcessors() * 2;
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newFixedThreadPool(thread, new DefaultThreadFactory("thread-agent-embed"));
 
