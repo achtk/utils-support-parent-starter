@@ -52,6 +52,8 @@ public class TransPointStore implements TransPoint {
         if (null == transPoint) {
             return;
         }
-        transPoint.publish(message);
+        EXECUTOR_SERVICE.execute(() -> {
+            transPoint.publish(message);
+        });
     }
 }
