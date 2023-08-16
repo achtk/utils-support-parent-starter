@@ -1,5 +1,6 @@
 package com.chua.common.support.lang.store;
 
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.function.Joiner;
 import com.chua.common.support.lang.date.constant.DateFormatConstant;
@@ -23,25 +24,29 @@ import java.util.function.Supplier;
 
 /**
  * 文件存储
+ *
  * @author CH
  */
+@Spi("nio")
 public class NioFileStore implements FileStore, Runnable, InitializingAware {
 
     private final ScheduledExecutorService executor = ThreadUtils.newScheduledThreadPoolExecutor(1, "nio-file-store-check");
     private final ExecutorService runExecutor = ThreadUtils.newProcessorThreadExecutor("nio-file-store-writer");
+    private final String suffix;
     private final StoreConfig storeConfig;
-    private final File file;
+    protected final File file;
 
     private final Map<String, Queue<String>> queue = new ConcurrentHashMap<>(10);
 
     private final AtomicBoolean status = new AtomicBoolean(false);
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(DateFormatConstant.YYYYMMDD);
+    protected static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(DateFormatConstant.YYYYMMDD);
 
     final Cacheable CACHEABLE = Cacheable.auto(CacheConfiguration.builder().expireAfterWrite(
             (int) TimeUnit.DAYS.toSeconds(1)).build());
 
-    public NioFileStore(String path, StoreConfig storeConfig) {
+    public NioFileStore(String path, String suffix, StoreConfig storeConfig) {
         this.file = new File(path);
+        this.suffix = suffix;
         this.storeConfig = storeConfig;
         afterPropertiesSet();
         executor.schedule(this, 0, TimeUnit.SECONDS);
@@ -62,45 +67,41 @@ public class NioFileStore implements FileStore, Runnable, InitializingAware {
     @Override
     public void afterPropertiesSet() {
         FileUtils.mkdir(file);
-      status.set(true);
-      runExecutor.execute(() -> {
-          while (status.get()) {
-              for (Map.Entry<String, Queue<String>> entry : queue.entrySet()) {
-                  Queue<String> stringQueue = entry.getValue();
-                  if(stringQueue.size() > 100) {
-                      List<String> rs = new LinkedList<>();
-                      String poll = null;
-                      while ((poll = stringQueue.poll()) != null) {
-                          rs.add(poll);
-                      }
-                      try {
-                          FileUtils.write(new File(entry.getKey()), Joiner.on("\r\n").join(rs), StandardCharsets.UTF_8, true);
-                      } catch (Exception ignored) {
-                      }
-                  }
-              }
-              ThreadUtils.sleepSecondsQuietly(0);
-          }
-      });
+        status.set(true);
+        runExecutor.execute(() -> {
+            while (status.get()) {
+                for (Map.Entry<String, Queue<String>> entry : queue.entrySet()) {
+                    Queue<String> stringQueue = entry.getValue();
+                    List<String> rs = new LinkedList<>();
+                    String poll = null;
+                    while ((poll = stringQueue.poll()) != null) {
+                        rs.add(poll);
+                    }
+                    try {
+                        FileUtils.write(new File(entry.getKey()), Joiner.on("\r\n").join(rs), StandardCharsets.UTF_8, true);
+                    } catch (Exception ignored) {
+                    }
+                }
+                ThreadUtils.sleepSecondsQuietly(10);
+            }
+        });
     }
 
     @Override
-    public void write(String message, String... parent) {
+    public void write(String applicationName, String message, String parent) {
         String key = Joiner.on("-").join(parent);
-        File director = check(parent, key);
-        File file = new File(director, key + ".log");
+        File director = check(applicationName, parent, key);
+        File file = new File(director, key + "." + suffix);
 
-        queue.computeIfAbsent(file.getAbsolutePath(), it -> new LinkedBlockingQueue<>(1000)).add(message);
+        queue.computeIfAbsent(file.getAbsolutePath(), it -> new LinkedBlockingQueue<>(Integer.MAX_VALUE)).add(message);
     }
 
-    private File check(String[] parent, String key) {
+    public File check(String application, String parent, String key) {
         return (File) CACHEABLE.getOrPut(key, (Supplier<File>) () -> {
             File file1 = new File(file, FORMATTER.format(LocalDate.now()));
             FileUtils.mkdir(file1);
-            for (String s : parent) {
-                file1 = new File(file1, s);
-                FileUtils.mkdir(file1);
-            }
+            file1 = new File(file1, application + "/" + parent);
+            FileUtils.mkdir(file1);
             return file1;
         }).getValue();
 

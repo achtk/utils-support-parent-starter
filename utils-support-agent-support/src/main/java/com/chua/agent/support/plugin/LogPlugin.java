@@ -157,7 +157,7 @@ public class LogPlugin implements Plugin {
             if (null != msg && msg.contains("org.zbus.net.tcp.TcpClient")) {
                 return;
             }
-            TransPointStore.INSTANCE.publish("LOG", msg);
+            TransPointStore.INSTANCE.publish("log", msg);
         }
 
     }
