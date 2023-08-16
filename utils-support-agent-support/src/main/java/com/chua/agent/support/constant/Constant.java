@@ -9,14 +9,40 @@ import java.util.logging.Logger;
  * @author CH
  */
 public interface Constant {
-    String DATE_FORMAT_DETAIL = "yyyy-MM-dd HH:mm:ss";
-    String LOG_LEVEL = "log.level";
-    String LOG_OPEN = "log.open";
-    String SERVER_TYPE = "embed.server";
 
+    String DATE_FORMAT_DETAIL = "yyyy-MM-dd HH:mm:ss";
+    /**
+     * 日志级别(默认: SEVERE)
+     */
+    String LOG_LEVEL = "log.level";
+    /**
+     * 日志是否开启(默认: true)
+     */
+    String LOG_OPEN = "log.open";
+    /**
+     * 嵌入服务器(默认: NONE)
+     */
+    String SERVER_TYPE = "embed.server";
+    /**
+     * 推送服务器地址(默认: 127.0.0.1:23579)
+     */
     String TRANS_SERVER_ADDRESS = "transport.address";
+    /**
+     * 应用名称
+     */
+    String TRANS_SERVER_NAME = "transport.name";
+    /**
+     * 推送服务器的端点(默认: uniform)
+     */
     String TRANS_SERVER_POINT = "transport.point";
-    String TRANS_SERVER_TYPE = "transport.type";
+    /**
+     * 推送服务器方式(默认: MQ)
+     */
+    String TRANS_SERVER_PROTOCOL = "transport.protocol";
+    /**
+     * 推送是否开启(默认: true)
+     */
+    String TRANS_SERVER_OPEN = "transport.open";
 
 
     String WS_PORT = "ws.port";

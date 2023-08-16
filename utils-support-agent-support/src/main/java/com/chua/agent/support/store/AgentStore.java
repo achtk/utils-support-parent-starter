@@ -8,6 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
+import static com.chua.agent.support.store.TransPointStore.installTransPoint;
 import static com.chua.agent.support.utils.StringUtils.format;
 
 /**
@@ -17,6 +18,11 @@ import static com.chua.agent.support.utils.StringUtils.format;
  */
 public class AgentStore implements Constant {
 
+    public static String APPLICATION_NAME;
+
+    public static String UNIFORM_ADDRESS;
+    public static String UNIFORM_PROTOCOL;
+    public static Boolean UNIFORM_OPEN;
     public static Instrumentation instrumentation;
     private static final Map<String, Object> PARAMETER = new LinkedHashMap<>();
     static Level LOG_LEVEL_LEVEL = Level.SEVERE;
@@ -52,8 +58,28 @@ public class AgentStore implements Constant {
         }
 
         LOG_LEVEL_LEVEL = Level.parse(getStringValue(LOG_LEVEL, "SEVERE"));
+        APPLICATION_NAME = AgentStore.getStringValue(TRANS_SERVER_NAME, null);
+        UNIFORM_PROTOCOL = AgentStore.getStringValue(TRANS_SERVER_PROTOCOL, null);
+        UNIFORM_OPEN = AgentStore.getBooleanValue(TRANS_SERVER_OPEN, null);
     }
 
+    public static void setUniformOpen(Boolean uniformOpen) {
+        if(null == uniformOpen || !uniformOpen) {
+            UNIFORM_PROTOCOL = null;
+            UNIFORM_ADDRESS = null;
+            return;
+        }
+
+        UNIFORM_OPEN = true;
+    }
+    public static void setUniformAddress(String uniformAddress) {
+        if(null == uniformAddress || !UNIFORM_OPEN) {
+            return;
+        }
+
+        UNIFORM_ADDRESS = uniformAddress;
+        installTransPoint();
+    }
 
     /**
      * 初始化环境
@@ -95,6 +121,20 @@ public class AgentStore implements Constant {
         logger.log(level, format(message, args));
     }
 
+    /**
+     * 获取参数
+     *
+     * @param key          索引
+     * @param defaultValue 默认值
+     * @return 参数
+     */
+    public static Boolean getBooleanValue(String key, Boolean defaultValue) {
+        try {
+            return Boolean.parseBoolean(getStringValue(key, "" + defaultValue));
+        } catch (Exception e) {
+            return false;
+        }
+    }
     /**
      * 获取参数
      *

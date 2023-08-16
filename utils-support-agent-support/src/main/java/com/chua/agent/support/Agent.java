@@ -7,7 +7,6 @@ import static com.chua.agent.support.store.InstrumentationStore.installInstrumen
 import static com.chua.agent.support.store.InstrumentationStore.preInstrumentation;
 import static com.chua.agent.support.store.PluginStore.installPlugins;
 import static com.chua.agent.support.store.PluginStore.prePlugins;
-import static com.chua.agent.support.store.TransPointStore.installTransPoint;
 
 /**
  * 代理
@@ -26,7 +25,6 @@ public class Agent {
         installEnvironment();
         installPlugins();
         prePlugins();
-        installTransPoint();
         installInstrumentation();
         preInstrumentation();
     }

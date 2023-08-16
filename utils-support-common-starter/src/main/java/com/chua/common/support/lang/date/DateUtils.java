@@ -1574,6 +1574,19 @@ public class DateUtils {
     public static LocalDate toLocalDate(final Calendar calendar) {
         return toLocalDate(calendar.getTime());
     }
+    /**
+     * String转LocalDate
+     *
+     * @param str str
+     * @param format format
+     * @return LocalDate
+     * @throws NullPointerException if localDateTime is not valid
+     */
+    public static LocalDate toLocalDate(String str, String format) {
+        Objects.requireNonNull(str, "str");
+        Objects.requireNonNull(format, "format");
+        return toLocalDate(DateTimeFormatter.ofPattern(format).parse(str));
+    }
 
     /**
      * LocalDateTime转LocalDate

@@ -3,11 +3,12 @@ package com.chua.agent.support.store;
 import com.chua.agent.support.thread.DefaultThreadFactory;
 import com.chua.agent.support.transpoint.MqTransPoint;
 import com.chua.agent.support.transpoint.TransPoint;
+import com.chua.agent.support.utils.StringUtils;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static com.chua.agent.support.store.AgentStore.getStringValue;
+import static com.chua.agent.support.store.AgentStore.*;
 
 /**
  * 数据传输缓存
@@ -27,7 +28,11 @@ public class TransPointStore implements TransPoint {
      * 初始化传输器
      */
     public static void installTransPoint() {
-        String mq = getStringValue(TRANS_SERVER_TYPE, "MQ");
+        if(null != TransPointStore.transPoint || !UNIFORM_OPEN) {
+            return;
+        }
+
+        String mq = getStringValue(TRANS_SERVER_PROTOCOL, "MQ");
         if ("MQ".equalsIgnoreCase(mq)) {
             TransPointStore.transPoint = new MqTransPoint();
         }
@@ -48,12 +53,18 @@ public class TransPointStore implements TransPoint {
     }
 
     @Override
-    public void publish(String message) {
+    public void publish(String type, String message) {
         if (null == transPoint) {
             return;
         }
+
+        if(StringUtils.isNullOrEmpty(APPLICATION_NAME)) {
+            return;
+        }
+
         EXECUTOR_SERVICE.execute(() -> {
-            transPoint.publish(message);
+            transPoint.publish(type, message);
         });
     }
+
 }

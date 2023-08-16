@@ -16,7 +16,8 @@ public interface TransPoint extends Constant {
     /**
      * 下发消息
      *
+     * @param type    类型
      * @param message 下发消息
      */
-    void publish(String message);
+    void publish(String type, String message);
 }
