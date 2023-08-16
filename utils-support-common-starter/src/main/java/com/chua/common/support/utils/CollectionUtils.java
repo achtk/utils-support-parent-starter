@@ -196,6 +196,16 @@ public class CollectionUtils {
     }
 
     /**
+     * 元素数量
+     *
+     * @param collection 集合
+     * @return 数量
+     */
+    public static int size(Map<?, ?> collection) {
+        return null == collection ? 0 : collection.size();
+    }
+
+    /**
      * 对象转集合
      *
      * @param value 对象
@@ -230,6 +240,21 @@ public class CollectionUtils {
             return ((List<T>) source).get(0);
         }
         Iterator<T> iterator = source.iterator();
+        return iterator.next();
+    }
+
+    /**
+     * 获取索引对应的数据
+     *
+     * @param source 数据
+     * @param <T>    类型
+     * @return 数据
+     */
+    public static <T> T findFirst(final Map<?, T> source) {
+        if (null == source || source.isEmpty()) {
+            return null;
+        }
+        Iterator<T> iterator = source.values().iterator();
         return iterator.next();
     }
 

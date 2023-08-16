@@ -31,7 +31,7 @@ import java.util.function.Supplier;
 public class NioFileStore implements FileStore, Runnable, InitializingAware {
 
     private final ScheduledExecutorService executor = ThreadUtils.newScheduledThreadPoolExecutor(1, "nio-file-store-check");
-    private final ExecutorService runExecutor = ThreadUtils.newProcessorThreadExecutor("nio-file-store-writer");
+    protected final ExecutorService runExecutor = ThreadUtils.newProcessorThreadExecutor("nio-file-store-writer");
     private final String suffix;
     private final StoreConfig storeConfig;
     protected final File file;

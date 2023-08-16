@@ -2,6 +2,7 @@ package com.chua.lucene.support.store;
 
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.collection.ImmutableBuilder;
+import com.chua.common.support.crypto.NoneCodec;
 import com.chua.common.support.lang.store.NioFileStore;
 import com.chua.common.support.lang.store.StoreConfig;
 import com.chua.lucene.support.entity.DataDocument;
@@ -18,16 +19,19 @@ import java.util.UUID;
  *
  * @author CH
  */
-@Spi("lucene")
-public class LuceneFileSore extends NioFileStore {
+@Spi(value = {"lucene", "nio"}, order = -1)
+public class LuceneFileStore extends NioFileStore {
 
     private final LuceneTemplateResolver luceneTemplateResolver;
     private IndexOperatorTemplate indexOperatorTemplate;
     final int fragmentation = Runtime.getRuntime().availableProcessors() - 1;
 
-    public LuceneFileSore(String path, String suffix, StoreConfig storeConfig) {
+    public LuceneFileStore(String path, String suffix, StoreConfig storeConfig) {
         super(path, suffix, storeConfig);
-        this.luceneTemplateResolver = new LuceneTemplateResolver(file.toPath(), DirectoryFactory.DirectoryType.NIO);
+        this.luceneTemplateResolver = new LuceneTemplateResolver(file.toPath(),
+                new NoneCodec(),
+                null,
+                DirectoryFactory.DirectoryType.NIO);
         this.indexOperatorTemplate = luceneTemplateResolver.getIndexOperatorTemplate();
 
     }
@@ -35,12 +39,14 @@ public class LuceneFileSore extends NioFileStore {
     @Override
     public void write(String applicationName, String message, String parent) {
         String index = FORMATTER.format(LocalDate.now());
-        index = applicationName + index;
-        checkIndex(index);
-        try {
-            addDocument(index, applicationName, message, parent);
-        } catch (Exception ignored) {
-        }
+        //index = applicationName + index;
+        runExecutor.execute(() -> {
+            checkIndex(index);
+            try {
+                addDocument(index, applicationName, message, parent);
+            } catch (Exception ignored) {
+            }
+        });
     }
 
     private void addDocument(String index, String applicationName, String message, String parent) throws Exception{
@@ -50,6 +56,8 @@ public class LuceneFileSore extends NioFileStore {
         document.setData(ImmutableBuilder.builderOfStringMap()
                 .put("keyword", applicationName + " " + parent)
                 .put("message", message)
+                .put("applicationName", applicationName)
+                .put("mode", parent)
                 .build()
         );
         documentOperatorTemplate.addDocument(document);
@@ -66,6 +74,7 @@ public class LuceneFileSore extends NioFileStore {
 
     @Override
     public void close() throws Exception {
+        super.close();
         try {
             this.luceneTemplateResolver.close();
         } catch (Exception ignored) {
@@ -77,7 +86,5 @@ public class LuceneFileSore extends NioFileStore {
     public void afterPropertiesSet() {
     }
 
-    @Override
-    public void run() {
-    }
+
 }

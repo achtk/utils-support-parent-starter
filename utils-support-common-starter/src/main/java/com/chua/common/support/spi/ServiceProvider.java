@@ -246,36 +246,41 @@ public class ServiceProvider<T> implements InitializingAware {
 
     //Definition *******************************************************************************************************************
     public ServiceDefinition getDefinition(String name, Object... args) {
+        String type = null, name1 = name;
         name = name.toUpperCase();
         if (name.contains(SYMBOL_COLON)) {
             String[] split = name.split(SYMBOL_COLON, 2);
-            String type = split[0];
-            String name1 = split[1];
-            SortedList<ServiceDefinition> definitions = new SortedArrayList<>(COMPARATOR);
-            SortedList<ServiceDefinition> serviceDefinitions = this.definitions.get(name);
-            for (Map.Entry<String, SortedList<ServiceDefinition>> entry : this.definitions.entrySet()) {
-                SortedList<ServiceDefinition> entryValue = entry.getValue();
-                for (ServiceDefinition serviceDefinition : entryValue) {
-                    if (type.equalsIgnoreCase(serviceDefinition.getLabelType()) && name1.equalsIgnoreCase(serviceDefinition.getName())) {
-                        definitions.add(serviceDefinition);
-                    }
-                }
-            }
-
-            return definitions.isEmpty() ? DEFAULT_DEFINITION : definitions.first();
+            type = split[0];
+            name1 = split[1];
         }
         SortedList<ServiceDefinition> definitions = new SortedArrayList<>(COMPARATOR);
-        for (String item : name.split(SYMBOL_COMMA)) {
-            SortedList<ServiceDefinition> definitions1 = getDefinitions(item, args);
-            if (null == definitions1) {
-                continue;
+        SortedList<ServiceDefinition> serviceDefinitions = this.definitions.get(name);
+        for (Map.Entry<String, SortedList<ServiceDefinition>> entry : this.definitions.entrySet()) {
+            SortedList<ServiceDefinition> entryValue = entry.getValue();
+            for (ServiceDefinition serviceDefinition : entryValue) {
+                if (((null != type && type.equalsIgnoreCase(serviceDefinition.getLabelType())) || null == type) && name1.equalsIgnoreCase(serviceDefinition.getName())) {
+                    definitions.add(serviceDefinition);
+                }
             }
-            definitions.addAll(definitions1);
-            definitions.addAll(createNameAware(name, definitions1, args));
+        }
+
+        if (!definitions.isEmpty()) {
+            return definitions.first();
+        }
+        SortedList<ServiceDefinition> definitions2 = new SortedArrayList<>(COMPARATOR);
+        if (null != args) {
+            for (String item : name.split(SYMBOL_COMMA)) {
+                SortedList<ServiceDefinition> definitions1 = getDefinitions(item, args);
+                if (null == definitions1) {
+                    continue;
+                }
+                definitions2.addAll(definitions1);
+                definitions2.addAll(createNameAware(name, definitions1, args));
+            }
         }
 
 
-        return definitions.isEmpty() ? DEFAULT_DEFINITION : definitions.first();
+        return definitions2.isEmpty() ? DEFAULT_DEFINITION : definitions2.first();
     }
 
 
@@ -293,7 +298,9 @@ public class ServiceProvider<T> implements InitializingAware {
             }
 
             SortedList<ServiceDefinition> entryValue = entry.getValue();
-            rs.addAll(createNameAware(name, entryValue, args));
+            if (null != args) {
+                rs.addAll(createNameAware(name, entryValue, args));
+            }
         }
 
         return rs;

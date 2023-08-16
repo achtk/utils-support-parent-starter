@@ -1,7 +1,5 @@
 package com.chua.common.support.spi.autowire;
 
-import com.chua.common.support.function.InitializingAware;
-import com.chua.common.support.reflection.describe.MethodDescribe;
 import com.chua.common.support.reflection.describe.TypeDescribe;
 import com.chua.common.support.reflection.describe.provider.MethodDescribeProvider;
 import com.chua.common.support.utils.ClassUtils;
@@ -21,13 +19,20 @@ public class AutoServiceAutowire implements ServiceAutowire {
     public static final String UTILS = "com.chua.starter.common.support.configuration.SpringBeanUtils";
     private static MethodDescribeProvider methodDescribe;
 
+    private static final String SPRING_AUTO = "com.chua.starter.common.support.spi.SpringServiceAutowire";
+
     public static final List<ServiceAutowire> AUTOWIRES = new LinkedList<>();
 
     private static MethodDescribeProvider createMethodDescribe;
 
+    private static ServiceAutowire springServiceAutowire;
+
     static {
+        if (ClassUtils.isPresent(SPRING_AUTO)) {
+            springServiceAutowire = ClassUtils.forObject(SPRING_AUTO);
+        }
         AUTOWIRES.add(new InitializingAwareAutoServiceAutowire());
-        if (ClassUtils.isPresent(APPLICATION_CONTEXT) && ClassUtils.isPresent(UTILS)) {
+        if (null == springServiceAutowire && (ClassUtils.isPresent(APPLICATION_CONTEXT) && ClassUtils.isPresent(UTILS))) {
             TypeDescribe typeDescribe = new TypeDescribe(UTILS);
             methodDescribe = typeDescribe.getMethodDescribe("getApplicationContext")
                     .isChain()
@@ -50,7 +55,9 @@ public class AutoServiceAutowire implements ServiceAutowire {
             return null;
         }
 
-        if (null != methodDescribe) {
+        if (null != springServiceAutowire) {
+            springServiceAutowire.autowire(object);
+        } else if (null != methodDescribe) {
             methodDescribe.executeSelf(object);
         }
 

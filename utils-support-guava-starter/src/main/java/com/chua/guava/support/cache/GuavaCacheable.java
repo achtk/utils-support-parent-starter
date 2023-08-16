@@ -44,8 +44,8 @@ public class GuavaCacheable extends AbstractCacheable {
     public Cacheable configuration(Map<String, Object> config) {
         super.configuration(config);
         CacheBuilder<Object, Object> cacheBuilder = CacheBuilder.newBuilder()
-                .initialCapacity(capacity)
-                .maximumSize(maximumSize);
+                .initialCapacity(capacity < 1 ? 100000 : capacity)
+                .maximumSize(maximumSize < 1 ? 100000 : maximumSize);
 
         if (expireAfterAccess > -1) {
             cacheBuilder.expireAfterAccess(expireAfterAccess, TimeUnit.SECONDS);
