@@ -3,6 +3,7 @@ package com.chua.lucene.support.store;
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.collection.ImmutableBuilder;
 import com.chua.common.support.crypto.NoneCodec;
+import com.chua.common.support.json.JsonObject;
 import com.chua.common.support.lang.store.NioFileStore;
 import com.chua.common.support.lang.store.StoreConfig;
 import com.chua.lucene.support.entity.DataDocument;
@@ -12,6 +13,7 @@ import com.chua.lucene.support.operator.IndexOperatorTemplate;
 import com.chua.lucene.support.resolver.LuceneTemplateResolver;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -86,5 +88,8 @@ public class LuceneFileStore extends NioFileStore {
     public void afterPropertiesSet() {
     }
 
-
+    @Override
+    public List<JsonObject> search(String keyword) {
+        return super.search(keyword);
+    }
 }

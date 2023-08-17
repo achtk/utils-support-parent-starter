@@ -3,6 +3,7 @@ package com.chua.common.support.lang.store;
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.function.Joiner;
+import com.chua.common.support.json.JsonObject;
 import com.chua.common.support.lang.date.constant.DateFormatConstant;
 import com.chua.common.support.lang.store.plugin.RetentionDaysPlugin;
 import com.chua.common.support.task.cache.CacheConfiguration;
@@ -14,10 +15,7 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
@@ -94,6 +92,11 @@ public class NioFileStore implements FileStore, Runnable, InitializingAware {
         File file = new File(director, key + "." + suffix);
 
         queue.computeIfAbsent(file.getAbsolutePath(), it -> new LinkedBlockingQueue<>(Integer.MAX_VALUE)).add(message);
+    }
+
+    @Override
+    public List<JsonObject> search(String keyword) {
+        return Collections.emptyList();
     }
 
     public File check(String application, String parent, String key) {
