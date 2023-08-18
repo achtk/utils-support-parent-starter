@@ -54,4 +54,17 @@ public interface Constant {
     DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(DATE_FORMAT_DETAIL);
     String DEFAULT_HOST = "0.0.0.0";
     Logger logger = Logger.getLogger("premain");
+
+    String LINK_ID = "x-request-link-id";
+    String LINK_PID = "x-request-pid";
+    String LINK_RES_SPAN = "x-response-span";
+
+    /**
+     * 发送指令：连接
+     */
+    String WEBSSH_OPERATE_CONNECT = "connect";
+    /**
+     * 发送指令：命令
+     */
+    String WEBSSH_OPERATE_COMMAND = "command";
 }

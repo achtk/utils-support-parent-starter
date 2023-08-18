@@ -11,9 +11,7 @@ import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
 
 import java.lang.reflect.Proxy;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
@@ -77,7 +75,9 @@ public class PluginStore implements Constant {
                 .with(new AgentBuilder.InitializationStrategy.SelfInjection.Eager());
         AgentBuilder.Identified.Extendable transform = null;
 
-        for (Plugin plugin : PLUGINS.values()) {
+        List<Plugin> plugins = new ArrayList<>(PLUGINS.values());
+        plugins.sort(Comparator.comparing(Plugin::name));
+        for (Plugin plugin : plugins) {
             String name = plugin.name();
             if (null == name) {
                 continue;
