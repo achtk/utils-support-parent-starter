@@ -2,9 +2,11 @@ package com.chua.lucene.support.operator;
 
 import com.chua.common.support.crypto.Codec;
 import com.chua.lucene.support.factory.DirectoryFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.store.Directory;
 
 import java.io.IOException;
 import java.nio.file.*;
@@ -21,6 +23,7 @@ import java.util.Set;
  * @version 1.0.0
  * @since 2020/11/3
  */
+@Slf4j
 public class DefaultIndexOperatorTemplate implements IndexOperatorTemplate {
 
     private final Path path;
@@ -46,7 +49,8 @@ public class DefaultIndexOperatorTemplate implements IndexOperatorTemplate {
             //分片索引
             Path fragPath = Paths.get(path.toAbsolutePath().toString(), safeStoreIndexName(name), i + "");
             //创建索引
-            directoryFactory.newDirectory(fragPath).close();
+            try (Directory directory = directoryFactory.newDirectory(fragPath)) {
+            }
         }
     }
 
@@ -94,7 +98,10 @@ public class DefaultIndexOperatorTemplate implements IndexOperatorTemplate {
                     List<IndexWriter> indexWriter = null;
                     try {
                         indexWriter = directoryFactory.getIndexWriter(dir);
-                    } catch (IOException e) {
+                    } catch (IOException ignored) {
+                    }
+                    if(null == indexWriter) {
+                        return FileVisitResult.CONTINUE;
                     }
                     indexWriterList.addAll(indexWriter);
                     return super.preVisitDirectory(dir, attrs);
@@ -121,12 +128,12 @@ public class DefaultIndexOperatorTemplate implements IndexOperatorTemplate {
                     List<IndexReader> indexReaders = null;
                     try {
                         indexReaders = directoryFactory.getIndexReader(dir);
-                    } catch (IOException e) {
+                    } catch (IOException ignored) {
                     }
                     try {
                         indexReaderList.addAll(indexReaders);
                     } catch (Exception e) {
-                        throw new IOException("Index data does not exist!!");
+                        log.warn("Index {} data does not exist!!", dir.getFileName());
                     }
                     return super.preVisitDirectory(dir, attrs);
                 }

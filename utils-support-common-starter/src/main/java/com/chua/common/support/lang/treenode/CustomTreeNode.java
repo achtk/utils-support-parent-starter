@@ -1,7 +1,6 @@
 package com.chua.common.support.lang.treenode;
 
 import com.chua.common.support.bean.BeanMap;
-import com.chua.common.support.bean.BeanUtils;
 import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.CollectionUtils;
 import lombok.Data;

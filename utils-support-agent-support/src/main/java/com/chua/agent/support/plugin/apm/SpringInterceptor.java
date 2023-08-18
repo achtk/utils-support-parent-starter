@@ -6,6 +6,7 @@ import com.chua.agent.support.json.JSON;
 import com.chua.agent.support.span.NewTrackManager;
 import com.chua.agent.support.span.Span;
 import com.chua.agent.support.span.TrackContext;
+import com.chua.agent.support.store.TransPointStore;
 import com.chua.agent.support.transfor.CloseHttpClientTransfer;
 import com.chua.agent.support.transfor.HttpClientTransfer;
 import com.chua.agent.support.transfor.TomcatTransfer;
@@ -192,7 +193,7 @@ public class SpringInterceptor implements Interceptor {
             Object response = getResponse(objects);
             for (Span span : result) {
                 span.setHeader(Collections.emptyList());
-                span.setStack(Collections.emptyList());
+                span.setStackTrace(new StackTraceElement[0]);
             }
             try {
                 ClassUtils.invoke("addHeader", response, "x-response-span", StringUtils.gzip(JSON.toJSONBytes(result)));
@@ -231,18 +232,9 @@ public class SpringInterceptor implements Interceptor {
         }
 
         spans2 = repackage(spans2);
-
-        for (Span span : spans2) {
-//            if ("sql".equals(span.getModel())) {
-//                sendLog(span.toLog());
-//                send(span, "sql");
-//            }
-//
-//            if ("exception".equals(span.getModel())) {
-//                sendLog(span.toLog());
-//            }
-//            send(span, "trace");
-        }
+        CustomTreeNode customTreeNode = new CustomTreeNode();
+        customTreeNode.add(spans2);
+        TransPointStore.INSTANCE.publish("trace", JSON.toJSONString(customTreeNode.transferAll()));
     }
 
     private static List<Span> repackage(List<Span> spans2) {

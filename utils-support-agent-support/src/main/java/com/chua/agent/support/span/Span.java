@@ -2,6 +2,7 @@ package com.chua.agent.support.span;
 
 import com.chua.agent.support.formatter.DmlFormatter;
 import com.chua.agent.support.json.JSON;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -10,6 +11,7 @@ import java.util.*;
 /**
  * @author Administrator
  */
+@Data
 public class Span implements Serializable {
 
     private String linkId;  //链路ID
@@ -30,6 +32,8 @@ public class Span implements Serializable {
     private String model;
     private String threadName;
     private String from;
+
+    private List<Span> children;
     private transient volatile Set<String> parents = new LinkedHashSet<>();
 
 
@@ -41,91 +45,11 @@ public class Span implements Serializable {
     public Span(String linkId) {
         this.linkId = linkId;
         this.enterTime = new Date();
-        setStack(Thread.currentThread().getStackTrace());
+        setStackTrace(Thread.currentThread().getStackTrace());
         this.threadName = Thread.currentThread().getName();
     }
 
-    public Set<String> getParents() {
-        return parents;
-    }
-
-    public void setParents(Set<String> parents) {
-        this.parents = parents;
-    }
-
-    public String getThreadName() {
-        return threadName;
-    }
-
-    public void setThreadName(String threadName) {
-        this.threadName = threadName;
-    }
-
-    public String getFrom() {
-        return from;
-    }
-
-    public void setFrom(String from) {
-        this.from = from;
-    }
-
-    public List<String> getHeader() {
-        return header;
-    }
-
-    public void setHeader(List<String> header) {
-        this.header = header;
-    }
-
-    public String getDb() {
-        return db;
-    }
-
-    public void setDb(String db) {
-        this.db = db;
-    }
-
-    public String getLinkId() {
-        return linkId;
-    }
-
-    public void setLinkId(String linkId) {
-        this.linkId = linkId;
-    }
-
-    public Date getEnterTime() {
-        return enterTime;
-    }
-
-    public String getModel() {
-        return model;
-    }
-
-    public void setModel(String model) {
-        this.model = model;
-    }
-
-    public void setEnterTime(Date enterTime) {
-        this.enterTime = enterTime;
-    }
-
-    public long getCostTime() {
-        return costTime;
-    }
-
-    public void setCostTime(long costTime) {
-        this.costTime = costTime;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public void setStack(StackTraceElement[] stackTrace) {
+    public void setStackTrace(StackTraceElement[] stackTrace) {
         List<String> rs = new LinkedList<>();
         for (int i = 0, stackTraceLength = stackTrace.length; i < stackTraceLength; i++) {
             StackTraceElement element = stackTrace[i];
@@ -146,77 +70,6 @@ public class Span implements Serializable {
         this.stack = rs;
     }
 
-    public void setStack(List<String> stack) {
-        this.stack = stack;
-    }
-
-    public List<String> getStack() {
-        return stack;
-    }
-
-    public boolean isTitle() {
-        return title;
-    }
-
-    public void setTitle(boolean title) {
-        this.title = title;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getPid() {
-        return pid;
-    }
-
-    public void setPid(String pid) {
-        this.pid = pid;
-    }
-
-    public String getMethod() {
-        return method;
-    }
-
-    public void setMethod(String method) {
-        this.method = method;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getError() {
-        return error;
-    }
-
-    public void setError(String error) {
-        this.error = error;
-    }
-
-    public String getTypeMethod() {
-        return typeMethod;
-    }
-
-    public void setTypeMethod(String typeMethod) {
-        this.typeMethod = typeMethod;
-    }
-
-    public String getEx() {
-        return ex;
-    }
-
-    public void setEx(String ex) {
-        this.ex = ex;
-    }
 
     public String toJson() {
         return JSON.toJSONString(this);

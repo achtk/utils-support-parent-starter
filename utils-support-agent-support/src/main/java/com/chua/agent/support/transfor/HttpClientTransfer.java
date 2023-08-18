@@ -40,7 +40,6 @@ public class HttpClientTransfer implements Transfer {
             analysis1(params[1], stackTrace);
         }
         desc += "]";
-//        SocketInterceptor.registerNode(desc, "apache", "localhost");
 
         span.setStack(stackTrace);
         span.setMethod(span.getMethod() + "  <span style='color: blue'>" + desc + "</span>");

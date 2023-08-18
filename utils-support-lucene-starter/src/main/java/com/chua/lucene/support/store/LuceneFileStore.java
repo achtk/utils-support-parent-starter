@@ -19,6 +19,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * lucene存储
@@ -30,7 +31,9 @@ public class LuceneFileStore extends NioFileStore {
 
     private final LuceneTemplateResolver luceneTemplateResolver;
     private IndexOperatorTemplate indexOperatorTemplate;
-    final int fragmentation = Runtime.getRuntime().availableProcessors() - 1;
+    final int fragmentation = 2;
+
+    private static Map<String, DocumentOperatorTemplate> documentOperatorTemplateMap = new ConcurrentHashMap<>();
 
     public LuceneFileStore(String path, String suffix, StoreConfig storeConfig) {
         super(path, suffix, storeConfig);
@@ -44,7 +47,7 @@ public class LuceneFileStore extends NioFileStore {
 
     @Override
     public void write(String applicationName, String message, String parent) {
-        String index = FORMATTER.format(LocalDate.now());
+        String index =  FORMATTER.format(LocalDate.now());
         //index = applicationName + index;
         runExecutor.execute(() -> {
             checkIndex(index);
@@ -56,7 +59,17 @@ public class LuceneFileStore extends NioFileStore {
     }
 
     private void addDocument(String index, String applicationName, String message, String parent) throws Exception{
-        DocumentOperatorTemplate documentOperatorTemplate = luceneTemplateResolver.getDocumentOperatorTemplate(index);
+        DocumentOperatorTemplate documentOperatorTemplate = null;
+        try {
+            documentOperatorTemplate = documentOperatorTemplateMap.computeIfAbsent(index, it -> {
+                try {
+                    return luceneTemplateResolver.getDocumentOperatorTemplate(index);
+                } catch (IOException ignored) {
+                    return null;
+                }
+            });
+        } catch (Exception ignored) {
+        }
         DataDocument document = new DataDocument();
         document.setDataId(applicationName + parent + UUID.randomUUID().toString());
         document.setData(ImmutableBuilder.builderOfStringMap()
@@ -69,7 +82,7 @@ public class LuceneFileStore extends NioFileStore {
         documentOperatorTemplate.addDocument(document);
     }
 
-    private void checkIndex(String index) {
+    private synchronized void checkIndex(String index) {
         if (!indexOperatorTemplate.exist(index)) {
             try {
                 indexOperatorTemplate.create(index, fragmentation);
@@ -95,19 +108,29 @@ public class LuceneFileStore extends NioFileStore {
     @Override
     public List<Map<String, Object>> search(String keyword) {
         List<Map<String, Object>> rs = new LinkedList<>();
-        LocalDate day = LocalDate.now().minusDays(3);
+        LocalDate day = LocalDate.now().minusDays(2);
         while (!day.isAfter(LocalDate.now())) {
-            SearchOperatorTemplate searchOperatorTemplate = null;
             try {
-                searchOperatorTemplate = this.luceneTemplateResolver.getSearchOperatorTemplate(FORMATTER.format(day));
-            } catch (IOException ignored) {
+                SearchOperatorTemplate searchOperatorTemplate = null;
+                try {
+                    searchOperatorTemplate = this.luceneTemplateResolver.getSearchOperatorTemplate(FORMATTER.format(day));
+                } catch (IOException ignored) {
+                }
+                if(null == searchOperatorTemplate) {
+                    continue;
+                }
+                HitData hitData = null;
+                try {
+                    hitData = searchOperatorTemplate.search(keyword);
+                } catch (Exception ignored) {
+                }
+                if(null == hitData) {
+                    continue;
+                }
+                rs.addAll(hitData.getData());
+            } finally {
+                day = day.plusDays(1);
             }
-            if(null == searchOperatorTemplate) {
-                continue;
-            }
-            HitData hitData = searchOperatorTemplate.search(keyword);
-            rs.addAll(hitData.getData());
-            day = day.plusDays(1);
         }
         return rs;
     }

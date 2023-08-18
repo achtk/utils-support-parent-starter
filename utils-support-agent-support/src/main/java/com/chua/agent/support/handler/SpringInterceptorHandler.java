@@ -19,7 +19,7 @@ public class SpringInterceptorHandler {
     public static String getLinkId(Object[] objects) {
         if(objects.length > 0) {
             Object object = objects[0];
-            if ("org.springframework.web.context.request.ServletWebRequest".equals(object.getClass().getTypeName())) {
+            if (null != object && "org.springframework.web.context.request.ServletWebRequest".equals(object.getClass().getTypeName())) {
                 object = ClassUtils.getObject("request", object);
             }
 

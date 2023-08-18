@@ -159,7 +159,7 @@ public class Listener {
             }
             item.add(stackTraceElement);
         }
-        r.setStack(item.toArray(new StackTraceElement[0]));
+        r.setStackTrace(item.toArray(new StackTraceElement[0]));
         TABLE.put(o, r);
         if (TABLE.size() > THRESHOLD) {
             THRESHOLD = 999999;

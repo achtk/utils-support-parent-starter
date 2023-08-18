@@ -76,7 +76,7 @@ public class DubboProxyInterceptorHandler  implements Constant {
         Span pSpan = null;
         Map<String, String> cache = new LinkedHashMap<>();
         for (Span span : spans1) {
-            span.setStack(Collections.emptyList());
+            span.setStackTrace(new StackTraceElement[0]);
             if(!StringUtils.isNullOrEmpty(span.getTypeMethod()) ) {
                 String pid = null;
                 if(null != pSpan) {
