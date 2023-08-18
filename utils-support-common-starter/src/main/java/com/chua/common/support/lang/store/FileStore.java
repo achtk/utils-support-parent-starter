@@ -1,8 +1,7 @@
 package com.chua.common.support.lang.store;
 
-import com.chua.common.support.json.JsonObject;
-
 import java.util.List;
+import java.util.Map;
 
 /**
  * 文件存储
@@ -23,5 +22,5 @@ public interface FileStore extends AutoCloseable {
      * @param keyword 关键词
      * @return 结果
      */
-    List<JsonObject> search(String keyword);
+    List<Map<String, Object>> search(String keyword);
 }

@@ -3,7 +3,6 @@ package com.chua.common.support.lang.store;
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.function.Joiner;
-import com.chua.common.support.json.JsonObject;
 import com.chua.common.support.lang.date.constant.DateFormatConstant;
 import com.chua.common.support.lang.store.plugin.RetentionDaysPlugin;
 import com.chua.common.support.task.cache.CacheConfiguration;
@@ -95,7 +94,7 @@ public class NioFileStore implements FileStore, Runnable, InitializingAware {
     }
 
     @Override
-    public List<JsonObject> search(String keyword) {
+    public List<Map<String, Object>> search(String keyword) {
         return Collections.emptyList();
     }
 

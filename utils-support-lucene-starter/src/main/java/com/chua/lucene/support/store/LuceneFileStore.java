@@ -3,17 +3,21 @@ package com.chua.lucene.support.store;
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.collection.ImmutableBuilder;
 import com.chua.common.support.crypto.NoneCodec;
-import com.chua.common.support.json.JsonObject;
 import com.chua.common.support.lang.store.NioFileStore;
 import com.chua.common.support.lang.store.StoreConfig;
 import com.chua.lucene.support.entity.DataDocument;
+import com.chua.lucene.support.entity.HitData;
 import com.chua.lucene.support.factory.DirectoryFactory;
 import com.chua.lucene.support.operator.DocumentOperatorTemplate;
 import com.chua.lucene.support.operator.IndexOperatorTemplate;
+import com.chua.lucene.support.operator.SearchOperatorTemplate;
 import com.chua.lucene.support.resolver.LuceneTemplateResolver;
 
+import java.io.IOException;
 import java.time.LocalDate;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -89,7 +93,22 @@ public class LuceneFileStore extends NioFileStore {
     }
 
     @Override
-    public List<JsonObject> search(String keyword) {
-        return super.search(keyword);
+    public List<Map<String, Object>> search(String keyword) {
+        List<Map<String, Object>> rs = new LinkedList<>();
+        LocalDate day = LocalDate.now().minusDays(3);
+        while (!day.isAfter(LocalDate.now())) {
+            SearchOperatorTemplate searchOperatorTemplate = null;
+            try {
+                searchOperatorTemplate = this.luceneTemplateResolver.getSearchOperatorTemplate(FORMATTER.format(day));
+            } catch (IOException ignored) {
+            }
+            if(null == searchOperatorTemplate) {
+                continue;
+            }
+            HitData hitData = searchOperatorTemplate.search(keyword);
+            rs.addAll(hitData.getData());
+            day = day.plusDays(1);
+        }
+        return rs;
     }
 }
