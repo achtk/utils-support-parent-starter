@@ -68,7 +68,6 @@
         <module>utils-support-deeplearning-paddlepaddle-starter</module>
         <module>utils-support-deeplearning-tensorFlow-starter</module>
         <module>utils-support-milvus-starter</module>
-        <module>utils-support-hikvision-support</module>
         <module>utils-support-agent-support</module>
     </modules>
 
