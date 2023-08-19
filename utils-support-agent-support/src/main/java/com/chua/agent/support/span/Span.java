@@ -65,7 +65,6 @@ public class Span implements Serializable {
             }
 
             int i1 = string.indexOf("(");
-            parents.add(i1 > -1 ? string.substring(0, i1) : string);
         }
         this.stack = rs;
     }

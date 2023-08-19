@@ -13,7 +13,7 @@ import net.bytebuddy.matcher.ElementMatchers;
 public class IbatisPlusInterceptor implements Interceptor {
     @Override
     public DynamicType.Builder<?> transform(DynamicType.Builder<?> builder) {
-        return builder.method(ElementMatchers.named("execute")).intercept(MethodDelegation.to(IbatisPlusInterceptor.class));
+        return builder.method(ElementMatchers.named("execute")).intercept(MethodDelegation.to(SpringInterceptor.class));
     }
 
     @Override

@@ -38,9 +38,11 @@ public class TomcatTransfer implements Transfer {
             desc += "] [Content-Type: " + (null == ClassUtils.invoke("getContentType", obj1) ? "none" : ClassUtils.invoke("getContentType", obj1).toString()) + " ]";
 
             Enumeration<String> headerNames = (Enumeration<String>) ClassUtils.invoke("getHeaderNames", obj1);
-            stackTrace.add("<strong>" + ClassUtils.invoke("getRequestURI", obj1) + "</strong>");
+            stackTrace.add("");
+            stackTrace.add(ClassUtils.invoke("getRequestURI", obj1) + "");
 
-            stackTrace.add("<strong>Request Header</strong>");
+            stackTrace.add("");
+            stackTrace.add("Request Header");
             while (headerNames.hasMoreElements()) {
                 String element = headerNames.nextElement();
                 String header = (String) ClassUtils.invoke("getHeader", obj1, element);
@@ -50,8 +52,8 @@ public class TomcatTransfer implements Transfer {
             Object param = params[0];
             Object getInputStream = ClassUtils.invoke("getInputStream", param);
 
-            try ( ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                  ObjectOutputStream outputStream = new ObjectOutputStream(byteArrayOutputStream);){
+            try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                 ObjectOutputStream outputStream = new ObjectOutputStream(byteArrayOutputStream);) {
                 outputStream.writeObject(getInputStream);
                 byte[] bytes = byteArrayOutputStream.toByteArray();
                 try (ObjectInputStream objectInputStream = new ObjectInputStream(new ByteArrayInputStream(bytes))) {
@@ -61,14 +63,16 @@ public class TomcatTransfer implements Transfer {
             } catch (Exception e) {
             }
 
-            stackTrace.add("<strong>Location</strong>");
+            stackTrace.add("");
+            stackTrace.add("Location");
             Enumeration<Locale> locales = (Enumeration<Locale>) ClassUtils.invoke("getLocales", obj1);
             while (locales.hasMoreElements()) {
                 Locale locale = locales.nextElement();
                 stackTrace.add("locale: " + locale.toString());
             }
 
-            stackTrace.add("<strong>Query</strong>");
+            stackTrace.add("");
+            stackTrace.add("Query");
             String queryString = (String) ClassUtils.invoke("getQueryString", obj1);
             if (null != queryString) {
                 String[] split = queryString.split("&");
@@ -88,7 +92,8 @@ public class TomcatTransfer implements Transfer {
                     }
                 }
             }
-            stackTrace.add("<strong>Params</strong>");
+            stackTrace.add("");
+            stackTrace.add("Params");
             Enumeration<String> parameterNames = (Enumeration<String>) ClassUtils.invoke("getParameterNames", obj1);
             while (parameterNames.hasMoreElements()) {
                 String element = parameterNames.nextElement();

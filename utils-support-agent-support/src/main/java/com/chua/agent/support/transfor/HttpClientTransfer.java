@@ -72,14 +72,16 @@ public class HttpClientTransfer implements Transfer {
         JSONObject jsonObject = (JSONObject) JSON.toJSON(fieldAccess.get(param, 0));
         JSONObject params1 = (JSONObject) JSON.toJSON(fieldAccess.get(param, 1));
 
-        stackTrace.add("<strong class='node-details__name collapse-handle'>Header</strong>");
+        stackTrace.add("");
+        stackTrace.add("Header");
         JSONArray allHeaders = jsonObject.getJSONArray("allHeaders");
         allHeaders.forEach(o1 -> {
             JSONObject jsonObject1 = (JSONObject) o1;
             stackTrace.add(jsonObject1.getString("name") + ": " + jsonObject1.getString("value"));
         });
 
-        stackTrace.add("<strong class='node-details__name collapse-handle'>Params</strong>");
+        stackTrace.add("");
+        stackTrace.add("Params");
         params1.forEach((k, v) -> {
             Object value = v;
             if (v instanceof JSONObject) {

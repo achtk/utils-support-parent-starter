@@ -7,6 +7,7 @@ import com.chua.agent.support.span.NewTrackManager;
 import com.chua.agent.support.span.Span;
 import com.chua.agent.support.span.TrackContext;
 import com.chua.agent.support.store.TransPointStore;
+import com.chua.agent.support.thread.DefaultThreadFactory;
 import com.chua.agent.support.transfor.CloseHttpClientTransfer;
 import com.chua.agent.support.transfor.HttpClientTransfer;
 import com.chua.agent.support.transfor.TomcatTransfer;
@@ -24,6 +25,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 /**
@@ -33,6 +36,9 @@ import java.util.concurrent.Callable;
  * @since 2021-08-25
  */
 public class SpringInterceptor implements Interceptor {
+
+    private static final int PRE_INDEX = Runtime.getRuntime().availableProcessors() * 2;
+    public static final ExecutorService EXECUTOR_SERVICE = Executors.newFixedThreadPool(PRE_INDEX, new DefaultThreadFactory());
     private static final Map<String, Transfer> MAPPING = new HashMap<>();
     public static Class<?> DUBBO;
 
@@ -67,6 +73,7 @@ public class SpringInterceptor implements Interceptor {
         if (Modifier.isNative(method.getModifiers())) {
             return callable.call();
         }
+
 
         Span currentSpan = NewTrackManager.getCurrentSpan();
         if (null == currentSpan) {
@@ -240,6 +247,9 @@ public class SpringInterceptor implements Interceptor {
     private static List<Span> repackage(List<Span> spans2) {
         List<Span> rs = new LinkedList<>();
         for (Span span : spans2) {
+            if (span.getType().equals("java.lang.Object.toString")) {
+                continue;
+            }
             rs.add(span);
             if (span.getParents().isEmpty()) {
                 continue;
