@@ -1,15 +1,16 @@
 package com.chua.common.support.lang.spider.xsoup.xevaluator;
 
-import org.jsoup.Jsoup;
-import org.jsoup.helper.Validate;
-import org.jsoup.internal.StringUtil;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
-import org.jsoup.nodes.TextNode;
-import org.jsoup.select.Elements;
-import org.jsoup.select.NodeTraversor;
-import org.jsoup.select.NodeVisitor;
+
+import com.chua.common.support.jsoup.Jsoup;
+import com.chua.common.support.jsoup.nodes.Document;
+import com.chua.common.support.jsoup.nodes.Element;
+import com.chua.common.support.jsoup.nodes.Node;
+import com.chua.common.support.jsoup.nodes.TextNode;
+import com.chua.common.support.jsoup.select.Elements;
+import com.chua.common.support.jsoup.select.NodeTraversor;
+import com.chua.common.support.jsoup.select.NodeVisitor;
+import com.chua.common.support.utils.Preconditions;
+import com.chua.common.support.utils.StringUtils;
 
 import java.io.IOException;
 
@@ -32,7 +33,7 @@ public class HtmlToPlainText {
     private static final int timeout = 5 * 1000;
 
     public static void main(String... args) throws IOException {
-        Validate.isTrue(args.length == 1 || args.length == 2, "usage: java -cp jsoup.jar org.jsoup.examples.HtmlToPlainText url [selector]");
+        Preconditions.isTrue(args.length == 1 || args.length == 2, "usage: java -cp jsoup.jar org.jsoup.examples.HtmlToPlainText url [selector]");
         final String url = args[0];
         final String selector = args.length == 2 ? args[1] : null;
 
@@ -82,7 +83,7 @@ public class HtmlToPlainText {
                 append("\n * ");
             else if (name.equals("dt"))
                 append("  ");
-            else if (StringUtil.in(name, "p", "h1", "h2", "h3", "h4", "h5", "tr"))
+            else if (StringUtils.in(name, "p", "h1", "h2", "h3", "h4", "h5", "tr"))
                 append("\n");
         }
 
@@ -90,7 +91,7 @@ public class HtmlToPlainText {
         @Override
         public void tail(Node node, int depth) {
             String name = node.nodeName();
-            if (StringUtil.in(name, "br", "dd", "dt", "p", "h1", "h2", "h3", "h4", "h5"))
+            if (StringUtils.in(name, "br", "dd", "dt", "p", "h1", "h2", "h3", "h4", "h5"))
                 append("\n");
             else if (name.equals("a"))
                 append(String.format(" <%s>", node.absUrl("href")));
@@ -101,7 +102,7 @@ public class HtmlToPlainText {
             if (text.startsWith("\n"))
                 width = 0; // reset counter if starts with a newline. only from formats above, not in natural text
             if (text.equals(" ") &&
-                    (accum.length() == 0 || StringUtil.in(accum.substring(accum.length() - 1), " ", "\n")))
+                    (accum.length() == 0 || StringUtils.in(accum.substring(accum.length() - 1), " ", "\n")))
                 return; // don't accumulate long runs of empty spaces
 
             if (text.length() + width > maxWidth) { // won't fit, needs to wrap
