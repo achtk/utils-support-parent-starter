@@ -30,6 +30,7 @@ class PageModelCollectorPipeline<T> implements CollectorPipeline<T> {
     }
 
     @Override
+    @SuppressWarnings("ALL")
     public synchronized void process(ResultItems resultItems, Task task) {
         Object o = resultItems.get(clazz.getCanonicalName());
         if (o != null) {

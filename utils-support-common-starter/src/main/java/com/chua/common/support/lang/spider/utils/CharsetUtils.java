@@ -1,5 +1,6 @@
 package com.chua.common.support.lang.spider.utils;
 
+import com.chua.common.support.constant.CommonConstant;
 import com.chua.common.support.jsoup.Jsoup;
 import com.chua.common.support.jsoup.nodes.Document;
 import com.chua.common.support.jsoup.nodes.Element;
@@ -42,9 +43,9 @@ public abstract class CharsetUtils {
                 // 2.1、html4.01 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
                 String metaContent = link.attr("content");
                 String metaCharset = link.attr("charset");
-                if (metaContent.indexOf("charset") != -1) {
+                if (metaContent.contains("charset")) {
                     metaContent = metaContent.substring(metaContent.indexOf("charset"), metaContent.length());
-                    charset = metaContent.split("=")[1];
+                    charset = metaContent.split(CommonConstant.SYMBOL_EQUALS)[1];
                     break;
                 }
                 // 2.2、html5 <meta charset="UTF-8" />

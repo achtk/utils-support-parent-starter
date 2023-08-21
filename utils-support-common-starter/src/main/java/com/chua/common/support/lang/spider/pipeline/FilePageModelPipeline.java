@@ -1,5 +1,6 @@
 package com.chua.common.support.lang.spider.pipeline;
 
+import com.chua.common.support.lang.function.ToStringBuilder;
 import com.chua.common.support.lang.spider.Task;
 import com.chua.common.support.lang.spider.model.HasKey;
 import com.chua.common.support.lang.spider.utils.FilePersistentBase;

@@ -2,8 +2,9 @@ package com.chua.common.support.lang.spider.selector;
 
 
 import com.chua.common.support.jsoup.nodes.Element;
+import com.chua.common.support.lang.spider.xsoup.XPathEvaluator;
+import com.chua.common.support.lang.spider.xsoup.Xsoup;
 import com.chua.common.support.utils.CollectionUtils;
-import org.w3c.dom.xpath.XPathEvaluator;
 
 import java.util.List;
 

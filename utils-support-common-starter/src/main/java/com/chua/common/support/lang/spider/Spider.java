@@ -14,6 +14,7 @@ import com.chua.common.support.lang.spider.scheduler.Scheduler;
 import com.chua.common.support.lang.spider.thread.CountableThreadPool;
 import com.chua.common.support.lang.spider.utils.WMCollections;
 import com.chua.common.support.utils.CollectionUtils;
+import com.chua.common.support.utils.UrlUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

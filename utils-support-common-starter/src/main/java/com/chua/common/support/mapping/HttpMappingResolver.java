@@ -13,8 +13,6 @@ import com.chua.common.support.log.Log;
 import com.chua.common.support.mapping.annotation.MappingPlugins;
 import com.chua.common.support.mapping.builder.Request;
 import com.chua.common.support.mapping.builder.Response;
-import com.chua.common.support.placeholder.PlaceholderSupport;
-import com.chua.common.support.placeholder.StringValuePropertyResolver;
 import com.chua.common.support.reflection.describe.MethodDescribe;
 import com.chua.common.support.reflection.marker.Bench;
 import com.chua.common.support.reflection.marker.Marker;
@@ -42,6 +40,7 @@ public final class HttpMappingResolver implements MappingResolver {
     private static final Log log = Log.getLogger(MappingResolver.class);
 
     @Override
+    @SuppressWarnings("ALL")
     public <T> T create(Class<T> target) {
         Marker marker = Marker.of(target);
         T proxy = ProxyUtils.newProxy(target, new DelegateMethodIntercept<>(target, (proxyMethod) -> {

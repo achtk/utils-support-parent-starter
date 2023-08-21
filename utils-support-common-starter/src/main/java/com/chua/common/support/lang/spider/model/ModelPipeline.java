@@ -30,6 +30,7 @@ class ModelPipeline implements Pipeline {
         return this;
     }
 
+    @SuppressWarnings("ALL")
     @Override
     public void process(ResultItems resultItems, Task task) {
         for (Map.Entry<Class, PageModelPipeline> classPageModelPipelineEntry : pageModelPipelines.entrySet()) {

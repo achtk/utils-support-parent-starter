@@ -167,7 +167,7 @@ class PageModelExtractor {
             return null;
         }
     }
-
+    @SuppressWarnings("ALL")
     private void initClassExtractors() {
         Annotation annotation = clazz.getAnnotation(TargetUrl.class);
         if (annotation == null) {
