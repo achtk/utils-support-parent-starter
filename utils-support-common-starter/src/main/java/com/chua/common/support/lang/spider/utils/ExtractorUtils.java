@@ -24,7 +24,6 @@ public class ExtractorUtils {
             case Regex:
                 selector = new RegexSelector(value);
                 break;
-            break;
             case JsonPath:
                 selector = new JsonPathSelector(value);
                 break;
