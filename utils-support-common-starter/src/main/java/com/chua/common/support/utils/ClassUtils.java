@@ -36,6 +36,14 @@ import static com.chua.common.support.converter.Converter.convertIfPrimitive;
 @SuppressWarnings("ALL")
 public class ClassUtils {
 
+    /**
+     * The inner class separator character: {@code '$' == {@value}}.
+     */
+    public static final char INNER_CLASS_SEPARATOR_CHAR = '$';
+    /**
+     * The package separator character: {@code '&#x2e;' == {@value}}.
+     */
+    public static final char PACKAGE_SEPARATOR_CHAR = '.';
 
     private static final String[] RT_PACKAGE = new String[]{
             "java.*",
@@ -168,6 +176,29 @@ public class ClassUtils {
      * when searching for 'primary' user-level interfaces.
      */
     private static final Set<Class<?>> JAVA_LANGUAGE_INTERFACES;
+
+    /**
+     * Maps an abbreviation used in array class names to corresponding primitive class name.
+     */
+    private static final Map<String, String> reverseAbbreviationMap;
+
+    // Feed abbreviation maps
+    static {
+        final Map<String, String> m = new HashMap<>();
+        m.put("int", "I");
+        m.put("boolean", "Z");
+        m.put("float", "F");
+        m.put("long", "J");
+        m.put("short", "S");
+        m.put("byte", "B");
+        m.put("double", "D");
+        m.put("char", "C");
+        final Map<String, String> r = new HashMap<>();
+        for (final Map.Entry<String, String> e : m.entrySet()) {
+            r.put(e.getValue(), e.getKey());
+        }
+        reverseAbbreviationMap = Collections.unmodifiableMap(r);
+    }
 
     static {
         PRIMITIVE_WRAPPER_TYPE_MAP.put(Boolean.class, boolean.class);
@@ -2435,6 +2466,37 @@ public class ClassUtils {
         return (byte) 0;
     }
 
+    /**
+     * promitive -> wrapper
+     *
+     * @param cls
+     * @return
+     */
+    public static boolean isPrimitiveWrapper(final Class<?> cls) {
+        return null != primitiveToWrapper(cls);
+    }
+
+    /**
+     * promitive -> wrapper
+     *
+     * @param cls
+     * @return
+     */
+    public static Class<?> primitiveToWrapper(final Class<?> cls) {
+        Class<?> convertedClass = cls;
+        if (cls != null && cls.isPrimitive()) {
+            Set<Object> objects = BASIC_VIRTUAL.rowKeySet();
+            for (Object object : objects) {
+                Map<Class<?>, Class<?>> row = BASIC_VIRTUAL.row(object);
+                convertedClass = row.get(cls);
+                if (null != convertedClass) {
+                    return convertedClass;
+                }
+            }
+        }
+        return convertedClass;
+    }
+
     static class SetAccessibleAction<T extends AccessibleObject> implements PrivilegedAction<T> {
         private final T obj;
 
@@ -2448,6 +2510,102 @@ public class ClassUtils {
             return obj;
         }
 
+    }
+// Short class name
+    // ----------------------------------------------------------------------
+
+    /**
+     * <p>Gets the class name of the {@code object} without the package name or names.</p>
+     *
+     * <p>The method looks up the class of the object and then converts the name of the class invoking
+     * {@link #getShortClassName(Class)} (see relevant notes there).</p>
+     *
+     * @param object      the class to get the short name for, may be {@code null}
+     * @param valueIfNull the value to return if the object is {@code null}
+     * @return the class name of the object without the package name, or {@code valueIfNull}
+     * if the argument {@code object} is {@code null}
+     */
+    public static String getShortClassName(final Object object, final String valueIfNull) {
+        if (object == null) {
+            return valueIfNull;
+        }
+        return getShortClassName(object.getClass());
+    }
+
+    /**
+     * <p>Gets the class name minus the package name from a {@code Class}.</p>
+     *
+     * <p>This method simply gets the name using {@code Class.getName()} and then calls
+     * {@link #getShortClassName(Class)}. See relevant notes there.</p>
+     *
+     * @param cls the class to get the short name for.
+     * @return the class name without the package name or an empty string. If the class
+     * is an inner class then the returned value will contain the outer class
+     * or classes separated with {@code .} (dot) character.
+     */
+    public static String getShortClassName(final Class<?> cls) {
+        if (cls == null) {
+            return EMPTY;
+        }
+        return getShortClassName(cls.getName());
+    }
+
+    /**
+     * <p>Gets the class name minus the package name from a String.</p>
+     *
+     * <p>The string passed in is assumed to be a class name - it is not checked. The string has to be formatted the way
+     * as the JDK method {@code Class.getName()} returns it, and not the usual way as we write it, for example in import
+     * statements, or as it is formatted by {@code Class.getCanonicalName()}.</p>
+     *
+     * <p>The difference is is significant only in case of classes that are inner classes of some other
+     * classes. In this case the separator between the outer and inner class (possibly on multiple hierarchy level) has
+     * to be {@code $} (dollar sign) and not {@code .} (dot), as it is returned by {@code Class.getName()}</p>
+     *
+     * <p>Note that this method is called from the {@link #getShortClassName(Class)} method using the string
+     * returned by {@code Class.getName()}.</p>
+     *
+     * <p>Note that this method differs from {@link #getSimpleName(Class)} in that this will
+     * return, for example {@code "Map.Entry"} whilst the {@code java.lang.Class} variant will simply
+     * return {@code "Entry"}. In this example the argument {@code className} is the string
+     * {@code java.util.Map$Entry} (note the {@code $} sign.</p>
+     *
+     * @param className the className to get the short name for. It has to be formatted as returned by
+     *                  {@code Class.getName()} and not {@code Class.getCanonicalName()}
+     * @return the class name of the class without the package name or an empty string. If the class is
+     * an inner class then value contains the outer class or classes and the separator is replaced
+     * to be {@code .} (dot) character.
+     */
+    public static String getShortClassName(String className) {
+        if (StringUtils.isEmpty(className)) {
+            return EMPTY;
+        }
+
+        final StringBuilder arrayPrefix = new StringBuilder();
+
+        // Handle array encoding
+        if (className.startsWith("[")) {
+            while (className.charAt(0) == '[') {
+                className = className.substring(1);
+                arrayPrefix.append("[]");
+            }
+            // Strip Object type encoding
+            if (className.charAt(0) == 'L' && className.charAt(className.length() - 1) == ';') {
+                className = className.substring(1, className.length() - 1);
+            }
+
+            if (reverseAbbreviationMap.containsKey(className)) {
+                className = reverseAbbreviationMap.get(className);
+            }
+        }
+
+        final int lastDotIdx = className.lastIndexOf(PACKAGE_SEPARATOR_CHAR);
+        final int innerIdx = className.indexOf(
+                INNER_CLASS_SEPARATOR_CHAR, lastDotIdx == -1 ? 0 : lastDotIdx + 1);
+        String out = className.substring(lastDotIdx + 1);
+        if (innerIdx != -1) {
+            out = out.replace(INNER_CLASS_SEPARATOR_CHAR, PACKAGE_SEPARATOR_CHAR);
+        }
+        return out + arrayPrefix;
     }
 
 }

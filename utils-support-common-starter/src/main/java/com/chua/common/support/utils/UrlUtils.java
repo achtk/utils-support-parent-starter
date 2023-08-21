@@ -3,6 +3,7 @@ package com.chua.common.support.utils;
 import com.chua.common.support.constant.CommonConstant;
 import com.chua.common.support.converter.Converter;
 import com.chua.common.support.lang.net.URLDecoder;
+import com.chua.common.support.lang.spider.Request;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
@@ -14,6 +15,7 @@ import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipFile;
 
@@ -1294,12 +1296,95 @@ public class UrlUtils {
     }
 
 
-    private static String removePort(String domain) {
+    public static String removePort(String domain) {
         int portIndex = domain.indexOf(":");
         if (portIndex != -1) {
             return domain.substring(0, portIndex);
-        }else {
+        } else {
             return domain;
         }
     }
+
+
+    /**
+     * canonicalizeUrl
+     * <br>
+     * Borrowed from Jsoup.
+     *
+     * @param url   url
+     * @param refer refer
+     * @return canonicalizeUrl
+     */
+    public static String canonicalizeUrl(String url, String refer) {
+        URL base;
+        try {
+            try {
+                base = new URL(refer);
+            } catch (MalformedURLException e) {
+                // the base is unsuitable, but the attribute may be abs on its own, so try that
+                URL abs = new URL(refer);
+                return abs.toExternalForm();
+            }
+            // workaround: java resolves '//path/file + ?foo' to '//path/?foo', not '//path/file?foo' as desired
+            if (url.startsWith("?"))
+                url = base.getPath() + url;
+            URL abs = new URL(base, url);
+            return abs.toExternalForm();
+        } catch (MalformedURLException e) {
+            return "";
+        }
+    }
+
+    /**
+     * @param url url
+     * @return new url
+     * @deprecated
+     */
+    public static String encodeIllegalCharacterInUrl(String url) {
+        return url.replace(" ", "%20");
+    }
+
+    public static String fixIllegalCharacterInUrl(String url) {
+        //TODO more charator support
+        return url.replace(" ", "%20").replaceAll("#+", "#");
+    }
+
+    public static String getHost(String url) {
+        String host = url;
+        int i = StringUtils.ordinalIndexOf(url, "/", 3);
+        if (i > 0) {
+            host = StringUtils.substring(url, 0, i);
+        }
+        return host;
+    }
+
+    public static List<Request> convertToRequests(Collection<String> urls) {
+        List<Request> requestList = new ArrayList<Request>(urls.size());
+        for (String url : urls) {
+            requestList.add(new Request(url));
+        }
+        return requestList;
+    }
+
+    public static List<String> convertToUrls(Collection<Request> requests) {
+        List<String> urlList = new ArrayList<String>(requests.size());
+        for (Request request : requests) {
+            urlList.add(request.getUrl());
+        }
+        return urlList;
+    }
+
+    private static final Pattern PATTERN_FOR_CHARSET = Pattern.compile("charset\\s*=\\s*['\"]*([^\\s;'\"]*)", Pattern.CASE_INSENSITIVE);
+
+    public static String getCharset(String contentType) {
+        Matcher matcher = PATTERN_FOR_CHARSET.matcher(contentType);
+        if (matcher.find()) {
+            String charset = matcher.group(1);
+            if (Charset.isSupported(charset)) {
+                return charset;
+            }
+        }
+        return null;
+    }
+
 }

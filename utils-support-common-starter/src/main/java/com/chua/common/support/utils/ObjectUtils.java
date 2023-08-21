@@ -4,6 +4,7 @@ import com.chua.common.support.function.SafeConsumer;
 import com.chua.common.support.function.SafeFunction;
 import com.chua.common.support.function.SafeSupplier;
 
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -27,6 +28,8 @@ public class ObjectUtils {
     private static final String ARRAY_END = "}";
     private static final String EMPTY_ARRAY = ARRAY_START + ARRAY_END;
     private static final String ARRAY_ELEMENT_SEPARATOR = ", ";
+    private static final char AT_SIGN = '@';
+
     /**
      * 对象比较
      *
@@ -514,10 +517,58 @@ public class ObjectUtils {
 
     /**
      * 是否是null
+     *
      * @param value 值
-     * @return  是否是null
+     * @return 是否是null
      */
     public static boolean isNull(Object value) {
         return null == value;
+    }
+
+
+    /**
+     * <p>Appends the toString that would be produced by {@code Object}
+     * if a class did not override toString itself. {@code null}
+     * will throw a NullPointerException for either of the two parameters. </p>
+     *
+     * <pre>
+     * ObjectUtils.identityToString(appendable, "")            = appendable.append("java.lang.String@1e23"
+     * ObjectUtils.identityToString(appendable, Boolean.TRUE)  = appendable.append("java.lang.Boolean@7fa"
+     * ObjectUtils.identityToString(appendable, Boolean.TRUE)  = appendable.append("java.lang.Boolean@7fa")
+     * </pre>
+     *
+     * @param appendable the appendable to append to
+     * @param object     the object to create a toString for
+     * @throws IOException if an I/O error occurs.
+     * @since 3.2
+     */
+    public static void identityToString(final Appendable appendable, final Object object) throws IOException {
+        appendable.append(object.getClass().getName())
+                .append(AT_SIGN)
+                .append(Integer.toHexString(System.identityHashCode(object)));
+    }
+
+    /**
+     * <p>Appends the toString that would be produced by {@code Object}
+     * if a class did not override toString itself. {@code null}
+     * will throw a NullPointerException for either of the two parameters. </p>
+     *
+     * <pre>
+     * ObjectUtils.identityToString(buf, "")            = buf.append("java.lang.String@1e23"
+     * ObjectUtils.identityToString(buf, Boolean.TRUE)  = buf.append("java.lang.Boolean@7fa"
+     * ObjectUtils.identityToString(buf, Boolean.TRUE)  = buf.append("java.lang.Boolean@7fa")
+     * </pre>
+     *
+     * @param buffer the buffer to append to
+     * @param object the object to create a toString for
+     * @since 2.4
+     */
+    public static void identityToString(final StringBuffer buffer, final Object object) {
+        final String name = object.getClass().getName();
+        final String hexString = Integer.toHexString(System.identityHashCode(object));
+        buffer.ensureCapacity(buffer.length() + name.length() + 1 + hexString.length());
+        buffer.append(name)
+                .append(AT_SIGN)
+                .append(hexString);
     }
 }

@@ -4106,14 +4106,357 @@ public class StringUtils {
             return defaultValue;
         }
 
-        if(isEmpty(value)) {
+        if (isEmpty(value)) {
             return defaultValue;
         }
 
-        if(NONE.equals(value) || NULL.equalsIgnoreCase(value)) {
+        if (NONE.equals(value) || NULL.equalsIgnoreCase(value)) {
             return defaultValue;
         }
 
         return value;
     }
+
+
+    /**
+     * <p>Finds the n-th index within a CharSequence, handling {@code null}.
+     * This method uses {@link String#indexOf(String)} if possible.</p>
+     * <p><b>Note:</b> The code starts looking for a match at the start of the target,
+     * incrementing the starting index by one after each successful match
+     * (unless {@code searchStr} is an empty string in which case the position
+     * is never incremented and {@code 0} is returned immediately).
+     * This means that matches may overlap.</p>
+     * <p>A {@code null} CharSequence will return {@code -1}.</p>
+     *
+     * <pre>
+     * StringUtils.ordinalIndexOf(null, *, *)          = -1
+     * StringUtils.ordinalIndexOf(*, null, *)          = -1
+     * StringUtils.ordinalIndexOf("", "", *)           = 0
+     * StringUtils.ordinalIndexOf("aabaabaa", "a", 1)  = 0
+     * StringUtils.ordinalIndexOf("aabaabaa", "a", 2)  = 1
+     * StringUtils.ordinalIndexOf("aabaabaa", "b", 1)  = 2
+     * StringUtils.ordinalIndexOf("aabaabaa", "b", 2)  = 5
+     * StringUtils.ordinalIndexOf("aabaabaa", "ab", 1) = 1
+     * StringUtils.ordinalIndexOf("aabaabaa", "ab", 2) = 4
+     * StringUtils.ordinalIndexOf("aabaabaa", "", 1)   = 0
+     * StringUtils.ordinalIndexOf("aabaabaa", "", 2)   = 0
+     * </pre>
+     *
+     * <p>Matches may overlap:</p>
+     * <pre>
+     * StringUtils.ordinalIndexOf("ababab", "aba", 1)   = 0
+     * StringUtils.ordinalIndexOf("ababab", "aba", 2)   = 2
+     * StringUtils.ordinalIndexOf("ababab", "aba", 3)   = -1
+     *
+     * StringUtils.ordinalIndexOf("abababab", "abab", 1) = 0
+     * StringUtils.ordinalIndexOf("abababab", "abab", 2) = 2
+     * StringUtils.ordinalIndexOf("abababab", "abab", 3) = 4
+     * StringUtils.ordinalIndexOf("abababab", "abab", 4) = -1
+     * </pre>
+     *
+     * <p>Note that 'head(CharSequence str, int n)' may be implemented as: </p>
+     *
+     * <pre>
+     *   str.substring(0, lastOrdinalIndexOf(str, "\n", n))
+     * </pre>
+     *
+     * @param str       the CharSequence to check, may be null
+     * @param searchStr the CharSequence to find, may be null
+     * @param ordinal   the n-th {@code searchStr} to find
+     * @return the n-th index of the search CharSequence,
+     * {@code -1} ({@code INDEX_NOT_FOUND}) if no match or {@code null} string input
+     * @since 2.1
+     * @since 3.0 Changed signature from ordinalIndexOf(String, String, int) to ordinalIndexOf(CharSequence, CharSequence, int)
+     */
+    public static int ordinalIndexOf(final CharSequence str, final CharSequence searchStr, final int ordinal) {
+        return ordinalIndexOf(str, searchStr, ordinal, false);
+    }
+
+    /**
+     * <p>Finds the n-th index within a String, handling {@code null}.
+     * This method uses {@link String#indexOf(String)} if possible.</p>
+     * <p>Note that matches may overlap<p>
+     *
+     * <p>A {@code null} CharSequence will return {@code -1}.</p>
+     *
+     * @param str       the CharSequence to check, may be null
+     * @param searchStr the CharSequence to find, may be null
+     * @param ordinal   the n-th {@code searchStr} to find, overlapping matches are allowed.
+     * @param lastIndex true if lastOrdinalIndexOf() otherwise false if ordinalIndexOf()
+     * @return the n-th index of the search CharSequence,
+     * {@code -1} ({@code INDEX_NOT_FOUND}) if no match or {@code null} string input
+     */
+    // Shared code between ordinalIndexOf(String, String, int) and lastOrdinalIndexOf(String, String, int)
+    private static int ordinalIndexOf(final CharSequence str, final CharSequence searchStr, final int ordinal, final boolean lastIndex) {
+        if (str == null || searchStr == null || ordinal <= 0) {
+            return INDEX_NOT_FOUND;
+        }
+        if (searchStr.length() == 0) {
+            return lastIndex ? str.length() : 0;
+        }
+        int found = 0;
+        // set the initial index beyond the end of the string
+        // this is to allow for the initial index decrement/increment
+        int index = lastIndex ? str.length() : INDEX_NOT_FOUND;
+        do {
+            if (lastIndex) {
+                index = CharSequenceUtils.lastIndexOf(str, searchStr, index - 1); // step backwards thru string
+            } else {
+                index = CharSequenceUtils.indexOf(str, searchStr, index + 1); // step forwards through string
+            }
+            if (index < 0) {
+                return index;
+            }
+            found++;
+        } while (found < ordinal);
+        return index;
+    }
+
+
+    /**
+     * <p>Gets a substring from the specified String avoiding exceptions.</p>
+     *
+     * <p>A negative start position can be used to start {@code n}
+     * characters from the end of the String.</p>
+     *
+     * <p>A {@code null} String will return {@code null}.
+     * An empty ("") String will return "".</p>
+     *
+     * <pre>
+     * StringUtils.substring(null, *)   = null
+     * StringUtils.substring("", *)     = ""
+     * StringUtils.substring("abc", 0)  = "abc"
+     * StringUtils.substring("abc", 2)  = "c"
+     * StringUtils.substring("abc", 4)  = ""
+     * StringUtils.substring("abc", -2) = "bc"
+     * StringUtils.substring("abc", -4) = "abc"
+     * </pre>
+     *
+     * @param str   the String to get the substring from, may be null
+     * @param start the position to start from, negative means
+     *              count back from the end of the String by this many characters
+     * @return substring from start position, {@code null} if null String input
+     */
+    public static String substring(final String str, int start) {
+        if (str == null) {
+            return null;
+        }
+
+        // handle negatives, which means last n characters
+        if (start < 0) {
+            start = str.length() + start; // remember start is negative
+        }
+
+        if (start < 0) {
+            start = 0;
+        }
+        if (start > str.length()) {
+            return EMPTY;
+        }
+
+        return str.substring(start);
+    }
+
+    /**
+     * <p>Gets a substring from the specified String avoiding exceptions.</p>
+     *
+     * <p>A negative start position can be used to start/end {@code n}
+     * characters from the end of the String.</p>
+     *
+     * <p>The returned substring starts with the character in the {@code start}
+     * position and ends before the {@code end} position. All position counting is
+     * zero-based -- i.e., to start at the beginning of the string use
+     * {@code start = 0}. Negative start and end positions can be used to
+     * specify offsets relative to the end of the String.</p>
+     *
+     * <p>If {@code start} is not strictly to the left of {@code end}, ""
+     * is returned.</p>
+     *
+     * <pre>
+     * StringUtils.substring(null, *, *)    = null
+     * StringUtils.substring("", * ,  *)    = "";
+     * StringUtils.substring("abc", 0, 2)   = "ab"
+     * StringUtils.substring("abc", 2, 0)   = ""
+     * StringUtils.substring("abc", 2, 4)   = "c"
+     * StringUtils.substring("abc", 4, 6)   = ""
+     * StringUtils.substring("abc", 2, 2)   = ""
+     * StringUtils.substring("abc", -2, -1) = "b"
+     * StringUtils.substring("abc", -4, 2)  = "ab"
+     * </pre>
+     *
+     * @param str   the String to get the substring from, may be null
+     * @param start the position to start from, negative means
+     *              count back from the end of the String by this many characters
+     * @param end   the position to end at (exclusive), negative means
+     *              count back from the end of the String by this many characters
+     * @return substring from start position to end position,
+     * {@code null} if null String input
+     */
+    public static String substring(final String str, int start, int end) {
+        if (str == null) {
+            return null;
+        }
+
+        // handle negatives
+        if (end < 0) {
+            end = str.length() + end; // remember end is negative
+        }
+        if (start < 0) {
+            start = str.length() + start; // remember start is negative
+        }
+
+        // check length next
+        if (end > str.length()) {
+            end = str.length();
+        }
+
+        // if start is greater than end, return ""
+        if (start > end) {
+            return EMPTY;
+        }
+
+        if (start < 0) {
+            start = 0;
+        }
+        if (end < 0) {
+            end = 0;
+        }
+
+        return str.substring(start, end);
+    }
+
+
+    /**
+     * <p>Check if a CharSequence ends with a specified suffix.</p>
+     *
+     * <p>{@code null}s are handled without exceptions. Two {@code null}
+     * references are considered to be equal. The comparison is case sensitive.</p>
+     *
+     * <pre>
+     * StringUtils.endsWith(null, null)      = true
+     * StringUtils.endsWith(null, "def")     = false
+     * StringUtils.endsWith("abcdef", null)  = false
+     * StringUtils.endsWith("abcdef", "def") = true
+     * StringUtils.endsWith("ABCDEF", "def") = false
+     * StringUtils.endsWith("ABCDEF", "cde") = false
+     * StringUtils.endsWith("ABCDEF", "")    = true
+     * </pre>
+     *
+     * @param str    the CharSequence to check, may be null
+     * @param suffix the suffix to find, may be null
+     * @return {@code true} if the CharSequence ends with the suffix, case sensitive, or
+     * both {@code null}
+     * @see java.lang.String#endsWith(String)
+     * @since 2.4
+     * @since 3.0 Changed signature from endsWith(String, String) to endsWith(CharSequence, CharSequence)
+     */
+    public static boolean endsWith(final CharSequence str, final CharSequence suffix) {
+        return endsWith(str, suffix, false);
+    }
+
+    /**
+     * <p>Check if a CharSequence ends with a specified suffix (optionally case insensitive).</p>
+     *
+     * @param str        the CharSequence to check, may be null
+     * @param suffix     the suffix to find, may be null
+     * @param ignoreCase indicates whether the compare should ignore case
+     *                   (case insensitive) or not.
+     * @return {@code true} if the CharSequence starts with the prefix or
+     * both {@code null}
+     * @see java.lang.String#endsWith(String)
+     */
+    private static boolean endsWith(final CharSequence str, final CharSequence suffix, final boolean ignoreCase) {
+        if (str == null || suffix == null) {
+            return str == suffix;
+        }
+        if (suffix.length() > str.length()) {
+            return false;
+        }
+        final int strOffset = str.length() - suffix.length();
+        return CharSequenceUtils.regionMatches(str, ignoreCase, strOffset, suffix, 0, suffix.length());
+    }
+
+    /**
+     * <p>Checks that the CharSequence does not contain certain characters.</p>
+     *
+     * <p>A {@code null} CharSequence will return {@code true}.
+     * A {@code null} invalid character array will return {@code true}.
+     * An empty CharSequence (length()=0) always returns true.</p>
+     *
+     * <pre>
+     * StringUtils.containsNone(null, *)       = true
+     * StringUtils.containsNone(*, null)       = true
+     * StringUtils.containsNone("", *)         = true
+     * StringUtils.containsNone("ab", '')      = true
+     * StringUtils.containsNone("abab", 'xyz') = true
+     * StringUtils.containsNone("ab1", 'xyz')  = true
+     * StringUtils.containsNone("abz", 'xyz')  = false
+     * </pre>
+     *
+     * @param cs          the CharSequence to check, may be null
+     * @param searchChars an array of invalid chars, may be null
+     * @return true if it contains none of the invalid chars, or is null
+     * @since 2.0
+     * @since 3.0 Changed signature from containsNone(String, char[]) to containsNone(CharSequence, char...)
+     */
+    public static boolean containsNone(final CharSequence cs, final char... searchChars) {
+        if (cs == null || searchChars == null) {
+            return true;
+        }
+        final int csLen = cs.length();
+        final int csLast = csLen - 1;
+        final int searchLen = searchChars.length;
+        final int searchLast = searchLen - 1;
+        for (int i = 0; i < csLen; i++) {
+            final char ch = cs.charAt(i);
+            for (int j = 0; j < searchLen; j++) {
+                if (searchChars[j] == ch) {
+                    if (Character.isHighSurrogate(ch)) {
+                        if (j == searchLast) {
+                            // missing low surrogate, fine, like String.indexOf(String)
+                            return false;
+                        }
+                        if (i < csLast && searchChars[j + 1] == cs.charAt(i + 1)) {
+                            return false;
+                        }
+                    } else {
+                        // ch is in the Basic Multilingual Plane
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * <p>Checks that the CharSequence does not contain certain characters.</p>
+     *
+     * <p>A {@code null} CharSequence will return {@code true}.
+     * A {@code null} invalid character array will return {@code true}.
+     * An empty String ("") always returns true.</p>
+     *
+     * <pre>
+     * StringUtils.containsNone(null, *)       = true
+     * StringUtils.containsNone(*, null)       = true
+     * StringUtils.containsNone("", *)         = true
+     * StringUtils.containsNone("ab", "")      = true
+     * StringUtils.containsNone("abab", "xyz") = true
+     * StringUtils.containsNone("ab1", "xyz")  = true
+     * StringUtils.containsNone("abz", "xyz")  = false
+     * </pre>
+     *
+     * @param cs           the CharSequence to check, may be null
+     * @param invalidChars a String of invalid chars, may be null
+     * @return true if it contains none of the invalid chars, or is null
+     * @since 2.0
+     * @since 3.0 Changed signature from containsNone(String, String) to containsNone(CharSequence, String)
+     */
+    public static boolean containsNone(final CharSequence cs, final String invalidChars) {
+        if (invalidChars == null) {
+            return true;
+        }
+        return containsNone(cs, invalidChars.toCharArray());
+    }
+
 }

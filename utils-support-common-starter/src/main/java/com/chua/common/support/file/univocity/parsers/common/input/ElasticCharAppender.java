@@ -7,7 +7,7 @@ package com.chua.common.support.file.univocity.parsers.common.input;
  */
 public class ElasticCharAppender extends ExpandingCharAppender {
 
-	private static final char[] EMPTY_CHAR_ARRAY = new char[0];
+	public static final char[] EMPTY_CHAR_ARRAY = new char[0];
 
 	private int defaultLength;
 
