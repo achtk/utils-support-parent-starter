@@ -339,7 +339,17 @@ public final class Preconditions {
 
     /**
      * 是否是true
+     *
      * @param b bool
+     */
+    public static void isTrue(boolean b) {
+        checkArgument(b, "参数不能为空");
+    }
+
+    /**
+     * 是否是true
+     *
+     * @param b       bool
      * @param message message
      */
     public static void isTrue(boolean b, String message) {
@@ -385,6 +395,16 @@ public final class Preconditions {
      * 断言这个 object 不为 null
      * <p>为 null 则抛异常</p>
      *
+     * @param object 对象
+     */
+    public static void notNull(Object object) {
+        isTrue(object != null, "对象不能为空");
+    }
+
+    /**
+     * 断言这个 object 不为 null
+     * <p>为 null 则抛异常</p>
+     *
      * @param object  对象
      * @param message 消息
      */
@@ -401,6 +421,16 @@ public final class Preconditions {
      */
     public static void notNull(Object[] object, String message, Object... params) {
         isTrue(object != null && object.length > 0, message, params);
+    }
+
+    /**
+     * 断言这个 value 不为 empty
+     * <p>为 empty 则抛异常</p>
+     *
+     * @param value 字符串
+     */
+    public static void notEmpty(String value) {
+        isTrue(StringUtils.isNotBlank(value), "参数不能为空");
     }
 
     /**

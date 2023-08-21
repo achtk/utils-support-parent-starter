@@ -1,7 +1,7 @@
 package com.chua.common.support.lang.spider.selector;
 
 import com.alibaba.fastjson2.JSON;
-import us.codecraft.xsoup.XTokenQueue;
+import com.chua.common.support.lang.spider.xsoup.XTokenQueue;
 
 import java.util.List;
 
