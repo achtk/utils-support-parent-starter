@@ -14,6 +14,7 @@ import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.regex.Pattern;
 import java.util.zip.ZipFile;
 
 import static com.chua.common.support.constant.CommonConstant.*;
@@ -1272,4 +1273,33 @@ public class UrlUtils {
         return QUERY.encode(url, charset);
     }
 
+    /**
+     * 获取域名
+     * @param url url
+     * @return 域名
+     */
+    public static String getDomain(String url) {
+        String domain = removeProtocol(url);
+        int i = StringUtils.indexOf(domain, '/', 1);
+        if (i > 0) {
+            domain = domain.substring(0, i);
+        }
+        return removePort(domain);
+    }
+
+    private static final Pattern PATTERN_FOR_PROTOCOL = Pattern.compile("[\\w]+://");
+
+    private static String removeProtocol(String url) {
+        return PATTERN_FOR_PROTOCOL.matcher(url).replaceAll("");
+    }
+
+
+    private static String removePort(String domain) {
+        int portIndex = domain.indexOf(":");
+        if (portIndex != -1) {
+            return domain.substring(0, portIndex);
+        }else {
+            return domain;
+        }
+    }
 }

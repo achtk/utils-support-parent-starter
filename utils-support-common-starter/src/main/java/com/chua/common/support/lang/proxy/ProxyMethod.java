@@ -1,6 +1,7 @@
 package com.chua.common.support.lang.proxy;
 
 import com.chua.common.support.lang.proxy.plugin.ProxyPlugin;
+import com.chua.common.support.lang.spide.processor.PageProcessor;
 import com.chua.common.support.utils.ClassUtils;
 import lombok.Builder;
 import lombok.Data;
@@ -68,5 +69,10 @@ public class ProxyMethod {
 
     public Object doDefault() {
         return ClassUtils.invokeDefaultMethod(method, obj, args);
+    }
+
+    public Object execute(Object bean) {
+        method.setAccessible(true);
+        return ClassUtils.invokeMethod(method, bean, args);
     }
 }

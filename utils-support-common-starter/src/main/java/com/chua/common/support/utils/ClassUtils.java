@@ -296,13 +296,14 @@ public class ClassUtils {
      * @return 类加载器是否包含该类, 包含返回true
      */
     public static boolean isPresent(final String className) {
-        if(StringUtils.isEmpty(className)) {
+        if (StringUtils.isEmpty(className)) {
             return false;
         }
         return isPresent(className, getDefaultClassLoader());
     }
 
     private static final Map<String, Boolean> CACHE = new ConcurrentReferenceHashMap<>(512);
+
     /**
      * 是否包含类
      *
@@ -480,6 +481,7 @@ public class ClassUtils {
             return null;
         }
     }
+
     /**
      * 实例化类
      *
@@ -491,7 +493,7 @@ public class ClassUtils {
     public static <T> T forObjectWithType(String typeName, Class<T> type, Object... params) {
         try {
             T forObject = (T) forObject(forName(typeName, type.getClassLoader()), params);
-            if(null == forObject || !type.isAssignableFrom(forObject.getClass())) {
+            if (null == forObject || !type.isAssignableFrom(forObject.getClass())) {
                 return null;
             }
             return forObject;
@@ -499,6 +501,7 @@ public class ClassUtils {
             return null;
         }
     }
+
     /**
      * 实例化类
      *
@@ -615,7 +618,7 @@ public class ClassUtils {
                 continue;
             }
 
-            if(parameterType.getTypeName().equals(param.getClass().getTypeName())) {
+            if (parameterType.getTypeName().equals(param.getClass().getTypeName())) {
                 continue;
             }
 
@@ -764,7 +767,7 @@ public class ClassUtils {
         Class<?> aClass = object.getClass();
         if (!Proxy.isProxyClass(aClass)) {
             String typeName = aClass.getTypeName();
-            if(!typeName.contains("$$EnhancerBySpringCGLIB$$")) {
+            if (!typeName.contains("$$EnhancerBySpringCGLIB$$")) {
                 return ObjectUtils.defaultIfNull(aClass, void.class);
             }
 
@@ -776,7 +779,7 @@ public class ClassUtils {
         String toString = object.toString();
         if (!toString.contains("$Proxy")) {
             Class<?> aClass1 = forName(StringUtils.removeSuffixContains(toString.replace("@", ""), "("), object.getClass().getClassLoader());
-            if(null == aClass1) {
+            if (null == aClass1) {
                 aClass1 = forName(toString.substring(0, toString.indexOf("@")), object.getClass().getClassLoader());
             }
             return null == aClass1 ? void.class : ObjectUtils.defaultIfNull(aClass1, void.class);
@@ -848,6 +851,7 @@ public class ClassUtils {
 
     /**
      * 是否是基础类
+     *
      * @param target 类
      * @param <T>    类型
      * @return 封装类
@@ -1036,8 +1040,9 @@ public class ClassUtils {
                 type.isPrimitive()
                 ;
     }
+
     /**
-     *spring类
+     * spring类
      *
      * @param type 类型
      * @return java类
@@ -1439,6 +1444,30 @@ public class ClassUtils {
     /**
      * 执行方法
      *
+     * @param bean                类型
+     * @param methodName          方法
+     * @param methodParameterType 方法类型
+     * @param args                参数
+     * @return 结果
+     */
+    public static Object invokeBean(Object bean, String methodName, Class<?>[] methodParameterType, Object... args) {
+        if (null == bean) {
+            return null;
+        }
+
+        Class<?> type = toType(bean);
+
+        Method method = findMethod(type, methodName, methodParameterType);
+        if (null == method) {
+            return null;
+        }
+        setAccessible(method);
+        return invokeMethod(method, bean, args);
+    }
+
+    /**
+     * 执行方法
+     *
      * @param bean       类型
      * @param methodName 方法
      * @param args       参数
@@ -1508,6 +1537,9 @@ public class ClassUtils {
         try {
             return method.invoke(bean, method.getParameterCount() == 0 ? EMPTY_OBJECT : args);
         } catch (Throwable e) {
+            if ("object is not an instance of declaring class".equalsIgnoreCase(e.getLocalizedMessage())) {
+                return ClassUtils.invokeBean(bean, method.getName(), method.getParameterTypes(), args);
+            }
             return null;
         }
     }
@@ -1816,7 +1848,7 @@ public class ClassUtils {
 
         String name = "set" + NamingCase.toFirstUpperCase(field.getName());
         try {
-            Method declaredMethod = findMethod(target, name,  field.getType());
+            Method declaredMethod = findMethod(target, name, field.getType());
             if (null != declaredMethod) {
                 declaredMethod.setAccessible(true);
                 declaredMethod.invoke(bean, value);

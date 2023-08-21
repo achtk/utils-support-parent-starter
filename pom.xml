@@ -69,6 +69,7 @@
         <module>utils-support-deeplearning-tensorFlow-starter</module>
         <module>utils-support-milvus-starter</module>
         <module>utils-support-agent-support</module>
+        <module>utils-support-crawler-support</module>
     </modules>
 
     <!-- -Djava.net.preferIPv4Stack=true-->
@@ -355,6 +356,12 @@
             <dependency>
                 <groupId>com.chua</groupId>
                 <artifactId>utils-support-deeplearning-tensorFlow-starter</artifactId>
+                <version>${utils.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.chua</groupId>
+                <artifactId>utils-support-crawler-support</artifactId>
                 <version>${utils.version}</version>
             </dependency>
 
