@@ -80,6 +80,15 @@ public class Site {
     }
 
     /**
+     * get cookies of all domains
+     *
+     * @return get cookies
+     */
+    public Map<String, Map<String, String>> getAllCookies() {
+        return cookies;
+    }
+
+    /**
      * Add a cookie with specific domain.
      *
      * @param domain domain

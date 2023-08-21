@@ -1,8 +1,7 @@
 package com.chua.httpclient.support.downloader;
 
+import com.chua.common.support.constant.JavaVersion;
 import com.chua.common.support.lang.spider.Site;
-import org.apache.commons.lang3.JavaVersion;
-import org.apache.commons.lang3.SystemUtils;
 import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpRequestInterceptor;
@@ -53,7 +52,7 @@ public class HttpClientGenerator {
         try {
             SSLContext sslContext = createIgnoreVerifySSL();
             String[] supportedProtocols;
-            if (SystemUtils.isJavaVersionAtLeast(JavaVersion.JAVA_11)) {
+            if (JavaVersion.isJavaVersionAtLeast(JavaVersion.JAVA_11)) {
                 supportedProtocols = new String[]{"SSLv3", "TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"};
             } else {
                 supportedProtocols = new String[]{"SSLv3", "TLSv1", "TLSv1.1", "TLSv1.2"};

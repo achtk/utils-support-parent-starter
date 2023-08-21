@@ -79,7 +79,7 @@ class PageModelExtractor {
             }
         });
     }
-
+    @SuppressWarnings("ALL")
     private FieldExtractor getAnnotationExtractByUrl(Class clazz, Field field) {
         FieldExtractor fieldExtractor = null;
         ExtractByUrl extractByUrl = field.getAnnotation(ExtractByUrl.class);
