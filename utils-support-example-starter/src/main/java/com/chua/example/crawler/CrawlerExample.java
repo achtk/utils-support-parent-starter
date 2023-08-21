@@ -1,7 +1,7 @@
 package com.chua.example.crawler;
 
 import com.chua.common.support.lang.spider.Spider;
-import com.chua.spider.support.processor.SinaBlogProcessor;
+import com.chua.common.support.lang.spider.processor.example.SinaBlogProcessor;
 
 /**
  * @author CH

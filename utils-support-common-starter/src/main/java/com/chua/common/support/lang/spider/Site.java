@@ -2,6 +2,7 @@ package com.chua.common.support.lang.spider;
 
 import com.chua.common.support.lang.spider.utils.HttpConstant;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.util.*;
 
@@ -13,6 +14,7 @@ import java.util.*;
  * @since 0.1.0
  */
 @Data
+@Accessors(chain = true)
 public class Site {
 
     private String domain;
