@@ -1,6 +1,7 @@
 package com.chua.common.support.lang.spider.model;
 
-import us.codecraft.webmagic.Page;
+
+import com.chua.common.support.lang.spider.Page;
 
 import java.util.List;
 

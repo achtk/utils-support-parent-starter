@@ -1,10 +1,11 @@
 package com.chua.common.support.lang.spider.pipeline;
 
-import us.codecraft.webmagic.MultiPageModel;
-import us.codecraft.webmagic.ResultItems;
-import us.codecraft.webmagic.Task;
-import us.codecraft.webmagic.utils.DoubleKeyMap;
-import us.codecraft.webmagic.utils.Experimental;
+
+import com.chua.common.support.collection.DoubleKeyMap;
+import com.chua.common.support.lang.spider.ResultItems;
+import com.chua.common.support.lang.spider.Task;
+import com.chua.common.support.lang.spider.model.MultiPageModel;
+import com.chua.common.support.lang.spider.utils.Experimental;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,9 +21,9 @@ import java.util.concurrent.ConcurrentHashMap;
 @Experimental
 public class MultiPagePipeline implements Pipeline {
 
-    private DoubleKeyMap<String, String, Boolean> pageMap = new DoubleKeyMap<String, String, Boolean>(ConcurrentHashMap.class);
+    private final DoubleKeyMap<String, String, Boolean> pageMap = new DoubleKeyMap<String, String, Boolean>(ConcurrentHashMap.class);
 
-    private DoubleKeyMap<String, String, MultiPageModel> objectMap = new DoubleKeyMap<String, String, MultiPageModel>(ConcurrentHashMap.class);
+    private final DoubleKeyMap<String, String, MultiPageModel> objectMap = new DoubleKeyMap<String, String, MultiPageModel>(ConcurrentHashMap.class);
 
     @Override
     public void process(ResultItems resultItems, Task task) {
@@ -69,16 +70,13 @@ public class MultiPagePipeline implements Pipeline {
                 List<Map.Entry<String, MultiPageModel>> entryList = new ArrayList<Map.Entry<String, MultiPageModel>>();
                 entryList.addAll(objectMap.get(multiPageModel.getPageKey()).entrySet());
                 if (entryList.size() != 0) {
-                    Collections.sort(entryList, new Comparator<Map.Entry<String, MultiPageModel>>() {
-                        @Override
-                        public int compare(Map.Entry<String, MultiPageModel> o1, Map.Entry<String, MultiPageModel> o2) {
-                            try {
-                                int i1 = Integer.parseInt(o1.getKey());
-                                int i2 = Integer.parseInt(o2.getKey());
-                                return i1 - i2;
-                            } catch (NumberFormatException e) {
-                                return o1.getKey().compareTo(o2.getKey());
-                            }
+                    Collections.sort(entryList, (o1, o2) -> {
+                        try {
+                            int i1 = Integer.parseInt(o1.getKey());
+                            int i2 = Integer.parseInt(o2.getKey());
+                            return i1 - i2;
+                        } catch (NumberFormatException e) {
+                            return o1.getKey().compareTo(o2.getKey());
                         }
                     });
                     // 合并

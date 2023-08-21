@@ -1,9 +1,10 @@
 package com.chua.common.support.lang.spider.example;
 
-import us.codecraft.webmagic.Site;
-import us.codecraft.webmagic.model.OOSpider;
-import us.codecraft.webmagic.model.annotation.ExtractBy;
-import us.codecraft.webmagic.utils.Experimental;
+
+import com.chua.common.support.lang.spider.Site;
+import com.chua.common.support.lang.spider.model.OOSpider;
+import com.chua.common.support.lang.spider.model.annotation.ExtractBy;
+import com.chua.common.support.lang.spider.utils.Experimental;
 
 import java.util.List;
 

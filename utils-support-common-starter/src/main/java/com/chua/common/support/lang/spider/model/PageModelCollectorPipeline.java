@@ -4,6 +4,7 @@ package com.chua.common.support.lang.spider.model;
 import com.chua.common.support.lang.spider.ResultItems;
 import com.chua.common.support.lang.spider.Task;
 import com.chua.common.support.lang.spider.model.annotation.ExtractBy;
+import com.chua.common.support.lang.spider.pipeline.CollectorPageModelPipeline;
 import com.chua.common.support.lang.spider.pipeline.CollectorPipeline;
 
 import java.lang.annotation.Annotation;

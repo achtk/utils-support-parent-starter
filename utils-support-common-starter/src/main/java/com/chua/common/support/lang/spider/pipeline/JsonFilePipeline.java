@@ -1,12 +1,12 @@
 package com.chua.common.support.lang.spider.pipeline;
 
-import com.alibaba.fastjson.JSON;
-import org.apache.commons.codec.digest.DigestUtils;
+import com.alibaba.fastjson2.JSON;
+import com.chua.common.support.lang.spider.ResultItems;
+import com.chua.common.support.lang.spider.Task;
+import com.chua.common.support.lang.spider.utils.FilePersistentBase;
+import com.chua.common.support.utils.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import us.codecraft.webmagic.ResultItems;
-import us.codecraft.webmagic.Task;
-import us.codecraft.webmagic.utils.FilePersistentBase;
 
 import java.io.FileWriter;
 import java.io.IOException;

@@ -1,10 +1,10 @@
 package com.chua.common.support.lang.spider.model;
 
-import us.codecraft.webmagic.Page;
-import us.codecraft.webmagic.Request;
-import us.codecraft.webmagic.Site;
-import us.codecraft.webmagic.processor.PageProcessor;
-import us.codecraft.webmagic.selector.Selector;
+import com.chua.common.support.lang.spider.Page;
+import com.chua.common.support.lang.spider.Request;
+import com.chua.common.support.lang.spider.Site;
+import com.chua.common.support.lang.spider.processor.PageProcessor;
+import com.chua.common.support.lang.spider.selector.Selector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
  */
 class ModelPageProcessor implements PageProcessor {
 
-    private List<PageModelExtractor> pageModelExtractorList = new ArrayList<PageModelExtractor>();
+    private final List<PageModelExtractor> pageModelExtractorList = new ArrayList<PageModelExtractor>();
 
     private Site site;
 

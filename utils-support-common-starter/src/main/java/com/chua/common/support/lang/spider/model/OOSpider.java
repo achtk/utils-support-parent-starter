@@ -1,10 +1,10 @@
 package com.chua.common.support.lang.spider.model;
 
-import us.codecraft.webmagic.Site;
-import us.codecraft.webmagic.Spider;
-import us.codecraft.webmagic.pipeline.CollectorPipeline;
-import us.codecraft.webmagic.pipeline.PageModelPipeline;
-import us.codecraft.webmagic.processor.PageProcessor;
+import com.chua.common.support.lang.spider.Site;
+import com.chua.common.support.lang.spider.Spider;
+import com.chua.common.support.lang.spider.pipeline.CollectorPipeline;
+import com.chua.common.support.lang.spider.pipeline.PageModelPipeline;
+import com.chua.common.support.lang.spider.processor.PageProcessor;
 
 import java.util.ArrayList;
 import java.util.List;

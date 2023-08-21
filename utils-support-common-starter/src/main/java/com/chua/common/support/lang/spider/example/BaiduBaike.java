@@ -1,8 +1,9 @@
 package com.chua.common.support.lang.spider.example;
 
-import us.codecraft.webmagic.Site;
-import us.codecraft.webmagic.model.OOSpider;
-import us.codecraft.webmagic.model.annotation.ExtractBy;
+
+import com.chua.common.support.lang.spider.Site;
+import com.chua.common.support.lang.spider.model.OOSpider;
+import com.chua.common.support.lang.spider.model.annotation.ExtractBy;
 
 import java.util.ArrayList;
 import java.util.List;

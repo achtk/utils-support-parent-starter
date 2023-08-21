@@ -3,6 +3,8 @@ package com.chua.common.support.lang.spider.example;
 
 import com.chua.common.support.lang.spider.Page;
 import com.chua.common.support.lang.spider.Site;
+import com.chua.common.support.lang.spider.Spider;
+import com.chua.common.support.lang.spider.model.PageMapper;
 import com.chua.common.support.lang.spider.processor.PageProcessor;
 
 /**

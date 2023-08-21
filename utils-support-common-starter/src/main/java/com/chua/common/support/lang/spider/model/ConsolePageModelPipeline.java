@@ -1,6 +1,8 @@
 package com.chua.common.support.lang.spider.model;
 
+import com.chua.common.support.lang.function.ToStringBuilder;
 import com.chua.common.support.lang.spider.Task;
+import com.chua.common.support.lang.spider.pipeline.PageModelPipeline;
 
 /**
  * Print page model in console.<br>

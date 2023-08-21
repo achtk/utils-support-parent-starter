@@ -1,6 +1,6 @@
 package com.chua.common.support.lang.spider.model;
 
-import us.codecraft.webmagic.utils.Experimental;
+import com.chua.common.support.lang.spider.utils.Experimental;
 
 /**
  * Interface to be implemented by page mode.<br>

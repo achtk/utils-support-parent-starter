@@ -1,11 +1,12 @@
 package com.chua.common.support.lang.spider.example;
 
-import us.codecraft.webmagic.Site;
-import us.codecraft.webmagic.model.ConsolePageModelPipeline;
-import us.codecraft.webmagic.model.HasKey;
-import us.codecraft.webmagic.model.OOSpider;
-import us.codecraft.webmagic.model.annotation.ExtractBy;
-import us.codecraft.webmagic.model.annotation.ExtractByUrl;
+
+import com.chua.common.support.lang.spider.Site;
+import com.chua.common.support.lang.spider.model.ConsolePageModelPipeline;
+import com.chua.common.support.lang.spider.model.HasKey;
+import com.chua.common.support.lang.spider.model.OOSpider;
+import com.chua.common.support.lang.spider.model.annotation.ExtractBy;
+import com.chua.common.support.lang.spider.model.annotation.ExtractByUrl;
 
 import java.util.List;
 

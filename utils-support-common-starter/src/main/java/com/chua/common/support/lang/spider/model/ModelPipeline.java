@@ -1,10 +1,11 @@
 package com.chua.common.support.lang.spider.model;
 
-import us.codecraft.webmagic.ResultItems;
-import us.codecraft.webmagic.Task;
-import us.codecraft.webmagic.model.annotation.ExtractBy;
-import us.codecraft.webmagic.pipeline.PageModelPipeline;
-import us.codecraft.webmagic.pipeline.Pipeline;
+
+import com.chua.common.support.lang.spider.ResultItems;
+import com.chua.common.support.lang.spider.Task;
+import com.chua.common.support.lang.spider.model.annotation.ExtractBy;
+import com.chua.common.support.lang.spider.pipeline.PageModelPipeline;
+import com.chua.common.support.lang.spider.pipeline.Pipeline;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
@@ -19,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 class ModelPipeline implements Pipeline {
 
-    private Map<Class, PageModelPipeline> pageModelPipelines = new ConcurrentHashMap<Class, PageModelPipeline>();
+    private final Map<Class, PageModelPipeline> pageModelPipelines = new ConcurrentHashMap<Class, PageModelPipeline>();
 
     public ModelPipeline() {
     }
