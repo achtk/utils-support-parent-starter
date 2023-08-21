@@ -1,10 +1,11 @@
 package com.chua.common.support.lang.spider.utils;
 
-import org.apache.commons.lang3.StringUtils;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+import com.chua.common.support.jsoup.Jsoup;
+import com.chua.common.support.jsoup.nodes.Document;
+import com.chua.common.support.jsoup.nodes.Element;
+import com.chua.common.support.jsoup.select.Elements;
+import com.chua.common.support.utils.StringUtils;
+import com.chua.common.support.utils.UrlUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
