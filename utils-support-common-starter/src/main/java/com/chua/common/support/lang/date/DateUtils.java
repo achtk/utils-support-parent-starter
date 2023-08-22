@@ -4,6 +4,7 @@ import com.chua.common.support.lang.date.constant.DateFormatConstant;
 import com.chua.common.support.utils.NumberUtils;
 
 import java.math.BigDecimal;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -1926,7 +1927,26 @@ public class DateUtils {
         Objects.requireNonNull(zonedDateTime, "zonedDateTime");
         return zonedDateTime.toLocalTime();
     }
-
+    /**
+     * Date转Time
+     *
+     * @param date Date
+     * @return Timestamp
+     */
+    public static Time toTime(Date date) {
+        Objects.requireNonNull(date, "date");
+        return new Time(date.getTime());
+    }
+    /**
+     * Date转Time
+     *
+     * @param localTime Date
+     * @return Timestamp
+     */
+    public static Time toTime(LocalTime localTime) {
+        Objects.requireNonNull(localTime, "date");
+        return new Time(toDate(localTime).getTime());
+    }
     /**
      * Date转Timestamp
      *

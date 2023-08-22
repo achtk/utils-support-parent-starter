@@ -50,6 +50,14 @@ public class PlatformKey {
         return this;
     }
     /**
+     *  linux
+     * @param key key
+     * @return this
+     */
+    public static PlatformKey isAny(String key) {
+        return new PlatformKey(OS.ANY, key);
+    }
+    /**
      * 添加索引
      *
      * @param key key
@@ -61,6 +69,6 @@ public class PlatformKey {
 
     @Override
     public String toString() {
-        return key;
+        return cache.getOrDefault(OS.getCurrent(), cache.get(OS.ANY));
     }
 }

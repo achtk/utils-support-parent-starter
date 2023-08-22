@@ -207,7 +207,14 @@ public enum Platform {
     public PlatformKey isLinux(String key) {
         return new PlatformKey(OS.LINUX, key);
     }
-
+    /**
+     *  linux
+     * @param key key
+     * @return this
+     */
+    public static PlatformKey isAny(String key) {
+        return new PlatformKey(OS.ANY, key);
+    }
 
     private static class TemporaryDirectory {
         final Path path;

@@ -49,9 +49,11 @@ public class ArcFaceEngine implements Engine, InitializingAware {
         //激活引擎
         int errorCode = faceEngine.activeOnline(
                 StringUtils.defaultString(configuration.appId(), Platform
-                        .isWindow("9gN1dRr4QVGZztS8iqwc2sBiLDGRUjRgfj3BiZsX21wk")
-                        .isLinux("25TpjKV5ZRgthaJtCJWuGTon47HyWNUC9VtSbjz1pqTa").toString()),
-                StringUtils.defaultString(configuration.appKey(), "25TpjKV5ZRgthaJtCJWuGTonCDs7pBTRkVmHm4DKNzH9"));
+                        .isAny("9gN1dRr4QVGZztS8iqwc2sBiLDGRUjRgfj3BiZsX21wk").toString()),
+                StringUtils.defaultString(configuration.appKey(),
+                        Platform.isWindow("25TpjKV5ZRgthaJtCJWuGTonCDs7pBTRkVmHm4DKNzH9")
+                                .isLinux("25TpjKV5ZRgthaJtCJWuGTon47HyWNUC9VtSbjz1pqTa").toString()
+                ));
 
         if (errorCode != ErrorInfo.MOK.getValue() && errorCode != ErrorInfo.MERR_ASF_ALREADY_ACTIVATED.getValue()) {
             System.out.println("引擎激活失败");

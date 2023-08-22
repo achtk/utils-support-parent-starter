@@ -23,10 +23,25 @@ public class ArcCompare implements Compare {
     public ArcCompare(FaceEngine faceEngine) {
         this.faceEngine = faceEngine;
     }
+    public List<PredictResult> calculateSimilar(FaceFeature t1, FaceFeature t2) {
+        //特征比对
+        FaceFeature targetFaceFeature = new FaceFeature();
+        targetFaceFeature.setFeatureData(t1.getFeatureData());
+        FaceFeature sourceFaceFeature = new FaceFeature();
+        sourceFaceFeature.setFeatureData(t2.getFeatureData());
+        FaceSimilar faceSimilar = new FaceSimilar();
+        faceEngine.compareFaceFeature(targetFaceFeature, sourceFaceFeature, faceSimilar);
+        PredictResult item = new PredictResult();
+        item.setScore(faceSimilar.getScore());
+        return Collections.singletonList(item);
+    }
 
     @Override
     public List<PredictResult> calculateSimilar(Object t1, Object t2) {
         List<PredictResult> rs = new LinkedList<>();
+        if(t1 instanceof FaceFeature && t2 instanceof FaceFeature) {
+            return calculateSimilar((FaceFeature)t1, (FaceFeature)t2);
+        }
         //人脸检测
         ImageInfo imageInfo = ImageFactory.getRGBData(Converter.convertIfNecessary(t1, File.class));
         List<FaceInfo> faceInfoList = new ArrayList<>();

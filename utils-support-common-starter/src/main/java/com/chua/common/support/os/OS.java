@@ -14,7 +14,8 @@ import java.util.regex.Pattern;
 public enum OS {
     OSX("^[Mm]ac OS X$"),
     LINUX("^[Ll]inux$"),
-    WINDOWS("^[Ww]indows.*");
+    WINDOWS("^[Ww]indows.*"),
+    ANY("any");
 
     private final Set<Pattern> patterns;
 
