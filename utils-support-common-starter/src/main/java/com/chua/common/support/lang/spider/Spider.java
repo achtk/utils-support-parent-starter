@@ -97,9 +97,9 @@ public class Spider implements Runnable, Task {
 
     protected boolean destroyWhenExit = true;
 
-    private ReentrantLock newUrlLock = new ReentrantLock();
+    private final ReentrantLock newUrlLock = new ReentrantLock();
 
-    private Condition newUrlCondition = newUrlLock.newCondition();
+    private final Condition newUrlCondition = newUrlLock.newCondition();
 
     private List<SpiderListener> spiderListeners;
 

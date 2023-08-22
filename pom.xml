@@ -358,12 +358,6 @@
                 <version>${utils.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>com.chua</groupId>
-                <artifactId>utils-support-crawler-support</artifactId>
-                <version>${utils.version}</version>
-            </dependency>
-
         </dependencies>
     </dependencyManagement>
 

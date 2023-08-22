@@ -25,11 +25,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.chua</groupId>
-            <artifactId>utils-support-crawler-support</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>org.zbus</groupId>
             <artifactId>zbus</artifactId>
             <version>7.2.2</version>
