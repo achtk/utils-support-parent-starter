@@ -1,5 +1,7 @@
 package com.chua.common.support.lang.robin;
 
+import com.chua.common.support.spi.ServiceProvider;
+
 import java.util.Collection;
 
 /**
@@ -7,7 +9,18 @@ import java.util.Collection;
  *
  * @author CH
  */
-public interface Robin {
+public interface Robin extends AutoCloseable {
+    /**
+     * 自动
+     *
+     * @param type   类型
+     * @param config 配置
+     * @return 均衡器
+     */
+    static Robin auto(String type, RobinConfig config) {
+        return ServiceProvider.of(Robin.class).getNewExtension(type, config);
+    }
+
     /**
      * 选择节点
      *
@@ -85,5 +98,10 @@ public interface Robin {
             addNode(node1);
         }
         return this;
+    }
+
+    @Override
+    default void close() throws Exception {
+
     }
 }

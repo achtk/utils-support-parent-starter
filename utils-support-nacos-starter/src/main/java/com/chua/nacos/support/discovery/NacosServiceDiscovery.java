@@ -40,12 +40,12 @@ public class NacosServiceDiscovery implements ServiceDiscovery {
         strategy = null == strategy ? DiscoveryBoundType.ROUND_ROBIN : strategy;
 
         List<Instance> instances = namingService.getAllInstances(discovery);
-        Robin<Instance> roundRobin = robin.create();
+        Robin roundRobin = robin.create();
         for (Instance instance : instances) {
             roundRobin.addNode(instance);
         }
-        Node<Instance> robin = roundRobin.selectNode();
-        Instance perceptual = robin.getContent();
+        Node robin = roundRobin.selectNode();
+        Instance perceptual = robin.getValue(Instance.class);
         return Discovery.builder()
                 .address(perceptual.getIp())
                 .port(perceptual.getPort())
