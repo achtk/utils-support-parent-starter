@@ -76,4 +76,23 @@ public class IpUtils {
     public static boolean isMatch(String ip) {
         return StringUtils.isNotEmpty(ip) && ip.matches(IPV4);
     }
+
+
+    /**
+     * 获取本地地址
+     *
+     * @return 本地地址
+     */
+    public static String getLocalHost() {
+        return NetUtils.getLocalIpv4();
+    }
+
+    /**
+     * 获取有效的端口
+     *
+     * @return 有效的端口
+     */
+    public static int getAvailablePort() {
+        return NetUtils.getAvailablePort();
+    }
 }
