@@ -55,7 +55,7 @@ public final class HttpMappingResolver implements MappingResolver {
                     .header(request.getHeader());
 
             httpClientBuilder.url(StringUtils.endWithMove(
-                    request.getBalance().selectNode().getContent(), "/") + request.getPath());
+                    request.getBalance().selectNode().getString(), "/") + request.getPath());
 
             httpClientBuilder.body(request.getRequestBody());
 

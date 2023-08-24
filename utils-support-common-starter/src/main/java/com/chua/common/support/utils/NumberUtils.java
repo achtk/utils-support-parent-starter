@@ -591,16 +591,6 @@ public class NumberUtils {
     }
 
     /**
-     * 验证整数（正整数和负整数）
-     *
-     * @param digit 一位或多位0-9之间的整数
-     * @return 验证成功返回true，验证失败返回false
-     */
-    public static boolean isDigit(String digit) {
-        return Pattern.matches(DIGIT.pattern(), digit);
-    }
-
-    /**
      * is integer string.
      *
      * @param str 字符串

@@ -26,6 +26,13 @@ public class Node implements Comparable<Node> {
 
     /**
      * 获取数据
+     * @return 结果
+     */
+    public String getString() {
+        return getValue(String.class);
+    }
+    /**
+     * 获取数据
      * @param targetType 目标类型
      * @return 结果
      * @param <T> 类型
