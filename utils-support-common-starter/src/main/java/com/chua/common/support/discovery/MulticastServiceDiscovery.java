@@ -29,7 +29,7 @@ public class MulticastServiceDiscovery implements ServiceDiscovery, Runnable {
     private final ConcurrentMap<String, Set<NetAddress>> received = new ConcurrentHashMap<>();
     private final Set<NetAddress> registered = new CopyOnWriteArraySet<>();
     private final ExecutorService executor = ThreadUtils.newSingleThreadExecutor("multicast-service-discovery");
-    private Robin<Discovery> robin = new RandomRoundRobin<>();
+    private Robin robin = new RandomRoundRobin();
     private DatagramPacket datagramPacketSend;
     private DatagramPacket datagramPacketReceive;
 
@@ -185,10 +185,10 @@ public class MulticastServiceDiscovery implements ServiceDiscovery, Runnable {
             }
         }
 
-        Robin<Discovery> robin1 = robin.create();
+        Robin robin1 = robin.create();
         robin1.addNodes(createNode(proxyUri, discovery.substring(proxyPath.length())));
-        Node<Discovery> discoveryNode = robin1.selectNode();
-        return null == discoveryNode ? null : discoveryNode.getContent();
+        Node discoveryNode = robin1.selectNode();
+        return null == discoveryNode ? null : discoveryNode.getValue(Discovery.class);
     }
 
     /**
@@ -198,9 +198,9 @@ public class MulticastServiceDiscovery implements ServiceDiscovery, Runnable {
      * @param uri      uri
      * @return node
      */
-    private List<Node<Discovery>> createNode(List<Discovery> proxyUri, String uri) {
+    private List<Node> createNode(List<Discovery> proxyUri, String uri) {
         return proxyUri.stream().map(it -> {
-            Node<Discovery> node = new Node<>();
+            Node node = new Node();
             node.setContent(it);
             node.setWeight((int) it.getWeight());
             return node;

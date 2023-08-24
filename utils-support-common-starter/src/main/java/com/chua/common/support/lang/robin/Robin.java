@@ -7,27 +7,27 @@ import java.util.Collection;
  *
  * @author CH
  */
-public interface Robin<T> {
+public interface Robin {
     /**
      * 选择节点
      *
      * @return 节点
      */
-    Node<T> selectNode();
+    Node selectNode();
 
     /**
      * 创建
      *
      * @return 创建
      */
-    Robin<T> create();
+    Robin create();
 
     /**
      * 清除
      *
      * @return 清除
      */
-    Robin<T> clear();
+    Robin clear();
 
     /**
      * 添加节点
@@ -35,7 +35,7 @@ public interface Robin<T> {
      * @param node 节点
      * @return 节点
      */
-    Robin<T> addNode(Node<T> node);
+    Robin addNode(Node node);
 
     /**
      * 添加节点
@@ -43,9 +43,9 @@ public interface Robin<T> {
      * @param node 节点
      * @return 节点
      */
-    default Robin<T> addNode(T... node) {
-        for (T node1 : node) {
-            addNode(new Node<>(node1));
+    default Robin addNode(Object... node) {
+        for (Object node1 : node) {
+            addNode(new Node(node1));
         }
         return this;
     }
@@ -55,9 +55,9 @@ public interface Robin<T> {
      * @param node 节点
      * @return 节点
      */
-    default Robin<T> addNode(Collection<T> node) {
-        for (T node1 : node) {
-            addNode(new Node<>(node1));
+    default Robin addNode(Collection<?> node) {
+        for (Object node1 : node) {
+            addNode(new Node(node1));
         }
         return this;
     }
@@ -67,8 +67,8 @@ public interface Robin<T> {
      * @param node 节点
      * @return 节点
      */
-    default Robin<T> addNodes(Node<T>... node) {
-        for (Node<T> node1 : node) {
+    default Robin addNodes(Node... node) {
+        for (Node node1 : node) {
             addNode(node1);
         }
         return this;
@@ -80,8 +80,8 @@ public interface Robin<T> {
      * @param node 节点
      * @return 节点
      */
-    default Robin<T> addNodes(Collection<Node<T>> node) {
-        for (Node<T> node1 : node) {
+    default Robin addNodes(Collection<Node> node) {
+        for (Node node1 : node) {
             addNode(node1);
         }
         return this;

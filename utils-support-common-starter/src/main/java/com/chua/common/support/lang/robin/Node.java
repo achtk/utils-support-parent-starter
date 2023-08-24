@@ -1,5 +1,6 @@
 package com.chua.common.support.lang.robin;
 
+import com.chua.common.support.converter.Converter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,15 +13,25 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Node<T> implements Comparable<Node<T>> {
+public class Node implements Comparable<Node> {
 
-    private T content;
+    private Object content;
     private Integer weight;
     private Integer effectiveWeight;
     private Integer currentWeight;
 
-    public Node(T content) {
+    public Node(Object content) {
         this.content = content;
+    }
+
+    /**
+     * 获取数据
+     * @param targetType 目标类型
+     * @return 结果
+     * @param <T> 类型
+     */
+    public <T>T getValue(Class<T> targetType) {
+        return Converter.convertIfNecessary(content, targetType);
     }
 
     @Override

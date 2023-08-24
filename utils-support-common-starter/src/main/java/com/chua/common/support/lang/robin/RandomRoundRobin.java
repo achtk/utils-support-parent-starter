@@ -13,11 +13,11 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author CH
  */
 @Spi("random")
-public class RandomRoundRobin<T> implements Robin<T> {
-    private final List<Node<T>> nodes = new ArrayList<>();
+public class RandomRoundRobin implements Robin {
+    private final List<Node> nodes = new ArrayList<>();
 
     @Override
-    public Node<T> selectNode() {
+    public Node selectNode() {
         if (nodes.isEmpty()) {
             return null;
         }
@@ -27,18 +27,18 @@ public class RandomRoundRobin<T> implements Robin<T> {
     }
 
     @Override
-    public Robin<T> create() {
-        return new RandomRoundRobin<>();
+    public Robin create() {
+        return new RandomRoundRobin();
     }
 
     @Override
-    public synchronized Robin<T> clear() {
+    public synchronized Robin clear() {
         nodes.clear();
         return this;
     }
 
     @Override
-    public Robin<T> addNode(Node<T> node) {
+    public Robin addNode(Node node) {
         this.nodes.add(node);
         return this;
     }

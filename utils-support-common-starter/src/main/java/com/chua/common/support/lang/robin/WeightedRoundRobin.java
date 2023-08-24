@@ -11,9 +11,8 @@ import java.util.List;
  * @author CH
  */
 @Spi("weight")
-
-public class WeightedRoundRobin<T> implements Robin<T> {
-    private final List<Node<T>> nodes = new ArrayList<>();
+public class WeightedRoundRobin implements Robin {
+    private final List<Node> nodes = new ArrayList<>();
     /**
      * 权重之和
      */
@@ -24,7 +23,7 @@ public class WeightedRoundRobin<T> implements Robin<T> {
      *
      * @return Node
      */
-    public Node<T> selectNode() {
+    public Node selectNode() {
         if (nodes.isEmpty()) {
             return null;
         }
@@ -32,11 +31,11 @@ public class WeightedRoundRobin<T> implements Robin<T> {
             return nodes.get(0);
         }
 
-        Node<T> nodeOfMaxWeight = null;
+        Node nodeOfMaxWeight = null;
         synchronized (nodes) {
             // 选出当前权重最大的节点
-            Node<T> tempNodeOfMaxWeight = null;
-            for (Node<T> node : nodes) {
+            Node tempNodeOfMaxWeight = null;
+            for (Node node : nodes) {
                 if (tempNodeOfMaxWeight == null) {
                     tempNodeOfMaxWeight = node;
                 } else {
@@ -44,7 +43,7 @@ public class WeightedRoundRobin<T> implements Robin<T> {
                 }
             }
             // 必须new个新的节点实例来保存信息，否则引用指向同一个堆实例，后面的set操作将会修改节点信息
-            nodeOfMaxWeight = new Node<T>(tempNodeOfMaxWeight.getContent(), tempNodeOfMaxWeight.getWeight(), tempNodeOfMaxWeight.getEffectiveWeight(), tempNodeOfMaxWeight.getCurrentWeight());
+            nodeOfMaxWeight = new Node(tempNodeOfMaxWeight.getContent(), tempNodeOfMaxWeight.getWeight(), tempNodeOfMaxWeight.getEffectiveWeight(), tempNodeOfMaxWeight.getCurrentWeight());
             // 调整当前权重比：按权重（effectiveWeight）的比例进行调整，确保请求分发合理。
             tempNodeOfMaxWeight.setCurrentWeight(tempNodeOfMaxWeight.getCurrentWeight() - totalWeight);
             nodes.forEach(node -> node.setCurrentWeight(node.getCurrentWeight() + node.getEffectiveWeight()));
@@ -53,18 +52,18 @@ public class WeightedRoundRobin<T> implements Robin<T> {
     }
 
     @Override
-    public Robin<T> create() {
-        return new WeightedRoundRobin<>();
+    public Robin create() {
+        return new WeightedRoundRobin();
     }
 
     @Override
-    public synchronized Robin<T> clear() {
+    public synchronized Robin clear() {
         nodes.clear();
         return this;
     }
 
     @Override
-    public Robin<T> addNode(Node<T> node) {
+    public Robin addNode(Node node) {
         this.nodes.add(node);
         return this;
     }

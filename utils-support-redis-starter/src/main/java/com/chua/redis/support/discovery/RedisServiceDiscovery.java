@@ -39,7 +39,7 @@ public class RedisServiceDiscovery implements ServiceDiscovery, Runnable {
     private final Map<String, Discovery> cache = new ConcurrentHashMap<>();
     private JedisPool jedisPool;
     private String root = PROXY_NODE;
-    private Robin<Discovery> robin = new RandomRoundRobin<>();
+    private Robin robin = new RandomRoundRobin();
 
     {
         executor.schedule(this, 3, TimeUnit.SECONDS);
@@ -87,10 +87,10 @@ public class RedisServiceDiscovery implements ServiceDiscovery, Runnable {
             }
         }
 
-        Robin<Discovery> robin1 = robin.create();
+        Robin robin1 = robin.create();
         robin1.addNodes(createNode(proxyUri, discovery.substring(proxyPath.length())));
-        Node<Discovery> discoveryNode = robin1.selectNode();
-        return null == discoveryNode ? null : discoveryNode.getContent();
+        Node discoveryNode = robin1.selectNode();
+        return null == discoveryNode ? null : discoveryNode.getValue(Discovery.class);
     }
 
     @Override
@@ -114,9 +114,9 @@ public class RedisServiceDiscovery implements ServiceDiscovery, Runnable {
      * @param uri      uri
      * @return node
      */
-    private List<Node<Discovery>> createNode(List<Discovery> proxyUri, String uri) {
+    private List<Node> createNode(List<Discovery> proxyUri, String uri) {
         return proxyUri.stream().map(it -> {
-            Node<Discovery> node = new Node<>();
+            Node node = new Node();
             node.setContent(it);
             node.setWeight((int) it.getWeight());
             return node;

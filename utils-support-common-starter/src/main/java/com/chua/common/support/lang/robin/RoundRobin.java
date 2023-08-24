@@ -14,12 +14,12 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @SpiDefault
 @Spi({"round", "polling"})
-public class RoundRobin<T> implements Robin<T> {
+public class RoundRobin implements Robin {
     final AtomicInteger count = new AtomicInteger(0);
-    private final List<Node<T>> nodes = new ArrayList<>();
+    private final List<Node> nodes = new ArrayList<>();
 
     @Override
-    public Node<T> selectNode() {
+    public Node selectNode() {
         if (nodes.isEmpty()) {
             return null;
         }
@@ -29,18 +29,18 @@ public class RoundRobin<T> implements Robin<T> {
     }
 
     @Override
-    public Robin<T> create() {
-        return new RoundRobin<>();
+    public Robin create() {
+        return new RoundRobin();
     }
 
     @Override
-    public synchronized Robin<T> clear() {
+    public synchronized Robin clear() {
         nodes.clear();
         return this;
     }
 
     @Override
-    public Robin<T> addNode(Node<T> node) {
+    public Robin addNode(Node node) {
         this.nodes.add(node);
         return this;
     }
