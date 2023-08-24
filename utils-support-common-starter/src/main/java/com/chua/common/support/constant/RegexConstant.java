@@ -44,7 +44,6 @@ public class RegexConstant {
      * 总结中文姓名：2-60位，只能是中文和维吾尔族的点·
      */
     public static final Pattern CHINESE_NAME = Pattern.compile("^[\u4E00-\u9FFF·]{2,60}$");
-
     /**
      * 链接
      */
