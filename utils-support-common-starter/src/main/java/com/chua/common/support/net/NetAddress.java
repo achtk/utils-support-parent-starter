@@ -792,7 +792,10 @@ public class NetAddress implements Serializable {
      */
     @SneakyThrows
     private void analysisAuthority() {
-        this.authority = (uri == null ? (uri = new URI(originalAddress)) : uri).getAuthority();
+        try {
+            this.authority = (uri == null ? (uri = new URI(originalAddress)) : uri).getAuthority();
+        } catch (URISyntaxException ignored) {
+        }
         this.analysisUserInfo();
         this.analysisAddress();
         this.analysisOrigin();

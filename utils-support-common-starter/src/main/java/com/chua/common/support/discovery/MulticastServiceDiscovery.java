@@ -177,7 +177,7 @@ public class MulticastServiceDiscovery implements ServiceDiscovery, Runnable {
                 Collection<NetAddress> strings1 = received.get(fullPath);
 
                 proxyPath = fullPath;
-                if (!strings1.isEmpty()) {
+                if (null != strings1 && !strings1.isEmpty()) {
                     for (NetAddress netAddress : strings1) {
                         Object source = netAddress.getParameter("source", null);
                         if (null == source) {
