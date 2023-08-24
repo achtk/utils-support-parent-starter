@@ -873,71 +873,11 @@ public final class CommonConstant {
 
   public static final String SYMBOL_EXCEPTION = "Exception:";
 
-    /**
-     *
-     */
-    private static final String SYMBOL_FILE = "file";
-    /**
-     *
-     */
-    private static final String SYMBOL_WAR = "war";
-    /**
-     *
-     */
-    private static final String SYMBOL_JAR = "jar";
-    /**
-     *
-     */
-    private static final String EMPTY_URL = "file:.";
 
     /**
      * .class
      */
     public static final String SUFFIX_CLASS = ".class";
-    /**
-     * .doc
-     */
-    public static final String SUFFIX_DOC = ".doc";
-    /**
-     * .docx
-     */
-    public static final String SUFFIX_DOCX = ".docx";
-    /**
-     * .xls
-     */
-    public static final String SUFFIX_XLS = ".xls";
-    /**
-     * .xlsx
-     */
-    public static final String SUFFIX_XLSX = ".xlsx";
-    /**
-     * .csv
-     */
-    public static final String SUFFIX_CSV = ".csv";
-    /**
-     * .java
-     */
-    public static final String SUFFIX_JAVA = ".java";
-    /**
-     * .xml
-     */
-    public static final String SUFFIX_XML = ".xml";
-    /**
-     * .yaml
-     */
-    public static final String SUFFIX_YAML = ".yaml";
-    /**
-     * .yml
-     */
-    public static final String SUFFIX_YML = ".yml";
-    /**
-     * .properties
-     */
-    public static final String SUFFIX_PROPERTIES = ".properties";
-    /**
-     * .jar
-     */
-    public static final String SUFFIX_JAR_SUFFIX = ".jar";
     /**
      * dtd
      */
@@ -947,78 +887,6 @@ public final class CommonConstant {
      * 空值
      */
     public static final Pattern PATTERN_EMPTY = Pattern.compile("\\s+");
-    /**
-     * 空值
-     */
-    public static final Pattern PATTERN_BLANK = Pattern.compile("\\s*|\t|\r|\n");
-    /**
-     * 空白行的正则表达式
-     */
-    public static final Pattern PATTERN_EMPTY_LINE = Pattern.compile("\\n\\s*\\r");
-    /**
-     * 身份证号(15位、18位数字)，最后一位是校验位，可能为数字或字符X
-     */
-    public static final Pattern ID_CARD = Pattern.compile("(\\d{15}$)|(\\d{18}$)|(\\d{17}(\\d|X|x))");
-    /**
-     * 手机号码
-     */
-    public static final Pattern CELLPHONE_NUMBER = Pattern.compile("(13[0-9]|14[5|7]|15[0|1|2|3|4|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\\d{8}");
-    /**
-     * 中文、英文、数字包括下划线
-     */
-    public static final Pattern NON_SPECIAL_CHARACTER = Pattern.compile("[\\u4E00-\\u9FA5A-Za-z0-9_]+");
-    /**
-     * Email地址
-     */
-    public static final Pattern EMAIL_ADDRESS = Pattern.compile("\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*");
-    /**
-     * 整数
-     */
-    public static final Pattern NUMERIC_PATTERN = Pattern.compile("-?[1-9]\\d*");
-    /**
-     * 只包含整数
-     */
-    public static final Pattern NUMBER_PATTERN = Pattern.compile("^[0-9]+$");
-    /**
-     * 整数
-     */
-    public static final Pattern NUMERIC_STRING_PATTERN = Pattern.compile("^[0-9\\-\\-]+$");
-    /**
-     * 浮点
-     */
-    public static final Pattern FLOAT_NUMERIC_PATTERN = Pattern.compile("(-?\\d+)(\\.\\d+)?");
-    /**
-     * 浮点区间
-     */
-    public static final Pattern FLOAT_NUMERIC_RANGE_PATTERN = Pattern.compile("(-?\\d+)(\\.\\d+)?,(-?\\d+)(\\.\\d+)?");
-    /**
-     * 字母
-     */
-    public static final Pattern ABC_PATTERN = Pattern.compile("^[a-z|A-Z]+$");
-    /**
-     * 中文
-     */
-    public static final Pattern CHINESE = Pattern.compile("[\u4E00-\u9FA5|！|，|。|（|）|《|》|“|”|？|：|；|【|】]");
-    /**
-     * (.*?)
-     */
-    public static final Pattern REGEXP_ANY = Pattern.compile("(.*?)");
-    /**
-     * 大写字母
-     */
-    public final static Pattern HUMP_PATTERN = Pattern.compile("[A-Z]");
-    /**
-     * 下划线
-     */
-    public final static Pattern LINE_PATTERN = Pattern.compile("_(\\w)");
-    /**
-     * 任意
-     */
-    public final static Pattern ALL_PATTERN = Pattern.compile("(.*?)");
-    /**
-     * 验证整数（正整数和负整数）
-     */
-    public static final Pattern DIGIT = Pattern.compile("-?[1-9]\\d+");
     /**
      * 验证整数和浮点数（正负整数和正负浮点数）
      */
@@ -1032,11 +900,6 @@ public final class CommonConstant {
      * 地址
      */
     public static final Pattern ADDRESS = Pattern.compile("([1-9]|[1-9]\\\\d|1\\\\d{2}|2[0-4]\\\\d|25[0-5])(\\\\.(\\\\d|[1-9]\\\\d|1\\\\d{2}|2[0-4]\\\\d|25[0-5])){3}");
-
-    /**
-     * .class
-     */
-    public static final String CLASS_FILE_EXTENSION = SUFFIX_CLASS;
 
     /**
      * 英文字母 、数字和下划线
