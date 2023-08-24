@@ -12,8 +12,6 @@ import com.chua.common.support.mapping.annotation.*;
 import com.chua.common.support.mapping.condition.MappingCondition;
 import com.chua.common.support.mapping.filter.MappingFilter;
 import com.chua.common.support.mapping.value.MappingValue;
-import com.chua.common.support.placeholder.MapMixSystemPlaceholderResolver;
-import com.chua.common.support.placeholder.StringValuePropertyResolver;
 import com.chua.common.support.reflection.describe.MethodDescribe;
 import com.chua.common.support.reflection.marker.Bench;
 import com.chua.common.support.reflection.marker.Marker;
@@ -52,7 +50,7 @@ public class Request {
     private final String path;
     private Marker marker;
     private final Object[] args;
-    private Robin<String> balance;
+    private Robin balance;
 
     private HttpMethod httpMethod;
 
@@ -345,9 +343,9 @@ public class Request {
      * @param proxyMethod 请求
      * @return 平衡器
      */
-    private Robin<String> createBalance(ProxyMethod proxyMethod) {
+    private Robin createBalance(ProxyMethod proxyMethod) {
         MappingAddress mappingAddress = target.getDeclaredAnnotation(MappingAddress.class);
-        Robin<String> stringRobin = ServiceProvider.of(Robin.class).getNewExtension(mappingAddress.balance());
+        Robin stringRobin = ServiceProvider.of(Robin.class).getNewExtension(mappingAddress.balance());
 
         String[] value = mappingAddress.value();
         for (String s : value) {
