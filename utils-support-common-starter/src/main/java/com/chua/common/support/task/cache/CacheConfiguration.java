@@ -26,6 +26,11 @@ public class CacheConfiguration {
      */
     private int expireAfterWrite;
     /**
+     * 冷热备份(即用的多的缓存数据生命周期增长)
+     */
+    @Builder.Default
+    private boolean hotColdBackup = true;
+    /**
      * 超时时间
      */
     @Builder.Default

@@ -42,7 +42,11 @@ public class JdkCacheable extends AbstractCacheable {
 
     @Override
     public Value<Object> get(Object key) {
-        return CACHE.get(key);
+        TimeValue<Object> value = CACHE.get(key);
+        if (hotColdBackup) {
+            value.refresh();
+        }
+        return value;
     }
 
     @Override

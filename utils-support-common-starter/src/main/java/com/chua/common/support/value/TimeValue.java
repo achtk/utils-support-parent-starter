@@ -11,9 +11,9 @@ import java.util.concurrent.TimeoutException;
 public class TimeValue<T> extends DelegateValue<T> {
 
 
-    private final long entryTime = System.currentTimeMillis();
+    private long entryTime = System.nanoTime();
 
-    private Duration timeout = Duration.ofMinutes(1);
+    private final Duration timeout;
 
     public TimeValue(T entity, Duration timeout) {
         super(entity);
@@ -72,9 +72,16 @@ public class TimeValue<T> extends DelegateValue<T> {
      * @return 生成时间
      */
     public boolean isTimeout() {
-        if(timeout.toMillis() == -1) {
+        if (timeout.toMillis() == -1) {
             return false;
         }
-        return (entryTime + timeout.toMillis()) < System.currentTimeMillis();
+        return (entryTime + timeout.toNanos()) < System.nanoTime();
+    }
+
+    /**
+     * 刷新时间
+     */
+    public void refresh() {
+        this.entryTime = System.nanoTime();
     }
 }

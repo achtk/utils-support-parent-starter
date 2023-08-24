@@ -56,6 +56,14 @@ public class RedisCacheable extends AbstractCacheable {
     @Override
     public Value<Object> get(Object key) {
         String s = jedis.get(key.toString());
+        if (null == s) {
+            return Value.of(null);
+        }
+
+        if (hotColdBackup) {
+            jedis.expire(key.toString(), expireAfterWrite);
+        }
+
         return Json.fromJson(s, Value.class);
     }
 

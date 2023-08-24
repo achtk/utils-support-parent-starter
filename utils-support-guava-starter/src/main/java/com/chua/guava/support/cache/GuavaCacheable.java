@@ -99,8 +99,13 @@ public class GuavaCacheable extends AbstractCacheable {
     public Value<Object> get(Object key) {
         Value<Object> ifPresent = cache.getIfPresent(key);
         if (null == ifPresent) {
-            return null;
+            return Value.of(null);
         }
+
+        if (hotColdBackup) {
+            cache.put(key, ifPresent);
+        }
+
         return ifPresent;
     }
 
