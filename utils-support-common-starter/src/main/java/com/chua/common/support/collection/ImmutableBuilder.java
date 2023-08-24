@@ -1,7 +1,6 @@
 package com.chua.common.support.collection;
 
 import com.chua.common.support.bean.BeanMap;
-import com.chua.common.support.bean.BeanUtils;
 import com.chua.common.support.lang.proxy.BridgingMethodIntercept;
 import com.chua.common.support.lang.proxy.ProxyUtils;
 import com.chua.common.support.reflection.describe.MethodDescribe;
@@ -309,7 +308,7 @@ public class ImmutableBuilder {
         }
 
         public MapBuilder<K, V> put(Map<K, V> map) {
-            map.putAll(map);
+            this.map.putAll(map);
             return this;
         }
 

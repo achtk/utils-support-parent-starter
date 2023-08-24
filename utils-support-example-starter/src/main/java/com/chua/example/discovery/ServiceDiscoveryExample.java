@@ -22,11 +22,11 @@ public class ServiceDiscoveryExample {
         serviceDiscovery.register(Discovery.builder().discovery("/danbin").address("http://qrtest.qirenit.com:82").build());
         serviceDiscovery.register(Discovery.builder().discovery("/webrtc").address("https://webrtc.tzbyte.com:6443").build());
 
-        Discovery discovery1 = serviceDiscovery.discovery("danbin");
-        Discovery discovery2 = serviceDiscovery.discovery("danbin");
-        Discovery discovery3 = serviceDiscovery.discovery("webrtc");
         System.out.println();
         while (true) {
+            Discovery discovery1 = serviceDiscovery.discovery("danbin");
+            Discovery discovery2 = serviceDiscovery.discovery("danbin");
+            Discovery discovery3 = serviceDiscovery.discovery("webrtc");
             ThreadUtils.sleepSecondsQuietly(1);
         }
     }
