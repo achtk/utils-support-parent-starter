@@ -5,6 +5,7 @@ import com.chua.common.support.collection.ImmutableBuilder;
 import com.chua.common.support.function.Splitter;
 import com.chua.common.support.lang.expression.parser.ExpressionParser;
 import com.chua.common.support.mock.MockValue;
+import com.chua.common.support.net.IpUtils;
 import com.chua.common.support.range.IpRange;
 import com.chua.common.support.utils.RandomUtils;
 
@@ -45,6 +46,6 @@ public class IpV4MockResolver implements MockResolver {
             return null;
         }
         long ipv4Num = RandomUtils.randomLong(range.getBeginIpNum(), range.getEndIpNum());
-        return IpRange.longToIpv4(ipv4Num);
+        return IpUtils.long2Ip(ipv4Num);
     }
 }
