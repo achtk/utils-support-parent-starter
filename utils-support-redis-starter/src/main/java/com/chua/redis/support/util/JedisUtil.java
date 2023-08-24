@@ -1,8 +1,8 @@
 package com.chua.redis.support.util;
 
 import com.chua.common.support.bean.BeanMap;
+import com.chua.common.support.net.NetAddress;
 import com.chua.common.support.utils.MapUtils;
-import com.chua.common.support.utils.NetAddress;
 import com.chua.common.support.utils.StringUtils;
 import com.chua.redis.support.config.RedisConfiguration;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;

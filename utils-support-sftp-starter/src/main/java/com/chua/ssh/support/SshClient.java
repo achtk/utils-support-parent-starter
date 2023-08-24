@@ -1,8 +1,8 @@
 package com.chua.ssh.support;
 
+import com.chua.common.support.net.NetAddress;
 import com.chua.common.support.protocol.client.AbstractClient;
 import com.chua.common.support.protocol.client.ClientOption;
-import com.chua.common.support.utils.NetAddress;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 import lombok.extern.slf4j.Slf4j;

@@ -1,9 +1,9 @@
 package com.chua.common.support.view;
 
 import com.chua.common.support.image.filter.ImageFilter;
+import com.chua.common.support.net.NetAddress;
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.MapUtils;
-import com.chua.common.support.utils.NetAddress;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;

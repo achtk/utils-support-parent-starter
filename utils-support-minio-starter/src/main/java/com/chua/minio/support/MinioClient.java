@@ -1,8 +1,8 @@
 package com.chua.minio.support;
 
+import com.chua.common.support.net.NetAddress;
 import com.chua.common.support.protocol.client.AbstractClient;
 import com.chua.common.support.protocol.client.ClientOption;
-import com.chua.common.support.utils.NetAddress;
 import com.chua.common.support.utils.StringUtils;
 
 /**

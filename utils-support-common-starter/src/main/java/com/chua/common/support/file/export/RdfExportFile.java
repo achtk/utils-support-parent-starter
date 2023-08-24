@@ -1,7 +1,7 @@
 package com.chua.common.support.file.export;
 
 import com.chua.common.support.annotations.Spi;
-import com.chua.common.support.utils.NetAddress;
+import com.chua.common.support.net.NetAddress;
 import com.chua.common.support.utils.StringUtils;
 import com.chua.common.support.value.Pair;
 

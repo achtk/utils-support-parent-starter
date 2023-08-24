@@ -1,8 +1,8 @@
 package com.chua.common.support.protocol.client;
 
 import com.chua.common.support.bean.BeanUtils;
+import com.chua.common.support.net.NetAddress;
 import com.chua.common.support.spi.ServiceProvider;
-import com.chua.common.support.utils.NetAddress;
 
 /**
  * 客户端生产者

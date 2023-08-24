@@ -1,7 +1,8 @@
-package com.chua.common.support.utils;
+package com.chua.common.support.net;
 
 import com.chua.common.support.matcher.PathMatcher;
 import com.chua.common.support.range.IpRange;
+import com.chua.common.support.utils.StringUtils;
 
 import static com.chua.common.support.constant.CommonConstant.*;
 

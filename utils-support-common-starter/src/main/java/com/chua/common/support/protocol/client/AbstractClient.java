@@ -3,8 +3,8 @@ package com.chua.common.support.protocol.client;
 import com.chua.common.support.bean.BeanMap;
 import com.chua.common.support.collection.TypeHashMap;
 import com.chua.common.support.lang.profile.Profile;
+import com.chua.common.support.net.NetAddress;
 import com.chua.common.support.router.Router;
-import com.chua.common.support.utils.NetAddress;
 import com.chua.common.support.utils.StringUtils;
 
 /**

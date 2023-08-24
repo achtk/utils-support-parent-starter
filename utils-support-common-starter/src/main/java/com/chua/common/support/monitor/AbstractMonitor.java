@@ -1,8 +1,8 @@
 package com.chua.common.support.monitor;
 
+import com.chua.common.support.net.NetAddress;
 import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.CollectionUtils;
-import com.chua.common.support.utils.NetAddress;
 import com.chua.common.support.utils.ThreadUtils;
 
 import java.lang.reflect.Type;

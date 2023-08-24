@@ -12,6 +12,7 @@ import com.chua.common.support.mapping.annotation.*;
 import com.chua.common.support.mapping.condition.MappingCondition;
 import com.chua.common.support.mapping.filter.MappingFilter;
 import com.chua.common.support.mapping.value.MappingValue;
+import com.chua.common.support.net.NetAddress;
 import com.chua.common.support.reflection.describe.MethodDescribe;
 import com.chua.common.support.reflection.marker.Bench;
 import com.chua.common.support.reflection.marker.Marker;
@@ -19,7 +20,6 @@ import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.unit.name.NamingCase;
 import com.chua.common.support.utils.ArrayUtils;
 import com.chua.common.support.utils.ClassUtils;
-import com.chua.common.support.utils.NetAddress;
 import com.chua.common.support.utils.StringUtils;
 import lombok.Data;
 

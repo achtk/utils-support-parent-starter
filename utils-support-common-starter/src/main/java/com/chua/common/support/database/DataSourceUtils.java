@@ -5,11 +5,11 @@ import com.chua.common.support.database.factory.DelegateDataSource;
 import com.chua.common.support.database.sqldialect.Dialect;
 import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.function.Joiner;
+import com.chua.common.support.net.NetAddress;
 import com.chua.common.support.reflection.MethodStation;
 import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.FileUtils;
 import com.chua.common.support.utils.MapUtils;
-import com.chua.common.support.utils.NetAddress;
 
 import javax.sql.DataSource;
 import java.io.File;

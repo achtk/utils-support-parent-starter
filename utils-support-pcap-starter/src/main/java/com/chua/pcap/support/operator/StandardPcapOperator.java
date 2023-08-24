@@ -1,7 +1,7 @@
 package com.chua.pcap.support.operator;
 
+import com.chua.common.support.net.NetUtils;
 import com.chua.common.support.utils.CollectionUtils;
-import com.chua.common.support.utils.NetUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.pcap4j.core.PcapNetworkInterface;

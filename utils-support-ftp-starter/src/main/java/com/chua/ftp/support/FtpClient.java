@@ -1,8 +1,8 @@
 package com.chua.ftp.support;
 
+import com.chua.common.support.net.NetAddress;
 import com.chua.common.support.protocol.client.AbstractClient;
 import com.chua.common.support.protocol.client.ClientOption;
-import com.chua.common.support.utils.NetAddress;
 import lombok.SneakyThrows;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPClientConfig;

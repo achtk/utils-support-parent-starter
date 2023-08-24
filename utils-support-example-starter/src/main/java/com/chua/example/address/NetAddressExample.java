@@ -1,6 +1,6 @@
 package com.chua.example.address;
 
-import com.chua.common.support.utils.NetAddress;
+import com.chua.common.support.net.NetAddress;
 
 /**
  * @author CH

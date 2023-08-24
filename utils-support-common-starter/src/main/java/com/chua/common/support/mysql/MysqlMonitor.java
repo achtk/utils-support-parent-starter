@@ -4,7 +4,7 @@ import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.collection.ConcurrentReferenceHashMap;
 import com.chua.common.support.monitor.*;
 import com.chua.common.support.mysql.event.*;
-import com.chua.common.support.utils.NetAddress;
+import com.chua.common.support.net.NetAddress;
 
 import java.io.IOException;
 import java.util.Map;
