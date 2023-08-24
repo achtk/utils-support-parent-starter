@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  *
  * @author CH
  */
-class IpUtils {
+class IpUtil {
 
     private static final List<PrintIP.StartAndEnd> AND_END_LIST = new ArrayList<>();
 
@@ -27,7 +27,7 @@ class IpUtils {
         List<String> ipRangeList = Arrays.asList("10.0.0.0-10.255.255.255", "172.16.0.0-172.31.255.255", "192.168.0.0-192.168.255.255");
         for (String ipRange : ipRangeList) {
             String[] split = ipRange.split("-");
-            AND_END_LIST.add(new PrintIP.StartAndEnd(IpUtils.ip2long(split[0]), IpUtils.ip2long(split[1])));
+            AND_END_LIST.add(new PrintIP.StartAndEnd(IpUtil.ip2long(split[0]), IpUtil.ip2long(split[1])));
         }
     }
 
@@ -39,8 +39,8 @@ class IpUtils {
             return false;
         }
         for (PrintIP.StartAndEnd se : AND_END_LIST) {
-            long ipLong = IpUtils.ip2long(ip);
-            if (IpUtils.isInRange(se.getStart(), se.getEnd(), ipLong)) {
+            long ipLong = IpUtil.ip2long(ip);
+            if (IpUtil.isInRange(se.getStart(), se.getEnd(), ipLong)) {
                 return true;
             }
         }
@@ -373,7 +373,7 @@ class IpUtils {
         if (ip.contains(":")) {
             return IpParser.getIPv6BigInteger(ip);
         } else {
-            return BigInteger.valueOf(IpUtils.ip2long(ip));
+            return BigInteger.valueOf(IpUtil.ip2long(ip));
         }
     }
 

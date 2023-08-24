@@ -401,11 +401,11 @@ public class IpIPPosition extends ProfileProvider<IpPosition> implements IpPosit
         if (ip == null) {
             return UNKNOWN;
         }
-        if (ip.contains(":") || !IpUtils.isIp(ip)) {
+        if (ip.contains(":") || !IpUtil.isIp(ip)) {
             return UNKNOWN;
         }
 
-        int index = Collections.binarySearch(I_PV_4_INFOS, new Ipv4Info(IpUtils.ip2long(ip), IpUtils.ip2long(ip)));
+        int index = Collections.binarySearch(I_PV_4_INFOS, new Ipv4Info(IpUtil.ip2long(ip), IpUtil.ip2long(ip)));
         if (index < 0 || index >= I_PV_4_INFOS.size()) {
             return UNKNOWN;
         }
@@ -453,15 +453,15 @@ public class IpIPPosition extends ProfileProvider<IpPosition> implements IpPosit
             return null;
         }
         String startIp = split[0].trim();
-        if (!IpUtils.isIp(startIp)) {
+        if (!IpUtil.isIp(startIp)) {
             return null;
         }
-        long startLong = IpUtils.ip2long(startIp);
+        long startLong = IpUtil.ip2long(startIp);
         String endIp = split[1].trim();
-        if (!IpUtils.isIp(endIp)) {
+        if (!IpUtil.isIp(endIp)) {
             return null;
         }
-        long endLong = IpUtils.ip2long(endIp);
+        long endLong = IpUtil.ip2long(endIp);
         String region = split[2].trim();
         String isp = split[3].replaceAll("CZ88\\.NET", "").trim();
         if ("255.255.255.0".equals(startIp)) {
