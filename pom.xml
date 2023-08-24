@@ -69,6 +69,7 @@
         <module>utils-support-deeplearning-tensorFlow-starter</module>
         <module>utils-support-milvus-starter</module>
         <module>utils-support-agent-support</module>
+        <module>utils-support-wx-support</module>
     </modules>
 
     <!-- -Djava.net.preferIPv4Stack=true-->

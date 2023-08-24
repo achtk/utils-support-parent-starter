@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static com.chua.common.support.constant.CommonConstant.*;
 
@@ -570,5 +571,21 @@ public class ObjectUtils {
         buffer.append(name)
                 .append(AT_SIGN)
                 .append(hexString);
+    }
+
+    /**
+     * 检测离校
+     * @param targetType 目标离校
+     * @param value 数据
+     * @param supplier 类型不一致输出
+     * @return 结果
+     */
+    @SuppressWarnings("ALL")
+    public static <T>T isPresent(Class<? extends T> targetType, Object value, Supplier<T> supplier) {
+        if(null == value || !(targetType.isAssignableFrom(value.getClass()))) {
+            return supplier.get();
+        }
+
+        return (T) value;
     }
 }

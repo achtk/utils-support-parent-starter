@@ -128,20 +128,6 @@ public class BeanMap extends LinkedHashMap<String, Object> {
         source.removeAll(rm);
     }
 
-    private boolean isLogger(Object o) {
-        String typeName = o.getClass().getTypeName();
-        return
-                typeName.contains("java.util.logging") ||
-                        typeName.contains("logging") ||
-                        typeName.contains("org.slf4j") ||
-                        typeName.contains("org.apache.log4j") ||
-                        typeName.contains("org.apache.logging") ||
-                        typeName.contains("org.apache.commons.log") ||
-                        typeName.contains("org.jboss.logging") ||
-                        typeName.contains("com.google.common.flog") ||
-                        typeName.contains("ch.qos.logback");
-    }
-
     /**
      * 分析参数
      *
@@ -178,6 +164,20 @@ public class BeanMap extends LinkedHashMap<String, Object> {
         });
 
         return rs;
+    }
+
+    private boolean isLogger(Object o) {
+        String typeName = o.getClass().getTypeName();
+        return
+                typeName.contains("java.util.logging") ||
+                        typeName.contains("logging") ||
+                        typeName.contains("org.slf4j") ||
+                        typeName.contains("org.apache.log4j") ||
+                        typeName.contains("org.apache.logging") ||
+                        typeName.contains("org.apache.commons.log") ||
+                        typeName.contains("org.jboss.logging") ||
+                        typeName.contains("com.google.common.flog") ||
+                        typeName.contains("ch.qos.logback");
     }
 
     /**

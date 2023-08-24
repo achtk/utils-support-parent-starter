@@ -3,6 +3,7 @@ package com.chua.common.support.http;
 import com.chua.common.support.bean.BeanUtils;
 import com.chua.common.support.converter.Converter;
 import com.chua.common.support.json.Json;
+import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.IoUtils;
 import lombok.Builder;
 import lombok.Data;
@@ -46,8 +47,15 @@ public class HttpResponse {
      * @return 结果
      */
     public <T> T content(Class<T> target) {
+        if(null == content) {
+            return ClassUtils.forObject(target);
+        }
+
         try {
-            return Converter.convertIfNecessary(content, target);
+            T t = Converter.convertIfNecessary(content, target);
+            if(null != t) {
+                return t;
+            }
         } catch (Exception ignored) {
         }
 

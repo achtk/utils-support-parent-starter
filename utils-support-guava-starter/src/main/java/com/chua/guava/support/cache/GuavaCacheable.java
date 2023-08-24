@@ -5,11 +5,14 @@ import com.chua.common.support.annotations.SpiDefault;
 import com.chua.common.support.task.cache.AbstractCacheable;
 import com.chua.common.support.task.cache.CacheConfiguration;
 import com.chua.common.support.task.cache.Cacheable;
+import com.chua.common.support.utils.ObjectUtils;
+import com.chua.common.support.value.TimeValue;
 import com.chua.common.support.value.Value;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 
+import java.time.Duration;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -103,8 +106,9 @@ public class GuavaCacheable extends AbstractCacheable {
 
 
     @Override
+    @SuppressWarnings("ALL")
     public Value<Object> put(Object key, Object value) {
-        Value<Object> value1 = Value.of(value);
+        TimeValue<Object> value1 = ObjectUtils.isPresent(TimeValue.class, value, () -> TimeValue.of(value, Duration.ofMillis(expireAfterWrite)));
         cache.put(key, value1);
         return value1;
     }

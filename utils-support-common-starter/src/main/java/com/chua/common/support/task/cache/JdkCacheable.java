@@ -2,6 +2,7 @@ package com.chua.common.support.task.cache;
 
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.collection.ConcurrentReferenceHashMap;
+import com.chua.common.support.utils.ObjectUtils;
 import com.chua.common.support.value.TimeValue;
 import com.chua.common.support.value.Value;
 
@@ -45,8 +46,9 @@ public class JdkCacheable extends AbstractCacheable {
     }
 
     @Override
+    @SuppressWarnings("ALL")
     public Value<Object> put(Object key, Object value) {
-        TimeValue<Object> timeValue = TimeValue.of(value, Duration.ofMillis(expireAfterWrite));
+        TimeValue<Object> timeValue = ObjectUtils.isPresent(TimeValue.class, value, () -> TimeValue.of(value, Duration.ofMillis(expireAfterWrite)));
         CACHE.put(key, timeValue);
         return timeValue;
     }
