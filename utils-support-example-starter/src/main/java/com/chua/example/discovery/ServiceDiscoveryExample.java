@@ -27,6 +27,9 @@ public class ServiceDiscoveryExample {
             Discovery discovery1 = serviceDiscovery.discovery("danbin");
             Discovery discovery2 = serviceDiscovery.discovery("danbin");
             Discovery discovery3 = serviceDiscovery.discovery("webrtc");
+            System.out.println(discovery1);
+            System.out.println(discovery2);
+            System.out.println(discovery3);
             ThreadUtils.sleepSecondsQuietly(1);
         }
     }

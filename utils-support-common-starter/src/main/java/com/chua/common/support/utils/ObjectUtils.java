@@ -1,5 +1,6 @@
 package com.chua.common.support.utils;
 
+import com.chua.common.support.bean.BeanUtils;
 import com.chua.common.support.function.SafeConsumer;
 import com.chua.common.support.function.SafeFunction;
 import com.chua.common.support.function.SafeSupplier;
@@ -581,11 +582,23 @@ public class ObjectUtils {
      * @return 结果
      */
     @SuppressWarnings("ALL")
-    public static <T>T isPresent(Class<? extends T> targetType, Object value, Supplier<T> supplier) {
-        if(null == value || !(targetType.isAssignableFrom(value.getClass()))) {
+    public static <T> T isPresent(Class<? extends T> targetType, Object value, Supplier<T> supplier) {
+        if (null == value || !(targetType.isAssignableFrom(value.getClass()))) {
             return supplier.get();
         }
 
         return (T) value;
+    }
+
+    /**
+     * 对象转换
+     *
+     * @param source     数据
+     * @param targetType 目标类型
+     * @param <T>        类型
+     * @return 结果
+     */
+    public static <T> T to(Object source, Class<T> targetType) {
+        return BeanUtils.copyProperties(source, targetType);
     }
 }

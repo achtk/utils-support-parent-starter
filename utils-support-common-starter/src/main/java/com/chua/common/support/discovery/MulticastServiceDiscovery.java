@@ -2,6 +2,8 @@ package com.chua.common.support.discovery;
 
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.bean.BeanMap;
+import com.chua.common.support.converter.Converter;
+import com.chua.common.support.lang.net.UrlQuery;
 import com.chua.common.support.lang.robin.Node;
 import com.chua.common.support.lang.robin.RandomRoundRobin;
 import com.chua.common.support.lang.robin.Robin;
@@ -158,11 +160,12 @@ public class MulticastServiceDiscovery implements ServiceDiscovery, Runnable {
         List<Discovery> proxyUri = new LinkedList<>();
         if (null != netAddresses) {
             for (NetAddress netAddress : netAddresses) {
-                Object source = netAddress.getParameter("source", null);
-                if (null == source) {
-                    continue;
-                }
-                proxyUri.add((Discovery) source);
+                UrlQuery source = netAddress.getUrlQuery();
+                proxyUri.add(Discovery.builder()
+                        .address(source.get("address").toString())
+                        .discovery(source.get("discovery").toString())
+                        .weight(Converter.convertIfNecessary(source.get("weight").toString(), Float.class))
+                        .build());
             }
         }
 
