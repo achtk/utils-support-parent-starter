@@ -29,7 +29,7 @@ public class DateExample {
         System.out.println(dateTime.duration(localDateTime));
         DateRangeTime dateRangeTime = DateRangeTime.greaterThan(LocalDateTime.now());
         LocalDateTime time1 = DateTime.now().plusMinutes(1).toLocalDateTime();
-        log.info("时间区间{}是否包含: {} -> {}", dateRangeTime, time1, dateRangeTime.contains(time1));
+        log.info("时间区间{}是否包含:{} -> {}", new Object[]{dateRangeTime.toString(), time1 + "", dateRangeTime.contains(time1) + ""});
 
         log.info("unix => {}", dateTime.toUnixTimestamp());
         log.info("当前时间 => {}", dateTime.getStringDate());

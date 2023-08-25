@@ -22,7 +22,7 @@ public class ViewFactoryExample {
         viewServer.addPlugin("logo-text", new TextImgWaterImageFilter("我是水印", new URL("https://cdn.qirenit.com/8d11da41-4f8d-4bcc-a36e-d36cddea2021").openStream(), new com.chua.common.support.protocol.image.ImagePoint(40, 20)));
         viewServer.addContext("demo", ViewConfig.newBuilder().setPath("D://"));
         viewServer.addContext("demo1", ViewConfig.newBuilder().setType("minio").setPath("http://127.0.0.1:9000").setAppKey("minioadmin").setAppSecret("minioadmin"));
-        viewServer.addContext("achtk", ViewConfig.newBuilder().setType("alibaba").setAppKey("LTAI5tNjxkANN1RXCWf5Q868").setAppSecret("NElUp68vSAosQRCAKAOZNgGCiPeswQ"));
+        viewServer.addContext("achtk", ViewConfig.newBuilder().setType("alibaba").setAppKey("").setAppSecret("NElUp68vSAosQRCAKAOZNgGCiPeswQ"));
         viewServer.run(new String[]{"97"});
     }
 }

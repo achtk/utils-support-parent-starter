@@ -45,7 +45,7 @@ public class ServiceProvider<T> implements InitializingAware {
     private final List<ServiceFinder> finders = new LinkedList<>();
 
     final List<ServiceFinder> rs = new LinkedList<>();
-    private static List<ServiceFinder> DEFAULT;
+    private static List<Class<? extends ServiceFinder>> DEFAULT;
     private final Value<Class<T>> value;
     private ClassLoader classLoader;
     private ServiceAutowire serviceAutowire;
@@ -83,11 +83,11 @@ public class ServiceProvider<T> implements InitializingAware {
                 ServiceLoaderServiceFinder finder = new ServiceLoaderServiceFinder();
                 List<ServiceDefinition> analyze = finder.analyze(ServiceFinder.class, Thread.currentThread().getContextClassLoader());
                 for (ServiceDefinition serviceDefinition : analyze) {
-                    DEFAULT.add(serviceDefinition.getObj(serviceAutowire));
+                    DEFAULT.add((Class<? extends ServiceFinder>) serviceDefinition.getImplClass());
                 }
-                DEFAULT.add(new ServiceLoaderServiceFinder());
-                DEFAULT.add(new CustomServiceFinder());
-                DEFAULT.add(new SamePackageServiceFinder());
+                DEFAULT.add(ServiceLoaderServiceFinder.class);
+                DEFAULT.add(CustomServiceFinder.class);
+                DEFAULT.add(SamePackageServiceFinder.class);
             }
         }
 
@@ -214,7 +214,9 @@ public class ServiceProvider<T> implements InitializingAware {
         }
 
         if (rs.isEmpty() && null != DEFAULT) {
-            rs.addAll(DEFAULT);
+            for (Class<? extends ServiceFinder> aClass : DEFAULT) {
+                rs.add(ClassUtils.forObject(aClass));
+            }
         }
         return rs;
     }
