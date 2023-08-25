@@ -32,8 +32,9 @@ import java.nio.file.Path;
 public class ArcFaceEngine implements Engine, InitializingAware {
 
     private FaceEngine faceEngine;
-    private static final String model = "libarcsoft_face";
+    private static final String MODEL = "libarcsoft_face";
     private DetectionConfiguration configuration;
+    private static final CharSequence FACE = "face";
 
     public ArcFaceEngine(DetectionConfiguration configuration) {
         this.configuration = configuration;
@@ -44,7 +45,7 @@ public class ArcFaceEngine implements Engine, InitializingAware {
 
     @Override
     public void afterPropertiesSet() {
-        Path path = Platform.extractNativeBinary(model, configuration.cachePath());
+        Path path = Platform.extractNativeBinary(MODEL, configuration.cachePath());
         this.faceEngine = new FaceEngine(path.getParent().toFile().getPath());
         //激活引擎
         int errorCode = faceEngine.activeOnline(
@@ -114,7 +115,7 @@ public class ArcFaceEngine implements Engine, InitializingAware {
 
     @Override
     public <T> T get(String name, Class<T> target) {
-        if(StringUtils.isNotEmpty(name) && !name.toLowerCase().contains("face")) {
+        if(StringUtils.isNotEmpty(name) && !name.toLowerCase().contains(FACE)) {
             return null;
         }
         return get(target);

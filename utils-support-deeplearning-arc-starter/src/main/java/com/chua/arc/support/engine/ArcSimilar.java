@@ -7,6 +7,7 @@ import com.chua.common.support.lang.function.Similar;
 
 /**
  * 相似度比
+ * @author CH
  */
 public class ArcSimilar implements Similar<byte[]> {
     private final FaceEngine faceEngine;

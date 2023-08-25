@@ -16,6 +16,7 @@ import java.util.function.Function;
 
 /**
  * 相似度比
+ * @author CH
  */
 public class ArcCompare implements Compare {
     private final FaceEngine faceEngine;
@@ -58,7 +59,7 @@ public class ArcCompare implements Compare {
             rs.add(PredictResult.empty());
             return rs;
         }
-        Map<FaceInfo, FaceFeature> cache = new HashMap<>();
+        Map<FaceInfo, FaceFeature> cache = new HashMap<>(faceInfoList.size() * faceInfoList2.size());
         for (FaceInfo faceInfo : faceInfoList) {
             Rect rect = faceInfo.getRect();
             List<Shape> shapes = new LinkedList<>();
