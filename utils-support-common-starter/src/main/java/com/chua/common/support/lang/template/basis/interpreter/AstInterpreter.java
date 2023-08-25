@@ -1,19 +1,20 @@
 
 package com.chua.common.support.lang.template.basis.interpreter;
 
-import com.chua.common.support.lang.template.basis.Error.TemplateException;
 import com.chua.common.support.lang.template.basis.BasisTemplate;
+import com.chua.common.support.lang.template.basis.Error.TemplateException;
 import com.chua.common.support.lang.template.basis.TemplateContext;
 import com.chua.common.support.lang.template.basis.parsing.Ast;
 import com.chua.common.support.lang.template.basis.parsing.Ast.Break;
 import com.chua.common.support.lang.template.basis.parsing.Ast.Continue;
-import com.chua.common.support.lang.template.basis.parsing.Ast.Node;
 import com.chua.common.support.lang.template.basis.parsing.Ast.Return;
 import com.chua.common.support.lang.template.basis.parsing.Ast.Return.ReturnValue;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * <p>
@@ -50,15 +51,15 @@ public class AstInterpreter {
 		}
 	}
 
-	public static Object interpretNodeList (List<Node> nodes, BasisTemplate template, TemplateContext context, OutputStream out) throws IOException {
+	public static Object interpretNodeList (List<Ast.AbstractNode> nodes, BasisTemplate template, TemplateContext context, OutputStream out) throws IOException {
 		for (int i = 0, n = nodes.size(); i < n; i++) {
-			Node node = nodes.get(i);
+			Ast.AbstractNode node = nodes.get(i);
 			Object value = node.evaluate(template, context, out);
 			if (value != null) {
 				if (value == Break.BREAK_SENTINEL || value == Continue.CONTINUE_SENTINEL || value == Return.RETURN_SENTINEL)
 					return value;
 				else
-					out.write(value.toString().getBytes("UTF-8"));
+					out.write(value.toString().getBytes(UTF_8));
 			}
 		}
 		return null;

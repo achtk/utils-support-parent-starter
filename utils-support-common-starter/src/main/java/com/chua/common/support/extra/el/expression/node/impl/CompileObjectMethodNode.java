@@ -11,74 +11,56 @@ import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class CompileObjectMethodNode extends AbstractMethodNode
-{
+public class CompileObjectMethodNode extends AbstractMethodNode {
     private static final CompileHelper COMPILER = new CompileHelper();
     private static final AtomicInteger ATOMIC_INTEGER = new AtomicInteger(0);
-    protected final      boolean       recognizeEveryTime;
-    private final        CalculateNode beanNode;
-    private final        String        methodName;
-    private volatile     Invoker       invoker;
-    private volatile     Class<?>      beanType;
+    protected final boolean recognizeEveryTime;
+    private final CalculateNode beanNode;
+    private final String methodName;
+    private volatile Invoker invoker;
+    private volatile Class<?> beanType;
 
-    public CompileObjectMethodNode(String literals, CalculateNode beanNode, boolean recognizeEveryTime)
-    {
+    public CompileObjectMethodNode(String literals, CalculateNode beanNode, boolean recognizeEveryTime) {
         methodName = literals;
         this.beanNode = beanNode;
         this.recognizeEveryTime = recognizeEveryTime;
     }
 
     @Override
-    public Object calculate(Map<String, Object> variables)
-    {
+    public Object calculate(Map<String, Object> variables) {
         Object value = beanNode.calculate(variables);
-        if (value == null)
-        {
+        if (value == null) {
             return value;
         }
         Object[] args = new Object[argsNodes.length];
-        try
-        {
-            for (int i = 0; i < args.length; i++)
-            {
+        try {
+            for (int i = 0; i < args.length; i++) {
                 args[i] = argsNodes[i].calculate(variables);
             }
             Invoker invoke = getMethod(value, args);
             return invoke.invoke(value, args);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             ReflectUtil.throwException(e);
             return null;
         }
     }
 
-    private Invoker getMethod(Object value, Object[] args)
-    {
-        if (recognizeEveryTime)
-        {
+    private Invoker getMethod(Object value, Object[] args) {
+        if (recognizeEveryTime) {
             Invoker invoker = this.invoker;
-            if (invoker == null || beanType.isAssignableFrom(value.getClass()) == false)
-            {
-                synchronized (this)
-                {
-                    if ((invoker = this.invoker) == null || beanType.isAssignableFrom(value.getClass()) == false)
-                    {
+            if (invoker == null || beanType.isAssignableFrom(value.getClass()) == false) {
+                synchronized (this) {
+                    if ((invoker = this.invoker) == null || beanType.isAssignableFrom(value.getClass()) == false) {
                         invoker = this.invoker = buildInvoker(value, args);
                         return invoker;
                     }
                 }
             }
             return invoker;
-        }
-        else
-        {
-            if (invoker == null)
-            {
-                synchronized (this)
-                {
-                    if (invoker == null)
-                    {
+        } else {
+            if (invoker == null) {
+                synchronized (this) {
+                    if (invoker == null) {
                         invoker = buildInvoker(value, args);
                         return invoker;
                     }
@@ -88,27 +70,18 @@ public class CompileObjectMethodNode extends AbstractMethodNode
         }
     }
 
-    private Invoker buildInvoker(Object value, Object[] args)
-    {
+    private Invoker buildInvoker(Object value, Object[] args) {
         nextmethod:
-        for (Method each : value.getClass().getMethods())
-        {
-            if (each.getName().equals(methodName) && each.getParameterTypes().length == args.length)
-            {
+        for (Method each : value.getClass().getMethods()) {
+            if (each.getName().equals(methodName) && each.getParameterTypes().length == args.length) {
                 Class<?>[] parameterTypes = each.getParameterTypes();
-                for (int i = 0; i < args.length; i++)
-                {
-                    if (parameterTypes[i].isPrimitive())
-                    {
-                        if (args[i] == null || MethodNodeUtil.isWrapType(parameterTypes[i], args[i].getClass()) == false)
-                        {
+                for (int i = 0; i < args.length; i++) {
+                    if (parameterTypes[i].isPrimitive()) {
+                        if (args[i] == null || MethodNodeUtil.isWrapType(parameterTypes[i], args[i].getClass()) == false) {
                             continue nextmethod;
                         }
-                    }
-                    else
-                    {
-                        if (args[i] != null && parameterTypes[i].isAssignableFrom(args[i].getClass()) == false)
-                        {
+                    } else {
+                        if (args[i] != null && parameterTypes[i].isAssignableFrom(args[i].getClass()) == false) {
                             continue nextmethod;
                         }
                     }
@@ -121,98 +94,60 @@ public class CompileObjectMethodNode extends AbstractMethodNode
         return null;
     }
 
-    private Invoker buildInvoker(Object[] args, Method method)
-    {
-        try
-        {
-            ClassModel  classModel  = new ClassModel("Invoke_" + method.getName() + "_" + ATOMIC_INTEGER.incrementAndGet(), Object.class, Invoker.class);
+    private Invoker buildInvoker(Object[] args, Method method) {
+        try {
+            ClassModel classModel = new ClassModel("Invoke_" + method.getName() + "_" + ATOMIC_INTEGER.incrementAndGet(), Object.class, Invoker.class);
             MethodModel methodModel = new MethodModel(classModel);
             methodModel.setAccessLevel(MethodModel.AccessLevel.PUBLIC);
             methodModel.setMethodName("invoke");
             methodModel.setParamterTypes(Object.class, Object[].class);
             methodModel.setReturnType(Object.class);
-            StringBuilder body           = new StringBuilder(" return ((" + SmcHelper.getReferenceName(method.getDeclaringClass(), classModel) + ")$0)." + method.getName() + "(");
-            int           length         = body.length();
-            Class<?>[]    parameterTypes = method.getParameterTypes();
-            for (int i = 0; i < parameterTypes.length; i++)
-            {
+            StringBuilder body = new StringBuilder(" return ((" + SmcHelper.getReferenceName(method.getDeclaringClass(), classModel) + ")$0)." + method.getName() + "(");
+            int length = body.length();
+            Class<?>[] parameterTypes = method.getParameterTypes();
+            for (int i = 0; i < parameterTypes.length; i++) {
                 Class<?> parameterType = parameterTypes[i];
-                if (parameterType == int.class)
-                {
+                if (parameterType == int.class) {
                     body.append("((java.lang.Number)$1[").append(i).append("]).intValue(),");
-                }
-                else if (parameterType == Integer.class)
-                {
-                    if (args[i].getClass() == Integer.class)
-                    {
+                } else if (parameterType == Integer.class) {
+                    if (args[i].getClass() == Integer.class) {
                         body.append("((java.lang.Integer)$").append(i).append("),");
-                    }
-                    else
-                    {
+                    } else {
                         body.append("((java.lang.Number)$1[").append(i).append("]).intValue(),");
                     }
-                }
-                else if (parameterTypes[i] == short.class || parameterTypes[i] == short.class)
-                {
+                } else if (parameterTypes[i] == short.class || parameterTypes[i] == Short.class) {
                     body.append("((java.lang.Number)$1[").append(i).append("]).shortValue(),");
-                }
-                else if (parameterTypes[i] == long.class)
-                {
+                } else if (parameterTypes[i] == long.class) {
                     body.append("((java.lang.Number)$1[").append(i).append("]).longValue(),");
-                }
-                else if (parameterType == Long.class)
-                {
-                    if (args[i].getClass() == Long.class)
-                    {
+                } else if (parameterType == Long.class) {
+                    if (args[i].getClass() == Long.class) {
                         body.append("((java.lang.Long)$").append(i).append("),");
-                    }
-                    else
-                    {
+                    } else {
                         body.append("((java.lang.Number)$1[").append(i).append("]).longValue(),");
                     }
-                }
-                else if (parameterTypes[i] == float.class)
-                {
+                } else if (parameterTypes[i] == float.class) {
                     body.append("((java.lang.Number)$1[").append(i).append("]).floatValue(),");
-                }
-                else if (parameterType == Float.class)
-                {
-                    if (args[i].getClass() == Float.class)
-                    {
+                } else if (parameterType == Float.class) {
+                    if (args[i].getClass() == Float.class) {
                         body.append("((java.lang.Float)$").append(i).append("),");
-                    }
-                    else
-                    {
+                    } else {
                         body.append("((java.lang.Number)$1[").append(i).append("]).floatValue(),");
                     }
-                }
-                else if (parameterTypes[i] == double.class)
-                {
+                } else if (parameterTypes[i] == double.class) {
                     body.append("((java.lang.Number)$1[").append(i).append("]).doubleValue(),");
-                }
-                else if (parameterType == Double.class)
-                {
+                } else if (parameterType == Double.class) {
                     body.append("((java.lang.Double)$").append(i).append("),");
-                }
-                else if (parameterTypes[i] == byte.class || parameterTypes[i] == Byte.class)
-                {
+                } else if (parameterTypes[i] == byte.class || parameterTypes[i] == Byte.class) {
                     body.append("((java.lang.Number)$1[").append(i).append("]).byteValue(),");
-                }
-                else if (parameterTypes[i] == boolean.class)
-                {
+                } else if (parameterTypes[i] == boolean.class) {
                     body.append("((java.lang.Boolean)$1[").append(i).append("]).booleanValue(),");
-                }
-                else if (parameterType == Boolean.class)
-                {
+                } else if (parameterType == Boolean.class) {
                     body.append("((java.lang.Boolean)$").append(i).append("),");
-                }
-                else
-                {
+                } else {
                     body.append("((" + SmcHelper.getReferenceName(parameterTypes[i], classModel) + ")$1[").append(i).append("]),");
                 }
             }
-            if (body.length() != length)
-            {
+            if (body.length() != length) {
                 body.setLength(body.length() - 1);
             }
             body.append(");");
@@ -220,27 +155,21 @@ public class CompileObjectMethodNode extends AbstractMethodNode
             classModel.putMethodModel(methodModel);
             Class<?> compile = COMPILER.compile(classModel);
             return (Invoker) compile.newInstance();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             ReflectUtil.throwException(e);
             return null;
         }
     }
 
     @Override
-    public String literals()
-    {
+    public String literals() {
         StringBuilder cache = new StringBuilder();
         cache.append(beanNode.literals()).append('.').append(methodName).append('(');
-        if (argsNodes != null)
-        {
-            for (CalculateNode each : argsNodes)
-            {
+        if (argsNodes != null) {
+            for (CalculateNode each : argsNodes) {
                 cache.append(each.literals()).append(',');
             }
-            if (cache.charAt(cache.length() - 1) == ',')
-            {
+            if (cache.charAt(cache.length() - 1) == ',') {
                 cache.setLength(cache.length() - 1);
             }
         }
@@ -249,13 +178,11 @@ public class CompileObjectMethodNode extends AbstractMethodNode
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return literals();
     }
 
-    public interface Invoker
-    {
+    public interface Invoker {
         Object invoke(Object host, Object[] params);
     }
 }

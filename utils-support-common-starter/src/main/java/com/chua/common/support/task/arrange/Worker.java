@@ -1,11 +1,11 @@
 package com.chua.common.support.task.arrange;
 
+import com.chua.common.support.constant.ResultState;
 import com.chua.common.support.task.arrange.async.callback.Callback;
 import com.chua.common.support.task.arrange.async.callback.DefaultCallback;
 import com.chua.common.support.task.arrange.async.exception.SkippedException;
 import com.chua.common.support.task.arrange.async.executor.timer.SystemClock;
 import com.chua.common.support.task.arrange.async.worker.DependWrapper;
-import com.chua.common.support.task.arrange.async.worker.ResultState;
 import com.chua.common.support.task.arrange.async.worker.WorkResult;
 import com.chua.common.support.view.view.TreeViewNode;
 

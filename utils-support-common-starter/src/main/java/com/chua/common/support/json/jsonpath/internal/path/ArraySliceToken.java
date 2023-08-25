@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Administrator
  */
-public class ArraySliceToken extends ArrayPathToken {
+public class ArraySliceToken extends AbstractArrayPathToken {
 
     private static final Logger logger = LoggerFactory.getLogger(ArraySliceToken.class);
 

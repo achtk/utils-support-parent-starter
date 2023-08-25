@@ -1,8 +1,8 @@
 
 package com.chua.common.support.lang.template.basis.parsing;
 
-import com.chua.common.support.lang.template.basis.Error;
 import com.chua.common.support.lang.template.basis.BasisTemplate;
+import com.chua.common.support.lang.template.basis.Error;
 import com.chua.common.support.lang.template.basis.TemplateLoader.Source;
 import com.chua.common.support.lang.template.basis.parsing.Ast.*;
 
@@ -17,7 +17,7 @@ public class Parser {
 
 	/** Parses a {@link Source} into a {@link BasisTemplate}. **/
 	public ParserResult parse (Source source) {
-		List<Node> nodes = new ArrayList<Node>();
+		List<AbstractNode> nodes = new ArrayList<>();
 		Macros macros = new Macros();
 		List<Include> includes = new ArrayList<Include>();
 		List<IncludeRaw> rawIncludes = new ArrayList<IncludeRaw>();
@@ -31,8 +31,8 @@ public class Parser {
 
 	/** Parse a statement, which may either be a text block, if statement, for statement, while statement, macro definition,
 	 * include statement or an expression. **/
-	private Node parseStatement (TokenStream tokens, boolean allowMacros, Macros macros, List<Include> includes, List<IncludeRaw> rawIncludes) {
-		Node result = null;
+	private AbstractNode parseStatement (TokenStream tokens, boolean allowMacros, Macros macros, List<Include> includes, List<IncludeRaw> rawIncludes) {
+		AbstractNode result = null;
 
 		if (tokens.match(TokenType.TextBlock, false))
 			result = new Text(tokens.consume().getSpan());
@@ -74,7 +74,7 @@ public class Parser {
 
 		Expression condition = parseExpression(stream);
 
-		List<Node> trueBlock = new ArrayList<Node>();
+		List<AbstractNode> trueBlock = new ArrayList<>();
 		while (stream.hasMore() && !stream.match(false, "elseif", "else", "end")) {
 			trueBlock.add(parseStatement(stream, false, null, includes, rawIncludes));
 		}
@@ -85,16 +85,16 @@ public class Parser {
 
 			Expression elseIfCondition = parseExpression(stream);
 
-			List<Node> elseIfBlock = new ArrayList<Node>();
+			List<AbstractNode> elseIfBlock = new ArrayList<>();
 			while (stream.hasMore() && !stream.match(false, "elseif", "else", "end")) {
 				elseIfBlock.add(parseStatement(stream, false, null, includes, rawIncludes));
 			}
 
 			Span elseIfSpan = new Span(elseIfOpening, elseIfBlock.size() > 0 ? elseIfBlock.get(elseIfBlock.size() - 1).getSpan() : elseIfOpening);
-			elseIfs.add(new IfStatement(elseIfSpan, elseIfCondition, elseIfBlock, new ArrayList<IfStatement>(), new ArrayList<Node>()));
+			elseIfs.add(new IfStatement(elseIfSpan, elseIfCondition, elseIfBlock, new ArrayList<IfStatement>(), new ArrayList<AbstractNode>()));
 		}
 
-		List<Node> falseBlock = new ArrayList<Node>();
+		List<AbstractNode> falseBlock = new ArrayList<>();
 		if (stream.match("else", true)) {
 			while (stream.hasMore() && !stream.match(false, "end")) {
 				falseBlock.add(parseStatement(stream, false, null, includes, rawIncludes));
@@ -121,7 +121,7 @@ public class Parser {
 
 		Expression mapOrArray = parseExpression(stream);
 
-		List<Node> body = new ArrayList<Node>();
+		List<AbstractNode> body = new ArrayList<>();
 		while (stream.hasMore() && !stream.match(false, "end")) {
 			body.add(parseStatement(stream, false, null, includes, rawIncludes));
 		}
@@ -136,7 +136,7 @@ public class Parser {
 
 		Expression condition = parseExpression(stream);
 
-		List<Node> body = new ArrayList<Node>();
+		List<AbstractNode> body = new ArrayList<>();
 		while (stream.hasMore() && !stream.match(false, "end")) {
 			body.add(parseStatement(stream, false, null, includes, rawIncludes));
 		}
@@ -155,7 +155,7 @@ public class Parser {
 
 		stream.expect(TokenType.RightParantheses);
 
-		List<Node> body = new ArrayList<Node>();
+		List<AbstractNode> body = new ArrayList<>();
 		while (stream.hasMore() && !stream.match(false, "end")) {
 			body.add(parseStatement(stream, false, null, includes, rawIncludes));
 		}
@@ -176,7 +176,7 @@ public class Parser {
 		return arguments;
 	}
 
-	private Node parseInclude (TokenStream stream, List<Include> includes, List<IncludeRaw> rawIncludes) {
+	private AbstractNode parseInclude (TokenStream stream, List<Include> includes, List<IncludeRaw> rawIncludes) {
 		Span openingInclude = stream.expect("include").getSpan();
 		if (stream.match("raw", true)) {
 			Span path = stream.expect(TokenType.StringLiteral).getSpan();
@@ -379,7 +379,7 @@ public class Parser {
 		return arguments;
 	}
 
-	private Node parseReturn (TokenStream tokens) {
+	private AbstractNode parseReturn (TokenStream tokens) {
 		Span returnSpan = tokens.expect("return").getSpan();
 		if (tokens.match(";", false)) return new Return(returnSpan, null);
 		Expression returnValue = parseExpression(tokens);
@@ -391,19 +391,19 @@ public class Parser {
 	}
 
 	public static class ParserResult {
-		private final List<Node> nodes;
+		private final List<AbstractNode> nodes;
 		private final Macros macros;
 		private final List<Include> includes;
 		private final List<IncludeRaw> rawIncludes;
 
-		public ParserResult (List<Node> nodes, Macros macros, List<Include> includes, List<IncludeRaw> rawIncludes) {
+		public ParserResult (List<AbstractNode> nodes, Macros macros, List<Include> includes, List<IncludeRaw> rawIncludes) {
 			this.nodes = nodes;
 			this.macros = macros;
 			this.includes = includes;
 			this.rawIncludes = rawIncludes;
 		}
 
-		public List<Node> getNodes () {
+		public List<AbstractNode> getNodes () {
 			return nodes;
 		}
 

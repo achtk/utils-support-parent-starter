@@ -1,7 +1,7 @@
 package com.chua.common.support.extra.el.baseutil.bytecode.structure.constantinfo;
 
+import com.chua.common.support.constant.ConstantType;
 import com.chua.common.support.extra.el.baseutil.bytecode.util.BinaryData;
-import com.chua.common.support.extra.el.baseutil.bytecode.util.ConstantType;
 
 import java.nio.charset.Charset;
 
@@ -13,7 +13,7 @@ public class Utf8Info extends ConstantInfo
 
     public Utf8Info()
     {
-        type = ConstantType.Utf8;
+        type = ConstantType.UTF_8;
     }
 
     public int getLength()

@@ -16,19 +16,19 @@ import java.util.List;
  */
 public class GithubRepoApi implements HasKey {
 
-    @ExtractBy(type = ExtractBy.Type.JsonPath, value = "$.name", source = ExtractBy.Source.RawText)
+    @ExtractBy(type = ExtractBy.Type.JSON_PATH, value = "$.name", source = ExtractBy.Source.RawText)
     private String name;
 
-    @ExtractBy(type = ExtractBy.Type.JsonPath, value = "$..owner.login", source = ExtractBy.Source.RawText)
+    @ExtractBy(type = ExtractBy.Type.JSON_PATH, value = "$..owner.login", source = ExtractBy.Source.RawText)
     private String author;
 
-    @ExtractBy(type = ExtractBy.Type.JsonPath, value = "$.language", multi = true, source = ExtractBy.Source.RawText)
+    @ExtractBy(type = ExtractBy.Type.JSON_PATH, value = "$.language", multi = true, source = ExtractBy.Source.RawText)
     private List<String> language;
 
-    @ExtractBy(type = ExtractBy.Type.JsonPath, value = "$.stargazers_count", source = ExtractBy.Source.RawText)
+    @ExtractBy(type = ExtractBy.Type.JSON_PATH, value = "$.stargazers_count", source = ExtractBy.Source.RawText)
     private int star;
 
-    @ExtractBy(type = ExtractBy.Type.JsonPath, value = "$.forks_count", source = ExtractBy.Source.RawText)
+    @ExtractBy(type = ExtractBy.Type.JSON_PATH, value = "$.forks_count", source = ExtractBy.Source.RawText)
     private int fork;
 
     @ExtractByUrl

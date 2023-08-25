@@ -12,15 +12,27 @@ import java.util.regex.Pattern;
  */
 @Slf4j
 public enum OS {
+    /**
+     * osx
+     */
     OSX("^[Mm]ac OS X$"),
+    /**
+     * linux
+     */
     LINUX("^[Ll]inux$"),
+    /**
+     * window
+     */
     WINDOWS("^[Ww]indows.*"),
+    /**
+     * any
+     */
     ANY("any");
 
     private final Set<Pattern> patterns;
 
-    private OS(final String... patterns) {
-        this.patterns = new HashSet<Pattern>();
+    OS(final String... patterns) {
+        this.patterns = new HashSet<>();
 
         for (final String pattern : patterns) {
             this.patterns.add(Pattern.compile(pattern));

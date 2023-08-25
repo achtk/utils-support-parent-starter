@@ -5,41 +5,86 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public enum Operator implements Token
-{
-    QUESTION("?", 0), //
-    COLON(":", 0), //
-    DOUBLE_AMP("&&", 1), //
-    DOUBLE_BAR("||", 1), //
-    EQ("==", 2), //
-    GT(">", 2), //
-    LT("<", 2), //
-    LT_EQ("<=", 2), //
-    GT_EQ(">=", 2), //
-    NOT_EQ("!=", 2), //
-    PLUS("+", 3), //
-    MINUS("-", 3), //
-    MULTI("*", 5), //
-    DIVISION("/", 5), //
-    PERCENT("%", 5), //
+/**
+ * Operator
+ * @author CH
+ */
+public enum Operator implements Token {
+    /**
+     * ?
+     */
+    QUESTION("?", 0),
+    /**
+     * :
+     */
+    COLON(":", 0),
+    /**
+     * &&
+     */
+    DOUBLE_AMP("&&", 1),
+    /**
+     * ||
+     */
+    DOUBLE_BAR("||", 1),
+    /**
+     * ==
+     */
+    EQ("==", 2),
+    /**
+     * >
+     */
+    GT(">", 2),
+    /**
+     * <
+     */
+    LT("<", 2),
+    /**
+     * <=
+     */
+    LT_EQ("<=", 2),
+    /**
+     * >=
+     */
+    GT_EQ(">=", 2),
+    /**
+     * !=
+     */
+    NOT_EQ("!=", 2),
+    /**
+     * +
+     */
+    PLUS("+", 3),
+    /**
+     * -
+     */
+    MINUS("-", 3),
+    /**
+     * *
+     */
+    MULTI("*", 5),
+    /**
+     * /
+     */
+    DIVISION("/", 5),
+    /**
+     * %
+     */
+    PERCENT("%", 5),
     ;
-    private static final Map<String, Operator> symbols = new HashMap<String, Operator>(128);
-    private static final Set<Operator>         store   = new HashSet<Operator>();
+    private static final Map<String, Operator> SYMBOLS = new HashMap<String, Operator>(128);
+    private static final Set<Operator> STORE = new HashSet<Operator>();
 
-    static
-    {
-        for (Operator each : Operator.values())
-        {
-            symbols.put(each.getLiterals(), each);
-            store.add(each);
+    static {
+        for (Operator each : Operator.values()) {
+            SYMBOLS.put(each.getLiterals(), each);
+            STORE.add(each);
         }
     }
 
     private final String literals;
-    private final int    priority;
+    private final int priority;
 
-    Operator(String literals, int priority)
-    {
+    Operator(String literals, int priority) {
         this.literals = literals;
         this.priority = priority;
     }
@@ -50,23 +95,19 @@ public enum Operator implements Token
      * @param literals 字面量
      * @return 词法符号
      */
-    public static Operator literalsOf(final String literals)
-    {
-        return symbols.get(literals);
+    public static Operator literalsOf(final String literals) {
+        return SYMBOLS.get(literals);
     }
 
-    public static boolean isOperator(Token token)
-    {
+    public static boolean isOperator(Token token) {
         return token instanceof Operator;
     }
 
-    public String getLiterals()
-    {
+    public String getLiterals() {
         return literals;
     }
 
-    public int getPriority()
-    {
+    public int getPriority() {
         return priority;
     }
 }

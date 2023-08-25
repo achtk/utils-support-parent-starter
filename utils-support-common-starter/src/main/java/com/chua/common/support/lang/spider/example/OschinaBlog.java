@@ -19,7 +19,7 @@ public class OschinaBlog {
     @ExtractBy("//title/text()")
     private String title;
 
-    @ExtractBy(value = "div.BlogContent", type = ExtractBy.Type.Css)
+    @ExtractBy(value = "div.BlogContent", type = ExtractBy.Type.CSS)
     private String content;
 
     @ExtractBy(value = "//div[@class='BlogTags']/a/text()", multi = true)

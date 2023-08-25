@@ -90,7 +90,7 @@ public class ScanPathToken extends PathToken {
     private static Predicate createScanPredicate(final PathToken target, final EvaluationContextImpl ctx) {
         if (target instanceof PropertyPathToken) {
             return new PropertyPathTokenPredicate(target, ctx);
-        } else if (target instanceof ArrayPathToken) {
+        } else if (target instanceof AbstractArrayPathToken) {
             return new ArrayPathTokenPredicate(ctx);
         } else if (target instanceof WildcardPathToken) {
             return new WildcardPathTokenPredicate();

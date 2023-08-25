@@ -15,7 +15,13 @@ import java.util.stream.IntStream;
 public class Indentation {
 
   enum IndentTypes {
+    /**
+     * INDENT_TYPE_TOP_LEVEL
+     */
     INDENT_TYPE_TOP_LEVEL,
+    /**
+     * INDENT_TYPE_BLOCK_LEVEL
+     */
     INDENT_TYPE_BLOCK_LEVEL
   }
 

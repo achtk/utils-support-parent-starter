@@ -11,7 +11,7 @@ import java.util.regex.Matcher;
  *
  * @author CH
  */
-public abstract class AnsiLog {
+public class AnsiLog {
     static boolean enableColor;
     public static Level LEVEL;
     private static final String RESET = "\u001b[0m";

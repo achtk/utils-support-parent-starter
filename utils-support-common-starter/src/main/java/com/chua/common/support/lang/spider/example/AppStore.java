@@ -15,19 +15,19 @@ import java.util.List;
 @Experimental
 public class AppStore {
 
-    @ExtractBy(type = ExtractBy.Type.JsonPath, value = "$..trackName")
+    @ExtractBy(type = ExtractBy.Type.JSON_PATH, value = "$..trackName")
     private String trackName;
 
-    @ExtractBy(type = ExtractBy.Type.JsonPath, value = "$..description")
+    @ExtractBy(type = ExtractBy.Type.JSON_PATH, value = "$..description")
     private String description;
 
-    @ExtractBy(type = ExtractBy.Type.JsonPath, value = "$..userRatingCount")
+    @ExtractBy(type = ExtractBy.Type.JSON_PATH, value = "$..userRatingCount")
     private int userRatingCount;
 
-    @ExtractBy(type = ExtractBy.Type.JsonPath, value = "$..screenshotUrls")
+    @ExtractBy(type = ExtractBy.Type.JSON_PATH, value = "$..screenshotUrls")
     private List<String> screenshotUrls;
 
-    @ExtractBy(type = ExtractBy.Type.JsonPath, value = "$..supportedDevices")
+    @ExtractBy(type = ExtractBy.Type.JSON_PATH, value = "$..supportedDevices")
     private List<String> supportedDevices;
 
     public static void main(String[] args) {

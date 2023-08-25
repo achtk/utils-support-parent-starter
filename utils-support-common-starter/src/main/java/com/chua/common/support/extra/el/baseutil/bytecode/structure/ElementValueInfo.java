@@ -1,91 +1,70 @@
 package com.chua.common.support.extra.el.baseutil.bytecode.structure;
 
+import com.chua.common.support.constant.ConstantType;
 import com.chua.common.support.extra.el.baseutil.bytecode.ClassFile;
 import com.chua.common.support.extra.el.baseutil.bytecode.ClassFileParser;
 import com.chua.common.support.extra.el.baseutil.bytecode.annotation.ValuePair;
+import com.chua.common.support.extra.el.baseutil.bytecode.structure.constantinfo.*;
 import com.chua.common.support.extra.el.baseutil.bytecode.util.BinaryData;
 import com.chua.common.support.extra.el.baseutil.bytecode.util.BytecodeUtil;
 import com.chua.common.support.extra.el.baseutil.reflect.ReflectUtil;
-import com.chua.common.support.extra.el.baseutil.bytecode.structure.constantinfo.*;
 
 import java.util.Arrays;
 
-public class ElementValueInfo
-{
-    private char               tag;
-    private ElementValueType   elementValueType;
-    private ConstantValue      constantValue;
-    private EnumConstant       enumConstant;
-    private String             classname;
-    private AnnotationInfo     annotationInfo;
-    private int                num_values;
+import static com.chua.common.support.constant.ConstantType.*;
+
+public class ElementValueInfo {
+    private char tag;
+    private ConstantType elementValueType;
+    private ConstantValue constantValue;
+    private EnumConstant enumConstant;
+    private String classname;
+    private AnnotationInfo annotationInfo;
+    private int num_values;
     private ElementValueInfo[] elementValueInfos;
 
-    public void resolve(BinaryData binaryData, ConstantInfo[] constantInfos)
-    {
+    public void resolve(BinaryData binaryData, ConstantInfo[] constantInfos) {
         tag = (char) binaryData.readByte();
         elementValueType = resolveType(tag);
-        if (isPrimitive(elementValueType) || elementValueType == ElementValueType.STRING)
-        {
-            int          const_value_index = binaryData.readShort();
-            ConstantInfo constantInfo      = constantInfos[const_value_index - 1];
-            if (constantInfo instanceof IntegerInfo)
-            {
+        if (isPrimitive(elementValueType) || elementValueType == STRING) {
+            int const_value_index = binaryData.readShort();
+            ConstantInfo constantInfo = constantInfos[const_value_index - 1];
+            if (constantInfo instanceof IntegerInfo) {
                 constantValue = new ConstantValue(elementValueType, ((IntegerInfo) constantInfo).getValue());
-            }
-            else if (constantInfo instanceof FloatInfo)
-            {
+            } else if (constantInfo instanceof FloatInfo) {
                 constantValue = new ConstantValue(elementValueType, ((FloatInfo) constantInfo).getValue());
-            }
-            else if (constantInfo instanceof LongInfo)
-            {
+            } else if (constantInfo instanceof LongInfo) {
                 constantValue = new ConstantValue(elementValueType, ((LongInfo) constantInfo).getValue());
-            }
-            else if (constantInfo instanceof DoubleInfo)
-            {
+            } else if (constantInfo instanceof DoubleInfo) {
                 constantValue = new ConstantValue(elementValueType, ((DoubleInfo) constantInfo).getValue());
-            }
-            else if (elementValueType == ElementValueType.STRING)
-            {
+            } else if (elementValueType == STRING) {
                 constantValue = new ConstantValue(elementValueType, ((Utf8Info) constantInfo).getValue());
-            }
-            else
-            {
+            } else {
                 throw new IllegalArgumentException();
             }
-        }
-        else if (elementValueType == ElementValueType.ENUM)
-        {
-            int    type_name_index  = binaryData.readShort();
-            int    const_name_index = binaryData.readShort();
-            String typeName         = ((Utf8Info) constantInfos[type_name_index - 1]).getValue();
-            String enumName         = ((Utf8Info) constantInfos[const_name_index - 1]).getValue();
+        } else if (elementValueType == ENUM) {
+            int type_name_index = binaryData.readShort();
+            int const_name_index = binaryData.readShort();
+            String typeName = ((Utf8Info) constantInfos[type_name_index - 1]).getValue();
+            String enumName = ((Utf8Info) constantInfos[const_name_index - 1]).getValue();
             enumConstant = new EnumConstant(typeName, enumName);
-        }
-        else if (elementValueType == ElementValueType.CLASS)
-        {
+        } else if (elementValueType == CLASS) {
             int class_info_index = binaryData.readShort();
             classname = ((Utf8Info) constantInfos[class_info_index - 1]).getValue();
-        }
-        else if (elementValueType == ElementValueType.ANNOTATION)
-        {
+        } else if (elementValueType == ANNOTATION) {
             annotationInfo = new AnnotationInfo();
             annotationInfo.resolve(binaryData, constantInfos);
-        }
-        else if (elementValueType == ElementValueType.ARRAY)
-        {
+        } else if (elementValueType == ARRAY) {
             num_values = binaryData.readShort();
             elementValueInfos = new ElementValueInfo[num_values];
-            for (int i = 0; i < num_values; i++)
-            {
+            for (int i = 0; i < num_values; i++) {
                 elementValueInfos[i] = new ElementValueInfo();
                 elementValueInfos[i].resolve(binaryData, constantInfos);
             }
         }
     }
 
-    public boolean isPrimitive(ElementValueType type)
-    {
+    public boolean isPrimitive(ConstantType type) {
         //
 //
 //
@@ -94,98 +73,86 @@ public class ElementValueInfo
 //
 //
 //
-        return type == ElementValueType.BYTE //
-                || type == ElementValueType.CHAR//
-                || type == ElementValueType.DOUBLE//
-                || type == ElementValueType.FLOAT//
-                || type == ElementValueType.INT//
-                || type == ElementValueType.LONG//
-                || type == ElementValueType.SHORT//
-                || type == ElementValueType.BOOLEAN;
+        return type == BYTE //
+                || type == CHAR//
+                || type == DOUBLE//
+                || type == FLOAT//
+                || type == INT//
+                || type == LONG//
+                || type == SHORT//
+                || type == BOOLEAN;
     }
 
-    ElementValueType resolveType(char c)
-    {
-        switch (c)
-        {
+    ConstantType resolveType(char c) {
+        switch (c) {
             case 'B':
-                return ElementValueType.BYTE;
+                return BYTE;
             case 'C':
-                return ElementValueType.CHAR;
+                return CHAR;
             case 'D':
-                return ElementValueType.DOUBLE;
+                return DOUBLE;
             case 'F':
-                return ElementValueType.FLOAT;
+                return FLOAT;
             case 'I':
-                return ElementValueType.INT;
+                return INT;
             case 'J':
-                return ElementValueType.LONG;
+                return LONG;
             case 'S':
-                return ElementValueType.SHORT;
+                return SHORT;
             case 'Z':
-                return ElementValueType.BOOLEAN;
+                return BOOLEAN;
             case 's':
-                return ElementValueType.STRING;
+                return STRING;
             case 'e':
-                return ElementValueType.ENUM;
+                return ENUM;
             case 'c':
-                return ElementValueType.CLASS;
+                return CLASS;
             case '@':
-                return ElementValueType.ANNOTATION;
+                return ANNOTATION;
             case '[':
-                return ElementValueType.ARRAY;
+                return ARRAY;
             default:
                 throw new IllegalArgumentException();
         }
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "ElementValueInfo{" + "tag=" + tag + ", elementValueType=" + elementValueType + ", constantValue=" + constantValue + ", enumConstant=" + enumConstant + ", classname='" + classname + '\'' + ", annotationInfo=" + annotationInfo + ", num_values=" + num_values + ", elementValueInfos=" + Arrays.toString(elementValueInfos) + '}';
     }
 
-    public ElementValueType getElementValueType()
-    {
+    public ConstantType getElementValueType() {
         return elementValueType;
     }
 
-    public ConstantValue getConstantValue()
-    {
+    public ConstantValue getConstantValue() {
         return constantValue;
     }
 
-    public EnumConstant getEnumConstant()
-    {
+    public EnumConstant getEnumConstant() {
         return enumConstant;
     }
 
-    public String getClassname()
-    {
+    public String getClassname() {
         return classname;
     }
 
-    public AnnotationInfo getAnnotationInfo()
-    {
+    public AnnotationInfo getAnnotationInfo() {
         return annotationInfo;
     }
 
-    public int getNum_values()
-    {
+    public int getNum_values() {
         return num_values;
     }
 
-    public ElementValueInfo[] getElementValueInfos()
-    {
+    public ElementValueInfo[] getElementValueInfos() {
         return elementValueInfos;
     }
 
-    public ValuePair getValue(ClassLoader classLoader, MethodInfo methodInfo)
-    {
+    public ValuePair getValue(ClassLoader classLoader, MethodInfo methodInfo) {
         ValuePair valuePair = new ValuePair(methodInfo);
         valuePair.setElementValueType(elementValueType);
-        switch (elementValueType)
-        {
+        switch (elementValueType) {
             case BYTE:
                 byte b = (byte) constantValue.getIntValue();
                 valuePair.setB(b);
@@ -235,82 +202,64 @@ public class ElementValueInfo
                 valuePair.setAnnotation(annotationInfo.getAnnotation(classLoader));
                 break;
             case ARRAY:
-                if (num_values != 0)
-                {
+                if (num_values != 0) {
                     valuePair.setComponentType(elementValueInfos[0].getElementValueType());
                     ValuePair[] array = new ValuePair[num_values];
-                    for (int i = 0; i < array.length; i++)
-                    {
+                    for (int i = 0; i < array.length; i++) {
                         array[i] = elementValueInfos[i].getValue(classLoader, methodInfo);
                     }
                     valuePair.setArray(array);
-                    if (valuePair.getComponentType() == ElementValueType.ENUM)
-                    {
+                    if (valuePair.getComponentType() == ENUM) {
                         valuePair.setComponentEnumTypeName(elementValueInfos[0].getEnumConstant().getTypeName().replace('/', '.'));
-                    }
-                    else if (valuePair.getComponentType() == ElementValueType.ANNOTATION)
-                    {
+                    } else if (valuePair.getComponentType() == ANNOTATION) {
                         valuePair.setComponentAnnotationType(elementValueInfos[0].getAnnotationInfo().getType().replace('/', '.'));
                     }
-                }
-                else
-                {
-                    String           methodInfoDescriptor = methodInfo.getDescriptor();
-                    int              index                = methodInfoDescriptor.indexOf(")");
-                    char             c1                   = methodInfoDescriptor.charAt(index + 2);
-                    ElementValueType componentType        = null;
-                    switch (c1)
-                    {
+                } else {
+                    String methodInfoDescriptor = methodInfo.getDescriptor();
+                    int index = methodInfoDescriptor.indexOf(")");
+                    char c1 = methodInfoDescriptor.charAt(index + 2);
+                    ConstantType componentType = null;
+                    switch (c1) {
                         case 'B':
-                            componentType = ElementValueType.BYTE;
+                            componentType = BYTE;
                             break;
                         case 'C':
-                            componentType = ElementValueType.CHAR;
+                            componentType = CHAR;
                             break;
                         case 'D':
-                            componentType = ElementValueType.DOUBLE;
+                            componentType = DOUBLE;
                             break;
                         case 'F':
-                            componentType = ElementValueType.FLOAT;
+                            componentType = FLOAT;
                             break;
                         case 'I':
-                            componentType = ElementValueType.INT;
+                            componentType = INT;
                             break;
                         case 'J':
-                            componentType = ElementValueType.LONG;
+                            componentType = LONG;
                             break;
                         case 'S':
-                            componentType = ElementValueType.SHORT;
+                            componentType = SHORT;
                             break;
                         case 'Z':
-                            componentType = ElementValueType.BOOLEAN;
+                            componentType = BOOLEAN;
                             break;
                         case 'L':
                             String reference = methodInfoDescriptor.substring(index + 3, methodInfoDescriptor.length() - 1);
-                            if (reference.equals("java/lang/String"))
-                            {
-                                componentType = ElementValueType.STRING;
-                            }
-                            else if (reference.equals("java/lang/Class"))
-                            {
-                                componentType = ElementValueType.CLASS;
-                            }
-                            else
-                            {
-                                byte[]    bytes     = BytecodeUtil.loadBytecode(classLoader, reference);
+                            if (reference.equals("java/lang/String")) {
+                                componentType = STRING;
+                            } else if (reference.equals("java/lang/Class")) {
+                                componentType = CLASS;
+                            } else {
+                                byte[] bytes = BytecodeUtil.loadBytecode(classLoader, reference);
                                 ClassFile classFile = new ClassFileParser(new BinaryData(bytes)).parse();
-                                if (classFile.isAnnotation())
-                                {
-                                    componentType = ElementValueType.ANNOTATION;
+                                if (classFile.isAnnotation()) {
+                                    componentType = ANNOTATION;
                                     valuePair.setComponentAnnotationType(reference.replace('/', '.'));
-                                }
-                                else if (classFile.isEnum())
-                                {
-                                    componentType = ElementValueType.ENUM;
+                                } else if (classFile.isEnum()) {
+                                    componentType = ENUM;
                                     valuePair.setComponentEnumTypeName(reference.replace('/', '.'));
-                                }
-                                else
-                                {
+                                } else {
                                     ReflectUtil.throwException(new IllegalArgumentException());
                                 }
                             }

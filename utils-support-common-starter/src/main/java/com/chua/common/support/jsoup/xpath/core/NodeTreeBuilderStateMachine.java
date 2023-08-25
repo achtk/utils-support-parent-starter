@@ -17,10 +17,13 @@ public class NodeTreeBuilderStateMachine {
     StringBuilder accum = new StringBuilder();
 
     enum BuilderState {
+        /**
+         * scope
+         */
         SCOPE {
             @Override
             public void parser(NodeTreeBuilderStateMachine stateMachine, char[] xpath) {
-                if(stateMachine.cur == xpath.length) {
+                if (stateMachine.cur == xpath.length) {
                     stateMachine.state = END;
                 }
                 while (stateMachine.cur < xpath.length) {
@@ -37,6 +40,9 @@ public class NodeTreeBuilderStateMachine {
                 }
             }
         },
+        /**
+         * axis
+         */
         AXIS {
             @Override
             public void parser(NodeTreeBuilderStateMachine stateMachine, char[] xpath) {
@@ -55,6 +61,9 @@ public class NodeTreeBuilderStateMachine {
                 stateMachine.state = TAG;
             }
         },
+        /**
+         * tag
+         */
         TAG {
             @Override
             public void parser(NodeTreeBuilderStateMachine stateMachine, char[] xpath) {
@@ -73,6 +82,9 @@ public class NodeTreeBuilderStateMachine {
                 }
             }
         },
+        /**
+         * predicate
+         */
         PREDICATE {
             @Override
             public void parser(NodeTreeBuilderStateMachine stateMachine, char[] xpath) {
@@ -99,6 +111,9 @@ public class NodeTreeBuilderStateMachine {
                 }
             }
         },
+        /**
+         * end
+         */
         END {
             @Override
             public void parser(NodeTreeBuilderStateMachine stateMachine, char[] xpath) {
@@ -109,11 +124,14 @@ public class NodeTreeBuilderStateMachine {
         }
     }
 
+    private static final String REG = ".+(\\+|=|-|>|<|>=|<=|^=|\\*=|$=|~=|!=)[^']+";
+    private static final String REG1 = ".+(\\+|=|-|>|<|>=|<=|^=|\\*=|$=|~=|!=)'.+'";
+
     /**
      * 根据谓语字符串初步生成谓语体
      *
-     * @param pre
-     * @return
+     * @param pre pre
+     * @return Predicate
      */
     public Predicate genPredicate(String pre) {
         StringBuilder op = new StringBuilder();
@@ -124,7 +142,7 @@ public class NodeTreeBuilderStateMachine {
         int index = preArray.length - 1;
         int argDeep = 0;
         int opFlag = 0;
-        if (pre.matches(".+(\\+|=|-|>|<|>=|<=|^=|\\*=|$=|~=|!=)'.+'")) {
+        if (pre.matches(REG1)) {
             while (index >= 0) {
                 char tmp = preArray[index];
                 if (tmp == '\'') {
@@ -141,7 +159,7 @@ public class NodeTreeBuilderStateMachine {
                 }
                 index -= 1;
             }
-        } else if (pre.matches(".+(\\+|=|-|>|<|>=|<=|^=|\\*=|$=|~=|!=)[^']+")) {
+        } else if (pre.matches(REG)) {
             while (index >= 0) {
                 char tmp = preArray[index];
                 if (opFlag == 0 && EmMap.getInstance().commOpChar.contains(tmp)) {

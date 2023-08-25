@@ -18,7 +18,24 @@ class Extractor {
 
     protected final boolean multi;
 
-    static enum Source {Html, Url, RawHtml, RawText}
+    static enum Source {
+        /**
+         * Html
+         */
+        HTML,
+        /**
+         * Url
+         */
+        URL,
+        /**
+         * RawHtml
+         */
+        RAW_HTML,
+        /**
+         * RawText
+         */
+        RAW_TEXT
+    }
 
     public Extractor(Selector selector, Source source, boolean notNull, boolean multi) {
         this.selector = selector;

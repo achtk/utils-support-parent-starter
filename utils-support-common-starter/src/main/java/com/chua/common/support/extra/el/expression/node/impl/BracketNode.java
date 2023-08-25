@@ -7,11 +7,10 @@ import com.chua.common.support.extra.el.expression.token.ValueResult;
 import java.util.List;
 import java.util.Map;
 
-public class BracketNode implements CalculateNode
-{
+public class BracketNode implements CalculateNode {
     private final CalculateNode beanNode;
     private final CalculateNode valueNode;
-    private final ValueType     type;
+    private final ValueType type;
 
     /**
      * 代表[]的节点
@@ -19,49 +18,35 @@ public class BracketNode implements CalculateNode
      * @param beanNode  元素节点
      * @param valueNode [] 内置的节点
      */
-    public BracketNode(CalculateNode beanNode, CalculateNode valueNode)
-    {
+    public BracketNode(CalculateNode beanNode, CalculateNode valueNode) {
         this.beanNode = beanNode;
         this.valueNode = valueNode;
-        if (valueNode.token() == ValueResult.STRING)
-        {
+        if (valueNode.token() == ValueResult.STRING) {
             type = ValueType.STRING;
-        }
-        else if (valueNode.token() == ValueResult.NUMBER)
-        {
+        } else if (valueNode.token() == ValueResult.NUMBER) {
             type = ValueType.NUMBER;
-        }
-        else
-        {
+        } else {
             type = ValueType.RUNTIME;
         }
     }
 
     @Override
-    public Object calculate(Map<String, Object> variables)
-    {
+    public Object calculate(Map<String, Object> variables) {
         Object value = valueNode.calculate(variables);
-        if (value == null)
-        {
+        if (value == null) {
             return null;
         }
-        switch (type)
-        {
+        switch (type) {
             case STRING:
                 return returnMapValue(variables, (String) value);
             case NUMBER:
                 return returnArrayOrListValue(variables, (Number) value);
             case RUNTIME:
-                if (value instanceof String)
-                {
+                if (value instanceof String) {
                     return returnMapValue(variables, (String) value);
-                }
-                else if (value instanceof Number)
-                {
+                } else if (value instanceof Number) {
                     return returnArrayOrListValue(variables, (Number) value);
-                }
-                else
-                {
+                } else {
                     throw new IllegalArgumentException(value.getClass().getName());
                 }
             default:
@@ -69,85 +54,68 @@ public class BracketNode implements CalculateNode
         }
     }
 
-    private Object returnArrayOrListValue(Map<String, Object> variables, Number value)
-    {
+    private Object returnArrayOrListValue(Map<String, Object> variables, Number value) {
         Object beanValue = beanNode.calculate(variables);
-        if (beanValue == null)
-        {
+        if (beanValue == null) {
             return null;
         }
-        if (beanValue instanceof List)
-        {
+        if (beanValue instanceof List) {
             return ((List<?>) beanValue).get((value).intValue());
-        }
-        else if (beanValue instanceof Object[])
-        {
+        } else if (beanValue instanceof Object[]) {
             return ((Object[]) beanValue)[(value).intValue()];
-        }
-        else if (beanValue instanceof int[])
-        {
+        } else if (beanValue instanceof int[]) {
             return ((int[]) beanValue)[(value).intValue()];
-        }
-        else if (beanValue instanceof long[])
-        {
+        } else if (beanValue instanceof long[]) {
             return ((long[]) beanValue)[(value).intValue()];
-        }
-        else if (beanValue instanceof short[])
-        {
+        } else if (beanValue instanceof short[]) {
             return ((short[]) beanValue)[(value).intValue()];
-        }
-        else if (beanValue instanceof float[])
-        {
+        } else if (beanValue instanceof float[]) {
             return ((float[]) beanValue)[(value).intValue()];
-        }
-        else if (beanValue instanceof double[])
-        {
+        } else if (beanValue instanceof double[]) {
             return ((double[]) beanValue)[(value).intValue()];
-        }
-        else if (beanValue instanceof boolean[])
-        {
+        } else if (beanValue instanceof boolean[]) {
             return ((boolean[]) beanValue)[(value).intValue()];
-        }
-        else if (beanValue instanceof char[])
-        {
+        } else if (beanValue instanceof char[]) {
             return ((char[]) beanValue)[(value).intValue()];
-        }
-        else if (beanValue instanceof byte[])
-        {
+        } else if (beanValue instanceof byte[]) {
             return ((byte[]) beanValue)[(value).intValue()];
-        }
-        else
-        {
+        } else {
             throw new IllegalArgumentException(beanValue.getClass().getName());
         }
     }
 
     @SuppressWarnings("unchecked")
-    private Object returnMapValue(Map<String, Object> variables, String value)
-    {
+    private Object returnMapValue(Map<String, Object> variables, String value) {
         return ((Map<String, Object>) beanNode.calculate(variables)).get(value);
     }
 
     @Override
-    public Token token()
-    {
+    public Token token() {
         return ValueResult.BRACKET;
     }
 
     @Override
-    public String literals()
-    {
+    public String literals() {
         return beanNode.literals() + "[" + valueNode.literals() + "]";
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return literals();
     }
 
-    enum ValueType
-    {
-        STRING, NUMBER, RUNTIME
+    enum ValueType {
+        /**
+         * str
+         */
+        STRING,
+        /**
+         * num
+         */
+        NUMBER,
+        /**
+         * runtime
+         */
+        RUNTIME
     }
 }

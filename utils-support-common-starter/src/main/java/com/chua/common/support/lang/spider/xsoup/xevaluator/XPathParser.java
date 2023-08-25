@@ -369,7 +369,13 @@ public class XPathParser {
     }
 
     enum Operation {
+        /**
+         * and
+         */
         AND,
+        /**
+         * or
+         */
         OR
     }
 

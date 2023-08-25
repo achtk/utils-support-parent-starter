@@ -8,6 +8,9 @@ import com.chua.common.support.constant.CommonConstant;
  * @author CH
  */
 public enum ReadFeature implements ReadFeatureHandler {
+    /**
+     * null
+     */
     NULL_STRING() {
         @Override
         public Object handle(Object value) {

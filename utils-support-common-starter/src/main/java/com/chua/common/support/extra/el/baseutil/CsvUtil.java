@@ -1,5 +1,6 @@
 package com.chua.common.support.extra.el.baseutil;
 
+import com.chua.common.support.constant.ConstantType;
 import com.chua.common.support.extra.el.baseutil.reflect.ReflectUtil;
 import com.chua.common.support.extra.el.baseutil.reflect.ValueAccessor;
 import lombok.AllArgsConstructor;
@@ -44,7 +45,7 @@ public class CsvUtil {
     static class CsvEntity {
         int index;
         ValueAccessor valueAccessor;
-        ReflectUtil.Primitive primitive;
+        ConstantType primitive;
     }
 
     public static <T> List<T> read(BufferedReader reader, Class<T> type) throws IOException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
@@ -100,7 +101,7 @@ public class CsvUtil {
                         case INT:
                             csvEntity.valueAccessor.setObject(t, Integer.valueOf(content.get(csvEntity.index())));
                             break;
-                        case BOOL:
+                        case BOOLEAN:
                             csvEntity.valueAccessor.setObject(t, Boolean.valueOf(content.get(csvEntity.index())));
                             break;
                         case BYTE:
@@ -124,7 +125,7 @@ public class CsvUtil {
                         case STRING:
                             csvEntity.valueAccessor.setObject(t, content.get(csvEntity.index()));
                             break;
-                        case UNKONW: {
+                        case UNKNOWN: {
                             throw new IllegalArgumentException("csv文件映射不支持字段:" + csvEntity.valueAccessor.getField().getName() + "的类型，请使用8种基本类型或包装类或String");
                         }
                         default:

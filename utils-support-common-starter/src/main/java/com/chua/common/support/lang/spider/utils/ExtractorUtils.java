@@ -18,13 +18,13 @@ public class ExtractorUtils {
         String value = extractBy.value();
         Selector selector;
         switch (extractBy.type()) {
-            case Css:
+            case CSS:
                 selector = new CssSelector(value);
                 break;
-            case Regex:
+            case REGEX:
                 selector = new RegexSelector(value);
                 break;
-            case JsonPath:
+            case JSON_PATH:
                 selector = new JsonPathSelector(value);
                 break;
             default:

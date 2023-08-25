@@ -570,13 +570,13 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
      * @return true 使用 false 不使用
      */
     public boolean isUseAnnotationOrderBy() {
-        final String _sqlSegment = this.getSqlSegment();
-        if (StringUtils.isBlank(_sqlSegment)) {
+        final String sqlSegment = this.getSqlSegment();
+        if (StringUtils.isBlank(sqlSegment)) {
             return true;
         }
-        final String _sqlSegmentToUpperCase = _sqlSegment.toUpperCase();
-        return !(_sqlSegmentToUpperCase.contains(SYMBOL_ORDER_BY)
-            || _sqlSegmentToUpperCase.contains(SYMBOL_LIMIT));
+        final String sqlSegmentToUpperCase = sqlSegment.toUpperCase();
+        return !(sqlSegmentToUpperCase.contains(SYMBOL_ORDER_BY)
+            || sqlSegmentToUpperCase.contains(SYMBOL_LIMIT));
     }
 
     @Override

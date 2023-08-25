@@ -12,9 +12,21 @@ import java.util.Set;
  */
 @Slf4j
 public enum Arch {
+    /**
+     * x86
+     */
     X86_32("i386", "i686", "x86"),
+    /**
+     * 64
+     */
     X86_64("amd64", "x86_64"),
+    /**
+     * arm7
+     */
     ARMv7("arm"),
+    /**
+     * arm8
+     */
     ARMv8("aarch64", "arm64");
 
     private final Set<String> patterns;

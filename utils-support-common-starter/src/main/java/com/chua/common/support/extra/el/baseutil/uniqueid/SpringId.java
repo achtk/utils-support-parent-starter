@@ -13,8 +13,8 @@ public class SpringId implements Uid
 
     static
     {
-        String _pid = ManagementFactory.getRuntimeMXBean().getName().split("@")[0];
-        int    pid  = Integer.valueOf(_pid);
+        String s = ManagementFactory.getRuntimeMXBean().getName().split("@")[0];
+        int    pid  = Integer.valueOf(s);
         SpringId.pid[0] = (byte) (pid >>> 8);
         SpringId.pid[1] = (byte) pid;
     }

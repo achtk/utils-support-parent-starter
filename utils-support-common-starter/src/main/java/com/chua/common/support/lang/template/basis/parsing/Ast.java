@@ -1,14 +1,15 @@
 
 package com.chua.common.support.lang.template.basis.parsing;
 
+import com.chua.common.support.lang.template.basis.BasisTemplate;
 import com.chua.common.support.lang.template.basis.Error;
 import com.chua.common.support.lang.template.basis.Error.TemplateException;
-import com.chua.common.support.lang.template.basis.BasisTemplate;
 import com.chua.common.support.lang.template.basis.TemplateContext;
 import com.chua.common.support.lang.template.basis.TemplateLoader.Source;
 import com.chua.common.support.lang.template.basis.interpreter.AstInterpreter;
 import com.chua.common.support.lang.template.basis.interpreter.Reflection;
 import com.chua.common.support.lang.template.basis.parsing.Parser.Macros;
+import lombok.Data;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -18,14 +19,14 @@ import java.util.*;
 import java.util.Map.Entry;
 
 /** Templates are parsed into an abstract syntax tree (AST) nodes by a Parser. This class contains all AST node types. */
-public abstract class Ast {
+public class Ast {
 
 	/** Base class for all AST nodes. A node minimally stores the {@link Span} that references its location in the
 	 * {@link Source}. **/
-	public abstract static class Node {
+	public static abstract class AbstractNode {
 		private final Span span;
 
-		public Node (Span span) {
+		public AbstractNode (Span span) {
 			this.span = span;
 		}
 
@@ -43,7 +44,7 @@ public abstract class Ast {
 	}
 
 	/** A text node represents an "un-templated" span in the source that should be emitted verbatim. **/
-	public static class Text extends Node {
+	public static class Text extends AbstractNode {
 		private final byte[] bytes;
 
 		public Text (Span text) {
@@ -82,7 +83,7 @@ public abstract class Ast {
 
 	/** All expressions are subclasses of this node type. Expressions are separated into unary operations (!, -), binary operations
 	 * (+, -, *, /, etc.) and ternary operations (?:). */
-	public abstract static class Expression extends Node {
+	public abstract static class Expression extends AbstractNode {
 		public Expression (Span span) {
 			super(span);
 		}
@@ -1201,13 +1202,13 @@ public abstract class Ast {
 
 	/** Represents an if statement of the form <code>if condition trueBlock elseif condition ... else falseBlock end</code>. Elseif
 	 * and else blocks are optional. */
-	public static class IfStatement extends Node {
+	public static class IfStatement extends AbstractNode {
 		private final Expression condition;
-		private final List<Node> trueBlock;
+		private final List<AbstractNode> trueBlock;
 		private final List<IfStatement> elseIfs;
-		private final List<Node> falseBlock;
+		private final List<AbstractNode> falseBlock;
 
-		public IfStatement (Span span, Expression condition, List<Node> trueBlock, List<IfStatement> elseIfs, List<Node> falseBlock) {
+		public IfStatement (Span span, Expression condition, List<AbstractNode> trueBlock, List<IfStatement> elseIfs, List<AbstractNode> falseBlock) {
 			super(span);
 			this.condition = condition;
 			this.trueBlock = trueBlock;
@@ -1219,7 +1220,7 @@ public abstract class Ast {
 			return condition;
 		}
 
-		public List<Node> getTrueBlock () {
+		public List<AbstractNode> getTrueBlock () {
 			return trueBlock;
 		}
 
@@ -1227,7 +1228,7 @@ public abstract class Ast {
 			return elseIfs;
 		}
 
-		public List<Node> getFalseBlock () {
+		public List<AbstractNode> getFalseBlock () {
 			return falseBlock;
 		}
 
@@ -1267,7 +1268,7 @@ public abstract class Ast {
 	}
 
 	/** Represents a break statement that will stop the inner-most loop it is contained in. **/
-	public static class Break extends Node {
+	public static class Break extends AbstractNode {
 		public static final Object BREAK_SENTINEL = new Object();
 
 		public Break (Span span) {
@@ -1282,7 +1283,7 @@ public abstract class Ast {
 
 	/** Represents a continue statement that will stop the current iteration and continue with the next iteration in the inner-most
 	 * loop it is contained in. **/
-	public static class Continue extends Node {
+	public static class Continue extends AbstractNode {
 		public static final Object CONTINUE_SENTINEL = new Object();
 
 		public Continue (Span span) {
@@ -1297,7 +1298,7 @@ public abstract class Ast {
 
 	/** Represents a return statement that will stop the current iteration and continue with the next iteration in the inner-most
 	 * loop it is contained in. **/
-	public static class Return extends Node {
+	public static class Return extends AbstractNode {
 
 		/** A sentital of which only one instance exists. Uses thread local storage to store an (optional) return value. See **/
 		public static class ReturnValue {
@@ -1335,13 +1336,13 @@ public abstract class Ast {
 	/** Represents a for statement of the form <code>for value in mapOrArray ... end</code> or
 	 * <code>for keyOrIndex, value in mapOrArray ... end</code>. The later form will store the key or index of the current
 	 * iteration in the specified variable. */
-	public static class ForStatement extends Node {
+	public static class ForStatement extends AbstractNode {
 		private final Span indexOrKeyName;
 		private final Span valueName;
 		private final Expression mapOrArray;
-		private final List<Node> body;
+		private final List<AbstractNode> body;
 
-		public ForStatement (Span span, Span indexOrKeyName, Span valueName, Expression mapOrArray, List<Node> body) {
+		public ForStatement (Span span, Span indexOrKeyName, Span valueName, Expression mapOrArray, List<AbstractNode> body) {
 			super(span);
 			this.indexOrKeyName = indexOrKeyName;
 			this.valueName = valueName;
@@ -1362,7 +1363,7 @@ public abstract class Ast {
 			return mapOrArray;
 		}
 
-		public List<Node> getBody () {
+		public List<AbstractNode> getBody () {
 			return body;
 		}
 
@@ -1766,23 +1767,17 @@ public abstract class Ast {
 	}
 
 	/** Represents a while statement of the form <code>while condition ... end</code>. **/
-	public static class WhileStatement extends Node {
+	@Data
+	public static class WhileStatement extends AbstractNode {
 		private final Expression condition;
-		private final List<Node> body;
+		private final List<AbstractNode> body;
 
-		public WhileStatement (Span span, Expression condition, List<Node> body) {
+		public WhileStatement (Span span, Expression condition, List<AbstractNode> body) {
 			super(span);
 			this.condition = condition;
 			this.body = body;
 		}
 
-		public Expression getCondition () {
-			return condition;
-		}
-
-		public List<Node> getBody () {
-			return body;
-		}
 
 		@Override
 		public Object evaluate (BasisTemplate template, TemplateContext context, OutputStream out) throws IOException {
@@ -1807,44 +1802,21 @@ public abstract class Ast {
 
 	/** Represents a macro of the form macro(arg1, arg2, arg3) ... end. Macros allow specifying re-usable template blocks that can
 	 * be "called" from other sections in the current template, or templates including the template. */
-	public static class Macro extends Node {
+	@Data
+	public static class Macro extends AbstractNode {
 		private final Span name;
 		private final List<Span> argumentNames;
-		private final List<Node> body;
+		private final List<AbstractNode> body;
 		private final TemplateContext macroContext = new TemplateContext();
 		private BasisTemplate template;
 
-		public Macro (Span span, Span name, List<Span> argumentNames, List<Node> body) {
+		public Macro (Span span, Span name, List<Span> argumentNames, List<AbstractNode> body) {
 			super(span);
 			this.name = name;
 			this.argumentNames = argumentNames;
 			this.body = body;
 		}
 
-		public Span getName () {
-			return name;
-		}
-
-		public List<Span> getArgumentNames () {
-			return argumentNames;
-		}
-
-		public List<Node> getBody () {
-			return body;
-		}
-
-		public TemplateContext getMacroContext () {
-			return macroContext;
-		}
-
-		public void setTemplate (BasisTemplate template) {
-			this.template = template;
-		}
-
-		/** The template of the macro is set after the entire template has been parsed. See the Template constructor. **/
-		public BasisTemplate getTemplate () {
-			return template;
-		}
 
 		@Override
 		public Object evaluate (BasisTemplate template, TemplateContext context, OutputStream out) throws IOException {
@@ -1856,7 +1828,8 @@ public abstract class Ast {
 	 * <code>include "path" as alias</code>, which includes only the macros and makes them accessible under the alias, e.g.
 	 * <code>alias.myMacro(a, b, c)</code>, or <code>include "path" with (key: value, key2: value)</code>, which includes the
 	 * template, passing the given map as the context. **/
-	public static class Include extends Node {
+	@Data
+	public static class Include extends AbstractNode {
 		private final Span path;
 		private final Map<Span, Expression> context;
 		private BasisTemplate template;
@@ -1871,32 +1844,6 @@ public abstract class Ast {
 			this.alias = alias;
 		}
 
-		public Span getPath () {
-			return path;
-		}
-
-		/** Returns null if macrosOnly is true **/
-		public Map<Span, Expression> getContext () {
-			return context;
-		}
-
-		public BasisTemplate getTemplate () {
-			return template;
-		}
-
-		public void setTemplate (BasisTemplate template) {
-			this.template = template;
-		}
-
-		/** Returns whether to include macros only. **/
-		public boolean isMacrosOnly () {
-			return macrosOnly;
-		}
-
-		/** Returns null if macrosOnly is false **/
-		public Span getAlias () {
-			return alias;
-		}
 
 		@Override
 		public Object evaluate (BasisTemplate template, TemplateContext context, OutputStream out) throws IOException {
@@ -1926,7 +1873,7 @@ public abstract class Ast {
 	}
 
 	/** Represents an include statement of the form <code>include raw "path"</code>, which includes the file verbatim. */
-	public static class IncludeRaw extends Node {
+	public static class IncludeRaw extends AbstractNode {
 		private final Span path;
 		private byte[] content;
 

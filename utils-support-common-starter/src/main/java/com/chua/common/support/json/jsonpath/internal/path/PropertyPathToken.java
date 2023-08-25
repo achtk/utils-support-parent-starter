@@ -54,7 +54,7 @@ class PropertyPathToken extends PathToken {
     }
 
     public boolean multiPropertyIterationCase() {
-        // Semantics of this case is the same as semantics of ArrayPathToken with INDEX_SEQUENCE operation.
+        // Semantics of this case is the same as semantics of AbstractArrayPathToken with INDEX_SEQUENCE operation.
         return !isLeaf() && properties.size() > 1;
     }
 

@@ -1,7 +1,7 @@
 package com.chua.common.support.extra.el.baseutil.bytecode.structure.constantinfo;
 
+import com.chua.common.support.constant.ConstantType;
 import com.chua.common.support.extra.el.baseutil.bytecode.util.BinaryData;
-import com.chua.common.support.extra.el.baseutil.bytecode.util.ConstantType;
 
 public class FloatInfo extends ConstantInfo
 {
@@ -9,7 +9,7 @@ public class FloatInfo extends ConstantInfo
 
     public FloatInfo()
     {
-        type = ConstantType.Float;
+        type = ConstantType.FLOAT;
     }
 
     public float getValue()

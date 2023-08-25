@@ -1,11 +1,11 @@
 package com.chua.common.support.extra.el.baseutil.bytecode.structure.constantinfo;
 
-import com.chua.common.support.extra.el.baseutil.bytecode.util.ConstantType;
+import com.chua.common.support.constant.ConstantType;
 
 public class FieldRefInfo extends RefInfo
 {
     public FieldRefInfo()
     {
-        type = ConstantType.FieldRef;
+        type = ConstantType.FIELD_REF;
     }
 }

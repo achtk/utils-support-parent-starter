@@ -60,9 +60,9 @@ public abstract class AbstractFormatter implements DialectConfigurator {
   private String getFormattedQueryFromTokens() {
     String formattedQuery = "";
 
-    int _index = -1;
+    int index = -1;
     for (Token token : this.tokens) {
-      this.index = ++_index;
+      this.index = ++index;
 
       token = this.tokenOverride(token);
 

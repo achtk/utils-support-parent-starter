@@ -1,7 +1,7 @@
 package com.chua.common.support.extra.el.baseutil.bytecode.structure.constantinfo;
 
+import com.chua.common.support.constant.ConstantType;
 import com.chua.common.support.extra.el.baseutil.bytecode.util.BinaryData;
-import com.chua.common.support.extra.el.baseutil.bytecode.util.ConstantType;
 
 public class MethodTypeInfo extends ConstantInfo
 {
@@ -12,7 +12,7 @@ public class MethodTypeInfo extends ConstantInfo
 
     public MethodTypeInfo()
     {
-        type = ConstantType.MethodType;
+        type = ConstantType.METHOD_TYPE;
     }
 
     @Override

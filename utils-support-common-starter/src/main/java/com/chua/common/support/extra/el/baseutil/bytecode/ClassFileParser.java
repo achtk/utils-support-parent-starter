@@ -1,11 +1,11 @@
 package com.chua.common.support.extra.el.baseutil.bytecode;
 
+import com.chua.common.support.constant.ConstantType;
 import com.chua.common.support.extra.el.baseutil.bytecode.structure.Attribute.AttributeInfo;
 import com.chua.common.support.extra.el.baseutil.bytecode.structure.FieldInfo;
 import com.chua.common.support.extra.el.baseutil.bytecode.structure.MethodInfo;
 import com.chua.common.support.extra.el.baseutil.bytecode.structure.constantinfo.*;
 import com.chua.common.support.extra.el.baseutil.bytecode.util.BinaryData;
-import com.chua.common.support.extra.el.baseutil.bytecode.util.ConstantType;
 
 import java.util.Arrays;
 
@@ -142,46 +142,46 @@ public class ClassFileParser
             ConstantInfo constantInfo;
             switch (constantType)
             {
-                case Utf8:
+                case UTF_8:
                     constantInfo = new Utf8Info();
                     break;
-                case Integer:
+                case INTEGER:
                     constantInfo = new IntegerInfo();
                     break;
-                case Float:
+                case FLOAT:
                     constantInfo = new FloatInfo();
                     break;
-                case Long:
+                case LONG:
                     constantInfo = new LongInfo();
                     break;
-                case Double:
+                case DOUBLE:
                     constantInfo = new DoubleInfo();
                     break;
-                case Class:
+                case CLASS:
                     constantInfo = new ClassInfo();
                     break;
                 case String:
                     constantInfo = new StringInfo();
                     break;
-                case FieldRef:
+                case FIELD_REF:
                     constantInfo = new FieldRefInfo();
                     break;
-                case MethodRef:
+                case METHOD_REF:
                     constantInfo = new MethodRefInfo();
                     break;
-                case InterfaceMethodref:
+                case INTERFACE_METHOD_REF:
                     constantInfo = new InterfaceMethodRefInfo();
                     break;
-                case NameAndType:
+                case NAME_AND_TYPE:
                     constantInfo = new NameAndTypeInfo();
                     break;
-                case MethodHandle:
+                case METHOD_HANDLE:
                     constantInfo = new MethodHandleInfo();
                     break;
-                case MethodType:
+                case METHOD_TYPE:
                     constantInfo = new MethodTypeInfo();
                     break;
-                case InvokeDynamic:
+                case INVOKE_DYNAMIC:
                     constantInfo = new InvokeDynamicInfo();
                     break;
                 default:

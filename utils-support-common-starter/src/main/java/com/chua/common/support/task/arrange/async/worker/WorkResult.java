@@ -1,5 +1,7 @@
 package com.chua.common.support.task.arrange.async.worker;
 
+import com.chua.common.support.constant.ResultState;
+
 /**
  * 执行结果
  */

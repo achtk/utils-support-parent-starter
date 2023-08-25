@@ -1,36 +1,30 @@
 
 package com.chua.common.support.lang.template.basis;
 
-import com.chua.common.support.lang.template.Template;
-import com.chua.common.support.lang.template.basis.TemplateLoader.SourceTemplateLoader;
 import com.chua.common.support.lang.template.basis.interpreter.AstInterpreter;
 import com.chua.common.support.lang.template.basis.parsing.Ast;
+import com.chua.common.support.lang.template.basis.parsing.Ast.AbstractNode;
 import com.chua.common.support.lang.template.basis.parsing.Ast.Include;
 import com.chua.common.support.lang.template.basis.parsing.Ast.Macro;
-import com.chua.common.support.lang.template.basis.parsing.Ast.Node;
 import com.chua.common.support.lang.template.basis.parsing.Parser;
 import com.chua.common.support.lang.template.basis.parsing.Parser.Macros;
-import com.chua.common.support.utils.IoUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Map;
 
 /** A template is loaded by a {@link TemplateLoader} from a file marked up with the basis-template language. The template can be
  * rendered to a {@link String} or {@link OutputStream} by calling one of the <code>render()</code> methods. The
  * {@link TemplateContext} passed to the <code>render()</code> methods is used to look up variable values referenced in the
  * template. */
 public class BasisTemplate{
-	private final List<Node> nodes;
+	private final List<AbstractNode> nodes;
 	private final Macros macros;
 	private final List<Include> includes;
 
 	/** Internal. Created by {@link Parser}. **/
-	public BasisTemplate(List<Node> nodes, Macros macros, List<Include> includes) {
+	public BasisTemplate(List<AbstractNode> nodes, Macros macros, List<Include> includes) {
 		this.nodes = nodes;
 		this.macros = macros;
 		this.includes = includes;
@@ -40,7 +34,7 @@ public class BasisTemplate{
 	}
 
 	/** Internal. The AST nodes representing this template after parsing. See {@link Ast}. Used by {@link AstInterpreter}. **/
-	public List<Node> getNodes () {
+	public List<AbstractNode> getNodes () {
 		return nodes;
 	}
 

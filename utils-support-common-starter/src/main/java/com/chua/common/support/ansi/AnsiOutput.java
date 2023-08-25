@@ -10,7 +10,7 @@ import java.util.Locale;
  * @author Phillip Webb
  * @since 1.0.0
  */
-public abstract class AnsiOutput {
+public class AnsiOutput {
 
     private static final String ENCODE_JOIN = ";";
 

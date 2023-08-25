@@ -276,7 +276,13 @@ public class TableView implements View {
      * 对齐方向
      */
     public enum Align {
+        /**
+         * left
+         */
         LEFT,
+        /**
+         * right
+         */
         RIGHT
     }
 

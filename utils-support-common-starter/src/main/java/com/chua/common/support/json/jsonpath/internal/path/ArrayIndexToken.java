@@ -19,7 +19,7 @@ import com.chua.common.support.json.jsonpath.internal.PathRef;
 /**
  * @author Administrator
  */
-public class ArrayIndexToken extends ArrayPathToken {
+public class ArrayIndexToken extends AbstractArrayPathToken {
 
     private final ArrayIndexOperation arrayIndexOperation;
 

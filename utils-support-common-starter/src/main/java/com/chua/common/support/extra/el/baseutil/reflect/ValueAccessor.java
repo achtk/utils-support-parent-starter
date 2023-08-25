@@ -1,17 +1,16 @@
 package com.chua.common.support.extra.el.baseutil.reflect;
 
-import com.chua.common.support.utils.ClassUtils;
+import com.chua.common.support.constant.ConstantType;
 import io.github.karlatemp.unsafeaccessor.Unsafe;
 
 import java.lang.reflect.Field;
-import java.nio.charset.StandardCharsets;
 
 public class ValueAccessor {
     protected Field field;
     private long offset;
     protected boolean primitive;
-    protected ReflectUtil.Primitive primitiveType;
-    private Unsafe unsafe = Unsafe.getUnsafe();
+    protected ConstantType primitiveType;
+    private final Unsafe unsafe = Unsafe.getUnsafe();
 
     public ValueAccessor() {
     }
@@ -298,7 +297,7 @@ public class ValueAccessor {
                     return unsafe.getFloat(entity, offset);
                 case DOUBLE:
                     return unsafe.getDouble(entity, offset);
-                case BOOL:
+                case BOOLEAN:
                     return unsafe.getBoolean(entity, offset);
                 case BYTE:
                     return unsafe.getByte(entity, offset);

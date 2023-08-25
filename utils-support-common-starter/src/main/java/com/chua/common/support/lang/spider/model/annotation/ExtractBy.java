@@ -24,14 +24,20 @@ public @interface ExtractBy {
     /**
      * types of extractor expressions
      */
-    public static enum Type {XPath, Regex, Css, JsonPath}
+    enum Type {
+        /**
+         * xpath
+         */
+        X_PATH,
+        /**regex*/ REGEX, /**Css*/ CSS, /**JsonPath*/ JSON_PATH
+    }
 
     /**
      * Extractor type, support XPath, CSS Selector and regex.
      *
      * @return extractor type
      */
-    Type type() default Type.XPath;
+    Type type() default Type.X_PATH;
 
     /**
      * Define whether the field can be null.<br>

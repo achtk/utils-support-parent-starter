@@ -1,66 +1,62 @@
 package com.chua.common.support.extra.el.baseutil.reflect;
 
 
+import com.chua.common.support.constant.ConstantType;
+
+import static com.chua.common.support.constant.ConstantType.*;
+
 public final class ReflectUtil {
-
-    public enum Primitive {
-        INT,
-        BOOL,
-        BYTE,
-        SHORT,
-        LONG,
-        CHAR,
-        FLOAT,
-        DOUBLE,
-        STRING,
-        UNKONW
-    }
-
-    public static Primitive ofPrimitive(Class<?> type) {
+    /**
+     * 类型装枚举
+     *
+     * @param type 类型
+     * @return ConstantType
+     */
+    public static ConstantType ofPrimitive(Class<?> type) {
         switch (type.getName()) {
             case "int":
             case "java.lang.Integer": {
-                return Primitive.INT;
+                return INTEGER;
             }
             case "boolean":
             case "java.lang.Boolean": {
-                return Primitive.BOOL;
+                return BOOLEAN;
             }
             case "byte":
             case "java.lang.Byte": {
-                return Primitive.BYTE;
+                return BYTE;
             }
             case "short":
             case "java.lang.Short": {
-                return Primitive.SHORT;
+                return SHORT;
             }
             case "long":
             case "java.lang.Long": {
-                return Primitive.LONG;
+                return LONG;
             }
             case "char":
             case "java.lang.Character": {
-                return Primitive.CHAR;
+                return CHAR;
             }
             case "float":
             case "java.lang.Float": {
-                return Primitive.FLOAT;
+                return FLOAT;
             }
             case "double":
             case "java.lang.Double": {
-                return Primitive.DOUBLE;
+                return DOUBLE;
             }
             case "java.lang.String": {
-                return Primitive.STRING;
+                return STRING;
             }
             default: {
-                return Primitive.UNKONW;
+                return UNKNOWN;
             }
         }
     }
 
     public static Class<?> wrapPrimitive(Class<?> type) {
-        if (type.isPrimitive() == false) {
+        if (!type.isPrimitive()) {
             throw new IllegalArgumentException();
         }
         if (type == int.class) {

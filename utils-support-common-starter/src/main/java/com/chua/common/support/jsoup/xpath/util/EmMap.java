@@ -34,8 +34,8 @@ public class EmMap {
         opEmMap.put("<",OpEm.LT);
         opEmMap.put(">=",OpEm.GE);
         opEmMap.put("<=",OpEm.LE);
-        opEmMap.put("^=",OpEm.STARTWITH);
-        opEmMap.put("$=",OpEm.ENDWITH);
+        opEmMap.put("^=",OpEm.START_WITH);
+        opEmMap.put("$=",OpEm.END_WITH);
         opEmMap.put("*=",OpEm.CONTAIN);
         opEmMap.put("~=",OpEm.REGEX);
 

@@ -89,7 +89,7 @@ class PageModelExtractor {
                 regexPattern = ".*";
             }
             fieldExtractor = new FieldExtractor(field,
-                    new RegexSelector(regexPattern), FieldExtractor.Source.Url, extractByUrl.notNull(),
+                    new RegexSelector(regexPattern), FieldExtractor.Source.URL, extractByUrl.notNull(),
                     extractByUrl.multi() || List.class.isAssignableFrom(field.getType()));
             Method setterMethod = getSetterMethod(clazz, field);
             if (setterMethod != null) {
@@ -115,7 +115,7 @@ class PageModelExtractor {
                 default:
                     selector = new AndSelector(ExtractorUtils.getSelectors(extractBies));
             }
-            fieldExtractor = new FieldExtractor(field, selector, comboExtract.source() == ComboExtract.Source.RawHtml ? FieldExtractor.Source.RawHtml : FieldExtractor.Source.Html,
+            fieldExtractor = new FieldExtractor(field, selector, comboExtract.source() == ComboExtract.Source.RawHtml ? FieldExtractor.Source.RAW_HTML : FieldExtractor.Source.HTML,
                     comboExtract.notNull(), comboExtract.multi() || List.class.isAssignableFrom(field.getType()));
             Method setterMethod = getSetterMethod(clazz, field);
             if (setterMethod != null) {
@@ -131,22 +131,22 @@ class PageModelExtractor {
         if (extractBy != null) {
             Selector selector = ExtractorUtils.getSelector(extractBy);
             ExtractBy.Source source0 = extractBy.source();
-            if (extractBy.type() == ExtractBy.Type.JsonPath) {
+            if (extractBy.type() == ExtractBy.Type.JSON_PATH) {
                 source0 = RawText;
             }
             FieldExtractor.Source source = null;
             switch (source0) {
                 case RawText:
-                    source = FieldExtractor.Source.RawText;
+                    source = FieldExtractor.Source.RAW_TEXT;
                     break;
                 case RawHtml:
-                    source = FieldExtractor.Source.RawHtml;
+                    source = FieldExtractor.Source.RAW_HTML;
                     break;
                 case SelectedHtml:
-                    source = FieldExtractor.Source.Html;
+                    source = FieldExtractor.Source.HTML;
                     break;
                 default:
-                    source = FieldExtractor.Source.Html;
+                    source = FieldExtractor.Source.HTML;
 
             }
 
@@ -196,7 +196,7 @@ class PageModelExtractor {
         annotation = clazz.getAnnotation(ExtractBy.class);
         if (annotation != null) {
             ExtractBy extractBy = (ExtractBy) annotation;
-            objectExtractor = new Extractor(new XpathSelector(extractBy.value()), Extractor.Source.Html, extractBy.notNull(), extractBy.multi());
+            objectExtractor = new Extractor(new XpathSelector(extractBy.value()), Extractor.Source.HTML, extractBy.notNull(), extractBy.multi());
         }
     }
 
@@ -239,20 +239,20 @@ class PageModelExtractor {
                 if (fieldExtractor.isMulti()) {
                     List<String> value;
                     switch (fieldExtractor.getSource()) {
-                        case RawHtml:
+                        case RAW_HTML:
                             value = page.getHtml().selectDocumentForList(fieldExtractor.getSelector());
                             break;
-                        case Html:
+                        case HTML:
                             if (isRaw) {
                                 value = page.getHtml().selectDocumentForList(fieldExtractor.getSelector());
                             } else {
                                 value = fieldExtractor.getSelector().selectList(html);
                             }
                             break;
-                        case Url:
+                        case URL:
                             value = fieldExtractor.getSelector().selectList(page.getUrl().toString());
                             break;
-                        case RawText:
+                        case RAW_TEXT:
                             value = fieldExtractor.getSelector().selectList(page.getRawText());
                             break;
                         default:
@@ -270,20 +270,20 @@ class PageModelExtractor {
                 } else {
                     String value;
                     switch (fieldExtractor.getSource()) {
-                        case RawHtml:
+                        case RAW_HTML:
                             value = page.getHtml().selectDocument(fieldExtractor.getSelector());
                             break;
-                        case Html:
+                        case HTML:
                             if (isRaw) {
                                 value = page.getHtml().selectDocument(fieldExtractor.getSelector());
                             } else {
                                 value = fieldExtractor.getSelector().select(html);
                             }
                             break;
-                        case Url:
+                        case URL:
                             value = fieldExtractor.getSelector().select(page.getUrl().toString());
                             break;
-                        case RawText:
+                        case RAW_TEXT:
                             value = fieldExtractor.getSelector().select(page.getRawText());
                             break;
                         default:

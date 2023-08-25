@@ -19,14 +19,41 @@ import java.util.function.Predicate;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public enum MatchSegment {
+    /**
+     * GROUP_BY
+     */
     GROUP_BY(i -> i == SqlKeyword.GROUP_BY),
+    /**
+     * ORDER_BY
+     */
     ORDER_BY(i -> i == SqlKeyword.ORDER_BY),
+    /**
+     * NOT
+     */
     NOT(i -> i == SqlKeyword.NOT),
+    /**
+     * AND
+     */
     AND(i -> i == SqlKeyword.AND),
+    /**
+     * OR
+     */
     OR(i -> i == SqlKeyword.OR),
+    /**
+     * AND_OR
+     */
     AND_OR(i -> i == SqlKeyword.AND || i == SqlKeyword.OR),
+    /**
+     * EXISTS
+     */
     EXISTS(i -> i == SqlKeyword.EXISTS),
+    /**
+     * HAVING
+     */
     HAVING(i -> i == SqlKeyword.HAVING),
+    /**
+     * APPLY
+     */
     APPLY(i -> i == WrapperKeyword.APPLY);
 
     private final Predicate<ISqlSegment> predicate;
