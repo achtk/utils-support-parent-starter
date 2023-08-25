@@ -53,6 +53,7 @@ public abstract class AbstractCacheable implements Cacheable {
     protected String cacheName;
     protected CacheConfiguration config;
     protected Boolean hotColdBackup;
+    protected String dir;
 
     public AbstractCacheable(){}
 
@@ -77,6 +78,7 @@ public abstract class AbstractCacheable implements Cacheable {
         this.path = MapUtils.getString(config, "path", System.getProperty("user.home") + "/cache/");
         this.cacheName = MapUtils.getString(config, "cacheName", "default");
         this.hotColdBackup = MapUtils.getBoolean(config, "hotColdBackup", true);
+        this.dir = MapUtils.getString(config, "dir", "cache");
         afterPropertiesSet();
         return this;
     }

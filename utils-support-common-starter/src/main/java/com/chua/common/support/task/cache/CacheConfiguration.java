@@ -36,4 +36,9 @@ public class CacheConfiguration {
     @Builder.Default
     private int expireAfterAccess = -1;
 
+    /**
+     * 磁盘缓存器缓存目录
+     */
+    private String dir;
+
 }
