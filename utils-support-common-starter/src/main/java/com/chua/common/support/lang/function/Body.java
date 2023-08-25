@@ -2,10 +2,12 @@ package com.chua.common.support.lang.function;
 
 import com.chua.common.support.constant.PredictResult;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 人体属性
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class Body extends PredictResult {
 

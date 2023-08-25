@@ -74,10 +74,7 @@ public @interface ExtractBy {
      * Define whether the extractor return more than one result.
      * When set to 'true', the extractor return a list of string (so you should define the field as List). <br>
      * <p>
-     * Deprecated since 0.4.2. This option is determined automatically by the class of field.
-     *
      * @return whether the extractor return more than one result
-     * @deprecated since 0.4.2
      */
     boolean multi() default false;
 

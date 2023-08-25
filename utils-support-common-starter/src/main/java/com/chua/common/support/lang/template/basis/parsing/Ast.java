@@ -10,6 +10,7 @@ import com.chua.common.support.lang.template.basis.interpreter.AstInterpreter;
 import com.chua.common.support.lang.template.basis.interpreter.Reflection;
 import com.chua.common.support.lang.template.basis.parsing.Parser.Macros;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -1767,6 +1768,7 @@ public class Ast {
 	}
 
 	/** Represents a while statement of the form <code>while condition ... end</code>. **/
+	@EqualsAndHashCode(callSuper = true)
 	@Data
 	public static class WhileStatement extends AbstractNode {
 		private final Expression condition;
@@ -1802,6 +1804,7 @@ public class Ast {
 
 	/** Represents a macro of the form macro(arg1, arg2, arg3) ... end. Macros allow specifying re-usable template blocks that can
 	 * be "called" from other sections in the current template, or templates including the template. */
+	@EqualsAndHashCode(callSuper = true)
 	@Data
 	public static class Macro extends AbstractNode {
 		private final Span name;
@@ -1828,6 +1831,7 @@ public class Ast {
 	 * <code>include "path" as alias</code>, which includes only the macros and makes them accessible under the alias, e.g.
 	 * <code>alias.myMacro(a, b, c)</code>, or <code>include "path" with (key: value, key2: value)</code>, which includes the
 	 * template, passing the given map as the context. **/
+	@EqualsAndHashCode(callSuper = true)
 	@Data
 	public static class Include extends AbstractNode {
 		private final Span path;

@@ -78,7 +78,6 @@ public @interface ComboExtract {
      * Deprecated since 0.4.2. This option is determined automatically by the class of field.
      *
      * @return whether the extractor return more than one result
-     * @deprecated since 0.4.2
      */
     boolean multi() default false;
 
