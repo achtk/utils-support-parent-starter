@@ -281,7 +281,7 @@ public class LambdaValueAccessor extends ValueAccessor
                                                                             MethodType.methodType(void.class, field.getDeclaringClass(), Integer.class)//实际运行的时候，这个函数式接口的方法签名。也就是将泛型的信息补充上
                                                                            ).getTarget().invoke();
                 }
-                case BOOL:
+                case BOOLEAN:
                 {
                     getBoolean = (GetBoolean) LambdaMetafactory.metafactory(lookup, "get", MethodType.methodType(GetBoolean.class), MethodType.methodType(boolean.class, Object.class), getMethodHandler, MethodType.methodType(boolean.class, field.getDeclaringClass())).getTarget().invoke();
                     setBoolean = (SetBoolean) LambdaMetafactory.metafactory(lookup, "set", MethodType.methodType(SetBoolean.class), MethodType.methodType(void.class, Object.class, boolean.class), setMethodHandler, MethodType.methodType(void.class, field.getDeclaringClass(), boolean.class)).getTarget().invoke();
@@ -331,7 +331,7 @@ public class LambdaValueAccessor extends ValueAccessor
                     setDoubleObj = (SetDoubleObj) LambdaMetafactory.metafactory(lookup, "set", MethodType.methodType(SetDoubleObj.class), MethodType.methodType(void.class, Object.class, Double.class), setMethodHandler, MethodType.methodType(void.class, field.getDeclaringClass(), Double.class)).getTarget().invoke();
                 }
                 case STRING:
-                case UNKONW :
+                case UNKNOWN:
                 {
                     getObj = (Function<Object, Object>) LambdaMetafactory.metafactory(lookup, "apply", MethodType.methodType(Function.class), MethodType.methodType(Object.class, Object.class), getMethodHandler, MethodType.methodType(field.getType(), field.getDeclaringClass())).getTarget().invoke();
                     setObj = (BiConsumer<Object, Object>) LambdaMetafactory.metafactory(lookup, "accept", MethodType.methodType(BiConsumer.class), MethodType.methodType(void.class,Object.class, Object.class), setMethodHandler, MethodType.methodType(void.class,field.getDeclaringClass(), field.getType())).getTarget().invoke();

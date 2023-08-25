@@ -1,5 +1,6 @@
 package com.chua.common.support.extra.el.expression.node.impl;
 
+import com.chua.common.support.constant.ConstantType;
 import com.chua.common.support.extra.el.expression.node.CalculateNode;
 
 import java.lang.reflect.Method;
@@ -12,7 +13,7 @@ public class ReflectMethodNode extends AbstractMethodNode
     private final    String        methodName;
     private volatile Method        method;
     private volatile Class<?>      beanType;
-    private          ConvertType[] convertTypes;
+    private          ConstantType[] convertTypes;
 
     public ReflectMethodNode(String literals, CalculateNode beanNode, boolean recognizeEveryTime)
     {

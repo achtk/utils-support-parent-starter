@@ -206,7 +206,7 @@ public class ValueAccessor {
                     unsafe.putFloat(entity, offset, ((Number) value).floatValue());break;
                 case DOUBLE:
                     unsafe.putDouble(entity, offset, ((Number) value).doubleValue());break;
-                case BOOL:
+                case BOOLEAN:
                     unsafe.putBoolean(entity, offset, ((Boolean) value).booleanValue());break;
                 case BYTE:
                     unsafe.putByte(entity, offset, ((Number) value).byteValue());break;

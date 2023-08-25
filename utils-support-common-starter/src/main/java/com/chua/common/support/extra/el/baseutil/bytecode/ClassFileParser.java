@@ -160,7 +160,7 @@ public class ClassFileParser
                 case CLASS:
                     constantInfo = new ClassInfo();
                     break;
-                case String:
+                case STRING:
                     constantInfo = new StringInfo();
                     break;
                 case FIELD_REF:
