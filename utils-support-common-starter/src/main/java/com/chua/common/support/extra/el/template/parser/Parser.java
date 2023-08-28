@@ -4,6 +4,7 @@ import com.chua.common.support.extra.el.exception.IllegalFormatException;
 import com.chua.common.support.extra.el.template.Template;
 import com.chua.common.support.extra.el.template.execution.Execution;
 import com.chua.common.support.extra.el.template.execution.impl.StringExecution;
+import com.chua.common.support.utils.CharUtils;
 
 import java.util.Deque;
 /**
@@ -47,12 +48,12 @@ public abstract class Parser
 
     protected char getChar(int offset, String sentence)
     {
-        return offset >= sentence.length() ? (char) CharType.EOI : sentence.charAt(offset);
+        return offset >= sentence.length() ? (char) CharUtils.EOI : sentence.charAt(offset);
     }
 
     protected int skipWhiteSpace(int offset, String el)
     {
-        while (CharType.isWhitespace(getChar(offset, el)))
+        while (CharUtils.isWhitespace(getChar(offset, el)))
         {
             offset++;
         }

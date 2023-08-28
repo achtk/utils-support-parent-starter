@@ -1,6 +1,7 @@
 package com.chua.common.support.extra.el.baseutil.uniqueid;
 
 import com.chua.common.support.extra.el.baseutil.StringUtil;
+import com.chua.common.support.utils.ByteUtils;
 
 import java.lang.management.ManagementFactory;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -76,17 +77,17 @@ public class SpringId implements Uid {
     public String generateDigits() {
         long tmp = generateLong();
         char[] value = new char[11];
-        value[0] = ByteTool.toDigit((int) ((tmp >>> 58) & SHORT_MASK));
-        value[1] = ByteTool.toDigit((int) ((tmp >>> 52) & SHORT_MASK));
-        value[2] = ByteTool.toDigit((int) ((tmp >>> 46) & SHORT_MASK));
-        value[3] = ByteTool.toDigit((int) ((tmp >>> 40) & SHORT_MASK));
-        value[4] = ByteTool.toDigit((int) ((tmp >>> 34) & SHORT_MASK));
-        value[5] = ByteTool.toDigit((int) ((tmp >>> 28) & SHORT_MASK));
-        value[6] = ByteTool.toDigit((int) ((tmp >>> 22) & SHORT_MASK));
-        value[7] = ByteTool.toDigit((int) ((tmp >>> 16) & SHORT_MASK));
-        value[8] = ByteTool.toDigit((int) ((tmp >>> 10) & SHORT_MASK));
-        value[9] = ByteTool.toDigit((int) ((tmp >>> 4) & SHORT_MASK));
-        value[10] = ByteTool.toDigit((int) ((tmp) & 0x000000000000000f));
+        value[0] = ByteUtils.toDigit((int) ((tmp >>> 58) & SHORT_MASK));
+        value[1] = ByteUtils.toDigit((int) ((tmp >>> 52) & SHORT_MASK));
+        value[2] = ByteUtils.toDigit((int) ((tmp >>> 46) & SHORT_MASK));
+        value[3] = ByteUtils.toDigit((int) ((tmp >>> 40) & SHORT_MASK));
+        value[4] = ByteUtils.toDigit((int) ((tmp >>> 34) & SHORT_MASK));
+        value[5] = ByteUtils.toDigit((int) ((tmp >>> 28) & SHORT_MASK));
+        value[6] = ByteUtils.toDigit((int) ((tmp >>> 22) & SHORT_MASK));
+        value[7] = ByteUtils.toDigit((int) ((tmp >>> 16) & SHORT_MASK));
+        value[8] = ByteUtils.toDigit((int) ((tmp >>> 10) & SHORT_MASK));
+        value[9] = ByteUtils.toDigit((int) ((tmp >>> 4) & SHORT_MASK));
+        value[10] = ByteUtils.toDigit((int) ((tmp) & 0x000000000000000f));
         return String.valueOf(value);
     }
 }

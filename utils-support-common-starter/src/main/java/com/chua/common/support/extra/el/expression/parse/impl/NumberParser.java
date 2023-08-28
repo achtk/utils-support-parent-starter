@@ -4,6 +4,7 @@ import com.chua.common.support.extra.el.expression.node.CalculateNode;
 import com.chua.common.support.extra.el.expression.node.impl.NumberNode;
 import com.chua.common.support.extra.el.expression.parse.Invoker;
 import com.chua.common.support.extra.el.expression.token.Operator;
+import com.chua.common.support.utils.CharUtils;
 
 import java.util.Deque;
 /**
@@ -19,13 +20,13 @@ public class NumberParser extends NodeParser {
                 return false;
             }
             // 这种情况下，-代表是一个负数
-            if (CharType.isDigital(getChar(offset + 1, el))) {
+            if (CharUtils.isDigital(getChar(offset + 1, el))) {
                 return true;
             } else {
                 throw new IllegalArgumentException("无法识别的-符号，不是负数也不是操作符,问题区间:" + el.substring(0, offset));
             }
         } else {
-            return CharType.isDigital(getChar(offset, el));
+            return CharUtils.isDigital(getChar(offset, el));
         }
     }
 
@@ -40,7 +41,7 @@ public class NumberParser extends NodeParser {
             offset += 1;
         }
         boolean hasDot = false;
-        while (CharType.isDigital(c = getChar(offset, el)) || (hasDot == false && c == '.')) {
+        while (CharUtils.isDigital(c = getChar(offset, el)) || (!hasDot && c == '.')) {
             offset++;
             if (c == '.') {
                 hasDot = true;

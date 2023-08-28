@@ -5,6 +5,7 @@ import com.chua.common.support.extra.el.expression.node.impl.KeywordNode;
 import com.chua.common.support.extra.el.expression.node.impl.VariableNode;
 import com.chua.common.support.extra.el.expression.parse.Invoker;
 import com.chua.common.support.extra.el.expression.token.KeyWord;
+import com.chua.common.support.utils.CharUtils;
 
 import java.util.Deque;
 /**
@@ -15,7 +16,7 @@ public class IdentifierParser extends NodeParser {
 
     @Override
     public int parse(String el, int offset, Deque<CalculateNode> nodes, int function, Invoker next) {
-        if (!CharType.isAlphabet(getChar(offset, el))) {
+        if (!CharUtils.isAlphabet(getChar(offset, el))) {
             return next.parse(el, offset, nodes, function);
         }
         return parseIdentifier(el, offset, nodes);
@@ -24,7 +25,7 @@ public class IdentifierParser extends NodeParser {
     private int parseIdentifier(String el, int offset, Deque<CalculateNode> nodes) {
         int length = 0;
         char c;
-        while (CharType.isAlphabet(c = getChar(length + offset, el)) || CharType.isDigital(c)) {
+        while (CharUtils.isAlphabet(c = getChar(length + offset, el)) || CharUtils.isDigital(c)) {
             length++;
         }
         String literals = el.substring(offset, offset + length);

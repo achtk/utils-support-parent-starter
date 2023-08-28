@@ -8,6 +8,7 @@ import com.chua.common.support.extra.el.template.execution.Execution;
 import com.chua.common.support.extra.el.template.execution.impl.ForEachExecution;
 import com.chua.common.support.extra.el.template.parser.Invoker;
 import com.chua.common.support.extra.el.template.parser.Parser;
+import com.chua.common.support.utils.CharUtils;
 
 import java.util.Deque;
 
@@ -37,7 +38,7 @@ public class ForEachParser extends Parser {
         }
         offset = skipWhiteSpace(offset + 1, sentence);
         int start = offset;
-        while (CharType.isAlphabet(getChar(offset, sentence)) && offset < sentence.length()) {
+        while (CharUtils.isAlphabet(getChar(offset, sentence)) && offset < sentence.length()) {
             offset++;
         }
         if (offset >= sentence.length()) {

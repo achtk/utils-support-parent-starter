@@ -8,6 +8,7 @@ import com.chua.common.support.extra.el.expression.node.impl.StaticObjectMethodN
 import com.chua.common.support.extra.el.expression.parse.Invoker;
 import com.chua.common.support.extra.el.expression.token.ValueResult;
 import com.chua.common.support.extra.el.expression.util.Functions;
+import com.chua.common.support.utils.CharUtils;
 
 import java.util.Deque;
 /**
@@ -24,7 +25,7 @@ public class MethodParser extends NodeParser {
         int origin = offset;
         offset += 1;
         char c;
-        while (CharType.isAlphabet(c = getChar(offset, el)) || CharType.isDigital(c)) {
+        while (CharUtils.isAlphabet(c = getChar(offset, el)) || CharUtils.isDigital(c)) {
             offset++;
         }
         // 该情况意味着是属性

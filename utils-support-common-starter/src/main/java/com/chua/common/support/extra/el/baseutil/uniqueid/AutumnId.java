@@ -1,6 +1,7 @@
 package com.chua.common.support.extra.el.baseutil.uniqueid;
 
 import com.chua.common.support.extra.el.baseutil.StringUtil;
+import com.chua.common.support.utils.ByteUtils;
 
 import java.lang.management.ManagementFactory;
 import java.net.InetAddress;
@@ -91,28 +92,28 @@ public class AutumnId implements Uid {
         tmp |= ((long) result[4] & 0xff) << 8;
         tmp |= ((long) result[5] & 0xff);
         char[] digs = new char[16];
-        digs[0] = ByteTool.toDigit((int) ((tmp >>> 42) & SHORT_MASK));
-        digs[1] = ByteTool.toDigit((int) ((tmp >>> 36) & SHORT_MASK));
-        digs[2] = ByteTool.toDigit((int) ((tmp >>> 30) & SHORT_MASK));
-        digs[3] = ByteTool.toDigit((int) ((tmp >>> 24) & SHORT_MASK));
-        digs[4] = ByteTool.toDigit((int) ((tmp >>> 18) & SHORT_MASK));
-        digs[5] = ByteTool.toDigit((int) ((tmp >>> 12) & SHORT_MASK));
-        digs[6] = ByteTool.toDigit((int) ((tmp >>> 6) & SHORT_MASK));
-        digs[7] = ByteTool.toDigit((int) ((tmp) & SHORT_MASK));
+        digs[0] = ByteUtils.toDigit((int) ((tmp >>> 42) & SHORT_MASK));
+        digs[1] = ByteUtils.toDigit((int) ((tmp >>> 36) & SHORT_MASK));
+        digs[2] = ByteUtils.toDigit((int) ((tmp >>> 30) & SHORT_MASK));
+        digs[3] = ByteUtils.toDigit((int) ((tmp >>> 24) & SHORT_MASK));
+        digs[4] = ByteUtils.toDigit((int) ((tmp >>> 18) & SHORT_MASK));
+        digs[5] = ByteUtils.toDigit((int) ((tmp >>> 12) & SHORT_MASK));
+        digs[6] = ByteUtils.toDigit((int) ((tmp >>> 6) & SHORT_MASK));
+        digs[7] = ByteUtils.toDigit((int) ((tmp) & SHORT_MASK));
         tmp = ((long) result[6] & 0xff) << 40;
         tmp |= ((long) result[7] & 0xff) << 32;
         tmp |= ((long) result[8] & 0xff) << 24;
         tmp |= ((long) result[9] & 0xff) << 16;
         tmp |= ((long) result[10] & 0xff) << 8;
         tmp |= ((long) result[11] & 0xff);
-        digs[8] = ByteTool.toDigit((int) ((tmp >>> 42) & SHORT_MASK));
-        digs[9] = ByteTool.toDigit((int) ((tmp >>> 36) & SHORT_MASK));
-        digs[10] = ByteTool.toDigit((int) ((tmp >>> 30) & SHORT_MASK));
-        digs[11] = ByteTool.toDigit((int) ((tmp >>> 24) & SHORT_MASK));
-        digs[12] = ByteTool.toDigit((int) ((tmp >>> 18) & SHORT_MASK));
-        digs[13] = ByteTool.toDigit((int) ((tmp >>> 12) & SHORT_MASK));
-        digs[14] = ByteTool.toDigit((int) ((tmp >>> 6) & SHORT_MASK));
-        digs[15] = ByteTool.toDigit((int) ((tmp) & SHORT_MASK));
+        digs[8] = ByteUtils.toDigit((int) ((tmp >>> 42) & SHORT_MASK));
+        digs[9] = ByteUtils.toDigit((int) ((tmp >>> 36) & SHORT_MASK));
+        digs[10] = ByteUtils.toDigit((int) ((tmp >>> 30) & SHORT_MASK));
+        digs[11] = ByteUtils.toDigit((int) ((tmp >>> 24) & SHORT_MASK));
+        digs[12] = ByteUtils.toDigit((int) ((tmp >>> 18) & SHORT_MASK));
+        digs[13] = ByteUtils.toDigit((int) ((tmp >>> 12) & SHORT_MASK));
+        digs[14] = ByteUtils.toDigit((int) ((tmp >>> 6) & SHORT_MASK));
+        digs[15] = ByteUtils.toDigit((int) ((tmp) & SHORT_MASK));
         return new String(digs);
     }
 }

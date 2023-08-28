@@ -4,6 +4,7 @@ import com.chua.common.support.extra.el.expression.node.CalculateNode;
 import com.chua.common.support.extra.el.expression.node.impl.OperatorNode;
 import com.chua.common.support.extra.el.expression.parse.Invoker;
 import com.chua.common.support.extra.el.expression.token.Operator;
+import com.chua.common.support.utils.CharUtils;
 
 import java.util.Deque;
 /**
@@ -14,7 +15,7 @@ public class OperatorParser extends NodeParser {
 
     @Override
     public int parse(String el, int offset, Deque<CalculateNode> nodes, int function, Invoker next) {
-        if (!CharType.isOperator(getChar(offset, el))) {
+        if (!CharUtils.isOperator(getChar(offset, el))) {
             return next.parse(el, offset, nodes, function);
         }
         String literals = new String(new char[]{getChar(offset, el), getChar(offset + 1, el)});

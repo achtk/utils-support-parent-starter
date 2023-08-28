@@ -71,8 +71,8 @@ public class NetUtils {
     public static final Pattern IPV4_PATTERN = Pattern
             .compile(
                     "^(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)(\\.(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)){3}$");
-    private static final String HTTP = "http:
-    private static final String HTTPS = "https:
+    private static final String HTTP = "http://";
+    private static final String HTTPS = "https://";
 
     /**
      * 连接转字符串
@@ -383,7 +383,7 @@ public class NetUtils {
         if (index != -1) {
             uri = uri.substring(index + 1);
         }
-        uri = uri.replace("\\", SYMBOL_LEFT_SLASH).replaceAll("
+        uri = uri.replace("\\", SYMBOL_LEFT_SLASH).replaceAll("//", SYMBOL_LEFT_SLASH);
         if (uri.startsWith(SYMBOL_LEFT_SLASH)) {
             uri = uri.substring(1);
         }
@@ -895,7 +895,7 @@ public class NetUtils {
 
     public static String toURL(String protocol, String host, int port, String path) {
         StringBuilder sb = new StringBuilder();
-        sb.append(protocol).append(":
+        sb.append(protocol).append("://");
         sb.append(host).append(':').append(port);
         if (path.charAt(0) != '/') {
             sb.append('/');

@@ -4,6 +4,7 @@ import com.chua.common.support.extra.el.expression.node.CalculateNode;
 import com.chua.common.support.extra.el.expression.node.impl.TypeNode;
 import com.chua.common.support.extra.el.expression.parse.Invoker;
 import com.chua.common.support.extra.el.expression.token.ValueResult;
+import com.chua.common.support.utils.CharUtils;
 
 import java.util.Deque;
 /**
@@ -21,7 +22,7 @@ public class TypeParser extends NodeParser {
         offset = skipWhiteSpace(offset, el);
         int origin = offset;
         char c;
-        while (CharType.isAlphabet(c = getChar(offset, el)) || '.' == c ||  '$' == c) {
+        while (CharUtils.isAlphabet(c = getChar(offset, el)) || '.' == c ||  '$' == c) {
             offset++;
         }
         int end = offset;
