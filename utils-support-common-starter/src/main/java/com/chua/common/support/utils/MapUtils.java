@@ -71,12 +71,12 @@ public class MapUtils {
             return expectedSize + 1;
         }
         if (expectedSize < MAX_POWER_OF_TWO) {
-            // This is the calculation used in JDK8 to resize when a putAll
-            // happens; it seems to be the most conservative calculation we
-            // can make.  0.75 is the default load factor.
+            
+            
+            
             return (int) ((float) expectedSize / 0.75F + 1.0F);
         }
-        return Integer.MAX_VALUE; // any large value
+        return Integer.MAX_VALUE; 
     }
     /**
      * 合并姐
@@ -230,7 +230,7 @@ public class MapUtils {
                     String text = (String) answer;
                     return NumberFormat.getInstance().parse(text);
                 } catch (ParseException e) {
-                    // 失败意味着返回null
+                    
                 }
             }
         }

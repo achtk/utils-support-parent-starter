@@ -29,7 +29,18 @@ public @interface ExtractBy {
          * xpath
          */
         X_PATH,
-        /**regex*/ REGEX, /**Css*/ CSS, /**JsonPath*/ JSON_PATH
+        /**
+         * regex
+         */
+        REGEX,
+        /**
+         * Css
+         */
+        CSS,
+        /**
+         * JsonPath
+         */
+        JSON_PATH
     }
 
     /**
@@ -74,6 +85,7 @@ public @interface ExtractBy {
      * Define whether the extractor return more than one result.
      * When set to 'true', the extractor return a list of string (so you should define the field as List). <br>
      * <p>
+     *
      * @return whether the extractor return more than one result
      */
     boolean multi() default false;

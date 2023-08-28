@@ -8,14 +8,16 @@ import com.chua.common.support.extra.el.template.parser.Parser;
 
 import java.util.Deque;
 
-public class ExecutionBeginParser extends Parser
-{
+/**
+ * 基础类
+ *
+ * @author CH
+ */
+public class ExecutionBeginParser extends Parser {
 
     @Override
-    public int parse(String sentence, int offset, Deque<Execution> executions, Template template, StringBuilder cache, Invoker next)
-    {
-        if (isExecutionBegin(offset, sentence) == false)
-        {
+    public int parse(String sentence, int offset, Deque<Execution> executions, Template template, StringBuilder cache, Invoker next) {
+        if (isExecutionBegin(offset, sentence) == false) {
             return next.scan(sentence, offset, executions, template, cache);
         }
         offset += 2;

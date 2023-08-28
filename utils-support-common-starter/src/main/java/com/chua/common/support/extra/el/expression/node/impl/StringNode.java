@@ -6,36 +6,35 @@ import com.chua.common.support.extra.el.expression.token.ValueResult;
 
 import java.util.Map;
 
-public class StringNode implements CalculateNode
-{
+/**
+ * 基础类
+ *
+ * @author CH
+ */
+public class StringNode implements CalculateNode {
     private final String literals;
 
-    public StringNode(String literals)
-    {
+    public StringNode(String literals) {
         this.literals = literals;
     }
 
     @Override
-    public Object calculate(Map<String, Object> variables)
-    {
+    public Object calculate(Map<String, Object> variables) {
         return literals;
     }
 
     @Override
-    public Token token()
-    {
+    public Token token() {
         return ValueResult.STRING;
     }
 
     @Override
-    public String literals()
-    {
+    public String literals() {
         return '\'' + literals + "'";
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return literals();
     }
 }

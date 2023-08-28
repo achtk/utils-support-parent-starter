@@ -7,7 +7,8 @@ import java.lang.annotation.Target;
 import java.util.List;
 
 /**
- * 某个具体注解实例的元数据表达形式
+ * 基础类
+ * @author CH
  */
 public interface AnnotationMetadata
 {

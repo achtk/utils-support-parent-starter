@@ -68,7 +68,7 @@ import com.chua.common.support.utils.Preconditions;
  *
  * <p>The exact format of the {@code toString} is determined by
  * the {@link ToStringStyle} passed into the constructor.</p>
- *
+ * @author Administrator
  * @since 1.0
  */
 public class ToStringBuilder implements Builder<String> {

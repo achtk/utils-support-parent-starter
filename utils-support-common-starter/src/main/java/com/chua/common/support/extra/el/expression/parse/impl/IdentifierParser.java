@@ -5,10 +5,12 @@ import com.chua.common.support.extra.el.expression.node.impl.KeywordNode;
 import com.chua.common.support.extra.el.expression.node.impl.VariableNode;
 import com.chua.common.support.extra.el.expression.parse.Invoker;
 import com.chua.common.support.extra.el.expression.token.KeyWord;
-import com.chua.common.support.extra.el.expression.util.CharType;
 
 import java.util.Deque;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class IdentifierParser extends NodeParser {
 
     @Override

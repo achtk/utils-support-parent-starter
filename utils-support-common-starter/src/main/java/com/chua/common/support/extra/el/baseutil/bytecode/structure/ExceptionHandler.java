@@ -1,7 +1,11 @@
 package com.chua.common.support.extra.el.baseutil.bytecode.structure;
 
-public class ExceptionHandler
-{
+/**
+ * 基础类
+ *
+ * @author CH
+ */
+public class ExceptionHandler {
     /**
      * start_pc和end_pc为异常处理字节码在code[]的索引值。当程序计数器在[start_pc, end_pc)内时，表示异常会被该ExceptionHandler捕获
      */

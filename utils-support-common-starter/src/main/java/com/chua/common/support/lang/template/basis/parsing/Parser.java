@@ -16,7 +16,8 @@ import static com.chua.common.support.constant.NameConstant.AS;
 import static com.chua.common.support.constant.NameConstant.WITH;
 
 /** Parses a {@link Source} into a {@link BasisTemplate}. The implementation is a simple recursive descent parser with a lookahead of
- * 1. **/
+ * @author Administrator
+ * **/
 public class Parser {
 
 	/** Parses a {@link Source} into a {@link BasisTemplate}. **/
@@ -53,11 +54,11 @@ public class Parser {
 		} else if (tokens.match("macro", false)) {
 			if (!allowMacros) {
 				Error.error("Macros can only be defined at the top level of a template.", tokens.consume().getSpan());
-				result = null; // never reached
+				result = null; 
 			} else {
 				Macro macro = parseMacro(tokens, includes, rawIncludes);
 				macros.put(macro.getName().getText(), macro);
-				result = macro; //
+				result = macro; 
 			}
 		} else if (tokens.match("include", false)) {
 			result = parseInclude(tokens, includes, rawIncludes);
@@ -67,7 +68,7 @@ public class Parser {
 			result = parseExpression(tokens);
 		}
 
-		// consume semi-colons as statement delimiters
+		
 		while (tokens.match(";", true)) {
 			;
 		}
@@ -309,7 +310,7 @@ public class Parser {
 			return new NullLiteral(stream.expect(TokenType.NullLiteral).getSpan());
 		} else {
 			Error.error("Expected a variable, field, map, array, function or method call, or literal.", stream);
-			return null; // not reached
+			return null; 
 		}
 	}
 
@@ -352,7 +353,7 @@ public class Parser {
 
 		while (stream.hasMore() && stream.match(false, TokenType.LeftParantheses, TokenType.LeftBracket, TokenType.Period)) {
 
-			// function or method call
+			
 			if (stream.match(TokenType.LeftParantheses, false)) {
 				List<AbstractExpression> arguments = parseArguments(stream);
 				Span closingSpan = stream.expect(TokenType.RightParantheses).getSpan();
@@ -365,14 +366,14 @@ public class Parser {
 				}
 			}
 
-			// map or array access
+			
 			else if (stream.match(TokenType.LeftBracket, true)) {
 				AbstractExpression keyOrIndex = parseExpression(stream);
 				Span closingSpan = stream.expect(TokenType.RightBracket).getSpan();
 				result = new MapOrArrayAccess(new Span(result.getSpan(), closingSpan), result, keyOrIndex);
 			}
 
-			// field or method access
+			
 			else if (stream.match(TokenType.Period, true)) {
 				identifier = stream.expect(TokenType.Identifier).getSpan();
 				result = new MemberAccess(result, identifier);

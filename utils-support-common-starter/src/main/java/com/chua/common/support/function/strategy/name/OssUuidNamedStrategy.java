@@ -6,6 +6,7 @@ import com.chua.common.support.utils.IdUtils;
 
 /**
  * oss策略
+ * @author Administrator
  */
 @Spi("uuid")
 @SpiOption("uuid")

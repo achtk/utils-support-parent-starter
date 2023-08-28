@@ -8,6 +8,7 @@ import com.chua.common.support.utils.NumberUtils;
  * This is intended to mirror available values from the
  * <em>java.specification.version</em> System property. </p>
  *
+ * @author Administrator
  * @since 3.0
  */
 public enum JavaVersion {
@@ -155,7 +156,7 @@ public enum JavaVersion {
         this.value = value;
         this.name = name;
     }
-// -----------------------------------------------------------------------
+
 
     /**
      * <p>
@@ -191,7 +192,7 @@ public enum JavaVersion {
         return JAVA_SPECIFICATION_VERSION_AS_ENUM.atLeast(requiredVersion);
     }
 
-    //-----------------------------------------------------------------------
+    
 
     /**
      * <p>Whether this version of Java is at least the version of Java passed in.</p>
@@ -206,7 +207,7 @@ public enum JavaVersion {
         return this.value >= requiredVersion.value;
     }
 
-    //-----------------------------------------------------------------------
+    
 
     /**
      * <p>Whether this version of Java is at most the version of Java passed in.</p>
@@ -231,7 +232,7 @@ public enum JavaVersion {
      * @return the corresponding enumeration constant or <b>null</b> if the
      * version is unknown
      */
-    // helper for static importing
+    
     static JavaVersion getJavaVersion(final String nom) {
         return get(nom);
     }
@@ -288,7 +289,7 @@ public enum JavaVersion {
                 return JAVA_17;
             default:
                 final float v = toFloatVersion(versionStr);
-                if ((v - 1.) < 1.) { // then we need to check decimals > .9
+                if ((v - 1.) < 1.) { 
                     final int firstComma = Math.max(versionStr.indexOf('.'), versionStr.indexOf(','));
                     final int end = Math.max(versionStr.length(), versionStr.indexOf(',', firstComma));
                     if (Float.parseFloat(versionStr.substring(firstComma + 1, end)) > .9f) {
@@ -301,7 +302,7 @@ public enum JavaVersion {
         }
     }
 
-    //-----------------------------------------------------------------------
+    
 
     /**
      * <p>The string value is overridden to return the standard name.</p>

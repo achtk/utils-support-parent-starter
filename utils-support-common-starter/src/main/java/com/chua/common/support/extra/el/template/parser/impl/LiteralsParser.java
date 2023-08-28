@@ -8,14 +8,16 @@ import com.chua.common.support.extra.el.template.parser.Parser;
 
 import java.util.Deque;
 
-public class LiteralsParser extends Parser
-{
+/**
+ * 基础类
+ *
+ * @author CH
+ */
+public class LiteralsParser extends Parser {
 
     @Override
-    public int parse(String sentence, int offset, Deque<Execution> executions, Template template, StringBuilder cache, Invoker next)
-    {
-        if (template.getMode() != ScanMode.LITERALS)
-        {
+    public int parse(String sentence, int offset, Deque<Execution> executions, Template template, StringBuilder cache, Invoker next) {
+        if (template.getMode() != ScanMode.LITERALS) {
             offset = skipWhiteSpace(offset, sentence);
             return offset;
         }

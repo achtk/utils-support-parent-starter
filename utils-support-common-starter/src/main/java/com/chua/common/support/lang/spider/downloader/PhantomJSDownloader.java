@@ -21,7 +21,7 @@ import java.io.InputStreamReader;
 public class PhantomJSDownloader extends AbstractDownloader {
     private static final Logger logger = LoggerFactory.getLogger(PhantomJSDownloader.class);
     private static String crawlJsPath;
-    private static String phantomJsCommand = "phantomjs"; // default
+    private static String phantomJsCommand = "phantomjs"; 
 
     public PhantomJSDownloader() {
         this.initPhantomjsCrawlPath();
@@ -111,7 +111,7 @@ public class PhantomJSDownloader extends AbstractDownloader {
 
     @Override
     public void setThread(int threadNum) {
-        // ignore
+        
     }
 
     protected String getPage(Request request) throws Exception {

@@ -4,6 +4,7 @@ package com.chua.common.support.lang.text.translate;
 /**
  * Translates code points to their Unicode escaped value suitable for Java source.
  *
+ * @author Administrator
  * @since 1.0
  */
 public class JavaUnicodeEscaper extends UnicodeEscaper {

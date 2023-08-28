@@ -6,6 +6,7 @@ import com.chua.common.support.utils.DigestUtils;
 
 /**
  * oss策略
+ * @author Administrator
  */
 @Spi("md5")
 @SpiOption("md5")

@@ -1,5 +1,8 @@
 package com.chua.common.support.extra.el.baseutil.time;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class NanoTimeWatch
 {
     private long t0;

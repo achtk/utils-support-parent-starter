@@ -4,24 +4,25 @@ import com.chua.common.support.extra.el.template.execution.Execution;
 
 import java.util.Map;
 
-public class StringExecution implements Execution
-{
+/**
+ * 基础类
+ *
+ * @author CH
+ */
+public class StringExecution implements Execution {
     private final String literals;
 
-    public StringExecution(String literals)
-    {
+    public StringExecution(String literals) {
         this.literals = literals;
     }
 
     @Override
-    public boolean execute(Map<String, Object> variables, StringBuilder cache)
-    {
+    public boolean execute(Map<String, Object> variables, StringBuilder cache) {
         cache.append(literals);
         return true;
     }
 
     @Override
-    public void check()
-    {
+    public void check() {
     }
 }

@@ -4,10 +4,14 @@ import com.chua.common.support.extra.el.expression.node.CalculateNode;
 import com.chua.common.support.extra.el.expression.node.impl.EnumNode;
 import com.chua.common.support.extra.el.expression.parse.Invoker;
 import com.chua.common.support.extra.el.expression.token.ValueResult;
-import com.chua.common.support.extra.el.expression.util.CharType;
 
 import java.util.Deque;
 
+/**
+ * 基础类
+ *
+ * @author CH
+ */
 public class EnumParser extends NodeParser {
 
     @Override

@@ -16,6 +16,7 @@ import static com.chua.common.support.constant.CharConstant.LF;
  * CSV</a> should be preferred over these low level classes.
  * </p>
  *
+ * @author Administrator
  * @see <a href="https://commons.apache.org/proper/commons-csv/apidocs/index.html">Apache Commons CSV</a>
  */
 public final class CsvTranslators {

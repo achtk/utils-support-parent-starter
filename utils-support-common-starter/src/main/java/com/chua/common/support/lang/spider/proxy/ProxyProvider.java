@@ -6,7 +6,7 @@ import com.chua.common.support.lang.spider.Task;
 
 /**
  * Proxy provider. <br>
- *
+ * @author Administrator
  * @since 0.7.0
  */
 public interface ProxyProvider {

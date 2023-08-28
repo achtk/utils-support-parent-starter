@@ -4,7 +4,10 @@ import com.chua.common.support.extra.el.baseutil.bytecode.util.BytecodeUtil;
 
 import java.util.List;
 import java.util.Map;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class DefaultAnnotationMetadata extends AbstractAnnotationMetadata
 {
 

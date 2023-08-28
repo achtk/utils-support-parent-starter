@@ -12,9 +12,11 @@ import java.util.regex.Pattern;
 
 import static com.chua.common.support.constant.CommonConstant.SYMBOL_DOT;
 import static com.chua.common.support.constant.CommonConstant.SYMBOL_DOT_CHAR;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class FormatterTokenizer {
-  // private final Pattern WHITESPACE_PATTERN;
   private final Pattern NUMBER_PATTERN;
   private final Pattern OPERATOR_PATTERN;
 
@@ -219,12 +221,10 @@ public class FormatterTokenizer {
     return key.replaceAll(RegexUtil.escapeRegExp("\\") + quoteChar, quoteChar);
   }
 
-  // Decimal, binary, or hex numbers
   private Token getNumberToken(String input) {
     return this.getTokenOnFirstMatch(input, TokenTypes.NUMBER, this.NUMBER_PATTERN);
   }
 
-  // Punctuation and symbols
   private Token getOperatorToken(String input) {
     return this.getTokenOnFirstMatch(input, TokenTypes.OPERATOR, this.OPERATOR_PATTERN);
   }

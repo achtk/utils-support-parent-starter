@@ -5,39 +5,31 @@ import com.chua.common.support.extra.el.expression.util.number.EqUtil;
 
 import java.util.Map;
 
-public class EqualNode extends OperatorResultNode
-{
+/**
+ * 基础类
+ *
+ * @author CH
+ */
+public class EqualNode extends OperatorResultNode {
 
-    public EqualNode()
-    {
+    public EqualNode() {
         super(Operator.EQ);
     }
 
     @Override
-    public Object calculate(Map<String, Object> variables)
-    {
-        Object leftValue  = leftOperand.calculate(variables);
+    public Object calculate(Map<String, Object> variables) {
+        Object leftValue = leftOperand.calculate(variables);
         Object rightValue = rightOperand.calculate(variables);
-        if (leftValue == null && rightValue == null)
-        {
+        if (leftValue == null && rightValue == null) {
             return false;
-        }
-        else if (leftValue == null && rightValue != null)
-        {
+        } else if (leftValue == null && rightValue != null) {
             return false;
-        }
-        else if (leftValue != null && rightValue == null)
-        {
+        } else if (leftValue != null && rightValue == null) {
             return false;
-        }
-        else
-        {
-            if (leftValue instanceof Number && rightValue instanceof Number)
-            {
+        } else {
+            if (leftValue instanceof Number && rightValue instanceof Number) {
                 return EqUtil.calculate((Number) leftValue, (Number) rightValue);
-            }
-            else
-            {
+            } else {
                 return leftValue.equals(rightValue);
             }
         }

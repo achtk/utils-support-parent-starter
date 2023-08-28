@@ -70,10 +70,10 @@ public class StringUtils {
      *
      * <p>例：</p>
      * <ul>
-     *     <li>{@code StrUtil.isEmpty(null)     // true}</li>
-     *     <li>{@code StrUtil.isEmpty("")       // true}</li>
-     *     <li>{@code StrUtil.isEmpty(" \t\n")  // false}</li>
-     *     <li>{@code StrUtil.isEmpty("abc")    // false}</li>
+     *     <li>{@code StrUtil.isEmpty(null)     
+     *     <li>{@code StrUtil.isEmpty("")       
+     *     <li>{@code StrUtil.isEmpty(" \t\n")  
+     *     <li>{@code StrUtil.isEmpty("abc")    
      * </ul>
      *
      * <p>注意：该方法与 {@link #isBlank(CharSequence)} 的区别是：该方法不校验空白字符。</p>
@@ -96,10 +96,10 @@ public class StringUtils {
      *
      * <p>例：</p>
      * <ul>
-     *     <li>{@code StrUtil.isEmpty(null)     // true}</li>
-     *     <li>{@code StrUtil.isEmpty("")       // true}</li>
-     *     <li>{@code StrUtil.isEmpty(" \t\n")  // false}</li>
-     *     <li>{@code StrUtil.isEmpty("abc")    // false}</li>
+     *     <li>{@code StrUtil.isEmpty(null)     
+     *     <li>{@code StrUtil.isEmpty("")       
+     *     <li>{@code StrUtil.isEmpty(" \t\n")  
+     *     <li>{@code StrUtil.isEmpty("abc")    
      * </ul>
      *
      * <p>注意：该方法与 {@link #isBlank(CharSequence)} 的区别是：该方法不校验空白字符。</p>
@@ -127,10 +127,10 @@ public class StringUtils {
      *
      * <p>例：</p>
      * <ul>
-     *     <li>{@code StrUtil.isEmpty(null)     // true}</li>
-     *     <li>{@code StrUtil.isEmpty("")       // true}</li>
-     *     <li>{@code StrUtil.isEmpty(" \t\n")  // false}</li>
-     *     <li>{@code StrUtil.isEmpty("abc")    // false}</li>
+     *     <li>{@code StrUtil.isEmpty(null)     
+     *     <li>{@code StrUtil.isEmpty("")       
+     *     <li>{@code StrUtil.isEmpty(" \t\n")  
+     *     <li>{@code StrUtil.isEmpty("abc")    
      * </ul>
      *
      * <p>注意：该方法与 {@link #isBlank(CharSequence)} 的区别是：该方法不校验空白字符。</p>
@@ -153,10 +153,10 @@ public class StringUtils {
      *
      * <p>例：</p>
      * <ul>
-     *     <li>{@code StrUtil.isEmpty(null)     // true}</li>
-     *     <li>{@code StrUtil.isEmpty("")       // true}</li>
-     *     <li>{@code StrUtil.isEmpty(" \t\n")  // false}</li>
-     *     <li>{@code StrUtil.isEmpty("abc")    // false}</li>
+     *     <li>{@code StrUtil.isEmpty(null)     
+     *     <li>{@code StrUtil.isEmpty("")       
+     *     <li>{@code StrUtil.isEmpty(" \t\n")  
+     *     <li>{@code StrUtil.isEmpty("abc")    
      * </ul>
      *
      * <p>注意：该方法与 {@link #isBlank(CharSequence)} 的区别是：该方法不校验空白字符。</p>
@@ -184,10 +184,10 @@ public class StringUtils {
      *
      * <p>例：</p>
      * <ul>
-     *     <li>{@code StrUtil.isNotEmpty(null)     // false}</li>
-     *     <li>{@code StrUtil.isNotEmpty("")       // false}</li>
-     *     <li>{@code StrUtil.isNotEmpty(" \t\n")  // true}</li>
-     *     <li>{@code StrUtil.isNotEmpty("abc")    // true}</li>
+     *     <li>{@code StrUtil.isNotEmpty(null)     
+     *     <li>{@code StrUtil.isNotEmpty("")       
+     *     <li>{@code StrUtil.isNotEmpty(" \t\n")  
+     *     <li>{@code StrUtil.isNotEmpty("abc")    
      * </ul>
      *
      * <p>注意：该方法与 {@link #isNotBlank(CharSequence)} 的区别是：该方法不校验空白字符。</p>
@@ -211,10 +211,10 @@ public class StringUtils {
      *
      * <p>例：</p>
      * <ul>
-     *     <li>{@code StrUtil.isBlank(null)     // true}</li>
-     *     <li>{@code StrUtil.isBlank("")       // true}</li>
-     *     <li>{@code StrUtil.isBlank(" \t\n")  // true}</li>
-     *     <li>{@code StrUtil.isBlank("abc")    // false}</li>
+     *     <li>{@code StrUtil.isBlank(null)     
+     *     <li>{@code StrUtil.isBlank("")       
+     *     <li>{@code StrUtil.isBlank(" \t\n")  
+     *     <li>{@code StrUtil.isBlank("abc")    
      * </ul>
      *
      * <p>注意：该方法与 {@link #isEmpty(CharSequence)} 的区别是：
@@ -234,7 +234,7 @@ public class StringUtils {
         }
 
         for (int i = 0; i < length; i++) {
-            // 只要有一个非空字符即为非空字符串
+            
             if (!isBlankChar(str.charAt(i))) {
                 return false;
             }
@@ -253,10 +253,10 @@ public class StringUtils {
      *
      * <p>例：</p>
      * <ul>
-     *     <li>{@code StrUtil.isNotBlank(null)     // false}</li>
-     *     <li>{@code StrUtil.isNotBlank("")       // false}</li>
-     *     <li>{@code StrUtil.isNotBlank(" \t\n")  // false}</li>
-     *     <li>{@code StrUtil.isNotBlank("abc")    // true}</li>
+     *     <li>{@code StrUtil.isNotBlank(null)     
+     *     <li>{@code StrUtil.isNotBlank("")       
+     *     <li>{@code StrUtil.isNotBlank(" \t\n")  
+     *     <li>{@code StrUtil.isNotBlank("abc")    
      * </ul>
      *
      * @param str 被检测的字符串
@@ -267,7 +267,7 @@ public class StringUtils {
         return !isBlank(str);
     }
 
-    // ------------------------------------------------------------------------ repeat
+    
 
     /**
      * 重复某个字符
@@ -318,7 +318,7 @@ public class StringUtils {
         if (str == null || separator == null) {
             return repeat(str, repeat);
         } else {
-            // given that repeat(String, int) is quite optimized, better to rely on it than try and splice this into it
+            
             String result = repeat(str + separator, repeat);
             return removeEnd(result, separator);
         }
@@ -342,7 +342,7 @@ public class StringUtils {
             return str.toString();
         }
 
-        // 检查
+        
         final int len = str.length();
         final long longSize = (long) len * (long) count;
         final int size = (int) longSize;
@@ -382,7 +382,7 @@ public class StringUtils {
             return subPre(str, padLen);
         }
 
-        // 重复，直到达到指定长度
+        
         final char[] padding = new char[padLen];
         for (int i = 0; i < padLen; i++) {
             padding[i] = str.charAt(i % strLen);
@@ -422,17 +422,17 @@ public class StringUtils {
         }
         return builder.toString();
     }
-    // ------------------------------------------------------------------------ pad
+    
 
     /**
      * 补充字符串以满足指定长度，如果提供的字符串大于指定长度，截断之
      * 同：leftPad (org.apache.commons.lang3.leftPad)
      *
      * <pre>
-     * StrUtil.padPre(null, *, *);//null
-     * StrUtil.padPre("1", 3, "ABC");//"AB1"
-     * StrUtil.padPre("123", 2, "ABC");//"12"
-     * StrUtil.padPre("1039", -1, "0");//"103"
+     * StrUtil.padPre(null, *, *);
+     * StrUtil.padPre("1", 3, "ABC");
+     * StrUtil.padPre("123", 2, "ABC");
+     * StrUtil.padPre("1039", -1, "0");
      * </pre>
      *
      * @param str    字符串
@@ -448,7 +448,7 @@ public class StringUtils {
         if (strLen == length) {
             return str.toString();
         } else if (strLen > length) {
-            //如果提供的字符串大于指定长度，截断之
+            
             return subPre(str, length);
         }
 
@@ -460,9 +460,9 @@ public class StringUtils {
      * 同：leftPad (org.apache.commons.lang3.leftPad)
      *
      * <pre>
-     * StrUtil.padPre(null, *, *);//null
-     * StrUtil.padPre("1", 3, '0');//"001"
-     * StrUtil.padPre("123", 2, '0');//"12"
+     * StrUtil.padPre(null, *, *);
+     * StrUtil.padPre("1", 3, '0');
+     * StrUtil.padPre("123", 2, '0');
      * </pre>
      *
      * @param str     字符串
@@ -478,7 +478,7 @@ public class StringUtils {
         if (strLen == length) {
             return str.toString();
         } else if (strLen > length) {
-            //如果提供的字符串大于指定长度，截断之
+            
             return subPre(str, length);
         }
 
@@ -489,10 +489,10 @@ public class StringUtils {
      * 补充字符串以满足最小长度，如果提供的字符串大于指定长度，截断之
      *
      * <pre>
-     * StrUtil.padAfter(null, *, *);//null
-     * StrUtil.padAfter("1", 3, '0');//"100"
-     * StrUtil.padAfter("123", 2, '0');//"23"
-     * StrUtil.padAfter("123", -1, '0')//"" 空串
+     * StrUtil.padAfter(null, *, *);
+     * StrUtil.padAfter("1", 3, '0');
+     * StrUtil.padAfter("123", 2, '0');
+     * StrUtil.padAfter("123", -1, '0')
      * </pre>
      *
      * @param str     字符串，如果为{@code null}，直接返回null
@@ -508,7 +508,7 @@ public class StringUtils {
         if (strLen == length) {
             return str.toString();
         } else if (strLen > length) {
-            //如果提供的字符串大于指定长度，截断之
+            
             return sub(str, strLen - length, strLen);
         }
 
@@ -519,9 +519,9 @@ public class StringUtils {
      * 补充字符串以满足最小长度
      *
      * <pre>
-     * StrUtil.padAfter(null, *, *);//null
-     * StrUtil.padAfter("1", 3, "ABC");//"1AB"
-     * StrUtil.padAfter("123", 2, "ABC");//"23"
+     * StrUtil.padAfter(null, *, *);
+     * StrUtil.padAfter("1", 3, "ABC");
+     * StrUtil.padAfter("123", 2, "ABC");
      * </pre>
      *
      * @param str    字符串，如果为{@code null}，直接返回null
@@ -538,14 +538,14 @@ public class StringUtils {
         if (strLen == length) {
             return str.toString();
         } else if (strLen > length) {
-            //如果提供的字符串大于指定长度，截断之
+            
             return subSufByLength(str, length);
         }
 
         return str.toString().concat(repeatByLength(padStr, length - strLen));
     }
 
-// ------------------------------------------------------------------------ sub
+
 
     /**
      * 改进JDK subString<br>
@@ -798,7 +798,7 @@ public class StringUtils {
         }
         return str.substring(pos + 1);
     }
-// ------------------------------------------------------------------------ Trim
+
 
     /**
      * 给定字符串数组全部做去首尾空格
@@ -900,14 +900,14 @@ public class StringUtils {
      * @return 存在{symbol}开头删除{symbol}并返回结果
      */
     public static String trimIfStartWith(String value, String symbol) {
-        // 正则表达式
+        
         String regPattern = SYMBOL_LEFT_SQUARE_BRACKET + symbol + "]*+";
         Pattern pattern = Pattern.compile(regPattern, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(value);
         if (matcher.lookingAt()) {
             value = value.substring(matcher.end());
         }
-        // 返回处理后的字符串
+        
         return value;
     }
 
@@ -1156,15 +1156,15 @@ public class StringUtils {
                 || c == '\ufeff'
                 || c == '\u202a'
                 || c == '\u0000'
-                // issue#I5UGSQ，Hangul Filler
+                
                 || c == '\u3164'
-                // Braille Pattern Blank
+                
                 || c == '\u2800'
-                // MONGOLIAN VOWEL SEPARATOR
+                
                 || c == '\u180e';
     }
 
-    // ------------------------------------------------------------------------ startWith, endWith
+    
 
     /**
      * 字符串是否以给定字符结尾
@@ -1270,7 +1270,7 @@ public class StringUtils {
         if (str == null || prefix == null) {
             return str == prefix;
         }
-        // Get length once instead of twice in the unlikely case that it changes.
+        
         final int preLen = prefix.length();
         if (preLen > str.length()) {
             return false;
@@ -1387,7 +1387,7 @@ public class StringUtils {
         }
         return tokens.toArray(EMPTY_STRING_ARRAY);
     }
-    // ------------------------------------------------------------------------format
+    
 
     /**
      * 格式化文本, {} 表示占位符<br>
@@ -1436,31 +1436,31 @@ public class StringUtils {
         for (int argIndex = 0; argIndex < argArray.length; argIndex++) {
             delimindex = strPattern.indexOf(EMPTY_JSON, handledPosition);
             if (delimindex == -1) {
-                // 不带占位符的模板直接返回
+                
                 if (handledPosition == 0) {
                     return strPattern;
                 }
-                // 字符串模板剩余部分不再包含占位符，加入剩余部分后返回结果
+                
                 sbuf.append(strPattern, handledPosition, strPatternLength);
                 return sbuf.toString();
             }
 
-            // 转义符
+            
             if (delimindex > 0 && strPattern.charAt(delimindex - 1) == SYMBOL_RIGHT_SLASH_CHAR) {
-                // 双转义符
+                
                 if (delimindex > 1 && strPattern.charAt(delimindex - 2) == SYMBOL_RIGHT_SLASH_CHAR) {
-                    // 转义符之前还有一个转义符，占位符依旧有效
+                    
                     sbuf.append(strPattern, handledPosition, delimindex - 1);
                     sbuf.append(utf8Str(argArray[argIndex]));
                     handledPosition = delimindex + 2;
                 } else {
-                    // 占位符被转义
+                    
                     argIndex--;
                     sbuf.append(strPattern, handledPosition, delimindex - 1);
                     sbuf.append(SYMBOL_LEFT_BIG_PARANTHESES_CHAR);
                     handledPosition = delimindex + 1;
                 }
-                // 正常占位符
+                
             } else {
                 sbuf.append(strPattern, handledPosition, delimindex);
                 sbuf.append(utf8Str(createValue(argArray[argIndex])));
@@ -1468,14 +1468,14 @@ public class StringUtils {
             }
         }
 
-        // append the characters following the last {} pair.
-        // 加入最后一个占位符后所有的字符
+        
+        
         sbuf.append(strPattern, handledPosition, strPattern.length());
 
         return sbuf.toString();
     }
 
-    // ------------------------------------------------------------------------ str
+    
 
     /**
      * {@link CharSequence} 转为字符串，null安全
@@ -1523,8 +1523,8 @@ public class StringUtils {
 
         return o;
     }
-// Left/Right/Mid
-    //-----------------------------------------------------------------------
+
+    
 
     /**
      * <p>Gets the leftmost <code>len</code> characters of a String.</p>
@@ -1733,7 +1733,7 @@ public class StringUtils {
 
         final String str2 = str.toString();
         if (str2.startsWith(prefix.toString())) {
-            // 截取后半段
+            
             return subSuf(str2, prefix.length());
         }
         return str2;
@@ -1753,7 +1753,7 @@ public class StringUtils {
 
         final String str2 = str.toString();
         if (str2.toLowerCase().startsWith(prefix.toString().toLowerCase())) {
-            // 截取后半段
+            
             return subSuf(str2, prefix.length());
         }
         return str2;
@@ -1773,7 +1773,7 @@ public class StringUtils {
 
         final String str2 = str.toString();
         if (str2.endsWith(suffix.toString())) {
-            // 截取前半段
+            
             return subPre(str2, str2.length() - suffix.length());
         }
         return str2;
@@ -1916,7 +1916,7 @@ public class StringUtils {
             endExclude = strLength;
         }
         if (startInclude > endExclude) {
-            // 如果起始位置大于结束位置，不替换
+            
             return str(str);
         }
 
@@ -2019,7 +2019,7 @@ public class StringUtils {
      *     capitalize("11", 1) = ""
      *     capitalize("t1", "") = "t1"
      *     capitalize(null, "1") = null
-     *     capitalize("//", "1") = "//"
+     *     capitalize("
      *     capitalize("T1", "1") = "T"
      * </pre>
      *
@@ -2048,7 +2048,7 @@ public class StringUtils {
      *     capitalize("11") = "11"
      *     capitalize("t1") = "T1"
      *     capitalize(null) = null
-     *     capitalize("//") = "/"
+     *     capitalize("
      * </pre>
      *
      * @param source 数据
@@ -2064,7 +2064,7 @@ public class StringUtils {
      *     capitalize("11", true) = "11"
      *     capitalize("t1", true) = "T1"
      *     capitalize(null, true) = null
-     *     capitalize("//", true) = "//"
+     *     capitalize("
      *     capitalize("T1", false) = "t1"
      * </pre>
      *
@@ -2470,7 +2470,7 @@ public class StringUtils {
      * @return an array of parsed Strings, {@code null} if null String input
      */
     private static String[] splitWorker(final String str, final char separatorChar, final boolean preserveAllTokens) {
-        // Performance tuned for 2.0 (JDK1.4)
+        
 
         if (str == null) {
             return new String[0];
@@ -2749,12 +2749,12 @@ public class StringUtils {
                 line = reader.readLine();
             }
         } catch (IOException exc) {
-            // quit
+            
         } finally {
             try {
                 reader.close();
             } catch (IOException e) {
-                // ignore
+                
             }
         }
         return result;
@@ -2957,7 +2957,7 @@ public class StringUtils {
      */
     public static boolean isActuallyWhitespace(int c) {
         return c == ' ' || c == '\t' || c == '\n' || c == '\f' || c == '\r' || c == 160;
-        // 160 is &nbsp; (non-breaking space). Not in the spec but expected.
+        
     }
 
     public static boolean isInvisibleChar(int c) {
@@ -3030,7 +3030,7 @@ public class StringUtils {
      * @return an absolute URL if one was able to be generated, or the empty string if not
      */
     public static String resolve(String baseUrl, String relUrl) {
-        // workaround: java will allow control chars in a path URL and may treat as relative, but Chrome / Firefox will strip and may see as a scheme. Normalize to browser's view.
+        
         baseUrl = stripControlChars(baseUrl);
         relUrl = stripControlChars(relUrl);
         try {
@@ -3038,14 +3038,14 @@ public class StringUtils {
             try {
                 base = new URL(baseUrl);
             } catch (MalformedURLException e) {
-                // the base is unsuitable, but the attribute/rel may be abs on its own, so try that
+                
                 URL abs = new URL(relUrl);
                 return abs.toExternalForm();
             }
             return resolve(base, relUrl).toExternalForm();
         } catch (MalformedURLException e) {
-            // it may still be valid, just that Java doesn't have a registered stream handler for it, e.g. tel
-            // we test here vs at start to normalize supported URLs (e.g. HTTP -> http)
+            
+            
             return RegexConstant.VALID_URI_SCHEME.matcher(relUrl).find() ? relUrl : "";
         }
     }
@@ -3060,11 +3060,11 @@ public class StringUtils {
      */
     public static java.net.URL resolve(URL base, String relUrl) throws MalformedURLException {
         relUrl = stripControlChars(relUrl);
-        // workaround: java resolves '//path/file + ?foo' to '//path/?foo', not '//path/file?foo' as desired
+        
         if (relUrl.startsWith(SYMBOL_QUESTION)) {
             relUrl = base.getPath() + relUrl;
         }
-        // workaround: //example.com + ./foo = //example.com/./foo, not //example.com/foo
+        
         URL url = new URL(base, relUrl);
         String fixedFile = RegexConstant.EXTRA_DOT_SEGMENTS_PATTERN.matcher(url.getFile()).replaceFirst("/");
         if (url.getRef() != null) {
@@ -3213,8 +3213,8 @@ public class StringUtils {
     public static byte[] bytes(CharSequence str, String charset) {
         return bytes(str, isNullOrEmpty(charset) ? Charset.defaultCharset() : Charset.forName(charset));
     }
-    // Remove
-    //-----------------------------------------------------------------------
+    
+    
 
     /**
      * <p>Removes a substring only if it is at the begining of a source string,
@@ -3419,7 +3419,7 @@ public class StringUtils {
         }
         String reg = "[^\t\\x00-\\xff]";
         cell = cell.replaceAll(reg, "");
-        //把·当做中文字符两个宽度
+        
         return cell.replaceAll("·", "").length();
     }
 
@@ -3499,11 +3499,11 @@ public class StringUtils {
      */
     public static boolean equals(CharSequence str1, CharSequence str2, boolean ignoreCase) {
         if (null == str1) {
-            // 只有两个都为null才判断相等
+            
             return str2 == null;
         }
         if (null == str2) {
-            // 字符串2空，字符串1非空，直接false
+            
             return false;
         }
 
@@ -3548,7 +3548,7 @@ public class StringUtils {
         return sbu.toString();
     }
 
-// ------------------------------------------------------------------------ contains
+
 
     /**
      * 指定字符是否在字符串中出现过
@@ -3683,7 +3683,7 @@ public class StringUtils {
      */
     public static boolean containsIgnoreCase(CharSequence str, CharSequence testStr) {
         if (null == str) {
-            // 如果被监测字符串和
+            
             return null == testStr;
         }
         return str.toString().toLowerCase().contains(testStr.toString().toLowerCase());
@@ -4186,7 +4186,7 @@ public class StringUtils {
      * @return the n-th index of the search CharSequence,
      * {@code -1} ({@code INDEX_NOT_FOUND}) if no match or {@code null} string input
      */
-    // Shared code between ordinalIndexOf(String, String, int) and lastOrdinalIndexOf(String, String, int)
+    
     private static int ordinalIndexOf(final CharSequence str, final CharSequence searchStr, final int ordinal, final boolean lastIndex) {
         if (str == null || searchStr == null || ordinal <= 0) {
             return INDEX_NOT_FOUND;
@@ -4195,14 +4195,14 @@ public class StringUtils {
             return lastIndex ? str.length() : 0;
         }
         int found = 0;
-        // set the initial index beyond the end of the string
-        // this is to allow for the initial index decrement/increment
+        
+        
         int index = lastIndex ? str.length() : INDEX_NOT_FOUND;
         do {
             if (lastIndex) {
-                index = CharSequenceUtils.lastIndexOf(str, searchStr, index - 1); // step backwards thru string
+                index = CharSequenceUtils.lastIndexOf(str, searchStr, index - 1); 
             } else {
-                index = CharSequenceUtils.indexOf(str, searchStr, index + 1); // step forwards through string
+                index = CharSequenceUtils.indexOf(str, searchStr, index + 1); 
             }
             if (index < 0) {
                 return index;
@@ -4242,9 +4242,9 @@ public class StringUtils {
             return null;
         }
 
-        // handle negatives, which means last n characters
+        
         if (start < 0) {
-            start = str.length() + start; // remember start is negative
+            start = str.length() + start; 
         }
 
         if (start < 0) {
@@ -4297,20 +4297,20 @@ public class StringUtils {
             return null;
         }
 
-        // handle negatives
+        
         if (end < 0) {
-            end = str.length() + end; // remember end is negative
+            end = str.length() + end; 
         }
         if (start < 0) {
-            start = str.length() + start; // remember start is negative
+            start = str.length() + start; 
         }
 
-        // check length next
+        
         if (end > str.length()) {
             end = str.length();
         }
 
-        // if start is greater than end, return ""
+        
         if (start > end) {
             return EMPTY;
         }
@@ -4413,14 +4413,14 @@ public class StringUtils {
                 if (searchChars[j] == ch) {
                     if (Character.isHighSurrogate(ch)) {
                         if (j == searchLast) {
-                            // missing low surrogate, fine, like String.indexOf(String)
+                            
                             return false;
                         }
                         if (i < csLast && searchChars[j + 1] == cs.charAt(i + 1)) {
                             return false;
                         }
                     } else {
-                        // ch is in the Basic Multilingual Plane
+                        
                         return false;
                     }
                 }

@@ -1,13 +1,15 @@
 package com.chua.common.support.extra.el.template.parser;
 
 import com.chua.common.support.extra.el.exception.IllegalFormatException;
-import com.chua.common.support.extra.el.expression.util.CharType;
 import com.chua.common.support.extra.el.template.Template;
 import com.chua.common.support.extra.el.template.execution.Execution;
 import com.chua.common.support.extra.el.template.execution.impl.StringExecution;
 
 import java.util.Deque;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public abstract class Parser
 {
 

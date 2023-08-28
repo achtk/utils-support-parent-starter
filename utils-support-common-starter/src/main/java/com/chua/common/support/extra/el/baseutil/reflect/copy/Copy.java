@@ -7,7 +7,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class Copy<S, D>
 {
 

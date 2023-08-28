@@ -4,7 +4,10 @@ import com.chua.common.support.constant.ConstantType;
 import com.chua.common.support.extra.el.baseutil.bytecode.util.BinaryData;
 
 import java.nio.charset.Charset;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class Utf8Info extends AbstractConstantInfo
 {
     private static final Charset CHARSET = Charset.forName("utf8");

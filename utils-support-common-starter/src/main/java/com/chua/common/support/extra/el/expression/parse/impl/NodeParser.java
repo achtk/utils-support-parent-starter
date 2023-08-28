@@ -2,10 +2,12 @@ package com.chua.common.support.extra.el.expression.parse.impl;
 
 import com.chua.common.support.extra.el.expression.node.CalculateNode;
 import com.chua.common.support.extra.el.expression.parse.Invoker;
-import com.chua.common.support.extra.el.expression.util.CharType;
 
 import java.util.Deque;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public abstract class NodeParser {
 
     /**

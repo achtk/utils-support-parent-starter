@@ -1,11 +1,9 @@
 package com.chua.common.support.extra.el.baseutil;
 
-import com.chua.common.support.utils.ThreadUtils;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class CodeLocation {
     /**
      * 调用该方法所在的行数信息

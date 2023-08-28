@@ -2,8 +2,12 @@ package com.chua.common.support.extra.el.template.execution;
 
 import java.util.Map;
 
-public interface Execution
-{
+/**
+ * 基础类
+ *
+ * @author CH
+ */
+public interface Execution {
 
     /**
      * 语句是否已经执行

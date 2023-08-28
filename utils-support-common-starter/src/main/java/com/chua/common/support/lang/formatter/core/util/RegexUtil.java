@@ -5,7 +5,10 @@ import com.chua.common.support.lang.formatter.languages.StringLiteral;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class RegexUtil {
 
   private static final String ESCAPE_REGEX =

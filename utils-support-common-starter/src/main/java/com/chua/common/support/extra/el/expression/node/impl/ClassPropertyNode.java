@@ -6,7 +6,10 @@ import com.chua.common.support.extra.el.expression.token.ValueResult;
 
 import java.lang.reflect.Field;
 import java.util.Map;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class ClassPropertyNode implements CalculateNode
 {
     protected final Class<?> beanType;

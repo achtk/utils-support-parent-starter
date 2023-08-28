@@ -3,8 +3,12 @@ package com.chua.common.support.extra.el.baseutil.bytecode.structure.constantinf
 import com.chua.common.support.constant.ConstantType;
 import com.chua.common.support.extra.el.baseutil.bytecode.util.BinaryData;
 
-public class MethodHandleInfo extends AbstractConstantInfo
-{
+/**
+ * 基础类
+ *
+ * @author CH
+ */
+public class MethodHandleInfo extends AbstractConstantInfo {
     private int referenceKind;
     /**
      * reference_index为常量池项的索引，根据reference_kind值不同，指向不同类型的常量池项。
@@ -14,20 +18,17 @@ public class MethodHandleInfo extends AbstractConstantInfo
      */
     private int referenceIndex;
 
-    public MethodHandleInfo()
-    {
+    public MethodHandleInfo() {
         type = ConstantType.METHOD_HANDLE;
     }
 
     @Override
-    public void resolve(BinaryData binaryData)
-    {
+    public void resolve(BinaryData binaryData) {
         referenceKind = binaryData.readByte();
         referenceIndex = binaryData.readShort();
     }
 
     @Override
-    public void resolve(AbstractConstantInfo[] constantPool)
-    {
+    public void resolve(AbstractConstantInfo[] constantPool) {
     }
 }

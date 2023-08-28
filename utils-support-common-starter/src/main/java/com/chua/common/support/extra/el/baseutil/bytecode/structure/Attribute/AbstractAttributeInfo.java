@@ -3,11 +3,18 @@ package com.chua.common.support.extra.el.baseutil.bytecode.structure.Attribute;
 import com.chua.common.support.extra.el.baseutil.bytecode.structure.constantinfo.AbstractConstantInfo;
 import com.chua.common.support.extra.el.baseutil.bytecode.structure.constantinfo.Utf8Info;
 import com.chua.common.support.extra.el.baseutil.bytecode.util.BinaryData;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public abstract class AbstractAttributeInfo {
-    //2个字节的索引
+    /**
+     * 2个字节的索引
+     */
     protected String name;
-    //4个字节的bytes长度
+    /**
+     * 4个字节的bytes长度
+     */
     protected int length;
 
     public AbstractAttributeInfo(String name, int length) {

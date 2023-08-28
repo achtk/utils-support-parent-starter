@@ -5,7 +5,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public abstract class CacheableAnnotationContextFactory implements AnnotationContextFactory {
     protected Map<Method, AnnotationContext> methodAnnotationContextStore = new ConcurrentHashMap<>();
     protected Map<String, AnnotationContext> resourceNameAnnotationContextStore = new ConcurrentHashMap<>();

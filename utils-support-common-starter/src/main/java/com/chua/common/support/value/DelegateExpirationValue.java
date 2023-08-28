@@ -10,6 +10,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 /**
  * 过期
  *
+ * @author Administrator
  * @param <T> 类型
  */
 public class DelegateExpirationValue<T> extends DelegateValue<T> implements ExpirationValue<T> {

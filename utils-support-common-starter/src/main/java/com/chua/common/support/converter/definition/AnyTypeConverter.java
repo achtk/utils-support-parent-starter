@@ -1,7 +1,5 @@
 package com.chua.common.support.converter.definition;
 
-import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONReader;
 import com.chua.common.support.json.Json;
 import com.chua.common.support.lang.any.Any;
 import com.chua.common.support.utils.StringUtils;
@@ -24,7 +22,7 @@ public class AnyTypeConverter implements TypeConverter<Any> {
                 try {
                     return new Any(Json.toMapStringObject(string));
                 } catch (Exception e) {
-                    return new Any(JSON.parseObject(string, JSONReader.Feature.AllowUnQuotedFieldNames));
+                    return new Any(Json.getJsonObject(string));
                 }
             }
 

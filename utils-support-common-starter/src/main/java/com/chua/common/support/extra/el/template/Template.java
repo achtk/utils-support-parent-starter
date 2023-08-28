@@ -10,7 +10,10 @@ import com.chua.common.support.extra.el.template.parser.impl.*;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Map;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class Template
 {
     private static final ThreadLocal<StringBuilder> LOCAL = new ThreadLocal<StringBuilder>()
@@ -25,15 +28,15 @@ public class Template
 
     static
     {
-        Parser[] parsers = new Parser[]{ //
-                new ExecutionBeginParser(), //
-                new ExecutionEndParser(), //
-                new IfParser(), //
-                new ElseParser(), //
-                new ForEachParser(), //
-                new EndBraceParser(), //
-                new ExpressionParser(), //
-                new LiteralsParser(), //
+        Parser[] parsers = new Parser[]{ 
+                new ExecutionBeginParser(), 
+                new ExecutionEndParser(), 
+                new IfParser(), 
+                new ElseParser(), 
+                new ForEachParser(), 
+                new EndBraceParser(), 
+                new ExpressionParser(), 
+                new LiteralsParser(), 
         };
         Invoker pred = new Invoker()
         {

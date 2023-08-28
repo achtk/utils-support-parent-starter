@@ -1,6 +1,10 @@
 package com.chua.common.support.extra.el.template.execution;
 
-public interface InvokerOnExecute
-{
+/**
+ * 基础类
+ *
+ * @author CH
+ */
+public interface InvokerOnExecute {
     void invoke(Object value);
 }

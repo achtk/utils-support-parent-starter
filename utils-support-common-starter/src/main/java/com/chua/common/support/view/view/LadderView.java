@@ -14,13 +14,19 @@ import java.util.List;
  */
 public class LadderView implements View {
 
-    // 分隔符
+    /**
+     * 分隔符
+     */
     private static final String LADDER_CHAR = "`-";
 
-    // 缩进符
+    /**
+     * 缩进符
+     */
     private static final String STEP_CHAR = " ";
 
-    // 缩进长度
+    /**
+     * 缩进长度
+     */
     private static final int INDENT_STEP = 2;
 
     private final List<String> items = new ArrayList<String>();

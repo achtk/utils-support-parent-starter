@@ -3,7 +3,10 @@ package com.chua.common.support.lang.formatter.core;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.regex.Pattern;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class Token {
   public final TokenTypes type;
   public final String value;

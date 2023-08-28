@@ -1,43 +1,43 @@
-// ASM: a very small and fast Java bytecode manipulation framework
-// Copyright (c) 2000-2011 INRIA, France Telecom
-// All rights reserved.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. Neither the name of the copyright holders nor the names of its
-//    contributors may be used to endorse or promote products derived from
-//    this software without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
-// LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-// CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-// SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-// INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-// CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
-// THE POSSIBILITY OF SUCH DAMAGE.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 package com.chua.common.support.extra.asm;
 
 /**
  * Defines additional JVM opcodes, access flags and constants which are not part of the ASM public
  * API.
  *
- * @see <a href="https://docs.oracle.com/javase/specs/jvms/se11/html/jvms-6.html">JVMS 6</a>
+ * @see <a href="https:
  * @author Eric Bruneton
  */
 final class Constants {
 
-  // The ClassFile attribute names, in the order they are defined in
-  // https://docs.oracle.com/javase/specs/jvms/se11/html/jvms-4.html#jvms-4.7-300.
+  
+  
 
   static final String CONSTANT_VALUE = "ConstantValue";
   static final String CODE = "Code";
@@ -70,14 +70,14 @@ final class Constants {
   static final String PERMITTED_SUBCLASSES = "PermittedSubclasses";
   static final String RECORD = "Record";
 
-  // ASM specific access flags.
-  // WARNING: the 16 least significant bits must NOT be used, to avoid conflicts with standard
-  // access flags, and also to make sure that these flags are automatically filtered out when
-  // written in class files (because access flags are stored using 16 bits only).
+  
+  
+  
+  
 
-  static final int ACC_CONSTRUCTOR = 0x40000; // method access flag.
+  static final int ACC_CONSTRUCTOR = 0x40000; 
 
-  // ASM specific stack map frame types, used in {@link ClassVisitor#visitFrame}.
+  
 
   /**
    * A frame inserted between already existing frames. This internal stack map frame type (in
@@ -89,8 +89,8 @@ final class Constants {
    */
   static final int F_INSERT = 256;
 
-  // The JVM opcode values which are not part of the ASM public API.
-  // See https://docs.oracle.com/javase/specs/jvms/se9/html/jvms-6.html.
+  
+  
 
   static final int LDC_W = 19;
   static final int LDC2_W = 20;
@@ -138,21 +138,21 @@ final class Constants {
   static final int GOTO_W = 200;
   static final int JSR_W = 201;
 
-  // Constants to convert between normal and wide jump instructions.
+  
 
-  // The delta between the GOTO_W and JSR_W opcodes and GOTO and JUMP.
+  
   static final int WIDE_JUMP_OPCODE_DELTA = GOTO_W - Opcodes.GOTO;
 
-  // Constants to convert JVM opcodes to the equivalent ASM specific opcodes, and vice versa.
+  
 
-  // The delta between the ASM_IFEQ, ..., ASM_IF_ACMPNE, ASM_GOTO and ASM_JSR opcodes
-  // and IFEQ, ..., IF_ACMPNE, GOTO and JSR.
+  
+  
   static final int ASM_OPCODE_DELTA = 49;
 
-  // The delta between the ASM_IFNULL and ASM_IFNONNULL opcodes and IFNULL and IFNONNULL.
+  
   static final int ASM_IFNULL_OPCODE_DELTA = 20;
 
-  // ASM specific opcodes, used for long forward jump instructions.
+  
 
   static final int ASM_IFEQ = Opcodes.IFEQ + ASM_OPCODE_DELTA;
   static final int ASM_IFNE = Opcodes.IFNE + ASM_OPCODE_DELTA;

@@ -7,7 +7,10 @@ import com.chua.common.support.lang.formatter.core.FormatConfig;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class TSqlFormatter extends AbstractFormatter {
 
   private static final List<String> RESERVED_WORDS =

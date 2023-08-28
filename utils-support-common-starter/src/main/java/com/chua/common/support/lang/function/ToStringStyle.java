@@ -50,6 +50,7 @@ import static com.chua.common.support.constant.CommonConstant.EMPTY;
  * }
  * </pre>
  *
+ * @author Administrator
  * @since 1.0
  */
 @SuppressWarnings("deprecation") // StringEscapeUtils

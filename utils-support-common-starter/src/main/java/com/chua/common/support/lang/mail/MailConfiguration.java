@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 /**
  * 邮件实体
+ * @author Administrator
  */
 @Data
 public class MailConfiguration implements Serializable {

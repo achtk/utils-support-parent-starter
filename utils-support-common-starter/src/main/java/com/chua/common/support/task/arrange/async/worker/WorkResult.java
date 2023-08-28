@@ -4,6 +4,7 @@ import com.chua.common.support.constant.ResultState;
 
 /**
  * 执行结果
+ * @author Administrator
  */
 public class WorkResult<V> {
     /**

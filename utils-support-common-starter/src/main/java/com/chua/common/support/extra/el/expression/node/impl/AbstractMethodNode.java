@@ -5,7 +5,10 @@ import com.chua.common.support.extra.el.expression.node.MethodNode;
 import com.chua.common.support.extra.el.expression.token.Intermediate;
 import com.chua.common.support.extra.el.expression.token.Token;
 import com.chua.common.support.extra.el.expression.token.ValueResult;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public abstract class AbstractMethodNode implements MethodNode
 {
     protected CalculateNode[] argsNodes;

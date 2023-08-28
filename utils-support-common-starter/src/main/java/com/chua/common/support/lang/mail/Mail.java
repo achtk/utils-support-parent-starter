@@ -11,6 +11,7 @@ import java.util.Map;
 
 /**
  * 邮件实体
+ * @author Administrator
  */
 @Data
 @Builder

@@ -6,7 +6,10 @@ import com.chua.common.support.extra.el.baseutil.bytecode.util.BinaryData;
 
 import java.util.Arrays;
 import java.util.Comparator;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class LocalVariableTableAttriInfo extends AbstractAttributeInfo {
     private int localVariableTableLength;
     private LocalVariableTableEntry[] entries;

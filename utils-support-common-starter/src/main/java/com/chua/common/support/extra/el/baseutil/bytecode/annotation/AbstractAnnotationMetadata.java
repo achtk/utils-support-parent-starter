@@ -11,6 +11,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 基础类
+ * @author CH
+ */
 public abstract class AbstractAnnotationMetadata implements AnnotationMetadata {
     protected String resourceName;
     protected Map<String, ValuePair> attributes;

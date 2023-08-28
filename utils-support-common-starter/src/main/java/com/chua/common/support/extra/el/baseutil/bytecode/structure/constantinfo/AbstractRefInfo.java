@@ -1,7 +1,10 @@
 package com.chua.common.support.extra.el.baseutil.bytecode.structure.constantinfo;
 
 import com.chua.common.support.extra.el.baseutil.bytecode.util.BinaryData;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public abstract class AbstractRefInfo extends AbstractConstantInfo
 {
     protected int       classInfoIndex;

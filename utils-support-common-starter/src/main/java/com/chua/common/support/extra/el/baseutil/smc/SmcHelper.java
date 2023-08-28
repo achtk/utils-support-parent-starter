@@ -2,41 +2,34 @@ package com.chua.common.support.extra.el.baseutil.smc;
 
 import com.chua.common.support.extra.el.baseutil.smc.model.ClassModel;
 
-public class SmcHelper
-{
+/**
+ * 基础类
+ *
+ * @author CH
+ */
+public class SmcHelper {
     /**
      * 获得类型的全限定名表达。其中对数组可以转化为源码的标准形式，以及内部类的源码形式
      *
      * @param type
      * @return
      */
-    public static String getReferenceName(Class<?> type, ClassModel classModel)
-    {
-        if (type.isArray() == false)
-        {
-            if (classModel.addImport(type))
-            {
+    public static String getReferenceName(Class<?> type, ClassModel classModel) {
+        if (type.isArray() == false) {
+            if (classModel.addImport(type)) {
                 return type.getSimpleName().replace('$', '.');
-            }
-            else
-            {
+            } else {
                 return type.getName().replace('$', '.');
             }
-        }
-        else
-        {
+        } else {
             StringBuilder cache = new StringBuilder();
-            while (type.isArray())
-            {
+            while (type.isArray()) {
                 cache.append("[]");
                 type = type.getComponentType();
             }
-            if (classModel.addImport(type))
-            {
+            if (classModel.addImport(type)) {
                 return type.getSimpleName().replace('$', '.') + cache.toString();
-            }
-            else
-            {
+            } else {
                 return type.getName().replace('$', '.') + cache.toString();
             }
         }

@@ -10,7 +10,7 @@ import java.util.Map;
 
 /**
  * Translates a value using a lookup table.
- *
+ * @author Administrator
  * @since 1.0
  */
 public class LookupTranslator extends AbstractCharSequenceTranslator {

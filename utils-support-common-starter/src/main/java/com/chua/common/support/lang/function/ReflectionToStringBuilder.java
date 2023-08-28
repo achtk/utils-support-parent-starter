@@ -78,7 +78,7 @@ import static com.chua.common.support.constant.CommonConstant.EMPTY_STRING_ARRAY
  * <b>Note:</b> the default {@link ToStringStyle} will only do a "shallow" formatting, i.e. composed objects are not
  * further traversed. To get "deep" formatting, use an instance of {@link RecursiveToStringStyle}.
  * </p>
- *
+ * @author Administrator
  * @since 2.0
  */
 public class ReflectionToStringBuilder extends ToStringBuilder {

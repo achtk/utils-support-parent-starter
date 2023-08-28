@@ -14,7 +14,7 @@ import java.util.EnumSet;
  * the specific code point.
  * <p>
  * Note that the semicolon is optional.
- *
+ * @author Administrator
  * @since 1.0
  */
 public class NumericEntityUnescaper extends AbstractCharSequenceTranslator {

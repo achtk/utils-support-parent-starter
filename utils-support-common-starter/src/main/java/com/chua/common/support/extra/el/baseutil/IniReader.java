@@ -8,12 +8,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class IniReader
-{
-    public static IniFile read(InputStream inputStream, Charset charset)
-    {
-        class Helper
-        {
+/**
+ * 基础类
+ *
+ * @author CH
+ */
+public class IniReader {
+    public static IniFile read(InputStream inputStream, Charset charset) {
+        class Helper {
             /**
              * 从index位置开始（包含）,找寻/n的坐标。并且返回
              *
@@ -21,18 +23,12 @@ public class IniReader
              * @param index
              * @return
              */
-            int currentLine(byte[] src, int index)
-            {
-                for (int i = index; i < src.length; i++)
-                {
-                    if (src[i] == '\n')
-                    {
-                        if (i > index && src[i - 1] == '\r')
-                        {
+            int currentLine(byte[] src, int index) {
+                for (int i = index; i < src.length; i++) {
+                    if (src[i] == '\n') {
+                        if (i > index && src[i - 1] == '\r') {
                             return i - 1;
-                        }
-                        else
-                        {
+                        } else {
                             return i;
                         }
                     }
@@ -40,85 +36,65 @@ public class IniReader
                 return src.length - 1;
             }
         }
-        Helper      helper      = new Helper();
-        SectionImpl preSection  = null;
+        Helper helper = new Helper();
+        SectionImpl preSection = null;
         IniFileImpl iniFileImpl = new IniFileImpl();
-        try
-        {
+        try {
             byte[] src = new byte[inputStream.available()];
             inputStream.read(src);
             int index = 0;
-            while (true)
-            {
+            while (true) {
                 int end = helper.currentLine(src, index);
-                if (index > end)
-                {
+                if (index > end) {
                     break;
-                }
-                else if (end == index)
-                {
+                } else if (end == index) {
                     index += 1;
                     continue;
                 }
                 int skip = -1;
-                if (src[end] == '\r')
-                {
+                if (src[end] == '\r') {
                     skip = 2;
-                }
-                else if (src[end] == '\n')
-                {
+                } else if (src[end] == '\n') {
                     skip = 1;
-                }
-                else
-                {
+                } else {
                     skip = 0;
                 }
                 String value = skip > 0 ? new String(src, index, end - index, charset) : new String(src, index, end - index + 1, charset);
                 value = value.trim();
                 char c = value.charAt(0);
                 // 忽略注释
-                if (c == ';' || c == '#')
-                {
+                if (c == ';' || c == '#') {
                 }
                 // 发现是一个新的节点
-                else if (c == '[' && value.charAt(value.length() - 1) == ']')
-                {
+                else if (c == '[' && value.charAt(value.length() - 1) == ']') {
                     String sectionName = value.substring(1, value.length() - 1);
                     preSection = new SectionImpl(sectionName);
                     iniFileImpl.addSection(preSection);
-                }
-                else
-                {
+                } else {
                     int splitIndex = value.indexOf('=');
-                    if (splitIndex > 0 && splitIndex < src.length)
-                    {
+                    if (splitIndex > 0 && splitIndex < src.length) {
                         // 属性节点
                         String k = value.substring(0, splitIndex).trim();
                         String v = value.substring(splitIndex + 1).trim();
                         iniFileImpl.putProperty(k, v);
-                        if (preSection != null)
-                        {
+                        if (preSection != null) {
                             preSection.putProperty(k, v);
                         }
                     }
                 }
                 index = end + skip;
-                if (skip == 0)
-                {
+                if (skip == 0) {
                     break;
                 }
             }
             return iniFileImpl;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             ReflectUtil.throwException(e);
             return null;
         }
     }
 
-    interface PropertyValueStore
-    {
+    interface PropertyValueStore {
         /**
          * 返回该属性的第一个值
          *
@@ -138,92 +114,73 @@ public class IniReader
         Set<String> keySet();
     }
 
-    public interface Section extends PropertyValueStore
-    {
+    public interface Section extends PropertyValueStore {
         String name();
     }
 
-    public interface IniFile extends PropertyValueStore
-    {
+    public interface IniFile extends PropertyValueStore {
         Section getSection(String name);
     }
 
-    static class PropertyValueStoreImpl implements PropertyValueStore
-    {
+    static class PropertyValueStoreImpl implements PropertyValueStore {
         Map<String, String[]> store = new HashMap<String, String[]>();
 
         @Override
-        public String getValue(String property)
-        {
+        public String getValue(String property) {
             String[] result = store.get(property);
-            if (result != null)
-            {
+            if (result != null) {
                 return result[0];
-            }
-            else
-            {
+            } else {
                 return null;
             }
         }
 
-        public void putProperty(String property, String value)
-        {
-            if (store.containsKey(property))
-            {
+        public void putProperty(String property, String value) {
+            if (store.containsKey(property)) {
                 String[] pred = store.get(property);
-                String[] now  = new String[pred.length + 1];
+                String[] now = new String[pred.length + 1];
                 System.arraycopy(pred, 0, now, 0, pred.length);
                 now[pred.length] = value;
                 store.put(property, now);
-            }
-            else
-            {
+            } else {
                 store.put(property, new String[]{value});
             }
         }
 
         @Override
-        public Set<String> keySet()
-        {
+        public Set<String> keySet() {
             return store.keySet();
         }
 
         @Override
-        public String[] getValues(String property)
-        {
+        public String[] getValues(String property) {
             return store.get(property);
         }
     }
 
-    static class IniFileImpl extends PropertyValueStoreImpl implements IniFile
-    {
+    static class IniFileImpl extends PropertyValueStoreImpl implements IniFile {
         Map<String, Section> sections = new HashMap<String, Section>();
 
         @Override
-        public Section getSection(String name)
-        {
+        public Section getSection(String name) {
             return sections.get(name);
         }
 
-        void addSection(Section section)
-        {
+        void addSection(Section section) {
             sections.put(section.name(), section);
         }
     }
 
-    static class SectionImpl extends PropertyValueStoreImpl implements Section
-    {
-        final     String                name;
+    static class SectionImpl extends PropertyValueStoreImpl implements Section {
+        final String name;
         protected Map<String, String[]> store = new HashMap<String, String[]>();
 
-        public SectionImpl(String name)
-        {
+        public SectionImpl(String name) {
             this.name = name;
         }
 
         @Override
-        public String name()
-        {
+        public String name() {
             return name;
         }
     }

@@ -16,7 +16,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /** A template loader loads a {@link BasisTemplate} from a path, and recursively loads other templates the template may reference. See
  * {@link CachingTemplateLoader}, {@link ClasspathTemplateLoader}, {@link FileTemplateLoader} and {@link MapTemplateLoader} for
- * specific implementations. */
+ * specific implementations.
+ * @author Administrator
+ * */
 public interface TemplateLoader {
 
 	/** Loads the template from the given path, recursively resolving other templates included or referenced by this template.

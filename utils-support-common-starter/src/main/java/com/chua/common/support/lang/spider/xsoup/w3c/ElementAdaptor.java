@@ -148,7 +148,6 @@ public class ElementAdaptor extends NodeAdaptor implements Element {
         return null;
     }
 
-    /*----------------------------- update - not support-------------*/
     @Override
     public void setAttribute(String name, String value) throws DOMException {
         throw new UnsupportedOperationException();

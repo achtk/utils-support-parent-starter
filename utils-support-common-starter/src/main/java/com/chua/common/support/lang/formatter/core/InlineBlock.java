@@ -50,8 +50,6 @@ class InlineBlock {
     return this.level > 0;
   }
 
-  // Check if this should be an inline parentheses block
-  // Examples are "NOW()", "COUNT(*)", "int(10)", key(`somecolumn`), DECIMAL(7,2)
   private boolean isInlineBlock(JSLikeList<Token> tokens, int index) {
     int length = 0;
     int level = 0;
@@ -81,8 +79,6 @@ class InlineBlock {
     return false;
   }
 
-  // Reserved words that cause newlines, comments and semicolons
-  // are not allowed inside inline parentheses block
   private boolean isForbiddenToken(Token token) {
     return token.type == TokenTypes.RESERVED_TOP_LEVEL
         || token.type == TokenTypes.RESERVED_NEWLINE

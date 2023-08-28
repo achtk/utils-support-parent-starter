@@ -16,14 +16,14 @@ import static com.chua.common.support.constant.NameConstant.*;
 public class FormattingVisitor implements NodeVisitor {
     private static final int MAX_WIDTH = 80;
     private int width = 0;
-    private final StringBuilder accum = new StringBuilder(); // holds the accumulated text
+    private final StringBuilder accum = new StringBuilder(); 
 
-    // hit when the node is first seen
+    
     @Override
     public void head(Node node, int depth) {
         String name = node.nodeName();
         if (node instanceof TextNode) {
-            append(((TextNode) node).text()); // TextNodes carry all user-readable text in the DOM.
+            append(((TextNode) node).text()); 
         } else if (LI_TAG.equals(name)) {
             append("\n * ");
         } else if (DT_TAG.equals(name)) {
@@ -33,7 +33,7 @@ public class FormattingVisitor implements NodeVisitor {
         }
     }
 
-    // hit when all of the node's children (if any) have been visited
+    
     @Override
     public void tail(Node node, int depth) {
         String name = node.nodeName();
@@ -44,26 +44,26 @@ public class FormattingVisitor implements NodeVisitor {
         }
     }
 
-    // appends text to the string builder with a simple word wrap method
+    
     private void append(String text) {
         if (text.startsWith("\n")) {
-            width = 0; // reset counter if starts with a newline. only from formats above, not in natural text
+            width = 0; 
         }
         if (SYMBOL_BLANK.equals(text) && (accum.length() == 0 || StringUtils.in(accum.substring(accum.length()
                 - 1), " ", "\n"))) {
-            return; // don't accumulate long runs of empty spaces
+            return; 
         }
 
-        if (text.length() + width > MAX_WIDTH) { // won't fit, needs to wrap
+        if (text.length() + width > MAX_WIDTH) { 
             String[] words = text.split("\\s+");
             for (int i = 0; i < words.length; i++) {
                 String word = words[i];
                 boolean last = i == words.length - 1;
-                if (!last) // insert a space if not the last word
+                if (!last) 
                 {
                     word = word + " ";
                 }
-                if (word.length() + width > MAX_WIDTH) { // wrap and reset counter
+                if (word.length() + width > MAX_WIDTH) { 
                     accum.append("\n").append(word);
                     width = word.length();
                 } else {
@@ -71,7 +71,7 @@ public class FormattingVisitor implements NodeVisitor {
                     width += word.length();
                 }
             }
-        } else { // fits as is, without need to wrap text
+        } else { 
             accum.append(text);
             width += text.length();
         }

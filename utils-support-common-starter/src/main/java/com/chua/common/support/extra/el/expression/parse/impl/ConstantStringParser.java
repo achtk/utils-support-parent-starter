@@ -6,7 +6,10 @@ import com.chua.common.support.extra.el.expression.node.impl.StringNode;
 import com.chua.common.support.extra.el.expression.parse.Invoker;
 
 import java.util.Deque;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class ConstantStringParser extends NodeParser {
 
     @Override

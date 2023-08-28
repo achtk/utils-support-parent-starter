@@ -6,38 +6,37 @@ import com.chua.common.support.extra.el.expression.token.ValueResult;
 
 import java.util.Map;
 
-public class EnumNode implements CalculateNode
-{
+/**
+ * 基础类
+ *
+ * @author CH
+ */
+public class EnumNode implements CalculateNode {
     private final Enum<?> value;
 
     @SuppressWarnings({"rawtypes", "unchecked"})
-    public EnumNode(CalculateNode enumTypeNode, String literals)
-    {
+    public EnumNode(CalculateNode enumTypeNode, String literals) {
         Class<Enum> enumType = (Class<Enum>) enumTypeNode.calculate(null);
         value = Enum.valueOf(enumType, literals);
     }
 
     @Override
-    public Object calculate(Map<String, Object> variables)
-    {
+    public Object calculate(Map<String, Object> variables) {
         return value;
     }
 
     @Override
-    public Token token()
-    {
+    public Token token() {
         return ValueResult.ENUM;
     }
 
     @Override
-    public String literals()
-    {
+    public String literals() {
         return value.name();
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return literals();
     }
 }

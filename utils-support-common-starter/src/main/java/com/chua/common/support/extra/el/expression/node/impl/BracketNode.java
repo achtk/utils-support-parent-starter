@@ -6,7 +6,10 @@ import com.chua.common.support.extra.el.expression.token.ValueResult;
 
 import java.util.List;
 import java.util.Map;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class BracketNode implements CalculateNode {
     private final CalculateNode beanNode;
     private final CalculateNode valueNode;

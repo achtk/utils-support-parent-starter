@@ -9,7 +9,10 @@ import java.util.Optional;
 import java.util.Set;
 
 import static com.chua.common.support.constant.CommonConstant.*;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public abstract class AbstractFormatter implements DialectConfigurator {
   private final FormatConfig cfg;
   private final Indentation indentation;
@@ -142,7 +145,9 @@ public abstract class AbstractFormatter implements DialectConfigurator {
     return this.addNewline(query) + this.equalizeWhitespace(this.show(token)) + " ";
   }
 
-  // Replace any sequence of whitespace characters with single space
+  /**
+   * Replace any sequence of whitespace characters with single space
+   */
   private String equalizeWhitespace(String string) {
     return string.replaceAll("\\s+", " ");
   }
@@ -154,7 +159,9 @@ public abstract class AbstractFormatter implements DialectConfigurator {
           TokenTypes.OPERATOR,
           TokenTypes.RESERVED_NEWLINE);
 
-  // Opening parentheses increase the block indent level and start a new line
+  /**
+   * Opening parentheses increase the block indent level and start a new line
+   */
   private String formatOpeningParentheses(Token token, String query) {
     // Take out the preceding space unless there was whitespace there in the original query
     // or another opening parens or line comment
@@ -175,7 +182,9 @@ public abstract class AbstractFormatter implements DialectConfigurator {
     return query;
   }
 
-  // Closing parentheses decrease the block indent level
+  /**
+   * Closing parentheses decrease the block indent level
+   */
   private String formatClosingParentheses(Token token, String query) {
     if (this.inlineBlock.isActive()) {
       this.inlineBlock.end();
@@ -190,7 +199,9 @@ public abstract class AbstractFormatter implements DialectConfigurator {
     return query + this.params.get(token) + " ";
   }
 
-  // Commas start a new line (unless within inline parentheses or SQL "LIMIT" clause)
+  /**
+   * Commas start a new line (unless within inline parentheses or SQL "LIMIT" clause)
+   */
   private String formatComma(Token token, String query) {
     query = Util.trimSpacesEnd(query) + this.show(token) + " ";
 
@@ -222,7 +233,9 @@ public abstract class AbstractFormatter implements DialectConfigurator {
         + Util.repeat("\n", Optional.ofNullable(this.cfg.linesBetweenQueries).orElse(1));
   }
 
-  // Converts token to string (uppercasing it if needed)
+  /**
+   * Converts token to string (uppercasing it if needed)
+   */
   private String show(Token token) {
     if (this.cfg.uppercase
         && (token.type == TokenTypes.RESERVED

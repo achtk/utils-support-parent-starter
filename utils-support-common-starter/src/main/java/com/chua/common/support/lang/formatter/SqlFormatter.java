@@ -9,7 +9,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class SqlFormatter {
   /**
    * FormatConfig whitespaces in a query to make it easier to read.

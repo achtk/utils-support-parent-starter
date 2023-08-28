@@ -8,7 +8,10 @@ import com.chua.common.support.extra.el.expression.token.ValueResult;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Map;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class StaticObjectMethodNode extends AbstractMethodNode {
     private final Class<?> beanType;
     private final String methodName;

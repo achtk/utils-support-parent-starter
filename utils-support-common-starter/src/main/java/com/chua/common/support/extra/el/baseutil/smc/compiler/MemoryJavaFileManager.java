@@ -19,7 +19,6 @@ import java.util.Map;
 class MemoryJavaFileManager extends ForwardingJavaFileManager<JavaFileManager>
 {
 
-    // compiled classes in bytes:
     private final Map<String, byte[]> classBytes = new HashMap<String, byte[]>();
 
     MemoryJavaFileManager(JavaFileManager fileManager)

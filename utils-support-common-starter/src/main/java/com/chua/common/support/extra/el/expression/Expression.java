@@ -8,26 +8,29 @@ import com.chua.common.support.extra.el.expression.util.Functional;
 import com.chua.common.support.extra.el.expression.util.OperatorResultUtil;
 
 import java.util.*;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class Expression {
     private static final Invoker DEFAULT_HEAD;
 
     static {
-        NodeParser[] parsers = new NodeParser[]{ //
-                new SkipIgnoredToken(), //
-                new LeftParenParser(), //
-                new RightParenParser(), //
-                new LeftBracketParser(), //
-                new TypeParser(), //
-                new RightBracketParser(), //
-                new PropertyParser(), //
-                new EnumParser(), //
-                new MethodParser(), //
-                new CommaParser(), //
-                new ConstantStringParser(), //
-                new NumberParser(), //
-                new IdentifierParser(), //
-                new OperatorParser()//
+        NodeParser[] parsers = new NodeParser[]{ 
+                new SkipIgnoredToken(), 
+                new LeftParenParser(), 
+                new RightParenParser(), 
+                new LeftBracketParser(), 
+                new TypeParser(), 
+                new RightBracketParser(), 
+                new PropertyParser(), 
+                new EnumParser(), 
+                new MethodParser(), 
+                new CommaParser(), 
+                new ConstantStringParser(), 
+                new NumberParser(), 
+                new IdentifierParser(), 
+                new OperatorParser()
         };
         Invoker pred = (el, offset, nodes, function) -> offset;
         for (int i = parsers.length - 1; i > -1; i--) {

@@ -316,7 +316,7 @@ public class XPathParser {
     private AbstractEvaluator byAttribute(XTokenQueue cq) {
         cq.matchChomp("@");
         String key =
-                cq.consumeToAny("=", "!=", "^=", "$=", "*=", "~="); // eq, not, start, end, contain, match, (no val)
+                cq.consumeToAny("=", "!=", "^=", "$=", "*=", "~=");
         Preconditions.notEmpty(key);
         cq.consumeWhitespace();
         AbstractEvaluator evaluator;

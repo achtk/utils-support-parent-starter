@@ -3,7 +3,10 @@ package com.chua.common.support.extra.el.expression.node;
 import com.chua.common.support.constant.ConstantType;
 
 import static com.chua.common.support.constant.ConstantType.*;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public interface MethodNode extends CalculateNode {
     void setArgsNodes(CalculateNode[] argsNodes);
 

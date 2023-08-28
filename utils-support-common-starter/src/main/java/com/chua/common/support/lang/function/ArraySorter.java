@@ -6,7 +6,7 @@ import java.util.Comparator;
 
 /**
  * Sorts and returns arrays in the fluent style.
- *
+ * @author Administrator
  * @since 3.12.0
  */
 public class ArraySorter {

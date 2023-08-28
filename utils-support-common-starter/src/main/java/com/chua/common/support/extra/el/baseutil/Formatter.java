@@ -4,7 +4,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class Formatter {
     static ConcurrentMap<String, Template> map = new ConcurrentHashMap<>();
     static ThreadLocal<StringBuilder> threadLocal = ThreadLocal.withInitial(StringBuilder::new);

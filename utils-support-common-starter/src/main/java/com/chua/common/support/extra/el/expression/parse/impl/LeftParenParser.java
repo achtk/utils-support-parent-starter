@@ -6,7 +6,10 @@ import com.chua.common.support.extra.el.expression.parse.Invoker;
 import com.chua.common.support.extra.el.expression.token.Symbol;
 
 import java.util.Deque;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class LeftParenParser extends NodeParser {
 
     @Override

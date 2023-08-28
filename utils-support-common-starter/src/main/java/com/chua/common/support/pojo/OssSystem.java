@@ -4,7 +4,10 @@ import com.chua.common.support.database.annotation.Column;
 import com.chua.common.support.database.annotation.Id;
 import com.chua.common.support.database.annotation.Table;
 import lombok.Data;
-
+/**
+ * 基础类
+ * @author CH
+ */
 @Data
 @Table(value = "oss_system")
 public class OssSystem {

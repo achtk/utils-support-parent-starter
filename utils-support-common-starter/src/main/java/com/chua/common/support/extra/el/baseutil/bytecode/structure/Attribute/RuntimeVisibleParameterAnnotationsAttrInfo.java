@@ -5,7 +5,10 @@ import com.chua.common.support.extra.el.baseutil.bytecode.structure.constantinfo
 import com.chua.common.support.extra.el.baseutil.bytecode.util.BinaryData;
 
 import java.util.Arrays;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class RuntimeVisibleParameterAnnotationsAttrInfo extends AbstractAttributeInfo {
     private int numParameters;
     private ParameterAnnotation[] parameterAnnotations;

@@ -28,6 +28,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  * (see {@link Ast} that evaluates that node. A node may return a value, to be used in the interpretation of a parent node or to
  * be written to the output stream.
  * </p>
+ * @author Administrator
  **/
 public class AstInterpreter {
 	public static Object interpret (BasisTemplate template, TemplateContext context, OutputStream out) {
@@ -43,7 +44,7 @@ public class AstInterpreter {
 				throw (TemplateException)t;
 			} else {
 				com.chua.common.support.lang.template.basis.Error.error("Couldn't interpret node list due to I/O error, " + t.getMessage(), template.getNodes().get(0).getSpan());
-				return null; // never reached
+				return null;
 			}
 		} finally {
 			// clear out RETURN_SENTINEL as it uses a ThreadLocal and would leak memory otherwise

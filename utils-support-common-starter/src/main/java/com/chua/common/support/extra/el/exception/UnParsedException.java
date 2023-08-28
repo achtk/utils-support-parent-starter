@@ -1,5 +1,8 @@
 package com.chua.common.support.extra.el.exception;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class UnParsedException extends RuntimeException
 {
 

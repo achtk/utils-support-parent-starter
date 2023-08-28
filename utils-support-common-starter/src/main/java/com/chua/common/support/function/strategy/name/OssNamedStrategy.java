@@ -2,6 +2,7 @@ package com.chua.common.support.function.strategy.name;
 
 /**
  * oss策略
+ * @author Administrator
  */
 public interface OssNamedStrategy {
     /**

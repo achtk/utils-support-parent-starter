@@ -12,12 +12,14 @@ import com.chua.common.support.extra.el.baseutil.bytecode.structure.constantinfo
 import com.chua.common.support.extra.el.baseutil.bytecode.structure.constantinfo.Utf8Info;
 import com.chua.common.support.extra.el.baseutil.bytecode.util.BinaryData;
 import com.chua.common.support.extra.el.baseutil.bytecode.util.BytecodeUtil;
-import javassist.bytecode.AttributeInfo;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class AnnotationInfo
 {
     private String               type;

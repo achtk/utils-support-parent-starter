@@ -9,6 +9,73 @@ import static com.chua.common.support.constant.CharConstant.SLASH;
  * @author CH
  */
 public class CharUtils {
+    /**
+     * 输入结束符.
+     */
+    public static final byte EOI = 0x1A;
+
+    /**
+     * 判断是否为空格.
+     *
+     * @param ch 待判断的字符
+     * @return 是否为空格
+     */
+    public static boolean isWhitespace(final char ch) {
+        return ch == ' ';
+    }
+
+    /**
+     * 判断是否输入结束.
+     *
+     * @param ch 待判断的字符
+     * @return 是否输入结束
+     */
+    public static boolean isEndOfInput(final char ch) {
+        return ch == 0x1A;
+    }
+
+    /**
+     * 判断是否为字母.
+     *
+     * @param ch 待判断的字符
+     * @return 是否为字母
+     */
+    public static boolean isAlphabet(final char ch) {
+        return ch >= 'A' && ch <= 'Z' || ch >= 'a' && ch <= 'z' || ch == '_';
+    }
+
+    /**
+     * 判断是否为数字.
+     *
+     * @param ch 待判断的字符
+     * @return 是否为数字
+     */
+    public static boolean isDigital(final char ch) {
+        return ch >= '0' && ch <= '9';
+    }
+
+    /**
+     * 判断是否为符号.
+     *
+     * @param ch 待判断的字符
+     * @return 是否为符号
+     */
+    public static boolean isOperator(final char ch) {
+        return '+' == ch
+                || '-' == ch
+                || '*' == ch
+                || '/' == ch
+                || '%' == ch
+                || '=' == ch
+                || '>' == ch
+                || '<' == ch
+                || '!' == ch
+                || '&' == ch
+                || '|' == ch
+                || '?' == ch
+                || ':' == ch
+                ;
+    }
 
     /**
      * 是否为ASCII字符，ASCII字符位于0~127之间
@@ -373,20 +440,19 @@ public class CharUtils {
     }
 
 
-
     /**
      * Green implementation of regionMatches.
      *
-     * @param cs the {@code CharSequence} to be processed
+     * @param cs         the {@code CharSequence} to be processed
      * @param ignoreCase whether or not to be case insensitive
-     * @param thisStart the index to start on the {@code cs} CharSequence
-     * @param substring the {@code CharSequence} to be looked for
-     * @param start the index to start on the {@code substring} CharSequence
-     * @param length character length of the region
+     * @param thisStart  the index to start on the {@code cs} CharSequence
+     * @param substring  the {@code CharSequence} to be looked for
+     * @param start      the index to start on the {@code substring} CharSequence
+     * @param length     character length of the region
      * @return whether the region matched
      */
     static boolean regionMatches(final CharSequence cs, final boolean ignoreCase, final int thisStart,
-                                 final CharSequence substring, final int start, final int length)    {
+                                 final CharSequence substring, final int start, final int length) {
         if (cs instanceof String && substring instanceof String) {
             return ((String) cs).regionMatches(ignoreCase, thisStart, (String) substring, start, length);
         }

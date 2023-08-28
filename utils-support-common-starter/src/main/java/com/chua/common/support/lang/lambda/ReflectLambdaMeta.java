@@ -10,7 +10,8 @@ import java.lang.reflect.Field;
 import static com.chua.common.support.constant.CommonConstant.*;
 
 /**
- * Created by hcl at 2021/5/14
+ * 基础类
+ * @author CH
  */
 @Slf4j
 public class ReflectLambdaMeta implements LambdaMeta {

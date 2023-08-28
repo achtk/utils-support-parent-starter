@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Borrowed from https://code.google.com/p/cx-extractor/
+ * Borrowed from https:
  *
  * @author code4crafter@gmail.com <br>
  * @since 0.4.1
@@ -21,10 +21,10 @@ public class SmartContentSelector implements Selector {
     @Override
     public String select(String html) {
         html = html.replaceAll("(?is)<!DOCTYPE.*?>", "");
-        html = html.replaceAll("(?is)<!--.*?-->", "");                // remove html comment
-        html = html.replaceAll("(?is)<script.*?>.*?</script>", ""); // remove javascript
-        html = html.replaceAll("(?is)<style.*?>.*?</style>", "");   // remove css
-        html = html.replaceAll("&.{2,5};|&#.{2,5};", " ");            // remove special char
+        html = html.replaceAll("(?is)<!--.*?-->", "");                
+        html = html.replaceAll("(?is)<script.*?>.*?</script>", ""); 
+        html = html.replaceAll("(?is)<style.*?>.*?</style>", "");   
+        html = html.replaceAll("&.{2,5};|&#.{2,5};", " ");            
         html = html.replaceAll("(?is)<.*?>", "");
         List<String> lines;
         int blocksWidth = 3;
@@ -69,7 +69,7 @@ public class SmartContentSelector implements Selector {
             }
             StringBuilder tmp = new StringBuilder();
             if (boolend) {
-                //System.out.println(start+1 + "\t\t" + end+1);
+                
                 for (int ii = start; ii <= end; ii++) {
                     if (lines.get(ii).length() < 5) {
                         continue;
@@ -77,7 +77,7 @@ public class SmartContentSelector implements Selector {
                     tmp.append(lines.get(ii) + "\n");
                 }
                 String str = tmp.toString();
-                //System.out.println(str);
+                
                 if (str.contains("Copyright")) {
                     continue;
                 }

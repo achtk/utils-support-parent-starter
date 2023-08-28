@@ -10,7 +10,10 @@ import com.chua.common.support.extra.el.expression.node.CalculateNode;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class CompileObjectMethodNode extends AbstractMethodNode {
     private static final CompileHelper COMPILER = new CompileHelper();
     private static final AtomicInteger ATOMIC_INTEGER = new AtomicInteger(0);

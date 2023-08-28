@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
  * @see TokenQueue
  */
 public class XTokenQueue {
-    private static final char ESC = '\\'; // escape char for chomp balanced.
+    private static final char ESC = '\\'; 
     private static final String[] QUOTES = {"\"", "'"};
     private static final char SINGLE_QUOTE = '\'';
     private static final char DOUBLE_QUOTE = '"';
@@ -116,7 +116,7 @@ public class XTokenQueue {
      * @param seq string to add.
      */
     public void addFirst(String seq) {
-        // not very performant, but an edge case
+        
         queue = seq + queue.substring(pos);
         pos = 0;
     }
@@ -174,7 +174,7 @@ public class XTokenQueue {
     }
 
     public boolean matchesStartTag() {
-        // micro opt for matching "<x"
+        
         return (remainingLength() >= 2 && queue.charAt(pos) == '<' && Character.isLetter(queue.charAt(pos + 1)));
     }
 
@@ -270,7 +270,7 @@ public class XTokenQueue {
     public String consumeToIgnoreCase(String seq) {
         int start = pos;
         String first = seq.substring(0, 1);
-        boolean canScan = first.toLowerCase().equals(first.toUpperCase()); // if first is not cased, use index of
+        boolean canScan = first.toLowerCase().equals(first.toUpperCase()); 
         while (!isEmpty()) {
             if (matches(seq)) {
                 break;
@@ -278,10 +278,10 @@ public class XTokenQueue {
 
             if (canScan) {
                 int skip = queue.indexOf(first, pos) - pos;
-                if (skip == 0) // this char is the skip char, but not match, so force advance of pos
+                if (skip == 0) 
                 {
                     pos++;
-                } else if (skip < 0) // no chance of finding, grab to end
+                } else if (skip < 0) 
                 {
                     pos = queue.length();
                 } else {
@@ -302,8 +302,8 @@ public class XTokenQueue {
      * @param seq any number of terminators to consume to. <b>Case insensitive.</b>
      * @return consumed string
      */
-    // todo: method name. not good that consumeTo cares for case, and consume to any doesn't. And the only use for this
-    // is is a case sensitive time...
+    
+    
     public String consumeToAny(String... seq) {
         int start = pos;
         while (!isEmpty() && !matchesAny(seq)) {
@@ -340,7 +340,7 @@ public class XTokenQueue {
     }
 
     public String chompToIgnoreCase(String seq) {
-        String data = consumeToIgnoreCase(seq); // case insensitive scan
+        String data = consumeToIgnoreCase(seq); 
         matchChomp(seq);
         return data;
     }
@@ -386,7 +386,7 @@ public class XTokenQueue {
             }
 
             if (depth > 0 && last != 0) {
-                accum.append(c); // don't include the outer match pair in the return
+                accum.append(c); 
             }
             last = c;
         } while (depth > 0);
@@ -422,7 +422,7 @@ public class XTokenQueue {
             }
 
             if (depth > 0 && last != 0) {
-                accum.append(c); // don't include the outer match pair in the return
+                accum.append(c); 
             }
             last = c;
         } while (depth > 0);
@@ -495,7 +495,7 @@ public class XTokenQueue {
 
     /**
      * Consume a CSS identifier (ID or class) off the queue (letter, digit, -, _)
-     * http://www.w3.org/TR/CSS2/syndata.html#value-def-identifier
+     * http:
      *
      * @return identifier
      */
@@ -593,7 +593,7 @@ public class XTokenQueue {
         return c == ' ' || c == '\t' || c == '\n' || c == '\f' || c == '\r';
     }
 
-    // also copied from jsoup's org.jsoup.internal.StringUtil.
+    
     private static boolean in(final String needle, final String... haystack) {
         final int len = haystack.length;
         for (int i = 0; i < len; i++) {

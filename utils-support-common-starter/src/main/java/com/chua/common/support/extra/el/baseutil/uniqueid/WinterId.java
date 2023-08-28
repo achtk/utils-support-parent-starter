@@ -7,7 +7,10 @@ import java.lang.management.ManagementFactory;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Calendar;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class WinterId implements Uid {
 
     private static final char[] PID;

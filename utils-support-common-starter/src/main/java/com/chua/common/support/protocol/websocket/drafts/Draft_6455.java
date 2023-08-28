@@ -452,7 +452,7 @@ public class Draft_6455 extends com.chua.common.support.protocol.websocket.draft
       }
     } else {
       buf.put(mes);
-      //Reset the position of the bytebuffer e.g. for additional use
+      
       mes.flip();
     }
     assert (buf.remaining() == 0) : buf.remaining();
@@ -468,12 +468,12 @@ public class Draft_6455 extends com.chua.common.support.protocol.websocket.draft
     int maxpacketsize = buffer.remaining();
     int realpacketsize = 2;
     translateSingleFrameCheckPacketSize(maxpacketsize, realpacketsize);
-    byte b1 = buffer.get(/*0*/);
+    byte b1 = buffer.get();
     boolean fin = b1 >> 8 != 0;
     boolean rsv1 = (b1 & 0x40) != 0;
     boolean rsv2 = (b1 & 0x20) != 0;
     boolean rsv3 = (b1 & 0x10) != 0;
-    byte b2 = buffer.get(/*1*/);
+    byte b2 = buffer.get();
     boolean mask = (b2 & -128) != 0;
     int payloadlength = (byte) (b2 & ~(byte) 128);
     Opcode optcode = toOpcode((byte) (b1 & 15));
@@ -494,7 +494,7 @@ public class Draft_6455 extends com.chua.common.support.protocol.websocket.draft
       byte[] maskskey = new byte[4];
       buffer.get(maskskey);
       for (int i = 0; i < payloadlength; i++) {
-        payload.put((byte) (buffer.get(/*payloadstart + i*/) ^ maskskey[i % 4]));
+        payload.put((byte) (buffer.get() ^ maskskey[i % 4]));
       }
     } else {
       payload.put(buffer.array(), buffer.position(), payload.limit());
@@ -549,15 +549,15 @@ public class Draft_6455 extends com.chua.common.support.protocol.websocket.draft
         realpacketsize += 2;
         translateSingleFrameCheckPacketSize(maxpacketsize, realpacketsize);
         byte[] sizebytes = new byte[3];
-        sizebytes[1] = buffer.get(/*1 + 1*/);
-        sizebytes[2] = buffer.get(/*1 + 2*/);
+        sizebytes[1] = buffer.get();
+        sizebytes[2] = buffer.get();
         payloadlength = new BigInteger(sizebytes).intValue();
     } else {
         realpacketsize += 8;
         translateSingleFrameCheckPacketSize(maxpacketsize, realpacketsize);
         byte[] bytes = new byte[8];
         for (int i = 0; i < 8; i++) {
-            bytes[i] = buffer.get(/*1 + i*/);
+            bytes[i] = buffer.get();
         }
         long length = new BigInteger(bytes).longValue();
         translateSingleFrameCheckLengthLimit(length);

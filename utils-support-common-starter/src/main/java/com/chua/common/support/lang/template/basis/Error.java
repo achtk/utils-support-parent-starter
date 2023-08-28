@@ -6,7 +6,9 @@ import com.chua.common.support.lang.template.basis.parsing.Span;
 import com.chua.common.support.lang.template.basis.parsing.TokenStream;
 import com.chua.common.support.lang.template.basis.parsing.Span.Line;
 
-/** All errors reported by the library go through the static functions of this class. */
+/** All errors reported by the library go through the static functions of this class.
+ * @author Administrator
+ * */
 public class Error {
 
 	/**

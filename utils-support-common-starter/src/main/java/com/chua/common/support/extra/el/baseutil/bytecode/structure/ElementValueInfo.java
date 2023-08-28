@@ -17,6 +17,11 @@ import static com.chua.common.support.constant.ConstantType.*;
 import static com.chua.common.support.constant.NameConstant.CLASS_NAME;
 import static com.chua.common.support.constant.NameConstant.STRING_NAME;
 
+/**
+ * 基础类
+ *
+ * @author CH
+ */
 public class ElementValueInfo {
     private char tag;
     private ConstantType elementValueType;
@@ -69,21 +74,13 @@ public class ElementValueInfo {
     }
 
     public boolean isPrimitive(ConstantType type) {
-        //
-//
-//
-//
-//
-//
-//
-//
-        return type == BYTE //
-                || type == CHAR//
-                || type == DOUBLE//
-                || type == FLOAT//
-                || type == INT//
-                || type == LONG//
-                || type == SHORT//
+        return type == BYTE
+                || type == CHAR
+                || type == DOUBLE
+                || type == FLOAT
+                || type == INT
+                || type == LONG
+                || type == SHORT
                 || type == BOOLEAN;
     }
 

@@ -2,7 +2,10 @@ package com.chua.common.support.extra.el.baseutil.bytecode.structure.Attribute;
 
 import com.chua.common.support.extra.el.baseutil.bytecode.structure.constantinfo.AbstractConstantInfo;
 import com.chua.common.support.extra.el.baseutil.bytecode.util.BinaryData;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class InnerClassesAttriInfo extends AbstractAttributeInfo {
     private int numberOfClasses;
     private InnerClass[] innerClasses;

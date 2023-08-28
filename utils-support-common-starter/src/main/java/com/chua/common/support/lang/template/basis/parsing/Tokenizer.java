@@ -6,11 +6,14 @@ import com.chua.common.support.lang.template.basis.TemplateLoader.Source;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class Tokenizer {
 
 	/** Tokenizes the source into tokens with a {@link TokenType}. Text blocks not enclosed in {{ }} are returned as a single token
-	 * of type {@link TextBlock}. {{ and }} are not returned as individual tokens. See {@link TokenType} for the list of
+	 * of type {{ and }} are not returned as individual tokens. See {@link TokenType} for the list of
 	 * tokens this tokenizer understands. */
 	public List<Token> tokenize (Source source) {
 		List<Token> tokens = new ArrayList<Token>();

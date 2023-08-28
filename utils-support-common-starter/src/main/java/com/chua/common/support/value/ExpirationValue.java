@@ -3,6 +3,7 @@ package com.chua.common.support.value;
 /**
  * 过期
  *
+ * @author Administrator
  * @param <T> 类型
  */
 public interface ExpirationValue<T> extends Value<T> {

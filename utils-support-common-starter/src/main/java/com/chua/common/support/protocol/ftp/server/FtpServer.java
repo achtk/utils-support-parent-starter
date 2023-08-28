@@ -24,7 +24,7 @@ public class FtpServer implements Closeable {
     protected final List<FtpListener> listeners = Collections.synchronizedList(new ArrayList<FtpListener>());
 
     protected FtpUserAuthenticator auth = null;
-    protected int idleTimeout = 5 * 60 * 1000; // 5 minutes
+    protected int idleTimeout = 5 * 60 * 1000; 
     protected int bufferSize = 1024;
     protected SSLContext ssl = null;
     protected boolean explicitSecurity = true;
@@ -239,7 +239,7 @@ public class FtpServer implements Closeable {
         try {
             addConnection(socket.accept());
         } catch(IOException ex) {
-            // The server was probably closed
+            
         }
     }
 
@@ -297,13 +297,13 @@ public class FtpServer implements Closeable {
      * For a complete cleanup, use {@link #close()} instead
      */
     protected void dispose() {
-        // Terminates the server thread
+        
         if(serverThread != null) {
             serverThread.interrupt();
             serverThread = null;
         }
 
-        // Stops each connection and clears them
+        
         synchronized(connections) {
             for(FtpConnection con : connections) {
                 try {

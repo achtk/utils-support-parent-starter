@@ -8,7 +8,10 @@ import com.chua.common.support.extra.el.baseutil.smc.model.MethodModel;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.concurrent.atomic.AtomicInteger;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class CompileValueAccessor extends ValueAccessor
 {
     protected static final AtomicInteger COUNT = new AtomicInteger();

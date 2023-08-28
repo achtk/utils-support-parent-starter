@@ -1,6 +1,5 @@
 package com.chua.common.support.extra.el.baseutil;
 
-import com.chua.common.support.constant.CommonConstant;
 import com.chua.common.support.constant.ConstantType;
 import com.chua.common.support.extra.el.baseutil.reflect.ReflectUtil;
 import com.chua.common.support.extra.el.baseutil.reflect.ValueAccessor;
@@ -22,7 +21,10 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static com.chua.common.support.constant.CommonConstant.EMPTY;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class CsvUtil {
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.FIELD)

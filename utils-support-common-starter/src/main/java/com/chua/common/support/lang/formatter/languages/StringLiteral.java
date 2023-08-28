@@ -10,83 +10,108 @@ import java.util.stream.Collectors;
 import static com.chua.common.support.constant.CommonConstant.SYMBOL_EMPTY_ARRAY;
 import static com.chua.common.support.constant.CommonConstant.SYMBOL_EMPTY_MAP;
 
+/**
+ * 基础类
+ *
+ * @author CH
+ */
 public class StringLiteral {
-  public static final String BACK_QUOTE = "``";
-  public static final String DOUBLE_QUOTE = "\"\"";
-  public static final String U_DOUBLE_QUOTE = "U&\"\"";
-  public static final String U_SINGLE_QUOTE = "U&''";
-  public static final String E_SINGLE_QUOTE = "E''";
-  public static final String N_SINGLE_QUOTE = "N''";
-  public static final String Q_SINGLE_QUOTE = "Q''";
-  public static final String SINGLE_QUOTE = "''";
-  public static final String BRACE = SYMBOL_EMPTY_MAP;
-  public static final String DOLLAR = "$$";
-  public static final String BRACKET = SYMBOL_EMPTY_ARRAY;
+    public static final String BACK_QUOTE = "``";
+    public static final String DOUBLE_QUOTE = "\"\"";
+    public static final String U_DOUBLE_QUOTE = "U&\"\"";
+    public static final String U_SINGLE_QUOTE = "U&''";
+    public static final String E_SINGLE_QUOTE = "E''";
+    public static final String N_SINGLE_QUOTE = "N''";
+    public static final String Q_SINGLE_QUOTE = "Q''";
+    public static final String SINGLE_QUOTE = "''";
+    public static final String BRACE = SYMBOL_EMPTY_MAP;
+    public static final String DOLLAR = "$$";
+    public static final String BRACKET = SYMBOL_EMPTY_ARRAY;
 
-  private static final Map<String, String> LITERALS;
+    private static final Map<String, String> LITERALS;
 
-  static {
-    LITERALS =
-        new HashMap<>(
-            Arrays.stream(Preset.values())
-                .collect(Collectors.toMap(Preset::getKey, Preset::getRegex)));
-  }
-
-  public static String get(String key) {
-    return LITERALS.get(key);
-  }
-
-  private enum Preset {
-    /** `` */
-    BACK_QUOTE(StringLiteral.BACK_QUOTE, "((`[^`]*($|`))+)"),
-    /** "" */
-    DOUBLE_QUOTE(
-        StringLiteral.DOUBLE_QUOTE,
-        "((\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*(\"|$))+)"), // "((^\"((?:\"\"|[^\"])*)\")+)"),
-    /** [] */
-    BRACKET(StringLiteral.BRACKET, "((\\[[^\\]]*($|\\]))(\\][^\\]]*($|\\]))*)"),
-    /** {} */
-    BRACE(StringLiteral.BRACE, "((\\{[^\\}]*($|\\}))+)"),
-    /** '' */
-    SINGLE_QUOTE(
-        StringLiteral.SINGLE_QUOTE,
-        "(('[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+)"), // "((^'((?:''|[^'])*)')+)"),
-    /** N'' */
-    N_SINGLE_QUOTE(StringLiteral.N_SINGLE_QUOTE, "((N'[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+)"),
-    /** q'' */
-    Q_SINGLE_QUOTE(
-        StringLiteral.Q_SINGLE_QUOTE,
-        "(?i)"
-            + String.join(
-                "|",
-                "((n?q'\\{(?:(?!\\}'|\\\\).)*\\}')+)",
-                "((n?q'\\[(?:(?!\\]'|\\\\).)*\\]')+)",
-                "((n?q'<(?:(?!>'|\\\\).)*>')+)",
-                "((n?q'\\((?:(?!\\)'|\\\\).)*\\)')+)")),
-    // single_quote("((^'((?:''|[^'])*)')+)"),
-    E_SINGLE_QUOTE(StringLiteral.E_SINGLE_QUOTE, "((E'[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+)"),
-    /** U&amp;'' */
-    U_SINGLE_QUOTE(StringLiteral.U_SINGLE_QUOTE, "((U&'[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+)"),
-    /** U&amp;"" */
-    U_DOUBLE_QUOTE(StringLiteral.U_DOUBLE_QUOTE, "((U&\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*(\"|$))+)"),
-    /** $$ */
-    DOLLAR(StringLiteral.DOLLAR, "((?<tag>\\$\\w*\\$)[\\s\\S]*?(?:\\k<tag>|$))"),
-    ;
-
-    public final String key;
-    public final String regex;
-
-    Preset(String key, String regex) {
-      this.key = key;
-      this.regex = regex;
+    static {
+        LITERALS =
+                new HashMap<>(
+                        Arrays.stream(Preset.values())
+                                .collect(Collectors.toMap(Preset::getKey, Preset::getRegex)));
     }
 
-    public String getKey() {
-      return this.key;
+    public static String get(String key) {
+        return LITERALS.get(key);
     }
 
-    public String getRegex() {
-      return this.regex;
+    private enum Preset {
+        /**
+         * ``
+         */
+        BACK_QUOTE(StringLiteral.BACK_QUOTE, "((`[^`]*($|`))+)"),
+        /**
+         * ""
+         */
+        DOUBLE_QUOTE(
+                StringLiteral.DOUBLE_QUOTE,
+                "((\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*(\"|$))+)"), 
+        /**
+         * []
+         */
+        BRACKET(StringLiteral.BRACKET, "((\\[[^\\]]*($|\\]))(\\][^\\]]*($|\\]))*)"),
+        /**
+         * {}
+         */
+        BRACE(StringLiteral.BRACE, "((\\{[^\\}]*($|\\}))+)"),
+        /**
+         * ''
+         */
+        SINGLE_QUOTE(
+                StringLiteral.SINGLE_QUOTE,
+                "(('[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+)"), 
+        /**
+         * N''
+         */
+        N_SINGLE_QUOTE(StringLiteral.N_SINGLE_QUOTE, "((N'[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+)"),
+        /**
+         * q''
+         */
+        Q_SINGLE_QUOTE(
+                StringLiteral.Q_SINGLE_QUOTE,
+                "(?i)"
+                        + String.join(
+                        "|",
+                        "((n?q'\\{(?:(?!\\}'|\\\\).)*\\}')+)",
+                        "((n?q'\\[(?:(?!\\]'|\\\\).)*\\]')+)",
+                        "((n?q'<(?:(?!>'|\\\\).)*>')+)",
+                        "((n?q'\\((?:(?!\\)'|\\\\).)*\\)')+)")),
+        
+        E_SINGLE_QUOTE(StringLiteral.E_SINGLE_QUOTE, "((E'[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+)"),
+        /**
+         * U&amp;''
+         */
+        U_SINGLE_QUOTE(StringLiteral.U_SINGLE_QUOTE, "((U&'[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+)"),
+        /**
+         * U&amp;""
+         */
+        U_DOUBLE_QUOTE(StringLiteral.U_DOUBLE_QUOTE, "((U&\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*(\"|$))+)"),
+        /**
+         * $$
+         */
+        DOLLAR(StringLiteral.DOLLAR, "((?<tag>\\$\\w*\\$)[\\s\\S]*?(?:\\k<tag>|$))"),
+        ;
+
+        public final String key;
+        public final String regex;
+
+        Preset(String key, String regex) {
+            this.key = key;
+            this.regex = regex;
+        }
+
+        public String getKey() {
+            return this.key;
+        }
+
+        public String getRegex() {
+            return this.regex;
+        }
     }
-  }
 }

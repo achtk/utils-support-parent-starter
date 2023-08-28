@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 @Spi("sybase")
 public class SybaseDialect extends OracleDialect {
 
-    private final boolean hasTop; // sybase12.5.4以前，不支持select top
+    private final boolean hasTop; 
 
     public SybaseDialect() {
         this(false);
@@ -77,27 +77,27 @@ public class SybaseDialect extends OracleDialect {
             fromIndex.add(from.start());
         }
 
-        // 形成select与from的混合顺序下标列表
+        
         List<Integer> indexList = new ArrayList<>(20);
         indexList.addAll(selectIndex);
         indexList.addAll(fromIndex);
         indexList.sort(Comparator.naturalOrder());
-        // 无法匹配有效下标
+        
         if (indexList.size() < 2) {
             return -1;
         }
-        // 利用栈逻辑匹配select与from
+        
         int selectCount = 1;
         for (int i = 1; i < indexList.size(); i++) {
             int each = indexList.get(i);
             if (fromIndex.contains(each)) {
-                // pointer弹栈
+                
                 selectCount--;
             } else {
-                // pointer压栈
+                
                 selectCount++;
             }
-            // from将全部select弹出，代表当前这个from为主要from
+            
             if (selectCount == 0) {
                 return each;
             }

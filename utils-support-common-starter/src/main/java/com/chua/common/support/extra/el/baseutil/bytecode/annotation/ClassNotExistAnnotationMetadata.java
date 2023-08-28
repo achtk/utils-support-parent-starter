@@ -2,7 +2,10 @@ package com.chua.common.support.extra.el.baseutil.bytecode.annotation;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class ClassNotExistAnnotationMetadata implements AnnotationMetadata
 {
     private String type;

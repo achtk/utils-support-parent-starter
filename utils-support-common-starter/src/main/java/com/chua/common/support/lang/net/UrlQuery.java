@@ -180,13 +180,17 @@ public class UrlQuery {
 
         final int len = queryStr.length();
         String name = null;
-        int pos = 0; // 未处理字符开始位置
-        int i; // 未处理字符结束位置
-        char c; // 当前字符
+        // 未处理字符开始位置
+        int pos = 0;
+        // 未处理字符结束位置
+        int i;
+        // 当前字符
+        char c;
         for (i = 0; i < len; i++) {
             c = queryStr.charAt(i);
             switch (c) {
-                case SYMBOL_EQUALS_CHAR://键和值的分界符
+                //键和值的分界符
+                case SYMBOL_EQUALS_CHAR:
                     if (null == name) {
                         // name可以是""
                         name = queryStr.substring(pos, i);
@@ -195,7 +199,8 @@ public class UrlQuery {
                     }
                     // 当=不作为分界符时，按照普通字符对待
                     break;
-                case SYMBOL_AND_CHAR://键值对之间的分界符
+                //键值对之间的分界符
+                case SYMBOL_AND_CHAR:
                     addParam(name, queryStr.substring(pos, i), charset);
                     name = null;
                     if (i + 4 < len && "amp;".equals(queryStr.substring(i + 1, i + 5))) {

@@ -4,7 +4,10 @@ import com.chua.common.support.extra.el.expression.token.Operator;
 import com.chua.common.support.extra.el.expression.util.number.MutliUtil;
 
 import java.util.Map;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class MutliNode extends OperatorResultNode
 {
 

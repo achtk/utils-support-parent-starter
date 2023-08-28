@@ -8,7 +8,7 @@ import static com.chua.common.support.constant.CommonConstant.*;
 /**
  * 基于 {@link SerializedLambda} 创建的元信息
  * <p>
- * Create by hcl at 2021/7/7
+ * @author Administrator
  */
 public class ShadowLambdaMeta implements LambdaMeta {
     private final SerializedLambda lambda;

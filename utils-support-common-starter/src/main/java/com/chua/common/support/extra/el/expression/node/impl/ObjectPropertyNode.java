@@ -12,7 +12,10 @@ import com.chua.common.support.utils.MapUtils;
 import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class ObjectPropertyNode implements CalculateNode {
     private final CalculateNode beanNode;
     protected Class<?> beanType;

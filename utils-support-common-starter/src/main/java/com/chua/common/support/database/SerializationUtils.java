@@ -6,7 +6,7 @@ import java.io.*;
 
 /**
  * <p> copy from spring-core#org.springframework.util.SerializationUtils version 5.2.8 </p>
- *
+ * @author Administrator
  * @since 1.0
  */
 public class SerializationUtils {

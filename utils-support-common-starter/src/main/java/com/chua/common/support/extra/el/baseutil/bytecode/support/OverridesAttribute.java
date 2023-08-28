@@ -2,11 +2,15 @@ package com.chua.common.support.extra.el.baseutil.bytecode.support;
 
 import java.lang.annotation.*;
 
+/**
+ * 基础类
+ *
+ * @author CH
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 @Documented
-public @interface OverridesAttribute
-{
+public @interface OverridesAttribute {
     /**
      * 需要覆盖的注解
      *

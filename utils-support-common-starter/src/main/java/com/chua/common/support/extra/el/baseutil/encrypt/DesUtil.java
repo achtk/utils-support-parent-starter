@@ -27,7 +27,7 @@ public class DesUtil implements EnDecrpt
     {
         try
         {
-            SecretKey deskey = new SecretKeySpec(key, "DES"); // 加密
+            SecretKey deskey = new SecretKeySpec(key, "DES"); 
             encrptCipher = Cipher.getInstance("DES");
             encrptCipher.init(Cipher.ENCRYPT_MODE, deskey);
             decryptCipher = Cipher.getInstance("DES");

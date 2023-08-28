@@ -57,6 +57,7 @@ package com.chua.common.support.lang.function;
  * </code></pre>
  *
  * @param <T> the type of object that the builder will construct or compute.
+ * @author Administrator
  * @since 3.0
  */
 @FunctionalInterface

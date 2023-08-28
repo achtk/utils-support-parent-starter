@@ -3,7 +3,10 @@ package com.chua.common.support.extra.el.baseutil.smc.model;
 import com.chua.common.support.extra.el.baseutil.smc.SmcHelper;
 
 import java.util.*;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class ClassModel
 {
     private String                                       packageName     = "com.jfireframe.smc.output";
@@ -42,9 +45,9 @@ public class ClassModel
         {
             cache.append("public class ").append(className).append(" extends ").append(SmcHelper.getReferenceName(parentClass, this));
         }
-        if (interfaces.isEmpty() == false)
+        if (!interfaces.isEmpty())
         {
-            cache.append(" implements ");//
+            cache.append(" implements ");
             boolean hasComma = false;
             for (Class<?> each : interfaces)
             {

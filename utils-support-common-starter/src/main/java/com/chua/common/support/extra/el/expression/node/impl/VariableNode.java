@@ -5,7 +5,10 @@ import com.chua.common.support.extra.el.expression.token.Token;
 import com.chua.common.support.extra.el.expression.token.ValueResult;
 
 import java.util.Map;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class VariableNode implements CalculateNode
 {
     private final String literals;

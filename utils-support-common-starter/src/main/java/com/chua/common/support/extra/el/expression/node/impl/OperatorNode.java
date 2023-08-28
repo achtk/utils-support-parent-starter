@@ -5,7 +5,10 @@ import com.chua.common.support.extra.el.expression.token.Operator;
 import com.chua.common.support.extra.el.expression.token.Token;
 
 import java.util.Map;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class OperatorNode implements CalculateNode
 {
     private final Operator operatorType;

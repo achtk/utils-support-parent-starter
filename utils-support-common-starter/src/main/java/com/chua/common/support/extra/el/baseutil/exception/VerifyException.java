@@ -1,5 +1,8 @@
 package com.chua.common.support.extra.el.baseutil.exception;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class VerifyException extends RuntimeException
 {
     /**

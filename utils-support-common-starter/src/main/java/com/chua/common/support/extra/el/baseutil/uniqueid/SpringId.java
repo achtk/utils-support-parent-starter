@@ -5,28 +5,29 @@ import com.chua.common.support.extra.el.baseutil.StringUtil;
 import java.lang.management.ManagementFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class SpringId implements Uid
-{
+/**
+ * 基础类
+ *
+ * @author CH
+ */
+public class SpringId implements Uid {
     private final static int COUNT_MASK = 0x0000ffff;
-    static               byte[]   pid       = new byte[2];
-    static               SpringId instance  = new SpringId();
+    static byte[] pid = new byte[2];
+    static SpringId instance = new SpringId();
 
-    static
-    {
+    static {
         String s = ManagementFactory.getRuntimeMXBean().getName().split("@")[0];
-        int    pid  = Integer.valueOf(s);
+        int pid = Integer.valueOf(s);
         SpringId.pid[0] = (byte) (pid >>> 8);
         SpringId.pid[1] = (byte) pid;
     }
 
     private final AtomicInteger count = new AtomicInteger(0);
 
-    private SpringId()
-    {
+    private SpringId() {
     }
 
-    public static SpringId getInstance()
-    {
+    public static SpringId getInstance() {
         return instance;
     }
 
@@ -36,11 +37,10 @@ public class SpringId implements Uid
      * @return
      */
     @Override
-    public byte[] generateBytes()
-    {
-        long   now      = System.currentTimeMillis();
-        int    duration = (int) ((now - BASE) / 1000);
-        byte[] result   = new byte[8];
+    public byte[] generateBytes() {
+        long now = System.currentTimeMillis();
+        int duration = (int) ((now - BASE) / 1000);
+        byte[] result = new byte[8];
         result[0] = (byte) ((duration >>> 24) & 0xff);
         result[1] = (byte) ((duration >>> 16) & 0xff);
         result[2] = (byte) ((duration >>> 8) & 0xff);
@@ -54,16 +54,14 @@ public class SpringId implements Uid
     }
 
     @Override
-    public String generate()
-    {
+    public String generate() {
         return StringUtil.toHexString(generateBytes());
     }
 
     @Override
-    public long generateLong()
-    {
+    public long generateLong() {
         byte[] result = generateBytes();
-        long   tmp    = ((long) result[0] & 0xff) << 56;
+        long tmp = ((long) result[0] & 0xff) << 56;
         tmp |= ((long) result[1] & 0xff) << 48;
         tmp |= ((long) result[2] & 0xff) << 40;
         tmp |= ((long) result[3] & 0xff) << 32;
@@ -75,9 +73,8 @@ public class SpringId implements Uid
     }
 
     @Override
-    public String generateDigits()
-    {
-        long   tmp   = generateLong();
+    public String generateDigits() {
+        long tmp = generateLong();
         char[] value = new char[11];
         value[0] = ByteTool.toDigit((int) ((tmp >>> 58) & SHORT_MASK));
         value[1] = ByteTool.toDigit((int) ((tmp >>> 52) & SHORT_MASK));

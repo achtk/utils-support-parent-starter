@@ -11,6 +11,7 @@ import java.util.stream.Stream;
  * Executes a sequence of translators one after the other. Execution ends whenever
  * the first translator consumes code points from the input.
  *
+ * @author Administrator
  * @since 1.0
  */
 public class AggregateTranslator extends AbstractCharSequenceTranslator {

@@ -32,7 +32,7 @@ import java.util.Collection;
  *
  * <p>This will produce a toString of the format:
  * {@code Person@7f54[name=Stephen,age=29,smoker=false,job=Job@43cd2[title=Manager]]}</p>
- *
+ * @author Administrator
  * @since 3.2
  */
 public class RecursiveToStringStyle extends ToStringStyle {

@@ -1,7 +1,5 @@
 package com.chua.common.support.database.transfer.file;
 
-import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONPath;
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.bean.BeanMap;
@@ -11,11 +9,14 @@ import com.chua.common.support.database.transfer.collection.SinkTable;
 import com.chua.common.support.file.export.ExportConfiguration;
 import com.chua.common.support.function.DisposableAware;
 import com.chua.common.support.function.InitializingAware;
+import com.chua.common.support.json.Json;
+import com.chua.common.support.json.JsonArray;
 import com.chua.common.support.utils.IoUtils;
 import com.chua.common.support.utils.StringUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -67,16 +68,16 @@ public class JsonWriterChannel extends AbstractWriterChannel implements Initiali
 
     @Override
     public SinkTable createSinkTable() {
-        JSONArray jsonArray = null;
+        JsonArray jsonArray = null;
         if(StringUtils.isNullOrEmpty(subKey)) {
             try {
-                jsonArray = JSON.parseArray(IoUtils.toString(inputStream, UTF_8));
+                jsonArray = Json.getJsonArray(IoUtils.toString(inputStream, UTF_8));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         } else {
             try {
-                jsonArray = (JSONArray) JSONPath.extract(IoUtils.toString(inputStream, UTF_8), subKey);
+                jsonArray = new JsonArray((Collection) JSONPath.extract(IoUtils.toString(inputStream, UTF_8), subKey));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

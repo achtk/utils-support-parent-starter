@@ -1,5 +1,8 @@
 package com.chua.common.support.extra.el.baseutil.bytecode.util;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class AccessFlags
 {
     public static final int ACC_PUBLIC     = 0x0001;
@@ -9,10 +12,14 @@ public class AccessFlags
     public static final int ACC_FINAL      = 0x0010;
     public static final int ACC_SUPER      = 0x0020;
     public static final int ACC_VOLATILE   = 0x0040;
-    //方法是否是由编译器产生的桥接方法
+    /**
+     * 方法是否是由编译器产生的桥接方法
+     */
     public static final int ACC_BRIDGE     = 0x0040;
     public static final int ACC_TRANSIENT  = 0x0080;
-    //方法是否接受不定參数
+    /**
+     * 方法是否接受不定參数
+     */
     public static final int ACC_VARARGS    = 0x0080;
     public static final int ACC_NATIVE     = 0x0100;
     public static final int ACC_INTERFACE  = 0x0200;

@@ -23,7 +23,9 @@ import java.util.Map.Entry;
 
 import static com.chua.common.support.constant.NameConstant.LENGTH;
 
-/** Templates are parsed into an abstract syntax tree (AST) nodes by a Parser. This class contains all AST node types. */
+/** Templates are parsed into an abstract syntax tree (AST) nodes by a Parser. This class contains all AST node types.
+ * @author Administrator
+ * */
 public class Ast {
 
 	/** Base class for all AST nodes. A node minimally stores the {@link Span} that references its location in the

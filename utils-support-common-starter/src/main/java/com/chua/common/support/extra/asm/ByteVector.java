@@ -248,7 +248,6 @@ public class ByteVector {
    * @param stringValue a String whose UTF8 encoded length must be less than 65536.
    * @return this byte vector.
    */
-  // DontCheck(AbbreviationAsWordInName): can't be renamed (for backward binary compatibility).
   public ByteVector putUtf8(final String stringValue) {
     int charLength = stringValue.length();
     if (charLength > 65535) {

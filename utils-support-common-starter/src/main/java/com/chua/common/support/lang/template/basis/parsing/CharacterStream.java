@@ -4,7 +4,8 @@ package com.chua.common.support.lang.template.basis.parsing;
 import com.chua.common.support.lang.template.basis.TemplateLoader.Source;
 
 /** Wraps a the content of a {@link Source} and handles traversing the contained characters. Manages a current {@link Span} via
- * the {@link #startSpan()} and {@link #endSpan()} methods. */
+ * the {@link #startSpan()} and {@link #endSpan()} methods.
+ * @author Administrator */
 public class CharacterStream {
 	private final Source source;
 	private int index = 0;

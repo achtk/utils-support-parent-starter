@@ -7,56 +7,50 @@ import java.lang.reflect.Field;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.LockSupport;
 
-public abstract class Sync<E>
-{
-    private static final Unsafe UNSAFE   = Unsafe.getUnsafe();
+/**
+ * 基础类
+ *
+ * @author CH
+ */
+public abstract class Sync<E> {
+    private static final Unsafe UNSAFE = Unsafe.getUnsafe();
     private static final long TAIL_OFFSET;
-    private static final int    WAITING  = 1;
-    private static final int    CANCELED = 2;
-    private volatile     Node   head;
-    private volatile     Node   tail;
+    private static final int WAITING = 1;
+    private static final int CANCELED = 2;
+    private volatile Node head;
+    private volatile Node tail;
 
-    static
-    {
-        try
-        {
+    static {
+        try {
             Field field = Sync.class.getDeclaredField("tail");
             TAIL_OFFSET = UNSAFE.objectFieldOffset(field);
-        }
-        catch (NoSuchFieldException e)
-        {
+        } catch (NoSuchFieldException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public Sync()
-    {
+    public Sync() {
         head = tail = new Node();
     }
 
-    public boolean hasWaiters()
-    {
+    public boolean hasWaiters() {
         return head != tail;
     }
 
-    private Node enqueue()
-    {
+    private Node enqueue() {
         Thread t = Thread.currentThread();
         Node insert = new Node();
         Node pred = tail;
         insert.prev = pred;
-        if (UNSAFE.compareAndSetReference(this, TAIL_OFFSET, pred, insert))
-        {
+        if (UNSAFE.compareAndSetReference(this, TAIL_OFFSET, pred, insert)) {
             // pred.nextWaiter = t;
             pred.relaxSetSuccessor(t);
             return insert;
         }
-        for (; ; )
-        {
+        for (; ; ) {
             pred = tail;
             insert.prev = pred;
-            if (UNSAFE.compareAndSetReference(this, TAIL_OFFSET, pred, insert))
-            {
+            if (UNSAFE.compareAndSetReference(this, TAIL_OFFSET, pred, insert)) {
                 pred.relaxSetSuccessor(t);
                 // pred.nextWaiter = t;
                 return insert;
@@ -64,8 +58,7 @@ public abstract class Sync<E>
         }
     }
 
-    public void signal()
-    {
+    public void signal() {
         Node h = head;
         unparkSuccessor(h);
     }
@@ -77,73 +70,53 @@ public abstract class Sync<E>
      */
     protected abstract E get();
 
-    public E take(long time, TimeUnit unit)
-    {
+    public E take(long time, TimeUnit unit) {
         E result;
         Node self = enqueue();
         Node pred = self.prev;
         Node h;
         long nanos = unit.toNanos(time);
         long t0 = System.nanoTime();
-        do
-        {
-            if (pred == (h = head))
-            {
+        do {
+            if (pred == (h = head)) {
                 result = get();
-                if (result == null)
-                {
-                    if (nanos < 1000)
-                    {
-                        for (int i = 0; i < 1000; i++)
-                        {
+                if (result == null) {
+                    if (nanos < 1000) {
+                        for (int i = 0; i < 1000; i++) {
                         }
-                    }
-                    else
-                    {
+                    } else {
                         LockSupport.parkNanos(nanos);
                     }
                     nanos -= System.nanoTime() - t0;
-                    if (nanos < 0)
-                    {
+                    if (nanos < 0) {
                         cancel(self);
                         return null;
                     }
                     t0 = System.nanoTime();
-                }
-                else
-                {
+                } else {
                     head = self;
                     unparkSuccessor(self);
                     return result;
                 }
-            }
-            else
-            {
-                if (nanos < 1000)
-                {
-                    for (int i = 0; i < 1000; i++)
-                    {
+            } else {
+                if (nanos < 1000) {
+                    for (int i = 0; i < 1000; i++) {
                     }
-                }
-                else
-                {
+                } else {
                     LockSupport.parkNanos(nanos);
                 }
                 nanos -= System.nanoTime() - t0;
-                if (nanos < 0)
-                {
+                if (nanos < 0) {
                     cancel(self);
                     return null;
                 }
                 t0 = System.nanoTime();
             }
-            if (Thread.currentThread().isInterrupted())
-            {
+            if (Thread.currentThread().isInterrupted()) {
                 cancel(self);
                 return null;
             }
-            if (pred.status == CANCELED)
-            {
+            if (pred.status == CANCELED) {
                 while (pred != h && (pred = pred.prev).status == CANCELED) {
                     ;
                 }
@@ -152,40 +125,29 @@ public abstract class Sync<E>
         while (true);
     }
 
-    public E take()
-    {
+    public E take() {
         Node self = enqueue();
         Node pred = self.prev;
         Node h;
-        do
-        {
-            if (pred == (h = head))
-            {
+        do {
+            if (pred == (h = head)) {
                 E result = get();
-                if (result == null)
-                {
+                if (result == null) {
                     LockSupport.park();
-                }
-                else
-                {
+                } else {
                     head = self;
                     unparkSuccessor(self);
                     return result;
                 }
-            }
-            else if (pred.status == CANCELED)
-            {
+            } else if (pred.status == CANCELED) {
                 // 寻找到非取消节点的最靠近的head的节点作为新的前置节点
                 while (pred != h && (pred = pred.prev).status == CANCELED) {
                     ;
                 }
-            }
-            else
-            {
+            } else {
                 LockSupport.park();
             }
-            if (Thread.currentThread().isInterrupted())
-            {
+            if (Thread.currentThread().isInterrupted()) {
                 cancel(self);
                 return null;
             }
@@ -198,13 +160,10 @@ public abstract class Sync<E>
      *
      * @param node
      */
-    private void unparkSuccessor(Node node)
-    {
+    private void unparkSuccessor(Node node) {
         Thread nextWaiter = node.successor;
-        if (node != tail)
-        {
-            if (nextWaiter == null)
-            {
+        if (node != tail) {
+            if (nextWaiter == null) {
                 while ((nextWaiter = node.successor) == null) {
                     ;
                 }
@@ -213,8 +172,7 @@ public abstract class Sync<E>
         }
     }
 
-    private void cancel(Node node)
-    {
+    private void cancel(Node node) {
         node.status = CANCELED;
         Node pred = node.prev;
         // 防止前面的节点的唤醒浪费
@@ -222,41 +180,33 @@ public abstract class Sync<E>
         unparkSuccessor(node);
     }
 
-    static class Node
-    {
+    static class Node {
         private static final long STATUS_OFFSET;
         private static final long SUCCESSOR_OFFSET;
-        private              Node   prev;
-        private volatile     Thread successor;
-        private volatile     int    status;
+        private Node prev;
+        private volatile Thread successor;
+        private volatile int status;
 
-        static
-        {
-            try
-            {
+        static {
+            try {
                 Field field = Node.class.getDeclaredField("status");
                 STATUS_OFFSET = UNSAFE.objectFieldOffset(field);
                 field = Node.class.getDeclaredField("successor");
                 SUCCESSOR_OFFSET = UNSAFE.objectFieldOffset(field);
-            }
-            catch (NoSuchFieldException e)
-            {
+            } catch (NoSuchFieldException e) {
                 throw new RuntimeException(e);
             }
         }
 
-        public Node()
-        {
+        public Node() {
             UNSAFE.putInt(this, STATUS_OFFSET, WAITING);
         }
 
-        public void relaxSetSuccessor(Thread next)
-        {
+        public void relaxSetSuccessor(Thread next) {
             UNSAFE.putReferenceVolatile(this, SUCCESSOR_OFFSET, next);
         }
 
-        public void clean()
-        {
+        public void clean() {
             prev = null;
             UNSAFE.putReference(this, SUCCESSOR_OFFSET, null);
         }

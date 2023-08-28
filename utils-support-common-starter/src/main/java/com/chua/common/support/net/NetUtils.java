@@ -71,8 +71,8 @@ public class NetUtils {
     public static final Pattern IPV4_PATTERN = Pattern
             .compile(
                     "^(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)(\\.(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)){3}$");
-    private static final String HTTP = "http://";
-    private static final String HTTPS = "https://";
+    private static final String HTTP = "http:
+    private static final String HTTPS = "https:
 
     /**
      * 连接转字符串
@@ -383,7 +383,7 @@ public class NetUtils {
         if (index != -1) {
             uri = uri.substring(index + 1);
         }
-        uri = uri.replace("\\", SYMBOL_LEFT_SLASH).replaceAll("//", SYMBOL_LEFT_SLASH);
+        uri = uri.replace("\\", SYMBOL_LEFT_SLASH).replaceAll("
         if (uri.startsWith(SYMBOL_LEFT_SLASH)) {
             uri = uri.substring(1);
         }
@@ -453,11 +453,11 @@ public class NetUtils {
     private static InetAddress getLocalHostBySocket(InetSocketAddress remoteAddress) {
         InetAddress host = null;
         try {
-            // 去连一下远程地址
+            
             Socket socket = new Socket();
             try {
                 socket.connect(remoteAddress, 1000);
-                // 得到本地地址
+                
                 host = socket.getLocalAddress();
             } finally {
                 IoUtils.closeQuietly(socket);
@@ -507,7 +507,7 @@ public class NetUtils {
                 port = i;
                 break;
             } catch (IOException e) {
-                // continue
+                
             }
         }
         return port;
@@ -524,7 +524,7 @@ public class NetUtils {
         try (ServerSocket ignored = new ServerSocket(port)) {
             return false;
         } catch (IOException e) {
-            // continue
+            
         }
         return true;
     }
@@ -646,7 +646,7 @@ public class NetUtils {
         if (!StringUtils.isNullOrEmpty(HOST_ADDRESS_V6)) {
             return HOST_ADDRESS_V6;
         }
-        //avoid to search network interface card many times
+        
         if ("".equals(HOST_ADDRESS_V6)) {
             return null;
         }
@@ -705,7 +705,7 @@ public class NetUtils {
     private static InetAddress getLocalAddress0() {
         InetAddress localAddress = null;
 
-        // @since 2.7.6, choose the {@link NetworkInterface} first
+        
         try {
             NetworkInterface networkInterface = findNetworkInterface();
             Enumeration<InetAddress> addresses = networkInterface.getInetAddresses();
@@ -717,7 +717,7 @@ public class NetUtils {
                             return addressOp.get();
                         }
                     } catch (IOException e) {
-                        // ignore
+                        
                     }
                 }
             }
@@ -739,7 +739,7 @@ public class NetUtils {
     }
 
     private static Inet6Address getLocalAddress0V6() {
-        // @since 2.7.6, choose the {@link NetworkInterface} first
+        
         try {
             NetworkInterface networkInterface = findNetworkInterface();
             Enumeration<InetAddress> addresses = networkInterface.getInetAddresses();
@@ -786,7 +786,7 @@ public class NetUtils {
         Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
         while (interfaces.hasMoreElements()) {
             NetworkInterface networkInterface = interfaces.nextElement();
-            if (ignoreNetworkInterface(networkInterface)) { // ignore
+            if (ignoreNetworkInterface(networkInterface)) { 
                 continue;
             }
             validNetworkInterfaces.add(networkInterface);
@@ -811,7 +811,7 @@ public class NetUtils {
 
         NetworkInterface result = null;
 
-        if (result == null) { // If not found, try to get the first one
+        if (result == null) { 
             for (NetworkInterface networkInterface : validNetworkInterfaces) {
                 Enumeration<InetAddress> addresses = networkInterface.getInetAddresses();
                 while (addresses.hasMoreElements()) {
@@ -822,7 +822,7 @@ public class NetUtils {
                                 return networkInterface;
                             }
                         } catch (IOException e) {
-                            // ignore
+                            
                         }
                     }
                 }
@@ -853,7 +853,7 @@ public class NetUtils {
                 return hostname;
             }
         } catch (Throwable e) {
-            // ignore
+            
         }
         return address;
     }
@@ -895,7 +895,7 @@ public class NetUtils {
 
     public static String toURL(String protocol, String host, int port, String path) {
         StringBuilder sb = new StringBuilder();
-        sb.append(protocol).append("://");
+        sb.append(protocol).append(":
         sb.append(host).append(':').append(port);
         if (path.charAt(0) != '/') {
             sb.append('/');
@@ -909,7 +909,7 @@ public class NetUtils {
             IOException {
         setInterface(multicastSocket, multicastAddress instanceof Inet6Address);
 
-        // For the deprecation notice: the equivalent only appears in JDK 9+.
+        
         multicastSocket.setLoopbackMode(false);
         multicastSocket.joinGroup(multicastAddress);
     }
@@ -930,7 +930,7 @@ public class NetUtils {
                             break;
                         }
                     } catch (IOException e) {
-                        // ignore
+                        
                     }
                 } else if (!preferIpv6 && address instanceof Inet4Address) {
                     try {
@@ -940,7 +940,7 @@ public class NetUtils {
                             break;
                         }
                     } catch (IOException e) {
-                        // ignore
+                        
                     }
                 }
             }
@@ -979,7 +979,7 @@ public class NetUtils {
             splitCharacter = SPLIT_IPV6_CHARACTER;
         }
         String[] mask = pattern.split(splitCharacter);
-        // check format of pattern
+        
         checkHostPattern(pattern, mask, isIpv4);
 
         host = inetAddress.getHostAddress();
@@ -987,7 +987,7 @@ public class NetUtils {
             return true;
         }
 
-        // short name condition
+        
         if (!ipPatternContainExpression(pattern)) {
             InetAddress patternAddress = InetAddress.getByName(pattern);
             return patternAddress.getHostAddress().equals(host);
@@ -1096,7 +1096,7 @@ public class NetUtils {
     }
 
     public static String getLegalIp(String ip) {
-        //ipv6 [::FFFF:129.144.52.38]:80
+        
         int ind;
         if ((ip.charAt(0) == '[' && (ind = ip.indexOf(']')) > 2)) {
             String nhost = ip;

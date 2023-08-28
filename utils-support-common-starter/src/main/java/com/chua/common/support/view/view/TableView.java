@@ -14,7 +14,7 @@ import static java.lang.String.format;
 
 /**
  * 表格控件
- * Created by vlinux on 15/5/7.
+ * @author Administrator  vlinux on 15/5/7.
  */
 public class TableView implements View {
 

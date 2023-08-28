@@ -4,14 +4,17 @@ import com.chua.common.support.extra.el.baseutil.smc.SmcHelper;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class MethodModel {
     private AccessLevel accessLevel;
     private Class<?> returnType;
     private Class<?>[] paramterTypes;
-    // 该数组为空时意味着全部属性都不需要用final修饰
+    
     private boolean[] paramterFinals;
-    //入参名称，没有值的情况下则使用$0,$1,$2,,,,,
+    
     private String[] paramterNames;
     private Class<?>[] throwables;
     private String methodName;
@@ -63,7 +66,7 @@ public class MethodModel {
                 cache.append("public ");
                 break;
         }
-        cache.append(SmcHelper.getReferenceName(returnType, classModel)).append(' ')//
+        cache.append(SmcHelper.getReferenceName(returnType, classModel)).append(' ')
                 .append(methodName).append('(');
         if (paramterTypes != null && paramterTypes.length > 0) {
             boolean hasComma = false;
@@ -103,7 +106,7 @@ public class MethodModel {
             }
             cache.setLength(cache.length() - 1);
         }
-        cache.append(" \r\n\t{\r\n");//
+        cache.append(" \r\n\t{\r\n");
         String[] tmp = body.split("\r\n");
         for (String each : tmp) {
             cache.append("\t\t").append(each).append("\r\n");

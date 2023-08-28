@@ -5,6 +5,11 @@ import com.chua.common.support.lang.spider.Site;
 import com.chua.common.support.lang.spider.Spider;
 import com.chua.common.support.lang.spider.processor.PageProcessor;
 
+/**
+ * 基础类
+ *
+ * @author CH
+ */
 public class SinaBlogProcessor implements PageProcessor {
 
     public static final String URL_POST = "https://blog.sina.com.cn/s/blog_\\w+\\.html";

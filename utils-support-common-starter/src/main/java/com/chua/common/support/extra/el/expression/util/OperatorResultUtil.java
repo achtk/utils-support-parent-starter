@@ -11,7 +11,10 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class OperatorResultUtil
 {
     public static CalculateNode aggregate(List<CalculateNode> list, String el, int offset)

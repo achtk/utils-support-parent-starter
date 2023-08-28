@@ -5,36 +5,34 @@ import com.chua.common.support.extra.el.baseutil.exception.UnSupportException;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class SummerId implements Uid
-{
+/**
+ * 基础类
+ *
+ * @author CH
+ */
+public class SummerId implements Uid {
 
     private final static int COUNT_MASK = 0x0000ffff;
-    private final        AtomicInteger count     = new AtomicInteger(0);
-    private final        byte          workedId;
+    private final AtomicInteger count = new AtomicInteger(0);
+    private final byte workedId;
 
-    public SummerId(int workerId)
-    {
-        if (workerId >= 0 && workerId <= 255)
-        {
+    public SummerId(int workerId) {
+        if (workerId >= 0 && workerId <= 255) {
             this.workedId = (byte) (workerId & 0xff);
-        }
-        else
-        {
+        } else {
             throw new UnSupportException("workerid的取值范围为0-255");
         }
     }
 
     @Override
-    public String generate()
-    {
+    public String generate() {
         return StringUtil.toHexString(generateBytes());
     }
 
     @Override
-    public long generateLong()
-    {
+    public long generateLong() {
         byte[] result = generateBytes();
-        long   tmp    = ((long) result[0] & 0xff) << 56;
+        long tmp = ((long) result[0] & 0xff) << 56;
         tmp |= ((long) result[1] & 0xff) << 48;
         tmp |= ((long) result[2] & 0xff) << 40;
         tmp |= ((long) result[3] & 0xff) << 32;
@@ -46,9 +44,8 @@ public class SummerId implements Uid
     }
 
     @Override
-    public String generateDigits()
-    {
-        long   tmp   = generateLong();
+    public String generateDigits() {
+        long tmp = generateLong();
         char[] value = new char[11];
         value[0] = ByteTool.toDigit((int) ((tmp >>> 58) & SHORT_MASK));
         value[1] = ByteTool.toDigit((int) ((tmp >>> 52) & SHORT_MASK));
@@ -70,10 +67,9 @@ public class SummerId implements Uid
      * 注意：该算法未进行超时保护。如果机器的能力超过了1毫秒0x0000ffff的id，则id会出现重复。但是这个数字已经十分大。基本不太可能。
      */
     @Override
-    public byte[] generateBytes()
-    {
+    public byte[] generateBytes() {
         byte[] result = new byte[8];
-        long   time   = System.currentTimeMillis() - BASE;
+        long time = System.currentTimeMillis() - BASE;
         result[0] = (byte) (time >>> 32);
         result[1] = (byte) (time >>> 24);
         result[2] = (byte) (time >>> 16);

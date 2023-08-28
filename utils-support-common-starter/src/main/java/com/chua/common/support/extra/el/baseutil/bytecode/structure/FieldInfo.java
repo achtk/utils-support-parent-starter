@@ -7,16 +7,19 @@ import com.chua.common.support.extra.el.baseutil.bytecode.util.BinaryData;
 
 import java.util.Arrays;
 
-public class FieldInfo
-{
+/**
+ * 基础类
+ *
+ * @author CH
+ */
+public class FieldInfo {
     private int accessFlags;
     private int nameIndex;
-    private String          name;
-    private String          descriptor;
+    private String name;
+    private String descriptor;
     private AbstractAttributeInfo[] attributeInfos;
 
-    public void resolve(BinaryData binaryData, AbstractConstantInfo[] constantInfos)
-    {
+    public void resolve(BinaryData binaryData, AbstractConstantInfo[] constantInfos) {
         accessFlags = binaryData.readShort();
         nameIndex = binaryData.readShort();
         name = ((Utf8Info) constantInfos[nameIndex - 1]).getValue();
@@ -24,25 +27,21 @@ public class FieldInfo
         descriptor = ((Utf8Info) constantInfos[descriptorIndex - 1]).getValue();
         int attributesCount = binaryData.readShort();
         attributeInfos = new AbstractAttributeInfo[attributesCount];
-        for (int i = 0; i < attributesCount; i++)
-        {
+        for (int i = 0; i < attributesCount; i++) {
             attributeInfos[i] = AbstractAttributeInfo.parse(binaryData, constantInfos);
         }
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    public AbstractAttributeInfo[] getAttributeInfos()
-    {
+    public AbstractAttributeInfo[] getAttributeInfos() {
         return attributeInfos;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "FieldInfo{" + "name='" + name + '\'' + ", descriptor='" + descriptor + '\'' + ", attributeInfos=" + Arrays.toString(attributeInfos) + '}';
     }
 }

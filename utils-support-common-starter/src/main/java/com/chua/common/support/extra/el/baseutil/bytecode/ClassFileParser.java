@@ -10,7 +10,10 @@ import com.chua.common.support.extra.el.baseutil.bytecode.util.BinaryData;
 import java.util.Arrays;
 
 import static com.chua.common.support.constant.NameConstant.OBJECT_NAME;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class ClassFileParser {
     private int magic;
     private int minorVersion;
@@ -199,9 +202,9 @@ public class ClassFileParser {
     }
 
     private void readMagic() {
-        if ((binaryData.readByte() & 0xff) == 0xca//
-                && (binaryData.readByte() & 0xff) == 0xfe//
-                && (binaryData.readByte() & 0xff) == 0xba//
+        if ((binaryData.readByte() & 0xff) == 0xca
+                && (binaryData.readByte() & 0xff) == 0xfe
+                && (binaryData.readByte() & 0xff) == 0xba
                 && (binaryData.readByte() & 0xff) == 0xbe) {
             magic = 0xcafebabe;
         } else {

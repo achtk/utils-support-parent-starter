@@ -3,6 +3,11 @@ package com.chua.common.support.extra.el.expression.token;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 基础类
+ *
+ * @author CH
+ */
 public enum Symbol implements Token {
     /**
      * (

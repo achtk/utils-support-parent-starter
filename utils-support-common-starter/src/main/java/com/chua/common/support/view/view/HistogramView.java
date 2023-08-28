@@ -80,7 +80,7 @@ public class HistogramView implements View {
         Double line = all / LINE_NUMBER;
         for (int i = 0; i < LINE_NUMBER; i++) {
             back[i] = Double.valueOf(max) - (line * i);
-            BigDecimal b = new BigDecimal(back[i]);
+            BigDecimal b = BigDecimal.valueOf(back[i]);
             back[i] = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
         }
         return back;

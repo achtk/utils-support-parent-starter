@@ -6,7 +6,7 @@ import java.io.Writer;
 
 /**
  * Helper subclass to CharSequenceTranslator to remove unpaired surrogates.
- *
+ * @author Administrator
  * @since 1.0
  */
 public class UnicodeUnpairedSurrogateRemover extends AbstractCodePointTranslator {

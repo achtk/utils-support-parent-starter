@@ -11,23 +11,23 @@ public class Bitmap {
      */
     private final long[] elementData;
 
-    /*
+    /**
     位图保存的点的状态种数
      */
     private final long stateNum;
-    /*
+    /**
     存储一个位图保存的点的状态值所需要的位数
      */
     private final int stateBitNum;
-    /*
+    /**
     位图可以储存的最大点数，初始化Bitmap类时指定
      */
     private final long MAX_SIZE;
-    /*
+    /**
     一个long型变量可以保存的点的数量
      */
     private final long numOfOneLong;
-    /*
+    /**
     该位图已经保存的点的数量
      */
     private long size;

@@ -14,6 +14,7 @@ import java.util.Locale;
  * Its core use is to escape and unescape text. Because escaping and unescaping
  * is completely contextual, the API does not present two separate signatures.
  *
+ * @author Administrator
  * @since 1.0
  */
 public abstract class AbstractCharSequenceTranslator {

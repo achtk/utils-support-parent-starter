@@ -7,7 +7,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class Proxy {
 
     private String scheme;

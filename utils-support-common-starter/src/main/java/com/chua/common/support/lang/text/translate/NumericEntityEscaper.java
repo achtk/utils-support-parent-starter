@@ -8,7 +8,7 @@ import java.io.Writer;
 
 /**
  * Translates code points to their XML numeric entity escaped value.
- *
+ * @author Administrator
  * @since 1.0
  */
 public class NumericEntityEscaper extends AbstractCodePointTranslator {

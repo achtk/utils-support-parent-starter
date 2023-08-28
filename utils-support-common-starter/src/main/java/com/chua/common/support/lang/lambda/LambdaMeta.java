@@ -3,7 +3,7 @@ package com.chua.common.support.lang.lambda;
 /**
  * Lambda 信息
  * <p>
- * Created by hcl at 2021/5/14
+ * @author Administrator
  */
 public interface LambdaMeta {
 

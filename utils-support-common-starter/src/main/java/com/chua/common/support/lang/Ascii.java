@@ -178,7 +178,7 @@ public class Ascii {
      *
      * @since 8.0
      */
-    public static final byte DC1 = 17; // aka XON
+    public static final byte DC1 = 17;
 
     /**
      * Transmission On: Although originally defined as DC1, this ASCII control character is now better
@@ -187,7 +187,7 @@ public class Ascii {
      *
      * @since 8.0
      */
-    public static final byte XON = 17; // aka DC1
+    public static final byte XON = 17;
 
     /**
      * Device Control 2. Characters for the control of ancillary devices associated with data
@@ -207,14 +207,14 @@ public class Ascii {
      *
      * @since 8.0
      */
-    public static final byte DC3 = 19; // aka XOFF
+    public static final byte DC3 = 19;
 
     /**
      * Transmission off. See {@link #XON} for explanation.
      *
      * @since 8.0
      */
-    public static final byte XOFF = 19; // aka DC3
+    public static final byte XOFF = 19;
 
     /**
      * Device Control 4. Characters for the control of ancillary devices associated with data

@@ -6,7 +6,7 @@ import java.io.Writer;
 
 /**
  * Translates code points to their Unicode escaped value.
- *
+ * @author Administrator
  * @since 1.0
  */
 public class UnicodeEscaper extends AbstractCodePointTranslator {

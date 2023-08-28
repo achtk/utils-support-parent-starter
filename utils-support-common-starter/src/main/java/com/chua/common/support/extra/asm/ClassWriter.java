@@ -1,30 +1,30 @@
-// ASM: a very small and fast Java bytecode manipulation framework
-// Copyright (c) 2000-2011 INRIA, France Telecom
-// All rights reserved.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. Neither the name of the copyright holders nor the names of its
-//    contributors may be used to endorse or promote products derived from
-//    this software without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
-// LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-// CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-// SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-// INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-// CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
-// THE POSSIBILITY OF SUCH DAMAGE.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 package com.chua.common.support.extra.asm;
 
 /**
@@ -33,7 +33,7 @@ package com.chua.common.support.extra.asm;
  * scratch", or with one or more {@link ClassReader} and adapter {@link ClassVisitor} to generate a
  * modified class from one or more existing Java classes.
  *
- * @see <a href="https://docs.oracle.com/javase/specs/jvms/se9/html/jvms-4.html">JVMS 4</a>
+ * @see <a href="https:
  * @author Eric Bruneton
  */
 public class ClassWriter extends ClassVisitor {
@@ -71,8 +71,8 @@ public class ClassWriter extends ClassVisitor {
    */
   private final int flags;
 
-  // Note: fields are ordered as in the ClassFile structure, and those related to attributes are
-  // ordered as in Section 4.7 of the JVMS.
+  
+  
 
   /**
    * The minor_version and major_version fields of the JVMS ClassFile structure. minor_version is
@@ -221,9 +221,9 @@ public class ClassWriter extends ClassVisitor {
    */
   private int compute;
 
-  // -----------------------------------------------------------------------------------------------
-  // Constructor
-  // -----------------------------------------------------------------------------------------------
+  
+  
+  
 
   /**
    * Constructs a new {@link ClassWriter} object.
@@ -272,9 +272,9 @@ public class ClassWriter extends ClassVisitor {
     }
   }
 
-  // -----------------------------------------------------------------------------------------------
-  // Accessors
-  // -----------------------------------------------------------------------------------------------
+  
+  
+  
 
   /**
    * Returns true if all the given flags were passed to the constructor.
@@ -287,9 +287,9 @@ public class ClassWriter extends ClassVisitor {
     return (this.flags & flags) == flags;
   }
 
-  // -----------------------------------------------------------------------------------------------
-  // Implementation of the ClassVisitor abstract class
-  // -----------------------------------------------------------------------------------------------
+  
+  
+  
 
   @Override
   public final void visit(
@@ -380,7 +380,7 @@ public class ClassWriter extends ClassVisitor {
 
   @Override
   public final void visitAttribute(final Attribute attribute) {
-    // Store the attributes in the <i>reverse</i> order of their visit by this method.
+    
     attribute.nextAttribute = firstAttribute;
     firstAttribute = attribute;
   }
@@ -409,12 +409,12 @@ public class ClassWriter extends ClassVisitor {
     if (innerClasses == null) {
       innerClasses = new ByteVector();
     }
-    // Section 4.7.6 of the JVMS states "Every CONSTANT_Class_info entry in the constant_pool table
-    // which represents a class or interface C that is not a package member must have exactly one
-    // corresponding entry in the classes array". To avoid duplicates we keep track in the info
-    // field of the Symbol of each CONSTANT_Class_info entry C whether an inner class entry has
-    // already been added for C. If so, we store the index of this inner class entry (plus one) in
-    // the info field. This trick allows duplicate detection in O(1) time.
+    
+    
+    
+    
+    
+    
     Symbol nameSymbol = symbolTable.addConstantClass(name);
     if (nameSymbol.info == 0) {
       ++numberOfInnerClasses;
@@ -424,8 +424,8 @@ public class ClassWriter extends ClassVisitor {
       innerClasses.putShort(access);
       nameSymbol.info = numberOfInnerClasses;
     }
-    // Else, compare the inner classes entry nameSymbol.info - 1 with the arguments of this method
-    // and throw an exception if there is a difference?
+    
+    
   }
 
   @Override
@@ -477,12 +477,12 @@ public class ClassWriter extends ClassVisitor {
 
   @Override
   public final void visitEnd() {
-    // Nothing to do.
+    
   }
 
-  // -----------------------------------------------------------------------------------------------
-  // Other public methods
-  // -----------------------------------------------------------------------------------------------
+  
+  
+  
 
   /**
    * Returns the content of the class file that was built by this ClassWriter.
@@ -492,10 +492,10 @@ public class ClassWriter extends ClassVisitor {
    * @throws MethodTooLargeException if the Code attribute of a method is too large.
    */
   public byte[] toByteArray() {
-    // First step: compute the size in bytes of the ClassFile structure.
-    // The magic field uses 4 bytes, 10 mandatory fields (minor_version, major_version,
-    // constant_pool_count, access_flags, this_class, super_class, interfaces_count, fields_count,
-    // methods_count and attributes_count) use 2 bytes each, and each interface uses 2 bytes too.
+    
+    
+    
+    
     int size = 24 + 2 * interfaceCount;
     int fieldsCount = 0;
     FieldWriter fieldWriter = firstField;
@@ -512,7 +512,7 @@ public class ClassWriter extends ClassVisitor {
       methodWriter = (MethodWriter) methodWriter.mv;
     }
 
-    // For ease of reference, we use here the same attribute order as in Section 4.7 of the JVMS.
+    
     int attributesCount = 0;
     if (innerClasses != null) {
       ++attributesCount;
@@ -613,16 +613,16 @@ public class ClassWriter extends ClassVisitor {
       attributesCount += firstAttribute.getAttributeCount();
       size += firstAttribute.computeAttributesSize(symbolTable);
     }
-    // IMPORTANT: this must be the last part of the ClassFile size computation, because the previous
-    // statements can add attribute names to the constant pool, thereby changing its size!
+    
+    
     size += symbolTable.getConstantPoolLength();
     int constantPoolCount = symbolTable.getConstantPoolCount();
     if (constantPoolCount > 0xFFFF) {
       throw new ClassTooLargeException(symbolTable.getClassName(), constantPoolCount);
     }
 
-    // Second step: allocate a ByteVector of the correct size (in order to avoid any array copy in
-    // dynamic resizes) and fill it with the ClassFile content.
+    
+    
     ByteVector result = new ByteVector(size);
     result.putInt(0xCAFEBABE).putInt(version);
     symbolTable.putConstantPool(result);
@@ -648,7 +648,7 @@ public class ClassWriter extends ClassVisitor {
       methodWriter.putMethodInfo(result);
       methodWriter = (MethodWriter) methodWriter.mv;
     }
-    // For ease of reference, we use here the same attribute order as in Section 4.7 of the JVMS.
+    
     result.putShort(attributesCount);
     if (innerClasses != null) {
       result
@@ -735,7 +735,7 @@ public class ClassWriter extends ClassVisitor {
       firstAttribute.putAttributes(symbolTable, result);
     }
 
-    // Third step: replace the ASM specific instructions, if any.
+    
     if (hasAsmInstructions) {
       return replaceAsmInstructions(result.data, hasFrames);
     } else {
@@ -807,9 +807,9 @@ public class ClassWriter extends ClassVisitor {
     return attributePrototypes.toArray();
   }
 
-  // -----------------------------------------------------------------------------------------------
-  // Utility methods: constant pool management for Attribute sub classes
-  // -----------------------------------------------------------------------------------------------
+  
+  
+  
 
   /**
    * Adds a number or string constant to the constant pool of the class being build. Does nothing if
@@ -832,7 +832,7 @@ public class ClassWriter extends ClassVisitor {
    * @param value the String value.
    * @return the index of a new or already existing UTF8 item.
    */
-  // DontCheck(AbbreviationAsWordInName): can't be renamed (for backward binary compatibility).
+  
   public int newUtf8(final String value) {
     return symbolTable.addConstantUtf8(value);
   }
@@ -1016,9 +1016,9 @@ public class ClassWriter extends ClassVisitor {
     return symbolTable.addConstantNameAndType(name, descriptor);
   }
 
-  // -----------------------------------------------------------------------------------------------
-  // Default method to compute common super classes when computing stack map frames
-  // -----------------------------------------------------------------------------------------------
+  
+  
+  
 
   /**
    * Returns the common super type of the two given types. The default implementation of this method
@@ -1070,12 +1070,12 @@ public class ClassWriter extends ClassVisitor {
    * @return ClassLoader
    */
   protected ClassLoader getClassLoader() {
-    // SPRING PATCH: prefer thread context ClassLoader for application classes
+    
     ClassLoader classLoader = null;
     try {
       classLoader = Thread.currentThread().getContextClassLoader();
     } catch (Throwable ex) {
-      // Cannot access thread context ClassLoader - falling back...
+      
     }
     return (classLoader != null ? classLoader : getClass().getClassLoader());
   }

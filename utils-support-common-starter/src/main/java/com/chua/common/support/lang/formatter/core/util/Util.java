@@ -7,7 +7,10 @@ import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class Util {
 
   public static <T> List<T> nullToEmpty(List<T> ts) {

@@ -7,7 +7,10 @@ import java.lang.invoke.MethodType;
 import java.lang.reflect.Field;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class LambdaValueAccessor extends ValueAccessor {
     @FunctionalInterface
     public interface GetBoolean {
@@ -215,33 +218,57 @@ public class LambdaValueAccessor extends ValueAccessor {
             MethodHandle setMethodHandler = lookup.findVirtual(field.getDeclaringClass(), setMethodName, MethodType.methodType(void.class, field.getType()));
             switch (primitiveType) {
                 case INT: {
-                    getInt = (GetInt) LambdaMetafactory.metafactory(lookup, //固定参数
-                            "get",//需要实现的函数式接口的方法名
-                            MethodType.methodType(GetInt.class),////固定写法，中间参数是需要实现的函数接口类
-                            MethodType.methodType(int.class, Object.class),// 函数式接口的方法签名
-                            getMethodHandler,//这个函数接口需要引用的类的实例方法
-                            MethodType.methodType(int.class, field.getDeclaringClass())//实际运行的时候，这个函数式接口的方法签名。也就是将泛型的信息补充上
+                    //固定参数
+                    getInt = (GetInt) LambdaMetafactory.metafactory(lookup,
+                            //需要实现的函数式接口的方法名
+                            "get",
+                            ////固定写法，中间参数是需要实现的函数接口类
+                            MethodType.methodType(GetInt.class),
+                            // 函数式接口的方法签名
+                            MethodType.methodType(int.class, Object.class),
+                            //这个函数接口需要引用的类的实例方法
+                            getMethodHandler,
+                            //实际运行的时候，这个函数式接口的方法签名。也就是将泛型的信息补充上
+                            MethodType.methodType(int.class, field.getDeclaringClass())
                     ).getTarget().invoke();
-                    getInteger = (GetInteger) LambdaMetafactory.metafactory(lookup, //固定参数
-                            "get",//需要实现的函数式接口的方法名
-                            MethodType.methodType(GetInteger.class),////固定写法，中间参数是需要实现的函数接口类
-                            MethodType.methodType(Integer.class, Object.class),// 函数式接口的方法签名
-                            getMethodHandler,//这个函数接口需要引用的类的实例方法
-                            MethodType.methodType(Integer.class, field.getDeclaringClass())//实际运行的时候，这个函数式接口的方法签名。也就是将泛型的信息补充上
+                    //固定参数
+                    getInteger = (GetInteger) LambdaMetafactory.metafactory(lookup,
+                            //需要实现的函数式接口的方法名
+                            "get",
+                            ////固定写法，中间参数是需要实现的函数接口类
+                            MethodType.methodType(GetInteger.class),
+                            // 函数式接口的方法签名
+                            MethodType.methodType(Integer.class, Object.class),
+                            //这个函数接口需要引用的类的实例方法
+                            getMethodHandler,
+                            //实际运行的时候，这个函数式接口的方法签名。也就是将泛型的信息补充上
+                            MethodType.methodType(Integer.class, field.getDeclaringClass())
                     ).getTarget().invoke();
-                    setInt = (SetInt) LambdaMetafactory.metafactory(lookup, //固定参数
-                            "set",//需要实现的函数式接口的方法名
-                            MethodType.methodType(SetInt.class),////固定写法，中间参数是需要实现的函数接口类
-                            MethodType.methodType(void.class, Object.class, int.class),// 函数式接口的方法签名
-                            setMethodHandler,//这个函数接口需要引用的类的实例方法
-                            MethodType.methodType(void.class, field.getDeclaringClass(), int.class)//实际运行的时候，这个函数式接口的方法签名。也就是将泛型的信息补充上
+                    //固定参数
+                    setInt = (SetInt) LambdaMetafactory.metafactory(lookup,
+                            //需要实现的函数式接口的方法名
+                            "set",
+                            ////固定写法，中间参数是需要实现的函数接口类
+                            MethodType.methodType(SetInt.class),
+                            // 函数式接口的方法签名
+                            MethodType.methodType(void.class, Object.class, int.class),
+                            //这个函数接口需要引用的类的实例方法
+                            setMethodHandler,
+                            //实际运行的时候，这个函数式接口的方法签名。也就是将泛型的信息补充上
+                            MethodType.methodType(void.class, field.getDeclaringClass(), int.class)
                     ).getTarget().invoke();
-                    setInteger = (SetInteger) LambdaMetafactory.metafactory(lookup, //固定参数
-                            "set",//需要实现的函数式接口的方法名
-                            MethodType.methodType(SetInteger.class),////固定写法，中间参数是需要实现的函数接口类
-                            MethodType.methodType(void.class, Object.class, Integer.class),// 函数式接口的方法签名
-                            setMethodHandler,//这个函数接口需要引用的类的实例方法
-                            MethodType.methodType(void.class, field.getDeclaringClass(), Integer.class)//实际运行的时候，这个函数式接口的方法签名。也就是将泛型的信息补充上
+                    //固定参数
+                    setInteger = (SetInteger) LambdaMetafactory.metafactory(lookup,
+                            //需要实现的函数式接口的方法名
+                            "set",
+                            ////固定写法，中间参数是需要实现的函数接口类
+                            MethodType.methodType(SetInteger.class),
+                            // 函数式接口的方法签名
+                            MethodType.methodType(void.class, Object.class, Integer.class),
+                            //这个函数接口需要引用的类的实例方法
+                            setMethodHandler,
+                            //实际运行的时候，这个函数式接口的方法签名。也就是将泛型的信息补充上
+                            MethodType.methodType(void.class, field.getDeclaringClass(), Integer.class)
                     ).getTarget().invoke();
                 }
                 case BOOLEAN: {

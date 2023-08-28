@@ -9,7 +9,10 @@ import java.lang.reflect.Field;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.locks.LockSupport;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class SerialLock<T>
 {
     private final static Unsafe UNSAFE;

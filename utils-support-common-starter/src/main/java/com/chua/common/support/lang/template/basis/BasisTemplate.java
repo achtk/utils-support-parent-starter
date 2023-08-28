@@ -12,12 +12,15 @@ import com.chua.common.support.lang.template.basis.parsing.Parser.Macros;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /** A template is loaded by a {@link TemplateLoader} from a file marked up with the basis-template language. The template can be
  * rendered to a {@link String} or {@link OutputStream} by calling one of the <code>render()</code> methods. The
  * {@link TemplateContext} passed to the <code>render()</code> methods is used to look up variable values referenced in the
- * template. */
+ * template.
+ * @author Administrator
+ * */
 public class BasisTemplate{
 	private final List<AbstractNode> nodes;
 	private final Macros macros;
@@ -56,10 +59,10 @@ public class BasisTemplate{
 		render(context, out);
 		try {
 			out.close();
-			return new String(out.toByteArray(), "UTF-8");
+			return new String(out.toByteArray(), StandardCharsets.UTF_8);
 		} catch (IOException e) {
 			Error.error("Couldn't render template to string, " + e.getMessage(), nodes.get(0).getSpan());
-			return null; // never reached
+			return null;
 		}
 	}
 

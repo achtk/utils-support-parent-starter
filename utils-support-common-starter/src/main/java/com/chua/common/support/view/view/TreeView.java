@@ -6,7 +6,7 @@ import com.chua.common.support.utils.StringUtils;
 
 /**
  * 树形控件
- * Created by vlinux on 15/5/26.
+ * @author  vlinux on 15/5/26.
  */
 public class TreeView implements View {
 

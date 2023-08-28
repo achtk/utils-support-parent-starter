@@ -29,6 +29,7 @@ import com.chua.common.support.protocol.websocket.framing.CloseFrame;
 
 /**
  * exception which indicates that the message limited was exceeded (CloseFrame.TOOBIG)
+ * @author Administrator
  */
 public class LimitExceededException extends InvalidDataException {
 

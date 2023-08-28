@@ -3,7 +3,9 @@ package com.chua.common.support.lang.template.basis.interpreter;
 
 /** Used by {@link AstInterpreter} to access fields and methods of objects. This is a singleton class used by all
  * {@link AstInterpreter} instances. Replace the default implementation via {@link #setInstance(Reflection)}. The implementation
- * must be thread-safe. */
+ * must be thread-safe.
+ * @author Administrator
+ * */
 public abstract class Reflection {
 	private static Reflection instance = new JavaReflection();
 

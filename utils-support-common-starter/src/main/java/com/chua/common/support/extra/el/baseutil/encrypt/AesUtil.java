@@ -23,7 +23,8 @@ public class AesUtil implements EnDecrpt
         {
             try
             {
-                SecretKey aeskey = new SecretKeySpec(key, "AES"); // 加密
+                // 加密
+                SecretKey aeskey = new SecretKeySpec(key, "AES");
                 encrptCipher = Cipher.getInstance("AES");
                 encrptCipher.init(Cipher.ENCRYPT_MODE, aeskey);
                 decryptCipher = Cipher.getInstance("AES");

@@ -7,7 +7,10 @@ import java.util.IdentityHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class DefaultAnnotationContext implements AnnotationContext
 {
     private final List<AnnotationMetadata>                metadataList;

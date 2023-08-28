@@ -5,7 +5,10 @@ import com.chua.common.support.extra.el.baseutil.bytecode.annotation.AnnotationM
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.util.List;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public interface AnnotationContext
 {
     boolean isAnnotationPresent(Class<? extends Annotation> ckass);

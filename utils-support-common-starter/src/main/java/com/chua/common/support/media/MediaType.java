@@ -160,7 +160,6 @@ public class MediaType implements Serializable {
      */
     public static final MediaType ANY_FONT_TYPE = createConstant(FONT_TYPE, WILDCARD);
 
-    /* text types */
     public static final MediaType CACHE_MANIFEST_UTF_8 =
             createConstantUtf8(TEXT_TYPE, "cache-manifest");
     public static final MediaType CSS_UTF_8 = createConstantUtf8(TEXT_TYPE, "css");
@@ -276,7 +275,6 @@ public class MediaType implements Serializable {
      */
     public static final MediaType JP2K = createConstant(IMAGE_TYPE, "jp2");
 
-    /* audio types */
     public static final MediaType MP4_AUDIO = createConstant(AUDIO_TYPE, "mp4");
     public static final MediaType MPEG_AUDIO = createConstant(AUDIO_TYPE, "mpeg");
     public static final MediaType OGG_AUDIO = createConstant(AUDIO_TYPE, "ogg");
@@ -352,7 +350,6 @@ public class MediaType implements Serializable {
      */
     public static final MediaType VND_WAVE_AUDIO = createConstant(AUDIO_TYPE, "vnd.wave");
 
-    /* video types */
     public static final MediaType MP4_VIDEO = createConstant(VIDEO_TYPE, "mp4");
     public static final MediaType MPEG_VIDEO = createConstant(VIDEO_TYPE, "mpeg");
     public static final MediaType OGG_VIDEO = createConstant(VIDEO_TYPE, "ogg");

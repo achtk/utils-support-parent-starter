@@ -4,10 +4,12 @@ import com.chua.common.support.extra.el.expression.node.CalculateNode;
 import com.chua.common.support.extra.el.expression.node.impl.NumberNode;
 import com.chua.common.support.extra.el.expression.parse.Invoker;
 import com.chua.common.support.extra.el.expression.token.Operator;
-import com.chua.common.support.extra.el.expression.util.CharType;
 
 import java.util.Deque;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class NumberParser extends NodeParser {
 
     private boolean match(String el, int offset, Deque<CalculateNode> nodes, int function) {

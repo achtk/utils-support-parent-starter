@@ -2,15 +2,18 @@ package com.chua.common.support.extra.el.baseutil.smc.model;
 
 import com.chua.common.support.extra.el.baseutil.smc.SmcHelper;
 
-public class FieldModel
-{
-    private final String   name;
+/**
+ * 基础类
+ *
+ * @author CH
+ */
+public class FieldModel {
+    private final String name;
     private final Class<?> type;
 
     protected String outSource;
 
-    public FieldModel(String name, Class<?> type, ClassModel classModel)
-    {
+    public FieldModel(String name, Class<?> type, ClassModel classModel) {
         this.name = name;
         this.type = type;
         StringBuilder builder = new StringBuilder();
@@ -18,8 +21,7 @@ public class FieldModel
         outSource = builder.toString();
     }
 
-    public FieldModel(String name, Class<?> type, String initStr, ClassModel classModel)
-    {
+    public FieldModel(String name, Class<?> type, String initStr, ClassModel classModel) {
         this.name = name;
         this.type = type;
         StringBuilder builder = new StringBuilder();
@@ -27,19 +29,16 @@ public class FieldModel
         outSource = builder.toString();
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    public Class<?> getType()
-    {
+    public Class<?> getType() {
         return type;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return outSource;
     }
 }

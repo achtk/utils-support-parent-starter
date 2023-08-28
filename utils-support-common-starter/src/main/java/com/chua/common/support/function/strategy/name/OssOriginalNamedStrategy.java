@@ -5,6 +5,7 @@ import com.chua.common.support.annotations.SpiOption;
 
 /**
  * oss策略
+ * @author Administrator
  */
 @Spi("original")
 @SpiOption("原始命名")

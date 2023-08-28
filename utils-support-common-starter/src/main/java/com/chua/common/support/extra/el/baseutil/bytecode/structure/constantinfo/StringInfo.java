@@ -3,6 +3,11 @@ package com.chua.common.support.extra.el.baseutil.bytecode.structure.constantinf
 import com.chua.common.support.constant.ConstantType;
 import com.chua.common.support.extra.el.baseutil.bytecode.util.BinaryData;
 
+/**
+ * 基础类
+ *
+ * @author CH
+ */
 public class StringInfo extends AbstractConstantInfo {
     private int stringIndex;
     private String value;

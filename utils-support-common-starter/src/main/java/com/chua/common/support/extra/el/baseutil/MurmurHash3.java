@@ -17,7 +17,8 @@ package com.chua.common.support.extra.el.baseutil;
  * Note - The x86 and x64 versions do _not_ produce the same results, as the
  * algorithms are optimized for their respective platforms.
  * <p>
- * See http://github.com/yonik/java_util for future updates to this file.
+ * See http:
+ * @author Administrator
  */
 public final class MurmurHash3 {
     public static final int SEED = 0x1234ABCD;
@@ -44,10 +45,10 @@ public final class MurmurHash3 {
      * Gets a long from a byte buffer in little endian byte order.
      */
     public static final long getLongLittleEndian(byte[] buf, int offset) {
-        return ((long) buf[offset + 7] << 56) // no mask needed
-                | ((buf[offset + 6] & 0xffL) << 48) | ((buf[offset + 5] & 0xffL) << 40) | ((buf[offset + 4] & 0xffL) << 32) | ((buf[offset + 3] & 0xffL) << 24) | ((buf[offset + 2] & 0xffL) << 16) | ((buf[offset + 1] & 0xffL) << 8) | ((buf[offset] & 0xffL)); // no
-        // shift
-        // needed
+        return ((long) buf[offset + 7] << 56) 
+                | ((buf[offset + 6] & 0xffL) << 48) | ((buf[offset + 5] & 0xffL) << 40) | ((buf[offset + 4] & 0xffL) << 32) | ((buf[offset + 3] & 0xffL) << 24) | ((buf[offset + 2] & 0xffL) << 16) | ((buf[offset + 1] & 0xffL) << 8) | ((buf[offset] & 0xffL)); 
+        
+        
     }
 
     /**

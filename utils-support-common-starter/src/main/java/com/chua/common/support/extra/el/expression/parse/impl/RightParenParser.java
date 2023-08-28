@@ -10,7 +10,10 @@ import com.chua.common.support.extra.el.expression.util.OperatorResultUtil;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class RightParenParser extends NodeParser {
 
     @Override

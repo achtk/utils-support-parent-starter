@@ -18,21 +18,25 @@ public class GaussView implements View {
     /**
      * 生成的虚拟数据的个数
      */
-    private int dataNumber;
+    private final int dataNumber;
     /**
      * 刻度数目x轴
      */
-    private int xSize;
+    private final int xSize;
 
-    //保存生成的高斯数据
-    private ArrayList<Double> list = new ArrayList<>();
-    //根据分组统计数据个数
-    private Map<Integer, Integer> map = new HashMap<>();
+    /**
+     * 保存生成的高斯数据
+     */
+    private final ArrayList<Double> list = new ArrayList<>();
+    /**
+     * 根据分组统计数据个数
+     */
+    private final Map<Integer, Integer> map = new HashMap<>();
 
     public GaussView(int xSize, int ySize, int dataNumber) {
-        this.ySize = ySize > 3 ? ySize : 3;
-        this.xSize = xSize > 3 ? xSize : 3;
-        this.dataNumber = dataNumber > 1000 ? dataNumber : 1000;
+        this.ySize = Math.max(ySize, 3);
+        this.xSize = Math.max(xSize, 3);
+        this.dataNumber = Math.max(dataNumber, 1000);
         init();
     }
 
@@ -48,7 +52,9 @@ public class GaussView implements View {
         }
     }
 
-    //分析并统计高斯随机数
+    /**
+     * 分析并统计高斯随机数
+     */
     public void analysis() {
         /*
          * 利用Stream进行统计，由于Stream终极方法会关闭，当重复使用Stream时
@@ -73,7 +79,9 @@ public class GaussView implements View {
         }
     }
 
-    //绘制统计图
+    /**
+     * 绘制统计图
+     */
     public StringBuilder grawValue() {
         StringBuilder sb = new StringBuilder();
         //x轴刻度长度

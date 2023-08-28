@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 
 /**
  * 人体属性
+ * @author Administrator
  */
 @EqualsAndHashCode(callSuper = true)
 @Data

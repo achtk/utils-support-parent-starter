@@ -1,7 +1,10 @@
 package com.chua.common.support.extra.el.baseutil.reflect;
 
 import java.util.concurrent.ConcurrentHashMap;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class ParalLock
 {
     private ConcurrentHashMap<String, Object> lockMap = new ConcurrentHashMap<String, Object>();

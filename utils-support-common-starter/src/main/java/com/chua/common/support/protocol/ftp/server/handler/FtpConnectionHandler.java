@@ -93,44 +93,44 @@ public class FtpConnectionHandler {
     }
 
     public void registerCommands() {
-        con.registerCommand("NOOP", "NOOP", this::noop, false); // Ping
-        con.registerCommand("HELP", "HELP <command>", this::help, false); // Command Help
-        con.registerCommand("QUIT", "QUIT", this::quit, false); // Quit
-        con.registerCommand("REIN", "REIN", this::rein, false); // Logout
-        con.registerCommand("USER", "USER <username>", this::user, false); // Set Username
-        con.registerCommand("PASS", "PASS <password>", this::pass, false); // Set Password
-        con.registerCommand("ACCT", "ACCT <info>", this::acct, false); // Account Info
-        con.registerCommand("SYST", "SYST", this::syst); // System Information
-        con.registerCommand("PASV", "PASV", this::pasv); // Passive Mode
-        con.registerCommand("PORT", "PORT <address>", this::port); // Active Mode
-        con.registerCommand("TYPE", "TYPE <type>", this::type); // Binary Flag
-        con.registerCommand("STRU", "STRU <type>", this::stru); // Structure Type
-        con.registerCommand("MODE", "MODE <mode>", this::mode); // Change Mode
-        con.registerCommand("STAT", "STAT", this::stat); // Statistics
+        con.registerCommand("NOOP", "NOOP", this::noop, false); 
+        con.registerCommand("HELP", "HELP <command>", this::help, false); 
+        con.registerCommand("QUIT", "QUIT", this::quit, false); 
+        con.registerCommand("REIN", "REIN", this::rein, false); 
+        con.registerCommand("USER", "USER <username>", this::user, false); 
+        con.registerCommand("PASS", "PASS <password>", this::pass, false); 
+        con.registerCommand("ACCT", "ACCT <info>", this::acct, false); 
+        con.registerCommand("SYST", "SYST", this::syst); 
+        con.registerCommand("PASV", "PASV", this::pasv); 
+        con.registerCommand("PORT", "PORT <address>", this::port); 
+        con.registerCommand("TYPE", "TYPE <type>", this::type); 
+        con.registerCommand("STRU", "STRU <type>", this::stru); 
+        con.registerCommand("MODE", "MODE <mode>", this::mode); 
+        con.registerCommand("STAT", "STAT", this::stat); 
 
-        con.registerCommand("AUTH", "AUTH <mechanism>", this::auth, false); // Security Mechanism (RFC 2228)
-        con.registerCommand("PBSZ", "PBSZ <size>", this::pbsz, false); // Protection Buffer Size (RFC 2228)
-        con.registerCommand("PROT", "PROT <level>", this::prot, false); // Data Channel Protection Level (RFC 2228)
+        con.registerCommand("AUTH", "AUTH <mechanism>", this::auth, false); 
+        con.registerCommand("PBSZ", "PBSZ <size>", this::pbsz, false); 
+        con.registerCommand("PROT", "PROT <level>", this::prot, false); 
 
-        con.registerCommand("LPSV", "LPSV", this::lpsv); // Long Passive Mode (RFC 1639) (Obsolete)
-        con.registerCommand("LPRT", "LPRT <address>", this::lprt); // Long Active Mode (RFC 1639) (Obsolete)
+        con.registerCommand("LPSV", "LPSV", this::lpsv); 
+        con.registerCommand("LPRT", "LPRT <address>", this::lprt); 
 
-        con.registerCommand("EPSV", "EPSV", this::epsv); // Extended Passive Mode (RFC 2428)
-        con.registerCommand("EPRT", "EPRT <address>", this::eprt); // Extended Active Mode (RFC 2428)
+        con.registerCommand("EPSV", "EPSV", this::epsv); 
+        con.registerCommand("EPRT", "EPRT <address>", this::eprt); 
 
-        con.registerCommand("HOST", "HOST <address>", this::host, false); // Custom Virtual Hosts (RFC 7151)
+        con.registerCommand("HOST", "HOST <address>", this::host, false); 
 
-        con.registerFeature("base"); // Base Commands (RFC 5797)
-        con.registerFeature("secu"); // Security Commands (RFC 5797)
-        con.registerFeature("hist"); // Obsolete Commands (RFC 5797)
-        con.registerFeature("nat6"); // Extended Passive/Active Commands (RFC 5797)
-        con.registerFeature("TYPE A;AN;AT;AC;L;I"); // Supported Types (RFC 5797)
-        con.registerFeature("AUTH TLS"); // SSL/TLS support (RFC 4217)
-        con.registerFeature("PBSZ"); // Protection Buffer Size (RFC 2228)
-        con.registerFeature("PROT"); // Protection Level (RFC 2228)
-        con.registerFeature("EPSV"); // Extended Passive Mode (RFC 2428)
-        con.registerFeature("EPRT"); // Extended Active Mode (RFC 2428)
-        con.registerFeature("HOST"); // Custom Virtual Hosts (RFC 7151)
+        con.registerFeature("base"); 
+        con.registerFeature("secu"); 
+        con.registerFeature("hist"); 
+        con.registerFeature("nat6"); 
+        con.registerFeature("TYPE A;AN;AT;AC;L;I"); 
+        con.registerFeature("AUTH TLS"); 
+        con.registerFeature("PBSZ"); 
+        con.registerFeature("PROT"); 
+        con.registerFeature("EPSV"); 
+        con.registerFeature("EPRT"); 
+        con.registerFeature("HOST"); 
     }
 
     private void noop() {
@@ -215,10 +215,10 @@ public class FtpConnectionHandler {
 
         FtpUserAuthenticator auth = con.getServer().getAuthenticator();
         if(auth.needsPassword(con, username, address)) {
-            // Requests a password for the authentication
+            
             con.sendResponse(331, "Needs a password");
         } else {
-            // Tries to authenticate using the given username
+            
             boolean success = authenticate(auth, null);
 
             if(success) {
@@ -236,7 +236,7 @@ public class FtpConnectionHandler {
             return;
         }
 
-        // Tries to authenticate using the given username and password
+        
         boolean success = authenticate(con.getServer().getAuthenticator(), password);
 
         if(success) {
@@ -253,19 +253,19 @@ public class FtpConnectionHandler {
             return;
         }
 
-        // Many clients don't even support this command, it's not needed in most cases
-        // A simple "username and password" combination is the most common system in the internet anyway
-        // The authenticator can also handle special formatted usernames, if really needed (for instance: "username|account")
+        
+        
+        
 
-        // Although this is pretty simple to implement, I would have to store the password
-        // in a field instead of directly sending it to the authenticator. I prefer to keep
-        // things the way they are for security reasons.
+        
+        
+        
 
         con.sendResponse(530, "Account information is not supported");
     }
 
     private void syst() {
-        con.sendResponse(215, "UNIX Type: L8"); // Generic System Info
+        con.sendResponse(215, "UNIX Type: L8"); 
     }
 
     private void rein() {
@@ -289,7 +289,7 @@ public class FtpConnectionHandler {
         int port = passiveServer.getLocalPort();
 
         if("0.0.0.0".equals(host)) {
-            // Sends a valid address instead of a wildcard
+            
             host = InetAddress.getLocalHost().getHostAddress();
         }
 
@@ -337,7 +337,7 @@ public class FtpConnectionHandler {
 
         if("TLS".equals(mechanism) || "TLS-C".equals(mechanism) ||
             "SSL".equals(mechanism) || "TLS-P".equals(mechanism)) {
-            // No need to distinguish between TLS and SSL, as the protocol self-negotiate its level
+            
 
             SSLContext ssl = con.getServer().getSslContext();
 
@@ -357,8 +357,8 @@ public class FtpConnectionHandler {
 
     private void pbsz(String size) {
         if(con.isSslEnabled()) {
-            // For SSL, the buffer size should always be 0
-            // Any other size should be accepted
+            
+            
             con.sendResponse(200, "The protection buffer size was set to 0");
         } else {
             con.sendResponse(503, "You can't set the protection buffer size in an insecure connection");
@@ -383,7 +383,7 @@ public class FtpConnectionHandler {
         }
     }
 
-    private void lpsv() throws IOException { // Obsolete Command
+    private void lpsv() throws IOException { 
         FtpServer server = con.getServer();
         passiveServer = Utils.createServer(0, 5, server.getAddress(), server.getSslContext(), secureData);
         passive = true;
@@ -392,7 +392,7 @@ public class FtpConnectionHandler {
         int port = passiveServer.getLocalPort();
 
         if("0.0.0.0".equals(host)) {
-            // Sends a valid address instead of a wildcard
+            
             host = InetAddress.getLocalHost().getHostAddress();
         }
 
@@ -404,7 +404,7 @@ public class FtpConnectionHandler {
         con.sendResponse(229, "Enabled Passive Mode (4,4," + address + ",2," + addressPort + ")");
     }
 
-    private void lprt(String data) { // Obsolete Command
+    private void lprt(String data) { 
         String[] args = data.split(",");
 
         int hostLength = Integer.parseInt(args[1]);

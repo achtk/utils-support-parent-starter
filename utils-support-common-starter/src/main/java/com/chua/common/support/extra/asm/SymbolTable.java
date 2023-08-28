@@ -1,30 +1,30 @@
-// ASM: a very small and fast Java bytecode manipulation framework
-// Copyright (c) 2000-2011 INRIA, France Telecom
-// All rights reserved.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions
-// are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. Neither the name of the copyright holders nor the names of its
-//    contributors may be used to endorse or promote products derived from
-//    this software without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-// ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
-// LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-// CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-// SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-// INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-// CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
-// THE POSSIBILITY OF SUCH DAMAGE.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 package com.chua.common.support.extra.asm;
 
 /**
@@ -32,9 +32,9 @@ package com.chua.common.support.extra.asm;
  * table entries of a class.
  *
  * @author Eric Bruneton
- * @see <a href="https://docs.oracle.com/javase/specs/jvms/se9/html/jvms-4.html#jvms-4.4">JVMS
+ * @see <a href="https:
  *     4.4</a>
- * @see <a href="https://docs.oracle.com/javase/specs/jvms/se9/html/jvms-4.html#jvms-4.7.23">JVMS
+ * @see <a href="https:
  *     4.7.23</a>
  */
 final class SymbolTable {
@@ -138,7 +138,7 @@ final class SymbolTable {
     this.classWriter = classWriter;
     this.sourceClassReader = classReader;
 
-    // Copy the constant pool binary content.
+    
     byte[] inputBytes = classReader.classFileBuffer;
     int constantPoolOffset = classReader.getItem(1) - 1;
     int constantPoolLength = classReader.header - constantPoolOffset;
@@ -146,9 +146,9 @@ final class SymbolTable {
     constantPool = new ByteVector(constantPoolLength);
     constantPool.putByteArray(inputBytes, constantPoolOffset, constantPoolLength);
 
-    // Add the constant pool items in the symbol table entries. Reserve enough space in 'entries' to
-    // avoid too many hash set collisions (entries is not dynamically resized by the addConstant*
-    // method calls below), and to account for bootstrap method entries.
+    
+    
+    
     entries = new Entry[constantPoolCount * 2];
     char[] charBuffer = new char[classReader.getMaxStringLength()];
     boolean hasBootstrapMethods = false;
@@ -226,7 +226,7 @@ final class SymbolTable {
           (itemTag == Symbol.CONSTANT_LONG_TAG || itemTag == Symbol.CONSTANT_DOUBLE_TAG) ? 2 : 1;
     }
 
-    // Copy the BootstrapMethods, if any.
+    
     if (hasBootstrapMethods) {
       copyBootstrapMethods(classReader, charBuffer);
     }
@@ -241,7 +241,7 @@ final class SymbolTable {
    * @param charBuffer a buffer used to read strings in the constant pool.
    */
   private void copyBootstrapMethods(final ClassReader classReader, final char[] charBuffer) {
-    // Find attributOffset of the 'bootstrap_methods' array.
+    
     byte[] inputBytes = classReader.classFileBuffer;
     int currentAttributeOffset = classReader.getFirstAttributeOffset();
     for (int i = classReader.readUnsignedShort(currentAttributeOffset - 2); i > 0; --i) {
@@ -253,13 +253,13 @@ final class SymbolTable {
       currentAttributeOffset += 6 + classReader.readInt(currentAttributeOffset + 2);
     }
     if (bootstrapMethodCount > 0) {
-      // Compute the offset and the length of the BootstrapMethods 'bootstrap_methods' array.
+      
       int bootstrapMethodsOffset = currentAttributeOffset + 8;
       int bootstrapMethodsLength = classReader.readInt(currentAttributeOffset + 2) - 2;
       bootstrapMethods = new ByteVector(bootstrapMethodsLength);
       bootstrapMethods.putByteArray(inputBytes, bootstrapMethodsOffset, bootstrapMethodsLength);
 
-      // Add each bootstrap method in the symbol table entries.
+      
       int currentOffset = bootstrapMethodsOffset;
       for (int i = 0; i < bootstrapMethodCount; i++) {
         int offset = currentOffset - bootstrapMethodsOffset;
@@ -379,9 +379,9 @@ final class SymbolTable {
     }
   }
 
-  // -----------------------------------------------------------------------------------------------
-  // Generic symbol table entries management.
-  // -----------------------------------------------------------------------------------------------
+  
+  
+  
 
   /**
    * Returns the list of entries which can potentially have the given hash code.
@@ -440,9 +440,9 @@ final class SymbolTable {
     entries[index] = entry;
   }
 
-  // -----------------------------------------------------------------------------------------------
-  // Constant pool entries management.
-  // -----------------------------------------------------------------------------------------------
+  
+  
+  
 
   /**
    * Adds a number or string constant to the constant pool of this symbol table. Does nothing if the
@@ -479,7 +479,7 @@ final class SymbolTable {
         return addConstantClass(type.getInternalName());
       } else if (typeSort == Type.METHOD) {
         return addConstantMethodType(type.getDescriptor());
-      } else { // type is a primitive or array type.
+      } else { 
         return addConstantClass(type.getDescriptor());
       }
     } else if (value instanceof Handle) {
@@ -806,8 +806,8 @@ final class SymbolTable {
       final String descriptor,
       final boolean isInterface) {
     final int tag = Symbol.CONSTANT_METHOD_HANDLE_TAG;
-    // Note that we don't need to include isInterface in the hash computation, because it is
-    // redundant with owner (we can't have the same owner with different isInterface values).
+    
+    
     int hashCode = hash(tag, owner, name, descriptor, referenceKind);
     Entry entry = get(hashCode);
     while (entry != null) {
@@ -1023,9 +1023,9 @@ final class SymbolTable {
     add(new Entry(index, tag, value, hash(tag, value)));
   }
 
-  // -----------------------------------------------------------------------------------------------
-  // Bootstrap method entries management.
-  // -----------------------------------------------------------------------------------------------
+  
+  
+  
 
   /**
    * Adds a bootstrap method to the BootstrapMethods attribute of this symbol table. Does nothing if
@@ -1042,19 +1042,19 @@ final class SymbolTable {
       bootstrapMethodsAttribute = bootstrapMethods = new ByteVector();
     }
 
-    // The bootstrap method arguments can be Constant_Dynamic values, which reference other
-    // bootstrap methods. We must therefore add the bootstrap method arguments to the constant pool
-    // and BootstrapMethods attribute first, so that the BootstrapMethods attribute is not modified
-    // while adding the given bootstrap method to it, in the rest of this method.
+    
+    
+    
+    
     int numBootstrapArguments = bootstrapMethodArguments.length;
     int[] bootstrapMethodArgumentIndexes = new int[numBootstrapArguments];
     for (int i = 0; i < numBootstrapArguments; i++) {
       bootstrapMethodArgumentIndexes[i] = addConstant(bootstrapMethodArguments[i]).index;
     }
 
-    // Write the bootstrap method in the BootstrapMethods table. This is necessary to be able to
-    // compare it with existing ones, and will be reverted below if there is already a similar
-    // bootstrap method.
+    
+    
+    
     int bootstrapMethodOffset = bootstrapMethodsAttribute.length;
     bootstrapMethodsAttribute.putShort(
         addConstantMethodHandle(
@@ -1070,7 +1070,7 @@ final class SymbolTable {
       bootstrapMethodsAttribute.putShort(bootstrapMethodArgumentIndexes[i]);
     }
 
-    // Compute the length and the hash code of the bootstrap method.
+    
     int bootstrapMethodlength = bootstrapMethodsAttribute.length - bootstrapMethodOffset;
     int hashCode = bootstrapMethodHandle.hashCode();
     for (Object bootstrapMethodArgument : bootstrapMethodArguments) {
@@ -1078,7 +1078,7 @@ final class SymbolTable {
     }
     hashCode &= 0x7FFFFFFF;
 
-    // Add the bootstrap method to the symbol table or revert the above changes.
+    
     return addBootstrapMethod(bootstrapMethodOffset, bootstrapMethodlength, hashCode);
   }
 
@@ -1106,7 +1106,7 @@ final class SymbolTable {
           }
         }
         if (isSameBootstrapMethod) {
-          bootstrapMethods.length = offset; // Revert to old position.
+          bootstrapMethods.length = offset; 
           return entry;
         }
       }
@@ -1115,9 +1115,9 @@ final class SymbolTable {
     return put(new Entry(bootstrapMethodCount++, Symbol.BOOTSTRAP_METHOD_TAG, offset, hashCode));
   }
 
-  // -----------------------------------------------------------------------------------------------
-  // Type table entries management.
-  // -----------------------------------------------------------------------------------------------
+  
+  
+  
 
   /**
    * Returns the type table element whose index is given.
@@ -1225,9 +1225,9 @@ final class SymbolTable {
     return put(entry).index;
   }
 
-  // -----------------------------------------------------------------------------------------------
-  // Static helper methods to compute hash codes.
-  // -----------------------------------------------------------------------------------------------
+  
+  
+  
 
   private static int hash(final int tag, final int value) {
     return 0x7FFFFFFF & (tag + value);

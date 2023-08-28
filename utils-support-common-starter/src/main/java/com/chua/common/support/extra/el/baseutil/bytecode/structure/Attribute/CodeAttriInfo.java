@@ -6,11 +6,18 @@ import com.chua.common.support.extra.el.baseutil.bytecode.util.BinaryData;
 import javassist.bytecode.AttributeInfo;
 
 import java.util.Arrays;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class CodeAttriInfo extends AbstractAttributeInfo {
-    //2字节长度
+    /**
+     * 2字节长度
+     */
     private int maxStack;
-    //2字节长度
+    /**
+     * 2字节长度
+     */
     private int maxLocals;
     private int codeLength;
     private ExceptionHandler[] exceptionHandlers;

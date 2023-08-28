@@ -6,8 +6,10 @@ import com.chua.common.support.extra.el.baseutil.bytecode.util.BytecodeUtil;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
-
-@Deprecated
+/**
+ * 基础类
+ * @author CH
+ */
 public class DefaultAnnotationContextFactory extends CacheableAnnotationContextFactory
 {
     @Override

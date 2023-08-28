@@ -11,7 +11,7 @@ import java.io.Writer;
  * <p>
  * Note that this currently only supports the viable range of octal for Java; namely
  * 1 to 377. This is because parsing Java is the main use case.
- *
+ * @author Administrator
  * @since 1.0
  */
 public class OctalUnescaper extends AbstractCharSequenceTranslator {
@@ -41,14 +41,14 @@ public class OctalUnescaper extends AbstractCharSequenceTranslator {
      */
     @Override
     public int translate(final CharSequence input, final int index, final Writer writer) throws IOException {
-        final int remaining = input.length() - index - 1; // how many characters left, ignoring the first \
+        final int remaining = input.length() - index - 1; 
         final StringBuilder builder = new StringBuilder();
         if (input.charAt(index) == '\\' && remaining > 0 && isOctalDigit(input.charAt(index + 1))) {
             final int next = index + 1;
             final int next2 = index + 2;
             final int next3 = index + 3;
 
-            // we know this is good as we checked it in the if block above
+            
             builder.append(input.charAt(next));
 
             if (remaining > 1 && isOctalDigit(input.charAt(next2))) {

@@ -7,11 +7,13 @@ import com.chua.common.support.extra.el.expression.node.impl.ReflectMethodNode;
 import com.chua.common.support.extra.el.expression.node.impl.StaticObjectMethodNode;
 import com.chua.common.support.extra.el.expression.parse.Invoker;
 import com.chua.common.support.extra.el.expression.token.ValueResult;
-import com.chua.common.support.extra.el.expression.util.CharType;
 import com.chua.common.support.extra.el.expression.util.Functions;
 
 import java.util.Deque;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class MethodParser extends NodeParser {
 
     @Override

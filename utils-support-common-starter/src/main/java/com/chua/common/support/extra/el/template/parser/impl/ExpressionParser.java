@@ -11,30 +11,29 @@ import com.chua.common.support.extra.el.template.parser.Parser;
 
 import java.util.Deque;
 
-public class ExpressionParser extends Parser
-{
+/**
+ * 基础类
+ *
+ * @author CH
+ */
+public class ExpressionParser extends Parser {
 
     @Override
-    public int parse(String sentence, int offset, Deque<Execution> executions, Template template, StringBuilder cache, Invoker next)
-    {
-        if (template.getMode() != ScanMode.LITERALS)
-        {
+    public int parse(String sentence, int offset, Deque<Execution> executions, Template template, StringBuilder cache, Invoker next) {
+        if (template.getMode() != ScanMode.LITERALS) {
             return next.scan(sentence, offset, executions, template, cache);
         }
-        if (getChar(offset, sentence) != '$' || getChar(offset + 1, sentence) != '{')
-        {
+        if (getChar(offset, sentence) != '$' || getChar(offset + 1, sentence) != '{') {
             return next.scan(sentence, offset, executions, template, cache);
         }
         extractLiterals(cache, executions);
         offset += 2;
-        int start  = offset;
+        int start = offset;
         int length = sentence.length();
-        while (getChar(offset, sentence) != '}' && offset < length)
-        {
+        while (getChar(offset, sentence) != '}' && offset < length) {
             offset++;
         }
-        if (offset >= length)
-        {
+        if (offset >= length) {
             throw new IllegalFormatException("语法错误，不是闭合的表达式", sentence.substring(0, start));
         }
         ExpressionExecution execution = new ExpressionExecution(Expression.parse(sentence.substring(start, offset)));

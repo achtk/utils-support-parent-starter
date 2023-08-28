@@ -3,7 +3,10 @@ package com.chua.common.support.extra.el.baseutil.bytecode.support;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public interface AnnotationContextFactory
 {
     AnnotationContext get(Class<?> ckass, ClassLoader classLoader);

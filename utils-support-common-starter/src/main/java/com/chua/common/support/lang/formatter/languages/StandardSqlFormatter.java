@@ -7,7 +7,10 @@ import com.chua.common.support.lang.formatter.core.FormatConfig;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class StandardSqlFormatter extends AbstractFormatter {
 
   // https://jakewheat.github.io/sql-overview/sql-2008-foundation-grammar.html#reserved-word

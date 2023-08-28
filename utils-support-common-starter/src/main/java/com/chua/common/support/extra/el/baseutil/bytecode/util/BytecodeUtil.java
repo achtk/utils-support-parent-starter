@@ -23,7 +23,10 @@ import java.lang.reflect.Modifier;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class BytecodeUtil
 {
     /**

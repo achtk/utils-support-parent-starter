@@ -4,7 +4,10 @@ package com.chua.common.support.extra.el.baseutil.reflect;
 import com.chua.common.support.constant.ConstantType;
 
 import static com.chua.common.support.constant.ConstantType.*;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public final class ReflectUtil {
     /**
      * 类型装枚举

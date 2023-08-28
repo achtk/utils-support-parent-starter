@@ -133,16 +133,16 @@ public class FtpNativeFileSystem implements FtpFileSystem<File> {
 
     @Override
     public InputStream readFile(File file, long start) throws IOException {
-        // Not really needed, but helps a bit in performance
+        
         if(start <= 0) {
             return new FileInputStream(file);
         }
 
-        // Use RandomAccessFile to seek a file
+        
         final RandomAccessFile raf = new RandomAccessFile(file, "r");
         raf.seek(start);
 
-        // Create a stream using the RandomAccessFile
+        
         return new FileInputStream(raf.getFD()) {
             @Override
             public void close() throws IOException {
@@ -154,18 +154,18 @@ public class FtpNativeFileSystem implements FtpFileSystem<File> {
 
     @Override
     public OutputStream writeFile(File file, long start) throws IOException {
-        // Not really needed, but helps a bit in performance
+        
         if(start <= 0) {
             return new FileOutputStream(file, false);
         } else if(start == file.length()) {
             return new FileOutputStream(file, true);
         }
 
-        // Use RandomAccessFile to seek a file
+        
         final RandomAccessFile raf = new RandomAccessFile(file, "rw");
         raf.seek(start);
 
-        // Create a stream using the RandomAccessFile
+        
         return new FileOutputStream(raf.getFD()) {
             @Override
             public void close() throws IOException {
@@ -185,12 +185,12 @@ public class FtpNativeFileSystem implements FtpFileSystem<File> {
     @Override
     public void delete(File file) throws IOException {
         if(file.isDirectory()) {
-            Files.walk(file.toPath()) // Walks through all files, except links
-                .sorted(Comparator.reverseOrder()) // Reverse order, so it deletes from the highest depth to the lowest one
-                .map(Path::toFile) // Converts the Path objects to File objects
-                .forEach(File::delete); // Deletes it
+            Files.walk(file.toPath()) 
+                .sorted(Comparator.reverseOrder()) 
+                .map(Path::toFile) 
+                .forEach(File::delete); 
         } else {
-            // Deletes a single file
+            
             if(!file.delete()) {
                 throw new IOException("Couldn't delete the file");
             }

@@ -7,7 +7,10 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
-
+/**
+ * 基础类
+ * @author CH
+ */
 public class AutumnId implements Uid {
     private static final int PID;
     private static final byte[] INTERNAL = new byte[5];

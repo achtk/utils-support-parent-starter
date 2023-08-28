@@ -6,47 +6,42 @@ import com.chua.common.support.extra.el.template.execution.WithBodyExecution;
 
 import java.util.Map;
 
-public class ElseIfExecution implements WithBodyExecution
-{
-    private final Expression  expression;
-    private       Execution[] body;
+/**
+ * 基础类
+ *
+ * @author CH
+ */
+public class ElseIfExecution implements WithBodyExecution {
+    private final Expression expression;
+    private Execution[] body;
 
-    public ElseIfExecution(Expression expression)
-    {
+    public ElseIfExecution(Expression expression) {
         this.expression = expression;
     }
 
     @Override
-    public boolean execute(Map<String, Object> variables, StringBuilder cache)
-    {
-        if (expression.calculate(variables))
-        {
-            for (Execution each : body)
-            {
+    public boolean execute(Map<String, Object> variables, StringBuilder cache) {
+        if (expression.calculate(variables)) {
+            for (Execution each : body) {
                 each.execute(variables, cache);
             }
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
 
     @Override
-    public void check()
-    {
+    public void check() {
     }
 
     @Override
-    public void setBody(Execution... executions)
-    {
+    public void setBody(Execution... executions) {
         body = executions;
     }
 
     @Override
-    public boolean isBodyNotSet()
-    {
+    public boolean isBodyNotSet() {
         return body == null;
     }
 }
