@@ -36,23 +36,6 @@ public interface Selectable {
     Selectable css(String selector, String attrName);
 
     /**
-     * select list with css selector
-     *
-     * @param selector css selector expression
-     * @return new Selectable after extract
-     */
-    Selectable jquery(String selector);
-
-    /**
-     * select list with css selector
-     *
-     * @param selector css selector expression
-     * @param attrName attribute name of css selector
-     * @return new Selectable after extract
-     */
-    Selectable jquery(String selector, String attrName);
-
-    /**
      * select smart content with ReadAbility algorithm
      *
      * @return content

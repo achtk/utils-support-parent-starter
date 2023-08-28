@@ -4,6 +4,7 @@ import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.io.CompressInputStream;
 import com.chua.common.support.lang.process.ProgressBar;
 import com.chua.common.support.lang.profile.ProfileProvider;
+import com.chua.common.support.net.IpUtils;
 import com.chua.common.support.resource.ResourceProvider;
 import com.chua.common.support.resource.repository.Metadata;
 import com.chua.common.support.resource.repository.Repository;
@@ -401,11 +402,11 @@ public class IpIPPosition extends ProfileProvider<IpPosition> implements IpPosit
         if (ip == null) {
             return UNKNOWN;
         }
-        if (ip.contains(":") || !IpUtil.isIp(ip)) {
+        if (ip.contains(":") || !IpUtils.isIp(ip)) {
             return UNKNOWN;
         }
 
-        int index = Collections.binarySearch(I_PV_4_INFOS, new Ipv4Info(IpUtil.ip2long(ip), IpUtil.ip2long(ip)));
+        int index = Collections.binarySearch(I_PV_4_INFOS, new Ipv4Info(IpUtils.ip2Long(ip), IpUtils.ip2Long(ip)));
         if (index < 0 || index >= I_PV_4_INFOS.size()) {
             return UNKNOWN;
         }
@@ -453,15 +454,15 @@ public class IpIPPosition extends ProfileProvider<IpPosition> implements IpPosit
             return null;
         }
         String startIp = split[0].trim();
-        if (!IpUtil.isIp(startIp)) {
+        if (!IpUtils.isIp(startIp)) {
             return null;
         }
-        long startLong = IpUtil.ip2long(startIp);
+        long startLong = IpUtils.ip2Long(startIp);
         String endIp = split[1].trim();
-        if (!IpUtil.isIp(endIp)) {
+        if (!IpUtils.isIp(endIp)) {
             return null;
         }
-        long endLong = IpUtil.ip2long(endIp);
+        long endLong = IpUtils.ip2Long(endIp);
         String region = split[2].trim();
         String isp = split[3].replaceAll("CZ88\\.NET", "").trim();
         if ("255.255.255.0".equals(startIp)) {

@@ -120,7 +120,7 @@ public class Selector {
     public static Elements select(String query, Iterable<Element> roots) {
         Validate.notEmpty(query);
         Validate.notNull(roots);
-        Evaluator evaluator = QueryParser.parse(query);
+        AbstractEvaluator evaluator = QueryParser.parse(query);
         Elements elements = new Elements();
         IdentityHashMap<Element, Boolean> seenElements = new IdentityHashMap<>();
 

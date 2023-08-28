@@ -53,12 +53,12 @@ public abstract class ComparisonChain {
 
                 @Override
                 public ComparisonChain compareTrueFirst(boolean left, boolean right) {
-                    return classify(Cut.compare(right, left));
+                    return classify(AbstractCut.compare(right, left));
                 }
 
                 @Override
                 public ComparisonChain compareFalseFirst(boolean left, boolean right) {
-                    return classify(Cut.compare(left, right));
+                    return classify(AbstractCut.compare(left, right));
                 }
 
                 ComparisonChain classify(int result) {
