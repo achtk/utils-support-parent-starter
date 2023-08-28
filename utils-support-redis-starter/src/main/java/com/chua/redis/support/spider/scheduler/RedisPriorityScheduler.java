@@ -89,15 +89,15 @@ public class RedisPriorityScheduler extends RedisScheduler {
     }
 
     private String getZsetPlusPriorityKey(Task task) {
-        return ZSET_PREFIX + task.getUUID() + PLUS_PRIORITY_SUFFIX;
+        return ZSET_PREFIX + task.getUuid() + PLUS_PRIORITY_SUFFIX;
     }
 
     private String getQueueNoPriorityKey(Task task) {
-        return QUEUE_PREFIX + task.getUUID() + NO_PRIORITY_SUFFIX;
+        return QUEUE_PREFIX + task.getUuid() + NO_PRIORITY_SUFFIX;
     }
 
     private String getZsetMinusPriorityKey(Task task) {
-        return ZSET_PREFIX + task.getUUID() + MINUS_PRIORITY_SUFFIX;
+        return ZSET_PREFIX + task.getUuid() + MINUS_PRIORITY_SUFFIX;
     }
 
     private void setExtrasInItem(Jedis jedis, Request request, Task task) {

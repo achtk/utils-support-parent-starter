@@ -61,7 +61,7 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
             if (checkForAdditionalInfo(request)) {
                 String field = DigestUtils.sha1Hex(request.getUrl());
                 String value = JSON.toJSONString(request);
-                jedis.hset((ITEM_PREFIX + task.getUUID()), field, value);
+                jedis.hset((ITEM_PREFIX + task.getUuid()), field, value);
             }
         } finally {
             jedis.close();
@@ -102,7 +102,7 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
             if (url == null) {
                 return null;
             }
-            String key = ITEM_PREFIX + task.getUUID();
+            String key = ITEM_PREFIX + task.getUuid();
             String field = DigestUtils.sha1Hex(url);
             byte[] bytes = jedis.hget(key.getBytes(), field.getBytes());
             if (bytes != null) {
@@ -115,15 +115,15 @@ public class RedisScheduler extends DuplicateRemovedScheduler implements Monitor
     }
 
     protected String getSetKey(Task task) {
-        return SET_PREFIX + task.getUUID();
+        return SET_PREFIX + task.getUuid();
     }
 
     protected String getQueueKey(Task task) {
-        return QUEUE_PREFIX + task.getUUID();
+        return QUEUE_PREFIX + task.getUuid();
     }
 
     protected String getItemKey(Task task) {
-        return ITEM_PREFIX + task.getUUID();
+        return ITEM_PREFIX + task.getUuid();
     }
 
     @Override

@@ -1,13 +1,10 @@
 package com.chua.common.support.jsoup.nodes;
 
-import com.chua.common.support.json.jsonpath.internal.filter.Evaluator;
 import com.chua.common.support.jsoup.helper.ChangeNotifyingArrayList;
 import com.chua.common.support.jsoup.helper.Validate;
-import com.chua.common.support.jsoup.internal.NonnullByDefault;
 import com.chua.common.support.jsoup.parser.ParseSettings;
 import com.chua.common.support.jsoup.parser.Tag;
 import com.chua.common.support.jsoup.select.*;
-import com.chua.common.support.utils.StringUtils;
 import lombok.EqualsAndHashCode;
 
 import java.io.IOException;

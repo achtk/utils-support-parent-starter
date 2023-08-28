@@ -5,7 +5,6 @@ import com.chua.common.support.file.AbstractResourceFile;
 import com.chua.common.support.file.ExifFile;
 import com.chua.common.support.file.ResourceFileConfiguration;
 import com.chua.common.support.geo.Point;
-import com.chua.common.support.resource.ResourceConfiguration;
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.lang.GeoLocation;
 import com.drew.metadata.Metadata;
@@ -178,7 +177,7 @@ public class ImageExifFile extends AbstractResourceFile implements ExifFile {
     }
 
     @Override
-    public String getXAxisResolution() {
+    public String getXzAxisResolution() {
         if (null == firstDirectoryOfType) {
             return null;
         }
@@ -186,7 +185,7 @@ public class ImageExifFile extends AbstractResourceFile implements ExifFile {
     }
 
     @Override
-    public String getYAxisResolution() {
+    public String getYzAxisResolution() {
         if (null == firstDirectoryOfType) {
             return null;
         }
