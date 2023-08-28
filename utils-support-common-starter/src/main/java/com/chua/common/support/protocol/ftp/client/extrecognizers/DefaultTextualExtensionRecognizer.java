@@ -32,7 +32,7 @@ public class DefaultTextualExtensionRecognizer extends
     /**
      * Lock object.
      */
-    private static final Object lock = new Object();
+    private static final Object LOCK = new Object();
 
     /**
      * The singleton instance.
@@ -45,7 +45,7 @@ public class DefaultTextualExtensionRecognizer extends
      * @return An instance of the class.
      */
     public static DefaultTextualExtensionRecognizer getInstance() {
-        synchronized (lock) {
+        synchronized (LOCK) {
             if (instance == null) {
                 instance = new DefaultTextualExtensionRecognizer();
             }

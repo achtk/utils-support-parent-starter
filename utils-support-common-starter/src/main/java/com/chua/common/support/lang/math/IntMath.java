@@ -97,7 +97,6 @@ public class IntMath {
                 // floor(2^(logFloor + 0.5))
                 int logFloor = (Integer.SIZE - 1) - leadingZeros;
                 return logFloor + lessThanBranchFree(cmp, x);
-
             default:
                 throw new AssertionError();
         }

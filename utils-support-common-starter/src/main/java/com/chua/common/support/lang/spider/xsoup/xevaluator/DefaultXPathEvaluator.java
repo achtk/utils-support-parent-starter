@@ -1,10 +1,11 @@
 package com.chua.common.support.lang.spider.xsoup.xevaluator;
 
 
+import com.chua.common.support.json.jsonpath.internal.filter.Evaluator;
 import com.chua.common.support.jsoup.nodes.Element;
+import com.chua.common.support.jsoup.select.AbstractEvaluator;
 import com.chua.common.support.jsoup.select.Collector;
 import com.chua.common.support.jsoup.select.Elements;
-import com.chua.common.support.jsoup.select.Evaluator;
 import com.chua.common.support.lang.spider.xsoup.XElements;
 import com.chua.common.support.lang.spider.xsoup.XPathEvaluator;
 
@@ -13,11 +14,11 @@ import com.chua.common.support.lang.spider.xsoup.XPathEvaluator;
  */
 public class DefaultXPathEvaluator implements XPathEvaluator {
 
-    private Evaluator evaluator;
+    private AbstractEvaluator evaluator;
 
     private ElementOperator elementOperator;
 
-    public DefaultXPathEvaluator(Evaluator evaluator, ElementOperator elementOperator) {
+    public DefaultXPathEvaluator(AbstractEvaluator evaluator, ElementOperator elementOperator) {
         this.evaluator = evaluator;
         this.elementOperator = elementOperator;
     }
@@ -39,7 +40,7 @@ public class DefaultXPathEvaluator implements XPathEvaluator {
         return elementOperator != null;
     }
 
-    public Evaluator getEvaluator() {
+    public AbstractEvaluator getEvaluator() {
         return evaluator;
     }
 

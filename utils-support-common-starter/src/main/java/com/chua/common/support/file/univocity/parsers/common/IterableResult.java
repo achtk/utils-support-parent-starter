@@ -21,10 +21,10 @@ package com.chua.common.support.file.univocity.parsers.common;
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  */
-public interface IterableResult<T, C extends Context> extends Iterable<T> {
+public interface IterableResult<T, C extends AbstractContext> extends Iterable<T> {
 
 	/**
-	 * Returns the current parsing {@link Context}, if available
+	 * Returns the current parsing {@link AbstractContext}, if available
 	 *
 	 * @return the contextual object with information about an ongoing parsing process
 	 */

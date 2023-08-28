@@ -1,6 +1,7 @@
 package com.chua.common.support.ansi;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * Erase
@@ -8,6 +9,7 @@ import lombok.AllArgsConstructor;
  * @author CH
  */
 @AllArgsConstructor
+@Getter
 public enum AnsiErase implements AnsiElement {
     /**
      * FORWARD
@@ -22,7 +24,7 @@ public enum AnsiErase implements AnsiElement {
      */
     ALL(2);
 
-    private int value;
+    private final int value;
 
 
     @Override

@@ -3,7 +3,7 @@ package com.chua.common.support.extra.el.baseutil.bytecode.structure.constantinf
 import com.chua.common.support.constant.ConstantType;
 import com.chua.common.support.extra.el.baseutil.bytecode.util.BinaryData;
 
-public class IntegerInfo extends ConstantInfo
+public class IntegerInfo extends AbstractConstantInfo
 {
     private int value;
 
@@ -24,7 +24,7 @@ public class IntegerInfo extends ConstantInfo
     }
 
     @Override
-    public void resolve(ConstantInfo[] constant_pool)
+    public void resolve(AbstractConstantInfo[] constantPool)
     {
     }
 }

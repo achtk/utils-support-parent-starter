@@ -242,8 +242,8 @@ public class GifEncoder {
      * @param fps float frame rate (frames per second)
      */
     public void setFrameRate(float fps) {
-        float s0 = 0f;
-        if (s0 != fps) {
+        Float s0 = 0f;
+        if (s0.equals(fps)) {
             delay = Math.round(100f / fps);
         }
     }
@@ -340,7 +340,7 @@ public class GifEncoder {
         int len = pixels.length;
         int nPix = len / 3;
         indexedPixels = new byte[nPix];
-        NeuQuant nq = new NeuQuant(pixels, len, sample);
+        com.chua.common.support.protocol.image.gif.NeuQuant nq = new com.chua.common.support.protocol.image.gif.NeuQuant(pixels, len, sample);
         colorTab = nq.process();
         int s3 = 3;
         for (int i = 0; i < colorTab.length; i += s3) {
@@ -599,7 +599,7 @@ public class GifEncoder {
      * @throws IOException IO异常
      */
     protected void writePixels() throws IOException {
-        LzwEncoder encoder = new LzwEncoder(width, height, indexedPixels, colorDepth);
+        com.chua.common.support.protocol.image.gif.LzwEncoder encoder = new com.chua.common.support.protocol.image.gif.LzwEncoder(width, height, indexedPixels, colorDepth);
         encoder.encode(out);
     }
 

@@ -50,6 +50,8 @@ public class SybaseDialect extends OracleDialect {
     }
 
 
+    private static final Pattern SELECT = Pattern.compile("SELECT ");
+    private static final Pattern FROM = Pattern.compile(" FROM ");
     /**
      * 查找主查询的FROM位置
      *
@@ -61,18 +63,18 @@ public class SybaseDialect extends OracleDialect {
     private int findMainFrom(String sql) {
         String tempSql = sql.toUpperCase();
         tempSql = tempSql.replace("\n", " ").replace("\t", " ").replace("\r", " ");
-        Matcher select_ = Pattern.compile("SELECT ").matcher(tempSql);
-        Matcher from_ = Pattern.compile(" FROM ").matcher(tempSql);
+        Matcher select = SELECT.matcher(tempSql);
+        Matcher from = FROM.matcher(tempSql);
         List<Integer> selectIndex = new ArrayList<>(10);
         List<Integer> fromIndex = new ArrayList<>(10);
-        while (select_.find()) {
-            int start = select_.start();
+        while (select.find()) {
+            int start = select.start();
             if (start == 0 || tempSql.charAt(start - 1) == ' ' || tempSql.charAt(start - 1) == '(') {
                 selectIndex.add(start);
             }
         }
-        while (from_.find()) {
-            fromIndex.add(from_.start());
+        while (from.find()) {
+            fromIndex.add(from.start());
         }
 
         // 形成select与from的混合顺序下标列表

@@ -14,10 +14,10 @@ public class EmMap {
     public final Map<String,ScopeEm> scopeEmMap = new HashMap<String, ScopeEm>();
     public final Map<String,OpEm> opEmMap = new HashMap<String, OpEm>();
     public final Set<Character> commOpChar = new HashSet<Character>();
-    private static final EmMap ourInstance = new EmMap();
+    private static final EmMap OUR_INSTANCE = new EmMap();
 
     public static EmMap getInstance() {
-        return ourInstance;
+        return OUR_INSTANCE;
     }
 
     private EmMap() {

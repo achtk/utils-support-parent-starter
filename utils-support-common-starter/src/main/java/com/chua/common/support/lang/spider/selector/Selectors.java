@@ -21,11 +21,11 @@ public abstract class Selectors {
         return new SmartContentSelector();
     }
 
-    public static CssSelector $(String expr) {
+    public static CssSelector css(String expr) {
         return new CssSelector(expr);
     }
 
-    public static CssSelector $(String expr, String attrName) {
+    public static CssSelector css(String expr, String attrName) {
         return new CssSelector(expr, attrName);
     }
 

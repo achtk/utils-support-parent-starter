@@ -1,24 +1,9 @@
-/*******************************************************************************
- * Copyright 2014 Univocity Software Pty Ltd
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.common.processor;
 
 import com.chua.common.support.file.univocity.parsers.annotations.helpers.MethodFilter;
 import com.chua.common.support.file.univocity.parsers.common.AbstractParser;
 import com.chua.common.support.file.univocity.parsers.common.AbstractWriter;
-import com.chua.common.support.file.univocity.parsers.common.Context;
+import com.chua.common.support.file.univocity.parsers.common.AbstractContext;
 import com.chua.common.support.file.univocity.parsers.common.ParsingContext;
 import com.chua.common.support.file.univocity.parsers.common.processor.core.AbstractBeanProcessor;
 
@@ -27,7 +12,7 @@ import com.chua.common.support.file.univocity.parsers.common.processor.core.Abst
  * <p>The class type of the object must contain the annotations provided in {@link com.chua.common.support.file.univocity.parsers.annotations}.
  *
  * <p> For each row processed, a java bean instance of a given class will be created with its fields populated.
- * <p> This instance will then be sent to the {@link BeanProcessor#beanProcessed(Object, Context)} method, where the user can access it.
+ * <p> This instance will then be sent to the {@link BeanProcessor#beanProcessed(Object, AbstractContext)} method, where the user can access it.
  *
  * @param <T> the annotated class type.
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>

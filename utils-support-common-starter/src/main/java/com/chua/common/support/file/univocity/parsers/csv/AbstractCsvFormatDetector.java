@@ -26,7 +26,7 @@ import java.util.Map.Entry;
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
  */
-public abstract class CsvFormatDetector implements InputAnalysisProcess {
+public abstract class AbstractCsvFormatDetector implements InputAnalysisProcess {
 
     private final int MAX_ROW_SAMPLES;
     private final char comment;
@@ -46,7 +46,7 @@ public abstract class CsvFormatDetector implements InputAnalysisProcess {
      *                             delimiter or quote character.
      * @param whitespaceRangeStart starting range of characters considered to be whitespace.
      */
-    public CsvFormatDetector(int maxRowSamples, CsvParserSettings settings, int whitespaceRangeStart) {
+    public AbstractCsvFormatDetector(int maxRowSamples, CsvParserSettings settings, int whitespaceRangeStart) {
         this.MAX_ROW_SAMPLES = maxRowSamples;
         this.whitespaceRangeStart = whitespaceRangeStart;
         allowedDelimiters = settings.getDelimitersForDetection();

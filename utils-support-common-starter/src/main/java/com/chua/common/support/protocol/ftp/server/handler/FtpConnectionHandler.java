@@ -14,6 +14,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import static com.chua.common.support.constant.NameConstant.SITE;
+
 /**
  * Handles special connection-based commands
  * @author Guilherme Chaguri
@@ -59,7 +61,7 @@ public class FtpConnectionHandler {
         if(passive && passiveServer != null) {
             return passiveServer.accept();
         } else if(secureData) {
-            SSLSocketFactory factory = con.getServer().getSSLContext().getSocketFactory();
+            SSLSocketFactory factory = con.getServer().getSslContext().getSocketFactory();
             SSLSocket socket = (SSLSocket)factory.createSocket(activeHost, activePort);
             socket.setUseClientMode(false);
             return socket;
@@ -143,7 +145,7 @@ public class FtpConnectionHandler {
         String command = cmd[0].toUpperCase();
         String help;
 
-        if(cmd.length > 1 && command.equals("SITE")) {
+        if(cmd.length > 1 && SITE.equals(command)) {
             help = "SITE " + con.getSiteHelpMessage(cmd[1].toUpperCase());
         } else {
             help = con.getHelpMessage(command);
@@ -166,7 +168,7 @@ public class FtpConnectionHandler {
     }
 
     private void stru(String structure) throws IOException {
-        if(structure.equalsIgnoreCase("F")) {
+        if("F".equalsIgnoreCase(structure)) {
             con.sendResponse(200, "The structure type was set to file");
         } else {
             con.sendResponse(504, "Unsupported structure type");
@@ -174,7 +176,7 @@ public class FtpConnectionHandler {
     }
 
     private void mode(String mode) throws IOException {
-        if(mode.equalsIgnoreCase("S")) {
+        if("S".equalsIgnoreCase(mode)) {
             con.sendResponse(200, "The mode was set to stream");
         } else {
             con.sendResponse(504, "Unsupported mode");
@@ -280,13 +282,13 @@ public class FtpConnectionHandler {
 
     private void pasv() throws IOException {
         FtpServer server = con.getServer();
-        passiveServer = Utils.createServer(0, 5, server.getAddress(), server.getSSLContext(), secureData);
+        passiveServer = Utils.createServer(0, 5, server.getAddress(), server.getSslContext(), secureData);
         passive = true;
 
         String host = passiveServer.getInetAddress().getHostAddress();
         int port = passiveServer.getLocalPort();
 
-        if(host.equals("0.0.0.0")) {
+        if("0.0.0.0".equals(host)) {
             // Sends a valid address instead of a wildcard
             host = InetAddress.getLocalHost().getHostAddress();
         }
@@ -333,19 +335,19 @@ public class FtpConnectionHandler {
     private void auth(String mechanism) throws IOException {
         mechanism = mechanism.toUpperCase();
 
-        if(mechanism.equals("TLS") || mechanism.equals("TLS-C") ||
-            mechanism.equals("SSL") || mechanism.equals("TLS-P")) {
+        if("TLS".equals(mechanism) || "TLS-C".equals(mechanism) ||
+            "SSL".equals(mechanism) || "TLS-P".equals(mechanism)) {
             // No need to distinguish between TLS and SSL, as the protocol self-negotiate its level
 
-            SSLContext ssl = con.getServer().getSSLContext();
+            SSLContext ssl = con.getServer().getSslContext();
 
             if(ssl == null) {
                 con.sendResponse(431, "TLS/SSL is not available");
-            } else if(con.isSSLEnabled()) {
+            } else if(con.isSslEnabled()) {
                 con.sendResponse(503, "TLS/SSL is already enabled");
             } else {
                 con.sendResponse(234, "Enabling TLS/SSL...");
-                con.enableSSL(ssl);
+                con.enableSsl(ssl);
             }
 
         } else {
@@ -354,7 +356,7 @@ public class FtpConnectionHandler {
     }
 
     private void pbsz(String size) {
-        if(con.isSSLEnabled()) {
+        if(con.isSslEnabled()) {
             // For SSL, the buffer size should always be 0
             // Any other size should be accepted
             con.sendResponse(200, "The protection buffer size was set to 0");
@@ -366,15 +368,15 @@ public class FtpConnectionHandler {
     private void prot(String level) {
         level = level.toUpperCase();
 
-        if(!con.isSSLEnabled()) {
+        if(!con.isSslEnabled()) {
             con.sendResponse(503, "You can't update the protection level in an insecure connection");
-        } else if(level.equals("C")) {
+        } else if("C".equals(level)) {
             secureData = false;
             con.sendResponse(200, "Protection level set to clear");
-        } else if(level.equals("P")) {
+        } else if("P".equals(level)) {
             secureData = true;
             con.sendResponse(200, "Protection level set to private");
-        } else if(level.equals("S") || level.equals("E")) {
+        } else if("S".equals(level) || "E".equals(level)) {
             con.sendResponse(521, "Unsupported protection level");
         } else {
             con.sendResponse(502, "Unknown protection level");
@@ -383,13 +385,13 @@ public class FtpConnectionHandler {
 
     private void lpsv() throws IOException { // Obsolete Command
         FtpServer server = con.getServer();
-        passiveServer = Utils.createServer(0, 5, server.getAddress(), server.getSSLContext(), secureData);
+        passiveServer = Utils.createServer(0, 5, server.getAddress(), server.getSslContext(), secureData);
         passive = true;
 
         String host = passiveServer.getInetAddress().getHostAddress();
         int port = passiveServer.getLocalPort();
 
-        if(host.equals("0.0.0.0")) {
+        if("0.0.0.0".equals(host)) {
             // Sends a valid address instead of a wildcard
             host = InetAddress.getLocalHost().getHostAddress();
         }
@@ -433,7 +435,7 @@ public class FtpConnectionHandler {
 
     private void epsv() throws IOException {
         FtpServer server = con.getServer();
-        passiveServer = Utils.createServer(0, 5, server.getAddress(), server.getSSLContext(), secureData);
+        passiveServer = Utils.createServer(0, 5, server.getAddress(), server.getSslContext(), secureData);
         passive = true;
 
         con.sendResponse(229, "Enabled Passive Mode (|||" + passiveServer.getLocalPort() + "|)");

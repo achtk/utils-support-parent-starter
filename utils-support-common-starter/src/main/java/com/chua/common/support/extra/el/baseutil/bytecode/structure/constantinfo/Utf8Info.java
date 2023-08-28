@@ -5,7 +5,7 @@ import com.chua.common.support.extra.el.baseutil.bytecode.util.BinaryData;
 
 import java.nio.charset.Charset;
 
-public class Utf8Info extends ConstantInfo
+public class Utf8Info extends AbstractConstantInfo
 {
     private static final Charset CHARSET = Charset.forName("utf8");
     private              int     length;
@@ -42,7 +42,7 @@ public class Utf8Info extends ConstantInfo
     }
 
     @Override
-    public void resolve(ConstantInfo[] constant_pool)
+    public void resolve(AbstractConstantInfo[] constantPool)
     {
     }
 }

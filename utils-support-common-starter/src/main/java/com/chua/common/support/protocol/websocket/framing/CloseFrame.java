@@ -38,7 +38,7 @@ import java.nio.ByteBuffer;
  *
  * @author Administrator
  */
-public class CloseFrame extends ControlFrame {
+public class CloseFrame extends AbstractControlFrame {
 
     /**
      * indicates a normal closure, meaning whatever purpose the connection was established for has

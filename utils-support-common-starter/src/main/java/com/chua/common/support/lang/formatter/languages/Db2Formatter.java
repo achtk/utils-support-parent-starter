@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Db2Formatter extends AbstractFormatter {
 
-  private static final List<String> reservedWords =
+  private static final List<String> RESERVED_WORDS =
       Arrays.asList(
           "ABS",
           "ACTIVATE",
@@ -515,7 +515,7 @@ public class Db2Formatter extends AbstractFormatter {
           "YEAR",
           "YEARS");
 
-  private static final List<String> reservedTopLevelWords =
+  private static final List<String> RESERVED_TOP_LEVEL_WORDS =
       Arrays.asList(
           "ADD",
           "AFTER",
@@ -540,10 +540,10 @@ public class Db2Formatter extends AbstractFormatter {
           "VALUES",
           "WHERE");
 
-  private static final List<String> reservedTopLevelWordsNoIndent =
+  private static final List<String> RESERVED_TOP_LEVEL_WORDS_NO_INDENT =
       Arrays.asList("INTERSECT", "INTERSECT ALL", "MINUS", "UNION", "UNION ALL");
 
-  private static final List<String> reservedNewlineWords =
+  private static final List<String> RESERVED_NEWLINE_WORDS =
       Arrays.asList(
           "AND",
           "OR",
@@ -562,10 +562,10 @@ public class Db2Formatter extends AbstractFormatter {
   @Override
   public DialectConfig dialectConfig() {
     return DialectConfig.builder()
-        .reservedWords(reservedWords)
-        .reservedTopLevelWords(reservedTopLevelWords)
-        .reservedTopLevelWordsNoIndent(reservedTopLevelWordsNoIndent)
-        .reservedNewlineWords(reservedNewlineWords)
+        .reservedWords(RESERVED_WORDS)
+        .reservedTopLevelWords(RESERVED_TOP_LEVEL_WORDS)
+        .reservedTopLevelWordsNoIndent(RESERVED_TOP_LEVEL_WORDS_NO_INDENT)
+        .reservedNewlineWords(RESERVED_NEWLINE_WORDS)
         .stringTypes(
             Arrays.asList(
                 StringLiteral.DOUBLE_QUOTE,

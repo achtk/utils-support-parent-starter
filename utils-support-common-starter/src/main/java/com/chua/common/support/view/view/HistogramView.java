@@ -67,7 +67,7 @@ public class HistogramView implements View {
      * @param array 传入的数组
      * @return 返回Y轴循环使用的数组, 降序
      */
-    private static Comparable[] getArrayYAxis(Comparable[] array) {
+    private static Comparable[] getArrayYzAxis(Comparable[] array) {
         //获取最大值和最小值
         Map<String, Comparable> MaxAndMin = getMaxAndMin(array);
         Double[] back = new Double[LINE_NUMBER];
@@ -155,18 +155,18 @@ public class HistogramView implements View {
         boolean check = true;
         boolean checkA = true;
         //获取y轴的数据
-        Comparable[] YAxis = getArrayYAxis(comparables);
+        Comparable[] yAxis = getArrayYzAxis(comparables);
         //获取最大的显示长度
-        int lengthY = getArrayDataLength(YAxis) + 2;
+        int lengthY = getArrayDataLength(yAxis) + 2;
         int lengthX = getArrayDataLength(comparables) + 2;
         //获取显示的数据
-        for (int i = 0; i < YAxis.length; i++) {
+        for (int i = 0; i < yAxis.length; i++) {
             //获取y坐标
-            String YInfo = YAxis[i].toString() + ROW_NUMBER_PRINT;
-            print.append(getStringRight(YInfo, lengthY));
+            String yInfo = yAxis[i].toString() + ROW_NUMBER_PRINT;
+            print.append(getStringRight(yInfo, lengthY));
             for (int k = 0; k < comparables.length; k++) {
                 //获取柱状
-                if (Double.valueOf(YAxis[i].toString())
+                if (Double.valueOf(yAxis[i].toString())
                         .compareTo(Double.valueOf(comparables[k].toString())) <= 0) {
                     print.append(getStringMiddle(ALL_PRINT, lengthX));
                 } else {

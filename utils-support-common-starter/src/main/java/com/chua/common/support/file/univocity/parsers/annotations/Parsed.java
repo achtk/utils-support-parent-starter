@@ -16,7 +16,7 @@
 package com.chua.common.support.file.univocity.parsers.annotations;
 
 import com.chua.common.support.file.univocity.parsers.annotations.helpers.AnnotationHelper;
-import com.chua.common.support.file.univocity.parsers.common.CommonParserSettings;
+import com.chua.common.support.file.univocity.parsers.common.AbstractCommonParserSettings;
 import com.chua.common.support.file.univocity.parsers.common.processor.BeanProcessor;
 import com.chua.common.support.file.univocity.parsers.common.processor.BeanWriterProcessor;
 import com.chua.common.support.file.univocity.parsers.conversions.BigDecimalConversion;
@@ -47,8 +47,8 @@ public @interface Parsed {
 	/**
 	 * The possible field names of a record. If multiple names are provided, the parser/writer will
 	 * attempt to match the given names against the headers provided (i.e. headers found in the input when parsing with
-	 * {@link CommonParserSettings#isHeaderExtractionEnabled()}, or manually set using
-	 * {@link com.chua.common.support.file.univocity.parsers.common.CommonSettings#setHeaders(String...)} for writing or parsing)
+	 * {@link AbstractCommonParserSettings#isHeaderExtractionEnabled()}, or manually set using
+	 * {@link com.chua.common.support.file.univocity.parsers.common.AbstractCommonSettings#setHeaders(String...)} for writing or parsing)
 	 *
 	 * @return the possible field names (optional if the index is provided)
 	 */

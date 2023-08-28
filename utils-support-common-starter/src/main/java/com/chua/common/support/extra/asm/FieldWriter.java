@@ -70,25 +70,25 @@ final class FieldWriter extends FieldVisitor {
 
   /**
    * The last runtime visible annotation of this field. The previous ones can be accessed with the
-   * {@link AnnotationWriter#previousAnnotation} field. May be {@literal null}.
+   *  field. May be {@literal null}.
    */
   private AnnotationWriter lastRuntimeVisibleAnnotation;
 
   /**
    * The last runtime invisible annotation of this field. The previous ones can be accessed with the
-   * {@link AnnotationWriter#previousAnnotation} field. May be {@literal null}.
+   *  field. May be {@literal null}.
    */
   private AnnotationWriter lastRuntimeInvisibleAnnotation;
 
   /**
    * The last runtime visible type annotation of this field. The previous ones can be accessed with
-   * the {@link AnnotationWriter#previousAnnotation} field. May be {@literal null}.
+   * the  field. May be {@literal null}.
    */
   private AnnotationWriter lastRuntimeVisibleTypeAnnotation;
 
   /**
    * The last runtime invisible type annotation of this field. The previous ones can be accessed
-   * with the {@link AnnotationWriter#previousAnnotation} field. May be {@literal null}.
+   * with the  field. May be {@literal null}.
    */
   private AnnotationWriter lastRuntimeInvisibleTypeAnnotation;
 
@@ -142,7 +142,7 @@ final class FieldWriter extends FieldVisitor {
   // -----------------------------------------------------------------------------------------------
 
   @Override
-  public AnnotationVisitor visitAnnotation(final String descriptor, final boolean visible) {
+  public AbstractAnnotationVisitor visitAnnotation(final String descriptor, final boolean visible) {
     if (visible) {
       return lastRuntimeVisibleAnnotation =
           AnnotationWriter.create(symbolTable, descriptor, lastRuntimeVisibleAnnotation);
@@ -153,7 +153,7 @@ final class FieldWriter extends FieldVisitor {
   }
 
   @Override
-  public AnnotationVisitor visitTypeAnnotation(
+  public AbstractAnnotationVisitor visitTypeAnnotation(
       final int typeRef, final TypePath typePath, final String descriptor, final boolean visible) {
     if (visible) {
       return lastRuntimeVisibleTypeAnnotation =

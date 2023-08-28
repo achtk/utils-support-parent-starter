@@ -149,25 +149,25 @@ public class ClassWriter extends ClassVisitor {
 
   /**
    * The last runtime visible annotation of this class. The previous ones can be accessed with the
-   * {@link AnnotationWriter#previousAnnotation} field. May be {@literal null}.
+   *  field. May be {@literal null}.
    */
   private AnnotationWriter lastRuntimeVisibleAnnotation;
 
   /**
    * The last runtime invisible annotation of this class. The previous ones can be accessed with the
-   * {@link AnnotationWriter#previousAnnotation} field. May be {@literal null}.
+   *  field. May be {@literal null}.
    */
   private AnnotationWriter lastRuntimeInvisibleAnnotation;
 
   /**
    * The last runtime visible type annotation of this class. The previous ones can be accessed with
-   * the {@link AnnotationWriter#previousAnnotation} field. May be {@literal null}.
+   * the  field. May be {@literal null}.
    */
   private AnnotationWriter lastRuntimeVisibleTypeAnnotation;
 
   /**
    * The last runtime invisible type annotation of this class. The previous ones can be accessed
-   * with the {@link AnnotationWriter#previousAnnotation} field. May be {@literal null}.
+   * with the  field. May be {@literal null}.
    */
   private AnnotationWriter lastRuntimeInvisibleTypeAnnotation;
 
@@ -354,7 +354,7 @@ public class ClassWriter extends ClassVisitor {
   }
 
   @Override
-  public final AnnotationVisitor visitAnnotation(final String descriptor, final boolean visible) {
+  public final AbstractAnnotationVisitor visitAnnotation(final String descriptor, final boolean visible) {
     if (visible) {
       return lastRuntimeVisibleAnnotation =
           AnnotationWriter.create(symbolTable, descriptor, lastRuntimeVisibleAnnotation);
@@ -365,7 +365,7 @@ public class ClassWriter extends ClassVisitor {
   }
 
   @Override
-  public final AnnotationVisitor visitTypeAnnotation(
+  public final AbstractAnnotationVisitor visitTypeAnnotation(
       final int typeRef, final TypePath typePath, final String descriptor, final boolean visible) {
     if (visible) {
       return lastRuntimeVisibleTypeAnnotation =
@@ -833,7 +833,7 @@ public class ClassWriter extends ClassVisitor {
    * @return the index of a new or already existing UTF8 item.
    */
   // DontCheck(AbbreviationAsWordInName): can't be renamed (for backward binary compatibility).
-  public int newUTF8(final String value) {
+  public int newUtf8(final String value) {
     return symbolTable.addConstantUtf8(value);
   }
 

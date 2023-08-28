@@ -15,7 +15,7 @@
  ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.common.fields;
 
-import com.chua.common.support.file.univocity.parsers.common.CommonSettings;
+import com.chua.common.support.file.univocity.parsers.common.AbstractCommonSettings;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,14 +25,14 @@ import java.util.List;
 /**
  * A set of selected fields.
  *
- * <p> Used by {@link CommonSettings} to select fields for reading/writing
+ * <p> Used by {@link AbstractCommonSettings} to select fields for reading/writing
  * <p> Also used by {@code com.chua.common.support.file.univocity.parsers.common.processor.ConversionProcessor} to select fields that have to be converted.
  *
  * @param <T> the type of the reference information used to uniquely identify a field (e.g. references to field indexes would use Integer, while references to field names would use String).
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
  * @see FieldNameSelector
  * @see FieldIndexSelector
- * @see CommonSettings
+ * @see AbstractCommonSettings
  */
 public class FieldSet<T> implements Cloneable {
 

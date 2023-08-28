@@ -171,11 +171,11 @@ public class FtpConnection implements Closeable {
         ftpFileHandler.setFileSystem(fs);
     }
 
-    public boolean isSSLEnabled() {
+    public boolean isSslEnabled() {
         return con instanceof SSLSocket;
     }
 
-    public void enableSSL(SSLContext context) throws IOException {
+    public void enableSsl(SSLContext context) throws IOException {
         SSLSocketFactory factory = context.getSocketFactory();
         con = factory.createSocket(con, con.getInetAddress().getHostAddress(), con.getPort(), true);
         ((SSLSocket)con).setUseClientMode(false);
@@ -190,7 +190,9 @@ public class FtpConnection implements Closeable {
      * @param response The response message
      */
     public void sendResponse(int code, String response) {
-        if(con.isClosed()) return;
+        if(con.isClosed()) {
+            return;
+        }
 
         if(response == null || response.isEmpty()) {
             response = "Unknown";
@@ -215,7 +217,9 @@ public class FtpConnection implements Closeable {
      * @throws FtpResponseException When an error occurs
      */
     public void sendData(byte[] data) throws FtpResponseException {
-        if(con.isClosed()) return;
+        if(con.isClosed()) {
+            return;
+        }
 
         Socket socket = null;
         try {
@@ -235,7 +239,9 @@ public class FtpConnection implements Closeable {
             throw new FtpResponseException(425, "An error occurred while transferring the data");
         } finally {
             onUpdate();
-            if(socket != null) dataConnections.remove(socket);
+            if(socket != null) {
+                dataConnections.remove(socket);
+            }
         }
     }
 
@@ -245,7 +251,9 @@ public class FtpConnection implements Closeable {
      * @throws FtpResponseException When an error occurs
      */
     public void sendData(InputStream in) throws FtpResponseException {
-        if(con.isClosed()) return;
+        if(con.isClosed()) {
+            return;
+        }
 
         Socket socket = null;
         try {
@@ -270,7 +278,9 @@ public class FtpConnection implements Closeable {
             throw new FtpResponseException(425, "An error occurred while transferring the data");
         } finally {
             onUpdate();
-            if(socket != null) dataConnections.remove(socket);
+            if(socket != null) {
+                dataConnections.remove(socket);
+            }
         }
     }
 
@@ -280,7 +290,9 @@ public class FtpConnection implements Closeable {
      * @throws FtpResponseException When an error occurs
      */
     public void receiveData(OutputStream out) throws FtpResponseException {
-        if(con.isClosed()) return;
+        if(con.isClosed()) {
+            return;
+        }
 
         Socket socket = null;
         try {
@@ -305,7 +317,9 @@ public class FtpConnection implements Closeable {
             throw new FtpResponseException(425, "An error occurred while transferring the data");
         } finally {
             onUpdate();
-            if(socket != null) dataConnections.remove(socket);
+            if(socket != null) {
+                dataConnections.remove(socket);
+            }
         }
     }
 
@@ -315,7 +329,9 @@ public class FtpConnection implements Closeable {
     public void abortDataTransfers() {
         while(!dataConnections.isEmpty()) {
             Socket socket = dataConnections.poll();
-            if(socket != null) Utils.closeQuietly(socket);
+            if(socket != null) {
+                Utils.closeQuietly(socket);
+            }
         }
     }
 
@@ -434,7 +450,9 @@ public class FtpConnection implements Closeable {
      */
     protected void process(String cmd) {
         int firstSpace = cmd.indexOf(' ');
-        if(firstSpace < 0) firstSpace = cmd.length();
+        if(firstSpace < 0) {
+            firstSpace = cmd.length();
+        }
 
         FtpCommandInfo info = commands.get(cmd.substring(0, firstSpace).toUpperCase());
 
@@ -452,7 +470,9 @@ public class FtpConnection implements Closeable {
      */
     protected void site(String cmd) {
         int firstSpace = cmd.indexOf(' ');
-        if(firstSpace < 0) firstSpace = cmd.length();
+        if(firstSpace < 0) {
+            firstSpace = cmd.length();
+        }
 
         FtpCommandInfo info = siteCommands.get(cmd.substring(0, firstSpace).toUpperCase());
 
@@ -522,7 +542,9 @@ public class FtpConnection implements Closeable {
             ex.printStackTrace();
         }
 
-        if(!responseSent) sendResponse(200, "Done");
+        if(!responseSent) {
+            sendResponse(200, "Done");
+        }
     }
 
     /**
@@ -556,7 +578,9 @@ public class FtpConnection implements Closeable {
             return;
         }
 
-        if(line.isEmpty()) return;
+        if(line.isEmpty()) {
+            return;
+        }
 
         process(line);
     }
@@ -575,7 +599,9 @@ public class FtpConnection implements Closeable {
 
         conHandler.onDisconnected();
 
-        if(close) con.close();
+        if(close) {
+            con.close();
+        }
     }
 
     /**

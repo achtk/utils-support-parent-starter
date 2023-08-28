@@ -33,12 +33,12 @@ public class PlainText extends AbstractSelectable {
     }
 
     @Override
-    public Selectable $(String selector) {
+    public Selectable css(String selector) {
         throw new UnsupportedOperationException("$ can not apply to plain text. Please check whether you use a previous xpath with attribute select (/@href etc).");
     }
 
     @Override
-    public Selectable $(String selector, String attrName) {
+    public Selectable css(String selector, String attrName) {
         throw new UnsupportedOperationException("$ can not apply to plain text. Please check whether you use a previous xpath with attribute select (/@href etc).");
     }
 

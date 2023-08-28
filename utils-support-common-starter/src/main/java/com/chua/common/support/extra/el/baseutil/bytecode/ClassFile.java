@@ -2,81 +2,49 @@ package com.chua.common.support.extra.el.baseutil.bytecode;
 
 import com.chua.common.support.extra.el.baseutil.bytecode.annotation.AnnotationMetadata;
 import com.chua.common.support.extra.el.baseutil.bytecode.structure.AnnotationInfo;
-import com.chua.common.support.extra.el.baseutil.bytecode.structure.Attribute.AttributeInfo;
+import com.chua.common.support.extra.el.baseutil.bytecode.structure.Attribute.AbstractAttributeInfo;
 import com.chua.common.support.extra.el.baseutil.bytecode.structure.Attribute.RuntimeVisibleAnnotationsAttriInfo;
 import com.chua.common.support.extra.el.baseutil.bytecode.structure.FieldInfo;
 import com.chua.common.support.extra.el.baseutil.bytecode.structure.MethodInfo;
 import com.chua.common.support.extra.el.baseutil.bytecode.util.AccessFlags;
+import javassist.bytecode.AttributeInfo;
+import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+@Data
 public class ClassFile
 {
-    private int                      minor_version;
-    private int                      major_version;
-    private int                      access_flags;
-    private String                   this_class_name;
-    private String                   super_class_name;
+    private int minorVersion;
+    private int majorVersion;
+    private int accessFlags;
+    private String thisClassName;
+    private String superClassName;
     private String[]                 interfaces;
     private FieldInfo[]              fieldInfos;
     private MethodInfo[]             methodInfos;
-    private AttributeInfo[]          attributeInfos;
+    private AbstractAttributeInfo[]          attributeInfos;
     private List<AnnotationMetadata> annotations;
 
-    void setAttributeInfos(AttributeInfo[] attributeInfos)
+    void setAttributeInfos(AbstractAttributeInfo[] attributeInfos)
     {
         this.attributeInfos = attributeInfos;
     }
 
-    void setSuper_class_name(String super_class_name)
+    void setSuperClassName(String superClassName)
     {
-        if (super_class_name == null)
+        if (superClassName == null)
         {
             return;
         }
-        if (super_class_name.indexOf('/') != -1)
+        if (superClassName.indexOf('/') != -1)
         {
-            super_class_name = super_class_name.replace('/', '.');
+            superClassName = superClassName.replace('/', '.');
         }
-        this.super_class_name = super_class_name;
-    }
-
-    public int getMinor_version()
-    {
-        return minor_version;
-    }
-
-    void setMinor_version(int minor_version)
-    {
-        this.minor_version = minor_version;
-    }
-
-    public int getMajor_version()
-    {
-        return major_version;
-    }
-
-    void setMajor_version(int major_version)
-    {
-        this.major_version = major_version;
-    }
-
-    public void setAccess_flags(int access_flags)
-    {
-        this.access_flags = access_flags;
-    }
-
-    public FieldInfo[] getFieldInfos()
-    {
-        return fieldInfos;
-    }
-
-    void setFieldInfos(FieldInfo[] fieldInfos)
-    {
-        this.fieldInfos = fieldInfos;
+        this.superClassName = superClassName;
     }
 
     public List<AnnotationMetadata> getAnnotations(ClassLoader classLoader)
@@ -86,7 +54,7 @@ public class ClassFile
             return annotations;
         }
         RuntimeVisibleAnnotationsAttriInfo runtimeVisibleAnnotationsAttriInfo = null;
-        for (AttributeInfo attributeInfo : attributeInfos)
+        for (AbstractAttributeInfo attributeInfo : attributeInfos)
         {
             if (attributeInfo instanceof RuntimeVisibleAnnotationsAttriInfo)
             {
@@ -119,22 +87,22 @@ public class ClassFile
 
     public boolean isInterface()
     {
-        return (access_flags & AccessFlags.ACC_INTERFACE) != 0;
+        return (accessFlags & AccessFlags.ACC_INTERFACE) != 0;
     }
 
     public boolean isAnnotation()
     {
-        return (access_flags & AccessFlags.ACC_ANNOTATION) != 0;
+        return (accessFlags & AccessFlags.ACC_ANNOTATION) != 0;
     }
 
     public boolean isAbstract()
     {
-        return (access_flags & AccessFlags.ACC_ABSTRACT) != 0;
+        return (accessFlags & AccessFlags.ACC_ABSTRACT) != 0;
     }
 
     public boolean isEnum()
     {
-        return (access_flags & AccessFlags.ACC_ENUM) != 0;
+        return (accessFlags & AccessFlags.ACC_ENUM) != 0;
     }
 
     public String[] getInterfaces()
@@ -158,21 +126,21 @@ public class ClassFile
 
     public String getSuperClassName()
     {
-        return super_class_name;
+        return superClassName;
     }
 
-    public String getThis_class_name()
+    public String getThisClassName()
     {
-        return this_class_name;
+        return thisClassName;
     }
 
-    void setThis_class_name(String this_class_name)
+    void setThisClassName(String thisClassName)
     {
-        if (this_class_name.indexOf('/') != -1)
+        if (thisClassName.indexOf('/') != -1)
         {
-            this_class_name = this_class_name.replace('/', '.');
+            thisClassName = thisClassName.replace('/', '.');
         }
-        this.this_class_name = this_class_name;
+        this.thisClassName = thisClassName;
     }
 
     public boolean hasInterface(Class<?> ckass)
@@ -190,12 +158,12 @@ public class ClassFile
 
     public boolean isSuperClass(Class<?> ckass)
     {
-        return ckass.getName().equals(super_class_name);
+        return ckass.getName().equals(superClassName);
     }
 
     @Override
     public String toString()
     {
-        return "ClassFile{" + "minor_version=" + minor_version + ", major_version=" + major_version + ", access_flags=" + access_flags + ", this_class_name='" + this_class_name + '\'' + ", super_class_name='" + super_class_name + '\'' + ", interfaces=" + Arrays.toString(interfaces) + ", fieldInfos=" + Arrays.toString(fieldInfos) + ", methodInfos=" + Arrays.toString(methodInfos) + ", attributeInfos=" + Arrays.toString(attributeInfos) + ", annotations=" + annotations + '}';
+        return "ClassFile{" + "minor_version=" + minorVersion + ", major_version=" + majorVersion + ", access_flags=" + accessFlags + ", this_class_name='" + thisClassName + '\'' + ", super_class_name='" + superClassName + '\'' + ", interfaces=" + Arrays.toString(interfaces) + ", fieldInfos=" + Arrays.toString(fieldInfos) + ", methodInfos=" + Arrays.toString(methodInfos) + ", attributeInfos=" + Arrays.toString(attributeInfos) + ", annotations=" + annotations + '}';
     }
 }

@@ -9,7 +9,7 @@ import java.io.Writer;
  *
  * @since 1.0
  */
-public class UnicodeUnpairedSurrogateRemover extends CodePointTranslator {
+public class UnicodeUnpairedSurrogateRemover extends AbstractCodePointTranslator {
     /**
      * Implementation of translate that throws out unpaired surrogates.
      * {@inheritDoc}

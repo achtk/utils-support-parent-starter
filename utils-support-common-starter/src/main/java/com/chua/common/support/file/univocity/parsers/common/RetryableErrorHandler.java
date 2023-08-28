@@ -20,7 +20,7 @@ package com.chua.common.support.file.univocity.parsers.common;
  * A {@link ProcessorErrorHandler} implementation that gives the user a chance to provide a default value for
  * columns that could not be processed due to an exception, through the method {@link #setDefaultValue(Object)}.
  * This must be called from within the implementation of the
- * {@link #handleError(DataProcessingException, Object[], Context)} method, and will prevent the record from being
+ * {@link #handleError(DataProcessingException, Object[], AbstractContext)} method, and will prevent the record from being
  * discarded. The value provided by the user will be assigned to the problematic input row, at the column defined by
  * {@link DataProcessingException#getColumnIndex()}.
  *
@@ -32,10 +32,10 @@ package com.chua.common.support.file.univocity.parsers.common;
  * @see TextParsingException
  * @see AbstractParser
  * @see AbstractWriter
- * @see CommonSettings
- * @see Context
+ * @see AbstractCommonSettings
+ * @see AbstractContext
  */
-public abstract class RetryableErrorHandler<T extends Context> implements ProcessorErrorHandler<T> {
+public abstract class RetryableErrorHandler<T extends AbstractContext> implements ProcessorErrorHandler<T> {
 
 	private Object defaultValue;
 	private boolean skipRecord = true;
@@ -80,7 +80,7 @@ public abstract class RetryableErrorHandler<T extends Context> implements Proces
 
 	/**
 	 * Prepares this error handler to be executed. This is called automatically by the library prior to invoking
-	 * method {@link #handleError(DataProcessingException, Object[], Context)}
+	 * method {@link #handleError(DataProcessingException, Object[], AbstractContext)}
 	 */
 	final void prepareToRun() {
 		skipRecord = true;
@@ -89,7 +89,7 @@ public abstract class RetryableErrorHandler<T extends Context> implements Proces
 
 	/**
 	 * Flag indicating whether the current record will be skipped. Returns {@code true} by default unless
-	 * the user invokes {@link #setDefaultValue(Object)} from within the {@link #handleError(DataProcessingException, Object[], Context)}
+	 * the user invokes {@link #setDefaultValue(Object)} from within the {@link #handleError(DataProcessingException, Object[], AbstractContext)}
 	 * method implementation, in which case the current record will continue to be processed.
 	 *
 	 * @return {@code true} if the record originating the current {@link DataProcessingException} should be skipped,

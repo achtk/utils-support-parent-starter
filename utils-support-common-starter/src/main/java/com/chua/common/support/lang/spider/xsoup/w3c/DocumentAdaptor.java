@@ -9,7 +9,7 @@ import java.nio.charset.Charset;
  */
 public class DocumentAdaptor extends ElementAdaptor implements Document {
 
-    private com.chua.common.support.jsoup.nodes.Document document;
+    private final com.chua.common.support.jsoup.nodes.Document document;
 
     public DocumentAdaptor(com.chua.common.support.jsoup.nodes.Document document) {
         super(document);
@@ -88,7 +88,7 @@ public class DocumentAdaptor extends ElementAdaptor implements Document {
     }
 
     @Override
-    public void setDocumentURI(String documentURI) {
+    public void setDocumentURI(String s) {
         throw new UnsupportedOperationException();
     }
 
@@ -158,12 +158,12 @@ public class DocumentAdaptor extends ElementAdaptor implements Document {
     }
 
     @Override
-    public Element createElementNS(String namespaceURI, String qualifiedName) throws DOMException {
+    public Element createElementNS(String s, String qualifiedName) throws DOMException {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Attr createAttributeNS(String namespaceURI, String qualifiedName) throws DOMException {
+    public Attr createAttributeNS(String s, String qualifiedName) throws DOMException {
         throw new UnsupportedOperationException();
     }
 }

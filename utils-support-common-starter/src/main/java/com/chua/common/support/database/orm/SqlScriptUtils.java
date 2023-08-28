@@ -27,10 +27,10 @@ public abstract class SqlScriptUtils {
      * @param sqlScript sql 脚本片段
      * @return if 脚本
      */
-    public static String convertIf(final String sqlScript, final String ifTest, boolean SYMBOL_NEWLINE) {
+    public static String convertIf(final String sqlScript, final String ifTest, boolean symbolNewline) {
         String newSqlScript = sqlScript;
-        if (SYMBOL_NEWLINE) {
-            newSqlScript = SYMBOL_NEWLINE + newSqlScript + SYMBOL_NEWLINE;
+        if (symbolNewline) {
+            newSqlScript = symbolNewline + newSqlScript + symbolNewline;
         }
         return String.format("<if test=\"%s\">%s</if>", ifTest, newSqlScript);
     }

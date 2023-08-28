@@ -17,7 +17,7 @@ package com.chua.common.support.file.univocity.parsers.fixed;
 
 import com.chua.common.support.file.univocity.parsers.annotations.Headers;
 import com.chua.common.support.file.univocity.parsers.annotations.helpers.AnnotationHelper;
-import com.chua.common.support.file.univocity.parsers.common.CommonWriterSettings;
+import com.chua.common.support.file.univocity.parsers.common.AbstractCommonWriterSettings;
 import com.chua.common.support.file.univocity.parsers.common.Format;
 import com.chua.common.support.file.univocity.parsers.common.NormalizedString;
 
@@ -27,7 +27,7 @@ import java.util.Map;
 /**
  * This is the configuration class used by the Fixed-Width writer ({@link FixedWidthWriter})
  *
- * <p>The FixedWidthWriterSettings provides all configuration options in {@link CommonWriterSettings} and currently does not require any additional setting.
+ * <p>The FixedWidthWriterSettings provides all configuration options in {@link AbstractCommonWriterSettings} and currently does not require any additional setting.
  *
  * <p> The FixedWidthParserSettings requires a definition of the field lengths of each record in the input. This must provided using an instance of {@link FixedWidthFields}.
  *
@@ -35,9 +35,9 @@ import java.util.Map;
  * @see com.chua.common.support.file.univocity.parsers.fixed.FixedWidthWriter
  * @see com.chua.common.support.file.univocity.parsers.fixed.FixedWidthFormat
  * @see FixedWidthFields
- * @see CommonWriterSettings
+ * @see AbstractCommonWriterSettings
  */
-public class FixedWidthWriterSettings extends CommonWriterSettings<FixedWidthFormat> {
+public class FixedWidthWriterSettings extends AbstractCommonWriterSettings<FixedWidthFormat> {
 
 	private FixedWidthFields fieldLengths;
 	private Map<String, FixedWidthFields> lookaheadFormats = new HashMap<String, FixedWidthFields>();

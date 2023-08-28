@@ -13,7 +13,7 @@ public class ObjectFormatters {
     private static Map<Class, Class<? extends ObjectFormatter>> formatterMap = new ConcurrentHashMap<Class, Class<? extends ObjectFormatter>>();
 
     static {
-        for (Class<? extends ObjectFormatter> basicTypeFormatter : BasicTypeFormatter.basicTypeFormatters) {
+        for (Class<? extends ObjectFormatter> basicTypeFormatter : BaseBasicTypeFormatter.BASIC_TYPE_FORMATTERS) {
             put(basicTypeFormatter);
         }
         put(DateFormatter.class);

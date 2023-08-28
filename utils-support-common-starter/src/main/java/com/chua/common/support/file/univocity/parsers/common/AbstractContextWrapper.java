@@ -19,20 +19,20 @@ import com.chua.common.support.file.univocity.parsers.common.record.Record;
 import com.chua.common.support.file.univocity.parsers.common.record.RecordMetaData;
 
 /**
- * A simple a wrapper for a {@link Context}.
+ * A simple a wrapper for a {@link AbstractContext}.
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
  */
-public abstract class ContextWrapper<T extends Context> implements Context {
+public abstract class AbstractContextWrapper<T extends AbstractContext> implements AbstractContext {
 
 	protected final T context;
 
 	/**
-	 * Wraps a {@link Context}.
+	 * Wraps a {@link AbstractContext}.
 	 *
 	 * @param context the context object to be wrapped.
 	 */
-	public ContextWrapper(T context) {
+	public AbstractContextWrapper(T context) {
 		this.context = context;
 	}
 

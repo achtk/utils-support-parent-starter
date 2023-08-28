@@ -195,8 +195,8 @@ public class DialectConfig {
         .build();
   }
 
-  public DialectConfig withOperators(List<String> Operators) {
-    return this.toBuilder().operators(Operators).build();
+  public DialectConfig withOperators(List<String> operators) {
+    return this.toBuilder().operators(operators).build();
   }
 
   public DialectConfig plusOperators(String... operators) {

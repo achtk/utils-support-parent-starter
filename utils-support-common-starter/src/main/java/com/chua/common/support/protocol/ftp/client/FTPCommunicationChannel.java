@@ -134,7 +134,7 @@ public class FTPCommunicationChannel {
 	 * @param command The command to be sent.
 	 * @throws IOException If an I/O error occurs.
 	 */
-	public void sendFTPCommand(String command) throws IOException {
+	public void sendFtpCommand(String command) throws IOException {
 		writer.writeLine(command);
 		for (Iterator iter = communicationListeners.iterator(); iter.hasNext(); ) {
 			FTPCommunicationListener l = (FTPCommunicationListener) iter.next();
@@ -149,7 +149,7 @@ public class FTPCommunicationChannel {
 	 * @throws IOException              If an I/O error occurs.
 	 * @throws FTPIllegalReplyException If the server doesn't reply in a FTP-compliant way.
 	 */
-	public FTPReply readFTPReply() throws IOException, FTPIllegalReplyException {
+	public FTPReply readFtpReply() throws IOException, FTPIllegalReplyException {
 		int code = 0;
 		ArrayList messages = new ArrayList();
 		do {

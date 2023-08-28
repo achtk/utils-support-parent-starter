@@ -2,8 +2,8 @@ package com.chua.common.support.lang.spider.xsoup.xevaluator;
 
 
 import com.chua.common.support.jsoup.nodes.Element;
+import com.chua.common.support.jsoup.select.AbstractEvaluator;
 import com.chua.common.support.jsoup.select.Elements;
-import com.chua.common.support.jsoup.select.Evaluator;
 
 /**
  * Evaluators in Xsoup.
@@ -12,7 +12,7 @@ import com.chua.common.support.jsoup.select.Evaluator;
  */
 public abstract class XEvaluators {
 
-    public static class HasAnyAttribute extends Evaluator {
+    public static class HasAnyAttribute extends AbstractEvaluator {
 
         @Override
         public boolean matches(Element root, Element element) {
@@ -20,7 +20,7 @@ public abstract class XEvaluators {
         }
     }
 
-    public static class IsNthOfType extends Evaluator.CssNthEvaluator {
+    public static class IsNthOfType extends AbstractEvaluator.AbstractCssNthEvaluator {
         public IsNthOfType(int a, int b) {
             super(a, b);
         }
@@ -29,8 +29,12 @@ public abstract class XEvaluators {
             int pos = 0;
             Elements family = element.parent().children();
             for (int i = 0; i < family.size(); i++) {
-                if (family.get(i).tag().equals(element.tag())) pos++;
-                if (family.get(i) == element) break;
+                if (family.get(i).tag().equals(element.tag())) {
+                    pos++;
+                }
+                if (family.get(i) == element) {
+                    break;
+                }
             }
             return pos;
         }

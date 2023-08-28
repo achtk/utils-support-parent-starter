@@ -1,18 +1,3 @@
-/*******************************************************************************
- * Copyright 2014 Univocity Software Pty Ltd
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.common;
 
 import com.chua.common.support.file.univocity.parsers.annotations.Headers;
@@ -33,12 +18,12 @@ import java.util.Map;
 /**
  * This is the parent class for all configuration classes used by parsers ({@link AbstractParser})
  *
- * <p>By default, all parsers work with, at least, the following configuration options in addition to the ones provided by {@link CommonSettings}:
+ * <p>By default, all parsers work with, at least, the following configuration options in addition to the ones provided by {@link AbstractCommonSettings}:
  *
  * <ul>
  * <li><b>rowProcessor:</b> a callback implementation of the interface {@link RowProcessor} which handles the life cycle of the parsing process and processes each record extracted from the input</li>
  * <li><b>headerExtractionEnabled <i>(defaults to false)</i>:</b> indicates whether or not the first valid record parsed from the input should be considered as the row containing the names of each column</li>
- * <li><b>columnReorderingEnabled <i>(defaults to true)</i>:</b> indicates whether fields selected using the field selection methods (defined by the parent class {@link CommonSettings}) should be reordered.
+ * <li><b>columnReorderingEnabled <i>(defaults to true)</i>:</b> indicates whether fields selected using the field selection methods (defined by the parent class {@link AbstractCommonSettings}) should be reordered.
  * <p>When disabled, each parsed record will contain values for all columns, in the order they occur in the input. Fields which were not selected will not be parsed but and the record will contain empty values.
  * <p>When enabled, each parsed record will contain values only for the selected columns. The values will be ordered according to the selection.
  * <li><b>inputBufferSize <i>(defaults to 1024*1024 characters)</i>:</b> The number of characters held by the parser's buffer when processing the input.
@@ -57,10 +42,10 @@ import java.util.Map;
  * @see com.chua.common.support.file.univocity.parsers.csv.CsvParserSettings
  * @see com.chua.common.support.file.univocity.parsers.fixed.FixedWidthParserSettings
  */
-public abstract class CommonParserSettings<F extends Format> extends CommonSettings<F> {
+public abstract class AbstractCommonParserSettings<F extends Format> extends AbstractCommonSettings<F> {
 
     protected Boolean headerExtractionEnabled = null;
-    private Processor<? extends Context> processor;
+    private Processor<? extends AbstractContext> processor;
     private boolean columnReorderingEnabled = true;
     private int inputBufferSize = 1024 * 1024;
     private boolean readInputOnSeparateThread = Runtime.getRuntime().availableProcessors() > 1;
@@ -153,7 +138,7 @@ public abstract class CommonParserSettings<F extends Format> extends CommonSetti
      * @see com.chua.common.support.file.univocity.parsers.common.processor.BeanProcessor
      * @see com.chua.common.support.file.univocity.parsers.common.processor.BeanListProcessor
      *  Use the {@link #setProcessor(Processor)} method as it allows format-specific processors to be built to work with different implementations of
-     * {@link Context}.
+     * {@link AbstractContext}.
      * Implementations based on {@link RowProcessor} allow only parsers who provide a {@link ParsingContext} to be used.
      */
     public void setRowProcessor(RowProcessor processor) {
@@ -174,7 +159,7 @@ public abstract class CommonParserSettings<F extends Format> extends CommonSetti
      * @see AbstractBeanProcessor
      * @see AbstractBeanListProcessor
      */
-    public <T extends Context> Processor<T> getProcessor() {
+    public <T extends AbstractContext> Processor<T> getProcessor() {
         if (processor == null) {
             return NoopProcessor.INSTANCE;
         }
@@ -195,7 +180,7 @@ public abstract class CommonParserSettings<F extends Format> extends CommonSetti
      * @see AbstractColumnProcessor
      * @see AbstractColumnProcessor
      */
-    public void setProcessor(Processor<? extends Context> processor) {
+    public void setProcessor(Processor<? extends AbstractContext> processor) {
         this.processor = processor;
     }
 
@@ -241,7 +226,7 @@ public abstract class CommonParserSettings<F extends Format> extends CommonSetti
     }
 
     /**
-     * Indicates whether fields selected using the field selection methods (defined by the parent class {@link CommonSettings}) should be reordered (defaults to
+     * Indicates whether fields selected using the field selection methods (defined by the parent class {@link AbstractCommonSettings}) should be reordered (defaults to
      * true).
      * <p>When disabled, each parsed record will contain values for all columns, in the order they occur in the input. Fields which were not selected will not
      * be parsed but and the record will contain empty values.
@@ -274,7 +259,7 @@ public abstract class CommonParserSettings<F extends Format> extends CommonSetti
     }
 
     /**
-     * Defines whether fields selected using the field selection methods (defined by the parent class {@link CommonSettings}) should be reordered (defaults to
+     * Defines whether fields selected using the field selection methods (defined by the parent class {@link AbstractCommonSettings}) should be reordered (defaults to
      * true).
      * <p>When disabled, each parsed record will contain values for all columns, in the order they occur in the input. Fields which were not selected will not
      * be parsed but the record will contain empty values.
@@ -463,13 +448,13 @@ public abstract class CommonParserSettings<F extends Format> extends CommonSetti
     }
 
     @Override
-    protected CommonParserSettings clone(boolean clearInputSpecificSettings) {
-        return (CommonParserSettings) super.clone(clearInputSpecificSettings);
+    protected AbstractCommonParserSettings clone(boolean clearInputSpecificSettings) {
+        return (AbstractCommonParserSettings) super.clone(clearInputSpecificSettings);
     }
 
     @Override
-    protected CommonParserSettings clone() {
-        return (CommonParserSettings) super.clone();
+    protected AbstractCommonParserSettings clone() {
+        return (AbstractCommonParserSettings) super.clone();
     }
 
     @Override

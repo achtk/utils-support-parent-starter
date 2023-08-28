@@ -15,14 +15,14 @@
  */
 package com.chua.common.support.file.univocity.parsers.common.processor;
 
-import com.chua.common.support.file.univocity.parsers.common.Context;
+import com.chua.common.support.file.univocity.parsers.common.AbstractContext;
 import com.chua.common.support.file.univocity.parsers.common.ParsingContext;
 import com.chua.common.support.file.univocity.parsers.common.processor.core.AbstractProcessorSwitch;
 
 /**
  * A special {@link RowProcessor} implementation that combines and allows switching among different
  * RowProcessors. Each RowProcessor will have its own {@link ParsingContext}. Concrete implementations of this class
- * are expected to implement the {@link #switchRowProcessor(String[], Context)} method and analyze the input row
+ * are expected to implement the  method and analyze the input row
  * to determine whether or not the current {@link RowProcessor} implementation must be changed to handle a special
  * circumstance (determined by the concrete implementation) such as a different row format.
  * <p>

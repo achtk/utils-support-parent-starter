@@ -35,7 +35,7 @@ package com.chua.common.support.extra.asm;
  * @author Eric Bruneton
  * @author Eugene Kuleshov
  */
-public abstract class AnnotationVisitor {
+public abstract class AbstractAnnotationVisitor {
 
   /**
    * The ASM API version implemented by this visitor. The value of this field must be one of the
@@ -47,27 +47,27 @@ public abstract class AnnotationVisitor {
    * The annotation visitor to which this visitor must delegate method calls. May be {@literal
    * null}.
    */
-  protected AnnotationVisitor av;
+  protected AbstractAnnotationVisitor av;
 
   /**
-   * Constructs a new {@link AnnotationVisitor}.
+   * Constructs a new {@link AbstractAnnotationVisitor}.
    *
    * @param api the ASM API version implemented by this visitor. Must be one of the {@code
    *     ASM}<i>x</i> values in {@link Opcodes}.
    */
-  protected AnnotationVisitor(final int api) {
+  protected AbstractAnnotationVisitor(final int api) {
     this(api, null);
   }
 
   /**
-   * Constructs a new {@link AnnotationVisitor}.
+   * Constructs a new {@link AbstractAnnotationVisitor}.
    *
    * @param api the ASM API version implemented by this visitor. Must be one of the {@code
    *     ASM}<i>x</i> values in {@link Opcodes}.
    * @param annotationVisitor the annotation visitor to which this visitor must delegate method
    *     calls. May be {@literal null}.
    */
-  protected AnnotationVisitor(final int api, final AnnotationVisitor annotationVisitor) {
+  protected AbstractAnnotationVisitor(final int api, final AbstractAnnotationVisitor annotationVisitor) {
     if (api != Opcodes.ASM9
         && api != Opcodes.ASM8
         && api != Opcodes.ASM7
@@ -121,7 +121,7 @@ public abstract class AnnotationVisitor {
    *     visitor is not interested in visiting this nested annotation. <i>The nested annotation
    *     value must be fully visited before calling other methods on this annotation visitor</i>.
    */
-  public AnnotationVisitor visitAnnotation(final String name, final String descriptor) {
+  public AbstractAnnotationVisitor visitAnnotation(final String name, final String descriptor) {
     if (av != null) {
       return av.visitAnnotation(name, descriptor);
     }
@@ -139,7 +139,7 @@ public abstract class AnnotationVisitor {
    *     this visitor are ignored. <i>All the array values must be visited before calling other
    *     methods on this annotation visitor</i>.
    */
-  public AnnotationVisitor visitArray(final String name) {
+  public AbstractAnnotationVisitor visitArray(final String name) {
     if (av != null) {
       return av.visitArray(name);
     }

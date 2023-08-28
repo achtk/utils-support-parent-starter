@@ -470,11 +470,11 @@ public final class Projects {
      */
     private static String getLinuxMainBoardSerialNumber() {
         String result = "";
-        String maniBord_cmd = "dmidecode | grep 'Serial Number' | awk '{print $3}' | tail -1";
+        String manibordCmd = "dmidecode | grep 'Serial Number' | awk '{print $3}' | tail -1";
         Process p;
         try {
             // 管道
-            p = Runtime.getRuntime().exec(new String[]{"sh", "-c", maniBord_cmd});
+            p = Runtime.getRuntime().exec(new String[]{"sh", "-c", manibordCmd});
             BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
             String line;
             while ((line = br.readLine()) != null) {
@@ -1220,7 +1220,7 @@ public final class Projects {
         return platform == PlatformEnum.MACOSX;
     }
 
-    public static boolean isCygwinOrMinGW() {
+    public static boolean isCygwinOrMinGw() {
         return isWindows() && (System.getenv("MSYSTEM") != null && System.getenv("MSYSTEM").startsWith("MINGW") || "/bin/bash".equals(System.getenv("SHELL")));
     }
 

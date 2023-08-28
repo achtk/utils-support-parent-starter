@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class CompileValueAccessor extends ValueAccessor
 {
-    protected static final AtomicInteger count = new AtomicInteger();
+    protected static final AtomicInteger COUNT = new AtomicInteger();
 
     static String toMethodName(Field field)
     {
@@ -20,7 +20,7 @@ public class CompileValueAccessor extends ValueAccessor
 
     public static ValueAccessor create(Field field, CompileHelper compileHelper)
     {
-        ClassModel classModel = new ClassModel("ValueAccessor_" + field.getName() + "_" + count.getAndIncrement(), CompileValueAccessor.class);
+        ClassModel classModel = new ClassModel("ValueAccessor_" + field.getName() + "_" + COUNT.getAndIncrement(), CompileValueAccessor.class);
         Class<?>   type       = field.getType();
         if (type == int.class || type == Integer.class)
         {
@@ -76,15 +76,15 @@ public class CompileValueAccessor extends ValueAccessor
         }
     }
 
-    private static ValueAccessor build(Field field, CompileHelper compileHelper, ClassModel classModel, String getMethodName, Class<?> C1, Class<?> C2)
+    private static ValueAccessor build(Field field, CompileHelper compileHelper, ClassModel classModel, String getMethodName, Class<?> c1, Class<?> c2)
     {
         try
         {
             overrideGetMethod(field, classModel, getMethodName);
             overrideGetMethod(field, classModel, getMethodName + "Object");
             overrideGetMethod(field, classModel, "get");
-            overrideSetMethod(field, classModel, "set", C1);
-            overrideSetMethod(field, classModel, "set", C2);
+            overrideSetMethod(field, classModel, "set", c1);
+            overrideSetMethod(field, classModel, "set", c2);
             overrideSetMethod(field, classModel, "setObject", Object.class);
             return (ValueAccessor) compileHelper.compile(classModel).getDeclaredConstructor().newInstance();
         }

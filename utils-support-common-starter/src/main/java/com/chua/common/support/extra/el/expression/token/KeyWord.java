@@ -17,15 +17,15 @@ public enum KeyWord implements Token {
      */
     NULL;
 
-    private static final Map<String, KeyWord> defaultKeeyWords = new HashMap<String, KeyWord>(128);
+    private static final Map<String, KeyWord> DEFAULT_KEEY_WORDS = new HashMap<String, KeyWord>(128);
 
     static {
         for (KeyWord each : KeyWord.values()) {
-            defaultKeeyWords.put(each.name().toLowerCase(), each);
+            DEFAULT_KEEY_WORDS.put(each.name().toLowerCase(), each);
         }
     }
 
     public static KeyWord getKeyWord(String literals) {
-        return defaultKeeyWords.get(literals.toLowerCase());
+        return DEFAULT_KEEY_WORDS.get(literals.toLowerCase());
     }
 }

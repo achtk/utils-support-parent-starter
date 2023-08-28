@@ -13,19 +13,19 @@ import java.util.stream.Stream;
  *
  * @since 1.0
  */
-public class AggregateTranslator extends CharSequenceTranslator {
+public class AggregateTranslator extends AbstractCharSequenceTranslator {
 
     /**
      * Translator list.
      */
-    private final List<CharSequenceTranslator> translators = new ArrayList<>();
+    private final List<AbstractCharSequenceTranslator> translators = new ArrayList<>();
 
     /**
      * Specify the translators to be used at creation time.
      *
      * @param translators CharSequenceTranslator array to aggregate
      */
-    public AggregateTranslator(final CharSequenceTranslator... translators) {
+    public AggregateTranslator(final AbstractCharSequenceTranslator... translators) {
         if (translators != null) {
             Stream.of(translators).filter(Objects::nonNull).forEach(this.translators::add);
         }
@@ -38,7 +38,7 @@ public class AggregateTranslator extends CharSequenceTranslator {
      */
     @Override
     public int translate(final CharSequence input, final int index, final Writer writer) throws IOException {
-        for (final CharSequenceTranslator translator : translators) {
+        for (final AbstractCharSequenceTranslator translator : translators) {
             final int consumed = translator.translate(input, index, writer);
             if (consumed != 0) {
                 return consumed;

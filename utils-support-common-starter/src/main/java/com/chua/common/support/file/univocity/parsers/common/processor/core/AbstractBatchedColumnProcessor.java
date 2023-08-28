@@ -16,7 +16,7 @@
 package com.chua.common.support.file.univocity.parsers.common.processor.core;
 
 import com.chua.common.support.file.univocity.parsers.common.AbstractParser;
-import com.chua.common.support.file.univocity.parsers.common.Context;
+import com.chua.common.support.file.univocity.parsers.common.AbstractContext;
 
 import java.util.List;
 import java.util.Map;
@@ -38,7 +38,7 @@ import java.util.Map;
  * @see BatchedColumnReader
  * @see Processor
  */
-public abstract class AbstractBatchedColumnProcessor<T extends Context> implements Processor<T>, BatchedColumnReader<String> {
+public abstract class AbstractBatchedColumnProcessor<T extends AbstractContext> implements Processor<T>, BatchedColumnReader<String> {
 
 	private final ColumnSplitter<String> splitter;
 	private final int rowsPerBatch;

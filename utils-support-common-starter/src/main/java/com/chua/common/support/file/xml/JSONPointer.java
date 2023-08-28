@@ -254,7 +254,7 @@ public class JSONPointer {
      *
      * @return a uri fragment string
      */
-    public String toURIFragment() {
+    public String toUriFragment() {
         try {
             StringBuilder rval = new StringBuilder("#");
             for (String token : this.refTokens) {

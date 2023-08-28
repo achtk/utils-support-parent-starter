@@ -33,7 +33,7 @@ class Lookup {
 	final char[] paddings;
 	final NormalizedString[] fieldNames;
 	final char wildcard;
-	Context context;
+	AbstractContext context;
 
 	Lookup(String value, FixedWidthFields config, FixedWidthFormat format) {
 		this.value = value.toCharArray();

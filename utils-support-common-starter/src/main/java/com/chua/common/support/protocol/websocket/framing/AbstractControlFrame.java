@@ -34,14 +34,14 @@ import com.chua.common.support.protocol.websocket.exceptions.InvalidFrameExcepti
  *
  * @author Administrator
  */
-public abstract class ControlFrame extends FramedataImpl1 {
+public abstract class AbstractControlFrame extends FramedataImpl1 {
 
   /**
    * Class to represent a control frame
    *
    * @param opcode the opcode to use
    */
-  public ControlFrame(Opcode opcode) {
+  public AbstractControlFrame(Opcode opcode) {
     super(opcode);
   }
 

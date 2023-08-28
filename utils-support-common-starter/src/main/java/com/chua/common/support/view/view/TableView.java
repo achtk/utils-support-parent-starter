@@ -95,7 +95,7 @@ public class TableView implements View {
 
     @Override
     public String draw() {
-        final StringBuilder tableSB = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
 
         // init width cache
         final int[] widthCacheArray = new int[getColumnCount()];
@@ -113,17 +113,17 @@ public class TableView implements View {
             if (isFirstRow
                     && hasBorder()
                     && isAnyBorder(BORDER_TOP)) {
-                tableSB.append(drawSeparationLine(widthCacheArray)).append("\n");
+                builder.append(drawSeparationLine(widthCacheArray)).append("\n");
             }
 
             // 打印内部分割行
             if (!isFirstRow
                     && hasBorder()) {
-                tableSB.append(drawSeparationLine(widthCacheArray)).append("\n");
+                builder.append(drawSeparationLine(widthCacheArray)).append("\n");
             }
 
             // 绘一行
-            tableSB.append(drawRow(widthCacheArray, rowIndex));
+            builder.append(drawRow(widthCacheArray, rowIndex));
 
 
             // 打印结尾分隔行
@@ -131,26 +131,26 @@ public class TableView implements View {
                     && hasBorder()
                     && isAnyBorder(BORDER_BOTTOM)) {
                 // 打印分割行
-                tableSB.append(drawSeparationLine(widthCacheArray)).append("\n");
+                builder.append(drawSeparationLine(widthCacheArray)).append("\n");
             }
 
         }
 
 
-        return tableSB.toString();
+        return builder.toString();
     }
 
 
     private String drawRow(int[] widthCacheArray, int rowIndex) {
 
-        final StringBuilder rowSB = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
         final Scanner[] scannerArray = new Scanner[getColumnCount()];
         try {
             boolean hasNext;
             do {
 
                 hasNext = false;
-                final StringBuilder segmentSB = new StringBuilder();
+                final StringBuilder builder1 = new StringBuilder();
 
                 for (int colIndex = 0; colIndex < getColumnCount(); colIndex++) {
 
@@ -178,22 +178,22 @@ public class TableView implements View {
                         final ColumnDefine columnDefine = columnDefineArray[colIndex];
                         final String dataFormat = getDataFormat(columnDefine, width);
                         final String paddingChar = StringUtils.repeat(" ", padding);
-                        segmentSB.append(format(borderChar + paddingChar + dataFormat + paddingChar, data));
+                        builder1.append(format(borderChar + paddingChar + dataFormat + paddingChar, data));
                     }
 
                     if (isLastColOfRow) {
-                        segmentSB.append(borderChar).append("\n");
+                        builder1.append(borderChar).append("\n");
                     }
 
                 }
 
                 if (hasNext) {
-                    rowSB.append(segmentSB);
+                    builder.append(builder1);
                 }
 
             } while (hasNext);
 
-            return rowSB.toString();
+            return builder.toString();
         } finally {
             for (Scanner scanner : scannerArray) {
                 if (null != scanner) {
@@ -237,13 +237,13 @@ public class TableView implements View {
      * 打印分隔行
      */
     private String drawSeparationLine(int[] widthCacheArray) {
-        final StringBuilder separationLineSB = new StringBuilder();
+        final StringBuilder stringBuilder = new StringBuilder();
         for (int width : widthCacheArray) {
             if (width > 0) {
-                separationLineSB.append("-").append(StringUtils.repeat("-", width + 2 * padding));
+                stringBuilder.append("-").append(StringUtils.repeat("-", width + 2 * padding));
             }
         }
-        return separationLineSB
+        return stringBuilder
                 .append("-")
                 .toString();
     }

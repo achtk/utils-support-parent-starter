@@ -503,7 +503,7 @@ public class Draft_6455 extends com.chua.common.support.protocol.websocket.draft
 
     FramedataImpl1 frame = FramedataImpl1.get(optcode);
     frame.setFin(fin);
-    frame.setRSV1(rsv1);
+    frame.setRsv1(rsv1);
     frame.setRsv2(rsv2);
     frame.setRsv3(rsv3);
     payload.flip();

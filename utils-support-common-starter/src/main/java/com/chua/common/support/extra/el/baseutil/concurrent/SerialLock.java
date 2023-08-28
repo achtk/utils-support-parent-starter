@@ -12,17 +12,17 @@ import java.util.concurrent.locks.LockSupport;
 
 public class SerialLock<T>
 {
-    private final static Unsafe unsafe;
+    private final static Unsafe UNSAFE;
     private final static long   NEXT_OFF;
-    private final static SerialNode TerminationNode = new SerialNode(null);
+    private final static SerialNode TERMINATION_NODE = new SerialNode(null);
 
     static
     {
         try
         {
-            unsafe = Unsafe.getUnsafe();
+            UNSAFE = Unsafe.getUnsafe();
             Field nextField = SerialNode.class.getDeclaredField("next");
-            NEXT_OFF = unsafe.objectFieldOffset(nextField);
+            NEXT_OFF = UNSAFE.objectFieldOffset(nextField);
         }
         catch (Throwable e)
         {
@@ -63,7 +63,7 @@ public class SerialLock<T>
                     {
                     }
                 }
-                else if (next == TerminationNode)
+                else if (next == TERMINATION_NODE)
                 {
                     if (store.replace(key, cs, ns))
                     {
@@ -138,7 +138,7 @@ public class SerialLock<T>
 
         boolean casTermination()
         {
-            return unsafe.compareAndSetReference(this, NEXT_OFF, null, TerminationNode);
+            return UNSAFE.compareAndSetReference(this, NEXT_OFF, null, TERMINATION_NODE);
         }
 
         void wakeup()
@@ -148,7 +148,7 @@ public class SerialLock<T>
 
         boolean casNext(SerialNode ns)
         {
-            return unsafe.compareAndSetReference(this, NEXT_OFF, null, ns);
+            return UNSAFE.compareAndSetReference(this, NEXT_OFF, null, ns);
         }
     }
 }

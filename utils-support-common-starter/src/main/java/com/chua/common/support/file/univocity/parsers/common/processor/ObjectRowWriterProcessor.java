@@ -16,7 +16,7 @@
 package com.chua.common.support.file.univocity.parsers.common.processor;
 
 import com.chua.common.support.file.univocity.parsers.common.AbstractWriter;
-import com.chua.common.support.file.univocity.parsers.common.CommonSettings;
+import com.chua.common.support.file.univocity.parsers.common.AbstractCommonSettings;
 import com.chua.common.support.file.univocity.parsers.common.DefaultConversionProcessor;
 import com.chua.common.support.file.univocity.parsers.common.NormalizedString;
 import com.chua.common.support.file.univocity.parsers.conversions.Conversion;
@@ -40,8 +40,8 @@ public class ObjectRowWriterProcessor extends DefaultConversionProcessor impleme
 	 * <p>In general the conversions will process a String and convert it to some object value (such as booleans, dates, etc).
 	 *
 	 * @param input          the object array that represents a record with its individual fields.
-	 * @param headers        All field names used to produce records in a given destination. May be null if no headers have been defined in {@link CommonSettings#getHeaders()}
-	 * @param indexesToWrite The indexes of the headers that are actually being written. May be null if no fields have been selected using {@link CommonSettings#selectFields(String...)} or {@link CommonSettings#selectIndexes(Integer...)}
+	 * @param headers        All field names used to produce records in a given destination. May be null if no headers have been defined in {@link AbstractCommonSettings#getHeaders()}
+	 * @param indexesToWrite The indexes of the headers that are actually being written. May be null if no fields have been selected using {@link AbstractCommonSettings#selectFields(String...)} or {@link CommonSettings#selectIndexes(Integer...)}
 	 * @return an row of Object instances containing the values obtained after the execution of all conversions.
 	 * <p> Fields that do not have any conversion defined will just be copied to the object array into their original positions.
 	 */
@@ -60,8 +60,8 @@ public class ObjectRowWriterProcessor extends DefaultConversionProcessor impleme
 	 * <p>In general the conversions will process a String and convert it to some object value (such as booleans, dates, etc).
 	 *
 	 * @param input          the object array that represents a record with its individual fields.
-	 * @param headers        All field names used to produce records in a given destination. May be null if no headers have been defined in {@link CommonSettings#getHeaders()}
-	 * @param indexesToWrite The indexes of the headers that are actually being written. May be null if no fields have been selected using {@link CommonSettings#selectFields(String...)} or {@link CommonSettings#selectIndexes(Integer...)}
+	 * @param headers        All field names used to produce records in a given destination. May be null if no headers have been defined in {@link AbstractCommonSettings#getHeaders()}
+	 * @param indexesToWrite The indexes of the headers that are actually being written. May be null if no fields have been selected using {@link AbstractCommonSettings#selectFields(String...)} or {@link CommonSettings#selectIndexes(Integer...)}
 	 * @return an row of Object instances containing the values obtained after the execution of all conversions.
 	 * <p> Fields that do not have any conversion defined will just be copied to the object array into their original positions.
 	 */

@@ -11,7 +11,7 @@ import java.io.Writer;
  *
  * @since 1.0
  */
-public class NumericEntityEscaper extends CodePointTranslator {
+public class NumericEntityEscaper extends AbstractCodePointTranslator {
 
     /**
      * Constructs a {@code NumericEntityEscaper} above the specified value (exclusive).

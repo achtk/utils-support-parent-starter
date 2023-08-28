@@ -1,15 +1,16 @@
 package com.chua.common.support.extra.el.baseutil.bytecode.structure.Attribute;
 
-import com.chua.common.support.extra.el.baseutil.bytecode.structure.constantinfo.ConstantInfo;
+import com.chua.common.support.extra.el.baseutil.bytecode.structure.constantinfo.AbstractConstantInfo;
 import com.chua.common.support.extra.el.baseutil.bytecode.util.BinaryData;
+import javassist.bytecode.AttributeInfo;
 
-public class ExceptionsAttriInfo extends AttributeInfo
+public class ExceptionsAttriInfo extends AbstractAttributeInfo
 {
-    private int   number_of_exceptions;
+    private int numberOfExceptions;
     /**
      * exception_index_table列表每项为CONSTANT_Class常量项的索引，表示具体的异常类
      */
-    private int[] exception_index_table;
+    private int[] exceptionIndexTable;
 
     public ExceptionsAttriInfo(String name, int length)
     {
@@ -17,7 +18,7 @@ public class ExceptionsAttriInfo extends AttributeInfo
     }
 
     @Override
-    protected void resolve(BinaryData binaryData, ConstantInfo[] constantInfos)
+    protected void resolve(BinaryData binaryData, AbstractConstantInfo[] constantInfos)
     {
         ignoreParse(binaryData);
     }

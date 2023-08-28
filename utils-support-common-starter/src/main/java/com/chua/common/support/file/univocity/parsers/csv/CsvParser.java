@@ -1,22 +1,7 @@
-/*******************************************************************************
- * Copyright 2014 Univocity Software Pty Ltd
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.csv;
 
+import com.chua.common.support.file.univocity.parsers.common.AbstractCommonParserSettings;
 import com.chua.common.support.file.univocity.parsers.common.AbstractParser;
-import com.chua.common.support.file.univocity.parsers.common.CommonParserSettings;
 import com.chua.common.support.file.univocity.parsers.common.TextParsingException;
 import com.chua.common.support.file.univocity.parsers.common.input.*;
 
@@ -465,7 +450,7 @@ public final class CsvParser extends AbstractParser<CsvParserSettings> {
     @Override
     protected final InputAnalysisProcess getInputAnalysisProcess() {
         if (settings.isDelimiterDetectionEnabled() || settings.isQuoteDetectionEnabled()) {
-            return new CsvFormatDetector(formatDetectorRowSampleCount, settings, whitespaceRangeStart) {
+            return new AbstractCsvFormatDetector(formatDetectorRowSampleCount, settings, whitespaceRangeStart) {
                 @Override
                 protected void apply(char delimiter, char quote, char quoteEscape) {
                     if (settings.isDelimiterDetectionEnabled()) {
@@ -486,7 +471,7 @@ public final class CsvParser extends AbstractParser<CsvParserSettings> {
     /**
      * Returns the CSV format detected when one of the following settings is enabled:
      * <ul>
-     * <li>{@link CommonParserSettings#isLineSeparatorDetectionEnabled()}</li>
+     * <li>{@link AbstractCommonParserSettings#isLineSeparatorDetectionEnabled()}</li>
      * <li>{@link CsvParserSettings#isDelimiterDetectionEnabled()}</li>
      * <li>{@link CsvParserSettings#isQuoteDetectionEnabled()}</li>
      * </ul>

@@ -31,7 +31,9 @@ public class FtpCommandInfo {
         void run(String argument) throws IOException;
 
         default void run(FtpCommandInfo info, String argument) throws IOException {
-            if(argument.isEmpty()) throw new FtpResponseException(501, "Missing parameters");
+            if(argument.isEmpty()) {
+                throw new FtpResponseException(501, "Missing parameters");
+            }
 
             run(argument);
         }

@@ -156,7 +156,7 @@ public class TarBuffer {
      * @param record The record data to check.
      * @return true if the record data is an End of Archive
      */
-    public boolean isEOFRecord(byte[] record) {
+    public boolean isEofRecord(byte[] record) {
         for (int i = 0, sz = getRecordSize(); i < sz; ++i) {
             if (record[i] != 0) {
                 return false;

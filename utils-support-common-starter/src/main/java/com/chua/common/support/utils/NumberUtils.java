@@ -2450,7 +2450,7 @@ public class NumberUtils {
      * @return 结果
      */
     public static double isZero(double value, double defaultValue) {
-        return value == 0.0d ? defaultValue : value;
+        return Double.compare(0.0d, value) == 1  ? defaultValue : value;
     }
 
     /**

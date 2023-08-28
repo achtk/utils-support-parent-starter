@@ -29,8 +29,9 @@ public class BasisTemplate{
 		this.macros = macros;
 		this.includes = includes;
 
-		for (Macro macro : macros.values())
+		for (Macro macro : macros.values()) {
 			macro.setTemplate(this);
+		}
 	}
 
 	/** Internal. The AST nodes representing this template after parsing. See {@link Ast}. Used by {@link AstInterpreter}. **/

@@ -1,5 +1,6 @@
 package com.chua.common.support.jsoup.select;
 
+import com.chua.common.support.json.jsonpath.internal.filter.Evaluator;
 import com.chua.common.support.jsoup.nodes.Element;
 import com.chua.common.support.utils.StringUtils;
 
@@ -11,26 +12,26 @@ import java.util.Collection;
  * Base combining (and, or) evaluator.
  * @author Administrator
  */
-public abstract class CombiningEvaluator extends Evaluator {
-    final ArrayList<Evaluator> evaluators;
+public abstract class AbstractCombiningEvaluator extends AbstractEvaluator {
+    final ArrayList<AbstractEvaluator> evaluators;
     int num = 0;
 
-    CombiningEvaluator() {
+    AbstractCombiningEvaluator() {
         super();
         evaluators = new ArrayList<>();
     }
 
-    CombiningEvaluator(Collection<Evaluator> evaluators) {
+    AbstractCombiningEvaluator(Collection<AbstractEvaluator> evaluators) {
         this();
         this.evaluators.addAll(evaluators);
         updateNumEvaluators();
     }
 
-    Evaluator rightMostEvaluator() {
+    AbstractEvaluator rightMostEvaluator() {
         return num > 0 ? evaluators.get(num - 1) : null;
     }
     
-    void replaceRightMostEvaluator(Evaluator replacement) {
+    void replaceRightMostEvaluator(AbstractEvaluator replacement) {
         evaluators.set(num - 1, replacement);
     }
 
@@ -39,19 +40,19 @@ public abstract class CombiningEvaluator extends Evaluator {
         num = evaluators.size();
     }
 
-    public static final class And extends CombiningEvaluator {
-        And(Collection<Evaluator> evaluators) {
+    public static final class And extends AbstractCombiningEvaluator {
+        And(Collection<AbstractEvaluator> evaluators) {
             super(evaluators);
         }
 
-        And(Evaluator... evaluators) {
+        And(AbstractEvaluator... evaluators) {
             this(Arrays.asList(evaluators));
         }
 
         @Override
         public boolean matches(Element root, Element node) {
             for (int i = num - 1; i >= 0; i--) { // process backwards so that :matchText is evaled earlier, to catch parent query. todo - should redo matchText to virtually expand during match, not pre-match (see SelectorTest#findBetweenSpan)
-                Evaluator s = evaluators.get(i);
+                AbstractEvaluator s = evaluators.get(i);
                 if (!s.matches(root, node)) {
                     return false;
                 }
@@ -65,12 +66,12 @@ public abstract class CombiningEvaluator extends Evaluator {
         }
     }
 
-    public static final class Or extends CombiningEvaluator {
+    public static final class Or extends AbstractCombiningEvaluator {
         /**
          * Create a new Or evaluator. The initial evaluators are ANDed together and used as the first clause of the OR.
          * @param evaluators initial OR clause (these are wrapped into an AND evaluator).
          */
-        Or(Collection<Evaluator> evaluators) {
+        Or(Collection<AbstractEvaluator> evaluators) {
             super();
             if (num > 1) {
                 this.evaluators.add(new And(evaluators));
@@ -81,13 +82,13 @@ public abstract class CombiningEvaluator extends Evaluator {
             updateNumEvaluators();
         }
 
-        Or(Evaluator... evaluators) { this(Arrays.asList(evaluators)); }
+        Or(AbstractEvaluator... evaluators) { this(Arrays.asList(evaluators)); }
 
         Or() {
             super();
         }
 
-        public void add(Evaluator e) {
+        public void add(AbstractEvaluator e) {
             evaluators.add(e);
             updateNumEvaluators();
         }
@@ -95,7 +96,7 @@ public abstract class CombiningEvaluator extends Evaluator {
         @Override
         public boolean matches(Element root, Element node) {
             for (int i = 0; i < num; i++) {
-                Evaluator s = evaluators.get(i);
+                AbstractEvaluator s = evaluators.get(i);
                 if (s.matches(root, node)) {
                     return true;
                 }

@@ -90,16 +90,16 @@ public class ClassInfoView implements View {
                     .add("name", field.getName());
 
 
-            final StringBuilder annotationSB = new StringBuilder();
+            final StringBuilder stringBuilder = new StringBuilder();
             final Annotation[] annotationArray = field.getAnnotations();
             if (null != annotationArray && annotationArray.length > 0) {
                 for (Annotation annotation : annotationArray) {
-                    annotationSB.append(StringUtils.classname(annotation.annotationType())).append(",");
+                    stringBuilder.append(StringUtils.classname(annotation.annotationType())).append(",");
                 }
-                if (annotationSB.length() > 0) {
-                    annotationSB.deleteCharAt(annotationSB.length() - 1);
+                if (stringBuilder.length() > 0) {
+                    stringBuilder.deleteCharAt(stringBuilder.length() - 1);
                 }
-                kvView.add("annotation", annotationSB);
+                kvView.add("annotation", stringBuilder);
             }
 
 

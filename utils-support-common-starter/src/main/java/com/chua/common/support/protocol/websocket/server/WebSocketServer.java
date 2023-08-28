@@ -380,7 +380,7 @@ public abstract class WebSocketServer extends AbstractWebSocket implements Runna
         } catch (ClosedByInterruptException e) {
           return; // do the same stuff as when InterruptedException is thrown
         } catch (WrappedIOException ex) {
-          handleIOException(key, ex.getConnection(), ex.getIOException());
+          handleIOException(key, ex.getConnection(), ex.getIoException());
         } catch (IOException ex) {
           handleIOException(key, null, ex);
         } catch (InterruptedException e) {

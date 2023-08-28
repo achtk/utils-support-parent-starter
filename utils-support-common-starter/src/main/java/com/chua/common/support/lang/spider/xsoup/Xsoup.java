@@ -38,7 +38,7 @@ public class Xsoup {
         return NodeAdaptors.getDocument(document);
     }
 
-    public static String HtmlToPlainText(Element element) {
+    public static String htmlToPlainText(Element element) {
         FormattingVisitor formatter = new FormattingVisitor();
         NodeTraversor.traverse(formatter, element);
         return formatter.toString();

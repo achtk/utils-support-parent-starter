@@ -1,5 +1,6 @@
 package com.chua.common.support.jsoup.select;
 
+import com.chua.common.support.json.jsonpath.internal.filter.Evaluator;
 import com.chua.common.support.jsoup.nodes.Element;
 import com.chua.common.support.jsoup.nodes.Node;
 
@@ -21,7 +22,7 @@ public class Collector {
      @param root root of tree to descend
      @return list of matches; empty if none
      */
-    public static Elements collect (Evaluator eval, Element root) {
+    public static Elements collect (AbstractEvaluator eval, Element root) {
         Elements elements = new Elements();
         NodeTraversor.traverse((node, depth) -> {
             if (node instanceof Element) {
@@ -41,7 +42,7 @@ public class Collector {
      @param root root of tree to descend
      @return the first match; {@code null} if none
      */
-    public static  Element findFirst(Evaluator eval, Element root) {
+    public static  Element findFirst(AbstractEvaluator eval, Element root) {
         FirstFinder finder = new FirstFinder(eval);
         return finder.find(root, root);
     }
@@ -49,9 +50,9 @@ public class Collector {
     static class FirstFinder implements NodeFilter {
         private  Element evalRoot = null;
         private  Element match = null;
-        private final Evaluator eval;
+        private final AbstractEvaluator eval;
 
-        FirstFinder(Evaluator eval) {
+        FirstFinder(AbstractEvaluator eval) {
             this.eval = eval;
         }
 

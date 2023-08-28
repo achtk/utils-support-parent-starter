@@ -249,7 +249,7 @@ public class ByteVector {
    * @return this byte vector.
    */
   // DontCheck(AbbreviationAsWordInName): can't be renamed (for backward binary compatibility).
-  public ByteVector putUTF8(final String stringValue) {
+  public ByteVector putUtf8(final String stringValue) {
     int charLength = stringValue.length();
     if (charLength > 65535) {
       throw new IllegalArgumentException("UTF8 string too large");

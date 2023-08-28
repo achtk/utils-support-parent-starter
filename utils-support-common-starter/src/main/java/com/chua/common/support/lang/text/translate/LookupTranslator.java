@@ -13,7 +13,7 @@ import java.util.Map;
  *
  * @since 1.0
  */
-public class LookupTranslator extends CharSequenceTranslator {
+public class LookupTranslator extends AbstractCharSequenceTranslator {
 
     /**
      * The mapping to be used in translation.

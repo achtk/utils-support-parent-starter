@@ -25,7 +25,7 @@ import java.util.Arrays;
  * @author Univocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  */
 class Internal {
-	public static final <C extends Context> void process(String[] row, Processor<C> processor, C context, ProcessorErrorHandler<C> errorHandler) {
+	public static final <C extends AbstractContext> void process(String[] row, Processor<C> processor, C context, ProcessorErrorHandler<C> errorHandler) {
 		try {
 			processor.rowProcessed(row, context);
 		} catch (DataProcessingException ex) {

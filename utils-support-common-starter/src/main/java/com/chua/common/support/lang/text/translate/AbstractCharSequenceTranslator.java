@@ -16,7 +16,7 @@ import java.util.Locale;
  *
  * @since 1.0
  */
-public abstract class CharSequenceTranslator {
+public abstract class AbstractCharSequenceTranslator {
 
     /**
      * Array containing the hexadecimal alphabet.
@@ -115,8 +115,8 @@ public abstract class CharSequenceTranslator {
      * @param translators CharSequenceTranslator array of translators to merge with this one
      * @return CharSequenceTranslator merging this translator with the others
      */
-    public final CharSequenceTranslator with(final CharSequenceTranslator... translators) {
-        final CharSequenceTranslator[] newArray = new CharSequenceTranslator[translators.length + 1];
+    public final AbstractCharSequenceTranslator with(final AbstractCharSequenceTranslator... translators) {
+        final AbstractCharSequenceTranslator[] newArray = new AbstractCharSequenceTranslator[translators.length + 1];
         newArray[0] = this;
         System.arraycopy(translators, 0, newArray, 1, translators.length);
         return new AggregateTranslator(newArray);

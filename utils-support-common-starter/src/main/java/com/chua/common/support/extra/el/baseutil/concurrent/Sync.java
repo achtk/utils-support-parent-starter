@@ -10,7 +10,7 @@ import java.util.concurrent.locks.LockSupport;
 public abstract class Sync<E>
 {
     private static final Unsafe UNSAFE   = Unsafe.getUnsafe();
-    private static final long   tailOffset;
+    private static final long TAIL_OFFSET;
     private static final int    WAITING  = 1;
     private static final int    CANCELED = 2;
     private volatile     Node   head;
@@ -21,7 +21,7 @@ public abstract class Sync<E>
         try
         {
             Field field = Sync.class.getDeclaredField("tail");
-            tailOffset = UNSAFE.objectFieldOffset(field);
+            TAIL_OFFSET = UNSAFE.objectFieldOffset(field);
         }
         catch (NoSuchFieldException e)
         {
@@ -45,7 +45,7 @@ public abstract class Sync<E>
         Node insert = new Node();
         Node pred = tail;
         insert.prev = pred;
-        if (UNSAFE.compareAndSetReference(this, tailOffset, pred, insert))
+        if (UNSAFE.compareAndSetReference(this, TAIL_OFFSET, pred, insert))
         {
             // pred.nextWaiter = t;
             pred.relaxSetSuccessor(t);
@@ -55,7 +55,7 @@ public abstract class Sync<E>
         {
             pred = tail;
             insert.prev = pred;
-            if (UNSAFE.compareAndSetReference(this, tailOffset, pred, insert))
+            if (UNSAFE.compareAndSetReference(this, TAIL_OFFSET, pred, insert))
             {
                 pred.relaxSetSuccessor(t);
                 // pred.nextWaiter = t;
@@ -144,8 +144,9 @@ public abstract class Sync<E>
             }
             if (pred.status == CANCELED)
             {
-                while (pred != h && (pred = pred.prev).status == CANCELED)
+                while (pred != h && (pred = pred.prev).status == CANCELED) {
                     ;
+                }
             }
         }
         while (true);
@@ -175,8 +176,9 @@ public abstract class Sync<E>
             else if (pred.status == CANCELED)
             {
                 // 寻找到非取消节点的最靠近的head的节点作为新的前置节点
-                while (pred != h && (pred = pred.prev).status == CANCELED)
+                while (pred != h && (pred = pred.prev).status == CANCELED) {
                     ;
+                }
             }
             else
             {
@@ -203,8 +205,9 @@ public abstract class Sync<E>
         {
             if (nextWaiter == null)
             {
-                while ((nextWaiter = node.successor) == null)
+                while ((nextWaiter = node.successor) == null) {
                     ;
+                }
             }
             LockSupport.unpark(nextWaiter);
         }
@@ -221,8 +224,8 @@ public abstract class Sync<E>
 
     static class Node
     {
-        private static final long   statusOffset;
-        private static final long   successorOffset;
+        private static final long STATUS_OFFSET;
+        private static final long SUCCESSOR_OFFSET;
         private              Node   prev;
         private volatile     Thread successor;
         private volatile     int    status;
@@ -232,9 +235,9 @@ public abstract class Sync<E>
             try
             {
                 Field field = Node.class.getDeclaredField("status");
-                statusOffset = UNSAFE.objectFieldOffset(field);
+                STATUS_OFFSET = UNSAFE.objectFieldOffset(field);
                 field = Node.class.getDeclaredField("successor");
-                successorOffset = UNSAFE.objectFieldOffset(field);
+                SUCCESSOR_OFFSET = UNSAFE.objectFieldOffset(field);
             }
             catch (NoSuchFieldException e)
             {
@@ -244,18 +247,18 @@ public abstract class Sync<E>
 
         public Node()
         {
-            UNSAFE.putInt(this, statusOffset, WAITING);
+            UNSAFE.putInt(this, STATUS_OFFSET, WAITING);
         }
 
         public void relaxSetSuccessor(Thread next)
         {
-            UNSAFE.putReferenceVolatile(this, successorOffset, next);
+            UNSAFE.putReferenceVolatile(this, SUCCESSOR_OFFSET, next);
         }
 
         public void clean()
         {
             prev = null;
-            UNSAFE.putReference(this, successorOffset, null);
+            UNSAFE.putReference(this, SUCCESSOR_OFFSET, null);
         }
     }
 }

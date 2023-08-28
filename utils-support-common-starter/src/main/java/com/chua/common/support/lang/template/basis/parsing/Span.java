@@ -2,8 +2,10 @@
 package com.chua.common.support.lang.template.basis.parsing;
 
 import com.chua.common.support.lang.template.basis.TemplateLoader.Source;
+import lombok.EqualsAndHashCode;
 
 /** A span within a source string denoted by start and end index, with the latter being exclusive. */
+@EqualsAndHashCode
 public class Span {
 	/** the source string this span refers to **/
 	private final Source source;
@@ -22,11 +24,18 @@ public class Span {
 	}
 
 	public Span (Source source, int start, int end) {
-		if (start > end) throw new IllegalArgumentException("Start must be <= end.");
-		if (start < 0) throw new IndexOutOfBoundsException("Start must be >= 0.");
-		if (start > source.getContent().length() - 1) 
-			throw new IndexOutOfBoundsException("Start outside of string.");
-		if (end > source.getContent().length()) throw new IndexOutOfBoundsException("End outside of string.");
+		if (start > end) {
+            throw new IllegalArgumentException("Start must be <= end.");
+        }
+		if (start < 0) {
+            throw new IndexOutOfBoundsException("Start must be >= 0.");
+        }
+		if (start > source.getContent().length() - 1) {
+            throw new IndexOutOfBoundsException("Start outside of string.");
+        }
+		if (end > source.getContent().length()) {
+            throw new IndexOutOfBoundsException("End outside of string.");
+        }
 
 		this.source = source;
 		this.start = start;
@@ -35,11 +44,21 @@ public class Span {
 	}
 
 	public Span (Span start, Span end) {
-		if (!start.source.equals(end.source)) throw new IllegalArgumentException("The two spans do not reference the same source.");
-		if (start.start > end.end) throw new IllegalArgumentException("Start must be <= end.");
-		if (start.start < 0) throw new IndexOutOfBoundsException("Start must be >= 0.");
-		if (start.start > start.source.getContent().length() - 1) throw new IndexOutOfBoundsException("Start outside of string.");
-		if (end.end > start.source.getContent().length()) throw new IndexOutOfBoundsException("End outside of string.");
+		if (!start.source.equals(end.source)) {
+            throw new IllegalArgumentException("The two spans do not reference the same source.");
+        }
+		if (start.start > end.end) {
+            throw new IllegalArgumentException("Start must be <= end.");
+        }
+		if (start.start < 0) {
+            throw new IndexOutOfBoundsException("Start must be >= 0.");
+        }
+		if (start.start > start.source.getContent().length() - 1) {
+            throw new IndexOutOfBoundsException("Start outside of string.");
+        }
+		if (end.end > start.source.getContent().length()) {
+            throw new IndexOutOfBoundsException("End outside of string.");
+        }
 
 		this.source = start.source;
 		this.start = start.start;
@@ -76,7 +95,9 @@ public class Span {
 	public Line getLine () {
 		int lineStart = start;
 		while (true) {
-			if (lineStart < 0) break;
+			if (lineStart < 0) {
+                break;
+            }
 			char c = source.getContent().charAt(lineStart);
 			if (c == '\n') {
 				lineStart = lineStart + 1;
@@ -84,11 +105,15 @@ public class Span {
 			}
 			lineStart--;
 		}
-		if (lineStart < 0) lineStart = 0;
+		if (lineStart < 0) {
+            lineStart = 0;
+        }
 
 		int lineEnd = end;
 		while (true) {
-			if (lineEnd > source.getContent().length() - 1) break;
+			if (lineEnd > source.getContent().length() - 1) {
+                break;
+            }
 			char c = source.getContent().charAt(lineEnd);
 			if (c == '\n') {
 				break;

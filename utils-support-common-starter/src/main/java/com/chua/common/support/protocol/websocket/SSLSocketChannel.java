@@ -522,7 +522,7 @@ public class SSLSocketChannel implements WrappedByteChannel, ByteChannel, ISSLCh
   }
 
   @Override
-  public SSLEngine getSSLEngine() {
+  public SSLEngine getSslEngine() {
     return engine;
   }
 }

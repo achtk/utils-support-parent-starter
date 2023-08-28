@@ -8,7 +8,7 @@ import java.util.List;
 
 public class SparkSqlFormatter extends AbstractFormatter {
 
-  private static final List<String> reservedWords =
+  private static final List<String> RESERVED_WORDS =
       Arrays.asList(
           "ALL",
           "ALTER",
@@ -153,7 +153,7 @@ public class SparkSqlFormatter extends AbstractFormatter {
           "WITH",
           "YEAR_MONTH");
 
-  private static final List<String> reservedTopLevelWords =
+  private static final List<String> RESERVED_TOP_LEVEL_WORDS =
       Arrays.asList(
           "ADD",
           "AFTER",
@@ -188,10 +188,10 @@ public class SparkSqlFormatter extends AbstractFormatter {
           "WHERE",
           "WINDOW");
 
-  private static final List<String> reservedTopLevelWordsNoIndent =
+  private static final List<String> RESERVED_TOP_LEVEL_WORDS_NO_INDENT =
       Arrays.asList("EXCEPT ALL", "EXCEPT", "INTERSECT ALL", "INTERSECT", "UNION ALL", "UNION");
 
-  private static final List<String> reservedNewlineWords =
+  private static final List<String> RESERVED_NEWLINE_WORDS =
       Arrays.asList(
           "AND",
           "CREATE OR",
@@ -234,10 +234,10 @@ public class SparkSqlFormatter extends AbstractFormatter {
   @Override
   public DialectConfig dialectConfig() {
     return DialectConfig.builder()
-        .reservedWords(reservedWords)
-        .reservedTopLevelWords(reservedTopLevelWords)
-        .reservedTopLevelWordsNoIndent(reservedTopLevelWordsNoIndent)
-        .reservedNewlineWords(reservedNewlineWords)
+        .reservedWords(RESERVED_WORDS)
+        .reservedTopLevelWords(RESERVED_TOP_LEVEL_WORDS)
+        .reservedTopLevelWordsNoIndent(RESERVED_TOP_LEVEL_WORDS_NO_INDENT)
+        .reservedNewlineWords(RESERVED_NEWLINE_WORDS)
         .stringTypes(
             Arrays.asList(
                 StringLiteral.DOUBLE_QUOTE,
@@ -269,7 +269,7 @@ public class SparkSqlFormatter extends AbstractFormatter {
       Token backToken = this.tokenLookBehind();
       if (backToken != null
           && backToken.type == TokenTypes.OPERATOR
-          && backToken.value.equals(".")) {
+          && ".".equals(backToken.value)) {
         // This is window().end (or similar) not CASE ... END
         return new Token(TokenTypes.WORD, token.value);
       }

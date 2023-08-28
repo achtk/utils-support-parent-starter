@@ -1,23 +1,8 @@
-/*******************************************************************************
- * Copyright 2014 Univocity Software Pty Ltd
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.common.processor;
 
 import com.chua.common.support.file.univocity.parsers.annotations.helpers.MethodFilter;
 import com.chua.common.support.file.univocity.parsers.common.AbstractWriter;
-import com.chua.common.support.file.univocity.parsers.common.CommonSettings;
+import com.chua.common.support.file.univocity.parsers.common.AbstractCommonSettings;
 import com.chua.common.support.file.univocity.parsers.common.NormalizedString;
 import com.chua.common.support.file.univocity.parsers.common.fields.FieldConversionMapping;
 import com.chua.common.support.file.univocity.parsers.common.processor.core.BeanConversionProcessor;
@@ -54,8 +39,8 @@ public class BeanWriterProcessor<T> extends BeanConversionProcessor<T> implement
 	 * Converts the java bean instance into a sequence of values for writing.
 	 *
 	 * @param input          an instance of the type defined in this class constructor.
-	 * @param headers        All field names used to produce records in a given destination. May be null if no headers have been defined in {@link CommonSettings#getHeaders()}
-	 * @param indexesToWrite The indexes of the headers that are actually being written. May be null if no fields have been selected using {@link CommonSettings#selectFields(String...)} or {@link CommonSettings#selectIndexes(Integer...)}
+	 * @param headers        All field names used to produce records in a given destination. May be null if no headers have been defined in {@link AbstractCommonSettings#getHeaders()}
+	 * @param indexesToWrite The indexes of the headers that are actually being written. May be null if no fields have been selected using {@link AbstractCommonSettings#selectFields(String...)} or {@link CommonSettings#selectIndexes(Integer...)}
 	 * @return a row of objects containing the values extracted from the java bean
 	 */
 	public Object[] write(T input, String[] headers, int[] indexesToWrite) {
@@ -70,8 +55,8 @@ public class BeanWriterProcessor<T> extends BeanConversionProcessor<T> implement
 	 * Converts the java bean instance into a sequence of values for writing.
 	 *
 	 * @param input          an instance of the type defined in this class constructor.
-	 * @param headers        All field names used to produce records in a given destination. May be null if no headers have been defined in {@link CommonSettings#getHeaders()}
-	 * @param indexesToWrite The indexes of the headers that are actually being written. May be null if no fields have been selected using {@link CommonSettings#selectFields(String...)} or {@link CommonSettings#selectIndexes(Integer...)}
+	 * @param headers        All field names used to produce records in a given destination. May be null if no headers have been defined in {@link AbstractCommonSettings#getHeaders()}
+	 * @param indexesToWrite The indexes of the headers that are actually being written. May be null if no fields have been selected using {@link AbstractCommonSettings#selectFields(String...)} or {@link CommonSettings#selectIndexes(Integer...)}
 	 * @return a row of objects containing the values extracted from the java bean
 	 */
 	@Override

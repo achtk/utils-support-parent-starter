@@ -972,7 +972,7 @@ public class FTPClient {
 					communication.addCommunicationListener((FTPCommunicationListener) i.next());
 				}
 				// Welcome message.
-				FTPReply wm = communication.readFTPReply();
+				FTPReply wm = communication.readFtpReply();
 				// Does this reply mean "ok"?
 				if (!wm.isSuccessCode()) {
 					// Mmmmm... it seems no!
@@ -1053,8 +1053,8 @@ public class FTPClient {
 			// Send QUIT?
 			if (sendQuitCommand) {
 				// Call the QUIT command.
-				communication.sendFTPCommand("QUIT");
-				FTPReply r = communication.readFTPReply();
+				communication.sendFtpCommand("QUIT");
+				FTPReply r = communication.readFtpReply();
 				if (!r.isSuccessCode()) {
 					throw new FTPException(r);
 				}
@@ -1127,13 +1127,13 @@ public class FTPClient {
 			}
 			// AUTH TLS command if security is FTPES
 			if (security == SECURITY_FTPES) {
-				communication.sendFTPCommand("AUTH TLS");
-				FTPReply r = communication.readFTPReply();
+				communication.sendFtpCommand("AUTH TLS");
+				FTPReply r = communication.readFtpReply();
 				if (r.isSuccessCode()) {
 					communication.ssl(sslSocketFactory);
 				} else {
-					communication.sendFTPCommand("AUTH SSL");
-					r = communication.readFTPReply();
+					communication.sendFtpCommand("AUTH SSL");
+					r = communication.readFtpReply();
 					if (r.isSuccessCode()) {
 						communication.ssl(sslSocketFactory);
 					} else {
@@ -1148,8 +1148,8 @@ public class FTPClient {
 			boolean passwordRequired;
 			boolean accountRequired;
 			// Send the user and read the reply.
-			communication.sendFTPCommand("USER " + username);
-			FTPReply r = communication.readFTPReply();
+			communication.sendFtpCommand("USER " + username);
+			FTPReply r = communication.readFtpReply();
 			switch (r.getCode()) {
 				case 230:
 					// Password and account aren't required.
@@ -1176,8 +1176,8 @@ public class FTPClient {
 					throw new FTPException(331);
 				}
 				// Send the password.
-				communication.sendFTPCommand("PASS " + password);
-				r = communication.readFTPReply();
+				communication.sendFtpCommand("PASS " + password);
+				r = communication.readFtpReply();
 				switch (r.getCode()) {
 					case 230:
 						// Account is not required.
@@ -1198,8 +1198,8 @@ public class FTPClient {
 					throw new FTPException(332);
 				}
 				// Send the account.
-				communication.sendFTPCommand("ACCT " + account);
-				r = communication.readFTPReply();
+				communication.sendFtpCommand("ACCT " + account);
+				r = communication.readFtpReply();
 				switch (r.getCode()) {
 					case 230:
 						// Well done!
@@ -1239,8 +1239,8 @@ public class FTPClient {
 			mlsdSupported = false;
 			modezSupported = false;
 			dataChannelEncrypted = false;
-			communication.sendFTPCommand("FEAT");
-			FTPReply r = communication.readFTPReply();
+			communication.sendFtpCommand("FEAT");
+			FTPReply r = communication.readFtpReply();
 			if (r.getCode() == 211) {
 				String[] lines = r.getMessages();
 				for (int i = 1; i < lines.length - 1; i++) {
@@ -1270,15 +1270,15 @@ public class FTPClient {
 			}
 			// Turn UTF 8 on (if supported).
 			if (utf8Supported) {
-				communication.sendFTPCommand("OPTS UTF8 ON");
-				communication.readFTPReply();
+				communication.sendFtpCommand("OPTS UTF8 ON");
+				communication.readFtpReply();
 			}
 			// Data channel security.
 			if (security == SECURITY_FTPS || security == SECURITY_FTPES) {
-				communication.sendFTPCommand("PBSZ 0");
-				communication.readFTPReply();
-				communication.sendFTPCommand("PROT P");
-				FTPReply reply = communication.readFTPReply();
+				communication.sendFtpCommand("PBSZ 0");
+				communication.readFtpReply();
+				communication.sendFtpCommand("PROT P");
+				FTPReply reply = communication.readFtpReply();
 				if (reply.isSuccessCode()) {
 					dataChannelEncrypted = true;
 				}
@@ -1309,8 +1309,8 @@ public class FTPClient {
 				throw new IllegalStateException("Client not authenticated");
 			}
 			// Send the REIN command.
-			communication.sendFTPCommand("REIN");
-			FTPReply r = communication.readFTPReply();
+			communication.sendFtpCommand("REIN");
+			FTPReply r = communication.readFtpReply();
 			if (!r.isSuccessCode()) {
 				throw new FTPException(r);
 			} else {
@@ -1346,8 +1346,8 @@ public class FTPClient {
 			// Safe code
 			try {
 				// Send the noop.
-				communication.sendFTPCommand("NOOP");
-				FTPReply r = communication.readFTPReply();
+				communication.sendFtpCommand("NOOP");
+				FTPReply r = communication.readFtpReply();
 				if (!r.isSuccessCode()) {
 					throw new FTPException(r);
 				}
@@ -1378,11 +1378,11 @@ public class FTPClient {
 				throw new IllegalStateException("Client not connected");
 			}
 			// Sends the command.
-			communication.sendFTPCommand(command);
+			communication.sendFtpCommand(command);
 			// Resets auto noop timer.
 			touchAutoNoopTimer();
 			// Returns the reply.
-			return communication.readFTPReply();
+			return communication.readFtpReply();
 		}
 	}
 
@@ -1404,11 +1404,11 @@ public class FTPClient {
 				throw new IllegalStateException("Client not connected");
 			}
 			// Sends the command.
-			communication.sendFTPCommand("SITE " + command);
+			communication.sendFtpCommand("SITE " + command);
 			// Resets auto noop timer.
 			touchAutoNoopTimer();
 			// Returns the reply.
-			return communication.readFTPReply();
+			return communication.readFtpReply();
 		}
 	}
 
@@ -1435,9 +1435,9 @@ public class FTPClient {
 				throw new IllegalStateException("Client not authenticated");
 			}
 			// Send the ACCT command.
-			communication.sendFTPCommand("ACCT " + account);
+			communication.sendFtpCommand("ACCT " + account);
 			// Gets the reply.
-			FTPReply r = communication.readFTPReply();
+			FTPReply r = communication.readFtpReply();
 			// Resets auto noop timer.
 			touchAutoNoopTimer();
 			// Evaluates the response.
@@ -1468,8 +1468,8 @@ public class FTPClient {
 				throw new IllegalStateException("Client not authenticated");
 			}
 			// Send the PWD command.
-			communication.sendFTPCommand("PWD");
-			FTPReply r = communication.readFTPReply();
+			communication.sendFtpCommand("PWD");
+			FTPReply r = communication.readFtpReply();
 			touchAutoNoopTimer();
 			if (!r.isSuccessCode()) {
 				throw new FTPException(r);
@@ -1509,8 +1509,8 @@ public class FTPClient {
 				throw new IllegalStateException("Client not authenticated");
 			}
 			// Send the CWD command.
-			communication.sendFTPCommand("CWD " + path);
-			FTPReply r = communication.readFTPReply();
+			communication.sendFtpCommand("CWD " + path);
+			FTPReply r = communication.readFtpReply();
 			touchAutoNoopTimer();
 			if (!r.isSuccessCode()) {
 				throw new FTPException(r);
@@ -1538,8 +1538,8 @@ public class FTPClient {
 				throw new IllegalStateException("Client not authenticated");
 			}
 			// Sends the CWD command.
-			communication.sendFTPCommand("CDUP");
-			FTPReply r = communication.readFTPReply();
+			communication.sendFtpCommand("CDUP");
+			FTPReply r = communication.readFtpReply();
 			touchAutoNoopTimer();
 			if (!r.isSuccessCode()) {
 				throw new FTPException(r);
@@ -1570,8 +1570,8 @@ public class FTPClient {
 				throw new IllegalStateException("Client not authenticated");
 			}
 			// Sends the MDTM command.
-			communication.sendFTPCommand("MDTM " + path);
-			FTPReply r = communication.readFTPReply();
+			communication.sendFtpCommand("MDTM " + path);
+			FTPReply r = communication.readFtpReply();
 			touchAutoNoopTimer();
 			if (!r.isSuccessCode()) {
 				throw new FTPException(r);
@@ -1611,15 +1611,15 @@ public class FTPClient {
 				throw new IllegalStateException("Client not authenticated");
 			}
 			// Sends the TYPE I command.
-			communication.sendFTPCommand("TYPE I");
-			FTPReply r = communication.readFTPReply();
+			communication.sendFtpCommand("TYPE I");
+			FTPReply r = communication.readFtpReply();
 			touchAutoNoopTimer();
 			if (!r.isSuccessCode()) {
 				throw new FTPException(r);
 			}
 			// Sends the SIZE command.
-			communication.sendFTPCommand("SIZE " + path);
-			r = communication.readFTPReply();
+			communication.sendFtpCommand("SIZE " + path);
+			r = communication.readFtpReply();
 			touchAutoNoopTimer();
 			if (!r.isSuccessCode()) {
 				throw new FTPException(r);
@@ -1671,15 +1671,15 @@ public class FTPClient {
 				throw new IllegalStateException("Client not authenticated");
 			}
 			// Sends the RNFR command.
-			communication.sendFTPCommand("RNFR " + oldPath);
-			FTPReply r = communication.readFTPReply();
+			communication.sendFtpCommand("RNFR " + oldPath);
+			FTPReply r = communication.readFtpReply();
 			touchAutoNoopTimer();
 			if (r.getCode() != 350) {
 				throw new FTPException(r);
 			}
 			// Sends the RNFR command.
-			communication.sendFTPCommand("RNTO " + newPath);
-			r = communication.readFTPReply();
+			communication.sendFtpCommand("RNTO " + newPath);
+			r = communication.readFtpReply();
 			touchAutoNoopTimer();
 			if (!r.isSuccessCode()) {
 				throw new FTPException(r);
@@ -1708,8 +1708,8 @@ public class FTPClient {
 				throw new IllegalStateException("Client not authenticated");
 			}
 			// Sends the DELE command.
-			communication.sendFTPCommand("DELE " + path);
-			FTPReply r = communication.readFTPReply();
+			communication.sendFtpCommand("DELE " + path);
+			FTPReply r = communication.readFtpReply();
 			touchAutoNoopTimer();
 			if (!r.isSuccessCode()) {
 				throw new FTPException(r);
@@ -1738,8 +1738,8 @@ public class FTPClient {
 				throw new IllegalStateException("Client not authenticated");
 			}
 			// Sends the RMD command.
-			communication.sendFTPCommand("RMD " + path);
-			FTPReply r = communication.readFTPReply();
+			communication.sendFtpCommand("RMD " + path);
+			FTPReply r = communication.readFtpReply();
 			touchAutoNoopTimer();
 			if (!r.isSuccessCode()) {
 				throw new FTPException(r);
@@ -1769,8 +1769,8 @@ public class FTPClient {
 				throw new IllegalStateException("Client not authenticated");
 			}
 			// Sends the MKD command.
-			communication.sendFTPCommand("MKD " + directoryName);
-			FTPReply r = communication.readFTPReply();
+			communication.sendFtpCommand("MKD " + directoryName);
+			FTPReply r = communication.readFtpReply();
 			touchAutoNoopTimer();
 			if (!r.isSuccessCode()) {
 				throw new FTPException(r);
@@ -1800,8 +1800,8 @@ public class FTPClient {
 				throw new IllegalStateException("Client not authenticated");
 			}
 			// Sends the HELP command.
-			communication.sendFTPCommand("HELP");
-			FTPReply r = communication.readFTPReply();
+			communication.sendFtpCommand("HELP");
+			FTPReply r = communication.readFtpReply();
 			touchAutoNoopTimer();
 			if (!r.isSuccessCode()) {
 				throw new FTPException(r);
@@ -1832,8 +1832,8 @@ public class FTPClient {
 				throw new IllegalStateException("Client not authenticated");
 			}
 			// Sends the STAT command.
-			communication.sendFTPCommand("STAT");
-			FTPReply r = communication.readFTPReply();
+			communication.sendFtpCommand("STAT");
+			FTPReply r = communication.readFtpReply();
 			touchAutoNoopTimer();
 			if (!r.isSuccessCode()) {
 				throw new FTPException(r);
@@ -1894,8 +1894,8 @@ public class FTPClient {
 				throw new IllegalStateException("Client not authenticated");
 			}
 			// ASCII, please!
-			communication.sendFTPCommand("TYPE A");
-			FTPReply r = communication.readFTPReply();
+			communication.sendFtpCommand("TYPE A");
+			FTPReply r = communication.readFtpReply();
 			touchAutoNoopTimer();
 			if (!r.isSuccessCode()) {
 				throw new FTPException(r);
@@ -1921,7 +1921,7 @@ public class FTPClient {
 			// Local abort state.
 			boolean wasAborted = false;
 			// Sends the command.
-			communication.sendFTPCommand(command);
+			communication.sendFtpCommand(command);
 			try {
 				Socket dtConnection;
 				try {
@@ -1984,19 +1984,19 @@ public class FTPClient {
 					}
 				}
 			} finally {
-				r = communication.readFTPReply();
+				r = communication.readFtpReply();
 				touchAutoNoopTimer();
 				if (r.getCode() != 150 && r.getCode() != 125) {
 					throw new FTPException(r);
 				}
 				// Consumes the result reply of the transfer.
-				r = communication.readFTPReply();
+				r = communication.readFtpReply();
 				if (!wasAborted && r.getCode() != 226) {
 					throw new FTPException(r);
 				}
 				// ABOR command response (if needed).
 				if (consumeAborCommandReply) {
-					communication.readFTPReply();
+					communication.readFtpReply();
 					consumeAborCommandReply = false;
 				}
 			}
@@ -2133,8 +2133,8 @@ public class FTPClient {
 				throw new IllegalStateException("Client not authenticated");
 			}
 			// ASCII, please!
-			communication.sendFTPCommand("TYPE A");
-			FTPReply r = communication.readFTPReply();
+			communication.sendFtpCommand("TYPE A");
+			FTPReply r = communication.readFtpReply();
 			touchAutoNoopTimer();
 			if (!r.isSuccessCode()) {
 				throw new FTPException(r);
@@ -2146,7 +2146,7 @@ public class FTPClient {
 			// Prepares the connection for the data transfer.
 			FTPDataTransferConnectionProvider provider = openDataTransferChannel();
 			// Send the NLST command.
-			communication.sendFTPCommand("NLST");
+			communication.sendFtpCommand("NLST");
 			try {
 				Socket dtConnection;
 				try {
@@ -2209,18 +2209,18 @@ public class FTPClient {
 					}
 				}
 			} finally {
-				r = communication.readFTPReply();
+				r = communication.readFtpReply();
 				if (r.getCode() != 150 && r.getCode() != 125) {
 					throw new FTPException(r);
 				}
 				// Consumes the result reply of the transfer.
-				r = communication.readFTPReply();
+				r = communication.readFtpReply();
 				if (!wasAborted && r.getCode() != 226) {
 					throw new FTPException(r);
 				}
 				// ABOR command response (if needed).
 				if (consumeAborCommandReply) {
-					communication.readFTPReply();
+					communication.readFtpReply();
 					consumeAborCommandReply = false;
 				}
 			}
@@ -2429,11 +2429,11 @@ public class FTPClient {
 				tp = detectType(fileName);
 			}
 			if (tp == TYPE_TEXTUAL) {
-				communication.sendFTPCommand("TYPE A");
+				communication.sendFtpCommand("TYPE A");
 			} else if (tp == TYPE_BINARY) {
-				communication.sendFTPCommand("TYPE I");
+				communication.sendFtpCommand("TYPE I");
 			}
-			FTPReply r = communication.readFTPReply();
+			FTPReply r = communication.readFtpReply();
 			touchAutoNoopTimer();
 			if (!r.isSuccessCode()) {
 				throw new FTPException(r);
@@ -2444,8 +2444,8 @@ public class FTPClient {
 			if (restSupported || restartAt > 0) {
 				boolean done = false;
 				try {
-					communication.sendFTPCommand("REST " + restartAt);
-					r = communication.readFTPReply();
+					communication.sendFtpCommand("REST " + restartAt);
+					r = communication.readFtpReply();
 					touchAutoNoopTimer();
 					if (r.getCode() != 350 && ((r.getCode() != 501 && r.getCode() != 502) || restartAt > 0)) {
 						throw new FTPException(r);
@@ -2460,7 +2460,7 @@ public class FTPClient {
 			// Local abort state.
 			boolean wasAborted = false;
 			// Send the STOR command.
-			communication.sendFTPCommand("STOR " + fileName);
+			communication.sendFtpCommand("STOR " + fileName);
 			try {
 				Socket dtConnection;
 				try {
@@ -2553,19 +2553,19 @@ public class FTPClient {
 				}
 			} finally {
 				// Data transfer command reply.
-				r = communication.readFTPReply();
+				r = communication.readFtpReply();
 				touchAutoNoopTimer();
 				if (r.getCode() != 150 && r.getCode() != 125) {
 					throw new FTPException(r);
 				}
 				// Consumes the result reply of the transfer.
-				r = communication.readFTPReply();
+				r = communication.readFtpReply();
 				if (!wasAborted && r.getCode() != 226) {
 					throw new FTPException(r);
 				}
 				// ABOR command response (if needed).
 				if (consumeAborCommandReply) {
-					communication.readFTPReply();
+					communication.readFtpReply();
 					consumeAborCommandReply = false;
 				}
 			}
@@ -2712,11 +2712,11 @@ public class FTPClient {
 				tp = detectType(fileName);
 			}
 			if (tp == TYPE_TEXTUAL) {
-				communication.sendFTPCommand("TYPE A");
+				communication.sendFtpCommand("TYPE A");
 			} else if (tp == TYPE_BINARY) {
-				communication.sendFTPCommand("TYPE I");
+				communication.sendFtpCommand("TYPE I");
 			}
-			FTPReply r = communication.readFTPReply();
+			FTPReply r = communication.readFtpReply();
 			touchAutoNoopTimer();
 			if (!r.isSuccessCode()) {
 				throw new FTPException(r);
@@ -2726,7 +2726,7 @@ public class FTPClient {
 			// Prepares the connection for the data transfer.
 			FTPDataTransferConnectionProvider provider = openDataTransferChannel();
 			// Send the STOR command.
-			communication.sendFTPCommand("APPE " + fileName);
+			communication.sendFtpCommand("APPE " + fileName);
 			try {
 				Socket dtConnection;
 				try {
@@ -2818,19 +2818,19 @@ public class FTPClient {
 					}
 				}
 			} finally {
-				r = communication.readFTPReply();
+				r = communication.readFtpReply();
 				touchAutoNoopTimer();
 				if (r.getCode() != 150 && r.getCode() != 125) {
 					throw new FTPException(r);
 				}
 				// Consumes the result reply of the transfer.
-				r = communication.readFTPReply();
+				r = communication.readFtpReply();
 				if (!wasAborted && r.getCode() != 226) {
 					throw new FTPException(r);
 				}
 				// ABOR command response (if needed).
 				if (consumeAborCommandReply) {
-					communication.readFTPReply();
+					communication.readFtpReply();
 					consumeAborCommandReply = false;
 				}
 			}
@@ -3040,11 +3040,11 @@ public class FTPClient {
 				tp = detectType(fileName);
 			}
 			if (tp == TYPE_TEXTUAL) {
-				communication.sendFTPCommand("TYPE A");
+				communication.sendFtpCommand("TYPE A");
 			} else if (tp == TYPE_BINARY) {
-				communication.sendFTPCommand("TYPE I");
+				communication.sendFtpCommand("TYPE I");
 			}
-			FTPReply r = communication.readFTPReply();
+			FTPReply r = communication.readFtpReply();
 			touchAutoNoopTimer();
 			if (!r.isSuccessCode()) {
 				throw new FTPException(r);
@@ -3055,8 +3055,8 @@ public class FTPClient {
 			if (restSupported || restartAt > 0) {
 				boolean done = false;
 				try {
-					communication.sendFTPCommand("REST " + restartAt);
-					r = communication.readFTPReply();
+					communication.sendFtpCommand("REST " + restartAt);
+					r = communication.readFtpReply();
 					touchAutoNoopTimer();
 					if (r.getCode() != 350 && ((r.getCode() != 501 && r.getCode() != 502) || restartAt > 0)) {
 						throw new FTPException(r);
@@ -3071,7 +3071,7 @@ public class FTPClient {
 			// Local abort state.
 			boolean wasAborted = false;
 			// Send the RETR command.
-			communication.sendFTPCommand("RETR " + fileName);
+			communication.sendFtpCommand("RETR " + fileName);
 			try {
 				Socket dtConnection;
 				try {
@@ -3161,19 +3161,19 @@ public class FTPClient {
 					}
 				}
 			} finally {
-				r = communication.readFTPReply();
+				r = communication.readFtpReply();
 				touchAutoNoopTimer();
 				if (r.getCode() != 150 && r.getCode() != 125) {
 					throw new FTPException(r);
 				}
 				// Consumes the result reply of the transfer.
-				r = communication.readFTPReply();
+				r = communication.readFtpReply();
 				if (!wasAborted && r.getCode() != 226) {
 					throw new FTPException(r);
 				}
 				// ABOR command response (if needed).
 				if (consumeAborCommandReply) {
-					communication.readFTPReply();
+					communication.readFtpReply();
 					consumeAborCommandReply = false;
 				}
 			}
@@ -3214,8 +3214,8 @@ public class FTPClient {
 		if (modezSupported && compressionEnabled) {
 			if (!modezEnabled) {
 				// Sends the MODE Z command.
-				communication.sendFTPCommand("MODE Z");
-				FTPReply r = communication.readFTPReply();
+				communication.sendFtpCommand("MODE Z");
+				FTPReply r = communication.readFtpReply();
 				touchAutoNoopTimer();
 				if (r.isSuccessCode()) {
 					modezEnabled = true;
@@ -3224,8 +3224,8 @@ public class FTPClient {
 		} else {
 			if (modezEnabled) {
 				// Sends the MODE S command.
-				communication.sendFTPCommand("MODE S");
-				FTPReply r = communication.readFTPReply();
+				communication.sendFtpCommand("MODE S");
+				FTPReply r = communication.readFtpReply();
 				touchAutoNoopTimer();
 				if (r.isSuccessCode()) {
 					modezEnabled = false;
@@ -3270,9 +3270,9 @@ public class FTPClient {
 		int p2 = port & 0xff;
 		int[] addr = pickLocalAddress();
 		// Send the port command.
-		communication.sendFTPCommand("PORT " + addr[0] + "," + addr[1] + "," + addr[2] + "," +
+		communication.sendFtpCommand("PORT " + addr[0] + "," + addr[1] + "," + addr[2] + "," +
 				addr[3] + "," + p1 + "," + p2);
-		FTPReply r = communication.readFTPReply();
+		FTPReply r = communication.readFtpReply();
 		touchAutoNoopTimer();
 		if (!r.isSuccessCode()) {
 			// Disposes.
@@ -3297,9 +3297,9 @@ public class FTPClient {
 			throws IOException, FTPIllegalReplyException, FTPException,
 			FTPDataTransferException {
 		// Send the PASV command.
-		communication.sendFTPCommand("PASV");
+		communication.sendFtpCommand("PASV");
 		// Read the reply.
-		FTPReply r = communication.readFTPReply();
+		FTPReply r = communication.readFtpReply();
 		touchAutoNoopTimer();
 		if (!r.isSuccessCode()) {
 			throw new FTPException(r);
@@ -3373,7 +3373,7 @@ public class FTPClient {
 		synchronized (abortLock) {
 			if (ongoingDataTransfer && !aborted) {
 				if (sendAborCommand) {
-					communication.sendFTPCommand("ABOR");
+					communication.sendFtpCommand("ABOR");
 					touchAutoNoopTimer();
 					consumeAborCommandReply = true;
 				}

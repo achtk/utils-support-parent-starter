@@ -10,7 +10,7 @@ import java.io.Writer;
  *
  * @since 1.0
  */
-public abstract class CodePointTranslator extends CharSequenceTranslator {
+public abstract class AbstractCodePointTranslator extends AbstractCharSequenceTranslator {
 
     /**
      * Implementation of translate that maps onto the abstract translate(int, Writer) method.

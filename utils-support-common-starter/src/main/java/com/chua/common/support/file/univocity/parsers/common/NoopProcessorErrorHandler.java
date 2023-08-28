@@ -17,13 +17,13 @@ package com.chua.common.support.file.univocity.parsers.common;
 
 /**
  * An (singleton) implementation of {@link ProcessorErrorHandler} that simply rethrows any {@link DataProcessingException}
- * that comes into its {@link #handleError(DataProcessingException, Object[], Context)}} method
+ * that comes into its {@link #handleError(DataProcessingException, Object[], AbstractContext)}} method
  *
  * @param <T> the {@code Context} type provided by the parser implementation.
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
  * @see ProcessorErrorHandler
  */
-public final class NoopProcessorErrorHandler<T extends Context> implements ProcessorErrorHandler<T> {
+public final class NoopProcessorErrorHandler<T extends AbstractContext> implements ProcessorErrorHandler<T> {
 
     public static final ProcessorErrorHandler INSTANCE = new NoopProcessorErrorHandler();
 

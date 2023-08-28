@@ -28,7 +28,7 @@ public abstract class AbstractAnnotationMetadata implements AnnotationMetadata {
     @Override
     public boolean shouldIgnore() {
         //排除掉三个JDK自带的注解，否则会这三个会无限循环
-        return type().equals(DocumentedName) || type().equals(RetentionName) || type().equals(TargetName);
+        return type().equals(DOCUMENTED_NAME) || type().equals(RETENTION_NAME) || type().equals(TARGET_NAME);
     }
 
     @Override
@@ -226,6 +226,8 @@ public abstract class AbstractAnnotationMetadata implements AnnotationMetadata {
                                 } catch (ClassNotFoundException e) {
                                     ReflectUtil.throwException(e);
                                 }
+                            default:
+                                break;
                         }
                         break;
                 }

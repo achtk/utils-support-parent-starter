@@ -1,5 +1,7 @@
 package com.chua.common.support.lang.spider.thread;
 
+import com.chua.common.support.utils.ThreadUtils;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -28,7 +30,7 @@ public class CountableThreadPool {
 
     public CountableThreadPool(int threadNum) {
         this.threadNum = threadNum;
-        this.executorService = Executors.newFixedThreadPool(threadNum);
+        this.executorService = ThreadUtils.newFixedThreadExecutor(threadNum);
     }
 
     public CountableThreadPool(int threadNum, ExecutorService executorService) {
@@ -54,8 +56,8 @@ public class CountableThreadPool {
 
 
         if (threadAlive.get() >= threadNum) {
+            reentrantLock.lock();
             try {
-                reentrantLock.lock();
                 while (threadAlive.get() >= threadNum) {
                     try {
                         condition.await();
@@ -73,8 +75,8 @@ public class CountableThreadPool {
                 try {
                     runnable.run();
                 } finally {
+                    reentrantLock.lock();
                     try {
-                        reentrantLock.lock();
                         threadAlive.decrementAndGet();
                         condition.signal();
                     } finally {

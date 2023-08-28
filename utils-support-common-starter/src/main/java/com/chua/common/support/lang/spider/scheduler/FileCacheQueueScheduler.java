@@ -170,7 +170,7 @@ public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implement
     }
 
     private String getFileName(String filename) {
-        return filePath + task.getUUID() + filename;
+        return filePath + task.getUuid() + filename;
     }
 
     @Override

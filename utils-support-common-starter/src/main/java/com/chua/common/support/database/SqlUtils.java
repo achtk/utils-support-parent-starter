@@ -1,7 +1,6 @@
 package com.chua.common.support.database;
 
 import com.chua.common.support.database.orm.enums.SqlLike;
-import com.chua.common.support.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +20,7 @@ import static com.chua.common.support.constant.CommonConstant.*;
 @SuppressWarnings("serial")
 public abstract class SqlUtils {
 
-    private static final Pattern pattern = Pattern.compile("\\{@((\\w+?)|(\\w+?:\\w+?)|(\\w+?:\\w+?:\\w+?))}");
+    private static final Pattern PATTERN = Pattern.compile("\\{@((\\w+?)|(\\w+?:\\w+?)|(\\w+?:\\w+?:\\w+?))}");
 
     /**
      * 用%连接like
@@ -41,7 +40,7 @@ public abstract class SqlUtils {
     }
 
     public static List<String> findPlaceholder(String sql) {
-        Matcher matcher = pattern.matcher(sql);
+        Matcher matcher = PATTERN.matcher(sql);
         List<String> list = new ArrayList<>();
         while (matcher.find()) {
             list.add(matcher.group());

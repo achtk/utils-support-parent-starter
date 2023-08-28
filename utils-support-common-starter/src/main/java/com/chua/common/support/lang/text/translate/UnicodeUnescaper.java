@@ -11,7 +11,7 @@ import java.io.Writer;
  *
  * @since 1.0
  */
-public class UnicodeUnescaper extends CharSequenceTranslator {
+public class UnicodeUnescaper extends AbstractCharSequenceTranslator {
 
     /**
      * {@inheritDoc}

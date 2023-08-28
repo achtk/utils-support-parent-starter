@@ -52,19 +52,19 @@ public class TreeView implements View {
         recursive(0, true, "", root, new Callback() {
 
             @Override
-            public void callback(int deep, boolean isLast, String prefix, TreeViewNode TreeViewNode) {
+            public void callback(int deep, boolean isLast, String prefix, TreeViewNode treeViewNode) {
                 builder.append(prefix).append(isLast ? STEP_FIRST_CHAR : STEP_NORMAL_CHAR);
-                if (isPrintCost && !TreeViewNode.isRoot()) {
-                    if (TreeViewNode == maxCost) {
+                if (isPrintCost && !treeViewNode.isRoot()) {
+                    if (treeViewNode == maxCost) {
                         // the TreeViewNode with max cost will be highlighted
-                        builder.append(highlighted.a(TreeViewNode.toString()).reset().toString());
+                        builder.append(highlighted.a(treeViewNode.toString()).reset().toString());
                     } else {
-                        builder.append(TreeViewNode.toString());
+                        builder.append(treeViewNode.toString());
                     }
                 }
-                builder.append(TreeViewNode.data);
-                if (!StringUtils.isBlank(TreeViewNode.mark)) {
-                    builder.append(" [").append(TreeViewNode.mark).append(TreeViewNode.marks > 1 ? "," + TreeViewNode.marks : "").append("]");
+                builder.append(treeViewNode.data);
+                if (!StringUtils.isBlank(treeViewNode.mark)) {
+                    builder.append(" [").append(treeViewNode.mark).append(treeViewNode.marks > 1 ? "," + treeViewNode.marks : "").append("]");
                 }
                 builder.append("\n");
             }
@@ -77,10 +77,10 @@ public class TreeView implements View {
     /**
      * 递归遍历
      */
-    private void recursive(int deep, boolean isLast, String prefix, TreeViewNode TreeViewNode, Callback callback) {
-        callback.callback(deep, isLast, prefix, TreeViewNode);
-        if (!TreeViewNode.isLeaf()) {
-            final int size = TreeViewNode.children.size();
+    private void recursive(int deep, boolean isLast, String prefix, TreeViewNode treeViewNode, Callback callback) {
+        callback.callback(deep, isLast, prefix, treeViewNode);
+        if (!treeViewNode.isLeaf()) {
+            final int size = treeViewNode.children.size();
             for (int index = 0; index < size; index++) {
                 final boolean isLastFlag = index == size - 1;
                 final String currentPrefix = isLast ? prefix + STEP_EMPTY_BOARD : prefix + STEP_HAS_BOARD;
@@ -88,7 +88,7 @@ public class TreeView implements View {
                         deep + 1,
                         isLastFlag,
                         currentPrefix,
-                        TreeViewNode.children.get(index),
+                        treeViewNode.children.get(index),
                         callback
                 );
             }
@@ -98,18 +98,18 @@ public class TreeView implements View {
     /**
      * 查找耗时最大的节点，便于后续高亮展示
      *
-     * @param TreeViewNode
+     * @param treeViewNode
      */
-    private void findMaxCostNode(TreeViewNode TreeViewNode) {
-        if (!TreeViewNode.isRoot() && !TreeViewNode.parent.isRoot()) {
+    private void findMaxCostNode(TreeViewNode treeViewNode) {
+        if (!treeViewNode.isRoot() && !treeViewNode.parent.isRoot()) {
             if (maxCost == null) {
-                maxCost = TreeViewNode;
-            } else if (maxCost.totalCost < TreeViewNode.totalCost) {
-                maxCost = TreeViewNode;
+                maxCost = treeViewNode;
+            } else if (maxCost.totalCost < treeViewNode.totalCost) {
+                maxCost = treeViewNode;
             }
         }
-        if (!TreeViewNode.isLeaf()) {
-            for (TreeViewNode n : TreeViewNode.children) {
+        if (!treeViewNode.isLeaf()) {
+            for (TreeViewNode n : treeViewNode.children) {
                 findMaxCostNode(n);
             }
         }
@@ -168,7 +168,7 @@ public class TreeView implements View {
      */
     private interface Callback {
 
-        void callback(int deep, boolean isLast, String prefix, TreeViewNode TreeViewNode);
+        void callback(int deep, boolean isLast, String prefix, TreeViewNode treeViewNode);
 
     }
 

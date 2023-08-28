@@ -15,7 +15,7 @@
  ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.csv;
 
-import com.chua.common.support.file.univocity.parsers.common.CommonParserSettings;
+import com.chua.common.support.file.univocity.parsers.common.AbstractCommonParserSettings;
 import com.chua.common.support.file.univocity.parsers.common.Format;
 import com.chua.common.support.file.univocity.parsers.common.TextParsingException;
 import com.chua.common.support.file.univocity.parsers.common.input.CharAppender;
@@ -28,7 +28,7 @@ import java.util.Map;
 /**
  * This is the configuration class used by the CSV parser ({@link CsvParser})
  *
- * <p>In addition to the configuration options provided by {@link CommonParserSettings}, the CSVParserSettings include:
+ * <p>In addition to the configuration options provided by {@link AbstractCommonParserSettings}, the CSVParserSettings include:
  *
  * <ul>
  * <li><b>emptyValue <i>(defaults to null)</i>:</b> Defines a replacement string to signify an empty value (which is not a null value)
@@ -38,9 +38,9 @@ import java.util.Map;
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
  * @see com.chua.common.support.file.univocity.parsers.csv.CsvParser
  * @see com.chua.common.support.file.univocity.parsers.csv.CsvFormat
- * @see CommonParserSettings
+ * @see AbstractCommonParserSettings
  */
-public class CsvParserSettings extends CommonParserSettings<CsvFormat> {
+public class CsvParserSettings extends AbstractCommonParserSettings<CsvFormat> {
 
     private String emptyValue = null;
     private boolean parseUnescapedQuotes = true;

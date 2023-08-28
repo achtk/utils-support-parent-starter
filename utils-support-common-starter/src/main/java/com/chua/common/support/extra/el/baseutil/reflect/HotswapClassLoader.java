@@ -11,7 +11,7 @@ import java.util.jar.JarFile;
 
 public class HotswapClassLoader extends ClassLoader
 {
-    private static final Map<String, classInfo>              classInfos        = new HashMap<String, classInfo>();
+    private static final Map<String, classInfo> CLASS_INFOS = new HashMap<String, classInfo>();
     private static final ParalLock                           PARAL_LOCK        = new ParalLock();
     private final        ClassLoader                         parent;
     // 需要被重载的Class
@@ -66,7 +66,7 @@ public class HotswapClassLoader extends ClassLoader
                     {
                         String className = entryName.substring(0, entryName.length() - 6);
                         className = className.replaceAll("/", ".");
-                        classInfos.put(className, new classInfo(jarEntry, file.getAbsolutePath()));
+                        CLASS_INFOS.put(className, new classInfo(jarEntry, file.getAbsolutePath()));
                     }
                 }
                 try
@@ -133,9 +133,9 @@ public class HotswapClassLoader extends ClassLoader
                     {
                         try
                         {
-                            if (classInfos.containsKey(name))
+                            if (CLASS_INFOS.containsKey(name))
                             {
-                                classInfo   cInfo       = classInfos.get(name);
+                                classInfo   cInfo       = CLASS_INFOS.get(name);
                                 JarFile     jarFile     = null;
                                 InputStream inputStream = null;
                                 try

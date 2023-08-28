@@ -33,7 +33,7 @@ public class PreviousGtidSetDeserializer implements EventDataDeserializer<Previo
         int nUuids = inputStream.readInteger(8);
         String[] gtids = new String[nUuids];
         for (int i = 0; i < nUuids; i++) {
-            String uuid = formatUUID(inputStream.read(16));
+            String uuid = formatUuid(inputStream.read(16));
 
             int nIntervals = inputStream.readInteger(8);
             String[] intervals = new String[nIntervals];
@@ -48,7 +48,7 @@ public class PreviousGtidSetDeserializer implements EventDataDeserializer<Previo
         return new PreviousGtidSetEventData(join(gtids, ","));
     }
 
-    private String formatUUID(byte[] bytes) {
+    private String formatUuid(byte[] bytes) {
         return format("%s-%s-%s-%s-%s",
                 byteArrayToHex(bytes, 0, 4),
                 byteArrayToHex(bytes, 4, 2),

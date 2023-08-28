@@ -969,7 +969,7 @@ public interface Validator<T> {
      * @param value 值
      * @return 是否为UUID
      */
-    public static boolean isUUID(CharSequence value) {
+    public static boolean isUuid(CharSequence value) {
         return isMatchRegex(UUID, value) || isMatchRegex(UUID_SIMPLE, value);
     }
 
@@ -983,8 +983,8 @@ public interface Validator<T> {
      * @return 验证后的值
      * @throws ValidateException 验证异常
      */
-    public static <T extends CharSequence> T validateUUID(T value, String errorMsg) throws ValidateException {
-        if (!isUUID(value)) {
+    static <T extends CharSequence> T validateUuid(T value, String errorMsg) throws ValidateException {
+        if (!isUuid(value)) {
             throw new ValidateException(errorMsg);
         }
         return value;

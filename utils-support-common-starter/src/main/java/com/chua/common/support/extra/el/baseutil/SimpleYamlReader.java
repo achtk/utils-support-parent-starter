@@ -1,5 +1,7 @@
 package com.chua.common.support.extra.el.baseutil;
 
+import com.chua.common.support.utils.IoUtils;
+
 import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -24,13 +26,13 @@ public class SimpleYamlReader
     public static Map<String, Object> read(InputStream inputStream) throws IOException
     {
         List<Element> seqence   = new ArrayList<>();
-        byte[]        content   = IoUtil.readAllBytes(inputStream);
+        byte[]        content   = IoUtils.toByteArray(inputStream);
         LineHelper    helper    = new LineHelper(content);
         int           seqenceId = 0;
         String        currentLine;
         while ((currentLine = helper.currentLine()) != null)
         {
-            if (currentLine.trim().equals(""))
+            if ("".equals(currentLine.trim()))
             {
                 continue;
             }

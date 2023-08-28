@@ -15,21 +15,21 @@
  ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.tsv;
 
-import com.chua.common.support.file.univocity.parsers.common.CommonWriterSettings;
+import com.chua.common.support.file.univocity.parsers.common.AbstractCommonWriterSettings;
 
 import java.util.Map;
 
 /**
  * This is the configuration class used by the TSV writer ({@link TsvWriter})
  *
- * <p>It does not offer additional configuration options on top of the ones provided by the {@link CommonWriterSettings}</p>
+ * <p>It does not offer additional configuration options on top of the ones provided by the {@link AbstractCommonWriterSettings}</p>
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
  * @see com.chua.common.support.file.univocity.parsers.tsv.TsvWriter
  * @see com.chua.common.support.file.univocity.parsers.tsv.TsvFormat
- * @see CommonWriterSettings
+ * @see AbstractCommonWriterSettings
  */
-public class TsvWriterSettings extends CommonWriterSettings<TsvFormat> {
+public class TsvWriterSettings extends AbstractCommonWriterSettings<TsvFormat> {
 
 
 	private boolean lineJoiningEnabled = false;

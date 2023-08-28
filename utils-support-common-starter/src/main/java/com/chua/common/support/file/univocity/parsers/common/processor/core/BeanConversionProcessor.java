@@ -477,7 +477,7 @@ public class BeanConversionProcessor<T> extends DefaultConversionProcessor {
 	 * @param row      the values to associate with each field of the javabean.
 	 * @param context  information about the current parsing process.
 	 */
-	void mapValuesToFields(T instance, Object[] row, Context context) {
+	void mapValuesToFields(T instance, Object[] row, AbstractContext context) {
 		if (row.length > lastFieldIndexMapped) {
 			this.lastFieldIndexMapped = row.length;
 			mapFieldIndexes(context, row, NormalizedString.toIdentifierGroupArray(context.headers()), context.extractedFieldIndexes(), context.columnsReordered());
@@ -521,13 +521,13 @@ public class BeanConversionProcessor<T> extends DefaultConversionProcessor {
 	 *
 	 * @param row              A row with values for the given java bean.
 	 * @param headers          The names of all fields of the record (including any header that is not mapped to the java bean). May be null if no headers have
-	 *                         been defined in {@link CommonSettings#getHeaders()}
+	 *                         been defined in {@link AbstractCommonSettings#getHeaders()}
 	 * @param indexes          The indexes of the headers or row that are actually being used. May be null if no fields have been selected using
-	 *                         {@link CommonSettings#selectFields(String...)} or {@link CommonSettings#selectIndexes(Integer...)}
+	 *                         {@link AbstractCommonSettings#selectFields(String...)} or {@link AbstractCommonSettings#selectIndexes(Integer...)}
 	 * @param columnsReordered Indicates the indexes provided were reordered and do not match the original sequence of headers.
 	 */
 
-	private void mapFieldIndexes(Context context, Object[] row, NormalizedString[] headers, int[] indexes, boolean columnsReordered) {
+	private void mapFieldIndexes(AbstractContext context, Object[] row, NormalizedString[] headers, int[] indexes, boolean columnsReordered) {
 		if (headers == null) {
 			headers = ArgumentUtils.EMPTY_NORMALIZED_STRING_ARRAY;
 		}
@@ -660,7 +660,7 @@ public class BeanConversionProcessor<T> extends DefaultConversionProcessor {
 	 * @param context The current state of the parsing process
 	 * @return an instance of the java bean type defined in this class constructor.
 	 */
-	public T createBean(String[] row, Context context) {
+	public T createBean(String[] row, AbstractContext context) {
 		Object[] convertedRow = super.applyConversions(row, context);
 		if (convertedRow == null) {
 			return null;
@@ -681,7 +681,7 @@ public class BeanConversionProcessor<T> extends DefaultConversionProcessor {
 		return instance;
 	}
 
-	void processNestedAttributes(String[] row, Object instance, Context context) {
+	void processNestedAttributes(String[] row, Object instance, AbstractContext context) {
 		for (Map.Entry<FieldMapping, BeanConversionProcessor<?>> e : nestedAttributes.entrySet()) {
 			Object nested = e.getValue().createBean(row, context);
 			if (nested != null) {
@@ -696,9 +696,9 @@ public class BeanConversionProcessor<T> extends DefaultConversionProcessor {
 	 * @param instance         the java bean instance to be read
 	 * @param row              object array that will receive the values extracted from java bean
 	 * @param headers          The names of all fields of the record (including any header that is not mapped to the java bean). May be null if no headers have
-	 *                         been defined in {@link CommonSettings#getHeaders()}
+	 *                         been defined in {@link AbstractCommonSettings#getHeaders()}
 	 * @param indexes          The indexes of the headers or row that are actually being used. May be null if no fields have been selected using
-	 *                         {@link CommonSettings#selectFields(String...)} or {@link CommonSettings#selectIndexes(Integer...)}
+	 *                         {@link AbstractCommonSettings#selectFields(String...)} or {@link AbstractCommonSettings#selectIndexes(Integer...)}
 	 * @param columnsReordered Indicates the indexes provided were reordered and do not match the original sequence of headers.
 	 */
 	private void mapFieldsToValues(T instance, Object[] row, NormalizedString[] headers, int[] indexes, boolean columnsReordered) {
@@ -729,9 +729,9 @@ public class BeanConversionProcessor<T> extends DefaultConversionProcessor {
 	 *
 	 * @param bean           an instance of the type defined in this class constructor.
 	 * @param headers        All field names used to produce records in a given destination. May be null if no headers have been defined in
-	 *                       {@link CommonSettings#getHeaders()}
+	 *                       {@link AbstractCommonSettings#getHeaders()}
 	 * @param indexesToWrite The indexes of the headers that are actually being written. May be null if no fields have been selected using
-	 *                       {@link CommonSettings#selectFields(String...)} or {@link CommonSettings#selectIndexes(Integer...)}
+	 *                       {@link AbstractCommonSettings#selectFields(String...)} or {@link AbstractCommonSettings#selectIndexes(Integer...)}
 	 * @return a row of objects containing the values extracted from the java bean
 	 */
 	public final Object[] reverseConversions(T bean, NormalizedString[] headers, int[] indexesToWrite) {

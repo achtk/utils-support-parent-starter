@@ -27,10 +27,10 @@ import com.chua.common.support.file.univocity.parsers.common.processor.core.Proc
  * <p>This error handler WILL NOT handle {@code TextParsingException}s or other errors that prevent the parser to reliably extract rows from a given input,
  * or the writer to proceed writing data. </p>
  *
- * <p>When parsing, the {@link #handleError(DataProcessingException, Object[], Context)} method will be called only when a valid record has been parsed, but the
+ * <p>When parsing, the {@link #handleError(DataProcessingException, Object[], AbstractContext)} method will be called only when a valid record has been parsed, but the
  * subsequent processing executed by a {@link Processor} fails.</p>
  *
- * <p>When writing, the {@link #handleError(DataProcessingException, Object[], Context)} method will be called only when a using
+ * <p>When writing, the {@link #handleError(DataProcessingException, Object[], AbstractContext)} method will be called only when a using
  * the {@link AbstractWriter#processRecord(Object)} methods, and {@link RowWriterProcessor} fails to execute.</p>
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
@@ -40,10 +40,10 @@ import com.chua.common.support.file.univocity.parsers.common.processor.core.Proc
  * @see TextParsingException
  * @see AbstractParser
  * @see AbstractWriter
- * @see CommonSettings
- * @see Context
+ * @see AbstractCommonSettings
+ * @see AbstractContext
  */
-public interface ProcessorErrorHandler<T extends Context> {
+public interface ProcessorErrorHandler<T extends AbstractContext> {
 
 	/**
 	 * Handles non-fatal instances of {@code DataProcessingException} that are thrown by a {@link Processor} while processing a record parsed from the input,

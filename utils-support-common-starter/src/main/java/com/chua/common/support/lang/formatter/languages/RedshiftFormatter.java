@@ -10,7 +10,7 @@ import java.util.List;
 
 public class RedshiftFormatter extends AbstractFormatter {
 
-  private static final List<String> reservedWords =
+  private static final List<String> RESERVED_WORDS =
       Arrays.asList(
           "AES128",
           "AES256",
@@ -224,7 +224,7 @@ public class RedshiftFormatter extends AbstractFormatter {
           "EVEN",
           "ALL");
 
-  private static final List<String> reservedTopLevelWords =
+  private static final List<String> RESERVED_TOP_LEVEL_WORDS =
       Arrays.asList(
           "ADD",
           "AFTER",
@@ -344,9 +344,9 @@ public class RedshiftFormatter extends AbstractFormatter {
           "HIVE METASTORE",
           "CATALOG_ROLE");
 
-  private static final List<String> reservedTopLevelWordsNoIndent = Collections.emptyList();
+  private static final List<String> RESERVED_TOP_LEVEL_WORDS_NO_INDENT = Collections.emptyList();
 
-  private static final List<String> reservedNewlineWords =
+  private static final List<String> RESERVED_NEWLINE_WORDS =
       Arrays.asList(
           "AND",
           "ELSE",
@@ -377,10 +377,10 @@ public class RedshiftFormatter extends AbstractFormatter {
   @Override
   public DialectConfig dialectConfig() {
     return DialectConfig.builder()
-        .reservedWords(reservedWords)
-        .reservedTopLevelWords(reservedTopLevelWords)
-        .reservedTopLevelWordsNoIndent(reservedTopLevelWordsNoIndent)
-        .reservedNewlineWords(reservedNewlineWords)
+        .reservedWords(RESERVED_WORDS)
+        .reservedTopLevelWords(RESERVED_TOP_LEVEL_WORDS)
+        .reservedTopLevelWordsNoIndent(RESERVED_TOP_LEVEL_WORDS_NO_INDENT)
+        .reservedNewlineWords(RESERVED_NEWLINE_WORDS)
         .stringTypes(
             Arrays.asList(
                 StringLiteral.DOUBLE_QUOTE, StringLiteral.SINGLE_QUOTE, StringLiteral.BACK_QUOTE))

@@ -27,7 +27,7 @@ import java.util.Objects;
  * {@link Processor} based on values found on the rows parsed from the input.
  * @author Administrator
  */
-public abstract class AbstractInputValueSwitch<T extends Context> extends AbstractProcessorSwitch<T> {
+public abstract class AbstractInputValueSwitch<T extends AbstractContext> extends AbstractProcessorSwitch<T> {
 
     private int columnIndex = -1;
     private NormalizedString columnName = null;
@@ -258,7 +258,7 @@ public abstract class AbstractInputValueSwitch<T extends Context> extends Abstra
 		throw new DataProcessingException("Unable to process input row. No switches activated and no default switch defined.", columnIndex, row, null);
 	}
 
-	private static class Switch<T extends Context> {
+	private static class Switch<T extends AbstractContext> {
 		final Processor<T> processor;
 		final String[] headers;
 		final int[] indexes;

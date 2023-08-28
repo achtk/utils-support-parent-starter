@@ -71,7 +71,7 @@ public class FunctionPathToken extends PathToken {
                 switch (param.getType()) {
                     case PATH:
                         PathLateBindingValue pathLateBindingValue = new PathLateBindingValue(param.getPath(), ctx.rootDocument(), ctx.configuration());
-                        if (!param.hasEvaluated() || !pathLateBindingValue.equals(param.getILateBingValue())) {
+                        if (!param.hasEvaluated() || !pathLateBindingValue.equals(param.getLateBingValue())) {
                             param.setLateBinding(pathLateBindingValue);
                             param.setEvaluated(true);
                         }

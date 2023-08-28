@@ -20,11 +20,11 @@ import com.chua.common.support.file.univocity.parsers.common.record.RecordFactor
 import com.chua.common.support.file.univocity.parsers.common.record.RecordMetaData;
 
 /**
- * Default implementation of the {@link Context} interface with essential information about the output being produced.
+ * Default implementation of the {@link AbstractContext} interface with essential information about the output being produced.
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  */
-public class DefaultContext implements Context {
+public class DefaultContext implements AbstractContext {
 
 	protected boolean stopped = false;
 	final ParserOutput output;

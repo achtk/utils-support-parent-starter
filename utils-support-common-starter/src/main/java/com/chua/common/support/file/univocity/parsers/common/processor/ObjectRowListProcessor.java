@@ -15,8 +15,8 @@
  ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.common.processor;
 
+import com.chua.common.support.file.univocity.parsers.common.AbstractContext;
 import com.chua.common.support.file.univocity.parsers.common.AbstractParser;
-import com.chua.common.support.file.univocity.parsers.common.Context;
 import com.chua.common.support.file.univocity.parsers.common.ParsingContext;
 import com.chua.common.support.file.univocity.parsers.common.processor.core.AbstractObjectListProcessor;
 
@@ -31,7 +31,7 @@ import java.util.List;
  * ObjectRowListProcessor processor = new ObjectRowListProcessor();
  * processor.convertIndexes(Conversions.toBigDecimal()).set(4, 6);
  * parserSettings.setRowProcessor(new ObjectRowListProcessor());
- * parser.parse(reader); // will invoke the {@link AbstractObjectListProcessor#rowProcessed(Object[], Context)} method for each parsed record.
+ * parser.parse(reader); // will invoke the {@link AbstractObjectListProcessor#rowProcessed(Object[], AbstractContext)} method for each parsed record.
  *
  * String[] headers = rowProcessor.getHeaders();
  * List&lt;Object[]&gt; rows = rowProcessor.getRows();

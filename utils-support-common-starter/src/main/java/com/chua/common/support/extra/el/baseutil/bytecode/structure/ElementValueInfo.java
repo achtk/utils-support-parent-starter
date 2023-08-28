@@ -11,7 +11,11 @@ import com.chua.common.support.extra.el.baseutil.reflect.ReflectUtil;
 
 import java.util.Arrays;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_DOT_CHAR;
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_LEFT_SLASH_CHAR;
 import static com.chua.common.support.constant.ConstantType.*;
+import static com.chua.common.support.constant.NameConstant.CLASS_NAME;
+import static com.chua.common.support.constant.NameConstant.STRING_NAME;
 
 public class ElementValueInfo {
     private char tag;
@@ -20,15 +24,15 @@ public class ElementValueInfo {
     private EnumConstant enumConstant;
     private String classname;
     private AnnotationInfo annotationInfo;
-    private int num_values;
+    private int numValues;
     private ElementValueInfo[] elementValueInfos;
 
-    public void resolve(BinaryData binaryData, ConstantInfo[] constantInfos) {
+    public void resolve(BinaryData binaryData, AbstractConstantInfo[] constantInfos) {
         tag = (char) binaryData.readByte();
         elementValueType = resolveType(tag);
         if (isPrimitive(elementValueType) || elementValueType == STRING) {
-            int const_value_index = binaryData.readShort();
-            ConstantInfo constantInfo = constantInfos[const_value_index - 1];
+            int constValueIndex = binaryData.readShort();
+            AbstractConstantInfo constantInfo = constantInfos[constValueIndex - 1];
             if (constantInfo instanceof IntegerInfo) {
                 constantValue = new ConstantValue(elementValueType, ((IntegerInfo) constantInfo).getValue());
             } else if (constantInfo instanceof FloatInfo) {
@@ -43,21 +47,21 @@ public class ElementValueInfo {
                 throw new IllegalArgumentException();
             }
         } else if (elementValueType == ENUM) {
-            int type_name_index = binaryData.readShort();
-            int const_name_index = binaryData.readShort();
-            String typeName = ((Utf8Info) constantInfos[type_name_index - 1]).getValue();
-            String enumName = ((Utf8Info) constantInfos[const_name_index - 1]).getValue();
+            int typeNameIndex = binaryData.readShort();
+            int constNameIndex = binaryData.readShort();
+            String typeName = ((Utf8Info) constantInfos[typeNameIndex - 1]).getValue();
+            String enumName = ((Utf8Info) constantInfos[constNameIndex - 1]).getValue();
             enumConstant = new EnumConstant(typeName, enumName);
         } else if (elementValueType == CLASS) {
-            int class_info_index = binaryData.readShort();
-            classname = ((Utf8Info) constantInfos[class_info_index - 1]).getValue();
+            int classInfoIndex = binaryData.readShort();
+            classname = ((Utf8Info) constantInfos[classInfoIndex - 1]).getValue();
         } else if (elementValueType == ANNOTATION) {
             annotationInfo = new AnnotationInfo();
             annotationInfo.resolve(binaryData, constantInfos);
         } else if (elementValueType == ARRAY) {
-            num_values = binaryData.readShort();
-            elementValueInfos = new ElementValueInfo[num_values];
-            for (int i = 0; i < num_values; i++) {
+            numValues = binaryData.readShort();
+            elementValueInfos = new ElementValueInfo[numValues];
+            for (int i = 0; i < numValues; i++) {
                 elementValueInfos[i] = new ElementValueInfo();
                 elementValueInfos[i].resolve(binaryData, constantInfos);
             }
@@ -118,7 +122,7 @@ public class ElementValueInfo {
 
     @Override
     public String toString() {
-        return "ElementValueInfo{" + "tag=" + tag + ", elementValueType=" + elementValueType + ", constantValue=" + constantValue + ", enumConstant=" + enumConstant + ", classname='" + classname + '\'' + ", annotationInfo=" + annotationInfo + ", num_values=" + num_values + ", elementValueInfos=" + Arrays.toString(elementValueInfos) + '}';
+        return "ElementValueInfo{" + "tag=" + tag + ", elementValueType=" + elementValueType + ", constantValue=" + constantValue + ", enumConstant=" + enumConstant + ", classname='" + classname + '\'' + ", annotationInfo=" + annotationInfo + ", num_values=" + numValues + ", elementValueInfos=" + Arrays.toString(elementValueInfos) + '}';
     }
 
     public ConstantType getElementValueType() {
@@ -141,8 +145,8 @@ public class ElementValueInfo {
         return annotationInfo;
     }
 
-    public int getNum_values() {
-        return num_values;
+    public int getNumValues() {
+        return numValues;
     }
 
     public ElementValueInfo[] getElementValueInfos() {
@@ -202,9 +206,9 @@ public class ElementValueInfo {
                 valuePair.setAnnotation(annotationInfo.getAnnotation(classLoader));
                 break;
             case ARRAY:
-                if (num_values != 0) {
+                if (numValues != 0) {
                     valuePair.setComponentType(elementValueInfos[0].getElementValueType());
-                    ValuePair[] array = new ValuePair[num_values];
+                    ValuePair[] array = new ValuePair[numValues];
                     for (int i = 0; i < array.length; i++) {
                         array[i] = elementValueInfos[i].getValue(classLoader, methodInfo);
                     }
@@ -246,19 +250,19 @@ public class ElementValueInfo {
                             break;
                         case 'L':
                             String reference = methodInfoDescriptor.substring(index + 3, methodInfoDescriptor.length() - 1);
-                            if (reference.equals("java/lang/String")) {
+                            if (STRING_NAME.equals(reference)) {
                                 componentType = STRING;
-                            } else if (reference.equals("java/lang/Class")) {
+                            } else if (CLASS_NAME.equals(reference)) {
                                 componentType = CLASS;
                             } else {
                                 byte[] bytes = BytecodeUtil.loadBytecode(classLoader, reference);
                                 ClassFile classFile = new ClassFileParser(new BinaryData(bytes)).parse();
                                 if (classFile.isAnnotation()) {
                                     componentType = ANNOTATION;
-                                    valuePair.setComponentAnnotationType(reference.replace('/', '.'));
+                                    valuePair.setComponentAnnotationType(reference.replace(SYMBOL_LEFT_SLASH_CHAR, SYMBOL_DOT_CHAR));
                                 } else if (classFile.isEnum()) {
                                     componentType = ENUM;
-                                    valuePair.setComponentEnumTypeName(reference.replace('/', '.'));
+                                    valuePair.setComponentEnumTypeName(reference.replace(SYMBOL_LEFT_SLASH_CHAR, SYMBOL_DOT_CHAR));
                                 } else {
                                     ReflectUtil.throwException(new IllegalArgumentException());
                                 }

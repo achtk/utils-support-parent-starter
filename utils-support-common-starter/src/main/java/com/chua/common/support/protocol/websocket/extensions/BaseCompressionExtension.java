@@ -27,7 +27,7 @@ package com.chua.common.support.protocol.websocket.extensions;
 
 import com.chua.common.support.protocol.websocket.exceptions.InvalidDataException;
 import com.chua.common.support.protocol.websocket.exceptions.InvalidFrameException;
-import com.chua.common.support.protocol.websocket.framing.ControlFrame;
+import com.chua.common.support.protocol.websocket.framing.AbstractControlFrame;
 import com.chua.common.support.protocol.websocket.framing.DataFrame;
 import com.chua.common.support.protocol.websocket.framing.Framedata;
 
@@ -37,7 +37,7 @@ import com.chua.common.support.protocol.websocket.framing.Framedata;
  * @author Administrator
  * @since 1.3.5
  */
-public abstract class CompressionExtension extends DefaultExtension {
+public abstract class BaseCompressionExtension extends DefaultExtension {
 
   @Override
   public void isFrameValid(Framedata inputFrame) throws InvalidDataException {
@@ -47,7 +47,7 @@ public abstract class CompressionExtension extends DefaultExtension {
                   "bad rsv RSV1: " + inputFrame.isRsv1() + " RSV2: " + inputFrame.isRsv2() + " RSV3: "
                           + inputFrame.isRsv3());
       }
-      b = (inputFrame instanceof ControlFrame) && (inputFrame.isRsv1() || inputFrame.isRsv2()
+      b = (inputFrame instanceof AbstractControlFrame) && (inputFrame.isRsv1() || inputFrame.isRsv2()
               || inputFrame.isRsv3());
       if (b) {
           throw new InvalidFrameException(

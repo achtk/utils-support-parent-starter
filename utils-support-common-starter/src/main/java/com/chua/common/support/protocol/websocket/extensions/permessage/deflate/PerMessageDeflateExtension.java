@@ -3,7 +3,7 @@ package com.chua.common.support.protocol.websocket.extensions.permessage.deflate
 import com.chua.common.support.protocol.constant.Opcode;
 import com.chua.common.support.protocol.websocket.exceptions.InvalidDataException;
 import com.chua.common.support.protocol.websocket.exceptions.InvalidFrameException;
-import com.chua.common.support.protocol.websocket.extensions.CompressionExtension;
+import com.chua.common.support.protocol.websocket.extensions.BaseCompressionExtension;
 import com.chua.common.support.protocol.websocket.extensions.ExtensionRequestData;
 import com.chua.common.support.protocol.websocket.extensions.IExtension;
 import com.chua.common.support.protocol.websocket.framing.*;
@@ -25,7 +25,7 @@ import java.util.zip.Inflater;
  * @see <a href="https://tools.ietf.org/html/rfc7692#section-7">7&#46; The "permessage-deflate"
  * Extension in RFC 7692</a>
  */
-public class PerMessageDeflateExtension extends CompressionExtension {
+public class PerMessageDeflateExtension extends BaseCompressionExtension {
 
     /**
      * Name of the extension as registered by IETF https://tools.ietf.org/html/rfc7692#section-9.
@@ -215,7 +215,7 @@ public class PerMessageDeflateExtension extends CompressionExtension {
     }
     // Only the first frame's RSV1 must be set.
     if (!(inputFrame instanceof ContinuousFrame)) {
-      ((DataFrame) inputFrame).setRSV1(true);
+      ((DataFrame) inputFrame).setRsv1(true);
     }
 
     deflater.setInput(payloadData);

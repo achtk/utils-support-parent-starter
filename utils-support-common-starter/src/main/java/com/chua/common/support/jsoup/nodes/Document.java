@@ -7,8 +7,8 @@ import com.chua.common.support.jsoup.helper.Validate;
 import com.chua.common.support.jsoup.parser.ParseSettings;
 import com.chua.common.support.jsoup.parser.Parser;
 import com.chua.common.support.jsoup.parser.Tag;
+import com.chua.common.support.jsoup.select.AbstractEvaluator;
 import com.chua.common.support.jsoup.select.Elements;
-import com.chua.common.support.jsoup.select.Evaluator;
 import com.chua.common.support.utils.StringUtils;
 
 import java.nio.charset.Charset;
@@ -154,7 +154,7 @@ public class Document extends Element {
         Element titleEl = head().selectFirst(TITLE_EVAL);
         return titleEl != null ? StringUtils.normaliseWhitespace(titleEl.text()).trim() : "";
     }
-    private static final Evaluator TITLE_EVAL = new Evaluator.Tag("title");
+    private static final AbstractEvaluator TITLE_EVAL = new AbstractEvaluator.Tag("title");
 
     /**
      Set the document's {@code title} element. Updates the existing element, or adds {@code title} to {@code head} if

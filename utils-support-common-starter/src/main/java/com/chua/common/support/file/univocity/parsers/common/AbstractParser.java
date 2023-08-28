@@ -1,18 +1,3 @@
-/*******************************************************************************
- * Copyright 2014 Univocity Software Pty Ltd
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.common;
 
 import com.chua.common.support.file.univocity.parsers.common.input.*;
@@ -34,7 +19,7 @@ import static com.chua.common.support.file.univocity.parsers.common.ArgumentUtil
 
 /**
  * The AbstractParser class provides a common ground for all parsers in univocity-parsers.
- * <p> It handles all settings defined by {@link CommonParserSettings}, and delegates the parsing algorithm implementation to its subclasses through the
+ * <p> It handles all settings defined by {@link AbstractCommonParserSettings}, and delegates the parsing algorithm implementation to its subclasses through the
  * abstract method {@link AbstractParser#parseRecord()}
  * <p> The following (absolutely required) attributes are exposed to subclasses:
  * <ul>
@@ -53,7 +38,8 @@ import static com.chua.common.support.file.univocity.parsers.common.ArgumentUtil
  * @see com.chua.common.support.file.univocity.parsers.common.input.CharInputReader
  * @see com.chua.common.support.file.univocity.parsers.common.ParserOutput
  */
-public abstract class AbstractParser<T extends CommonParserSettings<?>> {
+@SuppressWarnings("ALL")
+public abstract class AbstractParser<T extends AbstractCommonParserSettings<?>> {
 
 	protected final T settings;
 	protected final ParserOutput output;
@@ -80,7 +66,7 @@ public abstract class AbstractParser<T extends CommonParserSettings<?>> {
 	private final boolean processComments;
 
 	/**
-	 * All parsers must support, at the very least, the settings provided by {@link CommonParserSettings}. The AbstractParser requires its configuration to be
+	 * All parsers must support, at the very least, the settings provided by {@link AbstractCommonParserSettings}. The AbstractParser requires its configuration to be
 	 * properly initialized.
 	 *
 	 * @param settings the parser configuration
@@ -123,7 +109,7 @@ public abstract class AbstractParser<T extends CommonParserSettings<?>> {
 
 	/**
 	 * Parses the entirety of a given input and delegates each parsed row to an instance of {@link RowProcessor}, defined by
-	 * {@link CommonParserSettings#getRowProcessor()}.
+	 * {@link AbstractCommonParserSettings#getRowProcessor()}.
 	 *
 	 * @param reader The input to be parsed.
 	 */
@@ -192,7 +178,7 @@ public abstract class AbstractParser<T extends CommonParserSettings<?>> {
 	 * <p> After the record processing, the AbstractParser reads the next characters from the input, delegating control again to the parseRecord() implementation for processing of the next record.
 	 * <p> This cycle repeats until the reading process is stopped by the user, the input is exhausted, or an error happens.
 	 * <p> In case of errors, the unchecked exception {@link TextParsingException} will be thrown and all resources in use will be closed automatically
-	 * unless {@link CommonParserSettings#isAutoClosingEnabled()} evaluates to {@code false}. The exception should contain the cause and more information about where in the input the error happened.
+	 * unless {@link AbstractCommonParserSettings#isAutoClosingEnabled()} evaluates to {@code false}. The exception should contain the cause and more information about where in the input the error happened.
 	 *
 	 * @see com.chua.common.support.file.univocity.parsers.common.input.CharInputReader
 	 * @see com.chua.common.support.file.univocity.parsers.common.input.CharAppender
@@ -565,7 +551,7 @@ public abstract class AbstractParser<T extends CommonParserSettings<?>> {
 	 * Parses the next record from the input. Note that {@link AbstractParser#beginParsing(Reader)} must have been invoked once before calling this method.
 	 * If the end of the input is reached, then this method will return null. Additionally, all resources will be closed automatically at the end of the input
 	 * or if any error happens while parsing,
-	 * unless {@link CommonParserSettings#isAutoClosingEnabled()} evaluates to {@code false}.
+	 * unless {@link AbstractCommonParserSettings#isAutoClosingEnabled()} evaluates to {@code false}.
 	 *
 	 * @return The record parsed from the input or null if there's no more characters to read.
 	 */
@@ -717,7 +703,7 @@ public abstract class AbstractParser<T extends CommonParserSettings<?>> {
 
 	/**
 	 * Parses the entirety of a given file and delegates each parsed row to an instance of {@link RowProcessor}, defined by
-	 * {@link CommonParserSettings#getRowProcessor()}.
+	 * {@link AbstractCommonParserSettings#getRowProcessor()}.
 	 *
 	 * @param file The file to be parsed.
 	 */
@@ -727,7 +713,7 @@ public abstract class AbstractParser<T extends CommonParserSettings<?>> {
 
 	/**
 	 * Parses the entirety of a given file and delegates each parsed row to an instance of {@link RowProcessor}, defined by
-	 * {@link CommonParserSettings#getRowProcessor()}.
+	 * {@link AbstractCommonParserSettings#getRowProcessor()}.
 	 *
 	 * @param file     The file to be parsed.
 	 * @param encoding the encoding of the file
@@ -738,7 +724,7 @@ public abstract class AbstractParser<T extends CommonParserSettings<?>> {
 
 	/**
 	 * Parses the entirety of a given file and delegates each parsed row to an instance of {@link RowProcessor}, defined by
-	 * {@link CommonParserSettings#getRowProcessor()}.
+	 * {@link AbstractCommonParserSettings#getRowProcessor()}.
 	 *
 	 * @param file     The file to be parsed.
 	 * @param encoding the encoding of the file
@@ -749,9 +735,9 @@ public abstract class AbstractParser<T extends CommonParserSettings<?>> {
 
 	/**
 	 * Parses the entirety of a given input and delegates each parsed row to an instance of {@link RowProcessor}, defined by
-	 * {@link CommonParserSettings#getRowProcessor()}.
+	 * {@link AbstractCommonParserSettings#getRowProcessor()}.
 	 *
-	 * @param input The input to be parsed. The input stream will be closed automatically, unless {@link CommonParserSettings#isAutoClosingEnabled()} evaluates
+	 * @param input The input to be parsed. The input stream will be closed automatically, unless {@link AbstractCommonParserSettings#isAutoClosingEnabled()} evaluates
 	 *              to {@code false}.
 	 */
 	public final void parse(InputStream input) {
@@ -760,9 +746,9 @@ public abstract class AbstractParser<T extends CommonParserSettings<?>> {
 
 	/**
 	 * Parses the entirety of a given input and delegates each parsed row to an instance of {@link RowProcessor}, defined by
-	 * {@link CommonParserSettings#getRowProcessor()}.
+	 * {@link AbstractCommonParserSettings#getRowProcessor()}.
 	 *
-	 * @param input    The input to be parsed. The input stream will be closed automatically, unless {@link CommonParserSettings#isAutoClosingEnabled()}
+	 * @param input    The input to be parsed. The input stream will be closed automatically, unless {@link AbstractCommonParserSettings#isAutoClosingEnabled()}
 	 *                 evaluates to {@code false}.
 	 * @param encoding the encoding of the input stream
 	 */
@@ -772,9 +758,9 @@ public abstract class AbstractParser<T extends CommonParserSettings<?>> {
 
 	/**
 	 * Parses the entirety of a given input and delegates each parsed row to an instance of {@link RowProcessor}, defined by
-	 * {@link CommonParserSettings#getRowProcessor()}.
+	 * {@link AbstractCommonParserSettings#getRowProcessor()}.
 	 *
-	 * @param input    The input to be parsed. The input stream will be closed automatically, unless {@link CommonParserSettings#isAutoClosingEnabled()}
+	 * @param input    The input to be parsed. The input stream will be closed automatically, unless {@link AbstractCommonParserSettings#isAutoClosingEnabled()}
 	 *                 evaluates to {@code false}.
 	 * @param encoding the encoding of the input stream
 	 */
@@ -823,7 +809,7 @@ public abstract class AbstractParser<T extends CommonParserSettings<?>> {
 	 * The user may invoke @link {@link AbstractParser#stopParsing()} to stop reading from the input.
 	 *
 	 * @param input The input to be parsed. The input stream will be closed automatically in case of errors unless
-	 *              {@link              CommonParserSettings#isAutoClosingEnabled()} evaluates to {@code false}.
+	 *              {@link              AbstractCommonParserSettings#isAutoClosingEnabled()} evaluates to {@code false}.
 	 */
 	public final void beginParsing(InputStream input) {
 		beginParsing(ArgumentUtils.newReader(input));
@@ -835,7 +821,7 @@ public abstract class AbstractParser<T extends CommonParserSettings<?>> {
 	 * The user may invoke @link {@link AbstractParser#stopParsing()} to stop reading from the input.
 	 *
 	 * @param input    The input to be parsed. The input stream will be closed automatically in case of errors unless
-	 *                 {@link                 CommonParserSettings#isAutoClosingEnabled()} evaluates to {@code false}.
+	 *                 {@link                 AbstractCommonParserSettings#isAutoClosingEnabled()} evaluates to {@code false}.
 	 * @param encoding the encoding of the input stream
 	 */
 	public final void beginParsing(InputStream input, String encoding) {
@@ -848,7 +834,7 @@ public abstract class AbstractParser<T extends CommonParserSettings<?>> {
 	 * The user may invoke @link {@link AbstractParser#stopParsing()} to stop reading from the input.
 	 *
 	 * @param input    The input to be parsed. The input stream will be closed automatically in case of errors unless
-	 *                 {@link                 CommonParserSettings#isAutoClosingEnabled()} evaluates to {@code false}.
+	 *                 {@link                 AbstractCommonParserSettings#isAutoClosingEnabled()} evaluates to {@code false}.
 	 * @param encoding the encoding of the input stream
 	 */
 	public final void beginParsing(InputStream input, Charset encoding) {

@@ -11,7 +11,7 @@ import java.util.List;
 public class StandardSqlFormatter extends AbstractFormatter {
 
   // https://jakewheat.github.io/sql-overview/sql-2008-foundation-grammar.html#reserved-word
-  private static final List<String> reservedWords =
+  private static final List<String> RESERVED_WORDS =
       Arrays.asList(
           "ABS",
           "ALL",
@@ -310,7 +310,7 @@ public class StandardSqlFormatter extends AbstractFormatter {
           "WITHOUT",
           "YEAR");
 
-  private static final List<String> reservedTopLevelWords =
+  private static final List<String> RESERVED_TOP_LEVEL_WORDS =
       Arrays.asList(
           "ADD",
           "ALTER COLUMN",
@@ -337,7 +337,7 @@ public class StandardSqlFormatter extends AbstractFormatter {
           "VALUES",
           "WHERE");
 
-  private static final List<String> reservedTopLevelWordsNoIndent =
+  private static final List<String> RESERVED_TOP_LEVEL_WORDS_NO_INDENT =
       Arrays.asList(
           "INTERSECT",
           "INTERSECT ALL",
@@ -349,7 +349,7 @@ public class StandardSqlFormatter extends AbstractFormatter {
           "EXCEPT ALL",
           "EXCEPT DISTINCT");
 
-  private static final List<String> reservedNewlineWords =
+  private static final List<String> RESERVED_NEWLINE_WORDS =
       Arrays.asList(
           "AND",
           "ELSE",
@@ -370,10 +370,10 @@ public class StandardSqlFormatter extends AbstractFormatter {
   @Override
   public DialectConfig dialectConfig() {
     return DialectConfig.builder()
-        .reservedWords(reservedWords)
-        .reservedTopLevelWords(reservedTopLevelWords)
-        .reservedTopLevelWordsNoIndent(reservedTopLevelWordsNoIndent)
-        .reservedNewlineWords(reservedNewlineWords)
+        .reservedWords(RESERVED_WORDS)
+        .reservedTopLevelWords(RESERVED_TOP_LEVEL_WORDS)
+        .reservedTopLevelWordsNoIndent(RESERVED_TOP_LEVEL_WORDS_NO_INDENT)
+        .reservedNewlineWords(RESERVED_NEWLINE_WORDS)
         .stringTypes(Arrays.asList(StringLiteral.DOUBLE_QUOTE, StringLiteral.SINGLE_QUOTE))
         .openParens(Arrays.asList("(", "CASE"))
         .closeParens(Arrays.asList(")", "END"))

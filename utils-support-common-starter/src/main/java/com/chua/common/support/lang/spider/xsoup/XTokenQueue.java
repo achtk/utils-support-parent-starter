@@ -17,9 +17,9 @@ import java.util.regex.Pattern;
  */
 public class XTokenQueue {
     private static final char ESC = '\\'; // escape char for chomp balanced.
-    private static final String[] quotes = {"\"", "'"};
-    private static final char singleQuote = '\'';
-    private static final char doubleQuote = '"';
+    private static final String[] QUOTES = {"\"", "'"};
+    private static final char SINGLE_QUOTE = '\'';
+    private static final char DOUBLE_QUOTE = '"';
     private String queue;
     private int pos = 0;
 
@@ -44,7 +44,9 @@ public class XTokenQueue {
         char last = 0;
         for (char c : in.toCharArray()) {
             if (c == ESC) {
-                if (last != 0 && last == ESC) out.append(c);
+                if (last != 0 && last == ESC) {
+                    out.append(c);
+                }
             } else {
                 out.append(c);
             }
@@ -139,7 +141,7 @@ public class XTokenQueue {
      * @param seq string to case sensitively check for
      * @return true if matched, false if not
      */
-    public boolean matchesCS(String seq) {
+    public boolean matchesCs(String seq) {
         return queue.startsWith(seq, pos);
     }
 
@@ -151,16 +153,22 @@ public class XTokenQueue {
      */
     public boolean matchesAny(String... seq) {
         for (String s : seq) {
-            if (matches(s)) return true;
+            if (matches(s)) {
+                return true;
+            }
         }
         return false;
     }
 
     public boolean matchesAny(char... seq) {
-        if (isEmpty()) return false;
+        if (isEmpty()) {
+            return false;
+        }
 
         for (char c : seq) {
-            if (queue.charAt(pos) == c) return true;
+            if (queue.charAt(pos) == c) {
+                return true;
+            }
         }
         return false;
     }
@@ -208,7 +216,9 @@ public class XTokenQueue {
      * Drops the next character off the queue.
      */
     public void advance() {
-        if (!isEmpty()) pos++;
+        if (!isEmpty()) {
+            pos++;
+        }
     }
 
     /**
@@ -229,9 +239,13 @@ public class XTokenQueue {
      * @param seq sequence to remove from head of queue.
      */
     public void consume(String seq) {
-        if (!matches(seq)) throw new IllegalStateException("Queue did not match expected sequence");
+        if (!matches(seq)) {
+            throw new IllegalStateException("Queue did not match expected sequence");
+        }
         int len = seq.length();
-        if (len > remainingLength()) throw new IllegalStateException("Queue not long enough to consume sequence");
+        if (len > remainingLength()) {
+            throw new IllegalStateException("Queue not long enough to consume sequence");
+        }
 
         pos += len;
     }
@@ -258,7 +272,9 @@ public class XTokenQueue {
         String first = seq.substring(0, 1);
         boolean canScan = first.toLowerCase().equals(first.toUpperCase()); // if first is not cased, use index of
         while (!isEmpty()) {
-            if (matches(seq)) break;
+            if (matches(seq)) {
+                break;
+            }
 
             if (canScan) {
                 int skip = queue.indexOf(first, pos) - pos;
@@ -330,7 +346,7 @@ public class XTokenQueue {
     }
 
     public String chompBalancedQuotes() {
-        String quote = consumeAny(quotes);
+        String quote = consumeAny(QUOTES);
         if (quote.length() == 0) {
             return "";
         }
@@ -348,16 +364,20 @@ public class XTokenQueue {
         Character quote = null;
 
         do {
-            if (isEmpty()) break;
+            if (isEmpty()) {
+                break;
+            }
             Character c = consume();
             if (last == 0 || last != ESC) {
                 if (!inQuotes) {
-                    if (c.equals(singleQuote) || c.equals(doubleQuote)) {
+                    if (c.equals(SINGLE_QUOTE) || c.equals(DOUBLE_QUOTE)) {
                         inQuotes = true;
                         quote = c;
                     } else if (c.equals(open)) {
                         depth++;
-                    } else if (c.equals(close)) depth--;
+                    } else if (c.equals(close)) {
+                        depth--;
+                    }
                 } else {
                     if (c.equals(quote)) {
                         inQuotes = false;
@@ -365,7 +385,9 @@ public class XTokenQueue {
                 }
             }
 
-            if (depth > 0 && last != 0) accum.append(c); // don't include the outer match pair in the return
+            if (depth > 0 && last != 0) {
+                accum.append(c); // don't include the outer match pair in the return
+            }
             last = c;
         } while (depth > 0);
         return accum.toString();
@@ -387,15 +409,21 @@ public class XTokenQueue {
         char last = 0;
 
         do {
-            if (isEmpty()) break;
+            if (isEmpty()) {
+                break;
+            }
             Character c = consume();
             if (last == 0 || last != ESC) {
                 if (c.equals(open)) {
                     depth++;
-                } else if (c.equals(close)) depth--;
+                } else if (c.equals(close)) {
+                    depth--;
+                }
             }
 
-            if (depth > 0 && last != 0) accum.append(c); // don't include the outer match pair in the return
+            if (depth > 0 && last != 0) {
+                accum.append(c); // don't include the outer match pair in the return
+            }
             last = c;
         } while (depth > 0);
         return accum.toString();
@@ -422,7 +450,9 @@ public class XTokenQueue {
      */
     public String consumeWord() {
         int start = pos;
-        while (matchesWord()) pos++;
+        while (matchesWord()) {
+            pos++;
+        }
         return queue.substring(start, pos);
     }
 
@@ -433,7 +463,9 @@ public class XTokenQueue {
      */
     public String consumeTagName() {
         int start = pos;
-        while (!isEmpty() && (matchesWord() || matchesAny(':', '_', '-'))) pos++;
+        while (!isEmpty() && (matchesWord() || matchesAny(':', '_', '-'))) {
+            pos++;
+        }
 
         return queue.substring(start, pos);
     }
@@ -445,7 +477,9 @@ public class XTokenQueue {
      */
     public String consumeElementSelector() {
         int start = pos;
-        while (!isEmpty() && (matchesWord() || matchesAny('|', '_', '-'))) pos++;
+        while (!isEmpty() && (matchesWord() || matchesAny('|', '_', '-'))) {
+            pos++;
+        }
 
         return queue.substring(start, pos);
     }
@@ -467,7 +501,9 @@ public class XTokenQueue {
      */
     public String consumeCssIdentifier() {
         int start = pos;
-        while (!isEmpty() && (matchesWord() || matchesAny('-', '_'))) pos++;
+        while (!isEmpty() && (matchesWord() || matchesAny('-', '_'))) {
+            pos++;
+        }
 
         return queue.substring(start, pos);
     }
@@ -479,7 +515,9 @@ public class XTokenQueue {
      */
     public String consumeAttributeKey() {
         int start = pos;
-        while (!isEmpty() && (matchesWord() || matchesAny('-', '_', ':'))) pos++;
+        while (!isEmpty() && (matchesWord() || matchesAny('-', '_', ':'))) {
+            pos++;
+        }
 
         return queue.substring(start, pos);
     }
@@ -529,8 +567,8 @@ public class XTokenQueue {
             if (matchChomp(",")) {
                 params.add(accum.toString());
                 accum = new StringBuilder();
-            } else if (matchesAny(quotes)) {
-                String quoteUsed = consumeAny(quotes);
+            } else if (matchesAny(QUOTES)) {
+                String quoteUsed = consumeAny(QUOTES);
                 accum.append(quoteUsed);
                 accum.append(consumeToUnescaped(quoteUsed));
                 accum.append(consume());
@@ -559,8 +597,9 @@ public class XTokenQueue {
     private static boolean in(final String needle, final String... haystack) {
         final int len = haystack.length;
         for (int i = 0; i < len; i++) {
-            if (haystack[i].equals(needle))
+            if (haystack[i].equals(needle)) {
                 return true;
+            }
         }
         return false;
     }

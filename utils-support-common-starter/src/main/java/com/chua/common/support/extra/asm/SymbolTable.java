@@ -167,8 +167,8 @@ final class SymbolTable {
               itemIndex,
               itemTag,
               classReader.readClass(itemOffset, charBuffer),
-              classReader.readUTF8(nameAndTypeItemOffset, charBuffer),
-              classReader.readUTF8(nameAndTypeItemOffset + 2, charBuffer));
+              classReader.readUtf8(nameAndTypeItemOffset, charBuffer),
+              classReader.readUtf8(nameAndTypeItemOffset + 2, charBuffer));
           break;
         case Symbol.CONSTANT_INTEGER_TAG:
         case Symbol.CONSTANT_FLOAT_TAG:
@@ -177,8 +177,8 @@ final class SymbolTable {
         case Symbol.CONSTANT_NAME_AND_TYPE_TAG:
           addConstantNameAndType(
               itemIndex,
-              classReader.readUTF8(itemOffset, charBuffer),
-              classReader.readUTF8(itemOffset + 2, charBuffer));
+              classReader.readUtf8(itemOffset, charBuffer),
+              classReader.readUtf8(itemOffset + 2, charBuffer));
           break;
         case Symbol.CONSTANT_LONG_TAG:
         case Symbol.CONSTANT_DOUBLE_TAG:
@@ -196,8 +196,8 @@ final class SymbolTable {
               itemIndex,
               classReader.readByte(itemOffset),
               classReader.readClass(memberRefItemOffset, charBuffer),
-              classReader.readUTF8(nameAndTypeItemOffset, charBuffer),
-              classReader.readUTF8(nameAndTypeItemOffset + 2, charBuffer));
+              classReader.readUtf8(nameAndTypeItemOffset, charBuffer),
+              classReader.readUtf8(nameAndTypeItemOffset + 2, charBuffer));
           break;
         case Symbol.CONSTANT_DYNAMIC_TAG:
         case Symbol.CONSTANT_INVOKE_DYNAMIC_TAG:
@@ -207,8 +207,8 @@ final class SymbolTable {
           addConstantDynamicOrInvokeDynamicReference(
               itemTag,
               itemIndex,
-              classReader.readUTF8(nameAndTypeItemOffset, charBuffer),
-              classReader.readUTF8(nameAndTypeItemOffset + 2, charBuffer),
+              classReader.readUtf8(nameAndTypeItemOffset, charBuffer),
+              classReader.readUtf8(nameAndTypeItemOffset + 2, charBuffer),
               classReader.readUnsignedShort(itemOffset));
           break;
         case Symbol.CONSTANT_STRING_TAG:
@@ -217,7 +217,7 @@ final class SymbolTable {
         case Symbol.CONSTANT_MODULE_TAG:
         case Symbol.CONSTANT_PACKAGE_TAG:
           addConstantUtf8Reference(
-              itemIndex, itemTag, classReader.readUTF8(itemOffset, charBuffer));
+              itemIndex, itemTag, classReader.readUtf8(itemOffset, charBuffer));
           break;
         default:
           throw new IllegalArgumentException();
@@ -245,7 +245,7 @@ final class SymbolTable {
     byte[] inputBytes = classReader.classFileBuffer;
     int currentAttributeOffset = classReader.getFirstAttributeOffset();
     for (int i = classReader.readUnsignedShort(currentAttributeOffset - 2); i > 0; --i) {
-      String attributeName = classReader.readUTF8(currentAttributeOffset, charBuffer);
+      String attributeName = classReader.readUtf8(currentAttributeOffset, charBuffer);
       if (Constants.BOOTSTRAP_METHODS.equals(attributeName)) {
         bootstrapMethodCount = classReader.readUnsignedShort(currentAttributeOffset + 6);
         break;
@@ -771,7 +771,7 @@ final class SymbolTable {
       }
       entry = entry.next;
     }
-    constantPool.putByte(Symbol.CONSTANT_UTF8_TAG).putUTF8(value);
+    constantPool.putByte(Symbol.CONSTANT_UTF8_TAG).putUtf8(value);
     return put(new Entry(constantPoolCount++, Symbol.CONSTANT_UTF8_TAG, value, hashCode)).index;
   }
 

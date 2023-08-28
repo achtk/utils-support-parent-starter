@@ -14,7 +14,7 @@ import static com.chua.common.support.constant.CommonConstant.SYMBOL_COMMA_CHAR;
 import static com.chua.common.support.jsoup.internal.Normalizer.normalize;
 
 /**
- * Parses a CSS selector into an Evaluator tree.
+ * Parses a CSS selector into an AbstractEvaluator tree.
  *
  * @author Administrator
  */
@@ -24,7 +24,7 @@ public class QueryParser {
 
     private final TokenQueue tq;
     private final String query;
-    private final List<Evaluator> evaluators = new ArrayList<>();
+    private final List<AbstractEvaluator> evaluators = new ArrayList<>();
 
     /**
      * Create a new QueryParser.
@@ -38,12 +38,12 @@ public class QueryParser {
     }
 
     /**
-     * Parse a CSS query into an Evaluator.
+     * Parse a CSS query into an AbstractEvaluator.
      * @param query CSS query
-     * @return Evaluator
+     * @return AbstractEvaluator
      * @see Selector selector query syntax
      */
-    public static Evaluator parse(String query) {
+    public static AbstractEvaluator parse(String query) {
         try {
             QueryParser p = new QueryParser(query);
             return p.parse();
@@ -54,9 +54,9 @@ public class QueryParser {
 
     /**
      * Parse the query
-     * @return Evaluator
+     * @return AbstractEvaluator
      */
-    Evaluator parse() {
+    AbstractEvaluator parse() {
         tq.consumeWhitespace();
 
         if (tq.matchesAny(COMBINATORS)) {
@@ -82,48 +82,48 @@ public class QueryParser {
             return evaluators.get(0);
         }
 
-        return new CombiningEvaluator.And(evaluators);
+        return new AbstractCombiningEvaluator.And(evaluators);
     }
 
     private void combinator(char combinator) {
         tq.consumeWhitespace();
         String subQuery = consumeSubQuery();
-        Evaluator rootEval;
-        Evaluator currentEval; // the evaluator the new eval will be combined to. could be root, or rightmost or.
-        Evaluator newEval = parse(subQuery);
+        AbstractEvaluator rootEval;
+        AbstractEvaluator currentEval; // the evaluator the new eval will be combined to. could be root, or rightmost or.
+        AbstractEvaluator newEval = parse(subQuery);
         boolean replaceRightMost = false;
 
         if (evaluators.size() == 1) {
             rootEval = currentEval = evaluators.get(0);
-            if (rootEval instanceof CombiningEvaluator.Or && combinator != SYMBOL_COMMA_CHAR) {
-                currentEval = ((CombiningEvaluator.Or) currentEval).rightMostEvaluator();
+            if (rootEval instanceof AbstractCombiningEvaluator.Or && combinator != SYMBOL_COMMA_CHAR) {
+                currentEval = ((AbstractCombiningEvaluator.Or) currentEval).rightMostEvaluator();
                 assert currentEval != null;
                 replaceRightMost = true;
             }
         } else {
-            rootEval = currentEval = new CombiningEvaluator.And(evaluators);
+            rootEval = currentEval = new AbstractCombiningEvaluator.And(evaluators);
         }
         evaluators.clear();
 
         switch (combinator) {
             case '>':
-                currentEval = new CombiningEvaluator.And(new StructuralEvaluator.ImmediateParent(currentEval), newEval);
+                currentEval = new AbstractCombiningEvaluator.And(new StructuralEvaluator.ImmediateParent(currentEval), newEval);
                 break;
             case ' ':
-                currentEval = new CombiningEvaluator.And(new StructuralEvaluator.Parent(currentEval), newEval);
+                currentEval = new AbstractCombiningEvaluator.And(new StructuralEvaluator.Parent(currentEval), newEval);
                 break;
             case '+':
-                currentEval = new CombiningEvaluator.And(new StructuralEvaluator.ImmediatePreviousSibling(currentEval), newEval);
+                currentEval = new AbstractCombiningEvaluator.And(new StructuralEvaluator.ImmediatePreviousSibling(currentEval), newEval);
                 break;
             case '~':
-                currentEval = new CombiningEvaluator.And(new StructuralEvaluator.PreviousSibling(currentEval), newEval);
+                currentEval = new AbstractCombiningEvaluator.And(new StructuralEvaluator.PreviousSibling(currentEval), newEval);
                 break;
             case ',':
-                CombiningEvaluator.Or or;
-                if (currentEval instanceof CombiningEvaluator.Or) {
-                    or = (CombiningEvaluator.Or) currentEval;
+                AbstractCombiningEvaluator.Or or;
+                if (currentEval instanceof AbstractCombiningEvaluator.Or) {
+                    or = (AbstractCombiningEvaluator.Or) currentEval;
                 } else {
-                    or = new CombiningEvaluator.Or();
+                    or = new AbstractCombiningEvaluator.Or();
                     or.add(currentEval);
                 }
                 or.add(newEval);
@@ -134,7 +134,7 @@ public class QueryParser {
         }
 
         if (replaceRightMost) {
-            ((CombiningEvaluator.Or) rootEval).replaceRightMostEvaluator(currentEval);
+            ((AbstractCombiningEvaluator.Or) rootEval).replaceRightMostEvaluator(currentEval);
         } else {
             rootEval = currentEval;
         }
@@ -209,23 +209,23 @@ public class QueryParser {
         } else if (tq.matchChomp(":nth-last-of-type(")) {
             cssNthChild(true, true);
         } else if (tq.matchChomp(":first-child")) {
-            evaluators.add(new Evaluator.IsFirstChild());
+            evaluators.add(new AbstractEvaluator.IsFirstChild());
         } else if (tq.matchChomp(":last-child")) {
-            evaluators.add(new Evaluator.IsLastChild());
+            evaluators.add(new AbstractEvaluator.IsLastChild());
         } else if (tq.matchChomp(":first-of-type")) {
-            evaluators.add(new Evaluator.IsFirstOfType());
+            evaluators.add(new AbstractEvaluator.IsFirstOfType());
         } else if (tq.matchChomp(":last-of-type")) {
-            evaluators.add(new Evaluator.IsLastOfType());
+            evaluators.add(new AbstractEvaluator.IsLastOfType());
         } else if (tq.matchChomp(":only-child")) {
-            evaluators.add(new Evaluator.IsOnlyChild());
+            evaluators.add(new AbstractEvaluator.IsOnlyChild());
         } else if (tq.matchChomp(":only-of-type")) {
-            evaluators.add(new Evaluator.IsOnlyOfType());
+            evaluators.add(new AbstractEvaluator.IsOnlyOfType());
         } else if (tq.matchChomp(":empty")) {
-            evaluators.add(new Evaluator.IsEmpty());
+            evaluators.add(new AbstractEvaluator.IsEmpty());
         } else if (tq.matchChomp(":root")) {
-            evaluators.add(new Evaluator.IsRoot());
+            evaluators.add(new AbstractEvaluator.IsRoot());
         } else if (tq.matchChomp(":matchText")) {
-            evaluators.add(new Evaluator.MatchText());
+            evaluators.add(new AbstractEvaluator.MatchText());
         } else {
             throw new Selector.SelectorParseException("Could not parse query '%s': unexpected token at '%s'", query, tq.remainder());
         }
@@ -235,13 +235,13 @@ public class QueryParser {
     private void byId() {
         String id = tq.consumeCssIdentifier();
         Validate.notEmpty(id);
-        evaluators.add(new Evaluator.Id(id));
+        evaluators.add(new AbstractEvaluator.Id(id));
     }
 
     private void byClass() {
         String className = tq.consumeCssIdentifier();
         Validate.notEmpty(className);
-        evaluators.add(new Evaluator.Class(className.trim()));
+        evaluators.add(new AbstractEvaluator.Class(className.trim()));
     }
 
     private void byTag() {
@@ -250,16 +250,16 @@ public class QueryParser {
 
         if (tagName.startsWith("*|")) {
             String plainTag = tagName.substring(2);
-            evaluators.add(new CombiningEvaluator.Or(
-                    new Evaluator.Tag(plainTag),
-                    new Evaluator.TagEndsWith(tagName.replace("*|", ":")))
+            evaluators.add(new AbstractCombiningEvaluator.Or(
+                    new AbstractEvaluator.Tag(plainTag),
+                    new AbstractEvaluator.TagEndsWith(tagName.replace("*|", ":")))
             );
         } else {
             if (tagName.contains("|")) {
                 tagName = tagName.replace("|", ":");
             }
 
-            evaluators.add(new Evaluator.Tag(tagName));
+            evaluators.add(new AbstractEvaluator.Tag(tagName));
         }
     }
 
@@ -271,23 +271,23 @@ public class QueryParser {
 
         if (cq.isEmpty()) {
             if (key.startsWith("^")) {
-                evaluators.add(new Evaluator.AttributeStarting(key.substring(1)));
+                evaluators.add(new AbstractEvaluator.AttributeStarting(key.substring(1)));
             } else {
-                evaluators.add(new Evaluator.Attribute(key));
+                evaluators.add(new AbstractEvaluator.Attribute(key));
             }
         } else {
             if (cq.matchChomp("=")) {
-                evaluators.add(new Evaluator.AttributeWithValue(key, cq.remainder()));
+                evaluators.add(new AbstractEvaluator.AttributeWithValue(key, cq.remainder()));
             } else if (cq.matchChomp("!=")) {
-                evaluators.add(new Evaluator.AttributeWithValueNot(key, cq.remainder()));
+                evaluators.add(new AbstractEvaluator.AttributeWithValueNot(key, cq.remainder()));
             } else if (cq.matchChomp("^=")) {
-                evaluators.add(new Evaluator.AttributeWithValueStarting(key, cq.remainder()));
+                evaluators.add(new AbstractEvaluator.AttributeWithValueStarting(key, cq.remainder()));
             } else if (cq.matchChomp("$=")) {
-                evaluators.add(new Evaluator.AttributeWithValueEnding(key, cq.remainder()));
+                evaluators.add(new AbstractEvaluator.AttributeWithValueEnding(key, cq.remainder()));
             } else if (cq.matchChomp("*=")) {
-                evaluators.add(new Evaluator.AttributeWithValueContaining(key, cq.remainder()));
+                evaluators.add(new AbstractEvaluator.AttributeWithValueContaining(key, cq.remainder()));
             } else if (cq.matchChomp("~=")) {
-                evaluators.add(new Evaluator.AttributeWithValueMatching(key, Pattern.compile(cq.remainder())));
+                evaluators.add(new AbstractEvaluator.AttributeWithValueMatching(key, Pattern.compile(cq.remainder())));
             } else {
                 throw new Selector.SelectorParseException("Could not parse attribute query '%s': unexpected token at '%s'", query, cq.remainder());
             }
@@ -295,19 +295,19 @@ public class QueryParser {
     }
 
     private void allElements() {
-        evaluators.add(new Evaluator.AllElements());
+        evaluators.add(new AbstractEvaluator.AllElements());
     }
 
     private void indexLessThan() {
-        evaluators.add(new Evaluator.IndexLessThan(consumeIndex()));
+        evaluators.add(new AbstractEvaluator.IndexLessThan(consumeIndex()));
     }
 
     private void indexGreaterThan() {
-        evaluators.add(new Evaluator.IndexGreaterThan(consumeIndex()));
+        evaluators.add(new AbstractEvaluator.IndexGreaterThan(consumeIndex()));
     }
 
     private void indexEquals() {
-        evaluators.add(new Evaluator.IndexEquals(consumeIndex()));
+        evaluators.add(new AbstractEvaluator.IndexEquals(consumeIndex()));
     }
     
     private static final Pattern NTH_AB = Pattern.compile("(([+-])?(\\d+)?)n(\\s*([+-])?\\s*\\d+)?", Pattern.CASE_INSENSITIVE);
@@ -335,15 +335,15 @@ public class QueryParser {
         }
 		if (ofType) {
             if (backwards) {
-                evaluators.add(new Evaluator.IsNthLastOfType(a, b));
+                evaluators.add(new AbstractEvaluator.IsNthLastOfType(a, b));
             } else {
-                evaluators.add(new Evaluator.IsNthOfType(a, b));
+                evaluators.add(new AbstractEvaluator.IsNthOfType(a, b));
             }
         } else {
 			if (backwards) {
-                evaluators.add(new Evaluator.IsNthLastChild(a, b));
+                evaluators.add(new AbstractEvaluator.IsNthLastChild(a, b));
             } else {
-                evaluators.add(new Evaluator.IsNthChild(a, b));
+                evaluators.add(new AbstractEvaluator.IsNthChild(a, b));
             }
 		}
 	}
@@ -367,8 +367,8 @@ public class QueryParser {
         String searchText = TokenQueue.unescape(tq.chompBalanced('(', ')'));
         Validate.notEmpty(searchText, query + "(text) query must not be empty");
         evaluators.add(own
-                ? new Evaluator.ContainsOwnText(searchText)
-                : new Evaluator.ContainsText(searchText));
+                ? new AbstractEvaluator.ContainsOwnText(searchText)
+                : new AbstractEvaluator.ContainsText(searchText));
     }
 
     private void containsWholeText(boolean own) {
@@ -377,15 +377,15 @@ public class QueryParser {
         String searchText = TokenQueue.unescape(tq.chompBalanced('(', ')'));
         Validate.notEmpty(searchText, query + "(text) query must not be empty");
         evaluators.add(own
-            ? new Evaluator.ContainsWholeOwnText(searchText)
-            : new Evaluator.ContainsWholeText(searchText));
+            ? new AbstractEvaluator.ContainsWholeOwnText(searchText)
+            : new AbstractEvaluator.ContainsWholeText(searchText));
     }
 
     private void containsData() {
         tq.consume(":containsData");
         String searchText = TokenQueue.unescape(tq.chompBalanced('(', ')'));
         Validate.notEmpty(searchText, ":containsData(text) query must not be empty");
-        evaluators.add(new Evaluator.ContainsData(searchText));
+        evaluators.add(new AbstractEvaluator.ContainsData(searchText));
     }
 
     private void matches(boolean own) {
@@ -395,8 +395,8 @@ public class QueryParser {
         Validate.notEmpty(regex, query + "(regex) query must not be empty");
 
         evaluators.add(own
-                ? new Evaluator.MatchesOwn(Pattern.compile(regex))
-                : new Evaluator.Matches(Pattern.compile(regex)));
+                ? new AbstractEvaluator.MatchesOwn(Pattern.compile(regex))
+                : new AbstractEvaluator.Matches(Pattern.compile(regex)));
     }
 
     private void matchesWholeText(boolean own) {
@@ -406,8 +406,8 @@ public class QueryParser {
         Validate.notEmpty(regex, query + "(regex) query must not be empty");
 
         evaluators.add(own
-                ? new Evaluator.MatchesWholeOwnText(Pattern.compile(regex))
-                : new Evaluator.MatchesWholeText(Pattern.compile(regex)));
+                ? new AbstractEvaluator.MatchesWholeOwnText(Pattern.compile(regex))
+                : new AbstractEvaluator.MatchesWholeText(Pattern.compile(regex)));
     }
 
     private void not() {

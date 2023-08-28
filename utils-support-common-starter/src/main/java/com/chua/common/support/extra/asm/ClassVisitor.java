@@ -190,7 +190,7 @@ public abstract class ClassVisitor {
    * @return a visitor to visit the annotation values, or {@literal null} if this visitor is not
    *     interested in visiting this annotation.
    */
-  public AnnotationVisitor visitAnnotation(final String descriptor, final boolean visible) {
+  public AbstractAnnotationVisitor visitAnnotation(final String descriptor, final boolean visible) {
     if (cv != null) {
       return cv.visitAnnotation(descriptor, visible);
     }
@@ -212,7 +212,7 @@ public abstract class ClassVisitor {
    * @return a visitor to visit the annotation values, or {@literal null} if this visitor is not
    *     interested in visiting this annotation.
    */
-  public AnnotationVisitor visitTypeAnnotation(
+  public AbstractAnnotationVisitor visitTypeAnnotation(
       final int typeRef, final TypePath typePath, final String descriptor, final boolean visible) {
     if (api < Opcodes.ASM5) {
       throw new UnsupportedOperationException("TypeAnnotation requires ASM5");

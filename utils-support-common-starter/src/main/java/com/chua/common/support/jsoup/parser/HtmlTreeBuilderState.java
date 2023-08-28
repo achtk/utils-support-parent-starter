@@ -966,7 +966,7 @@ enum HtmlTreeBuilderState {
         boolean process(Token t, HtmlTreeBuilder tb) {
             if (t.isCharacter()) {
                 tb.insert(t.asCharacter());
-            } else if (t.isEOF()) {
+            } else if (t.isEof()) {
                 tb.error(this);
                 // if current node is script: already started
                 tb.pop();
@@ -1070,7 +1070,7 @@ enum HtmlTreeBuilderState {
                     return anythingElse(t, tb);
                 }
                 return true; // todo: as above todo
-            } else if (t.isEOF()) {
+            } else if (t.isEof()) {
                 if (tb.currentElementIs("html"))
                     tb.error(this);
                 return true; // stops parsing
@@ -1605,7 +1605,7 @@ enum HtmlTreeBuilderState {
                     if (tb.onStack("html")) tb.popStackToClose("html");
                     tb.transition(AfterAfterBody);
                 }
-            } else if (t.isEOF()) {
+            } else if (t.isEof()) {
                 // chillax! we're done
             } else {
                 tb.error(this);
@@ -1651,7 +1651,7 @@ enum HtmlTreeBuilderState {
                         tb.transition(AfterFrameset);
                     }
                 }
-            } else if (t.isEOF()) {
+            } else if (t.isEof()) {
                 if (!tb.currentElementIs("html")) {
                     tb.error(this);
                     return true;
@@ -1678,7 +1678,7 @@ enum HtmlTreeBuilderState {
                 tb.transition(AfterAfterFrameset);
             } else if (t.isStartTag() && t.asStartTag().normalName().equals("noframes")) {
                 return tb.process(t, InHead);
-            } else if (t.isEOF()) {
+            } else if (t.isEof()) {
                 // cool your heels, we're complete
             } else {
                 tb.error(this);
@@ -1695,7 +1695,7 @@ enum HtmlTreeBuilderState {
                 return tb.process(t, InBody);
             } else if (isWhitespace(t)) {
                 tb.insert(t.asCharacter());
-            }else if (t.isEOF()) {
+            }else if (t.isEof()) {
                 // nice work chuck
             } else {
                 tb.error(this);
@@ -1711,7 +1711,7 @@ enum HtmlTreeBuilderState {
                 tb.insert(t.asComment());
             } else if (t.isDoctype() || isWhitespace(t) || (t.isStartTag() && t.asStartTag().normalName().equals("html"))) {
                 return tb.process(t, InBody);
-            } else if (t.isEOF()) {
+            } else if (t.isEof()) {
                 // nice work chuck
             } else if (t.isStartTag() && t.asStartTag().normalName().equals("noframes")) {
                 return tb.process(t, InHead);

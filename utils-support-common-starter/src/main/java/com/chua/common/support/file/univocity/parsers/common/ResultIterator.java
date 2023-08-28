@@ -23,10 +23,10 @@ import java.util.Iterator;
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  */
-public interface ResultIterator<T, C extends Context> extends Iterator<T> {
+public interface ResultIterator<T, C extends AbstractContext> extends Iterator<T> {
 
 	/**
-	 * Returns the current parsing {@link Context}, if available
+	 * Returns the current parsing {@link AbstractContext}, if available
 	 *
 	 * @return the contextual object with information about an ongoing parsing process
 	 */

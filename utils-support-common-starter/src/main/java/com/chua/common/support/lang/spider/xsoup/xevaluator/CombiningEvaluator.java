@@ -1,7 +1,7 @@
 package com.chua.common.support.lang.spider.xsoup.xevaluator;
 
 import com.chua.common.support.jsoup.nodes.Element;
-import com.chua.common.support.jsoup.select.Evaluator;
+import com.chua.common.support.jsoup.select.AbstractEvaluator;
 import com.chua.common.support.utils.StringUtils;
 
 import java.util.ArrayList;
@@ -13,45 +13,47 @@ import java.util.List;
 /**
  * Base combining (and, or) evaluator.
  * <p>
- * Copy from {@link CombiningEvaluator} because it is package visible
+ * Copy from {@link AbstractCombiningEvaluator} because it is package visible
  *
- * @see CombiningEvaluator
+ * @see AbstractCombiningEvaluator
  */
-abstract class CombiningEvaluator extends Evaluator {
-    final List<Evaluator> evaluators;
+abstract class AbstractCombiningEvaluator extends AbstractEvaluator {
+    final List<AbstractEvaluator> evaluators;
 
-    CombiningEvaluator() {
+    AbstractCombiningEvaluator() {
         super();
-        evaluators = new ArrayList<Evaluator>();
+        evaluators = new ArrayList<AbstractEvaluator>();
     }
 
-    CombiningEvaluator(Collection<Evaluator> evaluators) {
+    AbstractCombiningEvaluator(Collection<AbstractEvaluator> evaluators) {
         this();
         this.evaluators.addAll(evaluators);
     }
 
-    Evaluator rightMostEvaluator() {
+    AbstractEvaluator rightMostEvaluator() {
         return evaluators.size() > 0 ? evaluators.get(evaluators.size() - 1) : null;
     }
 
-    void replaceRightMostEvaluator(Evaluator replacement) {
+    void replaceRightMostEvaluator(AbstractEvaluator replacement) {
         evaluators.set(evaluators.size() - 1, replacement);
     }
 
-    static final class And extends CombiningEvaluator {
-        And(Collection<Evaluator> evaluators) {
+    static final class And extends AbstractCombiningEvaluator {
+        And(Collection<AbstractEvaluator> evaluators) {
             super(evaluators);
         }
 
-        And(Evaluator... evaluators) {
+        And(AbstractEvaluator... evaluators) {
             this(Arrays.asList(evaluators));
         }
 
         @Override
         public boolean matches(Element root, Element node) {
             for (int i = 0; i < evaluators.size(); i++) {
-                Evaluator s = evaluators.get(i);
-                if (!s.matches(root, node)) return false;
+                AbstractEvaluator s = evaluators.get(i);
+                if (!s.matches(root, node)) {
+                    return false;
+                }
             }
             return true;
         }
@@ -62,14 +64,14 @@ abstract class CombiningEvaluator extends Evaluator {
         }
     }
 
-    static final class Or extends CombiningEvaluator {
+    static final class Or extends AbstractCombiningEvaluator {
 
-        Or(Collection<Evaluator> evaluators) {
+        Or(Collection<AbstractEvaluator> evaluators) {
             super();
             this.evaluators.addAll(evaluators);
         }
 
-        Or(Evaluator... evaluators) {
+        Or(AbstractEvaluator... evaluators) {
             this(Arrays.asList(evaluators));
         }
 
@@ -77,15 +79,17 @@ abstract class CombiningEvaluator extends Evaluator {
             super();
         }
 
-        public void add(Evaluator e) {
+        public void add(AbstractEvaluator e) {
             evaluators.add(e);
         }
 
         @Override
         public boolean matches(Element root, Element node) {
             for (int i = 0; i < evaluators.size(); i++) {
-                Evaluator s = evaluators.get(i);
-                if (s.matches(root, node)) return true;
+                AbstractEvaluator s = evaluators.get(i);
+                if (s.matches(root, node)) {
+                    return true;
+                }
             }
             return false;
         }

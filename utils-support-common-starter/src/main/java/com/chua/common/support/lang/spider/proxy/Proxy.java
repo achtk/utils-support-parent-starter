@@ -105,15 +105,27 @@ public class Proxy {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Proxy proxy = (Proxy) o;
 
-        if (port != proxy.port) return false;
-        if (host != null ? !host.equals(proxy.host) : proxy.host != null) return false;
-        if (scheme != null ? !scheme.equals(proxy.scheme) : proxy.scheme != null) return false;
-        if (username != null ? !username.equals(proxy.username) : proxy.username != null) return false;
+        if (port != proxy.port) {
+            return false;
+        }
+        if (host != null ? !host.equals(proxy.host) : proxy.host != null) {
+            return false;
+        }
+        if (scheme != null ? !scheme.equals(proxy.scheme) : proxy.scheme != null) {
+            return false;
+        }
+        if (username != null ? !username.equals(proxy.username) : proxy.username != null) {
+            return false;
+        }
         return password != null ? password.equals(proxy.password) : proxy.password == null;
     }
 

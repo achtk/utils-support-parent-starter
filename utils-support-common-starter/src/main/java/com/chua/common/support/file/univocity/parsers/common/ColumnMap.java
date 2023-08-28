@@ -32,10 +32,10 @@ public class ColumnMap {
 	private Map<NormalizedString, Integer> columnMap;
 	private int[] enumMap;
 	private int[] extractedIndexes = null;
-	private final Context context;
+	private final AbstractContext context;
 	private final ParserOutput output;
 
-	public ColumnMap(Context context, ParserOutput output) {
+	public ColumnMap(AbstractContext context, ParserOutput output) {
 		this.context = context;
 		this.output = output;
 	}

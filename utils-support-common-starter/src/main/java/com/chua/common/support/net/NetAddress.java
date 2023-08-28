@@ -965,7 +965,7 @@ public class NetAddress implements Serializable {
         return buildString(appendUser, appendParameter, false, false, parameters);
     }
 
-    private String buildString(boolean appendUser, boolean appendParameter, boolean useIP, boolean useService, String... parameters) {
+    private String buildString(boolean appendUser, boolean appendParameter, boolean useIp, boolean useService, String... parameters) {
         StringBuilder buf = new StringBuilder();
         if (!StringUtils.isEmpty(getProtocol())) {
             buf.append(getProtocol());
@@ -980,7 +980,7 @@ public class NetAddress implements Serializable {
             buf.append('@');
         }
         String host;
-        if (useIP) {
+        if (useIp) {
             host = getIp();
         } else {
             host = getHost();

@@ -2,6 +2,8 @@ package com.chua.common.support.lang.net;
 
 import com.chua.common.support.collection.ImmutableBuilder;
 import com.chua.common.support.collection.TableMap;
+import com.chua.common.support.constant.CommonConstant;
+import com.chua.common.support.constant.NameConstant;
 import com.chua.common.support.converter.Converter;
 import com.chua.common.support.crypto.PercentCodec;
 import com.chua.common.support.function.Joiner;
@@ -14,7 +16,8 @@ import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.Map;
 
-import static com.chua.common.support.constant.CommonConstant.EMPTY;
+import static com.chua.common.support.constant.CommonConstant.*;
+import static com.chua.common.support.constant.NameConstant.HTTP;
 
 /**
  * @author CH
@@ -183,7 +186,7 @@ public class UrlQuery {
         for (i = 0; i < len; i++) {
             c = queryStr.charAt(i);
             switch (c) {
-                case '='://键和值的分界符
+                case SYMBOL_EQUALS_CHAR://键和值的分界符
                     if (null == name) {
                         // name可以是""
                         name = queryStr.substring(pos, i);
@@ -192,7 +195,7 @@ public class UrlQuery {
                     }
                     // 当=不作为分界符时，按照普通字符对待
                     break;
-                case '&'://键值对之间的分界符
+                case SYMBOL_AND_CHAR://键值对之间的分界符
                     addParam(name, queryStr.substring(pos, i), charset);
                     name = null;
                     if (i + 4 < len && "amp;".equals(queryStr.substring(i + 1, i + 5))) {
@@ -202,12 +205,14 @@ public class UrlQuery {
                     // 开始位置从分节符后开始
                     pos = i + 1;
                     break;
+                default:
+                    break;
             }
         }
 
         if (i - pos == len) {
             // 没有任何参数符号
-            if (queryStr.startsWith("http") || queryStr.contains("/")) {
+            if (queryStr.startsWith(HTTP) || queryStr.contains(SYMBOL_LEFT_SLASH)) {
                 // 可能为url路径，忽略之
                 return this;
             }

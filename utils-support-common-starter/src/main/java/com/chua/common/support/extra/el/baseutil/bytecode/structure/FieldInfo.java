@@ -1,7 +1,7 @@
 package com.chua.common.support.extra.el.baseutil.bytecode.structure;
 
-import com.chua.common.support.extra.el.baseutil.bytecode.structure.Attribute.AttributeInfo;
-import com.chua.common.support.extra.el.baseutil.bytecode.structure.constantinfo.ConstantInfo;
+import com.chua.common.support.extra.el.baseutil.bytecode.structure.Attribute.AbstractAttributeInfo;
+import com.chua.common.support.extra.el.baseutil.bytecode.structure.constantinfo.AbstractConstantInfo;
 import com.chua.common.support.extra.el.baseutil.bytecode.structure.constantinfo.Utf8Info;
 import com.chua.common.support.extra.el.baseutil.bytecode.util.BinaryData;
 
@@ -9,24 +9,24 @@ import java.util.Arrays;
 
 public class FieldInfo
 {
-    private int             access_flags;
-    private int             name_index;
+    private int accessFlags;
+    private int nameIndex;
     private String          name;
     private String          descriptor;
-    private AttributeInfo[] attributeInfos;
+    private AbstractAttributeInfo[] attributeInfos;
 
-    public void resolve(BinaryData binaryData, ConstantInfo[] constantInfos)
+    public void resolve(BinaryData binaryData, AbstractConstantInfo[] constantInfos)
     {
-        access_flags = binaryData.readShort();
-        name_index = binaryData.readShort();
-        name = ((Utf8Info) constantInfos[name_index - 1]).getValue();
-        int descriptor_index = binaryData.readShort();
-        descriptor = ((Utf8Info) constantInfos[descriptor_index - 1]).getValue();
-        int attributes_count = binaryData.readShort();
-        attributeInfos = new AttributeInfo[attributes_count];
-        for (int i = 0; i < attributes_count; i++)
+        accessFlags = binaryData.readShort();
+        nameIndex = binaryData.readShort();
+        name = ((Utf8Info) constantInfos[nameIndex - 1]).getValue();
+        int descriptorIndex = binaryData.readShort();
+        descriptor = ((Utf8Info) constantInfos[descriptorIndex - 1]).getValue();
+        int attributesCount = binaryData.readShort();
+        attributeInfos = new AbstractAttributeInfo[attributesCount];
+        for (int i = 0; i < attributesCount; i++)
         {
-            attributeInfos[i] = AttributeInfo.parse(binaryData, constantInfos);
+            attributeInfos[i] = AbstractAttributeInfo.parse(binaryData, constantInfos);
         }
     }
 
@@ -35,7 +35,7 @@ public class FieldInfo
         return name;
     }
 
-    public AttributeInfo[] getAttributeInfos()
+    public AbstractAttributeInfo[] getAttributeInfos()
     {
         return attributeInfos;
     }

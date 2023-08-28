@@ -320,6 +320,7 @@ public class XMLTokener extends JSONTokener {
                         case '"':
                         case '\'':
                             throw syntaxError("Bad character in a name");
+                        default:break;
                     }
                 }
         }

@@ -15,13 +15,13 @@ public interface Task {
      *
      * @return uuid
      */
-    public String getUUID();
+    String getUuid();
 
     /**
      * site of a task
      *
      * @return site
      */
-    public Site getSite();
+    Site getSite();
 
 }

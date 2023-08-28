@@ -21,8 +21,8 @@ import com.chua.common.support.file.univocity.parsers.annotations.helpers.Annota
 import com.chua.common.support.file.univocity.parsers.annotations.helpers.AnnotationRegistry;
 import com.chua.common.support.file.univocity.parsers.annotations.helpers.MethodFilter;
 import com.chua.common.support.file.univocity.parsers.annotations.helpers.TransformedHeader;
+import com.chua.common.support.file.univocity.parsers.common.AbstractCommonSettings;
 import com.chua.common.support.file.univocity.parsers.common.ArgumentUtils;
-import com.chua.common.support.file.univocity.parsers.common.CommonSettings;
 import com.chua.common.support.file.univocity.parsers.common.NormalizedString;
 
 import java.util.*;
@@ -768,7 +768,7 @@ public class FixedWidthFields implements Cloneable {
 		return out.toString();
 	}
 
-	static void setHeadersIfPossible(FixedWidthFields fieldLengths, CommonSettings settings) {
+	static void setHeadersIfPossible(FixedWidthFields fieldLengths, AbstractCommonSettings settings) {
 		if (fieldLengths != null && settings.getHeaders() == null) {
 			NormalizedString[] headers = fieldLengths.getFieldNames();
 			if (headers != null) {

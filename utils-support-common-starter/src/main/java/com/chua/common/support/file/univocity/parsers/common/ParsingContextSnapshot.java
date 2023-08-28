@@ -36,7 +36,7 @@ public class ParsingContextSnapshot extends ParsingContextWrapper {
 	private final long currentRecord;
 
 	/**
-	 * Creates a snapshot of a given {@link Context}
+	 * Creates a snapshot of a given {@link AbstractContext}
 	 *
 	 * @param context the context object whose variable attributes will be copied over.
 	 */

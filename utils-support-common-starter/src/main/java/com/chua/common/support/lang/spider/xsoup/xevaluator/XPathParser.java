@@ -1,6 +1,7 @@
 package com.chua.common.support.lang.spider.xsoup.xevaluator;
 
-import com.chua.common.support.jsoup.select.Evaluator;
+import com.chua.common.support.json.jsonpath.internal.filter.Evaluator;
+import com.chua.common.support.jsoup.select.AbstractEvaluator;
 import com.chua.common.support.jsoup.select.Selector;
 import com.chua.common.support.lang.spider.xsoup.XPathEvaluator;
 import com.chua.common.support.lang.spider.xsoup.XTokenQueue;
@@ -31,30 +32,30 @@ public class XPathParser {
     static {
         FUNCTION_MAPPING.put("contains", new FunctionEvaluator() {
             @Override
-            public Evaluator call(String... param) {
+            public AbstractEvaluator call(String... param) {
                 Preconditions.isTrue(param.length == 2, String.format("Error argument of %s", "contains"));
-                return new Evaluator.AttributeWithValueContaining(param[0], param[1]);
+                return new AbstractEvaluator.AttributeWithValueContaining(param[0], param[1]);
             }
         });
         FUNCTION_MAPPING.put("starts-with", new FunctionEvaluator() {
             @Override
-            public Evaluator call(String... param) {
+            public AbstractEvaluator call(String... param) {
                 Preconditions.isTrue(param.length == 2, String.format("Error argument of %s", "starts-with"));
-                return new Evaluator.AttributeWithValueStarting(param[0], param[1]);
+                return new AbstractEvaluator.AttributeWithValueStarting(param[0], param[1]);
             }
         });
         FUNCTION_MAPPING.put("ends-with", new FunctionEvaluator() {
             @Override
-            public Evaluator call(String... param) {
+            public AbstractEvaluator call(String... param) {
                 Preconditions.isTrue(param.length == 2, String.format("Error argument of %s", "ends-with"));
-                return new Evaluator.AttributeWithValueEnding(param[0], param[1]);
+                return new AbstractEvaluator.AttributeWithValueEnding(param[0], param[1]);
             }
         });
     }
 
     private XTokenQueue tq;
     private String query;
-    private List<Evaluator> evals = new ArrayList<Evaluator>();
+    private List<AbstractEvaluator> evals = new ArrayList<>();
     private ElementOperator elementOperator;
     private boolean noEvalAllow = false;
     private final Pattern patternForText = Pattern.compile("text\\((\\d*)\\)");
@@ -96,19 +97,21 @@ public class XPathParser {
             return new DefaultXPathEvaluator(null, elementOperator);
         }
 
-        if (evals.size() == 1) return new DefaultXPathEvaluator(evals.get(0), elementOperator);
+        if (evals.size() == 1) {
+            return new DefaultXPathEvaluator(evals.get(0), elementOperator);
+        }
 
-        return new DefaultXPathEvaluator(new CombiningEvaluator.And(evals), elementOperator);
+        return new DefaultXPathEvaluator(new AbstractCombiningEvaluator.And(evals), elementOperator);
     }
 
     private void combinator(String combinator) {
-        Evaluator currentEval;
+        AbstractEvaluator currentEval;
         if (evals.size() == 0) {
             currentEval = new StructuralEvaluator.Root();
         } else if (evals.size() == 1) {
             currentEval = evals.get(0);
         } else {
-            currentEval = new CombiningEvaluator.And(evals);
+            currentEval = new AbstractCombiningEvaluator.And(evals);
         }
         evals.clear();
         String subQuery = consumeSubQuery();
@@ -122,12 +125,12 @@ public class XPathParser {
         }
         // attribute expr does not return Evaluator
         if (newEval.getEvaluator() != null) {
-            if (combinator.equals("//")) {
+            if ("//".equals(combinator)) {
                 currentEval =
-                        new CombiningEvaluator.And(newEval.getEvaluator(), new StructuralEvaluator.Parent(currentEval));
-            } else if (combinator.equals("/")) {
+                        new AbstractCombiningEvaluator.And(newEval.getEvaluator(), new StructuralEvaluator.Parent(currentEval));
+            } else if ("/".equals(combinator)) {
                 currentEval =
-                        new CombiningEvaluator.And(newEval.getEvaluator(), new StructuralEvaluator.ImmediateParent(currentEval));
+                        new AbstractCombiningEvaluator.And(newEval.getEvaluator(), new StructuralEvaluator.ImmediateParent(currentEval));
             }
         }
         evals.add(currentEval);
@@ -173,7 +176,7 @@ public class XPathParser {
         }
     }
 
-    private Evaluator consumePredicates(String queue) {
+    private AbstractEvaluator consumePredicates(String queue) {
         XTokenQueue predicatesQueue = new XTokenQueue(queue);
         EvaluatorStack evaluatorStack = new EvaluatorStack();
         Operation currentOperation = null;
@@ -187,7 +190,7 @@ public class XPathParser {
                 if (currentOperation == null && evaluatorStack.size() > 0) {
                     throw new IllegalArgumentException(String.format("Need AND/OR between two predicate! %s", predicatesQueue.remainder()));
                 }
-                Evaluator evaluator;
+                AbstractEvaluator evaluator;
                 if (predicatesQueue.matches("(")) {
                     evaluator = consumePredicates(predicatesQueue.chompBalanced('(', ')'));
                 } else if (predicatesQueue.matches("@")) {
@@ -207,7 +210,7 @@ public class XPathParser {
         return evaluatorStack.peek();
     }
 
-    private Evaluator byFunction(XTokenQueue predicatesQueue) {
+    private AbstractEvaluator byFunction(XTokenQueue predicatesQueue) {
         for (Map.Entry<String, FunctionEvaluator> entry : FUNCTION_MAPPING.entrySet()) {
             if (predicatesQueue.matchChomp(entry.getKey())) {
                 String paramString = predicatesQueue.chompBalanced('(', ')');
@@ -227,7 +230,7 @@ public class XPathParser {
 
     private void allElements() {
         tq.consume();
-        evals.add(new Evaluator.AllElements());
+        evals.add(new AbstractEvaluator.AllElements());
     }
 
     private void byNth() {
@@ -247,13 +250,13 @@ public class XPathParser {
             functionText(remainder);
         } else if (remainder.startsWith("regex(")) {
             functionRegex(remainder);
-        } else if (remainder.equals("allText()")) {
+        } else if ("allText()".equals(remainder)) {
             elementOperator = new ElementOperator.AllText();
-        } else if (remainder.equals("tidyText()")) {
+        } else if ("tidyText()".equals(remainder)) {
             elementOperator = new ElementOperator.TidyText();
-        } else if (remainder.equals("html()")) {
+        } else if ("html()".equals(remainder)) {
             elementOperator = new ElementOperator.Html();
-        } else if (remainder.equals("outerHtml()")) {
+        } else if ("outerHtml()".equals(remainder)) {
             elementOperator = new ElementOperator.OuterHtml();
         } else {
             throw new IllegalArgumentException("Unsupported function " + remainder);
@@ -289,7 +292,7 @@ public class XPathParser {
         if (matcher.matches()) {
             int attributeGroup;
             String group = matcher.group(1);
-            if (group.equals("")) {
+            if ("".equals(group)) {
                 attributeGroup = 0;
             } else {
                 attributeGroup = Integer.parseInt(group);
@@ -303,50 +306,52 @@ public class XPathParser {
         Preconditions.notEmpty(tagName);
 
         // namespaces: if element name is "abc:def", selector must be "abc|def", so flip:
-        if (tagName.contains("|")) tagName = tagName.replace("|", ":");
+        if (tagName.contains("|")) {
+            tagName = tagName.replace("|", ":");
+        }
 
-        evals.add(new Evaluator.Tag(tagName.trim().toLowerCase()));
+        evals.add(new AbstractEvaluator.Tag(tagName.trim().toLowerCase()));
     }
 
-    private Evaluator byAttribute(XTokenQueue cq) {
+    private AbstractEvaluator byAttribute(XTokenQueue cq) {
         cq.matchChomp("@");
         String key =
                 cq.consumeToAny("=", "!=", "^=", "$=", "*=", "~="); // eq, not, start, end, contain, match, (no val)
         Preconditions.notEmpty(key);
         cq.consumeWhitespace();
-        Evaluator evaluator;
+        AbstractEvaluator evaluator;
         if (cq.isEmpty()) {
             if ("*".equals(key)) {
                 evaluator = new XEvaluators.HasAnyAttribute();
             } else {
-                evaluator = new Evaluator.Attribute(key);
+                evaluator = new AbstractEvaluator.Attribute(key);
             }
         } else {
             if (cq.matchChomp("=")) {
                 String value = chompEqualValue(cq);
                 //to support select one class out of all
-                if (key.equals("class")) {
+                if ("class".equals(key)) {
                     String className = XTokenQueue.trimQuotes(value);
                     if (!className.contains(" ")) {
-                        evaluator = new Evaluator.Class(className);
+                        evaluator = new AbstractEvaluator.Class(className);
                     } else {
-                        evaluator = new Evaluator.AttributeWithValue(key, className);
+                        evaluator = new AbstractEvaluator.AttributeWithValue(key, className);
                     }
                 } else {
-                    evaluator = new Evaluator.AttributeWithValue(key, XTokenQueue.trimQuotes(value));
+                    evaluator = new AbstractEvaluator.AttributeWithValue(key, XTokenQueue.trimQuotes(value));
                 }
             } else if (cq.matchChomp("!=")) {
-                evaluator = new Evaluator.AttributeWithValueNot(key, XTokenQueue.trimQuotes(chompEqualValue(cq)));
+                evaluator = new AbstractEvaluator.AttributeWithValueNot(key, XTokenQueue.trimQuotes(chompEqualValue(cq)));
             } else if (cq.matchChomp("^=")) {
-                evaluator = new Evaluator.AttributeWithValueStarting(key, XTokenQueue.trimQuotes(chompEqualValue(cq)));
+                evaluator = new AbstractEvaluator.AttributeWithValueStarting(key, XTokenQueue.trimQuotes(chompEqualValue(cq)));
             } else if (cq.matchChomp("$=")) {
-                evaluator = new Evaluator.AttributeWithValueEnding(key, XTokenQueue.trimQuotes(chompEqualValue(cq)));
+                evaluator = new AbstractEvaluator.AttributeWithValueEnding(key, XTokenQueue.trimQuotes(chompEqualValue(cq)));
             } else if (cq.matchChomp("*=")) {
                 evaluator =
-                        new Evaluator.AttributeWithValueContaining(key, XTokenQueue.trimQuotes(chompEqualValue(cq)));
+                        new AbstractEvaluator.AttributeWithValueContaining(key, XTokenQueue.trimQuotes(chompEqualValue(cq)));
             } else if (cq.matchChomp("~=")) {
                 evaluator =
-                        new Evaluator.AttributeWithValueMatching(key, Pattern.compile(XTokenQueue.trimQuotes(chompEqualValue(cq))));
+                        new AbstractEvaluator.AttributeWithValueMatching(key, Pattern.compile(XTokenQueue.trimQuotes(chompEqualValue(cq))));
             } else {
                 throw new Selector.SelectorParseException("Could not parse attribute query '%s': unexpected token at '%s'", query, chompEqualValue(cq));
             }
@@ -380,7 +385,7 @@ public class XPathParser {
     }
 
     interface FunctionEvaluator {
-        Evaluator call(String... param);
+        AbstractEvaluator call(String... param);
     }
 
     /**
@@ -390,14 +395,14 @@ public class XPathParser {
      * Calculate AND immediately.
      * Store evaluator with OR, until there are two evaluator in stack, then calculate it.
      */
-    static class EvaluatorStack extends Stack<Evaluator> {
+    static class EvaluatorStack extends Stack<AbstractEvaluator> {
 
-        public void calc(Evaluator evaluator, Operation operation) {
+        public void calc(AbstractEvaluator evaluator, Operation operation) {
             if (size() == 0) {
                 push(evaluator);
             } else {
                 if (operation == Operation.AND) {
-                    evaluator = new CombiningEvaluator.And(pop(), evaluator);
+                    evaluator = new AbstractCombiningEvaluator.And(pop(), evaluator);
                 } else {
                     mergeOr();
                 }
@@ -407,9 +412,9 @@ public class XPathParser {
 
         public void mergeOr() {
             if (size() >= 2) {
-                Evaluator pop1 = pop();
-                Evaluator pop2 = pop();
-                Evaluator tempEvaluator = new CombiningEvaluator.Or(pop2, pop1);
+                AbstractEvaluator pop1 = pop();
+                AbstractEvaluator pop2 = pop();
+                AbstractEvaluator tempEvaluator = new AbstractCombiningEvaluator.Or(pop2, pop1);
                 push(tempEvaluator);
             }
         }

@@ -108,7 +108,7 @@ final class RecordComponentWriter extends RecordComponentVisitor {
   // -----------------------------------------------------------------------------------------------
 
   @Override
-  public AnnotationVisitor visitAnnotation(final String descriptor, final boolean visible) {
+  public AbstractAnnotationVisitor visitAnnotation(final String descriptor, final boolean visible) {
     if (visible) {
       return lastRuntimeVisibleAnnotation =
           AnnotationWriter.create(symbolTable, descriptor, lastRuntimeVisibleAnnotation);
@@ -119,7 +119,7 @@ final class RecordComponentWriter extends RecordComponentVisitor {
   }
 
   @Override
-  public AnnotationVisitor visitTypeAnnotation(
+  public AbstractAnnotationVisitor visitTypeAnnotation(
       final int typeRef, final TypePath typePath, final String descriptor, final boolean visible) {
     if (visible) {
       return lastRuntimeVisibleTypeAnnotation =

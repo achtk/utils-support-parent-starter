@@ -73,7 +73,7 @@ public class Parameter {
         this.json = json;
     }
 
-    public ILateBindingValue getILateBingValue() {
+    public ILateBindingValue getLateBingValue() {
         return lateBinding;
     }
 

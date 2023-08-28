@@ -2,7 +2,7 @@ package com.chua.common.support.extra.el.baseutil.bytecode.structure.constantinf
 
 import com.chua.common.support.constant.ConstantType;
 
-public class InterfaceMethodRefInfo extends RefInfo
+public class InterfaceMethodRefInfo extends AbstractRefInfo
 {
     public InterfaceMethodRefInfo()
     {

@@ -42,7 +42,7 @@ public abstract class DefaultConversionProcessor implements ConversionProcessor 
 	private boolean fieldsReordered;
 
 	ProcessorErrorHandler errorHandler = NoopProcessorErrorHandler.INSTANCE;
-	Context context;
+	AbstractContext context;
 
 	@Override
 	@SuppressWarnings({"unchecked", "rawtypes"})
@@ -69,7 +69,7 @@ public abstract class DefaultConversionProcessor implements ConversionProcessor 
 		return conversions;
 	}
 
-	protected void initializeConversions(String[] row, Context context) {
+	protected void initializeConversions(String[] row, AbstractContext context) {
 		conversionsInitialized = true;
 
 		this.fieldIndexes = null;
@@ -98,7 +98,7 @@ public abstract class DefaultConversionProcessor implements ConversionProcessor 
 	 * @return an row of Object instances containing the values obtained after the execution of all conversions.
 	 * <p> Fields that do not have any conversion defined will just be copied to the object array into their original positions.
 	 */
-	public final Object[] applyConversions(String[] row, Context context) {
+	public final Object[] applyConversions(String[] row, AbstractContext context) {
 		boolean keepRow = true;
 		Object[] objectRow = new Object[row.length];
 		boolean[] convertedFlags = conversionsByType != null ? new boolean[row.length] : null;
@@ -190,8 +190,8 @@ public abstract class DefaultConversionProcessor implements ConversionProcessor 
 	 *
 	 * @param executeInReverseOrder flag to indicate whether the conversion sequence should be executed in the reverse order of its declaration.
 	 * @param row                   the row of objects that will be converted
-	 * @param headers               All field names used to produce records in a given destination. May be null if no headers have been defined in {@link CommonSettings#getHeaders()}
-	 * @param indexesToWrite        The indexes of the headers that are actually being written. May be null if no fields have been selected using {@link CommonSettings#selectFields(String...)} or {@link CommonSettings#selectIndexes(Integer...)}
+	 * @param headers               All field names used to produce records in a given destination. May be null if no headers have been defined in {@link AbstractCommonSettings#getHeaders()}
+	 * @param indexesToWrite        The indexes of the headers that are actually being written. May be null if no fields have been selected using {@link AbstractCommonSettings#selectFields(String...)} or {@link AbstractCommonSettings#selectIndexes(Integer...)}
 	 * @return {@code true} if the the row should be discarded
 	 */
 	public final boolean reverseConversions(boolean executeInReverseOrder, Object[] row, NormalizedString[] headers, int[] indexesToWrite) {

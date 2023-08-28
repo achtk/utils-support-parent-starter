@@ -36,7 +36,7 @@ import java.util.List;
  * @param <W> writer configuration class
  * @author Administrator
  */
-public abstract class AbstractRoutines<P extends CommonParserSettings<?>, W extends CommonWriterSettings<?>> {
+public abstract class AbstractRoutines<P extends AbstractCommonParserSettings<?>, W extends AbstractCommonWriterSettings<?>> {
 
 	private boolean keepResourcesOpen = false;
 	private Writer previousOutput;

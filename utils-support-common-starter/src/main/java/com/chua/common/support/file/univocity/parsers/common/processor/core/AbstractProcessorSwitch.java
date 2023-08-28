@@ -15,8 +15,8 @@
  */
 package com.chua.common.support.file.univocity.parsers.common.processor.core;
 
-import com.chua.common.support.file.univocity.parsers.common.CommonParserSettings;
-import com.chua.common.support.file.univocity.parsers.common.Context;
+import com.chua.common.support.file.univocity.parsers.common.AbstractCommonParserSettings;
+import com.chua.common.support.file.univocity.parsers.common.AbstractContext;
 import com.chua.common.support.file.univocity.parsers.common.processor.RowProcessor;
 
 import java.util.HashMap;
@@ -25,15 +25,15 @@ import java.util.Map.Entry;
 
 /**
  * A special {@link Processor} implementation that combines and allows switching among different
- * Processors. Each Processor will have its own {@link Context}. Concrete implementations of this class
- * are expected to implement the {@link #switchRowProcessor(String[], Context)} method and analyze the input row
+ * Processors. Each Processor will have its own {@link AbstractContext}. Concrete implementations of this class
+ * are expected to implement the {@link #switchRowProcessor(String[], AbstractContext)} method and analyze the input row
  * to determine whether or not the current {@link Processor} implementation must be changed to handle a special
  * circumstance (determined by the concrete implementation) such as a different row format.
  * <p>
  * When the processor is switched, the {@link #processorSwitched(Processor, Processor)} will be called, and
  * must be overridden, to notify the change to the user.
  */
-public abstract class AbstractProcessorSwitch<T extends Context> implements Processor<T>, ColumnOrderDependent {
+public abstract class AbstractProcessorSwitch<T extends AbstractContext> implements Processor<T>, ColumnOrderDependent {
 
     private Map<Processor, T> processors;
     private Processor selectedProcessor;
@@ -52,7 +52,7 @@ public abstract class AbstractProcessorSwitch<T extends Context> implements Proc
 
     /**
      * Returns the headers in use by the current row processor implementation, which can vary among row processors.
-     * If {@code null}, the headers parsed by the input, or defined in {@link CommonParserSettings#getHeaders()} will be returned.
+     * If {@code null}, the headers parsed by the input, or defined in {@link AbstractCommonParserSettings#getHeaders()} will be returned.
      *
      * @return the current sequence of headers to use.
      */

@@ -77,9 +77,9 @@ public class GaussView implements View {
     public StringBuilder grawValue() {
         StringBuilder sb = new StringBuilder();
         //x轴刻度长度
-        int ScaleSize = 14;
+        int scaleSize = 14;
         int avgScale = this.dataNumber / xSize;
-        int printSize = ScaleSize - String.valueOf(avgScale).length();
+        int printSize = scaleSize - String.valueOf(avgScale).length();
         //打印X轴、刻度以及刻度值
         for (int i = 0; i <= xSize; i++) {
             printChar(sb, ' ', printSize);
@@ -90,7 +90,7 @@ public class GaussView implements View {
             if (i == 0) {
                 printChar(sb, ' ', printSize);
             } else {
-                printChar(sb, '-', ScaleSize);
+                printChar(sb, '-', scaleSize);
             }
         }
         sb.append("\r\n");
@@ -99,7 +99,7 @@ public class GaussView implements View {
             printChar(sb, ' ', printSize - 1 - String.valueOf(i).length());
             System.out.print(i + ":");
             int scaleValue = map.get(i);
-            double grawSize = scaleValue / (avgScale * 1.0 / ScaleSize);
+            double grawSize = scaleValue / (avgScale * 1.0 / scaleSize);
             grawSize = (grawSize > 0 && grawSize < 1) ? 1 : grawSize;
             printChar(sb, '█', (int) grawSize);
             sb.append(" " + scaleValue + "\n");

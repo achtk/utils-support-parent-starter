@@ -1,7 +1,7 @@
 package com.chua.common.support.extra.el.baseutil.bytecode;
 
 import com.chua.common.support.constant.ConstantType;
-import com.chua.common.support.extra.el.baseutil.bytecode.structure.Attribute.AttributeInfo;
+import com.chua.common.support.extra.el.baseutil.bytecode.structure.Attribute.AbstractAttributeInfo;
 import com.chua.common.support.extra.el.baseutil.bytecode.structure.FieldInfo;
 import com.chua.common.support.extra.el.baseutil.bytecode.structure.MethodInfo;
 import com.chua.common.support.extra.el.baseutil.bytecode.structure.constantinfo.*;
@@ -9,24 +9,24 @@ import com.chua.common.support.extra.el.baseutil.bytecode.util.BinaryData;
 
 import java.util.Arrays;
 
-public class ClassFileParser
-{
-    private int             magic;
-    private int             minor_version;
-    private int             major_version;
-    private int             constant_pool_count;
-    private ConstantInfo[]  constant_pool;
-    private int             access_flags;
-    private String          this_class_name;
-    private String          super_class_name;
-    private String[]        interfaces;
-    private FieldInfo[]     fieldInfos;
-    private MethodInfo[]    methodInfos;
-    private AttributeInfo[] attributeInfos;
-    private BinaryData      binaryData;
+import static com.chua.common.support.constant.NameConstant.OBJECT_NAME;
 
-    public ClassFileParser(BinaryData binaryData)
-    {
+public class ClassFileParser {
+    private int magic;
+    private int minorVersion;
+    private int majorVersion;
+    private int constantPoolCount;
+    private AbstractConstantInfo[] constantPool;
+    private int accessFlags;
+    private String thisClassName;
+    private String superClassName;
+    private String[] interfaces;
+    private FieldInfo[] fieldInfos;
+    private MethodInfo[] methodInfos;
+    private AbstractAttributeInfo[] attributeInfos;
+    private BinaryData binaryData;
+
+    public ClassFileParser(BinaryData binaryData) {
         this.binaryData = binaryData;
         readMagic();
         readminorVersion();
@@ -42,106 +42,86 @@ public class ClassFileParser
         readAttributeInfos();
     }
 
-    public ClassFileParser(byte[] bytecode)
-    {
+    public ClassFileParser(byte[] bytecode) {
         this(new BinaryData(bytecode));
     }
 
-    public ClassFile parse()
-    {
+    public ClassFile parse() {
         ClassFile classFile = new ClassFile();
-        classFile.setAccess_flags(access_flags);
-        classFile.setMinor_version(minor_version);
-        classFile.setMajor_version(major_version);
+        classFile.setAccessFlags(accessFlags);
+        classFile.setMinorVersion(minorVersion);
+        classFile.setMajorVersion(majorVersion);
         classFile.setInterfaces(interfaces);
-        classFile.setSuper_class_name(super_class_name);
-        classFile.setThis_class_name(this_class_name);
+        classFile.setSuperClassName(superClassName);
+        classFile.setThisClassName(thisClassName);
         classFile.setAttributeInfos(attributeInfos);
         classFile.setFieldInfos(fieldInfos);
         classFile.setMethodInfos(methodInfos);
         return classFile;
     }
 
-    private void readAttributeInfos()
-    {
-        int attribute_count = binaryData.readShort();
-        attributeInfos = new AttributeInfo[attribute_count];
-        for (int i = 0; i < attributeInfos.length; i++)
-        {
-            attributeInfos[i] = AttributeInfo.parse(binaryData, constant_pool);
+    private void readAttributeInfos() {
+        int attributeCount = binaryData.readShort();
+        attributeInfos = new AbstractAttributeInfo[attributeCount];
+        for (int i = 0; i < attributeInfos.length; i++) {
+            attributeInfos[i] = AbstractAttributeInfo.parse(binaryData, constantPool);
         }
     }
 
-    private void readMethodInfos()
-    {
-        int method_count = binaryData.readShort();
-        methodInfos = new MethodInfo[method_count];
-        for (int i = 0; i < method_count; i++)
-        {
+    private void readMethodInfos() {
+        int methodCount = binaryData.readShort();
+        methodInfos = new MethodInfo[methodCount];
+        for (int i = 0; i < methodCount; i++) {
             methodInfos[i] = new MethodInfo();
-            methodInfos[i].resolve(binaryData, constant_pool);
+            methodInfos[i].resolve(binaryData, constantPool);
         }
     }
 
-    private void readFieldInfos()
-    {
-        int fields_cout = binaryData.readShort();
-        fieldInfos = new FieldInfo[fields_cout];
-        for (int i = 0; i < fields_cout; i++)
-        {
+    private void readFieldInfos() {
+        int fieldsCout = binaryData.readShort();
+        fieldInfos = new FieldInfo[fieldsCout];
+        for (int i = 0; i < fieldsCout; i++) {
             fieldInfos[i] = new FieldInfo();
-            fieldInfos[i].resolve(binaryData, constant_pool);
+            fieldInfos[i].resolve(binaryData, constantPool);
         }
     }
 
-    private void readInterfaces()
-    {
-        int interfaces_cout = binaryData.readShort();
-        interfaces = new String[interfaces_cout];
-        for (int i = 0; i < interfaces_cout; i++)
-        {
+    private void readInterfaces() {
+        int interfacesCout = binaryData.readShort();
+        interfaces = new String[interfacesCout];
+        for (int i = 0; i < interfacesCout; i++) {
             int interfaceIndex = binaryData.readShort();
-            interfaces[i] = ((ClassInfo) constant_pool[interfaceIndex - 1]).getName();
+            interfaces[i] = ((ClassInfo) constantPool[interfaceIndex - 1]).getName();
         }
     }
 
-    private void readSuperClass()
-    {
-        int super_class = binaryData.readShort();
-        if (super_class == 0)
-        {
-            if (!this_class_name.equals("java/lang/Object"))
-            {
+    private void readSuperClass() {
+        int superClass = binaryData.readShort();
+        if (superClass == 0) {
+            if (!OBJECT_NAME.equals(thisClassName)) {
                 throw new RuntimeException("字节码解析错误，只有Object类型的父类才允许为空");
             }
-            super_class_name = null;
-        }
-        else
-        {
-            super_class_name = ((ClassInfo) constant_pool[super_class - 1]).getName();
+            superClassName = null;
+        } else {
+            superClassName = ((ClassInfo) constantPool[superClass - 1]).getName();
         }
     }
 
-    private void readThisClass()
-    {
-        int this_class = binaryData.readShort();
-        this_class_name = ((ClassInfo) constant_pool[this_class - 1]).getName();
+    private void readThisClass() {
+        int thisClass = binaryData.readShort();
+        thisClassName = ((ClassInfo) constantPool[thisClass - 1]).getName();
     }
 
-    private void readAccessFlags()
-    {
-        access_flags = binaryData.readShort();
+    private void readAccessFlags() {
+        accessFlags = binaryData.readShort();
     }
 
-    private void readConstantInfo()
-    {
-        constant_pool = new ConstantInfo[constant_pool_count - 1];
-        for (int i = 0; i < constant_pool.length; i++)
-        {
+    private void readConstantInfo() {
+        constantPool = new AbstractConstantInfo[constantPoolCount - 1];
+        for (int i = 0; i < constantPool.length; i++) {
             ConstantType constantType = readTag();
-            ConstantInfo constantInfo;
-            switch (constantType)
-            {
+            AbstractConstantInfo constantInfo;
+            switch (constantType) {
                 case UTF_8:
                     constantInfo = new Utf8Info();
                     break;
@@ -188,61 +168,49 @@ public class ClassFileParser
                     throw new IllegalArgumentException();
             }
             constantInfo.resolve(binaryData);
-            constant_pool[i] = constantInfo;
-            if (constantInfo instanceof LongInfo || constantInfo instanceof DoubleInfo)
-            {
+            constantPool[i] = constantInfo;
+            if (constantInfo instanceof LongInfo || constantInfo instanceof DoubleInfo) {
                 //JVM规范规定了如果遇到这两个常量类型，则编号多递增1
                 i++;
             }
         }
-        for (ConstantInfo constantInfo : constant_pool)
-        {
-            if (constantInfo != null)
-            {
-                constantInfo.resolve(constant_pool);
+        for (AbstractConstantInfo constantInfo : constantPool) {
+            if (constantInfo != null) {
+                constantInfo.resolve(constantPool);
             }
         }
     }
 
-    private ConstantType readTag()
-    {
+    private ConstantType readTag() {
         int tag = binaryData.readByte();
         return ConstantType.byteValue(tag);
     }
 
-    private void readConstantPoolCount()
-    {
-        constant_pool_count = binaryData.readShort();
+    private void readConstantPoolCount() {
+        constantPoolCount = binaryData.readShort();
     }
 
-    private void readmajorVersion()
-    {
-        major_version = binaryData.readShort();
+    private void readmajorVersion() {
+        majorVersion = binaryData.readShort();
     }
 
-    private void readminorVersion()
-    {
-        minor_version = binaryData.readShort();
+    private void readminorVersion() {
+        minorVersion = binaryData.readShort();
     }
 
-    private void readMagic()
-    {
+    private void readMagic() {
         if ((binaryData.readByte() & 0xff) == 0xca//
-            && (binaryData.readByte() & 0xff) == 0xfe//
-            && (binaryData.readByte() & 0xff) == 0xba//
-            && (binaryData.readByte() & 0xff) == 0xbe)
-        {
+                && (binaryData.readByte() & 0xff) == 0xfe//
+                && (binaryData.readByte() & 0xff) == 0xba//
+                && (binaryData.readByte() & 0xff) == 0xbe) {
             magic = 0xcafebabe;
-        }
-        else
-        {
+        } else {
             throw new IllegalArgumentException();
         }
     }
 
     @Override
-    public String toString()
-    {
-        return "ClassFileParser{" + "minor_version=" + minor_version + ", major_version=" + major_version + ", constant_pool_count=" + constant_pool_count + ", constant_pool=" + Arrays.toString(constant_pool) + ", access_flags=" + access_flags + ", this_class_name='" + this_class_name + '\'' + ", super_class_name='" + super_class_name + '\'' + ", interfaces=" + Arrays.toString(interfaces) + ", fieldInfos=" + Arrays.toString(fieldInfos) + ", methodInfos=" + Arrays.toString(methodInfos) + ", attributeInfos=" + Arrays.toString(attributeInfos) + '}';
+    public String toString() {
+        return "ClassFileParser{" + "minor_version=" + minorVersion + ", major_version=" + majorVersion + ", constant_pool_count=" + constantPoolCount + ", constant_pool=" + Arrays.toString(constantPool) + ", access_flags=" + accessFlags + ", this_class_name='" + thisClassName + '\'' + ", super_class_name='" + superClassName + '\'' + ", interfaces=" + Arrays.toString(interfaces) + ", fieldInfos=" + Arrays.toString(fieldInfos) + ", methodInfos=" + Arrays.toString(methodInfos) + ", attributeInfos=" + Arrays.toString(attributeInfos) + '}';
     }
 }

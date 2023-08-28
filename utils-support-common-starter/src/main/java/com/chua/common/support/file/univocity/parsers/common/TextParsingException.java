@@ -38,12 +38,12 @@ public class TextParsingException extends AbstractException {
      * @param message message with details about the error
      * @param cause   the cause of the error
      */
-    public TextParsingException(Context context, String message, Throwable cause) {
+    public TextParsingException(AbstractContext context, String message, Throwable cause) {
         super(message, cause);
         setContext(context);
     }
 
-    protected void setContext(Context context) {
+    protected void setContext(AbstractContext context) {
         if (context instanceof ParsingContext) {
             setParsingContext((ParsingContext) context);
         } else {

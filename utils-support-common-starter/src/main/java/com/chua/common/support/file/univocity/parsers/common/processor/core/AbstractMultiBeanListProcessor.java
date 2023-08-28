@@ -35,7 +35,7 @@ import java.util.*;
  * @see AbstractBeanProcessor
  * @see AbstractMultiBeanProcessor
  */
-public class AbstractMultiBeanListProcessor<C extends Context> extends AbstractMultiBeanRowProcessor<C> {
+public class AbstractMultiBeanListProcessor<C extends AbstractContext> extends AbstractMultiBeanRowProcessor<C> {
 
 	private final Class[] beanTypes;
 	private final List[] beans;
@@ -88,7 +88,7 @@ public class AbstractMultiBeanListProcessor<C extends Context> extends AbstractM
 	}
 
 	/**
-	 * Returns the record headers. This can be either the headers defined in {@link CommonSettings#getHeaders()} or the headers parsed in the file when {@link CommonSettings#getHeaders()}  equals true
+	 * Returns the record headers. This can be either the headers defined in {@link AbstractCommonSettings#getHeaders()} or the headers parsed in the file when {@link CommonSettings#getHeaders()}  equals true
 	 *
 	 * @return the headers of all records parsed.
 	 */

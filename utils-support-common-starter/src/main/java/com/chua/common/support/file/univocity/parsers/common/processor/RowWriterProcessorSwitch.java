@@ -15,8 +15,8 @@
  ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.common.processor;
 
-import com.chua.common.support.file.univocity.parsers.common.CommonSettings;
-import com.chua.common.support.file.univocity.parsers.common.CommonWriterSettings;
+import com.chua.common.support.file.univocity.parsers.common.AbstractCommonSettings;
+import com.chua.common.support.file.univocity.parsers.common.AbstractCommonWriterSettings;
 import com.chua.common.support.file.univocity.parsers.common.DataProcessingException;
 import com.chua.common.support.file.univocity.parsers.common.NormalizedString;
 
@@ -54,7 +54,7 @@ public abstract class RowWriterProcessorSwitch implements RowWriterProcessor<Obj
 
 	/**
 	 * Returns the headers in use by the current row writer processor implementation, which can vary among row writer processors.
-	 * If {@code null}, the headers defined in {@link CommonWriterSettings#getHeaders()} will be returned.
+	 * If {@code null}, the headers defined in {@link AbstractCommonWriterSettings#getHeaders()} will be returned.
 	 *
 	 * @return the current sequence of headers to use.
 	 */
@@ -64,8 +64,8 @@ public abstract class RowWriterProcessorSwitch implements RowWriterProcessor<Obj
 
 	/**
 	 * Returns the indexes in use by the current row writer processor implementation, which can vary among row writer processors.
-	 * If {@code null}, the indexes of fields that have been selected using {@link CommonSettings#selectFields(String...)}
-	 * or {@link CommonSettings#selectIndexes(Integer...)} will be returned.
+	 * If {@code null}, the indexes of fields that have been selected using {@link AbstractCommonSettings#selectFields(String...)}
+	 * or {@link AbstractCommonSettings#selectIndexes(Integer...)} will be returned.
 	 *
 	 * @return the current sequence of indexes to use.
 	 */

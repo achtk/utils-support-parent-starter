@@ -15,7 +15,7 @@
  ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.common.processor.core;
 
-import com.chua.common.support.file.univocity.parsers.common.CommonSettings;
+import com.chua.common.support.file.univocity.parsers.common.AbstractCommonSettings;
 
 import java.util.List;
 import java.util.Map;
@@ -35,8 +35,8 @@ import java.util.Map;
 interface ColumnReader<T> {
 
 	/**
-	 * Returns the column headers. This can be either the headers defined in {@link CommonSettings#getHeaders()} or the headers parsed in
-	 * the input when {@link CommonSettings#getHeaders()}  equals to {@code true}
+	 * Returns the column headers. This can be either the headers defined in {@link AbstractCommonSettings#getHeaders()} or the headers parsed in
+	 * the input when {@link AbstractCommonSettings#getHeaders()}  equals to {@code true}
 	 *
 	 * @return the headers of all column parsed.
 	 */

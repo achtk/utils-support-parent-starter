@@ -1,5 +1,6 @@
 package com.chua.common.support.jsoup.xpath.core;
 
+import com.chua.common.support.constant.RegexConstant;
 import com.chua.common.support.jsoup.nodes.Element;
 import com.chua.common.support.jsoup.select.Elements;
 import com.chua.common.support.jsoup.xpath.util.CommonUtil;
@@ -106,7 +107,7 @@ public class Functions {
     public List<Object> num(Elements context) {
         List<Object> res = new LinkedList<Object>();
         if (context != null) {
-            Pattern pattern = Pattern.compile("\\d+");
+            Pattern pattern = RegexConstant.NUMBERS;
             for (Element e : context) {
                 Matcher matcher = pattern.matcher(e.ownText());
                 if (matcher.find()) {

@@ -1,5 +1,6 @@
 package com.chua.common.support.extra.el.baseutil;
 
+import com.chua.common.support.constant.CommonConstant;
 import com.chua.common.support.constant.ConstantType;
 import com.chua.common.support.extra.el.baseutil.reflect.ReflectUtil;
 import com.chua.common.support.extra.el.baseutil.reflect.ValueAccessor;
@@ -19,6 +20,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
+
+import static com.chua.common.support.constant.CommonConstant.EMPTY;
 
 public class CsvUtil {
     @Retention(RetentionPolicy.RUNTIME)
@@ -143,7 +146,7 @@ public class CsvUtil {
         Map<String, ValueAccessor> map = new HashMap<>();
         Arrays.stream(type.getDeclaredFields()).forEach(field -> {
             if (field.isAnnotationPresent(CsvHeaderName.class)) {
-                map.put(field.getAnnotation(CsvHeaderName.class).value().equals("") ? field.getName() : field.getAnnotation(CsvHeaderName.class).value(), new ValueAccessor(field));
+                map.put(EMPTY.equals(field.getAnnotation(CsvHeaderName.class).value()) ? field.getName() : field.getAnnotation(CsvHeaderName.class).value(), new ValueAccessor(field));
             } else {
                 map.put(headerName.apply(field.getName()), new ValueAccessor(field));
             }
@@ -177,11 +180,11 @@ public class CsvUtil {
                             list.add(content.charAt(0) == '"' ? content.substring(1, content.length() - 1) : content);
                         }
                         lastContentIndex = index + 1;
-                    } else {
-                        ;
                     }
                 }
                 case '"': state = state == 0 ? 1 : 0;
+                default:
+                    break;
             }
             index += 1;
         }

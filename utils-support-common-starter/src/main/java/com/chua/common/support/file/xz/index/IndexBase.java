@@ -25,7 +25,7 @@ abstract class IndexBase {
 
     private long getUnpaddedIndexSize() {
         // Index Indicator + Number of Records + List of Records + CRC32
-        return 1 + Util.getVLISize(recordCount) + indexListSize + 4;
+        return 1 + Util.getVliSize(recordCount) + indexListSize + 4;
     }
 
     public long getIndexSize() {
@@ -44,8 +44,8 @@ abstract class IndexBase {
     void add(long unpaddedSize, long uncompressedSize) throws XZIOException {
         blocksSum += (unpaddedSize + 3) & ~3;
         uncompressedSum += uncompressedSize;
-        indexListSize += Util.getVLISize(unpaddedSize)
-                         + Util.getVLISize(uncompressedSize);
+        indexListSize += Util.getVliSize(unpaddedSize)
+                         + Util.getVliSize(uncompressedSize);
         ++recordCount;
 
         if (blocksSum < 0 || uncompressedSum < 0

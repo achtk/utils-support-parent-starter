@@ -17,8 +17,8 @@
 package com.chua.common.support.file.univocity.parsers.common.record;
 
 import com.chua.common.support.file.univocity.parsers.annotations.helpers.AnnotationHelper;
+import com.chua.common.support.file.univocity.parsers.common.AbstractContext;
 import com.chua.common.support.file.univocity.parsers.common.ArgumentUtils;
-import com.chua.common.support.file.univocity.parsers.common.Context;
 import com.chua.common.support.file.univocity.parsers.common.DataProcessingException;
 import com.chua.common.support.file.univocity.parsers.common.NormalizedString;
 import com.chua.common.support.file.univocity.parsers.common.fields.FieldConversionMapping;
@@ -28,7 +28,7 @@ import com.chua.common.support.file.univocity.parsers.conversions.Conversion;
 import java.lang.annotation.Annotation;
 import java.util.*;
 
-class RecordMetaDataImpl<C extends Context> implements RecordMetaData {
+class RecordMetaDataImpl<C extends AbstractContext> implements RecordMetaData {
 
 	final C context;
 

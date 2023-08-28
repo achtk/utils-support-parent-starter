@@ -364,13 +364,13 @@ final class MethodWriter extends MethodVisitor {
 
   /**
    * The last runtime visible type annotation of the Code attribute. The previous ones can be
-   * accessed with the {@link AnnotationWriter#previousAnnotation} field. May be {@literal null}.
+   * accessed with the  field. May be {@literal null}.
    */
   private AnnotationWriter lastCodeRuntimeVisibleTypeAnnotation;
 
   /**
    * The last runtime invisible type annotation of the Code attribute. The previous ones can be
-   * accessed with the {@link AnnotationWriter#previousAnnotation} field. May be {@literal null}.
+   * accessed with the  field. May be {@literal null}.
    */
   private AnnotationWriter lastCodeRuntimeInvisibleTypeAnnotation;
 
@@ -398,13 +398,13 @@ final class MethodWriter extends MethodVisitor {
 
   /**
    * The last runtime visible annotation of this method. The previous ones can be accessed with the
-   * {@link AnnotationWriter#previousAnnotation} field. May be {@literal null}.
+   *  field. May be {@literal null}.
    */
   private AnnotationWriter lastRuntimeVisibleAnnotation;
 
   /**
    * The last runtime invisible annotation of this method. The previous ones can be accessed with
-   * the {@link AnnotationWriter#previousAnnotation} field. May be {@literal null}.
+   * the  field. May be {@literal null}.
    */
   private AnnotationWriter lastRuntimeInvisibleAnnotation;
 
@@ -414,7 +414,7 @@ final class MethodWriter extends MethodVisitor {
   /**
    * The runtime visible parameter annotations of this method. Each array element contains the last
    * annotation of a parameter (which can be {@literal null} - the previous ones can be accessed
-   * with the {@link AnnotationWriter#previousAnnotation} field). May be {@literal null}.
+   * with the  field). May be {@literal null}.
    */
   private AnnotationWriter[] lastRuntimeVisibleParameterAnnotations;
 
@@ -424,19 +424,19 @@ final class MethodWriter extends MethodVisitor {
   /**
    * The runtime invisible parameter annotations of this method. Each array element contains the
    * last annotation of a parameter (which can be {@literal null} - the previous ones can be
-   * accessed with the {@link AnnotationWriter#previousAnnotation} field). May be {@literal null}.
+   * accessed with the  field). May be {@literal null}.
    */
   private AnnotationWriter[] lastRuntimeInvisibleParameterAnnotations;
 
   /**
    * The last runtime visible type annotation of this method. The previous ones can be accessed with
-   * the {@link AnnotationWriter#previousAnnotation} field. May be {@literal null}.
+   * the  field. May be {@literal null}.
    */
   private AnnotationWriter lastRuntimeVisibleTypeAnnotation;
 
   /**
    * The last runtime invisible type annotation of this method. The previous ones can be accessed
-   * with the {@link AnnotationWriter#previousAnnotation} field. May be {@literal null}.
+   * with the  field. May be {@literal null}.
    */
   private AnnotationWriter lastRuntimeInvisibleTypeAnnotation;
 
@@ -466,7 +466,7 @@ final class MethodWriter extends MethodVisitor {
 
   /**
    * Indicates what must be computed. Must be one of {@link #COMPUTE_ALL_FRAMES}, {@link
-   * #COMPUTE_INSERTED_FRAMES}, {@link COMPUTE_MAX_STACK_AND_LOCAL_FROM_FRAMES}, {@link
+   * #COMPUTE_INSERTED_FRAMES},{@link
    * #COMPUTE_MAX_STACK_AND_LOCAL} or {@link #COMPUTE_NOTHING}.
    */
   private final int compute;
@@ -534,8 +534,7 @@ final class MethodWriter extends MethodVisitor {
    * the number of stack elements. The local variables start at index 3 and are followed by the
    * operand stack elements. In summary frame[0] = offset, frame[1] = numLocal, frame[2] = numStack.
    * Local variables and operand stack entries contain abstract types, as defined in {@link Frame},
-   * but restricted to {@link Frame#CONSTANT_KIND}, {@link Frame#REFERENCE_KIND} or {@link
-   * Frame#UNINITIALIZED_KIND} abstract types. Long and double types use only one array entry.
+   * but restricted to abstract types. Long and double types use only one array entry.
    */
   private int[] currentFrame;
 
@@ -648,13 +647,13 @@ final class MethodWriter extends MethodVisitor {
   }
 
   @Override
-  public AnnotationVisitor visitAnnotationDefault() {
+  public AbstractAnnotationVisitor visitAnnotationDefault() {
     defaultValue = new ByteVector();
     return new AnnotationWriter(symbolTable, /* useNamedValues = */ false, defaultValue, null);
   }
 
   @Override
-  public AnnotationVisitor visitAnnotation(final String descriptor, final boolean visible) {
+  public AbstractAnnotationVisitor visitAnnotation(final String descriptor, final boolean visible) {
     if (visible) {
       return lastRuntimeVisibleAnnotation =
           AnnotationWriter.create(symbolTable, descriptor, lastRuntimeVisibleAnnotation);
@@ -665,7 +664,7 @@ final class MethodWriter extends MethodVisitor {
   }
 
   @Override
-  public AnnotationVisitor visitTypeAnnotation(
+  public AbstractAnnotationVisitor visitTypeAnnotation(
       final int typeRef, final TypePath typePath, final String descriptor, final boolean visible) {
     if (visible) {
       return lastRuntimeVisibleTypeAnnotation =
@@ -688,7 +687,7 @@ final class MethodWriter extends MethodVisitor {
   }
 
   @Override
-  public AnnotationVisitor visitParameterAnnotation(
+  public AbstractAnnotationVisitor visitParameterAnnotation(
       final int parameter, final String annotationDescriptor, final boolean visible) {
     if (visible) {
       if (lastRuntimeVisibleParameterAnnotations == null) {
@@ -1403,7 +1402,7 @@ final class MethodWriter extends MethodVisitor {
   }
 
   @Override
-  public AnnotationVisitor visitInsnAnnotation(
+  public AbstractAnnotationVisitor visitInsnAnnotation(
       final int typeRef, final TypePath typePath, final String descriptor, final boolean visible) {
     if (visible) {
       return lastCodeRuntimeVisibleTypeAnnotation =
@@ -1439,7 +1438,7 @@ final class MethodWriter extends MethodVisitor {
   }
 
   @Override
-  public AnnotationVisitor visitTryCatchAnnotation(
+  public AbstractAnnotationVisitor visitTryCatchAnnotation(
       final int typeRef, final TypePath typePath, final String descriptor, final boolean visible) {
     if (visible) {
       return lastCodeRuntimeVisibleTypeAnnotation =
@@ -1492,7 +1491,7 @@ final class MethodWriter extends MethodVisitor {
   }
 
   @Override
-  public AnnotationVisitor visitLocalVariableAnnotation(
+  public AbstractAnnotationVisitor visitLocalVariableAnnotation(
       final int typeRef,
       final TypePath typePath,
       final Label[] start,

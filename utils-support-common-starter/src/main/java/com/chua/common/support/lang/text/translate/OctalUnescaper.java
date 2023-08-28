@@ -14,7 +14,7 @@ import java.io.Writer;
  *
  * @since 1.0
  */
-public class OctalUnescaper extends CharSequenceTranslator {
+public class OctalUnescaper extends AbstractCharSequenceTranslator {
 
     /**
      * Tests if the given char is an octal digit. Octal digits are the character representations of the digits 0 to 7.

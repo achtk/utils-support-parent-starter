@@ -16,8 +16,8 @@
 package com.chua.common.support.file.univocity.parsers.common.processor;
 
 import com.chua.common.support.file.univocity.parsers.common.AbstractWriter;
-import com.chua.common.support.file.univocity.parsers.common.CommonSettings;
-import com.chua.common.support.file.univocity.parsers.common.CommonWriterSettings;
+import com.chua.common.support.file.univocity.parsers.common.AbstractCommonSettings;
+import com.chua.common.support.file.univocity.parsers.common.AbstractCommonWriterSettings;
 import com.chua.common.support.file.univocity.parsers.common.NormalizedString;
 import com.chua.common.support.file.univocity.parsers.conversions.Conversion;
 import com.chua.common.support.file.univocity.parsers.csv.CsvWriter;
@@ -26,7 +26,7 @@ import com.chua.common.support.file.univocity.parsers.fixed.FixedWidthWriter;
 /**
  * The essential callback interface to convert input objects into a manageable format for writing. Used by any writer that extends {@link AbstractWriter}.
  *
- * <p>When writing to an output, the writer will obtain the RowWriterProcessor from {@link CommonWriterSettings#getRowWriterProcessor()}, and
+ * <p>When writing to an output, the writer will obtain the RowWriterProcessor from {@link AbstractCommonWriterSettings#getRowWriterProcessor()}, and
  * invoke {@link RowWriterProcessor#write(Object, NormalizedString[], int[])} to convert the input to an array of objects. This array of objects will in turn be handed to the writer to produce a record in the expected format.
  *
  * <p>univocity-parsers provides some useful default implementations of this interface in the package {@link com.chua.common.support.file.univocity.parsers.common.processor}, namely:
@@ -39,7 +39,7 @@ import com.chua.common.support.file.univocity.parsers.fixed.FixedWidthWriter;
  * @param <T> the type that is converted by this implementation into an Object array, suitable for writing to the output.
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
  * @see AbstractWriter
- * @see CommonWriterSettings
+ * @see AbstractCommonWriterSettings
  */
 public interface RowWriterProcessor<T> {
 
@@ -47,12 +47,12 @@ public interface RowWriterProcessor<T> {
 	 * Converts the given input into an Object array that is suitable for writing. Used by format-specific writers that extend {@link AbstractWriter}.
 	 *
 	 * @param input          The original input record that must be converted into an Object array before writing to an output.
-	 * @param headers        All field names used to produce records in a given destination. May be null if no headers have been defined in {@link CommonSettings#getHeaders()}
-	 * @param indexesToWrite The indexes of the headers that are actually being written. May be null if no fields have been selected using {@link CommonSettings#selectFields(String...)} or {@link CommonSettings#selectIndexes(Integer...)}
-	 * @return an Object array that is suitable for writing. If null or an empty array is returned then the writer might either skip this value or write an empty record (if {@link CommonSettings#getSkipEmptyLines()} is false)
+	 * @param headers        All field names used to produce records in a given destination. May be null if no headers have been defined in {@link AbstractCommonSettings#getHeaders()}
+	 * @param indexesToWrite The indexes of the headers that are actually being written. May be null if no fields have been selected using {@link AbstractCommonSettings#selectFields(String...)} or {@link AbstractCommonSettings#selectIndexes(Integer...)}
+	 * @return an Object array that is suitable for writing. If null or an empty array is returned then the writer might either skip this value or write an empty record (if {@link AbstractCommonSettings#getSkipEmptyLines()} is false)
 	 * @see CsvWriter
 	 * @see FixedWidthWriter
-	 * @see CommonSettings
+	 * @see AbstractCommonSettings
 	 * @see AbstractWriter
 	 */
 	Object[] write(T input, NormalizedString[] headers, int[] indexesToWrite);

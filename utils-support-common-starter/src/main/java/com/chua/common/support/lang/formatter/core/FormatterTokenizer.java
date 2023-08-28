@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_DOT;
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_DOT_CHAR;
+
 public class FormatterTokenizer {
   // private final Pattern WHITESPACE_PATTERN;
   private final Pattern NUMBER_PATTERN;
@@ -229,7 +232,7 @@ public class FormatterTokenizer {
   private Token getReservedWordToken(String input, Token previousToken) {
     // A reserved word cannot be preceded by a "."
     // this makes it so in "mytable.from", "from" is not considered a reserved word
-    if (previousToken != null && previousToken.value != null && previousToken.value.equals(".")) {
+    if (previousToken != null && SYMBOL_DOT.equals(previousToken.value)) {
       return null;
     }
     return Util.firstNotnull(

@@ -23,7 +23,7 @@ public abstract class AbstractZipEncodingHelper {
      * name of the encoding UTF-8
      */
     static final ZipEncoding UTF8_ZIP_ENCODING = new FallbackZipEncoding(UTF8);
-    private static final Map<String, SimpleEncodingHolder> simpleEncodings;
+    private static final Map<String, SimpleEncodingHolder> SIMPLE_ENCODINGS;
     /**
      * The hexadecimal digits <code>0,...,9,A,...,F</code> encoded as
      * ASCII bytes.
@@ -103,7 +103,7 @@ public abstract class AbstractZipEncodingHelper {
         se.put("cp850", cp850);
         se.put("IBM850", cp850);
         se.put("ibm850", cp850);
-        simpleEncodings = Collections.unmodifiableMap(se);
+        SIMPLE_ENCODINGS = Collections.unmodifiableMap(se);
     }
 
     /**
@@ -174,7 +174,7 @@ public abstract class AbstractZipEncodingHelper {
             return new FallbackZipEncoding();
         }
 
-        final SimpleEncodingHolder h = simpleEncodings.get(name);
+        final SimpleEncodingHolder h = SIMPLE_ENCODINGS.get(name);
 
         if (h != null) {
             return h.getEncoding();

@@ -1326,8 +1326,9 @@ public class UrlUtils {
                 return abs.toExternalForm();
             }
             // workaround: java resolves '//path/file + ?foo' to '//path/?foo', not '//path/file?foo' as desired
-            if (url.startsWith("?"))
+            if (url.startsWith("?")) {
                 url = base.getPath() + url;
+            }
             URL abs = new URL(base, url);
             return abs.toExternalForm();
         } catch (MalformedURLException e) {

@@ -87,8 +87,8 @@ public class PackageScan
         try
         {
             // 获取正确并且完成的jar路径的url表示
-            JarURLConnection jarURLConnection = (JarURLConnection) url.openConnection();
-            jarFile = jarURLConnection.getJarFile();
+            JarURLConnection urlConnection = (JarURLConnection) url.openConnection();
+            jarFile = urlConnection.getJarFile();
         }
         catch (IOException e)
         {

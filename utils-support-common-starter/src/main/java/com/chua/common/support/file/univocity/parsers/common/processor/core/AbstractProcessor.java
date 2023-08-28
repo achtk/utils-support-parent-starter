@@ -15,14 +15,14 @@
  ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.common.processor.core;
 
-import com.chua.common.support.file.univocity.parsers.common.Context;
+import com.chua.common.support.file.univocity.parsers.common.AbstractContext;
 
 /**
  * A {@link Processor} implementation that just implements all methods defined by the interface.
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
  */
-public abstract class AbstractProcessor<T extends Context> implements Processor<T> {
+public abstract class AbstractProcessor<T extends AbstractContext> implements Processor<T> {
 
 	@Override
 	public void processStarted(T context) {

@@ -39,9 +39,9 @@ public class AstInterpreter {
 				return null;
 			}
 		} catch (Throwable t) {
-			if (t instanceof TemplateException)
+			if (t instanceof TemplateException) {
 				throw (TemplateException)t;
-			else {
+			} else {
 				com.chua.common.support.lang.template.basis.Error.error("Couldn't interpret node list due to I/O error, " + t.getMessage(), template.getNodes().get(0).getSpan());
 				return null; // never reached
 			}
@@ -56,10 +56,11 @@ public class AstInterpreter {
 			Ast.AbstractNode node = nodes.get(i);
 			Object value = node.evaluate(template, context, out);
 			if (value != null) {
-				if (value == Break.BREAK_SENTINEL || value == Continue.CONTINUE_SENTINEL || value == Return.RETURN_SENTINEL)
+				if (value == Break.BREAK_SENTINEL || value == Continue.CONTINUE_SENTINEL || value == Return.RETURN_SENTINEL) {
 					return value;
-				else
+				} else {
 					out.write(value.toString().getBytes(UTF_8));
+				}
 			}
 		}
 		return null;

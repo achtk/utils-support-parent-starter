@@ -170,12 +170,12 @@ public class ElementAdaptor extends NodeAdaptor implements Element {
     }
 
     @Override
-    public void setAttributeNS(String namespaceURI, String qualifiedName, String value) throws DOMException {
+    public void setAttributeNS(String s, String qualifiedName, String value) throws DOMException {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void removeAttributeNS(String namespaceURI, String localName) throws DOMException {
+    public void removeAttributeNS(String s, String localName) throws DOMException {
         throw new UnsupportedOperationException();
     }
 
@@ -190,7 +190,7 @@ public class ElementAdaptor extends NodeAdaptor implements Element {
     }
 
     @Override
-    public void setIdAttributeNS(String namespaceURI, String localName, boolean isId) throws DOMException {
+    public void setIdAttributeNS(String namespace, String localName, boolean isId) throws DOMException {
         throw new UnsupportedOperationException();
     }
 
@@ -202,12 +202,12 @@ public class ElementAdaptor extends NodeAdaptor implements Element {
     /*--------------------- NS not supported ----------------*/
 
     @Override
-    public String getAttributeNS(String namespaceURI, String localName) throws DOMException {
+    public String getAttributeNS(String namespace, String localName) throws DOMException {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Attr getAttributeNodeNS(String namespaceURI, String localName) throws DOMException {
+    public Attr getAttributeNodeNS(String namespace, String localName) throws DOMException {
         throw new UnsupportedOperationException();
     }
 

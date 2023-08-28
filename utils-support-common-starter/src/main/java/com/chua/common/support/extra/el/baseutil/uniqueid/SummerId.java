@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class SummerId implements Uid
 {
 
-    private final static int           countMask = 0x0000ffff;
+    private final static int COUNT_MASK = 0x0000ffff;
     private final        AtomicInteger count     = new AtomicInteger(0);
     private final        byte          workedId;
 
@@ -50,16 +50,16 @@ public class SummerId implements Uid
     {
         long   tmp   = generateLong();
         char[] value = new char[11];
-        value[0] = ByteTool.toDigit((int) ((tmp >>> 58) & short_mask));
-        value[1] = ByteTool.toDigit((int) ((tmp >>> 52) & short_mask));
-        value[2] = ByteTool.toDigit((int) ((tmp >>> 46) & short_mask));
-        value[3] = ByteTool.toDigit((int) ((tmp >>> 40) & short_mask));
-        value[4] = ByteTool.toDigit((int) ((tmp >>> 34) & short_mask));
-        value[5] = ByteTool.toDigit((int) ((tmp >>> 28) & short_mask));
-        value[6] = ByteTool.toDigit((int) ((tmp >>> 22) & short_mask));
-        value[7] = ByteTool.toDigit((int) ((tmp >>> 16) & short_mask));
-        value[8] = ByteTool.toDigit((int) ((tmp >>> 10) & short_mask));
-        value[9] = ByteTool.toDigit((int) ((tmp >>> 4) & short_mask));
+        value[0] = ByteTool.toDigit((int) ((tmp >>> 58) & SHORT_MASK));
+        value[1] = ByteTool.toDigit((int) ((tmp >>> 52) & SHORT_MASK));
+        value[2] = ByteTool.toDigit((int) ((tmp >>> 46) & SHORT_MASK));
+        value[3] = ByteTool.toDigit((int) ((tmp >>> 40) & SHORT_MASK));
+        value[4] = ByteTool.toDigit((int) ((tmp >>> 34) & SHORT_MASK));
+        value[5] = ByteTool.toDigit((int) ((tmp >>> 28) & SHORT_MASK));
+        value[6] = ByteTool.toDigit((int) ((tmp >>> 22) & SHORT_MASK));
+        value[7] = ByteTool.toDigit((int) ((tmp >>> 16) & SHORT_MASK));
+        value[8] = ByteTool.toDigit((int) ((tmp >>> 10) & SHORT_MASK));
+        value[9] = ByteTool.toDigit((int) ((tmp >>> 4) & SHORT_MASK));
         value[10] = ByteTool.toDigit((int) ((tmp) & 0x000000000000000f));
         return String.valueOf(value);
     }
@@ -73,14 +73,14 @@ public class SummerId implements Uid
     public byte[] generateBytes()
     {
         byte[] result = new byte[8];
-        long   time   = System.currentTimeMillis() - base;
+        long   time   = System.currentTimeMillis() - BASE;
         result[0] = (byte) (time >>> 32);
         result[1] = (byte) (time >>> 24);
         result[2] = (byte) (time >>> 16);
         result[3] = (byte) (time >>> 8);
         result[4] = (byte) time;
         result[5] = workedId;
-        int tmp = count.getAndIncrement() & countMask;
+        int tmp = count.getAndIncrement() & COUNT_MASK;
         result[6] = (byte) (tmp >>> 8);
         result[7] = (byte) (tmp);
         return result;

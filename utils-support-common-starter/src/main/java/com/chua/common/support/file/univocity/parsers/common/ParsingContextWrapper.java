@@ -24,7 +24,7 @@ import java.util.Map;
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
  */
-public class ParsingContextWrapper extends ContextWrapper<ParsingContext> implements ParsingContext {
+public class ParsingContextWrapper extends AbstractContextWrapper<ParsingContext> implements ParsingContext {
 
 	/**
 	 * Wraps a {@link ParsingContext}.

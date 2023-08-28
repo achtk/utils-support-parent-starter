@@ -1,26 +1,25 @@
 package com.chua.common.support.extra.el.baseutil.bytecode.util;
 
-import com.chua.common.support.extra.el.baseutil.IoUtil;
 import com.chua.common.support.extra.el.baseutil.bytecode.ClassFile;
 import com.chua.common.support.extra.el.baseutil.bytecode.ClassFileParser;
 import com.chua.common.support.extra.el.baseutil.bytecode.annotation.AnnotationMetadata;
 import com.chua.common.support.extra.el.baseutil.bytecode.annotation.ClassNotExistAnnotationMetadata;
 import com.chua.common.support.extra.el.baseutil.bytecode.structure.AnnotationInfo;
-import com.chua.common.support.extra.el.baseutil.bytecode.structure.Attribute.AttributeInfo;
+import com.chua.common.support.extra.el.baseutil.bytecode.structure.Attribute.AbstractAttributeInfo;
 import com.chua.common.support.extra.el.baseutil.bytecode.structure.Attribute.CodeAttriInfo;
 import com.chua.common.support.extra.el.baseutil.bytecode.structure.Attribute.LocalVariableTableAttriInfo;
 import com.chua.common.support.extra.el.baseutil.bytecode.structure.Attribute.RuntimeVisibleAnnotationsAttriInfo;
 import com.chua.common.support.extra.el.baseutil.bytecode.structure.FieldInfo;
 import com.chua.common.support.extra.el.baseutil.bytecode.structure.MethodInfo;
 import com.chua.common.support.extra.el.baseutil.reflect.ReflectUtil;
+import com.chua.common.support.utils.IoUtils;
+import javassist.bytecode.AttributeInfo;
 
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -44,7 +43,7 @@ public class BytecodeUtil
             {
                 return null;
             }
-            return IoUtil.readAllBytes(resourceAsStream);
+            return IoUtils.toByteArray(resourceAsStream);
         }
         catch (Exception e)
         {
@@ -107,11 +106,11 @@ public class BytecodeUtil
             {
                 if (methodInfo.getDescriptor().equals(descriptor))
                 {
-                    for (AttributeInfo attributeInfo : methodInfo.getAttributeInfos())
+                    for (AbstractAttributeInfo attributeInfo : methodInfo.getAttributeInfos())
                     {
                         if (attributeInfo instanceof CodeAttriInfo)
                         {
-                            for (AttributeInfo info : ((CodeAttriInfo) attributeInfo).getAttributeInfos())
+                            for (AbstractAttributeInfo info : ((CodeAttriInfo) attributeInfo).getAttributeInfos())
                             {
                                 if (info instanceof LocalVariableTableAttriInfo)
                                 {
@@ -260,7 +259,7 @@ public class BytecodeUtil
         {
             if (fieldInfo.getName().equals(fieldName))
             {
-                for (AttributeInfo attributeInfo : fieldInfo.getAttributeInfos())
+                for (AbstractAttributeInfo attributeInfo : fieldInfo.getAttributeInfos())
                 {
                     if (attributeInfo instanceof RuntimeVisibleAnnotationsAttriInfo)
                     {
@@ -295,7 +294,7 @@ public class BytecodeUtil
             {
                 if (methodInfo.getDescriptor().equals(descriptor))
                 {
-                    for (AttributeInfo attributeInfo : methodInfo.getAttributeInfos())
+                    for (AbstractAttributeInfo attributeInfo : methodInfo.getAttributeInfos())
                     {
                         if (attributeInfo instanceof RuntimeVisibleAnnotationsAttriInfo)
                         {

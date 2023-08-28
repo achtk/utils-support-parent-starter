@@ -502,13 +502,13 @@ public class ClassReader {
     int currentAttributeOffset = getFirstAttributeOffset();
     for (int i = readUnsignedShort(currentAttributeOffset - 2); i > 0; --i) {
       // Read the attribute_info's attribute_name and attribute_length fields.
-      String attributeName = readUTF8(currentAttributeOffset, charBuffer);
+      String attributeName = readUtf8(currentAttributeOffset, charBuffer);
       int attributeLength = readInt(currentAttributeOffset + 2);
       currentAttributeOffset += 6;
       // The tests are sorted in decreasing frequency order (based on frequencies observed on
       // typical classes).
       if (Constants.SOURCE_FILE.equals(attributeName)) {
-        sourceFile = readUTF8(currentAttributeOffset, charBuffer);
+        sourceFile = readUtf8(currentAttributeOffset, charBuffer);
       } else if (Constants.INNER_CLASSES.equals(attributeName)) {
         innerClassesOffset = currentAttributeOffset;
       } else if (Constants.ENCLOSING_METHOD.equals(attributeName)) {
@@ -520,7 +520,7 @@ public class ClassReader {
       } else if (Constants.PERMITTED_SUBCLASSES.equals(attributeName)) {
         permittedSubclassesOffset = currentAttributeOffset;
       } else if (Constants.SIGNATURE.equals(attributeName)) {
-        signature = readUTF8(currentAttributeOffset, charBuffer);
+        signature = readUtf8(currentAttributeOffset, charBuffer);
       } else if (Constants.RUNTIME_VISIBLE_ANNOTATIONS.equals(attributeName)) {
         runtimeVisibleAnnotationsOffset = currentAttributeOffset;
       } else if (Constants.RUNTIME_VISIBLE_TYPE_ANNOTATIONS.equals(attributeName)) {
@@ -591,8 +591,8 @@ public class ClassReader {
     if (enclosingMethodOffset != 0) {
       String className = readClass(enclosingMethodOffset, charBuffer);
       int methodIndex = readUnsignedShort(enclosingMethodOffset + 2);
-      String name = methodIndex == 0 ? null : readUTF8(cpInfoOffsets[methodIndex], charBuffer);
-      String type = methodIndex == 0 ? null : readUTF8(cpInfoOffsets[methodIndex] + 2, charBuffer);
+      String name = methodIndex == 0 ? null : readUtf8(cpInfoOffsets[methodIndex], charBuffer);
+      String type = methodIndex == 0 ? null : readUtf8(cpInfoOffsets[methodIndex] + 2, charBuffer);
       classVisitor.visitOuterClass(className, name, type);
     }
 
@@ -602,7 +602,7 @@ public class ClassReader {
       int currentAnnotationOffset = runtimeVisibleAnnotationsOffset + 2;
       while (numAnnotations-- > 0) {
         // Parse the type_index field.
-        String annotationDescriptor = readUTF8(currentAnnotationOffset, charBuffer);
+        String annotationDescriptor = readUtf8(currentAnnotationOffset, charBuffer);
         currentAnnotationOffset += 2;
         // Parse num_element_value_pairs and element_value_pairs and visit these values.
         currentAnnotationOffset =
@@ -620,7 +620,7 @@ public class ClassReader {
       int currentAnnotationOffset = runtimeInvisibleAnnotationsOffset + 2;
       while (numAnnotations-- > 0) {
         // Parse the type_index field.
-        String annotationDescriptor = readUTF8(currentAnnotationOffset, charBuffer);
+        String annotationDescriptor = readUtf8(currentAnnotationOffset, charBuffer);
         currentAnnotationOffset += 2;
         // Parse num_element_value_pairs and element_value_pairs and visit these values.
         currentAnnotationOffset =
@@ -640,7 +640,7 @@ public class ClassReader {
         // Parse the target_type, target_info and target_path fields.
         currentAnnotationOffset = readTypeAnnotationTarget(context, currentAnnotationOffset);
         // Parse the type_index field.
-        String annotationDescriptor = readUTF8(currentAnnotationOffset, charBuffer);
+        String annotationDescriptor = readUtf8(currentAnnotationOffset, charBuffer);
         currentAnnotationOffset += 2;
         // Parse num_element_value_pairs and element_value_pairs and visit these values.
         currentAnnotationOffset =
@@ -664,7 +664,7 @@ public class ClassReader {
         // Parse the target_type, target_info and target_path fields.
         currentAnnotationOffset = readTypeAnnotationTarget(context, currentAnnotationOffset);
         // Parse the type_index field.
-        String annotationDescriptor = readUTF8(currentAnnotationOffset, charBuffer);
+        String annotationDescriptor = readUtf8(currentAnnotationOffset, charBuffer);
         currentAnnotationOffset += 2;
         // Parse num_element_value_pairs and element_value_pairs and visit these values.
         currentAnnotationOffset =
@@ -718,7 +718,7 @@ public class ClassReader {
         classVisitor.visitInnerClass(
             readClass(currentClassesOffset, charBuffer),
             readClass(currentClassesOffset + 2, charBuffer),
-            readUTF8(currentClassesOffset + 4, charBuffer),
+            readUtf8(currentClassesOffset + 4, charBuffer),
             readUnsignedShort(currentClassesOffset + 6));
         currentClassesOffset += 8;
       }
@@ -777,7 +777,7 @@ public class ClassReader {
     int currentOffset = moduleOffset;
     String moduleName = readModule(currentOffset, buffer);
     int moduleFlags = readUnsignedShort(currentOffset + 2);
-    String moduleVersion = readUTF8(currentOffset + 4, buffer);
+    String moduleVersion = readUtf8(currentOffset + 4, buffer);
     currentOffset += 6;
     ModuleVisitor moduleVisitor = classVisitor.visitModule(moduleName, moduleFlags, moduleVersion);
     if (moduleVisitor == null) {
@@ -806,7 +806,7 @@ public class ClassReader {
       // Read the requires_index, requires_flags and requires_version fields and visit them.
       String requires = readModule(currentOffset, buffer);
       int requiresFlags = readUnsignedShort(currentOffset + 2);
-      String requiresVersion = readUTF8(currentOffset + 4, buffer);
+      String requiresVersion = readUtf8(currentOffset + 4, buffer);
       currentOffset += 6;
       moduleVisitor.visitRequire(requires, requiresFlags, requiresVersion);
     }
@@ -893,8 +893,8 @@ public class ClassReader {
     char[] charBuffer = context.charBuffer;
 
     int currentOffset = recordComponentOffset;
-    String name = readUTF8(currentOffset, charBuffer);
-    String descriptor = readUTF8(currentOffset + 2, charBuffer);
+    String name = readUtf8(currentOffset, charBuffer);
+    String descriptor = readUtf8(currentOffset + 2, charBuffer);
     currentOffset += 4;
 
     // Read the record component attributes (the variables are ordered as in Section 4.7 of the
@@ -919,13 +919,13 @@ public class ClassReader {
     currentOffset += 2;
     while (attributesCount-- > 0) {
       // Read the attribute_info's attribute_name and attribute_length fields.
-      String attributeName = readUTF8(currentOffset, charBuffer);
+      String attributeName = readUtf8(currentOffset, charBuffer);
       int attributeLength = readInt(currentOffset + 2);
       currentOffset += 6;
       // The tests are sorted in decreasing frequency order (based on frequencies observed on
       // typical classes).
       if (Constants.SIGNATURE.equals(attributeName)) {
-        signature = readUTF8(currentOffset, charBuffer);
+        signature = readUtf8(currentOffset, charBuffer);
       } else if (Constants.RUNTIME_VISIBLE_ANNOTATIONS.equals(attributeName)) {
         runtimeVisibleAnnotationsOffset = currentOffset;
       } else if (Constants.RUNTIME_VISIBLE_TYPE_ANNOTATIONS.equals(attributeName)) {
@@ -962,7 +962,7 @@ public class ClassReader {
       int currentAnnotationOffset = runtimeVisibleAnnotationsOffset + 2;
       while (numAnnotations-- > 0) {
         // Parse the type_index field.
-        String annotationDescriptor = readUTF8(currentAnnotationOffset, charBuffer);
+        String annotationDescriptor = readUtf8(currentAnnotationOffset, charBuffer);
         currentAnnotationOffset += 2;
         // Parse num_element_value_pairs and element_value_pairs and visit these values.
         currentAnnotationOffset =
@@ -980,7 +980,7 @@ public class ClassReader {
       int currentAnnotationOffset = runtimeInvisibleAnnotationsOffset + 2;
       while (numAnnotations-- > 0) {
         // Parse the type_index field.
-        String annotationDescriptor = readUTF8(currentAnnotationOffset, charBuffer);
+        String annotationDescriptor = readUtf8(currentAnnotationOffset, charBuffer);
         currentAnnotationOffset += 2;
         // Parse num_element_value_pairs and element_value_pairs and visit these values.
         currentAnnotationOffset =
@@ -1000,7 +1000,7 @@ public class ClassReader {
         // Parse the target_type, target_info and target_path fields.
         currentAnnotationOffset = readTypeAnnotationTarget(context, currentAnnotationOffset);
         // Parse the type_index field.
-        String annotationDescriptor = readUTF8(currentAnnotationOffset, charBuffer);
+        String annotationDescriptor = readUtf8(currentAnnotationOffset, charBuffer);
         currentAnnotationOffset += 2;
         // Parse num_element_value_pairs and element_value_pairs and visit these values.
         currentAnnotationOffset =
@@ -1024,7 +1024,7 @@ public class ClassReader {
         // Parse the target_type, target_info and target_path fields.
         currentAnnotationOffset = readTypeAnnotationTarget(context, currentAnnotationOffset);
         // Parse the type_index field.
-        String annotationDescriptor = readUTF8(currentAnnotationOffset, charBuffer);
+        String annotationDescriptor = readUtf8(currentAnnotationOffset, charBuffer);
         currentAnnotationOffset += 2;
         // Parse num_element_value_pairs and element_value_pairs and visit these values.
         currentAnnotationOffset =
@@ -1069,8 +1069,8 @@ public class ClassReader {
     // Read the access_flags, name_index and descriptor_index fields.
     int currentOffset = fieldInfoOffset;
     int accessFlags = readUnsignedShort(currentOffset);
-    String name = readUTF8(currentOffset + 2, charBuffer);
-    String descriptor = readUTF8(currentOffset + 4, charBuffer);
+    String name = readUtf8(currentOffset + 2, charBuffer);
+    String descriptor = readUtf8(currentOffset + 4, charBuffer);
     currentOffset += 6;
 
     // Read the field attributes (the variables are ordered as in Section 4.7 of the JVMS).
@@ -1095,7 +1095,7 @@ public class ClassReader {
     currentOffset += 2;
     while (attributesCount-- > 0) {
       // Read the attribute_info's attribute_name and attribute_length fields.
-      String attributeName = readUTF8(currentOffset, charBuffer);
+      String attributeName = readUtf8(currentOffset, charBuffer);
       int attributeLength = readInt(currentOffset + 2);
       currentOffset += 6;
       // The tests are sorted in decreasing frequency order (based on frequencies observed on
@@ -1104,7 +1104,7 @@ public class ClassReader {
         int constantvalueIndex = readUnsignedShort(currentOffset);
         constantValue = constantvalueIndex == 0 ? null : readConst(constantvalueIndex, charBuffer);
       } else if (Constants.SIGNATURE.equals(attributeName)) {
-        signature = readUTF8(currentOffset, charBuffer);
+        signature = readUtf8(currentOffset, charBuffer);
       } else if (Constants.DEPRECATED.equals(attributeName)) {
         accessFlags |= Opcodes.ACC_DEPRECATED;
       } else if (Constants.SYNTHETIC.equals(attributeName)) {
@@ -1146,7 +1146,7 @@ public class ClassReader {
       int currentAnnotationOffset = runtimeVisibleAnnotationsOffset + 2;
       while (numAnnotations-- > 0) {
         // Parse the type_index field.
-        String annotationDescriptor = readUTF8(currentAnnotationOffset, charBuffer);
+        String annotationDescriptor = readUtf8(currentAnnotationOffset, charBuffer);
         currentAnnotationOffset += 2;
         // Parse num_element_value_pairs and element_value_pairs and visit these values.
         currentAnnotationOffset =
@@ -1164,7 +1164,7 @@ public class ClassReader {
       int currentAnnotationOffset = runtimeInvisibleAnnotationsOffset + 2;
       while (numAnnotations-- > 0) {
         // Parse the type_index field.
-        String annotationDescriptor = readUTF8(currentAnnotationOffset, charBuffer);
+        String annotationDescriptor = readUtf8(currentAnnotationOffset, charBuffer);
         currentAnnotationOffset += 2;
         // Parse num_element_value_pairs and element_value_pairs and visit these values.
         currentAnnotationOffset =
@@ -1184,7 +1184,7 @@ public class ClassReader {
         // Parse the target_type, target_info and target_path fields.
         currentAnnotationOffset = readTypeAnnotationTarget(context, currentAnnotationOffset);
         // Parse the type_index field.
-        String annotationDescriptor = readUTF8(currentAnnotationOffset, charBuffer);
+        String annotationDescriptor = readUtf8(currentAnnotationOffset, charBuffer);
         currentAnnotationOffset += 2;
         // Parse num_element_value_pairs and element_value_pairs and visit these values.
         currentAnnotationOffset =
@@ -1208,7 +1208,7 @@ public class ClassReader {
         // Parse the target_type, target_info and target_path fields.
         currentAnnotationOffset = readTypeAnnotationTarget(context, currentAnnotationOffset);
         // Parse the type_index field.
-        String annotationDescriptor = readUTF8(currentAnnotationOffset, charBuffer);
+        String annotationDescriptor = readUtf8(currentAnnotationOffset, charBuffer);
         currentAnnotationOffset += 2;
         // Parse num_element_value_pairs and element_value_pairs and visit these values.
         currentAnnotationOffset =
@@ -1253,8 +1253,8 @@ public class ClassReader {
     // Read the access_flags, name_index and descriptor_index fields.
     int currentOffset = methodInfoOffset;
     context.currentMethodAccessFlags = readUnsignedShort(currentOffset);
-    context.currentMethodName = readUTF8(currentOffset + 2, charBuffer);
-    context.currentMethodDescriptor = readUTF8(currentOffset + 4, charBuffer);
+    context.currentMethodName = readUtf8(currentOffset + 2, charBuffer);
+    context.currentMethodDescriptor = readUtf8(currentOffset + 4, charBuffer);
     currentOffset += 6;
 
     // Read the method attributes (the variables are ordered as in Section 4.7 of the JVMS).
@@ -1293,7 +1293,7 @@ public class ClassReader {
     currentOffset += 2;
     while (attributesCount-- > 0) {
       // Read the attribute_info's attribute_name and attribute_length fields.
-      String attributeName = readUTF8(currentOffset, charBuffer);
+      String attributeName = readUtf8(currentOffset, charBuffer);
       int attributeLength = readInt(currentOffset + 2);
       currentOffset += 6;
       // The tests are sorted in decreasing frequency order (based on frequencies observed on
@@ -1386,7 +1386,7 @@ public class ClassReader {
       while (parametersCount-- > 0) {
         // Read the name_index and access_flags fields and visit them.
         methodVisitor.visitParameter(
-            readUTF8(currentParameterOffset, charBuffer),
+            readUtf8(currentParameterOffset, charBuffer),
             readUnsignedShort(currentParameterOffset + 2));
         currentParameterOffset += 4;
       }
@@ -1394,7 +1394,7 @@ public class ClassReader {
 
     // Visit the AnnotationDefault attribute.
     if (annotationDefaultOffset != 0) {
-      AnnotationVisitor annotationVisitor = methodVisitor.visitAnnotationDefault();
+      AbstractAnnotationVisitor annotationVisitor = methodVisitor.visitAnnotationDefault();
       readElementValue(annotationVisitor, annotationDefaultOffset, null, charBuffer);
       if (annotationVisitor != null) {
         annotationVisitor.visitEnd();
@@ -1407,7 +1407,7 @@ public class ClassReader {
       int currentAnnotationOffset = runtimeVisibleAnnotationsOffset + 2;
       while (numAnnotations-- > 0) {
         // Parse the type_index field.
-        String annotationDescriptor = readUTF8(currentAnnotationOffset, charBuffer);
+        String annotationDescriptor = readUtf8(currentAnnotationOffset, charBuffer);
         currentAnnotationOffset += 2;
         // Parse num_element_value_pairs and element_value_pairs and visit these values.
         currentAnnotationOffset =
@@ -1425,7 +1425,7 @@ public class ClassReader {
       int currentAnnotationOffset = runtimeInvisibleAnnotationsOffset + 2;
       while (numAnnotations-- > 0) {
         // Parse the type_index field.
-        String annotationDescriptor = readUTF8(currentAnnotationOffset, charBuffer);
+        String annotationDescriptor = readUtf8(currentAnnotationOffset, charBuffer);
         currentAnnotationOffset += 2;
         // Parse num_element_value_pairs and element_value_pairs and visit these values.
         currentAnnotationOffset =
@@ -1445,7 +1445,7 @@ public class ClassReader {
         // Parse the target_type, target_info and target_path fields.
         currentAnnotationOffset = readTypeAnnotationTarget(context, currentAnnotationOffset);
         // Parse the type_index field.
-        String annotationDescriptor = readUTF8(currentAnnotationOffset, charBuffer);
+        String annotationDescriptor = readUtf8(currentAnnotationOffset, charBuffer);
         currentAnnotationOffset += 2;
         // Parse num_element_value_pairs and element_value_pairs and visit these values.
         currentAnnotationOffset =
@@ -1469,7 +1469,7 @@ public class ClassReader {
         // Parse the target_type, target_info and target_path fields.
         currentAnnotationOffset = readTypeAnnotationTarget(context, currentAnnotationOffset);
         // Parse the type_index field.
-        String annotationDescriptor = readUTF8(currentAnnotationOffset, charBuffer);
+        String annotationDescriptor = readUtf8(currentAnnotationOffset, charBuffer);
         currentAnnotationOffset += 2;
         // Parse num_element_value_pairs and element_value_pairs and visit these values.
         currentAnnotationOffset =
@@ -1853,7 +1853,7 @@ public class ClassReader {
       Label start = createLabel(readUnsignedShort(currentOffset), labels);
       Label end = createLabel(readUnsignedShort(currentOffset + 2), labels);
       Label handler = createLabel(readUnsignedShort(currentOffset + 4), labels);
-      String catchType = readUTF8(cpInfoOffsets[readUnsignedShort(currentOffset + 6)], charBuffer);
+      String catchType = readUtf8(cpInfoOffsets[readUnsignedShort(currentOffset + 6)], charBuffer);
       currentOffset += 8;
       methodVisitor.visitTryCatchBlock(start, end, handler, catchType);
     }
@@ -1887,7 +1887,7 @@ public class ClassReader {
     currentOffset += 2;
     while (attributesCount-- > 0) {
       // Read the attribute_info's attribute_name and attribute_length fields.
-      String attributeName = readUTF8(currentOffset, charBuffer);
+      String attributeName = readUtf8(currentOffset, charBuffer);
       int attributeLength = readInt(currentOffset + 2);
       currentOffset += 6;
       if (Constants.LOCAL_VARIABLE_TABLE.equals(attributeName)) {
@@ -2439,8 +2439,8 @@ public class ClassReader {
             int cpInfoOffset = cpInfoOffsets[readUnsignedShort(currentOffset + 1)];
             int nameAndTypeCpInfoOffset = cpInfoOffsets[readUnsignedShort(cpInfoOffset + 2)];
             String owner = readClass(cpInfoOffset, charBuffer);
-            String name = readUTF8(nameAndTypeCpInfoOffset, charBuffer);
-            String descriptor = readUTF8(nameAndTypeCpInfoOffset + 2, charBuffer);
+            String name = readUtf8(nameAndTypeCpInfoOffset, charBuffer);
+            String descriptor = readUtf8(nameAndTypeCpInfoOffset + 2, charBuffer);
             if (opcode < Opcodes.INVOKEVIRTUAL) {
               methodVisitor.visitFieldInsn(opcode, owner, name, descriptor);
             } else {
@@ -2459,8 +2459,8 @@ public class ClassReader {
           {
             int cpInfoOffset = cpInfoOffsets[readUnsignedShort(currentOffset + 1)];
             int nameAndTypeCpInfoOffset = cpInfoOffsets[readUnsignedShort(cpInfoOffset + 2)];
-            String name = readUTF8(nameAndTypeCpInfoOffset, charBuffer);
-            String descriptor = readUTF8(nameAndTypeCpInfoOffset + 2, charBuffer);
+            String name = readUtf8(nameAndTypeCpInfoOffset, charBuffer);
+            String descriptor = readUtf8(nameAndTypeCpInfoOffset + 2, charBuffer);
             int bootstrapMethodOffset = bootstrapMethodOffsets[readUnsignedShort(cpInfoOffset)];
             Handle handle =
                 (Handle) readConst(readUnsignedShort(bootstrapMethodOffset), charBuffer);
@@ -2508,7 +2508,7 @@ public class ClassReader {
               readTypeAnnotationTarget(
                   context, visibleTypeAnnotationOffsets[currentVisibleTypeAnnotationIndex]);
           // Parse the type_index field.
-          String annotationDescriptor = readUTF8(currentAnnotationOffset, charBuffer);
+          String annotationDescriptor = readUtf8(currentAnnotationOffset, charBuffer);
           currentAnnotationOffset += 2;
           // Parse num_element_value_pairs and element_value_pairs and visit these values.
           readElementValues(
@@ -2536,7 +2536,7 @@ public class ClassReader {
               readTypeAnnotationTarget(
                   context, invisibleTypeAnnotationOffsets[currentInvisibleTypeAnnotationIndex]);
           // Parse the type_index field.
-          String annotationDescriptor = readUTF8(currentAnnotationOffset, charBuffer);
+          String annotationDescriptor = readUtf8(currentAnnotationOffset, charBuffer);
           currentAnnotationOffset += 2;
           // Parse num_element_value_pairs and element_value_pairs and visit these values.
           readElementValues(
@@ -2579,15 +2579,15 @@ public class ClassReader {
       while (localVariableTableLength-- > 0) {
         int startPc = readUnsignedShort(currentOffset);
         int length = readUnsignedShort(currentOffset + 2);
-        String name = readUTF8(currentOffset + 4, charBuffer);
-        String descriptor = readUTF8(currentOffset + 6, charBuffer);
+        String name = readUtf8(currentOffset + 4, charBuffer);
+        String descriptor = readUtf8(currentOffset + 6, charBuffer);
         int index = readUnsignedShort(currentOffset + 8);
         currentOffset += 10;
         String signature = null;
         if (typeTable != null) {
           for (int i = 0; i < typeTable.length; i += 3) {
             if (typeTable[i] == startPc && typeTable[i + 1] == index) {
-              signature = readUTF8(typeTable[i + 2], charBuffer);
+              signature = readUtf8(typeTable[i + 2], charBuffer);
               break;
             }
           }
@@ -2606,7 +2606,7 @@ public class ClassReader {
           // Parse the target_type, target_info and target_path fields.
           currentOffset = readTypeAnnotationTarget(context, typeAnnotationOffset);
           // Parse the type_index field.
-          String annotationDescriptor = readUTF8(currentOffset, charBuffer);
+          String annotationDescriptor = readUtf8(currentOffset, charBuffer);
           currentOffset += 2;
           // Parse num_element_value_pairs and element_value_pairs and visit these values.
           readElementValues(
@@ -2634,7 +2634,7 @@ public class ClassReader {
           // Parse the target_type, target_info and target_path fields.
           currentOffset = readTypeAnnotationTarget(context, typeAnnotationOffset);
           // Parse the type_index field.
-          String annotationDescriptor = readUTF8(currentOffset, charBuffer);
+          String annotationDescriptor = readUtf8(currentOffset, charBuffer);
           currentOffset += 2;
           // Parse num_element_value_pairs and element_value_pairs and visit these values.
           readElementValues(
@@ -2803,7 +2803,7 @@ public class ClassReader {
         TypePath path = pathLength == 0 ? null : new TypePath(classFileBuffer, currentOffset);
         currentOffset += 1 + 2 * pathLength;
         // Parse the type_index field.
-        String annotationDescriptor = readUTF8(currentOffset, charBuffer);
+        String annotationDescriptor = readUtf8(currentOffset, charBuffer);
         currentOffset += 2;
         // Parse num_element_value_pairs and element_value_pairs and visit these values.
         currentOffset =
@@ -2955,7 +2955,7 @@ public class ClassReader {
       currentOffset += 2;
       while (numAnnotations-- > 0) {
         // Parse the type_index field.
-        String annotationDescriptor = readUTF8(currentOffset, charBuffer);
+        String annotationDescriptor = readUtf8(currentOffset, charBuffer);
         currentOffset += 2;
         // Parse num_element_value_pairs and element_value_pairs and visit these values.
         currentOffset =
@@ -2983,7 +2983,7 @@ public class ClassReader {
    * @return the end offset of the JVMS 'annotation' or 'array_value' structure.
    */
   private int readElementValues(
-      final AnnotationVisitor annotationVisitor,
+      final AbstractAnnotationVisitor annotationVisitor,
       final int annotationOffset,
       final boolean named,
       final char[] charBuffer) {
@@ -2994,7 +2994,7 @@ public class ClassReader {
     if (named) {
       // Parse the element_value_pairs array.
       while (numElementValuePairs-- > 0) {
-        String elementName = readUTF8(currentOffset, charBuffer);
+        String elementName = readUtf8(currentOffset, charBuffer);
         currentOffset =
             readElementValue(annotationVisitor, currentOffset + 2, elementName, charBuffer);
       }
@@ -3022,7 +3022,7 @@ public class ClassReader {
    * @return the end offset of the JVMS 'element_value' structure.
    */
   private int readElementValue(
-      final AnnotationVisitor annotationVisitor,
+      final AbstractAnnotationVisitor annotationVisitor,
       final int elementValueOffset,
       final String elementName,
       final char[] charBuffer) {
@@ -3073,24 +3073,24 @@ public class ClassReader {
         currentOffset += 2;
         break;
       case 's': // const_value_index, CONSTANT_Utf8
-        annotationVisitor.visit(elementName, readUTF8(currentOffset, charBuffer));
+        annotationVisitor.visit(elementName, readUtf8(currentOffset, charBuffer));
         currentOffset += 2;
         break;
       case 'e': // enum_const_value
         annotationVisitor.visitEnum(
             elementName,
-            readUTF8(currentOffset, charBuffer),
-            readUTF8(currentOffset + 2, charBuffer));
+            readUtf8(currentOffset, charBuffer),
+            readUtf8(currentOffset + 2, charBuffer));
         currentOffset += 4;
         break;
       case 'c': // class_info
-        annotationVisitor.visit(elementName, Type.getType(readUTF8(currentOffset, charBuffer)));
+        annotationVisitor.visit(elementName, Type.getType(readUtf8(currentOffset, charBuffer)));
         currentOffset += 2;
         break;
       case '@': // annotation_value
         currentOffset =
             readElementValues(
-                annotationVisitor.visitAnnotation(elementName, readUTF8(currentOffset, charBuffer)),
+                annotationVisitor.visitAnnotation(elementName, readUtf8(currentOffset, charBuffer)),
                 currentOffset + 2,
                 true,
                 charBuffer);
@@ -3482,7 +3482,7 @@ public class ClassReader {
     int currentAttributeOffset = getFirstAttributeOffset();
     for (int i = readUnsignedShort(currentAttributeOffset - 2); i > 0; --i) {
       // Read the attribute_info's attribute_name and attribute_length fields.
-      String attributeName = readUTF8(currentAttributeOffset, charBuffer);
+      String attributeName = readUtf8(currentAttributeOffset, charBuffer);
       int attributeLength = readInt(currentAttributeOffset + 2);
       currentAttributeOffset += 6;
       if (Constants.BOOTSTRAP_METHODS.equals(attributeName)) {
@@ -3654,7 +3654,7 @@ public class ClassReader {
    * @return the String corresponding to the specified CONSTANT_Utf8 entry.
    */
   // DontCheck(AbbreviationAsWordInName): can't be renamed (for backward binary compatibility).
-  public String readUTF8(final int offset, final char[] charBuffer) {
+  public String readUtf8(final int offset, final char[] charBuffer) {
     int constantPoolEntryIndex = readUnsignedShort(offset);
     if (offset == 0 || constantPoolEntryIndex == 0) {
       return null;
@@ -3729,7 +3729,7 @@ public class ClassReader {
   private String readStringish(final int offset, final char[] charBuffer) {
     // Get the start offset of the cp_info structure (plus one), and read the CONSTANT_Utf8 entry
     // designated by the first two bytes of this cp_info.
-    return readUTF8(cpInfoOffsets[readUnsignedShort(offset)], charBuffer);
+    return readUtf8(cpInfoOffsets[readUnsignedShort(offset)], charBuffer);
   }
 
   /**
@@ -3794,8 +3794,8 @@ public class ClassReader {
     }
     int cpInfoOffset = cpInfoOffsets[constantPoolEntryIndex];
     int nameAndTypeCpInfoOffset = cpInfoOffsets[readUnsignedShort(cpInfoOffset + 2)];
-    String name = readUTF8(nameAndTypeCpInfoOffset, charBuffer);
-    String descriptor = readUTF8(nameAndTypeCpInfoOffset + 2, charBuffer);
+    String name = readUtf8(nameAndTypeCpInfoOffset, charBuffer);
+    String descriptor = readUtf8(nameAndTypeCpInfoOffset + 2, charBuffer);
     int bootstrapMethodOffset = bootstrapMethodOffsets[readUnsignedShort(cpInfoOffset)];
     Handle handle = (Handle) readConst(readUnsignedShort(bootstrapMethodOffset), charBuffer);
     Object[] bootstrapMethodArguments = new Object[readUnsignedShort(bootstrapMethodOffset + 2)];
@@ -3834,18 +3834,18 @@ public class ClassReader {
       case Symbol.CONSTANT_DOUBLE_TAG:
         return Double.longBitsToDouble(readLong(cpInfoOffset));
       case Symbol.CONSTANT_CLASS_TAG:
-        return Type.getObjectType(readUTF8(cpInfoOffset, charBuffer));
+        return Type.getObjectType(readUtf8(cpInfoOffset, charBuffer));
       case Symbol.CONSTANT_STRING_TAG:
-        return readUTF8(cpInfoOffset, charBuffer);
+        return readUtf8(cpInfoOffset, charBuffer);
       case Symbol.CONSTANT_METHOD_TYPE_TAG:
-        return Type.getMethodType(readUTF8(cpInfoOffset, charBuffer));
+        return Type.getMethodType(readUtf8(cpInfoOffset, charBuffer));
       case Symbol.CONSTANT_METHOD_HANDLE_TAG:
         int referenceKind = readByte(cpInfoOffset);
         int referenceCpInfoOffset = cpInfoOffsets[readUnsignedShort(cpInfoOffset + 1)];
         int nameAndTypeCpInfoOffset = cpInfoOffsets[readUnsignedShort(referenceCpInfoOffset + 2)];
         String owner = readClass(referenceCpInfoOffset, charBuffer);
-        String name = readUTF8(nameAndTypeCpInfoOffset, charBuffer);
-        String descriptor = readUTF8(nameAndTypeCpInfoOffset + 2, charBuffer);
+        String name = readUtf8(nameAndTypeCpInfoOffset, charBuffer);
+        String descriptor = readUtf8(nameAndTypeCpInfoOffset + 2, charBuffer);
         boolean isInterface =
             classFileBuffer[referenceCpInfoOffset - 1] == Symbol.CONSTANT_INTERFACE_METHODREF_TAG;
         return new Handle(referenceKind, owner, name, descriptor, isInterface);

@@ -15,9 +15,9 @@
  ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.common.processor.core;
 
+import com.chua.common.support.file.univocity.parsers.common.AbstractCommonSettings;
+import com.chua.common.support.file.univocity.parsers.common.AbstractContext;
 import com.chua.common.support.file.univocity.parsers.common.AbstractParser;
-import com.chua.common.support.file.univocity.parsers.common.CommonSettings;
-import com.chua.common.support.file.univocity.parsers.common.Context;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,7 +46,7 @@ import java.util.List;
  * @see AbstractProcessor
  * @see AbstractObjectProcessor
  */
-public abstract class AbstractObjectListProcessor<T extends Context> extends AbstractObjectProcessor<T> {
+public abstract class AbstractObjectListProcessor<T extends AbstractContext> extends AbstractObjectProcessor<T> {
 
 	private List<Object[]> rows;
 	private String[] headers;
@@ -105,7 +105,7 @@ public abstract class AbstractObjectListProcessor<T extends Context> extends Abs
 	}
 
 	/**
-	 * Returns the record headers. This can be either the headers defined in {@link CommonSettings#getHeaders()} or the headers parsed in the file when {@link CommonSettings#getHeaders()}  equals true
+	 * Returns the record headers. This can be either the headers defined in {@link AbstractCommonSettings#getHeaders()} or the headers parsed in the file when {@link AbstractCommonSettings#getHeaders()}  equals true
 	 *
 	 * @return the headers of all records parsed.
 	 */

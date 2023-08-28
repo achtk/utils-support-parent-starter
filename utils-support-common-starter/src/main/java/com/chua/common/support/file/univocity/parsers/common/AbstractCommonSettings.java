@@ -58,15 +58,15 @@ import java.util.TreeMap;
  *
  * @param <F> the format supported by this settings class.
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
- * @see com.chua.common.support.file.univocity.parsers.common.CommonParserSettings
- * @see com.chua.common.support.file.univocity.parsers.common.CommonWriterSettings
+ * @see com.chua.common.support.file.univocity.parsers.common.AbstractCommonParserSettings
+ * @see AbstractCommonWriterSettings
  * @see com.chua.common.support.file.univocity.parsers.csv.CsvParserSettings
  * @see com.chua.common.support.file.univocity.parsers.csv.CsvWriterSettings
  * @see com.chua.common.support.file.univocity.parsers.fixed.FixedWidthParserSettings
  * @see com.chua.common.support.file.univocity.parsers.fixed.FixedWidthWriterSettings
  */
 
-public abstract class CommonSettings<F extends Format> implements Cloneable {
+public abstract class AbstractCommonSettings<F extends Format> implements Cloneable {
 
 	private F format;
 	private String nullValue = null;
@@ -77,7 +77,7 @@ public abstract class CommonSettings<F extends Format> implements Cloneable {
 	private boolean ignoreLeadingWhitespaces = true;
 	private FieldSelector fieldSelector = null;
 	private boolean autoConfigurationEnabled = true;
-	private ProcessorErrorHandler<? extends Context> errorHandler;
+	private ProcessorErrorHandler<? extends AbstractContext> errorHandler;
 	private int errorContentLength = -1;
 	private boolean skipBitsAsWhitespace = true;
 
@@ -87,7 +87,7 @@ public abstract class CommonSettings<F extends Format> implements Cloneable {
 	/**
 	 * Creates a new instance of this settings object using the default format specified by the concrete class that inherits from {@code CommonSettings}
 	 */
-	public CommonSettings() {
+	public AbstractCommonSettings() {
 		setFormat(createDefaultFormat());
 	}
 
@@ -296,7 +296,7 @@ public abstract class CommonSettings<F extends Format> implements Cloneable {
 	 * <p><b>When reading</b>, only the values of the selected columns will be parsed, and the content of the other columns ignored.
 	 * The resulting rows will be returned with the selected columns only, in the order specified. If you want to
 	 * obtain the original row format, with all columns included and nulls in the fields that have not been selected,
-	 * set {@link CommonParserSettings#setColumnReorderingEnabled(boolean)} with {@code false}.</p>
+	 * set {@link AbstractCommonParserSettings#setColumnReorderingEnabled(boolean)} with {@code false}.</p>
 	 *
 	 * <p><b>When writing</b>, the sequence provided represents the expected format of the input rows. For example,
 	 * headers can be "H1,H2,H3", but the input data is coming with values for two columns and in a different order,
@@ -316,7 +316,7 @@ public abstract class CommonSettings<F extends Format> implements Cloneable {
 	 * <p><b>When reading</b>, only the values of the selected columns will be parsed, and the content of the other columns ignored.
 	 * The resulting rows will be returned with the selected columns only, in the order specified. If you want to
 	 * obtain the original row format, with all columns included and nulls in the fields that have not been selected,
-	 * set {@link CommonParserSettings#setColumnReorderingEnabled(boolean)} with {@code false}.</p>
+	 * set {@link AbstractCommonParserSettings#setColumnReorderingEnabled(boolean)} with {@code false}.</p>
 	 *
 	 * <p><b>When writing</b>, the sequence of non-excluded fields represents the expected format of the input rows. For example,
 	 * headers can be "H1,H2,H3", but the input data is coming with values for two columns and in a different order,
@@ -336,7 +336,7 @@ public abstract class CommonSettings<F extends Format> implements Cloneable {
 	 * <p><b>When reading</b>, only the values of the selected columns will be parsed, and the content of the other columns ignored.
 	 * The resulting rows will be returned with the selected columns only, in the order specified. If you want to
 	 * obtain the original row format, with all columns included and nulls in the fields that have not been selected,
-	 * set {@link CommonParserSettings#setColumnReorderingEnabled(boolean)} with {@code false}.</p>
+	 * set {@link AbstractCommonParserSettings#setColumnReorderingEnabled(boolean)} with {@code false}.</p>
 	 *
 	 * <p><b>When writing</b>, the sequence provided represents the expected format of the input rows. For example,
 	 * headers can be "H1,H2,H3", but the input data is coming with values for two columns and in a different order,
@@ -356,7 +356,7 @@ public abstract class CommonSettings<F extends Format> implements Cloneable {
 	 * <p><b>When reading</b>, only the values of the selected columns will be parsed, and the content of the other columns ignored.
 	 * The resulting rows will be returned with the selected columns only, in the order specified. If you want to
 	 * obtain the original row format, with all columns included and nulls in the fields that have not been selected,
-	 * set {@link CommonParserSettings#setColumnReorderingEnabled(boolean)} with {@code false}.</p>
+	 * set {@link AbstractCommonParserSettings#setColumnReorderingEnabled(boolean)} with {@code false}.</p>
 	 *
 	 * <p><b>When writing</b>, the sequence of non-excluded fields represents the expected format of the input rows. For example,
 	 * headers can be "H1,H2,H3", but the input data is coming with values for two columns and in a different order,
@@ -377,7 +377,7 @@ public abstract class CommonSettings<F extends Format> implements Cloneable {
 	 * <p><b>When reading</b>, only the values of the selected columns will be parsed, and the content of the other columns ignored.
 	 * The resulting rows will be returned with the selected columns only, in the order specified. If you want to
 	 * obtain the original row format, with all columns included and nulls in the fields that have not been selected,
-	 * set {@link CommonParserSettings#setColumnReorderingEnabled(boolean)} with {@code false}.</p>
+	 * set {@link AbstractCommonParserSettings#setColumnReorderingEnabled(boolean)} with {@code false}.</p>
 	 *
 	 * <p><b>When writing</b>, the sequence provided represents the expected format of the input rows. For example,
 	 * headers can be "H1,H2,H3", but the input data is coming with values for two columns and in a different order,
@@ -398,7 +398,7 @@ public abstract class CommonSettings<F extends Format> implements Cloneable {
 	 * <p><b>When reading</b>, only the values of the selected columns will be parsed, and the content of the other columns ignored.
 	 * The resulting rows will be returned with the selected columns only, in the order specified. If you want to
 	 * obtain the original row format, with all columns included and nulls in the fields that have not been selected,
-	 * set {@link CommonParserSettings#setColumnReorderingEnabled(boolean)} with {@code false}.</p>
+	 * set {@link AbstractCommonParserSettings#setColumnReorderingEnabled(boolean)} with {@code false}.</p>
 	 *
 	 * <p><b>When writing</b>, the sequence of non-excluded fields represents the expected format of the input rows. For example,
 	 * headers can be "H1,H2,H3", but the input data is coming with values for two columns and in a different order,
@@ -507,7 +507,7 @@ public abstract class CommonSettings<F extends Format> implements Cloneable {
 	 * @param <T> the {@code Context} type provided by the parser implementation.
 	 * @return the callback error handler with custom code to manage occurrences of {@link DataProcessingException}.
 	 */
-	public <T extends Context> ProcessorErrorHandler<T> getProcessorErrorHandler() {
+	public <T extends AbstractContext> ProcessorErrorHandler<T> getProcessorErrorHandler() {
 		return errorHandler == null ? NoopProcessorErrorHandler.INSTANCE : (ProcessorErrorHandler<T>) errorHandler;
 	}
 
@@ -519,7 +519,7 @@ public abstract class CommonSettings<F extends Format> implements Cloneable {
 	 *
 	 * @param processorErrorHandler the callback error handler with custom code to manage occurrences of {@link DataProcessingException}.
 	 */
-	public void setProcessorErrorHandler(ProcessorErrorHandler<? extends Context> processorErrorHandler) {
+	public void setProcessorErrorHandler(ProcessorErrorHandler<? extends AbstractContext> processorErrorHandler) {
 		this.errorHandler = processorErrorHandler;
 	}
 
@@ -680,9 +680,9 @@ public abstract class CommonSettings<F extends Format> implements Cloneable {
 	 * @param clearInputSpecificSettings flag indicating whether to clear settings that are likely to be associated with a given input.
 	 * @return a copy of the configurations applied to the current instance.
 	 */
-	protected CommonSettings clone(boolean clearInputSpecificSettings) {
+	protected AbstractCommonSettings clone(boolean clearInputSpecificSettings) {
 		try {
-			CommonSettings out = (CommonSettings) super.clone();
+			AbstractCommonSettings out = (AbstractCommonSettings) super.clone();
 			if (out.format != null) {
 				out.format = out.format.clone();
 			}
@@ -702,7 +702,7 @@ public abstract class CommonSettings<F extends Format> implements Cloneable {
 	 * @return a copy of all configurations applied to the current instance.
 	 */
 	@Override
-	protected CommonSettings clone() {
+	protected AbstractCommonSettings clone() {
 		return clone(false);
 	}
 

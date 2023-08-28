@@ -16,8 +16,8 @@
 package com.chua.common.support.file.univocity.parsers.common.processor.core;
 
 import com.chua.common.support.file.univocity.parsers.common.ArgumentUtils;
-import com.chua.common.support.file.univocity.parsers.common.CommonSettings;
-import com.chua.common.support.file.univocity.parsers.common.Context;
+import com.chua.common.support.file.univocity.parsers.common.AbstractCommonSettings;
+import com.chua.common.support.file.univocity.parsers.common.AbstractContext;
 import com.chua.common.support.file.univocity.parsers.common.DataProcessingException;
 
 import java.util.*;
@@ -97,11 +97,10 @@ class ColumnSplitter<T> {
 
 	/**
 	 * Initializes the list of column values, the headers of each column and which columns to read if fields
-	 * have been selected using {@link CommonSettings#selectFields(String...)} or {@link CommonSettings#selectIndexes(Integer...)}
 	 *
 	 * @param context the current active parsing context, which will be used to obtain information about headers and selected fields.
 	 */
-	private void initialize(Context context) {
+	private void initialize(AbstractContext context) {
 		headers:
 		if (this.headers == null) {
 			String[] allHeaders = context.headers();
@@ -147,7 +146,7 @@ class ColumnSplitter<T> {
 	 * @param row     the row whose column values will be split
 	 * @param context the current active parsing context.
 	 */
-	void addValuesToColumns(T[] row, Context context) {
+	void addValuesToColumns(T[] row, AbstractContext context) {
 		if (columnValues == null) {
 			initialize(context);
 		}

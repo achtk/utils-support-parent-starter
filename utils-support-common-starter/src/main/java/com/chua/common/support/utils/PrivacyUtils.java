@@ -22,7 +22,7 @@ public class PrivacyUtils {
     /**
      * 隐藏身份证
      */
-    public static String hideIDCard(String idCard) {
+    public static String hideCard(String idCard) {
         return idCard.replaceAll("(\\d{4})\\d{10}(\\w{4})", "$1*****$2");
     }
 

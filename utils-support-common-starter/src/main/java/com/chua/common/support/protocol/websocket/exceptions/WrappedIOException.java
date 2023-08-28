@@ -74,7 +74,7 @@ public class WrappedIOException extends Exception {
    *
    * @return IOException which is wrapped
    */
-  public IOException getIOException() {
+  public IOException getIoException() {
     return ioException;
   }
 }

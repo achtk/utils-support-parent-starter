@@ -817,7 +817,7 @@ public class TarEntry implements TarConstants {
      *
      * @return true if this is a sparse extension provided by GNU tar
      */
-    public boolean isGNUSparse() {
+    public boolean isGnuSparse() {
         return linkFlag == LF_GNUTYPE_SPARSE;
     }
 
@@ -826,7 +826,7 @@ public class TarEntry implements TarConstants {
      *
      * @return true if this is a long name extension provided by GNU tar
      */
-    public boolean isGNULongLinkEntry() {
+    public boolean isGnuLongLinkEntry() {
         return linkFlag == LF_GNUTYPE_LONGLINK;
     }
 
@@ -835,7 +835,7 @@ public class TarEntry implements TarConstants {
      *
      * @return true if this is a long name extension provided by GNU tar
      */
-    public boolean isGNULongNameEntry() {
+    public boolean isGnuLongNameEntry() {
         return linkFlag == LF_GNUTYPE_LONGNAME;
     }
 
@@ -918,7 +918,7 @@ public class TarEntry implements TarConstants {
     /**
      * @return <i>true</i> if this is a FIFO (pipe) entry.
      */
-    public boolean isFIFO() {
+    public boolean isFifo() {
         return linkFlag == LF_FIFO;
     }
 

@@ -32,7 +32,7 @@ import com.chua.common.support.protocol.constant.Opcode;
  *
  * @author Administrator
  */
-public class PongFrame extends ControlFrame {
+public class PongFrame extends AbstractControlFrame {
 
   /**
    * constructor which sets the opcode of this frame to pong

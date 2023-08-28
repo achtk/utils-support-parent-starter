@@ -100,9 +100,9 @@ public class JavaReflection extends Reflection {
 				Class parentClass = cls.getSuperclass();
 				while (parentClass != Object.class && parentClass != null) {
 					try {
-						if (name == null)
-							method = findApply(parentClass);
-						else {
+						if (name == null) {
+                            method = findApply(parentClass);
+                        } else {
 							method = findMethod(parentClass, name, parameterTypes);
 						}
 						method.setAccessible(true);
@@ -117,12 +117,14 @@ public class JavaReflection extends Reflection {
 			if (method == null) {
 				Class[] interfaces = cls.getInterfaces();
 				for (Class itf : interfaces) {
-					if (name == null)
-						method = findApply(itf);
-					else {
+					if (name == null) {
+                        method = findApply(itf);
+                    } else {
 						method = findMethod(itf, name, parameterTypes);
 					}
-					if (method != null) break;
+					if (method != null) {
+                        break;
+                    }
 				}
 			}
 		}
@@ -133,7 +135,9 @@ public class JavaReflection extends Reflection {
 	/** Returns the <code>apply()</code> method of a functional interface. **/
 	private static Method findApply (Class cls) {
 		for (Method method : cls.getDeclaredMethods()) {
-			if (method.getName().equals("apply")) return method;
+			if ("apply".equals(method.getName())) {
+                return method;
+            }
 		}
 		return null;
 	}
@@ -147,8 +151,12 @@ public class JavaReflection extends Reflection {
 			Method method = methods[i];
 
 			// if neither name or parameter list size match, bail on this method
-			if (!method.getName().equals(name)) continue;
-			if (method.getParameterTypes().length != parameterTypes.length) continue;
+			if (!method.getName().equals(name)) {
+                continue;
+            }
+			if (method.getParameterTypes().length != parameterTypes.length) {
+                continue;
+            }
 
 			// Check if the types match.
 			Class[] otherTypes = method.getParameterTypes();
@@ -190,15 +198,33 @@ public class JavaReflection extends Reflection {
 	 * relax the type constraint a little, as we'll invoke a method via reflection. That means the from type will always be boxed,
 	 * as the {@link Method#invoke(Object, Object...)} method takes objects. **/
 	private static boolean isPrimitiveAssignableFrom (Class from, Class to) {
-		if ((from == Boolean.class || from == boolean.class) && (to == boolean.class || to == Boolean.class)) return true;
-		if ((from == Integer.class || from == int.class) && (to == int.class || to == Integer.class)) return true;
-		if ((from == Float.class || from == float.class) && (to == float.class || to == Float.class)) return true;
-		if ((from == Double.class || from == double.class) && (to == double.class || to == Double.class)) return true;
-		if ((from == Byte.class || from == byte.class) && (to == byte.class || to == Byte.class)) return true;
-		if ((from == Short.class || from == short.class) && (to == short.class || to == Short.class)) return true;
-		if ((from == Long.class || from == long.class) && (to == long.class || to == Long.class)) return true;
-		if ((from == Character.class || from == char.class) && (to == char.class || to == Character.class)) return true;
-		if(to == Object[].class) return true;
+		if ((from == Boolean.class || from == boolean.class) && (to == boolean.class || to == Boolean.class)) {
+            return true;
+        }
+		if ((from == Integer.class || from == int.class) && (to == int.class || to == Integer.class)) {
+            return true;
+        }
+		if ((from == Float.class || from == float.class) && (to == float.class || to == Float.class)) {
+            return true;
+        }
+		if ((from == Double.class || from == double.class) && (to == double.class || to == Double.class)) {
+            return true;
+        }
+		if ((from == Byte.class || from == byte.class) && (to == byte.class || to == Byte.class)) {
+            return true;
+        }
+		if ((from == Short.class || from == short.class) && (to == short.class || to == Short.class)) {
+            return true;
+        }
+		if ((from == Long.class || from == long.class) && (to == long.class || to == Long.class)) {
+            return true;
+        }
+		if ((from == Character.class || from == char.class) && (to == char.class || to == Character.class)) {
+            return true;
+        }
+		if(to == Object[].class) {
+            return true;
+        }
 		return false;
 	}
 
@@ -273,14 +299,26 @@ public class JavaReflection extends Reflection {
 
 		@Override
 		public boolean equals (Object obj) {
-			if (this == obj) return true;
-			if (obj == null) return false;
-			if (getClass() != obj.getClass()) return false;
+			if (this == obj) {
+                return true;
+            }
+			if (obj == null) {
+                return false;
+            }
+			if (getClass() != obj.getClass()) {
+                return false;
+            }
 			MethodSignature other = (MethodSignature)obj;
 			if (name == null) {
-				if (other.name != null) return false;
-			} else if (!name.equals(other.name)) return false;
-			if (!Arrays.equals(parameters, other.parameters)) return false;
+				if (other.name != null) {
+                    return false;
+                }
+			} else if (!name.equals(other.name)) {
+                return false;
+            }
+			if (!Arrays.equals(parameters, other.parameters)) {
+                return false;
+            }
 			return true;
 		}
 	}

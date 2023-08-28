@@ -90,6 +90,6 @@ class InlineBlock {
         //                originally `TokenTypes.LINE_COMMENT` but this symbol is not defined
         //                token.type == TokenTypes.LINE_COMMENT ||
         token.type == TokenTypes.BLOCK_COMMENT
-        || token.value.equals(";");
+        || ";".equals(token.value);
   }
 }

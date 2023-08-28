@@ -31,7 +31,7 @@ import com.chua.common.support.protocol.constant.Opcode;
  *
  * @author Administrator
  */
-public class PingFrame extends ControlFrame {
+public class PingFrame extends AbstractControlFrame {
 
   /**
    * constructor which sets the opcode of this frame to ping

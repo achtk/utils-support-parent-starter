@@ -3,7 +3,7 @@ package com.chua.common.support.extra.el.baseutil.bytecode.annotation;
 import com.chua.common.support.extra.el.baseutil.bytecode.ClassFile;
 import com.chua.common.support.extra.el.baseutil.bytecode.ClassFileParser;
 import com.chua.common.support.extra.el.baseutil.bytecode.structure.AnnotationInfo;
-import com.chua.common.support.extra.el.baseutil.bytecode.structure.Attribute.AttributeInfo;
+import com.chua.common.support.extra.el.baseutil.bytecode.structure.Attribute.AbstractAttributeInfo;
 import com.chua.common.support.extra.el.baseutil.bytecode.structure.Attribute.RuntimeVisibleAnnotationsAttriInfo;
 import com.chua.common.support.extra.el.baseutil.bytecode.structure.MethodInfo;
 import com.chua.common.support.extra.el.baseutil.bytecode.support.OverridesAttribute;
@@ -25,10 +25,10 @@ public class SupportOverrideAttributeAnnotationMetadata extends AbstractAnnotati
         class StreamData
         {
             MethodInfo     methodInfo;
-            AttributeInfo  attributeInfo;
+            AbstractAttributeInfo attributeInfo;
             AnnotationInfo annotationInfo;
 
-            public StreamData(MethodInfo methodInfo, AttributeInfo attributeInfo)
+            public StreamData(MethodInfo methodInfo, AbstractAttributeInfo attributeInfo)
             {
                 this.methodInfo = methodInfo;
                 this.attributeInfo = attributeInfo;

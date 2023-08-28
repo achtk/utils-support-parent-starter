@@ -8,7 +8,7 @@ import java.io.Writer;
  * Abstract translator for processing whole input in single pass.
  * Handles initial index checking and counting of returned code points.
  */
-abstract class SinglePassTranslator extends CharSequenceTranslator {
+abstract class SinglePassTranslator extends AbstractCharSequenceTranslator {
 
     /**
      * A utility method to be used in the {@link #translate(CharSequence, int, Writer)} method.

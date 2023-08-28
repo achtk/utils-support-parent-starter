@@ -128,14 +128,14 @@ public interface ExifFile {
      *
      * @return x方向分辨路
      */
-    String getXAxisResolution();
+    String getXzAxisResolution();
 
     /**
      * y方向分辨路
      *
      * @return y方向分辨路
      */
-    String getYAxisResolution();
+    String getYzAxisResolution();
 
     /**
      * 显示固件Firmware版本(图片详细信息的程序名称)

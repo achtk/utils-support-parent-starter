@@ -17,7 +17,7 @@
 package com.chua.common.support.file.univocity.parsers.common.record;
 
 import com.chua.common.support.file.univocity.parsers.common.AbstractParser;
-import com.chua.common.support.file.univocity.parsers.common.Context;
+import com.chua.common.support.file.univocity.parsers.common.AbstractContext;
 import com.chua.common.support.file.univocity.parsers.common.ParsingContext;
 
 /**
@@ -33,7 +33,7 @@ public class RecordFactory extends AbstractRecordFactory<Record, RecordMetaDataI
 	 *
 	 * @param context the parser context
 	 */
-	public RecordFactory(Context context) {
+	public RecordFactory(AbstractContext context) {
 		super(context);
 	}
 
@@ -49,7 +49,7 @@ public class RecordFactory extends AbstractRecordFactory<Record, RecordMetaDataI
 	}
 
 	@Override
-	public RecordMetaDataImpl createMetaData(Context context) {
+	public RecordMetaDataImpl createMetaData(AbstractContext context) {
 		return new RecordMetaDataImpl(context);
 	}
 }

@@ -19,7 +19,7 @@ public final class Wrappers {
     /**
      * 空的 EmptyWrapper
      */
-    private static final QueryWrapper<?> emptyWrapper = new EmptyWrapper<>();
+    private static final QueryWrapper<?> QUERY_WRAPPER = new EmptyWrapper<>();
 
     private Wrappers() {
         // ignore
@@ -142,7 +142,7 @@ public final class Wrappers {
      */
     @SuppressWarnings("unchecked")
     public static <T> QueryWrapper<T> emptyWrapper() {
-        return (QueryWrapper<T>) emptyWrapper;
+        return (QueryWrapper<T>) QUERY_WRAPPER;
     }
 
     /**

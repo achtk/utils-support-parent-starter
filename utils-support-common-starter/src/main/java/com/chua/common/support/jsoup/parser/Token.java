@@ -491,7 +491,7 @@ abstract class Token {
         return (Character) this;
     }
 
-    final boolean isEOF() {
+    final boolean isEof() {
         return type == TokenType.EOF;
     }
 

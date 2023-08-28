@@ -55,16 +55,30 @@ public interface TemplateLoader {
 
 		@Override
 		public boolean equals (Object obj) {
-			if (this == obj) return true;
-			if (obj == null) return false;
-			if (getClass() != obj.getClass()) return false;
+			if (this == obj) {
+                return true;
+            }
+			if (obj == null) {
+                return false;
+            }
+			if (getClass() != obj.getClass()) {
+                return false;
+            }
 			Source other = (Source)obj;
 			if (content == null) {
-				if (other.content != null) return false;
-			} else if (!content.equals(other.content)) return false;
+				if (other.content != null) {
+                    return false;
+                }
+			} else if (!content.equals(other.content)) {
+                return false;
+            }
 			if (path == null) {
-				if (other.path != null) return false;
-			} else if (!path.equals(other.path)) return false;
+				if (other.path != null) {
+                    return false;
+                }
+			} else if (!path.equals(other.path)) {
+                return false;
+            }
 			return true;
 		}
 	}
@@ -76,7 +90,9 @@ public interface TemplateLoader {
 
 		@Override
 		public BasisTemplate load (String path) {
-			if (templates.containsKey(path)) return templates.get(path);
+			if (templates.containsKey(path)) {
+                return templates.get(path);
+            }
 			Source source = loadSource(path);
 			BasisTemplate template = compileTemplate(source);
 			templates.put(path, template);
@@ -183,7 +199,9 @@ public interface TemplateLoader {
 		@Override
 		protected Source loadSource (String path) {
 			Source template = templates.get(path);
-			if (template == null) Error.error("Couldn't load template '" + path + "'.", new Span(new Source(path, " "), 0, 0));
+			if (template == null) {
+                Error.error("Couldn't load template '" + path + "'.", new Span(new Source(path, " "), 0, 0));
+            }
 			return template;
 		}
 	}

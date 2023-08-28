@@ -12,14 +12,14 @@ import java.util.List;
 public interface AnnotationMetadata
 {
 
-    String RetentionName  = Retention.class.getName().replace('.', '/');
-    String DocumentedName = Documented.class.getName().replace('.', '/');
-    String TargetName     = Target.class.getName().replace('.', '/');
+    String RETENTION_NAME = Retention.class.getName().replace('.', '/');
+    String DOCUMENTED_NAME = Documented.class.getName().replace('.', '/');
+    String TARGET_NAME = Target.class.getName().replace('.', '/');
 
     /**
      * 该注解实例是否应该忽略。内置的几个元注解应该忽略，否则不断分析下去会无限循环。
      *
-     * @return
+     * @return boolean
      */
     boolean shouldIgnore();
 

@@ -28,20 +28,20 @@ public class LadderView implements View {
 
     @Override
     public String draw() {
-        final StringBuilder ladderSB = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
         int deep = 0;
         for (String item : items) {
 
             // 第一个条目不需要分隔符
             if (deep == 0) {
-                ladderSB
+                builder
                         .append(item)
                         .append("\n");
             }
 
             // 其他的需要添加分隔符
             else {
-                ladderSB
+                builder
                         .append(StringUtils.repeat(STEP_CHAR, deep * INDENT_STEP))
                         .append(LADDER_CHAR)
                         .append(item)
@@ -51,7 +51,7 @@ public class LadderView implements View {
             deep++;
 
         }
-        return ladderSB.toString();
+        return builder.toString();
     }
 
     /**

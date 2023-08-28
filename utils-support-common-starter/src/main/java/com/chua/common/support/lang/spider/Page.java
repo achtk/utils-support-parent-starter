@@ -114,7 +114,7 @@ public class Page {
      */
     public void addTargetRequests(Iterable<String> requests) {
         for (String s : requests) {
-            if (StringUtils.isBlank(s) || s.equals("#") || s.startsWith("javascript:")) {
+            if (StringUtils.isBlank(s) || "#".equals(s) || s.startsWith("javascript:")) {
                 continue;
             }
             s = UrlUtils.canonicalizeUrl(s, url.toString());
@@ -130,7 +130,7 @@ public class Page {
      */
     public void addTargetRequests(Iterable<String> requests, long priority) {
         for (String s : requests) {
-            if (StringUtils.isBlank(s) || s.equals("#") || s.startsWith("javascript:")) {
+            if (StringUtils.isBlank(s) || "#".equals(s) || s.startsWith("javascript:")) {
                 continue;
             }
             s = UrlUtils.canonicalizeUrl(s, url.toString());
@@ -144,7 +144,7 @@ public class Page {
      * @param requestString requestString
      */
     public void addTargetRequest(String requestString) {
-        if (StringUtils.isBlank(requestString) || requestString.equals("#")) {
+        if (StringUtils.isBlank(requestString) || "#".equals(requestString)) {
             return;
         }
         requestString = UrlUtils.canonicalizeUrl(requestString, url.toString());

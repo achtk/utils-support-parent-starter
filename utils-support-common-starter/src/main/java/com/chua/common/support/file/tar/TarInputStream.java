@@ -37,7 +37,7 @@ public class TarInputStream extends FilterInputStream {
     private final byte[] SMALL_BUF = new byte[SMALL_BUFFER_SIZE];
     private final ZipEncoding encoding;
     protected boolean debug;
-    protected boolean hasHitEOF;
+    protected boolean hasHitEof;
     protected long entrySize;
     protected long entryOffset;
     protected byte[] readBuf;
@@ -118,7 +118,7 @@ public class TarInputStream extends FilterInputStream {
         this.readBuf = null;
         this.oneBuf = new byte[1];
         this.debug = false;
-        this.hasHitEOF = false;
+        this.hasHitEof = false;
         this.encoding = AbstractZipEncodingHelper.getZipEncoding(encoding);
     }
 
@@ -246,7 +246,7 @@ public class TarInputStream extends FilterInputStream {
      * @throws IOException on error
      */
     public TarEntry getNextEntry() throws IOException {
-        if (hasHitEOF) {
+        if (hasHitEof) {
             return null;
         }
 
@@ -275,7 +275,7 @@ public class TarInputStream extends FilterInputStream {
 
         byte[] headerBuf = getRecord();
 
-        if (hasHitEOF) {
+        if (hasHitEof) {
             currEntry = null;
             return null;
         }
@@ -295,7 +295,7 @@ public class TarInputStream extends FilterInputStream {
         entryOffset = 0;
         entrySize = currEntry.getSize();
 
-        if (currEntry.isGNULongLinkEntry()) {
+        if (currEntry.isGnuLongLinkEntry()) {
             byte[] longLinkData = getLongNameData();
             if (longLinkData == null) {
                 // Bugzilla: 40334
@@ -306,7 +306,7 @@ public class TarInputStream extends FilterInputStream {
             currEntry.setLinkName(encoding.decode(longLinkData));
         }
 
-        if (currEntry.isGNULongNameEntry()) {
+        if (currEntry.isGnuLongNameEntry()) {
             byte[] longNameData = getLongNameData();
             if (longNameData == null) {
                 // Bugzilla: 40334
@@ -321,8 +321,8 @@ public class TarInputStream extends FilterInputStream {
             paxHeaders();
         }
 
-        if (currEntry.isGNUSparse()) {
-            readGNUSparse();
+        if (currEntry.isGnuSparse()) {
+            readGnuSparse();
         }
 
         // If the size of the next element in the archive has changed
@@ -379,7 +379,7 @@ public class TarInputStream extends FilterInputStream {
      * @throws IOException on error
      */
     private byte[] getRecord() throws IOException {
-        if (hasHitEOF) {
+        if (hasHitEof) {
             return null;
         }
 
@@ -389,15 +389,15 @@ public class TarInputStream extends FilterInputStream {
             if (debug) {
                 System.err.println("READ NULL RECORD");
             }
-            hasHitEOF = true;
-        } else if (buffer.isEOFRecord(headerBuf)) {
+            hasHitEof = true;
+        } else if (buffer.isEofRecord(headerBuf)) {
             if (debug) {
                 System.err.println("READ EOF RECORD");
             }
-            hasHitEOF = true;
+            hasHitEof = true;
         }
 
-        return hasHitEOF ? null : headerBuf;
+        return hasHitEof ? null : headerBuf;
     }
 
     private void paxHeaders() throws IOException {
@@ -515,12 +515,12 @@ public class TarInputStream extends FilterInputStream {
      * @throws IOException on error
      * @todo Sparse files get not yet really processed.
      */
-    private void readGNUSparse() throws IOException {
+    private void readGnuSparse() throws IOException {
         if (currEntry.isExtended()) {
             TarArchiveSparseEntry entry;
             do {
                 byte[] headerBuf = getRecord();
-                if (hasHitEOF) {
+                if (hasHitEof) {
                     currEntry = null;
                     break;
                 }
@@ -657,7 +657,7 @@ public class TarInputStream extends FilterInputStream {
      * @return boolean
      */
     public boolean canReadEntryData(TarEntry te) {
-        return !te.isGNUSparse();
+        return !te.isGnuSparse();
     }
 
     private boolean isDirectory() {

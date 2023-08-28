@@ -3,8 +3,7 @@ package com.chua.common.support.extra.el.baseutil.bytecode.structure.constantinf
 import com.chua.common.support.constant.ConstantType;
 import com.chua.common.support.extra.el.baseutil.bytecode.util.BinaryData;
 
-public abstract class ConstantInfo
-{
+public abstract class AbstractConstantInfo {
     protected ConstantType type;
 
     /**
@@ -15,7 +14,7 @@ public abstract class ConstantInfo
     /**
      * 使用常量池中的数据解析一些描述字符串链接等
      *
-     * @param constant_pool
+     * @param constantPool
      */
-    public abstract void resolve(ConstantInfo[] constant_pool);
+    public abstract void resolve(AbstractConstantInfo[] constantPool);
 }

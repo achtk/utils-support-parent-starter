@@ -15,8 +15,8 @@
  ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.common.processor;
 
+import com.chua.common.support.file.univocity.parsers.common.AbstractContext;
 import com.chua.common.support.file.univocity.parsers.common.AbstractParser;
-import com.chua.common.support.file.univocity.parsers.common.Context;
 import com.chua.common.support.file.univocity.parsers.common.ParsingContext;
 import com.chua.common.support.file.univocity.parsers.common.processor.core.AbstractObjectProcessor;
 import com.chua.common.support.file.univocity.parsers.conversions.Conversion;
@@ -26,7 +26,7 @@ import com.chua.common.support.file.univocity.parsers.conversions.Conversion;
  * <p>This uses the value conversions provided by {@link Conversion} instances.
  *
  * <p> For each row processed, a sequence of conversions will be executed and stored in an object array, at its original position.
- * <p> The row with the result of these conversions will then be sent to the {@link ObjectRowProcessor#rowProcessed(Object[], Context)} method, where the user can access it.
+ * <p> The row with the result of these conversions will then be sent to the {@link ObjectRowProcessor#rowProcessed(Object[], AbstractContext)} method, where the user can access it.
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
  * @see AbstractParser

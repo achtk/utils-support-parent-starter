@@ -61,7 +61,7 @@ public class FtpFileHandler {
         con.registerCommand("RNTO", "RNTO <file>", this::rnto); // Rename To
         con.registerCommand("SMNT", "SMNT <file>", this::smnt); // Structure Mount (Obsolete)
 
-        con.registerSiteCommand("CHMOD", "CHMOD <perm> <file>", this::site_chmod); // Change Permissions
+        con.registerSiteCommand("CHMOD", "CHMOD <perm> <file>", this::siteChmod); // Change Permissions
 
         con.registerCommand("MDTM", "MDTM <file>", this::mdtm); // Modification Time (RFC 3659)
         con.registerCommand("SIZE", "SIZE <file>", this::size); // File Size (RFC 3659)
@@ -97,9 +97,9 @@ public class FtpFileHandler {
     }
 
     private Object getFile(String path) throws IOException {
-        if(path.equals("...") || path.equals("..")) {
+        if("...".equals(path) || "..".equals(path)) {
             return fs.getParent(cwd);
-        } else if(path.equals("/")) {
+        } else if("/".equals(path)) {
             return fs.getRoot();
         } else if(path.startsWith("/")) {
             return fs.findFile(fs.getRoot(), path.substring(1));
@@ -167,7 +167,9 @@ public class FtpFileHandler {
         if(args.length > 0) {
             file = getFile(args[0]);
             int i = args[0].lastIndexOf('.');
-            if(i > 0) ext = args[0].substring(i);
+            if(i > 0) {
+                ext = args[0].substring(i);
+            }
         }
 
         while(file != null && fs.exists(file)) {
@@ -218,7 +220,7 @@ public class FtpFileHandler {
         // "-l" is not present in any specification, but chrome uses it
         // TODO remove this when the bug gets fixed
         // https://bugs.chromium.org/p/chromium/issues/detail?id=706905
-        Object dir = args.length > 0 && !args[0].equals("-l") && !args[0].equals("-a") ? getFile(args[0]) : cwd;
+        Object dir = args.length > 0 && !"-l".equals(args[0]) && !"-a".equals(args[0]) ? getFile(args[0]) : cwd;
 
         if(!fs.isDirectory(dir)) {
             con.sendResponse(550, "Not a directory");
@@ -241,7 +243,7 @@ public class FtpFileHandler {
         // "-l" is not present in any specification, but chrome uses it
         // TODO remove this when the bug gets fixed
         // https://bugs.chromium.org/p/chromium/issues/detail?id=706905
-        Object dir = args.length > 0 && !args[0].equals("-l") ? getFile(args[0]) : cwd;
+        Object dir = args.length > 0 && !"-l".equals(args[0]) ? getFile(args[0]) : cwd;
 
         if(!fs.isDirectory(dir)) {
             con.sendResponse(550, "Not a directory");
@@ -294,7 +296,7 @@ public class FtpFileHandler {
         con.sendResponse(502, "SMNT is not implemented in this server");
     }
 
-    private void site_chmod(String[] cmd) throws IOException {
+    private void siteChmod(String[] cmd) throws IOException {
         if(cmd.length <= 1) {
             con.sendResponse(501, "Missing parameters");
             return;
@@ -414,7 +416,9 @@ public class FtpFileHandler {
                 byte[] digest = fs.getDigest(file, "MD5");
                 String md5 = new BigInteger(1, digest).toString(16);
 
-                if(response.length() > 0) response.append(", ");
+                if(response.length() > 0) {
+                    response.append(", ");
+                }
                 response.append(path).append(" ").append(md5);
             }
 

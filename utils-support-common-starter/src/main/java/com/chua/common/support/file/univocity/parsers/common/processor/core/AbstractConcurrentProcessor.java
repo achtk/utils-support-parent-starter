@@ -1,22 +1,7 @@
-/*******************************************************************************
- * Copyright 2015 Univocity Software Pty Ltd
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.common.processor.core;
 
+import com.chua.common.support.file.univocity.parsers.common.AbstractContext;
 import com.chua.common.support.file.univocity.parsers.common.AbstractParser;
-import com.chua.common.support.file.univocity.parsers.common.Context;
 import com.chua.common.support.file.univocity.parsers.common.DataProcessingException;
 
 import java.util.concurrent.*;
@@ -26,15 +11,15 @@ import java.util.concurrent.*;
  * wraps another {@link Processor}, and collects rows read from the input.
  * The actual row processing is performed in by wrapped {@link Processor} in a separate thread.
  *
- * <i>Note: </i> by default the {@link Context} object passed on to the wrapped {@link Processor} will <b>not</b> reflect the
+ * <i>Note: </i> by default the {@link AbstractContext} object passed on to the wrapped {@link Processor} will <b>not</b> reflect the
  * state of the parser at the time the row as generated, but the current state of the parser instead. You can enable the
- * {@link #contextCopyingEnabled} flag to generate copies of the {@link Context} at the time each row was generated.
+ * {@link #contextCopyingEnabled} flag to generate copies of the {@link AbstractContext} at the time each row was generated.
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
  * @see AbstractParser
  * @see Processor
  */
-public abstract class AbstractConcurrentProcessor<T extends Context> implements Processor<T> {
+public abstract class AbstractConcurrentProcessor<T extends AbstractContext> implements Processor<T> {
 
 	private final Processor processor;
 

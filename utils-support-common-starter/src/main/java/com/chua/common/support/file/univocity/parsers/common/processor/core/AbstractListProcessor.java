@@ -15,8 +15,8 @@
  ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.common.processor.core;
 
-import com.chua.common.support.file.univocity.parsers.common.CommonSettings;
-import com.chua.common.support.file.univocity.parsers.common.Context;
+import com.chua.common.support.file.univocity.parsers.common.AbstractCommonSettings;
+import com.chua.common.support.file.univocity.parsers.common.AbstractContext;
 import com.chua.common.support.file.univocity.parsers.common.Format;
 
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ import java.util.List;
  * <hr><blockquote><pre>
  *
  * parserSettings.setRowProcessor(new RowListProcessor());
- * parser.parse(reader); // will invoke the {@link AbstractListProcessor#rowProcessed(String[], Context)} method for each parsed record.
+ * parser.parse(reader); // will invoke the {@link AbstractListProcessor#rowProcessed(String[], AbstractContext)} method for each parsed record.
  *
  * String[] headers = rowProcessor.getHeaders();
  * List&lt;String[]&gt; rows = rowProcessor.getRows();
@@ -39,7 +39,7 @@ import java.util.List;
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
  */
-public abstract class AbstractListProcessor<T extends Context> implements Processor<T> {
+public abstract class AbstractListProcessor<T extends AbstractContext> implements Processor<T> {
 
 	private List<String[]> rows;
 	private String[] headers;
@@ -73,7 +73,7 @@ public abstract class AbstractListProcessor<T extends Context> implements Proces
 	 * @param row     the data extracted by the parser for an individual record. Note that:
 	 *                <ul>
 	 *                <li>it will never by null. </li>
-	 *                <li>it will never be empty unless explicitly configured using {@link CommonSettings#setSkipEmptyLines(boolean)}</li>
+	 *                <li>it will never be empty unless explicitly configured using {@link AbstractCommonSettings#setSkipEmptyLines(boolean)}</li>
 	 *                <li>it won't contain lines identified by the parser as comments. To disable comment processing set {@link Format#setComment(char)} to '\0'</li>
 	 *                </ul>
 	 * @param context A contextual object with information and controls over the current state of the parsing process
@@ -98,7 +98,7 @@ public abstract class AbstractListProcessor<T extends Context> implements Proces
 	}
 
 	/**
-	 * Returns the record headers. This can be either the headers defined in {@link CommonSettings#getHeaders()} or the headers parsed in the file when {@link CommonSettings#getHeaders()}  equals true
+	 * Returns the record headers. This can be either the headers defined in {@link AbstractCommonSettings#getHeaders()} or the headers parsed in the file when {@link CommonSettings#getHeaders()}  equals true
 	 *
 	 * @return the headers of all records parsed.
 	 */

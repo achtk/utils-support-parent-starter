@@ -32,7 +32,9 @@ public class TemplateContext {
 	public TemplateContext set (String name, Object value) {
 		for (int i = scopes.size() - 1; i >= 0; i--) {
 			Map<String, Object> ctx = scopes.get(i);
-			if (ctx.isEmpty()) continue;
+			if (ctx.isEmpty()) {
+                continue;
+            }
 			if (ctx.containsKey(name)) {
 				ctx.put(name, value);
 				return this;
@@ -54,9 +56,13 @@ public class TemplateContext {
 	public Object get (String name) {
 		for (int i = scopes.size() - 1; i >= 0; i--) {
 			Map<String, Object> ctx = scopes.get(i);
-			if (ctx.isEmpty()) continue;
+			if (ctx.isEmpty()) {
+                continue;
+            }
 			Object value = ctx.get(name);
-			if (value != null) return value;
+			if (value != null) {
+                return value;
+            }
 		}
 		return null;
 	}

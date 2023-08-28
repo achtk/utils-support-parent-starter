@@ -19,7 +19,7 @@ public class Util {
     public static final long VLI_MAX = Long.MAX_VALUE;
     public static final int VLI_SIZE_MAX = 9;
 
-    public static int getVLISize(long num) {
+    public static int getVliSize(long num) {
         int size = 0;
         do {
             ++size;

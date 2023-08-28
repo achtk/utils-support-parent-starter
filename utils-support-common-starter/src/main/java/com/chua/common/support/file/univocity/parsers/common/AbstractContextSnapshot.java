@@ -16,23 +16,23 @@
 package com.chua.common.support.file.univocity.parsers.common;
 
 /**
- * A snapshot of a {@link Context} which retains copies of variable attributes of a given {@link Context} to
+ * A snapshot of a {@link AbstractContext} which retains copies of variable attributes of a given {@link AbstractContext} to
  * store the state of the parsing process at a given point in time. All runtime operations such as {@link #stop()}
  * will still work and affect the current parsing process.
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
  */
-public abstract class ContextSnapshot<T extends Context> extends ContextWrapper<T> {
+public abstract class AbstractContextSnapshot<T extends AbstractContext> extends AbstractContextWrapper<T> {
 
     private final int currentColumn;
     private final long currentRecord;
 
     /**
-     * Creates a snapshot of a given {@link Context}
+     * Creates a snapshot of a given {@link AbstractContext}
      *
      * @param context the context object whose variable attributes will be copied over.
      */
-    public ContextSnapshot(T context) {
+    public AbstractContextSnapshot(T context) {
         super(context);
         currentColumn = context.currentColumn();
         currentRecord = context.currentRecord();

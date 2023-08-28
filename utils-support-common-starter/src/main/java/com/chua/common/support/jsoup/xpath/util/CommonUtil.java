@@ -10,7 +10,7 @@ import com.chua.common.support.jsoup.select.Elements;
  * @author CH
  */
 public class CommonUtil {
-    public static String getJMethodNameFromStr(String str) {
+    public static String getMethodNameFromStr(String str) {
         if (str.contains("-")) {
             String[] pies = str.split("-");
             StringBuilder sb = new StringBuilder(pies[0]);

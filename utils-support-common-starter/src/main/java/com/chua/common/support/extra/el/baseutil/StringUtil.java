@@ -144,7 +144,7 @@ public class StringUtil
      */
     public static boolean isNotBlank(String src)
     {
-        return src != null && src.equals("") != true;
+        return src != null && "".equals(src) != true;
     }
 
     /**

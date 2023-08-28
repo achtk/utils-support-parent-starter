@@ -250,7 +250,7 @@ public class AnsiLog {
             }
         }
 
-        if (Projects.isCygwinOrMinGW()) {
+        if (Projects.isCygwinOrMinGw()) {
             enableColor = true;
         }
 

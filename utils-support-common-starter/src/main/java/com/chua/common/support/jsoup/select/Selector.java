@@ -1,5 +1,6 @@
 package com.chua.common.support.jsoup.select;
 
+import com.chua.common.support.json.jsonpath.internal.filter.Evaluator;
 import com.chua.common.support.jsoup.helper.Validate;
 import com.chua.common.support.jsoup.nodes.Element;
 
@@ -103,7 +104,7 @@ public class Selector {
      * @param root root element to descend into
      * @return matching elements, empty if none
      */
-    public static Elements select(Evaluator evaluator, Element root) {
+    public static Elements select(AbstractEvaluator evaluator, Element root) {
         Validate.notNull(evaluator);
         Validate.notNull(root);
         return Collector.collect(evaluator, root);

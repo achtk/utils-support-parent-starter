@@ -585,7 +585,7 @@ public class NetUtils {
      *
      * @return true if it is reachable
      */
-    static boolean isPreferIPV6Address() {
+    static boolean isPreferIpV6Address() {
         return Boolean.getBoolean("java.net.preferIPv6Addresses");
     }
 
@@ -692,7 +692,7 @@ public class NetUtils {
     private static Optional<InetAddress> toValidAddress(InetAddress address) {
         if (address instanceof Inet6Address) {
             Inet6Address v6Address = (Inet6Address) address;
-            if (isPreferIPV6Address()) {
+            if (isPreferIpV6Address()) {
                 return Optional.ofNullable(normalizeV6Address(v6Address));
             }
         }
@@ -1085,7 +1085,7 @@ public class NetUtils {
     }
 
 
-    public static boolean isIPV6URLStdFormat(String ip) {
+    public static boolean isIpV6URLStdFormat(String ip) {
         if ((ip.charAt(0) == '[' && ip.indexOf(']') > 2)) {
             return true;
         } else if (ip.indexOf(":") != ip.lastIndexOf(":")) {
@@ -1095,7 +1095,7 @@ public class NetUtils {
         }
     }
 
-    public static String getLegalIP(String ip) {
+    public static String getLegalIp(String ip) {
         //ipv6 [::FFFF:129.144.52.38]:80
         int ind;
         if ((ip.charAt(0) == '[' && (ind = ip.indexOf(']')) > 2)) {

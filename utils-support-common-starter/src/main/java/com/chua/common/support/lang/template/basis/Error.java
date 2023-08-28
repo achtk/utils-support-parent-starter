@@ -21,14 +21,15 @@ public class Error {
 	 * </p>
 	 */
 	public static void error (String message, TokenStream stream) {
-		if (stream.hasMore())
-			error(message, stream.consume().getSpan());
-		else {
+		if (stream.hasMore()) {
+            error(message, stream.consume().getSpan());
+        } else {
 			Source source = stream.getSource();
-			if (source == null)
-				error(message, new Span(new Source("unknown", " "), 0, 1));
-			else
-				error(message, new Span(source, source.getContent().length() - 1, source.getContent().length()));
+			if (source == null) {
+                error(message, new Span(new Source("unknown", " "), 0, 1));
+            } else {
+                error(message, new Span(source, source.getContent().length() - 1, source.getContent().length()));
+            }
 		}
 	}
 
@@ -48,10 +49,11 @@ public class Error {
 			message += i >= errorStart && i <= errorEnd ? "^" : useTab ? "\t" : " ";
 		}
 
-		if (cause == null)
-			throw new TemplateException(message, location);
-		else
-			throw new TemplateException(message, location, cause);
+		if (cause == null) {
+            throw new TemplateException(message, location);
+        } else {
+            throw new TemplateException(message, location, cause);
+        }
 	}
 
 	/** Create an error message based on the provided message and location, highlighting the location in the line on which the
@@ -99,10 +101,11 @@ public class Error {
 			while (cause != null && cause != this) {
 				if (cause instanceof TemplateException) {
 					TemplateException ex = (TemplateException)cause;
-					if (ex.getCause() == null || ex.getCause() == ex)
-						builder.append(ex.errorMessage);
-					else
-						builder.append(ex.errorMessage.substring(0, ex.errorMessage.indexOf('\n')));
+					if (ex.getCause() == null || ex.getCause() == ex) {
+                        builder.append(ex.errorMessage);
+                    } else {
+                        builder.append(ex.errorMessage.substring(0, ex.errorMessage.indexOf('\n')));
+                    }
 					builder.append("\n");
 				}
 				cause = cause.getCause();

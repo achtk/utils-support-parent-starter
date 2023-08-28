@@ -833,7 +833,7 @@ public class WebSocketImpl implements WebSocket {
             throw new IllegalArgumentException(
                     "This websocket uses ws instead of wss. No SSLSession available.");
         }
-        return ((ISSLChannel) channel).getSSLEngine().getSession();
+        return ((ISSLChannel) channel).getSslEngine().getSession();
     }
 
     @Override

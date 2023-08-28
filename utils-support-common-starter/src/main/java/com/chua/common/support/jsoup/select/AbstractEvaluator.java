@@ -1,5 +1,6 @@
 package com.chua.common.support.jsoup.select;
 
+import com.chua.common.support.json.jsonpath.internal.filter.Evaluator;
 import com.chua.common.support.jsoup.helper.Validate;
 import com.chua.common.support.jsoup.nodes.*;
 
@@ -15,8 +16,8 @@ import static com.chua.common.support.utils.StringUtils.normaliseWhitespace;
 /**
  * Evaluates that an element matches the selector.
  */
-public abstract class Evaluator {
-    protected Evaluator() {
+public abstract class AbstractEvaluator {
+    protected AbstractEvaluator() {
     }
 
     /**
@@ -32,7 +33,7 @@ public abstract class Evaluator {
     /**
      * Evaluator for tag name
      */
-    public static final class Tag extends Evaluator {
+    public static final class Tag extends AbstractEvaluator {
         private final String tagName;
 
         public Tag(String tagName) {
@@ -54,7 +55,7 @@ public abstract class Evaluator {
     /**
      * Evaluator for tag name that ends with
      */
-    public static final class TagEndsWith extends Evaluator {
+    public static final class TagEndsWith extends AbstractEvaluator {
         private final String tagName;
 
         public TagEndsWith(String tagName) {
@@ -75,7 +76,7 @@ public abstract class Evaluator {
     /**
      * Evaluator for element id
      */
-    public static final class Id extends Evaluator {
+    public static final class Id extends AbstractEvaluator {
         private final String id;
 
         public Id(String id) {
@@ -97,7 +98,7 @@ public abstract class Evaluator {
     /**
      * Evaluator for element class
      */
-    public static final class Class extends Evaluator {
+    public static final class Class extends AbstractEvaluator {
         private final String className;
 
         public Class(String className) {
@@ -119,7 +120,7 @@ public abstract class Evaluator {
     /**
      * Evaluator for attribute name matching
      */
-    public static final class Attribute extends Evaluator {
+    public static final class Attribute extends AbstractEvaluator {
         private final String key;
 
         public Attribute(String key) {
@@ -141,7 +142,7 @@ public abstract class Evaluator {
     /**
      * Evaluator for attribute name prefix matching
      */
-    public static final class AttributeStarting extends Evaluator {
+    public static final class AttributeStarting extends AbstractEvaluator {
         private final String keyPrefix;
 
         public AttributeStarting(String keyPrefix) {
@@ -169,7 +170,7 @@ public abstract class Evaluator {
     /**
      * Evaluator for attribute name/value matching
      */
-    public static final class AttributeWithValue extends AttributeKeyPair {
+    public static final class AttributeWithValue extends AbstractAttributeKeyPair {
         public AttributeWithValue(String key, String value) {
             super(key, value);
         }
@@ -189,7 +190,7 @@ public abstract class Evaluator {
     /**
      * Evaluator for attribute name != value matching
      */
-    public static final class AttributeWithValueNot extends AttributeKeyPair {
+    public static final class AttributeWithValueNot extends AbstractAttributeKeyPair {
         public AttributeWithValueNot(String key, String value) {
             super(key, value);
         }
@@ -209,7 +210,7 @@ public abstract class Evaluator {
     /**
      * Evaluator for attribute name/value matching (value prefix)
      */
-    public static final class AttributeWithValueStarting extends AttributeKeyPair {
+    public static final class AttributeWithValueStarting extends AbstractAttributeKeyPair {
         public AttributeWithValueStarting(String key, String value) {
             super(key, value, false);
         }
@@ -229,7 +230,7 @@ public abstract class Evaluator {
     /**
      * Evaluator for attribute name/value matching (value ending)
      */
-    public static final class AttributeWithValueEnding extends AttributeKeyPair {
+    public static final class AttributeWithValueEnding extends AbstractAttributeKeyPair {
         public AttributeWithValueEnding(String key, String value) {
             super(key, value, false);
         }
@@ -249,7 +250,7 @@ public abstract class Evaluator {
     /**
      * Evaluator for attribute name/value matching (value containing)
      */
-    public static final class AttributeWithValueContaining extends AttributeKeyPair {
+    public static final class AttributeWithValueContaining extends AbstractAttributeKeyPair {
         public AttributeWithValueContaining(String key, String value) {
             super(key, value);
         }
@@ -269,7 +270,7 @@ public abstract class Evaluator {
     /**
      * Evaluator for attribute name/value matching (value regex matching)
      */
-    public static final class AttributeWithValueMatching extends Evaluator {
+    public static final class AttributeWithValueMatching extends AbstractEvaluator {
         String key;
         Pattern pattern;
 
@@ -293,15 +294,15 @@ public abstract class Evaluator {
     /**
      * Abstract evaluator for attribute name/value matching
      */
-    public abstract static class AttributeKeyPair extends Evaluator {
+    public abstract static class AbstractAttributeKeyPair extends AbstractEvaluator {
         String key;
         String value;
 
-        public AttributeKeyPair(String key, String value) {
+        public AbstractAttributeKeyPair(String key, String value) {
             this(key, value, true);
         }
 
-        public AttributeKeyPair(String key, String value, boolean trimValue) {
+        public AbstractAttributeKeyPair(String key, String value, boolean trimValue) {
             Validate.notEmpty(key);
             Validate.notEmpty(value);
 
@@ -319,7 +320,7 @@ public abstract class Evaluator {
     /**
      * Evaluator for any / all element matching
      */
-    public static final class AllElements extends Evaluator {
+    public static final class AllElements extends AbstractEvaluator {
 
         @Override
         public boolean matches(Element root, Element element) {
@@ -335,7 +336,7 @@ public abstract class Evaluator {
     /**
      * Evaluator for matching by sibling index number (e {@literal <} idx)
      */
-    public static final class IndexLessThan extends IndexEvaluator {
+    public static final class IndexLessThan extends AbstractIndexEvaluator {
         public IndexLessThan(int index) {
             super(index);
         }
@@ -355,7 +356,7 @@ public abstract class Evaluator {
     /**
      * Evaluator for matching by sibling index number (e {@literal >} idx)
      */
-    public static final class IndexGreaterThan extends IndexEvaluator {
+    public static final class IndexGreaterThan extends AbstractIndexEvaluator {
         public IndexGreaterThan(int index) {
             super(index);
         }
@@ -375,7 +376,7 @@ public abstract class Evaluator {
     /**
      * Evaluator for matching by sibling index number (e = idx)
      */
-    public static final class IndexEquals extends IndexEvaluator {
+    public static final class IndexEquals extends AbstractIndexEvaluator {
         public IndexEquals(int index) {
             super(index);
         }
@@ -395,7 +396,7 @@ public abstract class Evaluator {
     /**
      * Evaluator for matching the last sibling (css :last-child)
      */
-    public static final class IsLastChild extends Evaluator {
+    public static final class IsLastChild extends AbstractEvaluator {
 		@Override
 		public boolean matches(Element root, Element element) {
 			final Element p = element.parent();
@@ -429,14 +430,14 @@ public abstract class Evaluator {
     }
 
 
-    public static abstract class CssNthEvaluator extends Evaluator {
+    public static abstract class AbstractCssNthEvaluator extends AbstractEvaluator {
     	protected final int a, b;
 
-    	public CssNthEvaluator(int a, int b) {
+    	public AbstractCssNthEvaluator(int a, int b) {
     		this.a = a;
     		this.b = b;
     	}
-    	public CssNthEvaluator(int b) {
+    	public AbstractCssNthEvaluator(int b) {
     		this(0,b);
     	}
 
@@ -470,7 +471,7 @@ public abstract class Evaluator {
      *
      * @see IndexEquals
      */
-    public static final class IsNthChild extends CssNthEvaluator {
+    public static final class IsNthChild extends AbstractCssNthEvaluator {
 
     	public IsNthChild(int a, int b) {
     		super(a,b);
@@ -491,7 +492,7 @@ public abstract class Evaluator {
      *
      * @see IndexEquals
      */
-    public static final class IsNthLastChild extends CssNthEvaluator {
+    public static final class IsNthLastChild extends AbstractCssNthEvaluator {
     	public IsNthLastChild(int a, int b) {
     		super(a,b);
     	}
@@ -513,7 +514,7 @@ public abstract class Evaluator {
      * css pseudo class nth-of-type
      *
      */
-    public static class IsNthOfType extends CssNthEvaluator {
+    public static class IsNthOfType extends AbstractCssNthEvaluator {
     	public IsNthOfType(int a, int b) {
     		super(a,b);
     	}
@@ -536,7 +537,7 @@ public abstract class Evaluator {
 		}
     }
 
-    public static class IsNthLastOfType extends CssNthEvaluator {
+    public static class IsNthLastOfType extends AbstractCssNthEvaluator {
 
 		public IsNthLastOfType(int a, int b) {
 			super(a, b);
@@ -563,7 +564,7 @@ public abstract class Evaluator {
     /**
      * Evaluator for matching the first sibling (css :first-child)
      */
-    public static final class IsFirstChild extends Evaluator {
+    public static final class IsFirstChild extends AbstractEvaluator {
     	@Override
     	public boolean matches(Element root, Element element) {
     		final Element p = element.parent();
@@ -581,7 +582,7 @@ public abstract class Evaluator {
      * @see <a href="http://www.w3.org/TR/selectors/#root-pseudo">:root selector</a>
      *
      */
-    public static final class IsRoot extends Evaluator {
+    public static final class IsRoot extends AbstractEvaluator {
     	@Override
     	public boolean matches(Element root, Element element) {
     		final Element r = root instanceof Document?root.child(0):root;
@@ -593,7 +594,7 @@ public abstract class Evaluator {
     	}
     }
 
-    public static final class IsOnlyChild extends Evaluator {
+    public static final class IsOnlyChild extends AbstractEvaluator {
 		@Override
 		public boolean matches(Element root, Element element) {
 			final Element p = element.parent();
@@ -605,7 +606,7 @@ public abstract class Evaluator {
     	}
     }
 
-    public static final class IsOnlyOfType extends Evaluator {
+    public static final class IsOnlyOfType extends AbstractEvaluator {
 		@Override
 		public boolean matches(Element root, Element element) {
 			final Element p = element.parent();
@@ -624,7 +625,7 @@ public abstract class Evaluator {
     	}
     }
 
-    public static final class IsEmpty extends Evaluator {
+    public static final class IsEmpty extends AbstractEvaluator {
 		@Override
 		public boolean matches(Element root, Element element) {
         	List<Node> family = element.childNodes();
@@ -644,10 +645,10 @@ public abstract class Evaluator {
      *
      * @author ant
      */
-    public abstract static class IndexEvaluator extends Evaluator {
+    public abstract static class AbstractIndexEvaluator extends AbstractEvaluator {
         int index;
 
-        public IndexEvaluator(int index) {
+        public AbstractIndexEvaluator(int index) {
             this.index = index;
         }
     }
@@ -655,7 +656,7 @@ public abstract class Evaluator {
     /**
      * Evaluator for matching Element (and its descendants) text
      */
-    public static final class ContainsText extends Evaluator {
+    public static final class ContainsText extends AbstractEvaluator {
         private final String searchText;
 
         public ContainsText(String searchText) {
@@ -678,7 +679,7 @@ public abstract class Evaluator {
      * normalized. <code>:containsWholeText()</code>
      * @since 1.15.1.
      */
-    public static final class ContainsWholeText extends Evaluator {
+    public static final class ContainsWholeText extends AbstractEvaluator {
         private final String searchText;
 
         public ContainsWholeText(String searchText) {
@@ -701,7 +702,7 @@ public abstract class Evaluator {
      * normalized. <code>:containsWholeOwnText()</code>
      * @since 1.15.1.
      */
-    public static final class ContainsWholeOwnText extends Evaluator {
+    public static final class ContainsWholeOwnText extends AbstractEvaluator {
         private final String searchText;
 
         public ContainsWholeOwnText(String searchText) {
@@ -722,7 +723,7 @@ public abstract class Evaluator {
     /**
      * Evaluator for matching Element (and its descendants) data
      */
-    public static final class ContainsData extends Evaluator {
+    public static final class ContainsData extends AbstractEvaluator {
         private final String searchText;
 
         public ContainsData(String searchText) {
@@ -743,7 +744,7 @@ public abstract class Evaluator {
     /**
      * Evaluator for matching Element's own text
      */
-    public static final class ContainsOwnText extends Evaluator {
+    public static final class ContainsOwnText extends AbstractEvaluator {
         private final String searchText;
 
         public ContainsOwnText(String searchText) {
@@ -764,7 +765,7 @@ public abstract class Evaluator {
     /**
      * Evaluator for matching Element (and its descendants) text with regex
      */
-    public static final class Matches extends Evaluator {
+    public static final class Matches extends AbstractEvaluator {
         private final Pattern pattern;
 
         public Matches(Pattern pattern) {
@@ -786,7 +787,7 @@ public abstract class Evaluator {
     /**
      * Evaluator for matching Element's own text with regex
      */
-    public static final class MatchesOwn extends Evaluator {
+    public static final class MatchesOwn extends AbstractEvaluator {
         private final Pattern pattern;
 
         public MatchesOwn(Pattern pattern) {
@@ -809,7 +810,7 @@ public abstract class Evaluator {
      * Evaluator for matching Element (and its descendants) whole text with regex.
      * @since 1.15.1.
      */
-    public static final class MatchesWholeText extends Evaluator {
+    public static final class MatchesWholeText extends AbstractEvaluator {
         private final Pattern pattern;
 
         public MatchesWholeText(Pattern pattern) {
@@ -832,7 +833,7 @@ public abstract class Evaluator {
      * Evaluator for matching Element's own whole text with regex.
      * @since 1.15.1.
      */
-    public static final class MatchesWholeOwnText extends Evaluator {
+    public static final class MatchesWholeOwnText extends AbstractEvaluator {
         private final Pattern pattern;
 
         public MatchesWholeOwnText(Pattern pattern) {
@@ -851,7 +852,7 @@ public abstract class Evaluator {
         }
     }
 
-    public static final class MatchText extends Evaluator {
+    public static final class MatchText extends AbstractEvaluator {
 
         @Override
         public boolean matches(Element root, Element element) {

@@ -41,7 +41,7 @@ public class EndBraceParser extends Parser
         {
             throw new IllegalFormatException("结束符}前面没有开始符号", sentence.substring(0, offset));
         }
-        ((WithBodyExecution) pop).setBody(array.toArray(emptyBody));
+        ((WithBodyExecution) pop).setBody(array.toArray(EMPTY_BODY));
         if (pop instanceof ElseExecution)
         {
             if (executions.peek() == null || executions.peek() instanceof IfExecution == false)

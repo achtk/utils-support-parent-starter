@@ -28,7 +28,7 @@
 package com.chua.common.support.extra.asm;
 
 /**
- * An {@link AnnotationVisitor} that generates a corresponding 'annotation' or 'type_annotation'
+ * An {@link AbstractAnnotationVisitor} that generates a corresponding 'annotation' or 'type_annotation'
  * structure, as defined in the Java Virtual Machine Specification (JVMS). AnnotationWriter
  * instances can be chained in a doubly linked list, from which Runtime[In]Visible[Type]Annotations
  * attributes can be generated with the {@link #putAnnotations} method. Similarly, arrays of such
@@ -41,7 +41,7 @@ package com.chua.common.support.extra.asm;
  * @author Eric Bruneton
  * @author Eugene Kuleshov
  */
-final class AnnotationWriter extends AnnotationVisitor {
+final class AnnotationWriter extends AbstractAnnotationVisitor {
 
   /** Where the constants used in this AnnotationWriter must be stored. */
   private final SymbolTable symbolTable;
@@ -275,7 +275,7 @@ final class AnnotationWriter extends AnnotationVisitor {
   }
 
   @Override
-  public AnnotationVisitor visitAnnotation(final String name, final String descriptor) {
+  public AbstractAnnotationVisitor visitAnnotation(final String name, final String descriptor) {
     // Case of an element_value with an annotation_value field.
     // See https://docs.oracle.com/javase/specs/jvms/se9/html/jvms-4.html#jvms-4.7.16.1.
     ++numElementValuePairs;
@@ -288,7 +288,7 @@ final class AnnotationWriter extends AnnotationVisitor {
   }
 
   @Override
-  public AnnotationVisitor visitArray(final String name) {
+  public AbstractAnnotationVisitor visitArray(final String name) {
     // Case of an element_value with an array_value field.
     // https://docs.oracle.com/javase/specs/jvms/se9/html/jvms-4.html#jvms-4.7.16.1
     ++numElementValuePairs;

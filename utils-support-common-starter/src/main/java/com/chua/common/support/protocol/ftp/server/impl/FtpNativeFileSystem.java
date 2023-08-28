@@ -27,7 +27,9 @@ public class FtpNativeFileSystem implements FtpFileSystem<File> {
     public FtpNativeFileSystem(File rootDir) {
         this.rootDir = rootDir;
 
-        if(!rootDir.exists()) rootDir.mkdirs();
+        if(!rootDir.exists()) {
+            rootDir.mkdirs();
+        }
     }
 
     @Override
@@ -100,7 +102,9 @@ public class FtpNativeFileSystem implements FtpFileSystem<File> {
 
     @Override
     public File[] listFiles(File dir) throws IOException {
-        if(!dir.isDirectory()) throw new IOException("Not a directory");
+        if(!dir.isDirectory()) {
+            throw new IOException("Not a directory");
+        }
 
         return dir.listFiles();
     }
@@ -173,7 +177,9 @@ public class FtpNativeFileSystem implements FtpFileSystem<File> {
 
     @Override
     public void mkdirs(File file) throws IOException {
-        if(!file.mkdirs()) throw new IOException("Couldn't create the directory");
+        if(!file.mkdirs()) {
+            throw new IOException("Couldn't create the directory");
+        }
     }
 
     @Override
@@ -185,13 +191,17 @@ public class FtpNativeFileSystem implements FtpFileSystem<File> {
                 .forEach(File::delete); // Deletes it
         } else {
             // Deletes a single file
-            if(!file.delete()) throw new IOException("Couldn't delete the file");
+            if(!file.delete()) {
+                throw new IOException("Couldn't delete the file");
+            }
         }
     }
 
     @Override
     public void rename(File from, File to) throws IOException {
-        if(!from.renameTo(to)) throw new IOException("Couldn't rename the file");
+        if(!from.renameTo(to)) {
+            throw new IOException("Couldn't rename the file");
+        }
     }
 
     @Override
@@ -200,18 +210,28 @@ public class FtpNativeFileSystem implements FtpFileSystem<File> {
         boolean write = Utils.hasPermission(perms, Utils.CAT_OWNER + Utils.TYPE_WRITE);
         boolean execute = Utils.hasPermission(perms, Utils.CAT_OWNER + Utils.TYPE_EXECUTE);
 
-        if(!file.setReadable(read, true)) throw new IOException("Couldn't update the readable permission");
-        if(!file.setWritable(write, true)) throw new IOException("Couldn't update the writable permission");
-        if(!file.setExecutable(execute, true)) throw new IOException("Couldn't update the executable permission");
+        if(!file.setReadable(read, true)) {
+            throw new IOException("Couldn't update the readable permission");
+        }
+        if(!file.setWritable(write, true)) {
+            throw new IOException("Couldn't update the writable permission");
+        }
+        if(!file.setExecutable(execute, true)) {
+            throw new IOException("Couldn't update the executable permission");
+        }
     }
 
     @Override
     public void touch(File file, long time) throws IOException {
-        if(!file.setLastModified(time)) throw new IOException("Couldn't touch the file");
+        if(!file.setLastModified(time)) {
+            throw new IOException("Couldn't touch the file");
+        }
     }
 
     private boolean isInside(File dir, File file) {
-        if(file.equals(dir)) return true;
+        if(file.equals(dir)) {
+            return true;
+        }
 
         try {
             return file.getCanonicalPath().startsWith(dir.getCanonicalPath() + File.separator);

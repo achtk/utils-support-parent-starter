@@ -85,7 +85,7 @@ public abstract class ElementOperator {
             //NodeTraversor.traverse(formatter, element);
             //return formatter.toString();
             //return new HtmlToPlainText().getPlainText(element);
-            return Xsoup.HtmlToPlainText(element);
+            return Xsoup.htmlToPlainText(element);
         }
 
         @Override

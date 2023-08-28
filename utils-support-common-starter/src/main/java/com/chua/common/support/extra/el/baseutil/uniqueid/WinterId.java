@@ -1,38 +1,34 @@
 package com.chua.common.support.extra.el.baseutil.uniqueid;
 
+import com.chua.common.support.net.NetUtils;
+import com.chua.common.support.os.Platform;
+
 import java.lang.management.ManagementFactory;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Calendar;
 
-public class WinterId implements Uid
-{
+public class WinterId implements Uid {
 
-    private static final    char[]   pid;
+    private static final char[] PID;
     private static volatile WinterId INSTANCE;
 
-    static
-    {
-        pid = (ManagementFactory.getRuntimeMXBean().getName().split("@")[0] + "_").toCharArray();
+    static {
+        PID = NetUtils.getPid().toCharArray();
     }
 
     private Sequencer sequencer;
 
-    private WinterId()
-    {
+    private WinterId() {
         sequencer = new Sequencer();
     }
 
-    public static final WinterId instance()
-    {
-        if (INSTANCE != null)
-        {
+    public static final WinterId instance() {
+        if (INSTANCE != null) {
             return INSTANCE;
         }
-        synchronized (WinterId.class)
-        {
-            if (INSTANCE != null)
-            {
+        synchronized (WinterId.class) {
+            if (INSTANCE != null) {
                 return INSTANCE;
             }
             INSTANCE = new WinterId();
@@ -40,68 +36,55 @@ public class WinterId implements Uid
         }
     }
 
-    public static void main(String[] args) throws SocketException, UnknownHostException
-    {
-        WinterId id    = WinterId.instance();
+    public static void main(String[] args) throws SocketException, UnknownHostException {
+        WinterId id = WinterId.instance();
         String[] array = new String[1000];
-        for (int i = 0; i < 1000; i++)
-        {
+        for (int i = 0; i < 1000; i++) {
             array[i] = id.generate();
         }
-        for (String each : array)
-        {
+        for (String each : array) {
             System.out.println(each);
         }
     }
 
     @Override
-    public byte[] generateBytes()
-    {
+    public byte[] generateBytes() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public String generate()
-    {
+    public String generate() {
         return sequencer.next();
     }
 
     @Override
-    public long generateLong()
-    {
+    public long generateLong() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public String generateDigits()
-    {
+    public String generateDigits() {
         return generate();
     }
 
-    class Sequencer
-    {
+    class Sequencer {
         final StringBuilder cache = new StringBuilder();
-        int      sequence;
-        long     lastTime;
-        int      pidLength;
+        int sequence;
+        long lastTime;
+        int pidLength;
         Calendar now = Calendar.getInstance();
 
-        public Sequencer()
-        {
-            cache.append(pid);
-            pidLength = pid.length;
+        public Sequencer() {
+            cache.append(PID);
+            pidLength = PID.length;
         }
 
-        synchronized String next()
-        {
+        synchronized String next() {
             long time = System.currentTimeMillis();
-            if (time > lastTime)
-            {
+            if (time > lastTime) {
                 sequence = 0;
                 lastTime = time;
-            }
-            else
-            {
+            } else {
                 sequence += 1;
             }
             now.setTimeInMillis(time);
@@ -111,66 +94,45 @@ public class WinterId implements Uid
             return result;
         }
 
-        void format(StringBuilder cache, Calendar now, int sequence)
-        {
+        void format(StringBuilder cache, Calendar now, int sequence) {
             int year = now.get(Calendar.YEAR);
             cache.append(year);
             int month = now.get(Calendar.MONTH) + 1;
-            if (month >= 10)
-            {
+            if (month >= 10) {
                 cache.append(month);
-            }
-            else
-            {
+            } else {
                 cache.append('0').append(month);
             }
             int dayInMonth = now.get(Calendar.DAY_OF_MONTH);
-            if (dayInMonth >= 10)
-            {
+            if (dayInMonth >= 10) {
                 cache.append(dayInMonth);
-            }
-            else
-            {
+            } else {
                 cache.append(0).append(dayInMonth);
             }
             int hour = now.get(Calendar.HOUR_OF_DAY);
-            if (hour >= 10)
-            {
+            if (hour >= 10) {
                 cache.append(hour);
-            }
-            else
-            {
+            } else {
                 cache.append('0').append(hour);
             }
             int minute = now.get(Calendar.MINUTE);
-            if (minute >= 10)
-            {
+            if (minute >= 10) {
                 cache.append(minute);
-            }
-            else
-            {
+            } else {
                 cache.append('0').append(minute);
             }
             int seconds = now.get(Calendar.SECOND);
-            if (seconds >= 10)
-            {
+            if (seconds >= 10) {
                 cache.append(seconds);
-            }
-            else
-            {
+            } else {
                 cache.append('0').append(seconds);
             }
             int millSeconds = now.get(Calendar.MILLISECOND);
-            if (millSeconds >= 100)
-            {
+            if (millSeconds >= 100) {
                 cache.append(millSeconds);
-            }
-            else if (millSeconds >= 10)
-            {
+            } else if (millSeconds >= 10) {
                 cache.append(0).append(millSeconds);
-            }
-            else
-            {
+            } else {
                 cache.append(0).append(0).append(millSeconds);
             }
             cache.append('_').append(sequence);

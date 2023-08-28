@@ -2,7 +2,7 @@ package com.chua.common.support.extra.el.baseutil.bytecode.structure.constantinf
 
 import com.chua.common.support.extra.el.baseutil.bytecode.util.BinaryData;
 
-public abstract class RefInfo extends ConstantInfo
+public abstract class AbstractRefInfo extends AbstractConstantInfo
 {
     protected int       classInfoIndex;
     protected int       nameAndTypeInfoIndex;
@@ -16,8 +16,8 @@ public abstract class RefInfo extends ConstantInfo
     }
 
     @Override
-    public void resolve(ConstantInfo[] constant_pool)
+    public void resolve(AbstractConstantInfo[] constantPool)
     {
-        classInfo = (ClassInfo) constant_pool[classInfoIndex - 1];
+        classInfo = (ClassInfo) constantPool[classInfoIndex - 1];
     }
 }

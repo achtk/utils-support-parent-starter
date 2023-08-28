@@ -1,5 +1,6 @@
 package com.chua.common.support.jsoup.nodes;
 
+import com.chua.common.support.json.jsonpath.internal.filter.Evaluator;
 import com.chua.common.support.jsoup.helper.ChangeNotifyingArrayList;
 import com.chua.common.support.jsoup.helper.Validate;
 import com.chua.common.support.jsoup.internal.NonnullByDefault;
@@ -428,7 +429,7 @@ public class Element extends Node {
      * @param evaluator an element evaluator
      * @return an {@link Elements} list containing elements that match the query (empty if none match)
      */
-    public Elements select(Evaluator evaluator) {
+    public Elements select(AbstractEvaluator evaluator) {
         return Selector.select(evaluator, this);
     }
 
@@ -455,7 +456,7 @@ public class Element extends Node {
      * @return the first matching element (walking down the tree, starting from this element), or {@code null} if none
      * match.
      */
-    public  Element selectFirst(Evaluator evaluator) {
+    public  Element selectFirst(AbstractEvaluator evaluator) {
         return Collector.findFirst(evaluator, this);
     }
 
@@ -495,7 +496,7 @@ public class Element extends Node {
      * @param evaluator an element evaluator
      * @return if this element matches
      */
-    public boolean is(Evaluator evaluator) {
+    public boolean is(AbstractEvaluator evaluator) {
         return evaluator.matches(this.root(), this);
     }
 
@@ -519,7 +520,7 @@ public class Element extends Node {
      * @return the closest ancestor element (possibly itself) that matches the provided evaluator. {@code null} if not
      * found.
      */
-    public  Element closest(Evaluator evaluator) {
+    public  Element closest(AbstractEvaluator evaluator) {
         Validate.notNull(evaluator);
         Element el = this;
         final Element root = root();

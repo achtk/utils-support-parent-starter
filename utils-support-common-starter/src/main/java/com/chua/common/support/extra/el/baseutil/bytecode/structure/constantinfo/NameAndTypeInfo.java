@@ -3,7 +3,7 @@ package com.chua.common.support.extra.el.baseutil.bytecode.structure.constantinf
 import com.chua.common.support.constant.ConstantType;
 import com.chua.common.support.extra.el.baseutil.bytecode.util.BinaryData;
 
-public class NameAndTypeInfo extends ConstantInfo
+public class NameAndTypeInfo extends AbstractConstantInfo
 {
     private int    nameIndex;
     private int    descriptorIndex;
@@ -23,9 +23,9 @@ public class NameAndTypeInfo extends ConstantInfo
     }
 
     @Override
-    public void resolve(ConstantInfo[] constant_pool)
+    public void resolve(AbstractConstantInfo[] constantPool)
     {
-        name = ((Utf8Info) constant_pool[nameIndex - 1]).getValue();
-        descriptor = ((Utf8Info) constant_pool[descriptorIndex - 1]).getValue();
+        name = ((Utf8Info) constantPool[nameIndex - 1]).getValue();
+        descriptor = ((Utf8Info) constantPool[descriptorIndex - 1]).getValue();
     }
 }

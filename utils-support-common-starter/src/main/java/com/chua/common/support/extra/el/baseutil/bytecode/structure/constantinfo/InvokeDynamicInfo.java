@@ -3,13 +3,13 @@ package com.chua.common.support.extra.el.baseutil.bytecode.structure.constantinf
 import com.chua.common.support.constant.ConstantType;
 import com.chua.common.support.extra.el.baseutil.bytecode.util.BinaryData;
 
-public class InvokeDynamicInfo extends ConstantInfo
+public class InvokeDynamicInfo extends AbstractConstantInfo
 {
     /**
      * class文件中attributes属性的索引
      */
-    private int bootstrap_method_attr_index;
-    private int name_and_type_index;
+    private int bootstrapMethodAttrIndex;
+    private int nameAndTypeIndex;
 
     public InvokeDynamicInfo()
     {
@@ -19,18 +19,18 @@ public class InvokeDynamicInfo extends ConstantInfo
     @Override
     public void resolve(BinaryData binaryData)
     {
-        bootstrap_method_attr_index = binaryData.readShort();
-        name_and_type_index = binaryData.readShort();
+        bootstrapMethodAttrIndex = binaryData.readShort();
+        nameAndTypeIndex = binaryData.readShort();
     }
 
     @Override
     public String toString()
     {
-        return "InvokeDynamicInfo{" + "bootstrap_method_attr_index=" + bootstrap_method_attr_index + ", name_and_type_index=" + name_and_type_index + '}';
+        return "InvokeDynamicInfo{" + "bootstrap_method_attr_index=" + bootstrapMethodAttrIndex + ", name_and_type_index=" + nameAndTypeIndex + '}';
     }
 
     @Override
-    public void resolve(ConstantInfo[] constant_pool)
+    public void resolve(AbstractConstantInfo[] constantPool)
     {
     }
 }

@@ -1,15 +1,16 @@
 package com.chua.common.support.jsoup.select;
 
+import com.chua.common.support.json.jsonpath.internal.filter.Evaluator;
 import com.chua.common.support.jsoup.nodes.Element;
 import com.chua.common.support.jsoup.nodes.Node;
 
 /**
  * Base structural evaluator.
  */
-abstract class StructuralEvaluator extends Evaluator {
-    Evaluator evaluator;
+abstract class StructuralEvaluator extends AbstractEvaluator {
+    AbstractEvaluator evaluator;
 
-    static class Root extends Evaluator {
+    static class Root extends AbstractEvaluator {
         @Override
         public boolean matches(Element root, Element element) {
             return root == element;
@@ -19,7 +20,7 @@ abstract class StructuralEvaluator extends Evaluator {
     static class Has extends StructuralEvaluator {
         final Collector.FirstFinder finder;
 
-        public Has(Evaluator evaluator) {
+        public Has(AbstractEvaluator evaluator) {
             this.evaluator = evaluator;
             finder = new Collector.FirstFinder(evaluator);
         }
@@ -46,7 +47,7 @@ abstract class StructuralEvaluator extends Evaluator {
     }
 
     static class Not extends StructuralEvaluator {
-        public Not(Evaluator evaluator) {
+        public Not(AbstractEvaluator evaluator) {
             this.evaluator = evaluator;
         }
 
@@ -62,7 +63,7 @@ abstract class StructuralEvaluator extends Evaluator {
     }
 
     static class Parent extends StructuralEvaluator {
-        public Parent(Evaluator evaluator) {
+        public Parent(AbstractEvaluator evaluator) {
             this.evaluator = evaluator;
         }
 
@@ -92,7 +93,7 @@ abstract class StructuralEvaluator extends Evaluator {
     }
 
     static class ImmediateParent extends StructuralEvaluator {
-        public ImmediateParent(Evaluator evaluator) {
+        public ImmediateParent(AbstractEvaluator evaluator) {
             this.evaluator = evaluator;
         }
 
@@ -113,7 +114,7 @@ abstract class StructuralEvaluator extends Evaluator {
     }
 
     static class PreviousSibling extends StructuralEvaluator {
-        public PreviousSibling(Evaluator evaluator) {
+        public PreviousSibling(AbstractEvaluator evaluator) {
             this.evaluator = evaluator;
         }
 
@@ -142,7 +143,7 @@ abstract class StructuralEvaluator extends Evaluator {
     }
 
     static class ImmediatePreviousSibling extends StructuralEvaluator {
-        public ImmediatePreviousSibling(Evaluator evaluator) {
+        public ImmediatePreviousSibling(AbstractEvaluator evaluator) {
             this.evaluator = evaluator;
         }
 

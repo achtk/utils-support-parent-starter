@@ -192,7 +192,7 @@ public abstract class FramedataImpl1 implements Framedata {
    *
    * @param rsv1 true if rsv1 has to be set
    */
-  public void setRSV1(boolean rsv1) {
+  public void setRsv1(boolean rsv1) {
     this.rsv1 = rsv1;
   }
 

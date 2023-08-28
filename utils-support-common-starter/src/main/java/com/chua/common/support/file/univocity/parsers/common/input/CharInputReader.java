@@ -16,7 +16,7 @@
 package com.chua.common.support.file.univocity.parsers.common.input;
 
 import com.chua.common.support.file.univocity.parsers.common.AbstractParser;
-import com.chua.common.support.file.univocity.parsers.common.CommonParserSettings;
+import com.chua.common.support.file.univocity.parsers.common.AbstractCommonParserSettings;
 import com.chua.common.support.file.univocity.parsers.common.Format;
 
 import java.io.Reader;
@@ -99,7 +99,7 @@ public interface CharInputReader extends CharInput {
     /**
      * Returns the line separator by this character input reader. This could be the line separator defined
      * in the {@link Format#getLineSeparator()} configuration, or the line separator sequence identified automatically
-     * when {@link CommonParserSettings#isLineSeparatorDetectionEnabled()} evaluates to {@code true}.
+     * when {@link AbstractCommonParserSettings#isLineSeparatorDetectionEnabled()} evaluates to {@code true}.
      *
      * @return the line separator in use.
      */

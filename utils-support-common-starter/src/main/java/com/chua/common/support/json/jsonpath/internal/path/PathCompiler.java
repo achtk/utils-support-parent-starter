@@ -205,19 +205,19 @@ public class PathCompiler {
 
         List<Parameter> functionParameters = null;
         if (isFunction) {
-            int parenthesis_count = 1;
+            int parenthesisCount = 1;
             for (int i = readPosition + 1; i < path.length(); i++) {
                 if (path.charAt(i) == CLOSE_PARENTHESIS) {
-                    parenthesis_count--;
+                    parenthesisCount--;
                 } else if (path.charAt(i) == OPEN_PARENTHESIS) {
-                    parenthesis_count++;
+                    parenthesisCount++;
                 }
-                if (parenthesis_count == 0) {
+                if (parenthesisCount == 0) {
                     break;
                 }
             }
 
-            if (parenthesis_count != 0) {
+            if (parenthesisCount != 0) {
                 String functionName = path.subSequence(startPosition, endPosition).toString();
                 throw new InvalidPathException("Arguments to function: '" + functionName + "' are not closed properly.");
             }

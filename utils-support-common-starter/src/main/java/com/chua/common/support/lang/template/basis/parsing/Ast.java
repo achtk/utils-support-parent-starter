@@ -11,6 +11,8 @@ import com.chua.common.support.lang.template.basis.interpreter.Reflection;
 import com.chua.common.support.lang.template.basis.parsing.Parser.Macros;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -18,6 +20,8 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
 import java.util.*;
 import java.util.Map.Entry;
+
+import static com.chua.common.support.constant.NameConstant.LENGTH;
 
 /** Templates are parsed into an abstract syntax tree (AST) nodes by a Parser. This class contains all AST node types. */
 public class Ast {
@@ -56,12 +60,13 @@ public class Ast {
 
 				CharacterStream stream = new CharacterStream(new Source(text.getSource().getPath(), unescapedValue));
 				while (stream.hasMore()) {
-					if (stream.match("\\{", true))
+					if (stream.match("\\{", true)) {
 						builder.append('{');
-					else if (stream.match("\\}", true))
+					} else if (stream.match("\\}", true)) {
 						builder.append('}');
-					else
+					} else {
 						builder.append(stream.consume());
+					}
 				}
 				bytes = builder.toString().getBytes("UTF-8");
 			} catch (UnsupportedEncodingException e) {
@@ -84,31 +89,37 @@ public class Ast {
 
 	/** All expressions are subclasses of this node type. Expressions are separated into unary operations (!, -), binary operations
 	 * (+, -, *, /, etc.) and ternary operations (?:). */
-	public abstract static class Expression extends AbstractNode {
-		public Expression (Span span) {
+	public abstract static class AbstractExpression extends AbstractNode {
+		public AbstractExpression (Span span) {
 			super(span);
 		}
 	}
 
 	/** An unary operation node represents a logical or numerical negation. **/
-	public static class UnaryOperation extends Expression {
+	public static class UnaryOperation extends AbstractExpression {
 
 		public static enum UnaryOperator {
 			Not, Negate, Positive;
 
 			public static UnaryOperator getOperator (Token op) {
-				if (op.getType() == TokenType.Not) return UnaryOperator.Not;
-				if (op.getType() == TokenType.Plus) return UnaryOperator.Positive;
-				if (op.getType() == TokenType.Minus) return UnaryOperator.Negate;
+				if (op.getType() == TokenType.Not) {
+					return UnaryOperator.Not;
+				}
+				if (op.getType() == TokenType.Plus) {
+					return UnaryOperator.Positive;
+				}
+				if (op.getType() == TokenType.Minus) {
+					return UnaryOperator.Negate;
+				}
 				Error.error("Unknown unary operator " + op + ".", op.getSpan());
 				return null; // not reached
 			}
 		}
 
 		private final UnaryOperator operator;
-		private final Expression operand;
+		private final AbstractExpression operand;
 
-		public UnaryOperation (Token operator, Expression operand) {
+		public UnaryOperation (Token operator, AbstractExpression operand) {
 			super(operator.getSpan());
 			this.operator = UnaryOperator.getOperator(operator);
 			this.operand = operand;
@@ -118,7 +129,7 @@ public class Ast {
 			return operator;
 		}
 
-		public Expression getOperand () {
+		public AbstractExpression getOperand () {
 			return operand;
 		}
 
@@ -127,24 +138,26 @@ public class Ast {
 			Object operand = getOperand().evaluate(template, context, out);
 
 			if (getOperator() == UnaryOperator.Negate) {
-				if (operand instanceof Integer)
+				if (operand instanceof Integer) {
 					return -(Integer)operand;
-				else if (operand instanceof Float)
+				} else if (operand instanceof Float) {
 					return -(Float)operand;
-				else if (operand instanceof Double)
+				} else if (operand instanceof Double) {
 					return -(Double)operand;
-				else if (operand instanceof Byte)
+				} else if (operand instanceof Byte) {
 					return -(Byte)operand;
-				else if (operand instanceof Short)
+				} else if (operand instanceof Short) {
 					return -(Short)operand;
-				else if (operand instanceof Long)
+				} else if (operand instanceof Long) {
 					return -(Long)operand;
-				else {
+				} else {
 					Error.error("Operand of operator '" + getOperator().name() + "' must be a number, got " + operand, getSpan());
 					return null; // never reached
 				}
 			} else if (getOperator() == UnaryOperator.Not) {
-				if (!(operand instanceof Boolean)) Error.error("Operand of operator '" + getOperator().name() + "' must be a boolean", getSpan());
+				if (!(operand instanceof Boolean)) {
+					Error.error("Operand of operator '" + getOperator().name() + "' must be a boolean", getSpan());
+				}
 				return !(Boolean)operand;
 			} else {
 				return operand;
@@ -154,44 +167,74 @@ public class Ast {
 
 	/** A binary operation represents arithmetic operators, like addition or division, comparison operators, like less than or
 	 * equals, logical operators, like and, or an assignment. **/
-	public static class BinaryOperation extends Expression {
+	public static class BinaryOperation extends AbstractExpression {
 
 		public static enum BinaryOperator {
 			Addition, Subtraction, Multiplication, Division, Modulo, Equal, NotEqual, Less, LessEqual, Greater, GreaterEqual, And, Or, Xor, Assignment;
 
 			public static BinaryOperator getOperator (Token op) {
-				if (op.getType() == TokenType.Plus) return BinaryOperator.Addition;
-				if (op.getType() == TokenType.Minus) return BinaryOperator.Subtraction;
-				if (op.getType() == TokenType.Asterisk) return BinaryOperator.Multiplication;
-				if (op.getType() == TokenType.ForwardSlash) return BinaryOperator.Division;
-				if (op.getType() == TokenType.Percentage) return BinaryOperator.Modulo;
-				if (op.getType() == TokenType.Equal) return BinaryOperator.Equal;
-				if (op.getType() == TokenType.NotEqual) return BinaryOperator.NotEqual;
-				if (op.getType() == TokenType.Less) return BinaryOperator.Less;
-				if (op.getType() == TokenType.LessEqual) return BinaryOperator.LessEqual;
-				if (op.getType() == TokenType.Greater) return BinaryOperator.Greater;
-				if (op.getType() == TokenType.GreaterEqual) return BinaryOperator.GreaterEqual;
-				if (op.getType() == TokenType.And) return BinaryOperator.And;
-				if (op.getType() == TokenType.Or) return BinaryOperator.Or;
-				if (op.getType() == TokenType.Xor) return BinaryOperator.Xor;
-				if (op.getType() == TokenType.Assignment) return BinaryOperator.Assignment;
+				if (op.getType() == TokenType.Plus) {
+					return BinaryOperator.Addition;
+				}
+				if (op.getType() == TokenType.Minus) {
+					return BinaryOperator.Subtraction;
+				}
+				if (op.getType() == TokenType.Asterisk) {
+					return BinaryOperator.Multiplication;
+				}
+				if (op.getType() == TokenType.ForwardSlash) {
+					return BinaryOperator.Division;
+				}
+				if (op.getType() == TokenType.Percentage) {
+					return BinaryOperator.Modulo;
+				}
+				if (op.getType() == TokenType.Equal) {
+					return BinaryOperator.Equal;
+				}
+				if (op.getType() == TokenType.NotEqual) {
+					return BinaryOperator.NotEqual;
+				}
+				if (op.getType() == TokenType.Less) {
+					return BinaryOperator.Less;
+				}
+				if (op.getType() == TokenType.LessEqual) {
+					return BinaryOperator.LessEqual;
+				}
+				if (op.getType() == TokenType.Greater) {
+					return BinaryOperator.Greater;
+				}
+				if (op.getType() == TokenType.GreaterEqual) {
+					return BinaryOperator.GreaterEqual;
+				}
+				if (op.getType() == TokenType.And) {
+					return BinaryOperator.And;
+				}
+				if (op.getType() == TokenType.Or) {
+					return BinaryOperator.Or;
+				}
+				if (op.getType() == TokenType.Xor) {
+					return BinaryOperator.Xor;
+				}
+				if (op.getType() == TokenType.Assignment) {
+					return BinaryOperator.Assignment;
+				}
 				Error.error("Unknown binary operator " + op + ".", op.getSpan());
 				return null; // not reached
 			}
 		}
 
-		private final Expression leftOperand;
+		private final AbstractExpression leftOperand;
 		private final BinaryOperator operator;
-		private final Expression rightOperand;
+		private final AbstractExpression rightOperand;
 
-		public BinaryOperation (Expression leftOperand, Token operator, Expression rightOperand) {
+		public BinaryOperation (AbstractExpression leftOperand, Token operator, AbstractExpression rightOperand) {
 			super(operator.getSpan());
 			this.leftOperand = leftOperand;
 			this.operator = BinaryOperator.getOperator(operator);
 			this.rightOperand = rightOperand;
 		}
 
-		public Expression getLeftOperand () {
+		public AbstractExpression getLeftOperand () {
 			return leftOperand;
 		}
 
@@ -199,18 +242,32 @@ public class Ast {
 			return operator;
 		}
 
-		public Expression getRightOperand () {
+		public AbstractExpression getRightOperand () {
 			return rightOperand;
 		}
 
 		private Object evaluateAddition (Object left, Object right) {
-			if (left instanceof String || right instanceof String) return left.toString() + right.toString();
-			if (left instanceof Double || right instanceof Double) return ((Number)left).doubleValue() + ((Number)right).doubleValue();
-			if (left instanceof Float || right instanceof Float) return ((Number)left).floatValue() + ((Number)right).floatValue();
-			if (left instanceof Long || right instanceof Long) return ((Number)left).longValue() + ((Number)right).longValue();
-			if (left instanceof Integer || right instanceof Integer) return ((Number)left).intValue() + ((Number)right).intValue();
-			if (left instanceof Short || right instanceof Short) return ((Number)left).shortValue() + ((Number)right).shortValue();
-			if (left instanceof Byte || right instanceof Byte) return ((Number)left).byteValue() + ((Number)right).byteValue();
+			if (left instanceof String || right instanceof String) {
+				return left.toString() + right.toString();
+			}
+			if (left instanceof Double || right instanceof Double) {
+				return ((Number)left).doubleValue() + ((Number)right).doubleValue();
+			}
+			if (left instanceof Float || right instanceof Float) {
+				return ((Number)left).floatValue() + ((Number)right).floatValue();
+			}
+			if (left instanceof Long || right instanceof Long) {
+				return ((Number)left).longValue() + ((Number)right).longValue();
+			}
+			if (left instanceof Integer || right instanceof Integer) {
+				return ((Number)left).intValue() + ((Number)right).intValue();
+			}
+			if (left instanceof Short || right instanceof Short) {
+				return ((Number)left).shortValue() + ((Number)right).shortValue();
+			}
+			if (left instanceof Byte || right instanceof Byte) {
+				return ((Number)left).byteValue() + ((Number)right).byteValue();
+			}
 
 			Error.error("Operands for addition operator must be numbers or strings, got " + left + ", " + right + ".", getSpan());
 			return null; // never reached
@@ -369,30 +426,50 @@ public class Ast {
 		}
 
 		private Object evaluateAnd (Object left, BasisTemplate template, TemplateContext context, OutputStream out) throws IOException {
-			if (!(left instanceof Boolean)) Error.error("Left operand must be a boolean, got " + left + ".", getLeftOperand().getSpan());
-			if (!(Boolean)left) return false;
+			if (!(left instanceof Boolean)) {
+				Error.error("Left operand must be a boolean, got " + left + ".", getLeftOperand().getSpan());
+			}
+			if (!(Boolean)left) {
+				return false;
+			}
 			Object right = getRightOperand().evaluate(template, context, out);
-			if (!(right instanceof Boolean)) Error.error("Right operand must be a boolean, got " + right + ".", getRightOperand().getSpan());
+			if (!(right instanceof Boolean)) {
+				Error.error("Right operand must be a boolean, got " + right + ".", getRightOperand().getSpan());
+			}
 			return (Boolean)left && (Boolean)right;
 		}
 
 		private Object evaluateOr (Object left, BasisTemplate template, TemplateContext context, OutputStream out) throws IOException {
-			if (!(left instanceof Boolean)) Error.error("Left operand must be a boolean, got " + left + ".", getLeftOperand().getSpan());
-			if ((Boolean)left) return true;
+			if (!(left instanceof Boolean)) {
+				Error.error("Left operand must be a boolean, got " + left + ".", getLeftOperand().getSpan());
+			}
+			if ((Boolean)left) {
+				return true;
+			}
 			Object right = getRightOperand().evaluate(template, context, out);
-			if (!(right instanceof Boolean)) Error.error("Right operand must be a boolean, got " + right + ".", getRightOperand().getSpan());
+			if (!(right instanceof Boolean)) {
+				Error.error("Right operand must be a boolean, got " + right + ".", getRightOperand().getSpan());
+			}
 			return (Boolean)left || (Boolean)right;
 		}
 
 		private Object evaluateXor (Object left, Object right) {
-			if (!(left instanceof Boolean)) Error.error("Left operand must be a boolean, got " + left + ".", getLeftOperand().getSpan());
-			if (!(right instanceof Boolean)) Error.error("Right operand must be a boolean, got " + right + ".", getRightOperand().getSpan());
+			if (!(left instanceof Boolean)) {
+				Error.error("Left operand must be a boolean, got " + left + ".", getLeftOperand().getSpan());
+			}
+			if (!(right instanceof Boolean)) {
+				Error.error("Right operand must be a boolean, got " + right + ".", getRightOperand().getSpan());
+			}
 			return (Boolean)left ^ (Boolean)right;
 		}
 
 		private Object evaluateEqual (Object left, Object right) {
-			if (left != null) return left.equals(right);
-			if (right != null) return right.equals(left);
+			if (left != null) {
+				return left.equals(right);
+			}
+			if (right != null) {
+				return right.equals(left);
+			}
 			return true;
 		}
 
@@ -403,7 +480,9 @@ public class Ast {
 		@Override
 		public Object evaluate (BasisTemplate template, TemplateContext context, OutputStream out) throws IOException {
 			if (getOperator() == BinaryOperator.Assignment) {
-				if (!(getLeftOperand() instanceof VariableAccess)) Error.error("Can only assign to top-level variables in context.", getLeftOperand().getSpan());
+				if (!(getLeftOperand() instanceof VariableAccess)) {
+					Error.error("Can only assign to top-level variables in context.", getLeftOperand().getSpan());
+				}
 				Object value = getRightOperand().evaluate(template, context, out);
 				context.set(((VariableAccess)getLeftOperand()).getVariableName().getText(), value);
 				return null;
@@ -449,40 +528,42 @@ public class Ast {
 	}
 
 	/** A ternary operation is an abbreviated if/then/else operation, and equivalent to the the ternary operator in Java. **/
-	public static class TernaryOperation extends Expression {
-		private final Expression condition;
-		private final Expression trueExpression;
-		private final Expression falseExpression;
+	public static class TernaryOperation extends AbstractExpression {
+		private final AbstractExpression condition;
+		private final AbstractExpression trueExpression;
+		private final AbstractExpression falseExpression;
 
-		public TernaryOperation (Expression condition, Expression trueExpression, Expression falseExpression) {
+		public TernaryOperation (AbstractExpression condition, AbstractExpression trueExpression, AbstractExpression falseExpression) {
 			super(new Span(condition.getSpan(), falseExpression.getSpan()));
 			this.condition = condition;
 			this.trueExpression = trueExpression;
 			this.falseExpression = falseExpression;
 		}
 
-		public Expression getCondition () {
+		public AbstractExpression getCondition () {
 			return condition;
 		}
 
-		public Expression getTrueExpression () {
+		public AbstractExpression getTrueExpression () {
 			return trueExpression;
 		}
 
-		public Expression getFalseExpression () {
+		public AbstractExpression getFalseExpression () {
 			return falseExpression;
 		}
 
 		@Override
 		public Object evaluate (BasisTemplate template, TemplateContext context, OutputStream out) throws IOException {
 			Object condition = getCondition().evaluate(template, context, out);
-			if (!(condition instanceof Boolean)) Error.error("Condition of ternary operator must be a boolean, got " + condition + ".", getSpan());
+			if (!(condition instanceof Boolean)) {
+				Error.error("Condition of ternary operator must be a boolean, got " + condition + ".", getSpan());
+			}
 			return ((Boolean)condition) ? getTrueExpression().evaluate(template, context, out) : getFalseExpression().evaluate(template, context, out);
 		}
 	}
 
 	/** A null literal, with the single value <code>null</code> **/
-	public static class NullLiteral extends Expression {
+	public static class NullLiteral extends AbstractExpression {
 		public NullLiteral (Span span) {
 			super(span);
 		}
@@ -494,7 +575,7 @@ public class Ast {
 	}
 
 	/** A boolean literal, with the values <code>true</code> and <code>false</code> **/
-	public static class BooleanLiteral extends Expression {
+	public static class BooleanLiteral extends AbstractExpression {
 		private final Boolean value;
 
 		public BooleanLiteral (Span literal) {
@@ -513,7 +594,7 @@ public class Ast {
 	}
 
 	/** A double precision floating point literal. Must be marked with the <code>d</code> suffix, e.g. "1.0d". **/
-	public static class DoubleLiteral extends Expression {
+	public static class DoubleLiteral extends AbstractExpression {
 		private final Double value;
 
 		public DoubleLiteral (Span literal) {
@@ -532,13 +613,15 @@ public class Ast {
 	}
 
 	/** A single precision floating point literla. May be optionally marked with the <code>f</code> suffix, e.g. "1.0f". **/
-	public static class FloatLiteral extends Expression {
+	public static class FloatLiteral extends AbstractExpression {
 		private final Float value;
 
 		public FloatLiteral (Span literal) {
 			super(literal);
 			String text = literal.getText();
-			if (text.charAt(text.length() - 1) == 'f') text = text.substring(0, text.length() - 1);
+			if (text.charAt(text.length() - 1) == 'f') {
+				text = text.substring(0, text.length() - 1);
+			}
 			this.value = Float.parseFloat(text);
 		}
 
@@ -553,7 +636,7 @@ public class Ast {
 	}
 
 	/** A byte literal. Must be marked with the <code>b</code> suffix, e.g. "123b". **/
-	public static class ByteLiteral extends Expression {
+	public static class ByteLiteral extends AbstractExpression {
 		private final Byte value;
 
 		public ByteLiteral (Span literal) {
@@ -572,7 +655,7 @@ public class Ast {
 	}
 
 	/** A short literal. Must be marked with the <code>s</code> suffix, e.g. "123s". **/
-	public static class ShortLiteral extends Expression {
+	public static class ShortLiteral extends AbstractExpression {
 		private final Short value;
 
 		public ShortLiteral (Span literal) {
@@ -591,7 +674,7 @@ public class Ast {
 	}
 
 	/** An integer literal. **/
-	public static class IntegerLiteral extends Expression {
+	public static class IntegerLiteral extends AbstractExpression {
 		private final Integer value;
 
 		public IntegerLiteral (Span literal) {
@@ -610,7 +693,7 @@ public class Ast {
 	}
 
 	/** A long integer literal. Must be marked with the <code>l</code> suffix, e.g. "123l". **/
-	public static class LongLiteral extends Expression {
+	public static class LongLiteral extends AbstractExpression {
 		private final Long value;
 
 		public LongLiteral (Span literal) {
@@ -629,7 +712,7 @@ public class Ast {
 	}
 
 	/** A character literal, enclosed in single quotes. Supports escape sequences \n, \r,\t, \' and \\. **/
-	public static class CharacterLiteral extends Expression {
+	public static class CharacterLiteral extends AbstractExpression {
 		private final Character value;
 
 		public CharacterLiteral (Span literal) {
@@ -637,17 +720,17 @@ public class Ast {
 
 			String text = literal.getText();
 			if (text.length() > 3) {
-				if (text.charAt(2) == 'n')
+				if (text.charAt(2) == 'n') {
 					value = '\n';
-				else if (text.charAt(2) == 'r')
+				} else if (text.charAt(2) == 'r') {
 					value = '\r';
-				else if (text.charAt(2) == 't')
+				} else if (text.charAt(2) == 't') {
 					value = '\t';
-				else if (text.charAt(2) == '\\')
+				} else if (text.charAt(2) == '\\') {
 					value = '\\';
-				else if (text.charAt(2) == '\'')
+				} else if (text.charAt(2) == '\'') {
 					value = '\'';
-				else {
+				} else {
 					Error.error("Unknown escape sequence '" + literal.getText() + "'.", literal);
 					value = 0; // never reached
 				}
@@ -667,7 +750,7 @@ public class Ast {
 	}
 
 	/** A string literal, enclosed in double quotes. Supports escape sequences \n, \r, \t, \" and \\. **/
-	public static class StringLiteral extends Expression {
+	public static class StringLiteral extends AbstractExpression {
 		private final String value;
 
 		public StringLiteral (Span literal, boolean raw) {
@@ -679,18 +762,19 @@ public class Ast {
 			CharacterStream stream = new CharacterStream(new Source(literal.getSource().getPath(), unescapedValue));
 			while (stream.hasMore()) {
 				if (!raw) {
-					if (stream.match("\\\\", true))
+					if (stream.match("\\\\", true)) {
 						builder.append('\\');
-					else if (stream.match("\\n", true))
+					} else if (stream.match("\\n", true)) {
 						builder.append('\n');
-					else if (stream.match("\\r", true))
+					} else if (stream.match("\\r", true)) {
 						builder.append('\r');
-					else if (stream.match("\\t", true))
+					} else if (stream.match("\\t", true)) {
 						builder.append('\t');
-					else if (stream.match("\\\"", true))
+					} else if (stream.match("\\\"", true)) {
 						builder.append('"');
-					else
+					} else {
 						builder.append(stream.consume());
+					}
 				} else {
 					builder.append(stream.consume());
 				}
@@ -712,7 +796,7 @@ public class Ast {
 	/** Represents a top-level variable access by name. E.g. in the expression "a + 1", <code>a</code> would be encoded as a
 	 * VariableAccess node. Variables can be both read (in expressions) and written to (in assignments). Variable values are looked
 	 * up and written to a {@link TemplateContext}. **/
-	public static class VariableAccess extends Expression {
+	public static class VariableAccess extends AbstractExpression {
 		public VariableAccess (Span name) {
 			super(name);
 		}
@@ -724,30 +808,32 @@ public class Ast {
 		@Override
 		public Object evaluate (BasisTemplate template, TemplateContext context, OutputStream out) throws IOException {
 			Object value = context.get(getSpan().getText());
-			if (value == null) Error.error("Couldn't find variable '" + getSpan().getText() + "' in context.", getSpan());
+			if (value == null) {
+				Error.error("Couldn't find variable '" + getSpan().getText() + "' in context.", getSpan());
+			}
 			return value;
 		}
 	}
 
 	/** Represents a map or array element access of the form <code>mapOrArray[keyOrIndex]</code>. Maps and arrays may only be read
 	 * from. **/
-	public static class MapOrArrayAccess extends Expression {
-		private final Expression mapOrArray;
-		private final Expression keyOrIndex;
+	public static class MapOrArrayAccess extends AbstractExpression {
+		private final AbstractExpression mapOrArray;
+		private final AbstractExpression keyOrIndex;
 
-		public MapOrArrayAccess (Span span, Expression mapOrArray, Expression keyOrIndex) {
+		public MapOrArrayAccess (Span span, AbstractExpression mapOrArray, AbstractExpression keyOrIndex) {
 			super(span);
 			this.mapOrArray = mapOrArray;
 			this.keyOrIndex = keyOrIndex;
 		}
 
 		/** Returns an expression that must evaluate to a map or array. **/
-		public Expression getMapOrArray () {
+		public AbstractExpression getMapOrArray () {
 			return mapOrArray;
 		}
 
 		/** Returns an expression that is used as the key or index to fetch a map or array element. **/
-		public Expression getKeyOrIndex () {
+		public AbstractExpression getKeyOrIndex () {
 			return keyOrIndex;
 		}
 
@@ -755,9 +841,13 @@ public class Ast {
 		@Override
 		public Object evaluate (BasisTemplate template, TemplateContext context, OutputStream out) throws IOException {
 			Object mapOrArray = getMapOrArray().evaluate(template, context, out);
-			if (mapOrArray == null) Error.error("Couldn't find map or array in context.", getSpan());
+			if (mapOrArray == null) {
+				Error.error("Couldn't find map or array in context.", getSpan());
+			}
 			Object keyOrIndex = getKeyOrIndex().evaluate(template, context, out);
-			if (keyOrIndex == null) Error.error("Couldn't evaluate key or index.", getKeyOrIndex().getSpan());
+			if (keyOrIndex == null) {
+				Error.error("Couldn't evaluate key or index.", getKeyOrIndex().getSpan());
+			}
 
 			if (mapOrArray instanceof Map) {
 				return ((Map)mapOrArray).get(keyOrIndex);
@@ -772,41 +862,42 @@ public class Ast {
 					Error.error("Array index must be an integer, but was " + keyOrIndex.getClass().getSimpleName(), getKeyOrIndex().getSpan());
 				}
 				int index = ((Number)keyOrIndex).intValue();
-				if (mapOrArray instanceof int[])
+				if (mapOrArray instanceof int[]) {
 					return ((int[])mapOrArray)[index];
-				else if (mapOrArray instanceof float[])
+				} else if (mapOrArray instanceof float[]) {
 					return ((float[])mapOrArray)[index];
-				else if (mapOrArray instanceof double[])
+				} else if (mapOrArray instanceof double[]) {
 					return ((double[])mapOrArray)[index];
-				else if (mapOrArray instanceof boolean[])
+				} else if (mapOrArray instanceof boolean[]) {
 					return ((boolean[])mapOrArray)[index];
-				else if (mapOrArray instanceof char[])
+				} else if (mapOrArray instanceof char[]) {
 					return ((char[])mapOrArray)[index];
-				else if (mapOrArray instanceof short[])
+				} else if (mapOrArray instanceof short[]) {
 					return ((short[])mapOrArray)[index];
-				else if (mapOrArray instanceof long[])
+				} else if (mapOrArray instanceof long[]) {
 					return ((long[])mapOrArray)[index];
-				else
+				} else {
 					return ((Object[])mapOrArray)[index];
+				}
 			}
 		}
 	}
 
 	/** Represents an access of a member (field or method or entry in a map) of the form <code>object.member</code>. Members may
 	 * only be read from. **/
-	public static class MemberAccess extends Expression {
-		private final Expression object;
+	public static class MemberAccess extends AbstractExpression {
+		private final AbstractExpression object;
 		private final Span name;
 		private Object cachedMember;
 
-		public MemberAccess (Expression object, Span name) {
+		public MemberAccess (AbstractExpression object, Span name) {
 			super(name);
 			this.object = object;
 			this.name = name;
 		}
 
 		/** Returns the object on which to access the member. **/
-		public Expression getObject () {
+		public AbstractExpression getObject () {
 			return object;
 		}
 
@@ -833,10 +924,12 @@ public class Ast {
 		@Override
 		public Object evaluate (BasisTemplate template, TemplateContext context, OutputStream out) throws IOException {
 			Object object = getObject().evaluate(template, context, out);
-			if (object == null) Error.error("Couldn't find object in context.", getSpan());
+			if (object == null) {
+				Error.error("Couldn't find object in context.", getSpan());
+			}
 
 			// special case for array.length
-			if (object.getClass().isArray() && getName().getText().equals("length")) {
+			if (object.getClass().isArray() && LENGTH.equals(getName().getText())) {
 				return Array.getLength(object);
 			}
 
@@ -866,13 +959,13 @@ public class Ast {
 
 	/** Represents a call to a top-level function. A function may either be a {@link FunctionalInterface} stored in a
 	 * {@link TemplateContext}, or a {@link Macro} defined in a template. */
-	public static class FunctionCall extends Expression {
-		private final Expression function;
-		private final List<Expression> arguments;
+	public static class FunctionCall extends AbstractExpression {
+		private final AbstractExpression function;
+		private final List<AbstractExpression> arguments;
 		private Object cachedFunction;
 		private final ThreadLocal<Object[]> cachedArguments;
 
-		public FunctionCall (Span span, Expression function, List<Expression> arguments) {
+		public FunctionCall (Span span, AbstractExpression function, List<AbstractExpression> arguments) {
 			super(span);
 			this.function = function;
 			this.arguments = arguments;
@@ -880,12 +973,12 @@ public class Ast {
 		}
 
 		/** Return the expression that must evaluate to a {@link FunctionalInterface} or a {@link Macro}. **/
-		public Expression getFunction () {
+		public AbstractExpression getFunction () {
 			return function;
 		}
 
 		/** Returns the list of expressions to be passed to the function as arguments. **/
-		public List<Expression> getArguments () {
+		public List<AbstractExpression> getArguments () {
 			return arguments;
 		}
 
@@ -916,17 +1009,18 @@ public class Ast {
 		/** Must be invoked when this node is done evaluating so we don't leak memory **/
 		public void clearCachedArguments () {
 			Object[] args = getCachedArguments();
-			for (int i = 0; i < args.length; i++)
+			for (int i = 0; i < args.length; i++) {
 				args[i] = null;
+			}
 		}
 
 		@Override
 		public Object evaluate (BasisTemplate template, TemplateContext context, OutputStream out) throws IOException {
 			try {
 				Object[] argumentValues = getCachedArguments();
-				List<Expression> arguments = getArguments();
+				List<AbstractExpression> arguments = getArguments();
 				for (int i = 0, n = argumentValues.length; i < n; i++) {
-					Expression expr = arguments.get(i);
+					AbstractExpression expr = arguments.get(i);
 					argumentValues[i] = expr.evaluate(template, context, out);
 				}
 
@@ -953,7 +1047,9 @@ public class Ast {
 						}
 					}
 					method = Reflection.getInstance().getMethod(function, null, argumentValues);
-					if (method == null) Error.error("Couldn't find function.", getSpan());
+					if (method == null) {
+						Error.error("Couldn't find function.", getSpan());
+					}
 					setCachedFunction(method);
 					try {
 						return Reflection.getInstance().callMethod(function, method, argumentValues);
@@ -968,14 +1064,17 @@ public class Ast {
 						Macros macros = template.getMacros();
 						Macro macro = macros.get(functionName);
 						if (macro != null) {
-							if (macro.getArgumentNames().size() != arguments.size())
+							if (macro.getArgumentNames().size() != arguments.size()) {
 								Error.error("Expected " + macro.getArgumentNames().size() + " arguments, got " + arguments.size(), getSpan());
+							}
 							TemplateContext macroContext = macro.getMacroContext();
 
 							// Set all included macros on the macro's context
 							for (String variable : context.getVariables()) {
 								Object value = context.get(variable);
-								if (value instanceof Macros) macroContext.set(variable, value);
+								if (value instanceof Macros) {
+									macroContext.set(variable, value);
+								}
 							}
 
 							// Set the arguments, shadowing any included macro names
@@ -986,10 +1085,11 @@ public class Ast {
 							}
 
 							Object retVal = AstInterpreter.interpretNodeList(macro.getBody(), macro.getTemplate(), macroContext, out);
-							if (retVal == Return.RETURN_SENTINEL)
+							if (retVal == Return.RETURN_SENTINEL) {
 								return ((Return.ReturnValue)retVal).getValue();
-							else
+							} else {
 								return null;
+							}
 						}
 					}
 					Error.error("Couldn't find function.", getSpan());
@@ -1002,13 +1102,13 @@ public class Ast {
 	}
 
 	/** Represents a call to a method of the form <code>object.method(a, b, c)</code>. **/
-	public static class MethodCall extends Expression {
+	public static class MethodCall extends AbstractExpression {
 		private final MemberAccess method;
-		private final List<Expression> arguments;
+		private final List<AbstractExpression> arguments;
 		private Object cachedMethod;
 		private final ThreadLocal<Object[]> cachedArguments;
 
-		public MethodCall (Span span, MemberAccess method, List<Expression> arguments) {
+		public MethodCall (Span span, MemberAccess method, List<AbstractExpression> arguments) {
 			super(span);
 			this.method = method;
 			this.arguments = arguments;
@@ -1016,7 +1116,7 @@ public class Ast {
 		}
 
 		/** Returns the object on which to call the method. **/
-		public Expression getObject () {
+		public AbstractExpression getObject () {
 			return method.getObject();
 		}
 
@@ -1026,7 +1126,7 @@ public class Ast {
 		}
 
 		/** Returns the list of expressions to be passed to the function as arguments. **/
-		public List<Expression> getArguments () {
+		public List<AbstractExpression> getArguments () {
 			return arguments;
 		}
 
@@ -1057,20 +1157,23 @@ public class Ast {
 		/** Must be invoked when this node is done evaluating so we don't leak memory **/
 		public void clearCachedArguments () {
 			Object[] args = getCachedArguments();
-			for (int i = 0; i < args.length; i++)
+			for (int i = 0; i < args.length; i++) {
 				args[i] = null;
+			}
 		}
 
 		@Override
 		public Object evaluate (BasisTemplate template, TemplateContext context, OutputStream out) throws IOException {
 			try {
 				Object object = getObject().evaluate(template, context, out);
-				if (object == null) Error.error("Couldn't find object in context.", getSpan());
+				if (object == null) {
+					Error.error("Couldn't find object in context.", getSpan());
+				}
 
 				Object[] argumentValues = getCachedArguments();
-				List<Expression> arguments = getArguments();
+				List<AbstractExpression> arguments = getArguments();
 				for (int i = 0, n = argumentValues.length; i < n; i++) {
-					Expression expr = arguments.get(i);
+					AbstractExpression expr = arguments.get(i);
 					argumentValues[i] = expr.evaluate(template, context, out);
 				}
 
@@ -1080,14 +1183,17 @@ public class Ast {
 					Macros macros = (Macros)object;
 					Macro macro = macros.get(getMethod().getName().getText());
 					if (macro != null) {
-						if (macro.getArgumentNames().size() != arguments.size())
+						if (macro.getArgumentNames().size() != arguments.size()) {
 							Error.error("Expected " + macro.getArgumentNames().size() + " arguments, got " + arguments.size(), getSpan());
+						}
 						TemplateContext macroContext = macro.getMacroContext();
 
 						// Set all included macros on the macro's context
 						for (String variable : context.getVariables()) {
 							Object value = context.get(variable);
-							if (value instanceof Macros) macroContext.set(variable, value);
+							if (value instanceof Macros) {
+								macroContext.set(variable, value);
+							}
 						}
 
 						// Set arguments
@@ -1097,10 +1203,11 @@ public class Ast {
 							macroContext.set(name, arg);
 						}
 						Object result = AstInterpreter.interpretNodeList(macro.getBody(), macro.getTemplate(), macroContext, out);
-						if (result == Return.RETURN_SENTINEL)
+						if (result == Return.RETURN_SENTINEL) {
 							return ((Return.ReturnValue)result).getValue();
-						else
+						} else {
 							return null;
+						}
 					}
 				}
 
@@ -1127,14 +1234,17 @@ public class Ast {
 				} else {
 					// didn't find the method on the object, try to find a field pointing to a lambda
 					Object field = Reflection.getInstance().getField(object, getMethod().getName().getText());
-					if (field == null)
+					if (field == null) {
 						Error.error("Couldn't find method '" + getMethod().getName().getText() + "' for object of type '" + object.getClass().getSimpleName() + "'.",
 							getSpan());
+					}
 					Object function = Reflection.getInstance().getFieldValue(object, field);
 					method = Reflection.getInstance().getMethod(function, null, argumentValues);
-					if (method == null) Error.error(
-						"Couldn't find function in field '" + getMethod().getName().getText() + "' for object of type '" + object.getClass().getSimpleName() + "'.",
-						getSpan());
+					if (method == null) {
+						Error.error(
+							"Couldn't find function in field '" + getMethod().getName().getText() + "' for object of type '" + object.getClass().getSimpleName() + "'.",
+							getSpan());
+					}
 					try {
 						return Reflection.getInstance().callMethod(function, method, argumentValues);
 					} catch (Throwable t) {
@@ -1149,11 +1259,11 @@ public class Ast {
 	}
 
 	/** Represents a map literal of the form <code>{ key: value, key2: value, ... }</code> which can be nested. */
-	public static class MapLiteral extends Expression {
+	public static class MapLiteral extends AbstractExpression {
 		private final List<Span> keys;
-		private final List<Expression> values;
+		private final List<AbstractExpression> values;
 
-		public MapLiteral (Span span, List<Span> keys, List<Expression> values) {
+		public MapLiteral (Span span, List<Span> keys, List<AbstractExpression> values) {
 			super(span);
 			this.keys = keys;
 			this.values = values;
@@ -1163,7 +1273,7 @@ public class Ast {
 			return keys;
 		}
 
-		public List<Expression> getValues () {
+		public List<AbstractExpression> getValues () {
 			return values;
 		}
 
@@ -1179,15 +1289,15 @@ public class Ast {
 	}
 
 	/** Represents a list literal of the form <code>[ value, value2, value3, ...]</code> which can be nested. */
-	public static class ListLiteral extends Expression {
-		public final List<Expression> values;
+	public static class ListLiteral extends AbstractExpression {
+		public final List<AbstractExpression> values;
 
-		public ListLiteral (Span span, List<Expression> values) {
+		public ListLiteral (Span span, List<AbstractExpression> values) {
 			super(span);
 			this.values = values;
 		}
 
-		public List<Expression> getValues () {
+		public List<AbstractExpression> getValues () {
 			return values;
 		}
 
@@ -1204,12 +1314,12 @@ public class Ast {
 	/** Represents an if statement of the form <code>if condition trueBlock elseif condition ... else falseBlock end</code>. Elseif
 	 * and else blocks are optional. */
 	public static class IfStatement extends AbstractNode {
-		private final Expression condition;
+		private final AbstractExpression condition;
 		private final List<AbstractNode> trueBlock;
 		private final List<IfStatement> elseIfs;
 		private final List<AbstractNode> falseBlock;
 
-		public IfStatement (Span span, Expression condition, List<AbstractNode> trueBlock, List<IfStatement> elseIfs, List<AbstractNode> falseBlock) {
+		public IfStatement (Span span, AbstractExpression condition, List<AbstractNode> trueBlock, List<IfStatement> elseIfs, List<AbstractNode> falseBlock) {
 			super(span);
 			this.condition = condition;
 			this.trueBlock = trueBlock;
@@ -1217,7 +1327,7 @@ public class Ast {
 			this.falseBlock = falseBlock;
 		}
 
-		public Expression getCondition () {
+		public AbstractExpression getCondition () {
 			return condition;
 		}
 
@@ -1236,7 +1346,9 @@ public class Ast {
 		@Override
 		public Object evaluate (BasisTemplate template, TemplateContext context, OutputStream out) throws IOException {
 			Object condition = getCondition().evaluate(template, context, out);
-			if (!(condition instanceof Boolean)) Error.error("Expected a condition evaluating to a boolean, got " + condition, getCondition().getSpan());
+			if (!(condition instanceof Boolean)) {
+				Error.error("Expected a condition evaluating to a boolean, got " + condition, getCondition().getSpan());
+			}
 			if ((Boolean)condition) {
 				context.push();
 				Object breakOrContinueOrReturn = AstInterpreter.interpretNodeList(getTrueBlock(), template, context, out);
@@ -1247,8 +1359,9 @@ public class Ast {
 			if (getElseIfs().size() > 0) {
 				for (IfStatement elseIf : getElseIfs()) {
 					condition = elseIf.getCondition().evaluate(template, context, out);
-					if (!(condition instanceof Boolean))
+					if (!(condition instanceof Boolean)) {
 						Error.error("Expected a condition evaluating to a boolean, got " + condition, elseIf.getCondition().getSpan());
+					}
 					if ((Boolean)condition) {
 						context.push();
 						Object breakOrContinueOrReturn = AstInterpreter.interpretNodeList(elseIf.getTrueBlock(), template, context, out);
@@ -1315,15 +1428,15 @@ public class Ast {
 		}
 
 		public static final ReturnValue RETURN_SENTINEL = new ReturnValue();
-		private final Expression returnValue;
+		private final AbstractExpression returnValue;
 
-		public Return (Span span, Expression returnValue) {
+		public Return (Span span, AbstractExpression returnValue) {
 			super(span);
 			this.returnValue = returnValue;
 		}
 
 		/** Returns the return value expression. May be null for return statements without a return value. **/
-		public Expression getReturnValue () {
+		public AbstractExpression getReturnValue () {
 			return returnValue;
 		}
 
@@ -1340,10 +1453,10 @@ public class Ast {
 	public static class ForStatement extends AbstractNode {
 		private final Span indexOrKeyName;
 		private final Span valueName;
-		private final Expression mapOrArray;
+		private final AbstractExpression mapOrArray;
 		private final List<AbstractNode> body;
 
-		public ForStatement (Span span, Span indexOrKeyName, Span valueName, Expression mapOrArray, List<AbstractNode> body) {
+		public ForStatement (Span span, Span indexOrKeyName, Span valueName, AbstractExpression mapOrArray, List<AbstractNode> body) {
 			super(span);
 			this.indexOrKeyName = indexOrKeyName;
 			this.valueName = valueName;
@@ -1360,7 +1473,7 @@ public class Ast {
 			return valueName;
 		}
 
-		public Expression getMapOrArray () {
+		public AbstractExpression getMapOrArray () {
 			return mapOrArray;
 		}
 
@@ -1372,7 +1485,9 @@ public class Ast {
 		@Override
 		public Object evaluate (BasisTemplate template, TemplateContext context, OutputStream out) throws IOException {
 			Object mapOrArray = getMapOrArray().evaluate(template, context, out);
-			if (mapOrArray == null) Error.error("Expected a map or array, got null.", getMapOrArray().getSpan());
+			if (mapOrArray == null) {
+				Error.error("Expected a map or array, got null.", getMapOrArray().getSpan());
+			}
 			String valueName = getValueName().getText();
 
 			if (mapOrArray instanceof Map) {
@@ -1768,13 +1883,13 @@ public class Ast {
 	}
 
 	/** Represents a while statement of the form <code>while condition ... end</code>. **/
-	@EqualsAndHashCode(callSuper = true)
-	@Data
+	@Getter
+	@Setter
 	public static class WhileStatement extends AbstractNode {
-		private final Expression condition;
+		private final AbstractExpression condition;
 		private final List<AbstractNode> body;
 
-		public WhileStatement (Span span, Expression condition, List<AbstractNode> body) {
+		public WhileStatement(Span span, AbstractExpression condition, List<AbstractNode> body) {
 			super(span);
 			this.condition = condition;
 			this.body = body;
@@ -1786,8 +1901,12 @@ public class Ast {
 			context.push();
 			while (true) {
 				Object condition = getCondition().evaluate(template, context, out);
-				if (!(condition instanceof Boolean)) Error.error("Expected a condition evaluating to a boolean, got " + condition, getCondition().getSpan());
-				if (!((Boolean)condition)) break;
+				if (!(condition instanceof Boolean)) {
+					Error.error("Expected a condition evaluating to a boolean, got " + condition, getCondition().getSpan());
+				}
+				if (!((Boolean)condition)) {
+					break;
+				}
 				Object breakOrContinueOrReturn = AstInterpreter.interpretNodeList(getBody(), template, context, out);
 				if (breakOrContinueOrReturn == Break.BREAK_SENTINEL) {
 					break;
@@ -1804,8 +1923,8 @@ public class Ast {
 
 	/** Represents a macro of the form macro(arg1, arg2, arg3) ... end. Macros allow specifying re-usable template blocks that can
 	 * be "called" from other sections in the current template, or templates including the template. */
-	@EqualsAndHashCode(callSuper = true)
-	@Data
+	@Getter
+	@Setter
 	public static class Macro extends AbstractNode {
 		private final Span name;
 		private final List<Span> argumentNames;
@@ -1831,16 +1950,17 @@ public class Ast {
 	 * <code>include "path" as alias</code>, which includes only the macros and makes them accessible under the alias, e.g.
 	 * <code>alias.myMacro(a, b, c)</code>, or <code>include "path" with (key: value, key2: value)</code>, which includes the
 	 * template, passing the given map as the context. **/
+	@Getter
+	@Setter
 	@EqualsAndHashCode(callSuper = true)
-	@Data
 	public static class Include extends AbstractNode {
 		private final Span path;
-		private final Map<Span, Expression> context;
+		private final Map<Span, AbstractExpression> context;
 		private BasisTemplate template;
 		private final boolean macrosOnly;
 		private final Span alias;
 
-		public Include (Span span, Span path, Map<Span, Expression> context, boolean macrosOnly, Span alias) {
+		public Include (Span span, Span path, Map<Span, AbstractExpression> context, boolean macrosOnly, Span alias) {
 			super(span);
 			this.path = path;
 			this.context = context;

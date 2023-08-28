@@ -1,5 +1,6 @@
 package com.chua.common.support.protocol.ftp.server;
 
+import com.chua.common.support.lang.date.DateUtils;
 import com.chua.common.support.protocol.ftp.server.api.FtpFileSystem;
 
 import javax.net.ssl.SSLContext;
@@ -7,9 +8,9 @@ import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
+
+import static com.chua.common.support.lang.date.constant.DateFormatConstant.YYYYMMDDHHMMSS;
 
 /**
  * @author Guilherme Chaguri
@@ -27,10 +28,7 @@ public class Utils {
     public static final int TYPE_EXECUTE = 0;
 
     // Time
-    private static final SimpleDateFormat mdtmFormat = new SimpleDateFormat("YYYYMMddHHmmss", Locale.ENGLISH);
-    private static final SimpleDateFormat hourFormat = new SimpleDateFormat("MMM dd HH:mm", Locale.ENGLISH);
-    private static final SimpleDateFormat yearFormat = new SimpleDateFormat("MMM dd YYYY", Locale.ENGLISH);
-    private static final long sixMonths = 183L * 24L * 60L * 60L * 1000L;
+    private static final long SIX_MONTHS = 183L * 24L * 60L * 60L * 1000L;
 
     public static String toListTimestamp(long time) {
         // Intended Format
@@ -39,18 +37,18 @@ public class Utils {
 
         Date date = new Date(time);
 
-        if(System.currentTimeMillis() - time > sixMonths) {
-            return yearFormat.format(date);
+        if(System.currentTimeMillis() - time > SIX_MONTHS) {
+            return DateUtils.format(date, "MMM dd YYYY");
         }
-        return hourFormat.format(date);
+        return DateUtils.format(date, "MMM dd HH:mm");
     }
 
     public static String toMdtmTimestamp(long time) {
-        return mdtmFormat.format(new Date(time));
+        return DateUtils.format(new Date(time), YYYYMMDDHHMMSS);
     }
 
     public static long fromMdtmTimestamp(String time) throws ParseException {
-        return mdtmFormat.parse(time).getTime();
+        return DateUtils.parseDate(time, YYYYMMDDHHMMSS).getTime();
     }
 
     public static <F> String format(FtpFileSystem<F> fs, F file) {
@@ -101,19 +99,19 @@ public class Utils {
         // modify=20170526215012;size=380;type=file;perm=rfadw; data.txt
         // modify=20171012082146;size=0;type=dir;perm=elfpcm; directory
 
-        String facts = "";
+        StringBuilder facts = new StringBuilder();
         boolean dir = fs.isDirectory(file);
 
         for(String opt : options) {
             opt = opt.toLowerCase();
 
-            if(opt.equals("modify")) {
-                facts += "modify=" + Utils.toMdtmTimestamp(fs.getLastModified(file)) + ";";
-            } else if(opt.equals("size")) {
-                facts += "size=" + fs.getSize(file) + ";";
-            } else if(opt.equals("type")) {
-                facts += "type=" + (dir ? "dir" : "file") + ";";
-            } else if(opt.equals("perm")) {
+            if("modify".equals(opt)) {
+                facts.append("modify=").append(Utils.toMdtmTimestamp(fs.getLastModified(file))).append(";");
+            } else if("size".equals(opt)) {
+                facts.append("size=").append(fs.getSize(file)).append(";");
+            } else if("type".equals(opt)) {
+                facts.append("type=").append(dir ? "dir" : "file").append(";");
+            } else if("perm".equals(opt)) {
                 int perms = fs.getPermissions(file);
                 String perm = "";
 
@@ -125,12 +123,12 @@ public class Utils {
                     perm += dir ? "pcm" : "adw";
                 }
 
-                facts += "perm=" + perm + ";";
+                facts.append("perm=").append(perm).append(";");
             }
         }
 
-        facts += " " + fs.getName(file) + "\r\n";
-        return facts;
+        facts.append(" ").append(fs.getName(file)).append("\r\n");
+        return facts.toString();
     }
 
     public static void write(OutputStream out, byte[] bytes, int len, boolean ascii) throws IOException {
@@ -189,7 +187,9 @@ public class Utils {
 
     public static ServerSocket createServer(int port, int backlog, InetAddress address, SSLContext context, boolean ssl) throws IOException {
         if(ssl) {
-            if(context == null) throw new NullPointerException("The SSL context is null");
+            if(context == null) {
+                throw new NullPointerException("The SSL context is null");
+            }
             return context.getServerSocketFactory().createServerSocket(port, backlog, address);
         }
         return new ServerSocket(port, backlog, address);
@@ -198,7 +198,7 @@ public class Utils {
     public static void closeQuietly(Closeable closeable) {
         try {
             closeable.close();
-        } catch(IOException e) {}
+        } catch(IOException ignored) {}
     }
 
 }

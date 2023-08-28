@@ -22,7 +22,7 @@ import java.util.Arrays;
  */
 public class XAPrepareEventData implements EventData {
     private boolean onePhase;
-    private int formatID;
+    private int formatId;
     private int gtridLength;
     private int bqualLength;
     private byte[] data;
@@ -37,12 +37,12 @@ public class XAPrepareEventData implements EventData {
         this.onePhase = onePhase;
     }
 
-    public int getFormatID() {
-        return formatID;
+    public int getFormatId() {
+        return formatId;
     }
 
-    public void setFormatID(int formatID) {
-        this.formatID = formatID;
+    public void setFormatId(int formatId) {
+        this.formatId = formatId;
     }
 
     public int getGtridLength() {
@@ -83,7 +83,7 @@ public class XAPrepareEventData implements EventData {
     public String toString() {
         final StringBuilder sb = new StringBuilder("XAPrepareEventData{");
         sb.append("onePhase=").append(onePhase);
-        sb.append(", formatID=").append(formatID);
+        sb.append(", formatID=").append(formatId);
         sb.append(", gtridLength=").append(gtridLength);
         sb.append(", bqualLength=").append(bqualLength);
         sb.append(", data=").append(Arrays.toString(data));

@@ -25,16 +25,16 @@ import com.chua.common.support.file.univocity.parsers.conversions.Conversion;
 /**
  * The essential callback interface to handle records parsed by any parser that extends {@link AbstractParser}.
  *
- * <p>When parsing an input, univocity-parsers will obtain the RowProcessor from {@link CommonParserSettings#getRowProcessor()}, and
- * delegate each parsed row to {@link Processor#rowProcessed(String[], Context)}.
+ * <p>When parsing an input, univocity-parsers will obtain the RowProcessor from {@link AbstractCommonParserSettings#getRowProcessor()}, and
+ * delegate each parsed row to {@link Processor#rowProcessed(String[], AbstractContext)}.
  *
- * <p>Before parsing the first row, the parser will invoke the {@link Processor#processStarted(Context)} method.
+ * <p>Before parsing the first row, the parser will invoke the {@link Processor#processStarted(AbstractContext)} method.
  * By this time the input buffer will be already loaded and ready to be consumed.
  *
- * <p>After parsing the last row, all resources are closed and the processing stops. Only after the {@link Processor#processEnded(Context)} is called so you
+ * <p>After parsing the last row, all resources are closed and the processing stops. Only after the {@link Processor#processEnded(AbstractContext)} is called so you
  * can perform any additional housekeeping you might need.
  *
- * <p>More control and information over the parsing process are provided by the {@link Context} object.
+ * <p>More control and information over the parsing process are provided by the {@link AbstractContext} object.
  *
  * <p>univocity-parsers provides many useful default implementations of this interface in the package {@link com.chua.common.support.file.univocity.parsers.common.processor}, namely:
  *
@@ -50,11 +50,11 @@ import com.chua.common.support.file.univocity.parsers.conversions.Conversion;
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
  * @see AbstractParser
- * @see CommonParserSettings
+ * @see AbstractCommonParserSettings
  * @see ParsingContext
- * @see Context
+ * @see AbstractContext
  */
-public interface Processor<T extends Context> {
+public interface Processor<T extends AbstractContext> {
 
 	/**
 	 * This method will by invoked by the parser once, when it is ready to start processing the input.
@@ -69,7 +69,7 @@ public interface Processor<T extends Context> {
 	 * @param row     the data extracted by the parser for an individual record. Note that:
 	 *                <ul>
 	 *                <li>it will never by null. </li>
-	 *                <li>it will never be empty unless explicitly configured using {@link CommonSettings#setSkipEmptyLines(boolean)}</li>
+	 *                <li>it will never be empty unless explicitly configured using {@link AbstractCommonSettings#setSkipEmptyLines(boolean)}</li>
 	 *                <li>it won't contain lines identified by the parser as comments. To disable comment processing set {@link Format#setComment(char)} to '\0'</li>
 	 *                </ul>
 	 * @param context A contextual object with information and controls over the current state of the parsing process

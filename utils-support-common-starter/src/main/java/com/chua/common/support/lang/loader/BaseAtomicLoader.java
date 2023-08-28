@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicReference;
  *
  * @author CH
  */
-public abstract class AtomicLoader<T> implements InitLoader<T>, Loader<T> {
+public abstract class BaseAtomicLoader<T> implements InitLoader<T>, Loader<T> {
 
 
     /**

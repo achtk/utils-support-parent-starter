@@ -81,7 +81,9 @@ public class FtpServer implements Closeable {
      * @see FtpNoOpAuthenticator
      */
     public void setAuthenticator(FtpUserAuthenticator auth) {
-        if(auth == null) throw new NullPointerException("The Authenticator is null");
+        if(auth == null) {
+            throw new NullPointerException("The Authenticator is null");
+        }
         this.auth = auth;
     }
 
@@ -89,7 +91,7 @@ public class FtpServer implements Closeable {
      * Gets the SSL context
      * @return The context
      */
-    public SSLContext getSSLContext() {
+    public SSLContext getSslContext() {
         return ssl;
     }
 
@@ -100,7 +102,7 @@ public class FtpServer implements Closeable {
      *
      * @param ssl The context
      */
-    public void setSSLContext(SSLContext ssl) {
+    public void setSslContext(SSLContext ssl) {
         this.ssl = ssl;
     }
 
@@ -110,11 +112,11 @@ public class FtpServer implements Closeable {
      * A server in explicit mode will support both secure and insecure connections.
      * A server in implicit mode will only support secure connections.
      *
-     * In order to support SSL, a context must be given with {@link #setSSLContext(SSLContext)}
+     * In order to support SSL, a context must be given with {@link #setSslContext(SSLContext)}
      *
      * @param explicit {@code true} to support all connections, {@code false} otherwise
      */
-    public void setExplicitSSL(boolean explicit) {
+    public void setExplicitSsl(boolean explicit) {
         this.explicitSecurity = explicit;
     }
 
@@ -180,8 +182,12 @@ public class FtpServer implements Closeable {
      * @throws IOException When an error occurs while starting the server
      */
     public void listen(InetAddress address, int port) throws IOException {
-        if(auth == null) throw new NullPointerException("The Authenticator is null");
-        if(socket != null) throw new IOException("Server already started");
+        if(auth == null) {
+            throw new NullPointerException("The Authenticator is null");
+        }
+        if(socket != null) {
+            throw new IOException("Server already started");
+        }
 
         socket = Utils.createServer(port, 50, address, ssl, !explicitSecurity);
 
@@ -212,8 +218,12 @@ public class FtpServer implements Closeable {
      * @throws IOException When an error occurs while starting the server
      */
     public void listenSync(InetAddress address, int port) throws IOException {
-        if(auth == null) throw new NullPointerException("The Authenticator is null");
-        if(socket != null) throw new IOException("Server already started");
+        if(auth == null) {
+            throw new NullPointerException("The Authenticator is null");
+        }
+        if(socket != null) {
+            throw new IOException("Server already started");
+        }
 
         socket = Utils.createServer(port, 50, address, ssl, !explicitSecurity);
 

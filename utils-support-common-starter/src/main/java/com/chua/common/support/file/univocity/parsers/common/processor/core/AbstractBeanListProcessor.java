@@ -16,10 +16,7 @@
 package com.chua.common.support.file.univocity.parsers.common.processor.core;
 
 import com.chua.common.support.file.univocity.parsers.annotations.helpers.MethodFilter;
-import com.chua.common.support.file.univocity.parsers.common.AbstractParser;
-import com.chua.common.support.file.univocity.parsers.common.AbstractWriter;
-import com.chua.common.support.file.univocity.parsers.common.CommonSettings;
-import com.chua.common.support.file.univocity.parsers.common.Context;
+import com.chua.common.support.file.univocity.parsers.common.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,7 +41,7 @@ import java.util.List;
  * @see AbstractBeanProcessor
  * @see BeanConversionProcessor
  */
-public abstract class AbstractBeanListProcessor<T, C extends Context> extends AbstractBeanProcessor<T, C> {
+public abstract class AbstractBeanListProcessor<T, C extends AbstractContext> extends AbstractBeanProcessor<T, C> {
 
 	private List<T> beans;
 	private String[] headers;
@@ -105,7 +102,7 @@ public abstract class AbstractBeanListProcessor<T, C extends Context> extends Ab
 	}
 
 	/**
-	 * Returns the record headers. This can be either the headers defined in {@link CommonSettings#getHeaders()} or the headers parsed in the file when {@link CommonSettings#getHeaders()}  equals true
+	 * Returns the record headers. This can be either the headers defined in {@link AbstractCommonSettings#getHeaders()} or the headers parsed in the file when {@link CommonSettings#getHeaders()}  equals true
 	 *
 	 * @return the headers of all records parsed.
 	 */

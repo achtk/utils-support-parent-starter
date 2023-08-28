@@ -8,6 +8,8 @@ import java.util.EnumSet;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.chua.common.support.constant.CommonConstant.*;
+
 public abstract class AbstractFormatter implements DialectConfigurator {
   private final FormatConfig cfg;
   private final Indentation indentation;
@@ -88,13 +90,13 @@ public abstract class AbstractFormatter implements DialectConfigurator {
         formattedQuery = this.formatClosingParentheses(token, formattedQuery);
       } else if (token.type == TokenTypes.PLACEHOLDER) {
         formattedQuery = this.formatPlaceholder(token, formattedQuery);
-      } else if (token.value.equals(",")) {
+      } else if (SYMBOL_COMMA.equals(token.value)) {
         formattedQuery = this.formatComma(token, formattedQuery);
-      } else if (token.value.equals(":")) {
+      } else if (SYMBOL_COLON.equals(token.value)) {
         formattedQuery = this.formatWithSpaceAfter(token, formattedQuery);
-      } else if (token.value.equals(".")) {
+      } else if (SYMBOL_DOT.equals(token.value)) {
         formattedQuery = this.formatWithoutSpaces(token, formattedQuery);
-      } else if (token.value.equals(";")) {
+      } else if (SYMBOL_SEMICOLON.equals(token.value)) {
         formattedQuery = this.formatQuerySeparator(token, formattedQuery);
       } else {
         formattedQuery = this.formatWithSpaces(token, formattedQuery);
@@ -145,7 +147,7 @@ public abstract class AbstractFormatter implements DialectConfigurator {
     return string.replaceAll("\\s+", " ");
   }
 
-  private static final Set<TokenTypes> preserveWhitespaceFor =
+  private static final Set<TokenTypes> PRESERVE_WHITESPACE_FOR =
       EnumSet.of(
           TokenTypes.OPEN_PAREN,
           TokenTypes.LINE_COMMENT,
@@ -158,7 +160,7 @@ public abstract class AbstractFormatter implements DialectConfigurator {
     // or another opening parens or line comment
     if (token.whitespaceBefore.isEmpty()
         && !Optional.ofNullable(this.tokenLookBehind())
-            .map(t -> preserveWhitespaceFor.contains(t.type))
+            .map(t -> PRESERVE_WHITESPACE_FOR.contains(t.type))
             .orElse(false)) {
       query = Util.trimSpacesEnd(query);
     }

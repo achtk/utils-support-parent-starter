@@ -1,18 +1,12 @@
 package com.chua.common.support.lang.spider.xsoup.xevaluator;
 
 
-import com.chua.common.support.jsoup.Jsoup;
-import com.chua.common.support.jsoup.nodes.Document;
 import com.chua.common.support.jsoup.nodes.Element;
 import com.chua.common.support.jsoup.nodes.Node;
 import com.chua.common.support.jsoup.nodes.TextNode;
-import com.chua.common.support.jsoup.select.Elements;
 import com.chua.common.support.jsoup.select.NodeTraversor;
 import com.chua.common.support.jsoup.select.NodeVisitor;
-import com.chua.common.support.utils.Preconditions;
 import com.chua.common.support.utils.StringUtils;
-
-import java.io.IOException;
 
 /**
  * HTML to plain-text. This example program demonstrates the use of jsoup to convert HTML input to lightly-formatted
@@ -29,30 +23,8 @@ import java.io.IOException;
  * @author Jonathan Hedley, jonathan@hedley.net
  */
 public class HtmlToPlainText {
-    private static final String userAgent = "Mozilla/5.0 (jsoup)";
-    private static final int timeout = 5 * 1000;
-
-    public static void main(String... args) throws IOException {
-        Preconditions.isTrue(args.length == 1 || args.length == 2, "usage: java -cp jsoup.jar org.jsoup.examples.HtmlToPlainText url [selector]");
-        final String url = args[0];
-        final String selector = args.length == 2 ? args[1] : null;
-
-        // fetch the specified URL and parse to a HTML DOM
-        Document doc = Jsoup.connect(url).userAgent(userAgent).timeout(timeout).get();
-
-        HtmlToPlainText formatter = new HtmlToPlainText();
-
-        if (selector != null) {
-            Elements elements = doc.select(selector); // get each element that matches the CSS selector
-            for (Element element : elements) {
-                String plainText = formatter.getPlainText(element); // format that element to plain text
-                System.out.println(plainText);
-            }
-        } else { // format the whole doc
-            String plainText = formatter.getPlainText(doc);
-            System.out.println(plainText);
-        }
-    }
+    private static final String USER_AGENT = "Mozilla/5.0 (jsoup)";
+    private static final int TIMEOUT = 5 * 1000;
 
     /**
      * Format an Element to plain-text
@@ -69,50 +41,56 @@ public class HtmlToPlainText {
 
     // the formatting rules, implemented in a breadth-first DOM traverse
     private static class FormattingVisitor implements NodeVisitor {
-        private static final int maxWidth = 80;
+        private static final int MAX_WIDTH = 80;
         private int width = 0;
-        private StringBuilder accum = new StringBuilder(); // holds the accumulated text
+        private final StringBuilder accum = new StringBuilder(); // holds the accumulated text
 
         // hit when the node is first seen
         @Override
         public void head(Node node, int depth) {
             String name = node.nodeName();
-            if (node instanceof TextNode)
+            if (node instanceof TextNode) {
                 append(((TextNode) node).text()); // TextNodes carry all user-readable text in the DOM.
-            else if (name.equals("li"))
+            } else if ("li".equals(name)) {
                 append("\n * ");
-            else if (name.equals("dt"))
+            } else if ("dt".equals(name)) {
                 append("  ");
-            else if (StringUtils.in(name, "p", "h1", "h2", "h3", "h4", "h5", "tr"))
+            } else if (StringUtils.in(name, "p", "h1", "h2", "h3", "h4", "h5", "tr")) {
                 append("\n");
+            }
         }
 
         // hit when all of the node's children (if any) have been visited
         @Override
         public void tail(Node node, int depth) {
             String name = node.nodeName();
-            if (StringUtils.in(name, "br", "dd", "dt", "p", "h1", "h2", "h3", "h4", "h5"))
+            if (StringUtils.in(name, "br", "dd", "dt", "p", "h1", "h2", "h3", "h4", "h5")) {
                 append("\n");
-            else if (name.equals("a"))
+            } else if ("a".equals(name)) {
                 append(String.format(" <%s>", node.absUrl("href")));
+            }
         }
 
         // appends text to the string builder with a simple word wrap method
         private void append(String text) {
-            if (text.startsWith("\n"))
+            if (text.startsWith("\n")) {
                 width = 0; // reset counter if starts with a newline. only from formats above, not in natural text
-            if (text.equals(" ") &&
-                    (accum.length() == 0 || StringUtils.in(accum.substring(accum.length() - 1), " ", "\n")))
+            }
+            if (" ".equals(text) &&
+                    (accum.length() == 0 || StringUtils.in(accum.substring(accum.length() - 1), " ", "\n"))) {
                 return; // don't accumulate long runs of empty spaces
+            }
 
-            if (text.length() + width > maxWidth) { // won't fit, needs to wrap
+            if (text.length() + width > MAX_WIDTH) { // won't fit, needs to wrap
                 String[] words = text.split("\\s+");
                 for (int i = 0; i < words.length; i++) {
                     String word = words[i];
                     boolean last = i == words.length - 1;
                     if (!last) // insert a space if not the last word
+                    {
                         word = word + " ";
-                    if (word.length() + width > maxWidth) { // wrap and reset counter
+                    }
+                    if (word.length() + width > MAX_WIDTH) { // wrap and reset counter
                         accum.append("\n").append(word);
                         width = word.length();
                     } else {

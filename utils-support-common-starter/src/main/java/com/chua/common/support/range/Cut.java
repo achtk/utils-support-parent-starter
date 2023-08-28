@@ -10,10 +10,11 @@ import static com.chua.common.support.utils.Preconditions.checkNotNull;
  * @see Range
  * @author CH
  */
-abstract class Cut<C extends Comparable> implements Comparable<Cut<C>>, Serializable {
+@SuppressWarnings("ALL")
+abstract class AbstractCut<C extends Comparable> implements Comparable<AbstractCut<C>>, Serializable {
     final C endpoint;
 
-    Cut(C endpoint) {
+    AbstractCut(C endpoint) {
         this.endpoint = endpoint;
     }
 
@@ -23,9 +24,9 @@ abstract class Cut<C extends Comparable> implements Comparable<Cut<C>>, Serializ
 
     abstract BoundType typeAsUpperBound();
 
-    abstract Cut<C> withLowerBoundType(BoundType boundType, DiscreteDomain<C> domain);
+    abstract AbstractCut<C> withLowerBoundType(BoundType boundType, DiscreteDomain<C> domain);
 
-    abstract Cut<C> withUpperBoundType(BoundType boundType, DiscreteDomain<C> domain);
+    abstract AbstractCut<C> withUpperBoundType(BoundType boundType, DiscreteDomain<C> domain);
 
     abstract void describeAsLowerBound(StringBuilder sb);
 
@@ -39,12 +40,12 @@ abstract class Cut<C extends Comparable> implements Comparable<Cut<C>>, Serializ
      * The canonical form is a BelowValue cut whenever possible, otherwise ABOVE_ALL, or
      * (only in the case of types that are unbounded below) BELOW_ALL.
      */
-    Cut<C> canonical(DiscreteDomain<C> domain) {
+    AbstractCut<C> canonical(DiscreteDomain<C> domain) {
         return this;
     }
 
     @Override
-    public int compareTo(Cut<C> that) {
+    public int compareTo(AbstractCut<C> that) {
         if (that == belowAll()) {
             return 1;
         }
@@ -65,9 +66,9 @@ abstract class Cut<C extends Comparable> implements Comparable<Cut<C>>, Serializ
     @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Cut) {
-            // It might not really be a Cut<C>, but we'll catch a CCE if it's not
-            Cut<C> that = (Cut<C>) obj;
+        if (obj instanceof AbstractCut) {
+            // It might not really be a AbstractCut<C>, but we'll catch a CCE if it's not
+            AbstractCut<C> that = (AbstractCut<C>) obj;
             try {
                 int compareResult = compareTo(that);
                 return compareResult == 0;
@@ -86,13 +87,13 @@ abstract class Cut<C extends Comparable> implements Comparable<Cut<C>>, Serializ
      * casting the type parameter is safe.
      */
     @SuppressWarnings("unchecked")
-    static <C extends Comparable> Cut<C> belowAll() {
-        return (Cut<C>) BelowAll.INSTANCE;
+    static <C extends Comparable> AbstractCut<C> belowAll() {
+        return (AbstractCut<C>) BelowAll.INSTANCE;
     }
 
     private static final long serialVersionUID = 0;
 
-    private static final class BelowAll extends Cut<Comparable<?>> {
+    private static final class BelowAll extends AbstractCut<Comparable<?>> {
         private static final BelowAll INSTANCE = new BelowAll();
 
         private BelowAll() {
@@ -126,13 +127,13 @@ abstract class Cut<C extends Comparable> implements Comparable<Cut<C>>, Serializ
         }
 
         @Override
-        Cut<Comparable<?>> withLowerBoundType(
+        AbstractCut<Comparable<?>> withLowerBoundType(
                 BoundType boundType, DiscreteDomain<Comparable<?>> domain) {
             throw new IllegalStateException();
         }
 
         @Override
-        Cut<Comparable<?>> withUpperBoundType(
+        AbstractCut<Comparable<?>> withUpperBoundType(
                 BoundType boundType, DiscreteDomain<Comparable<?>> domain) {
             throw new AssertionError("this statement should be unreachable");
         }
@@ -158,16 +159,16 @@ abstract class Cut<C extends Comparable> implements Comparable<Cut<C>>, Serializ
         }
 
         @Override
-        Cut<Comparable<?>> canonical(DiscreteDomain<Comparable<?>> domain) {
+        AbstractCut<Comparable<?>> canonical(DiscreteDomain<Comparable<?>> domain) {
             try {
-                return Cut.<Comparable<?>>belowValue(domain.minValue());
+                return AbstractCut.<Comparable<?>>belowValue(domain.minValue());
             } catch (NoSuchElementException e) {
                 return this;
             }
         }
 
         @Override
-        public int compareTo(Cut<Comparable<?>> o) {
+        public int compareTo(AbstractCut<Comparable<?>> o) {
             return (o == this) ? 0 : -1;
         }
 
@@ -193,11 +194,11 @@ abstract class Cut<C extends Comparable> implements Comparable<Cut<C>>, Serializ
      * type C, so casting the type parameter is safe.
      */
     @SuppressWarnings("unchecked")
-    static <C extends Comparable> Cut<C> aboveAll() {
-        return (Cut<C>) AboveAll.INSTANCE;
+    static <C extends Comparable> AbstractCut<C> aboveAll() {
+        return (AbstractCut<C>) AboveAll.INSTANCE;
     }
 
-    private static final class AboveAll extends Cut<Comparable<?>> {
+    private static final class AboveAll extends AbstractCut<Comparable<?>> {
         private static final AboveAll INSTANCE = new AboveAll();
 
         private AboveAll() {
@@ -226,13 +227,13 @@ abstract class Cut<C extends Comparable> implements Comparable<Cut<C>>, Serializ
         }
 
         @Override
-        Cut<Comparable<?>> withLowerBoundType(
+        AbstractCut<Comparable<?>> withLowerBoundType(
                 BoundType boundType, DiscreteDomain<Comparable<?>> domain) {
             throw new AssertionError("this statement should be unreachable");
         }
 
         @Override
-        Cut<Comparable<?>> withUpperBoundType(
+        AbstractCut<Comparable<?>> withUpperBoundType(
                 BoundType boundType, DiscreteDomain<Comparable<?>> domain) {
             throw new IllegalStateException();
         }
@@ -258,7 +259,7 @@ abstract class Cut<C extends Comparable> implements Comparable<Cut<C>>, Serializ
         }
 
         @Override
-        public int compareTo(Cut<Comparable<?>> o) {
+        public int compareTo(AbstractCut<Comparable<?>> o) {
             return (o == this) ? 0 : 1;
         }
 
@@ -279,11 +280,11 @@ abstract class Cut<C extends Comparable> implements Comparable<Cut<C>>, Serializ
         private static final long serialVersionUID = 0;
     }
 
-    static <C extends Comparable> Cut<C> belowValue(C endpoint) {
+    static <C extends Comparable> AbstractCut<C> belowValue(C endpoint) {
         return new BelowValue<>(endpoint);
     }
 
-    private static final class BelowValue<C extends Comparable> extends Cut<C> {
+    private static final class BelowValue<C extends Comparable> extends AbstractCut<C> {
         BelowValue(C endpoint) {
             super(checkNotNull(endpoint));
         }
@@ -304,24 +305,24 @@ abstract class Cut<C extends Comparable> implements Comparable<Cut<C>>, Serializ
         }
 
         @Override
-        Cut<C> withLowerBoundType(BoundType boundType, DiscreteDomain<C> domain) {
+        AbstractCut<C> withLowerBoundType(BoundType boundType, DiscreteDomain<C> domain) {
             switch (boundType) {
                 case CLOSED:
                     return this;
                 case OPEN:
                     C previous = domain.previous(endpoint);
-                    return (previous == null) ? Cut.<C>belowAll() : new AboveValue<C>(previous);
+                    return (previous == null) ? AbstractCut.<C>belowAll() : new AboveValue<C>(previous);
                 default:
                     throw new AssertionError();
             }
         }
 
         @Override
-        Cut<C> withUpperBoundType(BoundType boundType, DiscreteDomain<C> domain) {
+        AbstractCut<C> withUpperBoundType(BoundType boundType, DiscreteDomain<C> domain) {
             switch (boundType) {
                 case CLOSED:
                     C previous = domain.previous(endpoint);
-                    return (previous == null) ? Cut.<C>aboveAll() : new AboveValue<C>(previous);
+                    return (previous == null) ? AbstractCut.<C>aboveAll() : new AboveValue<C>(previous);
                 case OPEN:
                     return this;
                 default:
@@ -362,11 +363,11 @@ abstract class Cut<C extends Comparable> implements Comparable<Cut<C>>, Serializ
         private static final long serialVersionUID = 0;
     }
 
-    static <C extends Comparable> Cut<C> aboveValue(C endpoint) {
+    static <C extends Comparable> AbstractCut<C> aboveValue(C endpoint) {
         return new AboveValue<>(endpoint);
     }
 
-    private static final class AboveValue<C extends Comparable> extends Cut<C> {
+    private static final class AboveValue<C extends Comparable> extends AbstractCut<C> {
         AboveValue(C endpoint) {
             super(checkNotNull(endpoint));
         }
@@ -387,24 +388,24 @@ abstract class Cut<C extends Comparable> implements Comparable<Cut<C>>, Serializ
         }
 
         @Override
-        Cut<C> withLowerBoundType(BoundType boundType, DiscreteDomain<C> domain) {
+        AbstractCut<C> withLowerBoundType(BoundType boundType, DiscreteDomain<C> domain) {
             switch (boundType) {
                 case OPEN:
                     return this;
                 case CLOSED:
                     C next = domain.next(endpoint);
-                    return (next == null) ? Cut.<C>belowAll() : belowValue(next);
+                    return (next == null) ? AbstractCut.<C>belowAll() : belowValue(next);
                 default:
                     throw new AssertionError();
             }
         }
 
         @Override
-        Cut<C> withUpperBoundType(BoundType boundType, DiscreteDomain<C> domain) {
+        AbstractCut<C> withUpperBoundType(BoundType boundType, DiscreteDomain<C> domain) {
             switch (boundType) {
                 case OPEN:
                     C next = domain.next(endpoint);
-                    return (next == null) ? Cut.<C>aboveAll() : belowValue(next);
+                    return (next == null) ? AbstractCut.<C>aboveAll() : belowValue(next);
                 case CLOSED:
                     return this;
                 default:
@@ -433,9 +434,9 @@ abstract class Cut<C extends Comparable> implements Comparable<Cut<C>>, Serializ
         }
 
         @Override
-        Cut<C> canonical(DiscreteDomain<C> domain) {
+        AbstractCut<C> canonical(DiscreteDomain<C> domain) {
             C next = leastValueAbove(domain);
-            return (next != null) ? belowValue(next) : Cut.<C>aboveAll();
+            return (next != null) ? belowValue(next) : AbstractCut.<C>aboveAll();
         }
 
         @Override

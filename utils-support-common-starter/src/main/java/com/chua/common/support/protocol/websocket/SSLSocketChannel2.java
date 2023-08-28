@@ -458,7 +458,7 @@ public class SSLSocketChannel2 implements ByteChannel, WrappedByteChannel, ISSLC
   }
 
   @Override
-  public SSLEngine getSSLEngine() {
+  public SSLEngine getSslEngine() {
     return sslEngine;
   }
 

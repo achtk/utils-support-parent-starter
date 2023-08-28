@@ -11,7 +11,7 @@ import java.util.Deque;
 public abstract class Parser
 {
 
-    protected static final Execution[] emptyBody = new Execution[0];
+    protected static final Execution[] EMPTY_BODY = new Execution[0];
 
     public abstract int parse(String sentence, int offset, Deque<Execution> executions, Template template, StringBuilder cache, Invoker next);
 

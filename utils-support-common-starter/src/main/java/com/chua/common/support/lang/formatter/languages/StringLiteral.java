@@ -1,9 +1,14 @@
 package com.chua.common.support.lang.formatter.languages;
 
+import com.chua.common.support.constant.CommonConstant;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_EMPTY_ARRAY;
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_EMPTY_MAP;
 
 public class StringLiteral {
   public static final String BACK_QUOTE = "``";
@@ -14,21 +19,21 @@ public class StringLiteral {
   public static final String N_SINGLE_QUOTE = "N''";
   public static final String Q_SINGLE_QUOTE = "Q''";
   public static final String SINGLE_QUOTE = "''";
-  public static final String BRACE = "{}";
+  public static final String BRACE = SYMBOL_EMPTY_MAP;
   public static final String DOLLAR = "$$";
-  public static final String BRACKET = "[]";
+  public static final String BRACKET = SYMBOL_EMPTY_ARRAY;
 
-  private static final Map<String, String> literals;
+  private static final Map<String, String> LITERALS;
 
   static {
-    literals =
+    LITERALS =
         new HashMap<>(
             Arrays.stream(Preset.values())
                 .collect(Collectors.toMap(Preset::getKey, Preset::getRegex)));
   }
 
   public static String get(String key) {
-    return literals.get(key);
+    return LITERALS.get(key);
   }
 
   private enum Preset {

@@ -17,7 +17,7 @@ package com.chua.common.support.file.univocity.parsers.common.processor.core;
 
 import com.chua.common.support.file.univocity.parsers.common.AbstractParser;
 import com.chua.common.support.file.univocity.parsers.common.ArgumentUtils;
-import com.chua.common.support.file.univocity.parsers.common.Context;
+import com.chua.common.support.file.univocity.parsers.common.AbstractContext;
 import com.chua.common.support.file.univocity.parsers.common.processor.MasterDetailRecord;
 import com.chua.common.support.file.univocity.parsers.common.processor.ObjectRowListProcessor;
 import com.chua.common.support.file.univocity.parsers.common.processor.RowPlacement;
@@ -29,10 +29,10 @@ import java.util.List;
 /**
  * A {@link Processor} implementation for associating rows extracted from any implementation of {@link AbstractParser} into {@link MasterDetailRecord} instances.
  *
- * <p> For each row processed, a call to {@link AbstractMasterDetailProcessor#isMasterRecord(String[], Context)} will be made to identify whether or not it is a master row.
+ * <p> For each row processed, a call to {@link AbstractMasterDetailProcessor#isMasterRecord(String[], AbstractContext)} will be made to identify whether or not it is a master row.
  * <p> The detail rows are automatically associated with the master record in an instance of {@link MasterDetailRecord}.
  * <p> When the master record is fully processed (i.e. {@link MasterDetailRecord} contains a master row and  all associated detail rows),
- * it is sent to the user for processing in {@link AbstractMasterDetailProcessor#masterDetailRecordProcessed(MasterDetailRecord, Context)}.
+ * it is sent to the user for processing in {@link AbstractMasterDetailProcessor#masterDetailRecordProcessed(MasterDetailRecord, AbstractContext)}.
  *
  * <p> <b>Note</b> this class extends {@link AbstractObjectProcessor} and value conversions provided by {@link Conversion} instances are fully supported.
  *
@@ -43,7 +43,7 @@ import java.util.List;
  * @see ObjectRowListProcessor
  * @see Processor
  */
-public abstract class AbstractMasterDetailProcessor<T extends Context> extends AbstractObjectProcessor<T> {
+public abstract class AbstractMasterDetailProcessor<T extends AbstractContext> extends AbstractObjectProcessor<T> {
 
 	private final AbstractObjectListProcessor detailProcessor;
 	private MasterDetailRecord record;

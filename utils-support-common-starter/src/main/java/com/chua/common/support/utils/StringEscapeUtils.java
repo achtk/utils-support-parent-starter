@@ -33,7 +33,7 @@ public class StringEscapeUtils {
      *      .toString()
      * </pre>
      */
-    public static final class Builder {
+    public static class Builder {
 
         /**
          * StringBuilder to be used in the Builder class.
@@ -43,14 +43,14 @@ public class StringEscapeUtils {
         /**
          * CharSequenceTranslator to be used in the Builder class.
          */
-        private final CharSequenceTranslator translator;
+        private final AbstractCharSequenceTranslator translator;
 
         /**
          * Builder constructor.
          *
          * @param translator a CharSequenceTranslator.
          */
-        private Builder(final CharSequenceTranslator translator) {
+        private Builder(final AbstractCharSequenceTranslator translator) {
             this.sb = new StringBuilder();
             this.translator = translator;
         }
@@ -67,7 +67,7 @@ public class StringEscapeUtils {
         }
 
         /**
-         * Escape {@code input} according to the given {@link CharSequenceTranslator}.
+         * Escape {@code input} according to the given {@link AbstractCharSequenceTranslator}.
          *
          * @param input the String to escape
          * @return {@code this}, to enable chaining
@@ -91,12 +91,7 @@ public class StringEscapeUtils {
     /**
      * Translator object for unescaping backslash escaped entries.
      */
-    static class XsiUnescaper extends CharSequenceTranslator {
-
-        /**
-         * Escaped backslash constant.
-         */
-        private static final char BACKSLASH = '\\';
+    static class XsiUnescaper extends AbstractCharSequenceTranslator {
 
         @Override
         public int translate(final CharSequence input, final int index, final Writer writer) throws IOException {
@@ -110,6 +105,10 @@ public class StringEscapeUtils {
             int segmentStart = 0;
             int searchOffset = 0;
             while (true) {
+                /**
+                 * Escaped backslash constant.
+                 */
+                char BACKSLASH = '\\';
                 final int pos = s.indexOf(BACKSLASH, searchOffset);
                 if (pos == -1) {
                     if (segmentStart < s.length()) {
@@ -135,7 +134,7 @@ public class StringEscapeUtils {
      * object allows the Java escaping functionality to be used
      * as the foundation for a custom translator.
      */
-    public static final CharSequenceTranslator ESCAPE_JAVA;
+    public static AbstractCharSequenceTranslator ESCAPE_JAVA;
 
     static {
         final Map<CharSequence, CharSequence> escapeJavaMap = new HashMap<>();
@@ -155,7 +154,7 @@ public class StringEscapeUtils {
      * object allows the EcmaScript escaping functionality to be used
      * as the foundation for a custom translator.
      */
-    public static final CharSequenceTranslator ESCAPE_ECMASCRIPT;
+    public static AbstractCharSequenceTranslator ESCAPE_ECMASCRIPT;
 
     static {
         final Map<CharSequence, CharSequence> escapeEcmaScriptMap = new HashMap<>();
@@ -177,7 +176,7 @@ public class StringEscapeUtils {
      * object allows the Json escaping functionality to be used
      * as the foundation for a custom translator.
      */
-    public static final CharSequenceTranslator ESCAPE_JSON;
+    public static AbstractCharSequenceTranslator ESCAPE_JSON;
 
     static {
         final Map<CharSequence, CharSequence> escapeJsonMap = new HashMap<>();
@@ -198,7 +197,7 @@ public class StringEscapeUtils {
      * object allows the XML escaping functionality to be used
      * as the foundation for a custom translator.
      */
-    public static final CharSequenceTranslator ESCAPE_XML10;
+    public static AbstractCharSequenceTranslator ESCAPE_XML10;
 
     static {
         final Map<CharSequence, CharSequence> escapeXml10Map = new HashMap<>();
@@ -250,7 +249,7 @@ public class StringEscapeUtils {
      * object allows the XML escaping functionality to be used
      * as the foundation for a custom translator.
      */
-    public static final CharSequenceTranslator ESCAPE_XML11;
+    public static AbstractCharSequenceTranslator ESCAPE_XML11;
 
     static {
         final Map<CharSequence, CharSequence> escapeXml11Map = new HashMap<>();
@@ -278,7 +277,7 @@ public class StringEscapeUtils {
      * object allows the HTML escaping functionality to be used
      * as the foundation for a custom translator.
      */
-    public static final CharSequenceTranslator ESCAPE_HTML3 =
+    public static AbstractCharSequenceTranslator ESCAPE_HTML3 =
             new AggregateTranslator(
                     new LookupTranslator(EntityArrays.BASIC_ESCAPE),
                     new LookupTranslator(EntityArrays.ISO8859_1_ESCAPE)
@@ -291,7 +290,7 @@ public class StringEscapeUtils {
      * object allows the HTML escaping functionality to be used
      * as the foundation for a custom translator.
      */
-    public static final CharSequenceTranslator ESCAPE_HTML4 =
+    public static AbstractCharSequenceTranslator ESCAPE_HTML4 =
             new AggregateTranslator(
                     new LookupTranslator(EntityArrays.BASIC_ESCAPE),
                     new LookupTranslator(EntityArrays.ISO8859_1_ESCAPE),
@@ -304,7 +303,7 @@ public class StringEscapeUtils {
      * object allows the CSV escaping functionality to be used
      * as the foundation for a custom translator.
      */
-    public static final CharSequenceTranslator ESCAPE_CSV = new CsvTranslators.CsvEscaper();
+    public static AbstractCharSequenceTranslator ESCAPE_CSV = new CsvTranslators.CsvEscaper();
 
     /* UNESCAPE TRANSLATORS */
 
@@ -313,7 +312,7 @@ public class StringEscapeUtils {
      *
      * @see <a href="http://pubs.opengroup.org/onlinepubs/7908799/xcu/chap2.html">Shell Command Language</a>
      */
-    public static final CharSequenceTranslator ESCAPE_XSI;
+    public static AbstractCharSequenceTranslator ESCAPE_XSI;
 
     static {
         final Map<CharSequence, CharSequence> escapeXsiMap = new HashMap<>();
@@ -352,7 +351,7 @@ public class StringEscapeUtils {
      * object allows the Java unescaping functionality to be used
      * as the foundation for a custom translator.
      */
-    public static final CharSequenceTranslator UNESCAPE_JAVA;
+    public static AbstractCharSequenceTranslator UNESCAPE_JAVA;
 
     static {
         final Map<CharSequence, CharSequence> unescapeJavaMap = new HashMap<>();
@@ -375,7 +374,7 @@ public class StringEscapeUtils {
      * object allows the EcmaScript unescaping functionality to be used
      * as the foundation for a custom translator.
      */
-    public static final CharSequenceTranslator UNESCAPE_ECMASCRIPT = UNESCAPE_JAVA;
+    public static AbstractCharSequenceTranslator UNESCAPE_ECMASCRIPT = UNESCAPE_JAVA;
 
     /**
      * Translator object for unescaping escaped Json.
@@ -384,7 +383,7 @@ public class StringEscapeUtils {
      * object allows the Json unescaping functionality to be used
      * as the foundation for a custom translator.
      */
-    public static final CharSequenceTranslator UNESCAPE_JSON = UNESCAPE_JAVA;
+    public static AbstractCharSequenceTranslator UNESCAPE_JSON = UNESCAPE_JAVA;
 
     /**
      * Translator object for unescaping escaped HTML 3.0.
@@ -393,7 +392,7 @@ public class StringEscapeUtils {
      * object allows the HTML unescaping functionality to be used
      * as the foundation for a custom translator.
      */
-    public static final CharSequenceTranslator UNESCAPE_HTML3 =
+    public static AbstractCharSequenceTranslator UNESCAPE_HTML3 =
             new AggregateTranslator(
                     new LookupTranslator(EntityArrays.BASIC_UNESCAPE),
                     new LookupTranslator(EntityArrays.ISO8859_1_UNESCAPE),
@@ -407,7 +406,7 @@ public class StringEscapeUtils {
      * object allows the HTML unescaping functionality to be used
      * as the foundation for a custom translator.
      */
-    public static final CharSequenceTranslator UNESCAPE_HTML4 =
+    public static AbstractCharSequenceTranslator UNESCAPE_HTML4 =
             new AggregateTranslator(
                     new LookupTranslator(EntityArrays.BASIC_UNESCAPE),
                     new LookupTranslator(EntityArrays.ISO8859_1_UNESCAPE),
@@ -422,7 +421,7 @@ public class StringEscapeUtils {
      * object allows the XML unescaping functionality to be used
      * as the foundation for a custom translator.
      */
-    public static final CharSequenceTranslator UNESCAPE_XML =
+    public static AbstractCharSequenceTranslator UNESCAPE_XML =
             new AggregateTranslator(
                     new LookupTranslator(EntityArrays.BASIC_UNESCAPE),
                     new LookupTranslator(EntityArrays.APOS_UNESCAPE),
@@ -436,7 +435,7 @@ public class StringEscapeUtils {
      * object allows the CSV unescaping functionality to be used
      * as the foundation for a custom translator.
      */
-    public static final CharSequenceTranslator UNESCAPE_CSV = new CsvTranslators.CsvUnescaper();
+    public static AbstractCharSequenceTranslator UNESCAPE_CSV = new CsvTranslators.CsvUnescaper();
 
     /* Helper functions */
 
@@ -447,7 +446,7 @@ public class StringEscapeUtils {
      * object allows the XSI unescaping functionality to be used
      * as the foundation for a custom translator.
      */
-    public static final CharSequenceTranslator UNESCAPE_XSI = new XsiUnescaper();
+    public static AbstractCharSequenceTranslator UNESCAPE_XSI = new XsiUnescaper();
 
     /**
      * Get a {@link Builder}.
@@ -455,7 +454,7 @@ public class StringEscapeUtils {
      * @param translator the text translator
      * @return {@link Builder}
      */
-    public static StringEscapeUtils.Builder builder(final CharSequenceTranslator translator) {
+    public static StringEscapeUtils.Builder builder(final AbstractCharSequenceTranslator translator) {
         return new Builder(translator);
     }
 
@@ -478,7 +477,7 @@ public class StringEscapeUtils {
      * @return The input String, enclosed in double quotes if the value contains a comma,
      * newline or double quote, {@code null} if null string input
      */
-    public static final String escapeCsv(final String input) {
+    public static String escapeCsv(final String input) {
         return ESCAPE_CSV.translate(input);
     }
 
@@ -512,7 +511,7 @@ public class StringEscapeUtils {
      * @param input String to escape values in, may be null
      * @return String with escaped values, {@code null} if null string input
      */
-    public static final String escapeEcmaScript(final String input) {
+    public static String escapeEcmaScript(final String input) {
         return ESCAPE_ECMASCRIPT.translate(input);
     }
 
@@ -524,7 +523,7 @@ public class StringEscapeUtils {
      * @param input the {@code String} to escape, may be null
      * @return a new escaped {@code String}, {@code null} if null string input
      */
-    public static final String escapeHtml3(final String input) {
+    public static String escapeHtml3(final String input) {
         return ESCAPE_HTML3.translate(input);
     }
 
@@ -554,7 +553,7 @@ public class StringEscapeUtils {
      * @see <a href="http://www.w3.org/TR/html401/charset.html#h-5.3">HTML 4.01 Character References</a>
      * @see <a href="http://www.w3.org/TR/html401/charset.html#code-position">HTML 4.01 Code positions</a>
      */
-    public static final String escapeHtml4(final String input) {
+    public static String escapeHtml4(final String input) {
         return ESCAPE_HTML4.translate(input);
     }
 
@@ -580,7 +579,7 @@ public class StringEscapeUtils {
      * @param input String to escape values in, may be null
      * @return String with escaped values, {@code null} if null string input
      */
-    public static final String escapeJava(final String input) {
+    public static String escapeJava(final String input) {
         return ESCAPE_JAVA.translate(input);
     }
 
@@ -607,7 +606,7 @@ public class StringEscapeUtils {
      * @param input String to escape values in, may be null
      * @return String with escaped values, {@code null} if null string input
      */
-    public static final String escapeJson(final String input) {
+    public static String escapeJson(final String input) {
         return ESCAPE_JSON.translate(input);
     }
 
@@ -688,7 +687,7 @@ public class StringEscapeUtils {
      * @return String with escaped values, {@code null} if null string input
      * @see <a href="http://pubs.opengroup.org/onlinepubs/7908799/xcu/chap2.html">Shell Command Language</a>
      */
-    public static final String escapeXSI(final String input) {
+    public static String escapeXSI(final String input) {
         return ESCAPE_XSI.translate(input);
     }
 
@@ -712,7 +711,7 @@ public class StringEscapeUtils {
      * @return The input String, with enclosing double quotes removed and embedded double
      * quotes unescaped, {@code null} if null string input
      */
-    public static final String unescapeCsv(final String input) {
+    public static String unescapeCsv(final String input) {
         return UNESCAPE_CSV.translate(input);
     }
 
@@ -727,7 +726,7 @@ public class StringEscapeUtils {
      * @return A new unescaped {@code String}, {@code null} if null string input
      * @see #unescapeJava(String)
      */
-    public static final String unescapeEcmaScript(final String input) {
+    public static String unescapeEcmaScript(final String input) {
         return UNESCAPE_ECMASCRIPT.translate(input);
     }
 
@@ -739,7 +738,7 @@ public class StringEscapeUtils {
      * @param input the {@code String} to unescape, may be null
      * @return a new unescaped {@code String}, {@code null} if null string input
      */
-    public static final String unescapeHtml3(final String input) {
+    public static String unescapeHtml3(final String input) {
         return UNESCAPE_HTML3.translate(input);
     }
 
@@ -758,7 +757,7 @@ public class StringEscapeUtils {
      * @param input the {@code String} to unescape, may be null
      * @return a new unescaped {@code String}, {@code null} if null string input
      */
-    public static final String unescapeHtml4(final String input) {
+    public static String unescapeHtml4(final String input) {
         return UNESCAPE_HTML4.translate(input);
     }
 
@@ -771,7 +770,7 @@ public class StringEscapeUtils {
      * @param input the {@code String} to unescape, may be null
      * @return a new unescaped {@code String}, {@code null} if null string input
      */
-    public static final String unescapeJava(final String input) {
+    public static String unescapeJava(final String input) {
         return UNESCAPE_JAVA.translate(input);
     }
 
@@ -786,7 +785,7 @@ public class StringEscapeUtils {
      * @return A new unescaped {@code String}, {@code null} if null string input
      * @see #unescapeJava(String)
      */
-    public static final String unescapeJson(final String input) {
+    public static String unescapeJson(final String input) {
         return UNESCAPE_JSON.translate(input);
     }
 
@@ -806,7 +805,7 @@ public class StringEscapeUtils {
      * @see #escapeXml10(String)
      * @see #escapeXml11(String)
      */
-    public static final String unescapeXml(final String input) {
+    public static String unescapeXml(final String input) {
         return UNESCAPE_XML.translate(input);
     }
 
@@ -817,7 +816,7 @@ public class StringEscapeUtils {
      * @return a new unescaped {@code String}, {@code null} if null string input
      * @see StringEscapeUtils#escapeXSI(String)
      */
-    public static final String unescapeXSI(final String input) {
+    public static String unescapeXSI(final String input) {
         return UNESCAPE_XSI.translate(input);
     }
 

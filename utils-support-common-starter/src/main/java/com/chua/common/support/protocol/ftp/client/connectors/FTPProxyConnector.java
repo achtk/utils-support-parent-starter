@@ -118,7 +118,7 @@ public class FTPProxyConnector extends FTPConnector {
         // Welcome message.
         FTPReply r;
         try {
-            r = communication.readFTPReply();
+            r = communication.readFtpReply();
         } catch (FTPIllegalReplyException e) {
             throw new IOException("Invalid proxy response");
         }
@@ -131,9 +131,9 @@ public class FTPProxyConnector extends FTPConnector {
             // Usefull flags.
             boolean passwordRequired;
             // Send the user and read the reply.
-            communication.sendFTPCommand("USER " + proxyUser);
+            communication.sendFtpCommand("USER " + proxyUser);
             try {
-                r = communication.readFTPReply();
+                r = communication.readFtpReply();
             } catch (FTPIllegalReplyException e) {
                 throw new IOException("Invalid proxy response");
             }
@@ -153,9 +153,9 @@ public class FTPProxyConnector extends FTPConnector {
             // Password.
             if (passwordRequired) {
                 // Send the password.
-                communication.sendFTPCommand("PASS " + proxyPass);
+                communication.sendFtpCommand("PASS " + proxyPass);
                 try {
-                    r = communication.readFTPReply();
+                    r = communication.readFtpReply();
                 } catch (FTPIllegalReplyException e) {
                     throw new IOException("Invalid proxy response");
                 }
@@ -164,9 +164,9 @@ public class FTPProxyConnector extends FTPConnector {
                     throw new IOException("Proxy authentication failed");
                 }
             }
-            communication.sendFTPCommand("SITE " + host + ":" + port);
+            communication.sendFtpCommand("SITE " + host + ":" + port);
         } else if (style == STYLE_OPEN_COMMAND) {
-            communication.sendFTPCommand("OPEN " + host + ":" + port);
+            communication.sendFtpCommand("OPEN " + host + ":" + port);
         }
         return socket;
     }

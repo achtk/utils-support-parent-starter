@@ -233,8 +233,8 @@ public class TarOutputStream extends FilterOutputStream {
         if (haveUnclosedEntry) {
             throw new IOException("This archives contains unclosed entries.");
         }
-        writeEOFRecord();
-        writeEOFRecord();
+        writeEofRecord();
+        writeEofRecord();
         buffer.flushBlock();
         finished = true;
     }
@@ -539,7 +539,7 @@ public class TarOutputStream extends FilterOutputStream {
      * Write an EOF (end of archive) record to the tar archive.
      * An EOF record consists of a record of all zeros.
      */
-    private void writeEOFRecord() throws IOException {
+    private void writeEofRecord() throws IOException {
         Arrays.fill(recordBuf, (byte) 0);
 
         buffer.writeRecord(recordBuf);

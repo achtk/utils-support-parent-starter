@@ -76,7 +76,7 @@ public class XpathEvaluator {
                     for (Element e : context) {
                         //处理上下文自身节点
                         String key = n.getTagName().substring(1);
-                        if (key.equals("*")) {
+                        if ("*".equals(key)) {
                             res.add(e.attributes().toString());
                         } else {
                             String value = e.attr(key);
@@ -86,7 +86,7 @@ public class XpathEvaluator {
                         }
                         //处理上下文子代节点
                         for (Element dep : e.getAllElements()) {
-                            if (key.equals("*")) {
+                            if ("*".equals(key)) {
                                 res.add(dep.attributes().toString());
                             } else {
                                 String value = dep.attr(key);
@@ -114,7 +114,7 @@ public class XpathEvaluator {
                 if (n.getTagName().startsWith("@")) {
                     for (Element e : context) {
                         String key = n.getTagName().substring(1);
-                        if (key.equals("*")) {
+                        if ("*".equals(key)) {
                             res.add(e.attributes().toString());
                         } else {
                             String value = e.attr(key);
@@ -156,7 +156,7 @@ public class XpathEvaluator {
      * @return
      */
     public Element filter(Element e, Node node) throws NoSuchFunctionException, NoSuchAxisException {
-        if (node.getTagName().equals("*") || node.getTagName().equals(e.nodeName())) {
+        if ("*".equals(node.getTagName()) || node.getTagName().equals(e.nodeName())) {
             if (node.getPredicate() != null) {
                 Predicate p = node.getPredicate();
                 if (p.getOpEm() == null) {
@@ -207,7 +207,7 @@ public class XpathEvaluator {
      */
     public Elements getAxisScopeEls(String axis, Element e) throws NoSuchAxisException {
         try {
-            String functionName = CommonUtil.getJMethodNameFromStr(axis);
+            String functionName = CommonUtil.getMethodNameFromStr(axis);
             Method axisSelector = AxisSelector.class.getMethod(functionName, Element.class);
             return (Elements) axisSelector.invoke(SingletonProducer.getInstance().getAxisSelector(), e);
         } catch (NoSuchMethodException e1) {

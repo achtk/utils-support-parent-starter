@@ -71,12 +71,16 @@ public class SmartContentSelector implements Selector {
             if (boolend) {
                 //System.out.println(start+1 + "\t\t" + end+1);
                 for (int ii = start; ii <= end; ii++) {
-                    if (lines.get(ii).length() < 5) continue;
+                    if (lines.get(ii).length() < 5) {
+                        continue;
+                    }
                     tmp.append(lines.get(ii) + "\n");
                 }
                 String str = tmp.toString();
                 //System.out.println(str);
-                if (str.contains("Copyright")) continue;
+                if (str.contains("Copyright")) {
+                    continue;
+                }
                 text.append(str);
                 boolstart = boolend = false;
             }

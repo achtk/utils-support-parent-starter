@@ -26,7 +26,7 @@ import java.util.Map;
 /**
  * This is the parent class for all configuration classes used by writers ({@link AbstractWriter})
  *
- * <p>By default, all writers work with, at least, the following configuration options in addition to the ones provided by {@link CommonSettings}:
+ * <p>By default, all writers work with, at least, the following configuration options in addition to the ones provided by {@link AbstractCommonSettings}:
  *
  * <ul>
  * <li><b>rowWriterProcessor:</b> a implementation of the interface {@link RowWriterProcessor} which processes input objects into a manageable format for writing.</li>
@@ -38,7 +38,7 @@ import java.util.Map;
  * @see com.chua.common.support.file.univocity.parsers.csv.CsvWriterSettings
  * @see com.chua.common.support.file.univocity.parsers.fixed.FixedWidthWriterSettings
  */
-public abstract class CommonWriterSettings<F extends Format> extends CommonSettings<F> {
+public abstract class AbstractCommonWriterSettings<F extends Format> extends AbstractCommonSettings<F> {
 
     private RowWriterProcessor<?> rowWriterProcessor;
 
@@ -191,13 +191,13 @@ public abstract class CommonWriterSettings<F extends Format> extends CommonSetti
     }
 
     @Override
-    protected CommonWriterSettings clone(boolean clearInputSpecificSettings) {
-        return (CommonWriterSettings) super.clone(clearInputSpecificSettings);
+    protected AbstractCommonWriterSettings clone(boolean clearInputSpecificSettings) {
+        return (AbstractCommonWriterSettings) super.clone(clearInputSpecificSettings);
     }
 
     @Override
-    protected CommonWriterSettings clone() {
-        return (CommonWriterSettings) super.clone();
+    protected AbstractCommonWriterSettings clone() {
+        return (AbstractCommonWriterSettings) super.clone();
     }
 
     @Override
@@ -207,7 +207,7 @@ public abstract class CommonWriterSettings<F extends Format> extends CommonSetti
     }
 
     /**
-     * Indicates whether fields selected using the field selection methods (defined by the parent class {@link CommonSettings}) should be reordered (defaults to false).
+     * Indicates whether fields selected using the field selection methods (defined by the parent class {@link AbstractCommonSettings}) should be reordered (defaults to false).
      * <p>When disabled, each written record will contain values for all columns, in the order they are sent to the writer. Fields which were not selected will not be written but and the record will contain empty values.
      * <p>When enabled, each written record will contain values only for the selected columns. The values will be ordered according to the selection.
      *
@@ -218,7 +218,7 @@ public abstract class CommonWriterSettings<F extends Format> extends CommonSetti
     }
 
     /**
-     * Defines whether fields selected using the field selection methods (defined by the parent class {@link CommonSettings}) should be reordered (defaults to false).
+     * Defines whether fields selected using the field selection methods (defined by the parent class {@link AbstractCommonSettings}) should be reordered (defaults to false).
      * <p>When disabled, each written record will contain values for all columns, in the order they are sent to the writer. Fields which were not selected will not be written but and the record will contain empty values.
      * <p>When enabled, each written record will contain values only for the selected columns. The values will be ordered according to the selection.
      *

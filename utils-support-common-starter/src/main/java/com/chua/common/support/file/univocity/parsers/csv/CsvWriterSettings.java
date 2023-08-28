@@ -15,7 +15,7 @@
  ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.csv;
 
-import com.chua.common.support.file.univocity.parsers.common.CommonWriterSettings;
+import com.chua.common.support.file.univocity.parsers.common.AbstractCommonWriterSettings;
 import com.chua.common.support.file.univocity.parsers.common.Format;
 import com.chua.common.support.file.univocity.parsers.common.fields.*;
 
@@ -25,7 +25,7 @@ import java.util.Map;
 /**
  * This is the configuration class used by the CSV writer ({@link CsvWriter})
  *
- * <p>In addition to the configuration options provided by {@link CommonWriterSettings}, the CsvWriterSettings include:
+ * <p>In addition to the configuration options provided by {@link AbstractCommonWriterSettings}, the CsvWriterSettings include:
  *
  * <ul>
  * <li><b>emptyValue <i>(defaults to null)</i>:</b> Defines a replacement string to signify an empty value (which is not a null value)
@@ -37,9 +37,9 @@ import java.util.Map;
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
  * @see com.chua.common.support.file.univocity.parsers.csv.CsvWriter
  * @see com.chua.common.support.file.univocity.parsers.csv.CsvFormat
- * @see CommonWriterSettings
+ * @see AbstractCommonWriterSettings
  */
-public class CsvWriterSettings extends CommonWriterSettings<CsvFormat> {
+public class CsvWriterSettings extends AbstractCommonWriterSettings<CsvFormat> {
 
 	private boolean escapeUnquotedValues = false;
 	private boolean quoteAllFields = false;

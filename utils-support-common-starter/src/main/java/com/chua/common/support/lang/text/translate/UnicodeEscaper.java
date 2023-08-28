@@ -9,7 +9,7 @@ import java.io.Writer;
  *
  * @since 1.0
  */
-public class UnicodeEscaper extends CodePointTranslator {
+public class UnicodeEscaper extends AbstractCodePointTranslator {
 
     /**
      * Constructs a {@code UnicodeEscaper} above the specified value (exclusive).

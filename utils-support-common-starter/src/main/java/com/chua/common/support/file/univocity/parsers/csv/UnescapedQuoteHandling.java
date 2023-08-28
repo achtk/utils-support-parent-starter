@@ -17,8 +17,8 @@
 package com.chua.common.support.file.univocity.parsers.csv;
 
 
-import com.chua.common.support.file.univocity.parsers.common.CommonParserSettings;
-import com.chua.common.support.file.univocity.parsers.common.CommonSettings;
+import com.chua.common.support.file.univocity.parsers.common.AbstractCommonParserSettings;
+import com.chua.common.support.file.univocity.parsers.common.AbstractCommonSettings;
 import com.chua.common.support.file.univocity.parsers.common.TextParsingException;
 
 /**
@@ -31,7 +31,7 @@ import com.chua.common.support.file.univocity.parsers.common.TextParsingExceptio
  * @see com.chua.common.support.file.univocity.parsers.csv.CsvParserSettings
  * @see com.chua.common.support.file.univocity.parsers.csv.CsvFormat
  * @see com.chua.common.support.file.univocity.parsers.csv.CsvParser
- * @see CommonParserSettings
+ * @see AbstractCommonParserSettings
  */
 public enum UnescapedQuoteHandling {
 
@@ -57,7 +57,7 @@ public enum UnescapedQuoteHandling {
 
 	/**
 	 * If unescaped quotes are found in the input, the content parsed for the given value will be skipped
-	 * (until the next delimiter is found) and the value set in {@link CommonSettings#getNullValue()} will be produced instead.
+	 * (until the next delimiter is found) and the value set in {@link AbstractCommonSettings#getNullValue()} will be produced instead.
 	 */
 	SKIP_VALUE,
 

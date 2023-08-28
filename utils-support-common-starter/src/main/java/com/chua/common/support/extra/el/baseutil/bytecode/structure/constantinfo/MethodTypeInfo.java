@@ -3,7 +3,7 @@ package com.chua.common.support.extra.el.baseutil.bytecode.structure.constantinf
 import com.chua.common.support.constant.ConstantType;
 import com.chua.common.support.extra.el.baseutil.bytecode.util.BinaryData;
 
-public class MethodTypeInfo extends ConstantInfo
+public class MethodTypeInfo extends AbstractConstantInfo
 {
     /**
      * descriptor_index为CONSTANT_Utf8类型常量项的索引，里面存储了方法描述符的字符串
@@ -22,7 +22,7 @@ public class MethodTypeInfo extends ConstantInfo
     }
 
     @Override
-    public void resolve(ConstantInfo[] constant_pool)
+    public void resolve(AbstractConstantInfo[] constantPool)
     {
     }
 }

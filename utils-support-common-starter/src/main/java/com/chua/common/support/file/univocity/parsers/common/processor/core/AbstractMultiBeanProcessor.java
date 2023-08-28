@@ -1,19 +1,3 @@
-/*
- * Copyright (c) 2015. Univocity Software Pty Ltd
- * <p/>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p/>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p/>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.chua.common.support.file.univocity.parsers.common.processor.core;
 
 import com.chua.common.support.file.univocity.parsers.annotations.helpers.MethodFilter;
@@ -32,7 +16,7 @@ import java.util.Map;
  * <p>The class types passed to the constructor of this class must contain the annotations provided in {@link com.chua.common.support.file.univocity.parsers.annotations}.
  *
  * <p> For each row processed, one or more java bean instances of any given class will be created with their fields populated.
- * <p> Each individual instance will then be sent to the {@link AbstractMultiBeanProcessor#beanProcessed(Class, Object, Context)} method, where the user can access the
+ * <p> Each individual instance will then be sent to the {@link AbstractMultiBeanProcessor#beanProcessed(Class, Object, AbstractContext)} method, where the user can access the
  * beans parsed for each row.
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
@@ -40,7 +24,8 @@ import java.util.Map;
  * @see Processor
  * @see com.chua.common.support.file.univocity.parsers.common.processor.BeanProcessor
  */
-public abstract class AbstractMultiBeanProcessor<C extends Context> implements Processor<C>, ConversionProcessor {
+@SuppressWarnings("ALL")
+public abstract class AbstractMultiBeanProcessor<C extends AbstractContext> implements Processor<C>, ConversionProcessor {
 
 	private final AbstractBeanProcessor<?, C>[] beanProcessors;
 	private final Map<Class, AbstractBeanProcessor> processorMap = new HashMap<Class, AbstractBeanProcessor>();

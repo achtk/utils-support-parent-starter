@@ -41,5 +41,5 @@ public interface ISSLChannel {
    *
    * @return the ssl engine of this channel
    */
-  SSLEngine getSSLEngine();
+  SSLEngine getSslEngine();
 }

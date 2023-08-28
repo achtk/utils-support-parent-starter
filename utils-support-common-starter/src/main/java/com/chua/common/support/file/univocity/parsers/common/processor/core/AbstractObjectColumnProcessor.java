@@ -16,7 +16,7 @@
 package com.chua.common.support.file.univocity.parsers.common.processor.core;
 
 import com.chua.common.support.file.univocity.parsers.common.AbstractParser;
-import com.chua.common.support.file.univocity.parsers.common.Context;
+import com.chua.common.support.file.univocity.parsers.common.AbstractContext;
 import com.chua.common.support.file.univocity.parsers.conversions.Conversion;
 
 import java.util.List;
@@ -41,7 +41,7 @@ import java.util.Map;
  * @see Conversion
  * @see AbstractObjectProcessor
  */
-public abstract class AbstractObjectColumnProcessor<T extends Context> extends AbstractObjectProcessor<T> implements ColumnReader<Object> {
+public abstract class AbstractObjectColumnProcessor<T extends AbstractContext> extends AbstractObjectProcessor<T> implements ColumnReader<Object> {
 
 	private final ColumnSplitter<Object> splitter;
 

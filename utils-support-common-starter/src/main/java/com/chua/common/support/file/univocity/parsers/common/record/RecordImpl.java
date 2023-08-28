@@ -13,14 +13,14 @@
 
 package com.chua.common.support.file.univocity.parsers.common.record;
 
-import com.chua.common.support.file.univocity.parsers.common.Context;
+import com.chua.common.support.file.univocity.parsers.common.AbstractContext;
 import com.chua.common.support.file.univocity.parsers.conversions.Conversion;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
 
-class RecordImpl<C extends Context> implements Record {
+class RecordImpl<C extends AbstractContext> implements Record {
 
 	private final String[] data;
 	private final RecordMetaDataImpl<C> metaData;

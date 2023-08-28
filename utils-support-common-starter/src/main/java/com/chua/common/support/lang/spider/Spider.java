@@ -268,7 +268,7 @@ public class Spider implements Runnable, Task {
     public void run() {
         checkRunningStat();
         initComponent();
-        logger.info("Spider {} started!", getUUID());
+        logger.info("Spider {} started!", getUuid());
         // interrupt won't be necessarily detected
         while (!Thread.currentThread().isInterrupted() && stat.get() == STAT_RUNNING) {
             Request poll = scheduler.poll(this);
@@ -322,7 +322,7 @@ public class Spider implements Runnable, Task {
         if (destroyWhenExit) {
             close();
         }
-        logger.info("Spider {} closed! {} pages downloaded.", getUUID(), pageCount.get());
+        logger.info("Spider {} closed! {} pages downloaded.", getUuid(), pageCount.get());
     }
 
     /**
@@ -574,8 +574,8 @@ public class Spider implements Runnable, Task {
     }
 
     private void signalNewUrl() {
+        newUrlLock.lock();
         try {
-            newUrlLock.lock();
             newUrlCondition.signalAll();
         } finally {
             newUrlLock.unlock();
@@ -588,9 +588,9 @@ public class Spider implements Runnable, Task {
 
     public void stop() {
         if (stat.compareAndSet(STAT_RUNNING, STAT_STOPPED)) {
-            logger.info("Spider " + getUUID() + " stop success!");
+            logger.info("Spider " + getUuid() + " stop success!");
         } else {
-            logger.info("Spider " + getUUID() + " stop fail!");
+            logger.info("Spider " + getUuid() + " stop fail!");
         }
     }
 
@@ -732,7 +732,7 @@ public class Spider implements Runnable, Task {
     }
 
     @Override
-    public String getUUID() {
+    public String getUuid() {
         if (uuid != null) {
             return uuid;
         }

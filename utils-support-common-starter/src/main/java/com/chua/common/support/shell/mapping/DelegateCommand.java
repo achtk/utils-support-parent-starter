@@ -14,7 +14,7 @@ public class DelegateCommand {
 
     public static final int COMMAND_LIMIT = 60;
 
-    DiagnosticCommandMBean diagnosticCommandMBean = ManagementFactoryHelper.getDiagnosticCommandMBean();
+    DiagnosticCommandMBean diagnosticCommand = ManagementFactoryHelper.getDiagnosticCommandMBean();
 
 //    @ShellMapping(value = {"view"}, describe = "预览")
 //    public ShellResult view(
@@ -40,7 +40,7 @@ public class DelegateCommand {
     @ShellMapping(value = "jstack", describe = "jstack")
     public ShellResult stack() {
         try {
-            Object res = diagnosticCommandMBean.invoke("threadPrint", new Object[]{new String[]{}}, new String[]{String[].class.getName()});
+            Object res = diagnosticCommand.invoke("threadPrint", new Object[]{new String[]{}}, new String[]{String[].class.getName()});
             return ShellResult.text(res.toString());
         } catch (Exception ignored) {
         }

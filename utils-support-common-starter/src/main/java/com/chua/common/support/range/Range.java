@@ -129,31 +129,31 @@ public final class Range<C extends Comparable> implements Predicate<C>, Serializ
         return null;
     }
 
-    static class LowerBoundFn implements Function<Range, Cut> {
+    static class LowerBoundFn implements Function<Range, AbstractCut> {
         static final LowerBoundFn INSTANCE = new LowerBoundFn();
 
         @Override
-        public Cut apply(Range range) {
+        public AbstractCut apply(Range range) {
             return range.lowerBound;
         }
     }
 
-    static class UpperBoundFn implements Function<Range, Cut> {
+    static class UpperBoundFn implements Function<Range, AbstractCut> {
         static final UpperBoundFn INSTANCE = new UpperBoundFn();
 
         @Override
-        public Cut apply(Range range) {
+        public AbstractCut apply(Range range) {
             return range.upperBound;
         }
     }
 
     @SuppressWarnings("unchecked")
-    static <C extends Comparable<?>> Function<Range<C>, Cut<C>> lowerBoundFn() {
+    static <C extends Comparable<?>> Function<Range<C>, AbstractCut<C>> lowerBoundFn() {
         return (Function) LowerBoundFn.INSTANCE;
     }
 
     @SuppressWarnings("unchecked")
-    static <C extends Comparable<?>> Function<Range<C>, Cut<C>> upperBoundFn() {
+    static <C extends Comparable<?>> Function<Range<C>, AbstractCut<C>> upperBoundFn() {
         return (Function) UpperBoundFn.INSTANCE;
     }
 
@@ -161,7 +161,7 @@ public final class Range<C extends Comparable> implements Predicate<C>, Serializ
         return (Ordering) RangeLexOrdering.INSTANCE;
     }
 
-    static <C extends Comparable<?>> Range<C> create(Cut<C> lowerBound, Cut<C> upperBound) {
+    static <C extends Comparable<?>> Range<C> create(AbstractCut<C> lowerBound, AbstractCut<C> upperBound) {
         return new Range<>(lowerBound, upperBound);
     }
 
@@ -175,7 +175,7 @@ public final class Range<C extends Comparable> implements Predicate<C>, Serializ
      * @since 14.0
      */
     public static <C extends Comparable<?>> Range<C> open(C lower, C upper) {
-        return create(Cut.aboveValue(lower), Cut.belowValue(upper));
+        return create(AbstractCut.aboveValue(lower), AbstractCut.belowValue(upper));
     }
 
     /**
@@ -187,7 +187,7 @@ public final class Range<C extends Comparable> implements Predicate<C>, Serializ
      * @since 14.0
      */
     public static <C extends Comparable<?>> Range<C> closed(C lower, C upper) {
-        return create(Cut.belowValue(lower), Cut.aboveValue(upper));
+        return create(AbstractCut.belowValue(lower), AbstractCut.aboveValue(upper));
     }
 
     /**
@@ -199,7 +199,7 @@ public final class Range<C extends Comparable> implements Predicate<C>, Serializ
      * @since 14.0
      */
     public static <C extends Comparable<?>> Range<C> closedOpen(C lower, C upper) {
-        return create(Cut.belowValue(lower), Cut.belowValue(upper));
+        return create(AbstractCut.belowValue(lower), AbstractCut.belowValue(upper));
     }
 
     /**
@@ -211,7 +211,7 @@ public final class Range<C extends Comparable> implements Predicate<C>, Serializ
      * @since 14.0
      */
     public static <C extends Comparable<?>> Range<C> openClosed(C lower, C upper) {
-        return create(Cut.aboveValue(lower), Cut.aboveValue(upper));
+        return create(AbstractCut.aboveValue(lower), AbstractCut.aboveValue(upper));
     }
 
     /**
@@ -227,10 +227,10 @@ public final class Range<C extends Comparable> implements Predicate<C>, Serializ
         checkNotNull(lowerType);
         checkNotNull(upperType);
 
-        Cut<C> lowerBound =
-                (lowerType == BoundType.OPEN) ? Cut.aboveValue(lower) : Cut.belowValue(lower);
-        Cut<C> upperBound =
-                (upperType == BoundType.OPEN) ? Cut.belowValue(upper) : Cut.aboveValue(upper);
+        AbstractCut<C> lowerBound =
+                (lowerType == BoundType.OPEN) ? AbstractCut.aboveValue(lower) : AbstractCut.belowValue(lower);
+        AbstractCut<C> upperBound =
+                (upperType == BoundType.OPEN) ? AbstractCut.belowValue(upper) : AbstractCut.aboveValue(upper);
         return create(lowerBound, upperBound);
     }
 
@@ -240,7 +240,7 @@ public final class Range<C extends Comparable> implements Predicate<C>, Serializ
      * @since 14.0
      */
     public static <C extends Comparable<?>> Range<C> lessThan(C endpoint) {
-        return create(Cut.<C>belowAll(), Cut.belowValue(endpoint));
+        return create(AbstractCut.<C>belowAll(), AbstractCut.belowValue(endpoint));
     }
 
     /**
@@ -249,7 +249,7 @@ public final class Range<C extends Comparable> implements Predicate<C>, Serializ
      * @since 14.0
      */
     public static <C extends Comparable<?>> Range<C> atMost(C endpoint) {
-        return create(Cut.<C>belowAll(), Cut.aboveValue(endpoint));
+        return create(AbstractCut.<C>belowAll(), AbstractCut.aboveValue(endpoint));
     }
 
     /**
@@ -275,7 +275,7 @@ public final class Range<C extends Comparable> implements Predicate<C>, Serializ
      * @since 14.0
      */
     public static <C extends Comparable<?>> Range<C> greaterThan(C endpoint) {
-        return create(Cut.aboveValue(endpoint), Cut.<C>aboveAll());
+        return create(AbstractCut.aboveValue(endpoint), AbstractCut.<C>aboveAll());
     }
 
     /**
@@ -284,7 +284,7 @@ public final class Range<C extends Comparable> implements Predicate<C>, Serializ
      * @since 14.0
      */
     public static <C extends Comparable<?>> Range<C> atLeast(C endpoint) {
-        return create(Cut.belowValue(endpoint), Cut.<C>aboveAll());
+        return create(AbstractCut.belowValue(endpoint), AbstractCut.<C>aboveAll());
     }
 
     /**
@@ -304,7 +304,7 @@ public final class Range<C extends Comparable> implements Predicate<C>, Serializ
         }
     }
 
-    private static final Range<Comparable> ALL = new Range<>(Cut.belowAll(), Cut.aboveAll());
+    private static final Range<Comparable> ALL = new Range<>(AbstractCut.belowAll(), AbstractCut.aboveAll());
 
     /**
      * Returns a range that contains every value of type {@code C}.
@@ -355,22 +355,22 @@ public final class Range<C extends Comparable> implements Predicate<C>, Serializ
         return closed(min, max);
     }
 
-    final Cut<C> lowerBound;
-    final Cut<C> upperBound;
+    final AbstractCut<C> lowerBound;
+    final AbstractCut<C> upperBound;
 
-    private Range(Cut<C> lowerBound, Cut<C> upperBound) {
+    private Range(AbstractCut<C> lowerBound, AbstractCut<C> upperBound) {
         this.lowerBound = checkNotNull(lowerBound);
         this.upperBound = checkNotNull(upperBound);
         if (lowerBound.compareTo(upperBound) > 0
-                || lowerBound == Cut.<C>aboveAll()
-                || upperBound == Cut.<C>belowAll()) {
+                || lowerBound == AbstractCut.<C>aboveAll()
+                || upperBound == AbstractCut.<C>belowAll()) {
             throw new IllegalArgumentException("Invalid range: " + toString(lowerBound, upperBound));
         }
     }
 
     /** Returns {@code true} if this range has a lower endpoint. */
     public boolean hasLowerBound() {
-        return lowerBound != Cut.belowAll();
+        return lowerBound != AbstractCut.belowAll();
     }
 
     /**
@@ -396,7 +396,7 @@ public final class Range<C extends Comparable> implements Predicate<C>, Serializ
 
     /** Returns {@code true} if this range has an upper endpoint. */
     public boolean hasUpperBound() {
-        return upperBound != Cut.aboveAll();
+        return upperBound != AbstractCut.aboveAll();
     }
 
     /**
@@ -559,8 +559,8 @@ public final class Range<C extends Comparable> implements Predicate<C>, Serializ
         } else if (lowerCmp <= 0 && upperCmp >= 0) {
             return connectedRange;
         } else {
-            Cut<C> newLower = (lowerCmp >= 0) ? lowerBound : connectedRange.lowerBound;
-            Cut<C> newUpper = (upperCmp <= 0) ? upperBound : connectedRange.upperBound;
+            AbstractCut<C> newLower = (lowerCmp >= 0) ? lowerBound : connectedRange.lowerBound;
+            AbstractCut<C> newUpper = (upperCmp <= 0) ? upperBound : connectedRange.upperBound;
 
             // create() would catch this, but give a confusing error message
             checkArgument(
@@ -633,8 +633,8 @@ public final class Range<C extends Comparable> implements Predicate<C>, Serializ
         } else if (lowerCmp >= 0 && upperCmp <= 0) {
             return other;
         } else {
-            Cut<C> newLower = (lowerCmp <= 0) ? lowerBound : other.lowerBound;
-            Cut<C> newUpper = (upperCmp >= 0) ? upperBound : other.upperBound;
+            AbstractCut<C> newLower = (lowerCmp <= 0) ? lowerBound : other.lowerBound;
+            AbstractCut<C> newUpper = (upperCmp >= 0) ? upperBound : other.upperBound;
             return create(newLower, newUpper);
         }
     }
@@ -665,8 +665,8 @@ public final class Range<C extends Comparable> implements Predicate<C>, Serializ
      */
     public Range<C> canonical(DiscreteDomain<C> domain) {
         checkNotNull(domain);
-        Cut<C> lower = lowerBound.canonical(domain);
-        Cut<C> upper = upperBound.canonical(domain);
+        AbstractCut<C> lower = lowerBound.canonical(domain);
+        AbstractCut<C> upper = upperBound.canonical(domain);
         return (lower == lowerBound && upper == upperBound) ? this : create(lower, upper);
     }
 
@@ -701,7 +701,7 @@ public final class Range<C extends Comparable> implements Predicate<C>, Serializ
         return toString(lowerBound, upperBound);
     }
 
-    private static String toString(Cut<?> lowerBound, Cut<?> upperBound) {
+    private static String toString(AbstractCut<?> lowerBound, AbstractCut<?> upperBound) {
         StringBuilder sb = new StringBuilder(16);
         lowerBound.describeAsLowerBound(sb);
         sb.append("..");

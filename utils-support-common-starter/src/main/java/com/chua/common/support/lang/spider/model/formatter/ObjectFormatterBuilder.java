@@ -23,7 +23,7 @@ public class ObjectFormatterBuilder {
         if (fieldClazz.equals(String.class) || List.class.isAssignableFrom(fieldClazz)) {
             return null;
         }
-        Class<? extends ObjectFormatter> formatterClass = ObjectFormatters.get(BasicTypeFormatter.detectBasicClass(fieldClazz));
+        Class<? extends ObjectFormatter> formatterClass = ObjectFormatters.get(BaseBasicTypeFormatter.detectBasicClass(fieldClazz));
         if (formatterClass == null) {
             throw new IllegalStateException("Can't find formatter for field " + field.getName() + " of type " + fieldClazz);
         }

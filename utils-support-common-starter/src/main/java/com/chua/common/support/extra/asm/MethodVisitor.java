@@ -122,7 +122,7 @@ public abstract class MethodVisitor {
    *     'name' parameters passed to the methods of this annotation visitor are ignored. Moreover,
    *     exacly one visit method must be called on this annotation visitor, followed by visitEnd.
    */
-  public AnnotationVisitor visitAnnotationDefault() {
+  public AbstractAnnotationVisitor visitAnnotationDefault() {
     if (mv != null) {
       return mv.visitAnnotationDefault();
     }
@@ -137,7 +137,7 @@ public abstract class MethodVisitor {
    * @return a visitor to visit the annotation values, or {@literal null} if this visitor is not
    *     interested in visiting this annotation.
    */
-  public AnnotationVisitor visitAnnotation(final String descriptor, final boolean visible) {
+  public AbstractAnnotationVisitor visitAnnotation(final String descriptor, final boolean visible) {
     if (mv != null) {
       return mv.visitAnnotation(descriptor, visible);
     }
@@ -160,7 +160,7 @@ public abstract class MethodVisitor {
    * @return a visitor to visit the annotation values, or {@literal null} if this visitor is not
    *     interested in visiting this annotation.
    */
-  public AnnotationVisitor visitTypeAnnotation(
+  public AbstractAnnotationVisitor visitTypeAnnotation(
       final int typeRef, final TypePath typePath, final String descriptor, final boolean visible) {
     if (api < Opcodes.ASM5) {
       throw new UnsupportedOperationException(REQUIRES_ASM5);
@@ -205,7 +205,7 @@ public abstract class MethodVisitor {
    * @return a visitor to visit the annotation values, or {@literal null} if this visitor is not
    *     interested in visiting this annotation.
    */
-  public AnnotationVisitor visitParameterAnnotation(
+  public AbstractAnnotationVisitor visitParameterAnnotation(
       final int parameter, final String descriptor, final boolean visible) {
     if (mv != null) {
       return mv.visitParameterAnnotation(parameter, descriptor, visible);
@@ -622,7 +622,7 @@ public abstract class MethodVisitor {
    * @return a visitor to visit the annotation values, or {@literal null} if this visitor is not
    *     interested in visiting this annotation.
    */
-  public AnnotationVisitor visitInsnAnnotation(
+  public AbstractAnnotationVisitor visitInsnAnnotation(
       final int typeRef, final TypePath typePath, final String descriptor, final boolean visible) {
     if (api < Opcodes.ASM5) {
       throw new UnsupportedOperationException(REQUIRES_ASM5);
@@ -670,7 +670,7 @@ public abstract class MethodVisitor {
    * @return a visitor to visit the annotation values, or {@literal null} if this visitor is not
    *     interested in visiting this annotation.
    */
-  public AnnotationVisitor visitTryCatchAnnotation(
+  public AbstractAnnotationVisitor visitTryCatchAnnotation(
       final int typeRef, final TypePath typePath, final String descriptor, final boolean visible) {
     if (api < Opcodes.ASM5) {
       throw new UnsupportedOperationException(REQUIRES_ASM5);
@@ -727,7 +727,7 @@ public abstract class MethodVisitor {
    * @return a visitor to visit the annotation values, or {@literal null} if this visitor is not
    *     interested in visiting this annotation.
    */
-  public AnnotationVisitor visitLocalVariableAnnotation(
+  public AbstractAnnotationVisitor visitLocalVariableAnnotation(
       final int typeRef,
       final TypePath typePath,
       final Label[] start,
