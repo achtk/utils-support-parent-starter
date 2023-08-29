@@ -9,7 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.chua.common.support.constant.CommonConstant.SYMBOL_BLANK_CHAR;
+import static com.chua.common.support.constant.CommonConstant.*;
+import static com.chua.common.support.constant.NumberConstant.*;
 import static com.chua.common.support.constant.RegexConstant.NUMBERS;
 
 /**
@@ -38,6 +39,11 @@ public class CardUtils {
      * 台湾身份首字母对应数字
      */
     private static final Map<Character, Integer> TW_FIRST_CODE = new HashMap<>();
+    private static final String TW_CARD = "^[a-zA-Z][0-9]{9}$";
+    private static final String AM_CARD = "^[157][0-9]{6}\\(?[0-9A-Z]\\)?$";
+    private static final String XG_CARD = "^[A-Z]{1,2}[0-9]{6}\\(?[0-9A]\\)?$";
+    public static final String A = "A";
+    public static final String D = "D";
 
     static {
         CITY_CODES.put("11", "北京");
@@ -122,7 +128,7 @@ public class CardUtils {
             String birthday = idCard.substring(6, 12);
             DateTime dateTime = DateTime.of(birthday);
             int sYear = dateTime.getYear();
-            if (sYear > 2000) {
+            if (sYear > TWE_THOUSAND) {
                 // 2000年之后不存在15位身份证号，此处用于修复此问题的判断
                 sYear -= 100;
             }
@@ -262,7 +268,8 @@ public class CardUtils {
         }
 
         //校验生日
-        if (!Validator.isBirthday(idcard.substring(6, 14))) {
+        int v14 = 14;
+        if (!Validator.isBirthday(idcard.substring(SIX, v14))) {
             return false;
         }
 
@@ -316,16 +323,16 @@ public class CardUtils {
         }
         String[] info = new String[3];
         String card = idcard.replaceAll("[()]", "");
-        if (card.length() != 8 && card.length() != 9 && idcard.length() != 10) {
+        if (card.length() != EIGHT && card.length() != NIGHT && idcard.length() != TEN) {
             return null;
         }
         // 台湾
-        if (idcard.matches("^[a-zA-Z][0-9]{9}$")) {
+        if (idcard.matches(TW_CARD)) {
             info[0] = "台湾";
             char char2 = idcard.charAt(1);
-            if ('1' == char2) {
+            if (ONE_CHAR == char2) {
                 info[1] = "M";
-            } else if ('2' == char2) {
+            } else if (TWE_CHAR == char2) {
                 info[1] = "F";
             } else {
                 info[1] = "N";
@@ -334,12 +341,12 @@ public class CardUtils {
             }
             info[2] = isValidTwCard(idcard) ? "true" : "false";
             // 澳门
-        } else if (idcard.matches("^[157][0-9]{6}\\(?[0-9A-Z]\\)?$")) {
+        } else if (idcard.matches(AM_CARD)) {
             info[0] = "澳门";
             info[1] = "N";
             info[2] = "true";
             // 香港
-        } else if (idcard.matches("^[A-Z]{1,2}[0-9]{6}\\(?[0-9A]\\)?$")) {
+        } else if (idcard.matches(XG_CARD)) {
             info[0] = "香港";
             info[1] = "N";
             info[2] = isValidHkCard(idcard) ? "true" : "false";
@@ -356,7 +363,7 @@ public class CardUtils {
      * @return 验证码是否符合
      */
     public static boolean isValidTwCard(String idcard) {
-        if (null == idcard || idcard.length() != 10) {
+        if (null == idcard || idcard.length() != TEN) {
             return false;
         }
         final Integer iStart = TW_FIRST_CODE.get(idcard.charAt(0));
@@ -392,7 +399,7 @@ public class CardUtils {
     public static boolean isValidHkCard(String idcard) {
         String card = idcard.replaceAll("[()]", "");
         int sum;
-        if (card.length() == 9) {
+        if (card.length() == NIGHT) {
             sum = (Character.toUpperCase(card.charAt(0)) - 55) * 9 + (Character.toUpperCase(card.charAt(1)) - 55) * 8;
             card = card.substring(1, 9);
         } else {
@@ -408,7 +415,7 @@ public class CardUtils {
             sum = sum + Integer.parseInt(String.valueOf(c)) * iflag;
             iflag--;
         }
-        if ("A".equalsIgnoreCase(end)) {
+        if (A.equalsIgnoreCase(end)) {
             sum += 10;
         } else {
             sum += Integer.parseInt(end);

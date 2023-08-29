@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
+import static com.chua.common.support.constant.NumberConstant.EIGHT;
+import static com.chua.common.support.constant.NumberConstant.TWE;
 import static com.chua.common.support.constant.RegexConstant.CREDIT_CODE;
 
 
@@ -104,15 +106,16 @@ public class CreditCodeUtils {
 
 
         //
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < TWE; i++) {
             int num = RandomUtils.randomInt(BASE_CODE_ARRAY.length - 1);
             buf.append(Character.toUpperCase(BASE_CODE_ARRAY[num]));
         }
-        for (int i = 2; i < 8; i++) {
+        for (int i = TWE; i < EIGHT; i++) {
             int num = RandomUtils.randomInt(10);
             buf.append(BASE_CODE_ARRAY[num]);
         }
-        for (int i = 8; i < 17; i++) {
+        int v17 = 17;
+        for (int i = EIGHT; i < v17; i++) {
             int num = RandomUtils.randomInt(BASE_CODE_ARRAY.length - 1);
             buf.append(BASE_CODE_ARRAY[num]);
         }
@@ -130,7 +133,8 @@ public class CreditCodeUtils {
     private static int getParityBit(CharSequence creditCode) {
         int sum = 0;
         Integer codeIndex;
-        for (int i = 0; i < 17; i++) {
+        int v17 = 17;
+        for (int i = 0; i < v17; i++) {
             codeIndex = CODE_INDEX_MAP.get(creditCode.charAt(i));
             if (null == codeIndex) {
                 return -1;

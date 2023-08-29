@@ -6,6 +6,8 @@ import com.chua.common.support.utils.Preconditions;
 
 import java.util.*;
 
+import static com.chua.common.support.constant.NumberConstant.*;
+
 /**
  * <p>
  * Utility functions for
@@ -153,19 +155,19 @@ public final class GeoHash {
         Point centre = decodeHash(hash);
 
         if (Direction.RIGHT.equals(direction)) {
-            if (Math.abs(centre.longitude() + widthDegrees(hash.length()) / 2 - 180) < PRECISION) {
+            if (Math.abs(centre.longitude() + widthDegrees(hash.length()) / NUM_2 - NUM_180) < PRECISION) {
                 return encodeHash(centre.latitude(), -180, hash.length());
             }
         } else if (Direction.LEFT.equals(direction)) {
-            if (Math.abs(centre.longitude() - widthDegrees(hash.length()) / 2 + 180) < PRECISION) {
+            if (Math.abs(centre.longitude() - widthDegrees(hash.length()) / NUM_2 + NUM_180) < PRECISION) {
                 return encodeHash(centre.latitude(), 180, hash.length());
             }
         } else if (Direction.TOP.equals(direction)) {
-            if (Math.abs(centre.latitude() + widthDegrees(hash.length()) / 2 - 90) < PRECISION) {
+            if (Math.abs(centre.latitude() + widthDegrees(hash.length()) / NUM_2 - NUM_90) < PRECISION) {
                 return encodeHash(centre.latitude(), centre.longitude() + 180, hash.length());
             }
         } else {
-            if (Math.abs(centre.latitude() - widthDegrees(hash.length()) / 2 + 90) < PRECISION) {
+            if (Math.abs(centre.latitude() - widthDegrees(hash.length()) / NUM_2 + NUM_90) < PRECISION) {
                 return encodeHash(centre.latitude(), centre.longitude() + 180, hash.length());
             }
         }
@@ -326,7 +328,7 @@ public final class GeoHash {
      */
     static String fromLongToString(long hash) {
         int length = (int) (hash & 0xf);
-        if (length > 12 || length < 1) {
+        if (length > NUM_12 || length < 1) {
             throw new IllegalArgumentException("invalid long geohash " + hash);
         }
         char[] geohash = new char[length];
@@ -390,7 +392,7 @@ public final class GeoHash {
         for (int i = 0; i < geohash.length(); i++) {
             char c = geohash.charAt(i);
             int cd = BASE32.indexOf(c);
-            for (int j = 0; j < 5; j++) {
+            for (int j = 0; j < NUM_5; j++) {
                 int mask = BITS[j];
                 if (isEven) {
                     refineInterval(lon, cd, mask);
@@ -437,7 +439,7 @@ public final class GeoHash {
         double minLat = -90.0, maxLat = 90;
         double minLon = -180.0, maxLon = 180.0;
 
-        for (int bits = 0; bits < MAX_HASH_LENGTH * 5; bits++) {
+        for (int bits = 0; bits < MAX_HASH_LENGTH * NUM_5; bits++) {
             if (isEven) {
                 double mid = (minLon + maxLon) / 2;
                 if (topLeftLon >= mid) {
@@ -589,7 +591,7 @@ public final class GeoHash {
         if (diff < 0) {
             bottomRightLon += 360;
             diff = bottomRightLon - topLeftLon;
-        } else if (diff > 360) {
+        } else if (diff > NUM_360) {
             topLeftLon = -180;
             bottomRightLon = 180;
             diff = 360;
@@ -651,7 +653,7 @@ public final class GeoHash {
      */
     private static double calculateHeightDegrees(int n) {
         double a;
-        if (n % 2 == 0) {
+        if (n % NUM_2 == 0) {
             a = 0;
         } else {
             a = -0.5;
@@ -698,7 +700,7 @@ public final class GeoHash {
      */
     private static double calculateWidthDegrees(int n) {
         double a;
-        if (n % 2 == 0) {
+        if (n % NUM_2 == 0) {
             a = -1;
         } else {
             a = -0.5;
@@ -800,7 +802,7 @@ public final class GeoHash {
         if (d < 0) {
             return -to180(Math.abs(d));
         } else {
-            if (d > 180) {
+            if (d > NUM_180) {
                 long n = Math.round(Math.floor((d + 180) / 360.0));
                 return d - n * 360;
             } else {

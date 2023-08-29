@@ -3,9 +3,10 @@ package com.chua.common.support.lang.math;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 
-import static com.chua.common.support.constant.NumberConstant.TWE;
+import static com.chua.common.support.constant.NumberConstant.*;
 import static com.chua.common.support.utils.Preconditions.*;
 import static java.lang.Double.*;
+import static java.lang.Math.min;
 import static java.lang.Math.*;
 import static java.math.RoundingMode.HALF_EVEN;
 import static java.math.RoundingMode.HALF_UP;
@@ -230,7 +231,7 @@ public class LongMath {
    
     public static long pow(long b, int k) {
         checkNonNegative("exponent", k);
-        if (-2 <= b && b <= TWE) {
+        if (-NUM_2 <= b && b <= TWE) {
             switch ((int) b) {
                 case 0:
                     return (k == 0) ? 1 : 0;
@@ -565,7 +566,7 @@ public class LongMath {
    
     public static long checkedPow(long b, int k) {
         checkNonNegative("exponent", k);
-        if (b >= -2 & b <= TWE) {
+        if (b >= -NUM_2 & b <= TWE) {
             switch ((int) b) {
                 case 0:
                     return (k == 0) ? 1 : 0;
@@ -679,7 +680,7 @@ public class LongMath {
     
     public static long saturatedPow(long b, int k) {
         checkNonNegative("exponent", k);
-        if (b >= -2 & b <= TWE) {
+        if (b >= -NUM_2 & b <= TWE) {
             switch ((int) b) {
                 case 0:
                     return (k == 0) ? 1 : 0;
@@ -968,7 +969,7 @@ public class LongMath {
             checkNonNegative("n", n);
             return false;
         }
-        if (n < 66) {
+        if (n < NUM_66) {
             // Encode all primes less than 66 into mask without 0 and 1.
             long mask =
                     (1L << (2 - TWE))
@@ -993,13 +994,13 @@ public class LongMath {
             return ((mask >> ((int) n - TWE)) & 1) != 0;
         }
 
-        if ((SIEVE_30 & (1 << (n % 30))) != 0) {
+        if ((SIEVE_30 & (1 << (n % NUM_30))) != 0) {
             return false;
         }
-        if (n % 7 == 0 || n % 11 == 0 || n % 13 == 0) {
+        if (n % NUM_7 == 0 || n % NUM_11 == 0 || n % NUM_13 == 0) {
             return false;
         }
-        if (n < 17 * 17) {
+        if (n < NUM_17 * NUM_17) {
             return true;
         }
 

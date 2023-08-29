@@ -5,8 +5,8 @@ import com.chua.common.support.protocol.ftp.server.api.FtpCommandInfo.ArgsArrayC
 import com.chua.common.support.protocol.ftp.server.api.FtpCommandInfo.Command;
 import com.chua.common.support.protocol.ftp.server.api.FtpCommandInfo.NoArgsCommand;
 import com.chua.common.support.protocol.ftp.server.api.FtpFileSystem;
-import com.chua.common.support.protocol.ftp.server.api.FtpUserAuthenticator;
 import com.chua.common.support.protocol.ftp.server.api.FtpResponseException;
+import com.chua.common.support.protocol.ftp.server.api.FtpUserAuthenticator;
 import com.chua.common.support.protocol.ftp.server.handler.FtpConnectionHandler;
 import com.chua.common.support.protocol.ftp.server.handler.FtpFileHandler;
 
@@ -20,8 +20,12 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.*;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_MINUS_CHAR;
+import static com.chua.common.support.constant.NumberConstant.NUM_2;
+
 /**
  * Represents a FTP user connected to the server
+ *
  * @author Guilherme Chaguri
  */
 public class FtpConnection implements Closeable {
@@ -199,7 +203,7 @@ public class FtpConnection implements Closeable {
         }
 
         try {
-            if(response.charAt(0) == '-') {
+            if (response.charAt(0) == SYMBOL_MINUS_CHAR) {
                 writer.write(code + response + "\r\n");
             } else {
                 writer.write(code + " " + response + "\r\n");
@@ -511,9 +515,9 @@ public class FtpConnection implements Closeable {
 
         String option = opts[0].toUpperCase();
 
-        if(!options.containsKey(option)) {
+        if (!options.containsKey(option)) {
             sendResponse(501, "No option found");
-        } else if(opts.length < 2) {
+        } else if (opts.length < NUM_2) {
             sendResponse(200, options.get(option));
         } else {
             options.put(option, opts[1].toUpperCase());

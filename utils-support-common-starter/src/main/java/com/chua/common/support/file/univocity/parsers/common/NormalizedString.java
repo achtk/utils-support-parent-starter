@@ -18,6 +18,7 @@ package com.chua.common.support.file.univocity.parsers.common;
 import java.io.Serializable;
 import java.util.*;
 
+import static com.chua.common.support.constant.NumberConstant.NUM_2;
 import static com.chua.common.support.file.univocity.parsers.common.ArgumentUtils.*;
 
 /**
@@ -58,7 +59,7 @@ public final class NormalizedString implements Serializable, Comparable<Normaliz
 
 	private NormalizedString(String string) {
 		String trimmed = string.trim();
-		if (trimmed.length() > 2 && trimmed.charAt(0) == '\'' && trimmed.charAt(trimmed.length() - 1) == '\'') {
+		if (trimmed.length() > NUM_2 && trimmed.charAt(0) == '\'' && trimmed.charAt(trimmed.length() - 1) == '\'') {
 			this.original = string.substring(1, string.length() - 1);
 			this.normalized = original;
 			this.hashCode = normalize(original).hashCode();

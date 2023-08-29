@@ -21,6 +21,8 @@ import com.chua.common.support.mysql.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Collection;
 
+import static com.chua.common.support.constant.NumberConstant.NUM_2;
+
 /**
  * @author <a href="mailto:stanley.shyiko@gmail.com">Stanley Shyiko</a>
  */
@@ -69,7 +71,7 @@ public class DumpBinaryLogGtidCommand implements Command {
 
     private static byte[] hexToByteArray(String uuid) {
         byte[] b = new byte[uuid.length() / 2];
-        for (int i = 0, j = 0; j < uuid.length(); j += 2) {
+        for (int i = 0, j = 0; j < uuid.length(); j += NUM_2) {
             b[i++] = (byte) Integer.parseInt(uuid.charAt(j) + "" + uuid.charAt(j + 1), 16);
         }
         return b;

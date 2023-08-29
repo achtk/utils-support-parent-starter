@@ -19,6 +19,10 @@ public class DdlFormatter implements Formatter {
      * Singleton access
      */
     public static final DdlFormatter INSTANCE = new DdlFormatter();
+    private static final String CREATE_TABLE = "create table";
+    private static final String CREATE = "create";
+    private static final String ALTER_TABLE = "alter table";
+    private static final String COMMENT_ON = "comment on";
 
     @Override
     public String format(String sql) {
@@ -27,13 +31,13 @@ public class DdlFormatter implements Formatter {
         }
         sql = sql.trim();
 
-        if (sql.toLowerCase(Locale.ROOT).startsWith("create table")) {
+        if (sql.toLowerCase(Locale.ROOT).startsWith(CREATE_TABLE)) {
             return formatCreateTable(sql);
-        } else if (sql.toLowerCase(Locale.ROOT).startsWith("create")) {
+        } else if (sql.toLowerCase(Locale.ROOT).startsWith(CREATE)) {
             return sql;
-        } else if (sql.toLowerCase(Locale.ROOT).startsWith("alter table")) {
+        } else if (sql.toLowerCase(Locale.ROOT).startsWith(ALTER_TABLE)) {
             return formatAlterTable(sql);
-        } else if (sql.toLowerCase(Locale.ROOT).startsWith("comment on")) {
+        } else if (sql.toLowerCase(Locale.ROOT).startsWith(COMMENT_ON)) {
             return formatCommentOn(sql);
         } else {
             return INITIAL_LINE + sql;

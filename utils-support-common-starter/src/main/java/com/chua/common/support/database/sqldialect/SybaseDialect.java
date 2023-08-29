@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.chua.common.support.constant.NumberConstant.NUM_2;
+
 /**
  * sybase 数据库分页方言
  *
@@ -82,8 +84,8 @@ public class SybaseDialect extends OracleDialect {
         indexList.addAll(selectIndex);
         indexList.addAll(fromIndex);
         indexList.sort(Comparator.naturalOrder());
-        
-        if (indexList.size() < 2) {
+
+        if (indexList.size() < NUM_2) {
             return -1;
         }
         

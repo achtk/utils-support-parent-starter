@@ -1,5 +1,7 @@
 package com.chua.common.support.constant;
 
+import com.chua.common.support.protocol.server.Constant;
+
 import static com.chua.common.support.constant.CommonConstant.SYMBOL_DOT;
 
 /**
@@ -7,7 +9,7 @@ import static com.chua.common.support.constant.CommonConstant.SYMBOL_DOT;
  *
  * @author CH
  */
-public class NameConstant {
+public class NameConstant implements Constant {
     /**
      * with
      */
@@ -85,6 +87,14 @@ public class NameConstant {
      * null
      */
     public static final String NULL = "null";
+    /**
+     * now
+     */
+    public static final String NOW = "now";
+    /**
+     * null
+     */
+    public static final String NULL_CHAR = "'null'";
     /**
      * 处理占位符对象属性
      */
@@ -176,6 +186,12 @@ public class NameConstant {
      */
     public static final String SYMBOL_WRAPPER_PARAM = "MPGENVAL";
     public static final String SYMBOL_WRAPPER_PARAM_MIDDLE = ".paramNameValuePairs" + SYMBOL_DOT;
+
+    /**
+     * master
+     */
+
+    public static final String MASTER = "master";
     /**
      * order by
      */
@@ -247,4 +263,44 @@ public class NameConstant {
      * "SITE"
      */
     public static final String SITE = "SITE";
+    /**
+     * .gz
+     */
+    public static final String SUFFIX_GZ = ".gz";
+    /**
+     * .z
+     */
+    public static final String SUFFIX_Z = ".z";
+    /**
+     * .xml
+     */
+    public static final String SUFFIX_XML = ".xml";
+    /**
+     * xml
+     */
+    public static final String XML = "xml";
+    /**
+     * UPDATE
+     */
+    public static final String UPDATE = "UPDATE";
+    /**
+     * INSERT
+     */
+    public static final String INSERT = "INSERT";
+    /**
+     * union
+     */
+    public static final String UNION = "union";
+    /**
+     * name
+     */
+    public static final String NAME = "name";
+    /**
+     * pom.xml
+     */
+    public static final String POM = "pom.xml";
+    /**
+     * aes
+     */
+    public static final String AES = "aes";
 }

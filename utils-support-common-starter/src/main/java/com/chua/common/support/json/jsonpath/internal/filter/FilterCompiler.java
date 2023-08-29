@@ -1,5 +1,7 @@
 package com.chua.common.support.json.jsonpath.internal.filter;
 
+import com.chua.common.support.constant.CommonConstant;
+import com.chua.common.support.constant.NameConstant;
 import com.chua.common.support.json.jsonpath.Filter;
 import com.chua.common.support.json.jsonpath.InvalidPathException;
 import com.chua.common.support.json.jsonpath.Predicate;
@@ -10,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.chua.common.support.constant.CommonConstant.*;
+import static com.chua.common.support.constant.NumberConstant.NUM_3;
 import static com.chua.common.support.json.jsonpath.internal.filter.ValueNodes.*;
 
 /**
@@ -61,18 +65,18 @@ public class FilterCompiler {
     private FilterCompiler(String filterString) {
         filter = new CharacterIndex(filterString);
         filter.trim();
-        if (!filter.currentCharIs('[') || !filter.lastCharIs(']')) {
+        if (!filter.currentCharIs(SYMBOL_LEFT_SQUARE_BRACKET_CHAR) || !filter.lastCharIs(SYMBOL_RIGHT_SQUARE_BRACKET_CHAR)) {
             throw new InvalidPathException("Filter must start with '[' and end with ']'. " + filterString);
         }
         filter.incrementPosition(1);
         filter.decrementEndPosition(1);
         filter.trim();
-        if (!filter.currentCharIs('?')) {
+        if (!filter.currentCharIs(SYMBOL_QUESTION_CHAR)) {
             throw new InvalidPathException("Filter must start with '[?' and end with ']'. " + filterString);
         }
         filter.incrementPosition(1);
         filter.trim();
-        if (!filter.currentCharIs('(') || !filter.lastCharIs(')')) {
+        if (!filter.currentCharIs(SYMBOL_LEFT_BRACKETS_CHAR) || !filter.lastCharIs(SYMBOL_RIGHT_BRACKETS_CHAR)) {
             throw new InvalidPathException("Filter must start with '[?(' and end with ')]'. " + filterString);
         }
     }
@@ -232,7 +236,7 @@ public class FilterCompiler {
             throw new InvalidPathException("Expected boolean literal");
         }
         CharSequence logicalOperator = filter.subSequence(begin, end + 1);
-        if (!"||".equals(logicalOperator) && !"&&".equals(logicalOperator)) {
+        if (!SYMBOL_DOUBLE_PIPE.equals(logicalOperator) && !SYMBOL_DOUBLE_AND.equals(logicalOperator)) {
             throw new InvalidPathException("Expected logical operator");
         }
         filter.incrementPosition(logicalOperator.length());
@@ -261,9 +265,9 @@ public class FilterCompiler {
 
     private NullNode readNullLiteral() {
         int begin = filter.position();
-        if (filter.currentChar() == NULL && filter.inBounds(filter.position() + 3)) {
+        if (filter.currentChar() == NULL && filter.inBounds(filter.position() + NUM_3)) {
             CharSequence nullValue = filter.subSequence(filter.position(), filter.position() + 4);
-            if ("null".equals(nullValue.toString())) {
+            if (NameConstant.NULL.equals(nullValue.toString())) {
                 logger.trace("NullLiteral from {} to {} -> [{}]", begin, filter.position() + 3, nullValue);
                 filter.incrementPosition(nullValue.length());
                 return ValueNode.createNullNode();
@@ -360,7 +364,7 @@ public class FilterCompiler {
             throw new InvalidPathException("Expected boolean literal");
         }
         CharSequence boolValue = filter.subSequence(begin, end + 1);
-        if (!"true".equals(boolValue) && !"false".equals(boolValue)) {
+        if (!CommonConstant.TRUE.equals(boolValue) && !CommonConstant.FALSE.equals(boolValue)) {
             throw new InvalidPathException("Expected boolean literal");
         }
         filter.incrementPosition(boolValue.length());
@@ -452,7 +456,7 @@ public class FilterCompiler {
         @Override
         public String toString() {
             String predicateString = predicate.toString();
-            if (predicateString.startsWith("(")) {
+            if (predicateString.startsWith(SYMBOL_LEFT_BRACKETS)) {
                 return "[?" + predicateString + "]";
             } else {
                 return "[?(" + predicateString + ")]";

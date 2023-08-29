@@ -9,6 +9,8 @@ import com.chua.common.support.utils.StringUtils;
 
 import java.io.InputStream;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_LEFT_SQUARE_BRACKET;
+
 /**
  * fastjson
  *
@@ -17,7 +19,7 @@ import java.io.InputStream;
 public class FastjsonJsonProvider extends AbstractJsonProvider {
     @Override
     public Object parse(String json) throws InvalidJsonException {
-        if (StringUtils.trim(json).startsWith("[")) {
+        if (StringUtils.trim(json).startsWith(SYMBOL_LEFT_SQUARE_BRACKET)) {
             return JSON.parseArray(json);
         }
         return JSON.parseObject(json);

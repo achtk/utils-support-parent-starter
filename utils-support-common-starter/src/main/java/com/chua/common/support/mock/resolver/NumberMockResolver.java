@@ -1,10 +1,10 @@
 package com.chua.common.support.mock.resolver;
 
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.lang.expression.parser.ExpressionParser;
 import com.chua.common.support.mock.Mock;
 import com.chua.common.support.mock.MockValue;
 import com.chua.common.support.range.Range;
-import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.utils.CardUtils;
 import com.chua.common.support.utils.NumberUtils;
 import com.chua.common.support.utils.RandomUtils;
@@ -12,6 +12,7 @@ import com.chua.common.support.utils.StringUtils;
 
 import static com.chua.common.support.constant.CommonConstant.SYMBOL_LEFT_BRACKETS;
 import static com.chua.common.support.constant.CommonConstant.SYMBOL_LEFT_SQUARE_BRACKET;
+import static com.chua.common.support.constant.NumberConstant.NUM_3;
 
 /**
  * 日期时间
@@ -33,7 +34,7 @@ public class NumberMockResolver extends DateMockResolver {
             return String.valueOf(NumberUtils.parseNumber(range.random(), Integer.class));
         }
 
-        if(base.length() > 3) {
+        if (base.length() > NUM_3) {
             base = mock.symbol() == Mock.Symbol.AFTER ? "0" : "100";
         }
 

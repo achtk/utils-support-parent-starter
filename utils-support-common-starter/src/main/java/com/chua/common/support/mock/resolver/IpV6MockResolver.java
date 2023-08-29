@@ -9,6 +9,8 @@ import com.chua.common.support.utils.RandomUtils;
 
 import java.util.List;
 
+import static com.chua.common.support.constant.NumberConstant.NUM_8;
+
 /**
  * ipv6
  *
@@ -30,7 +32,7 @@ public class IpV6MockResolver implements MockResolver {
      */
     public static String getRandom() {
         List<String> numbers = ImmutableBuilder.<String>builder().newArrayList();
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < NUM_8; i++) {
             numbers.add(Integer.toHexString(RandomUtils.randomInt(0, 65535)));
         }
         return Joiner.on(":").join(numbers);

@@ -27,6 +27,8 @@ import java.util.Calendar;
 import java.util.Map;
 import java.util.TimeZone;
 
+import static com.chua.common.support.constant.NumberConstant.FOUR;
+
 /**
  * Whole class is basically a mix of <a href="https://code.google.com/p/open-replicator">open-replicator</a>'s
  * AbstractRowEventParser and MySQLUtils. Main purpose here is to ease rows deserialization.<p>
@@ -466,13 +468,13 @@ public abstract class AbstractRowsEventDataDeserializer<T extends EventData> imp
         int ipSize = (ipDigits << 2) + DIG_TO_BYTES[ipDigitsX];
         int offset = DIG_TO_BYTES[ipDigitsX];
         BigDecimal ip = offset > 0 ? BigDecimal.valueOf(bigEndianInteger(value, 0, offset)) : BigDecimal.ZERO;
-        for (; offset < ipSize; offset += 4) {
+        for (; offset < ipSize; offset += FOUR) {
             int i = bigEndianInteger(value, offset, 4);
             ip = ip.movePointRight(DIG_PER_DEC).add(BigDecimal.valueOf(i));
         }
         int shift = 0;
         BigDecimal fp = BigDecimal.ZERO;
-        for (; shift + DIG_PER_DEC <= scale; shift += DIG_PER_DEC, offset += 4) {
+        for (; shift + DIG_PER_DEC <= scale; shift += DIG_PER_DEC, offset += FOUR) {
             int i = bigEndianInteger(value, offset, 4);
             fp = fp.add(BigDecimal.valueOf(i).movePointLeft(shift + DIG_PER_DEC));
         }

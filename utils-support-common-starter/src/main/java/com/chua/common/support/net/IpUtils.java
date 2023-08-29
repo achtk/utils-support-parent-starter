@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import static com.chua.common.support.constant.CommonConstant.*;
+import static com.chua.common.support.constant.NumberConstant.*;
 
 /**
  * 地址处理
@@ -64,7 +65,7 @@ public class IpUtils {
 
         if (!sourceAddress.contains(SYMBOL_ASTERISK) && sourceAddress.equals(SYMBOL_MINS)) {
             String[] split = sourceAddress.split(SYMBOL_COMMA, 2);
-            if (split.length != 2) {
+            if (split.length != NUM_2) {
                 return false;
             }
             String start = split[0];
@@ -179,10 +180,10 @@ public class IpUtils {
      * @return int
      */
     public static int parse(char c) {
-        if (c >= 'a') {
+        if (c >= LETTER_LOWERCASE_A) {
             return (c - 'a' + 10) & 0x0f;
         }
-        if (c >= 'A') {
+        if (c >= LETTER_A) {
             return (c - 'A' + 10) & 0x0f;
         }
         return (c - '0') & 0x0f;
@@ -195,7 +196,7 @@ public class IpUtils {
      * @return 檢驗
      */
     private static Ipv4Info getIpv4Info(byte[] ipv4Bytes) {
-        if (ipv4Bytes.length != 4) {
+        if (ipv4Bytes.length != NUM_4) {
             throw new IllegalArgumentException("ipv4 must be 4 bytes length");
         }
 
@@ -222,7 +223,7 @@ public class IpUtils {
      * @return string
      */
     public static String ipv4BytesToString(byte[] ipv4Bytes, int offset, int length) {
-        if (length != 4) {
+        if (length != NUM_4) {
             throw new IllegalArgumentException("ipv4 must be 4 bytes length");
         }
         StringBuilder builder = new StringBuilder();
@@ -245,9 +246,9 @@ public class IpUtils {
      * @return string
      */
     public static String ipBytesToString(byte[] ipBytes, int offset, int length) {
-        if (length == 4) {
+        if (length == NUM_4) {
             return ipv4BytesToString(ipBytes, offset, length);
-        } else if (length == 16) {
+        } else if (length == NUM_16) {
             return getShortIpv6(ipBytes, offset, length);
         } else {
             throw new IllegalArgumentException("Illegal ip length");
@@ -261,7 +262,7 @@ public class IpUtils {
      * @return 檢驗
      */
     public static IPv6Info getIpv6Info(byte[] ipv6Bytes) {
-        if (ipv6Bytes.length != 16) {
+        if (ipv6Bytes.length != NUM_16) {
             throw new IllegalArgumentException("ipv6 must be 16 bytes length");
         }
 
@@ -286,7 +287,7 @@ public class IpUtils {
         StringBuilder builder = new StringBuilder();
         int endPosition = offset + length;
         int zeroCount = 0;
-        for (int i = offset; i < endPosition; i += 2) {
+        for (int i = offset; i < endPosition; i += NUM_2) {
             int i1 = ipv6Bytes[i] & 0xFF;
             int i2 = ipv6Bytes[i + 1] & 0xFF;
 
@@ -331,7 +332,7 @@ public class IpUtils {
         }
 
         String ip = builder.toString();
-        if (ip.endsWith(":") && !ip.endsWith("::")) {
+        if (ip.endsWith(SYMBOL_COLON) && !ip.endsWith(SYMBOL_DOUBLE_COLON)) {
             ip = ip.substring(0, ip.lastIndexOf(':'));
         }
         return ip;
@@ -383,7 +384,7 @@ public class IpUtils {
      */
     public static String parseIpBytes(byte[] ipBytes, int offset, int length) {
         ByteBuffer byteBuffer = ByteBuffer.wrap(ipBytes, offset, length);
-        if (length == 4) {
+        if (length == NUM_4) {
             long l = Integer.toUnsignedLong(byteBuffer.getInt());
             return long2Ip(l);
         } else {
@@ -419,17 +420,17 @@ public class IpUtils {
      */
     public static String getFullIpv6(String ipv6) {
         //入参为::时，此时全为0
-        if ("::".equals(ipv6)) {
+        if (SYMBOL_DOUBLE_COLON.equals(ipv6)) {
             return "0000:0000:0000:0000:0000:0000:0000:0000";
         }
         //入参已::结尾时，直接在后缀加0
-        if (ipv6.endsWith("::")) {
+        if (ipv6.endsWith(SYMBOL_DOUBLE_COLON)) {
             ipv6 += "0";
         }
         String[] arrs = ipv6.split(SYMBOL_COLON);
         StringBuilder symbol = new StringBuilder("::");
         int arrleng = arrs.length;
-        while (arrleng < 8) {
+        while (arrleng < NUM_8) {
             symbol.append(SYMBOL_COLON_CHAR);
             arrleng++;
         }
@@ -437,7 +438,7 @@ public class IpUtils {
         StringBuilder fullip = new StringBuilder();
         for (String ip : ipv6.split(SYMBOL_COLON)) {
             StringBuilder ipBuilder = new StringBuilder(ip);
-            while (ipBuilder.length() < 4) {
+            while (ipBuilder.length() < NUM_4) {
                 ipBuilder.insert(0, "0");
             }
             ip = ipBuilder.toString();
@@ -456,10 +457,10 @@ public class IpUtils {
         ret[0] = 0;
         int ib = 16;
         boolean comFlag = false;
-        if (ipv6.startsWith(":")) {
+        if (ipv6.startsWith(SYMBOL_COLON)) {
             ipv6 = ipv6.substring(1);
         }
-        String[] groups = ipv6.split(":");
+        String[] groups = ipv6.split(SYMBOL_COLON);
         for (int ig = groups.length - 1; ig > -1; ig--) {
             if (groups[ig].contains(".")) {
                 // 出现ipv4混合模式

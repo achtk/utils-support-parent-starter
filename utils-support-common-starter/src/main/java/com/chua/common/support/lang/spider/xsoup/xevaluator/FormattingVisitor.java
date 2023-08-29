@@ -7,6 +7,7 @@ import com.chua.common.support.jsoup.select.NodeVisitor;
 import com.chua.common.support.utils.StringUtils;
 
 import static com.chua.common.support.constant.CommonConstant.SYMBOL_BLANK;
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_NEWLINE;
 import static com.chua.common.support.constant.NameConstant.*;
 
 /**
@@ -15,20 +16,22 @@ import static com.chua.common.support.constant.NameConstant.*;
  */
 public class FormattingVisitor implements NodeVisitor {
     private static final int MAX_WIDTH = 80;
+    static final String[] TEXT_TAG = new String[]{"p", "h1", "h2", "h3", "h4", "h5", "tr"};
+    protected static final String[] BR_TAG = new String[]{"br", "dd", "dt", "p", "h1", "h2", "h3", "h4", "h5"};
     private int width = 0;
-    private final StringBuilder accum = new StringBuilder(); 
+    private final StringBuilder accum = new StringBuilder();
 
-    
+
     @Override
     public void head(Node node, int depth) {
         String name = node.nodeName();
         if (node instanceof TextNode) {
-            append(((TextNode) node).text()); 
+            append(((TextNode) node).text());
         } else if (LI_TAG.equals(name)) {
             append("\n * ");
         } else if (DT_TAG.equals(name)) {
             append("  ");
-        } else if (StringUtils.in(name, "p", "h1", "h2", "h3", "h4", "h5", "tr")) {
+        } else if (StringUtils.in(name, TEXT_TAG)) {
             append("\n");
         }
     }
@@ -37,7 +40,7 @@ public class FormattingVisitor implements NodeVisitor {
     @Override
     public void tail(Node node, int depth) {
         String name = node.nodeName();
-        if (StringUtils.in(name, "br", "dd", "dt", "p", "h1", "h2", "h3", "h4", "h5")) {
+        if (StringUtils.in(name, BR_TAG)) {
             append("\n");
         } else if (A_TAG.equals(name)) {
             append(String.format(" <%s>", node.absUrl("href")));
@@ -46,8 +49,8 @@ public class FormattingVisitor implements NodeVisitor {
 
     
     private void append(String text) {
-        if (text.startsWith("\n")) {
-            width = 0; 
+        if (text.startsWith(SYMBOL_NEWLINE)) {
+            width = 0;
         }
         boolean b = SYMBOL_BLANK.equals(text) && (accum.length() == 0 || StringUtils.in(accum.substring(accum.length()
                 - 1), " ", "\n"));

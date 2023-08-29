@@ -3,6 +3,9 @@ package com.chua.common.support.ansi;
 
 import java.util.Locale;
 
+import static com.chua.common.support.constant.NumberConstant.ONE_HUNDRED;
+import static com.chua.common.support.constant.NumberConstant.TEN;
+
 /**
  * Generates ANSI encoded output, automatically attempting to detect if the terminal
  * supports ANSI.
@@ -40,7 +43,8 @@ public class AnsiOutput {
 
     public static void help() {
         //基本色
-        for (int i = 0; i <= 15; i++) {
+        int v15 = 15;
+        for (int i = 0; i <= v15; i++) {
             if (i % 8 == 0) {
                 System.out.println();
             }
@@ -51,7 +55,8 @@ public class AnsiOutput {
         }
         System.out.print(ENCODE_START + "38;5;15" + ENCODE_END + fix(15, "38;5;"));
         //色谱
-        for (int i = 16; i <= 231; i++) {
+        int v16 = 16, v231 = 231, v232 = 232, v255 = 255;
+        for (int i = v16; i <= v231; i++) {
             if (i % 8 == 0) {
                 System.out.println();
             }
@@ -64,7 +69,7 @@ public class AnsiOutput {
             }
         }
         //灰度
-        for (int i = 232; i <= 255; i++) {
+        for (int i = v232; i <= v255; i++) {
             if (i % 8 == 0) {
                 System.out.println();
             }
@@ -76,10 +81,10 @@ public class AnsiOutput {
     }
 
     static String fix(int i, String s) {
-        if (i < 10) {
+        if (i < TEN) {
             return "  " + i + "(" + s + ")  ";
         }
-        if (i < 100) {
+        if (i < ONE_HUNDRED) {
             return "  " + i + "(" + s + ") ";
         }
         return " " + i + "(" + s + ") ";

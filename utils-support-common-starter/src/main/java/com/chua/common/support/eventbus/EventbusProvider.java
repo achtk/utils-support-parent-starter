@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 public class EventbusProvider implements InitializingAware, AutoCloseable {
 
     private static final Log log = Log.getLogger(EventbusProvider.class);
+    private static final CharSequence CGLIB$$ = "CGLIB$$";
 
     private Profile profile;
 
@@ -93,7 +94,7 @@ public class EventbusProvider implements InitializingAware, AutoCloseable {
     public void register(Object entity) {
         Class<?> aClass = entity.getClass();
         String typeName = aClass.getTypeName();
-        if (typeName.contains("CGLIB$$")) {
+        if (typeName.contains(CGLIB$$)) {
             aClass = ObjectUtils.defaultIfNull(ClassUtils.forName(typeName.substring(0, typeName.indexOf("$$"))), aClass);
         }
 

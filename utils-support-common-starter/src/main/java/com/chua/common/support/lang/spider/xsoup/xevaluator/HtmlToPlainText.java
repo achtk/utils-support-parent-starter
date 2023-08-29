@@ -8,6 +8,11 @@ import com.chua.common.support.jsoup.select.NodeTraversor;
 import com.chua.common.support.jsoup.select.NodeVisitor;
 import com.chua.common.support.utils.StringUtils;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_N;
+import static com.chua.common.support.constant.NameConstant.A_TAG;
+import static com.chua.common.support.lang.spider.xsoup.xevaluator.FormattingVisitor.BR_TAG;
+import static com.chua.common.support.lang.spider.xsoup.xevaluator.FormattingVisitor.TEXT_TAG;
+
 /**
  * HTML to plain-text. This example program demonstrates the use of jsoup to convert HTML input to lightly-formatted
  * plain-text. That is divergent from the general goal of jsoup's .text() methods, which is to get clean data from a
@@ -55,7 +60,7 @@ public class HtmlToPlainText {
                 append("\n * ");
             } else if ("dt".equals(name)) {
                 append("  ");
-            } else if (StringUtils.in(name, "p", "h1", "h2", "h3", "h4", "h5", "tr")) {
+            } else if (StringUtils.in(name, TEXT_TAG)) {
                 append("\n");
             }
         }
@@ -64,17 +69,17 @@ public class HtmlToPlainText {
         @Override
         public void tail(Node node, int depth) {
             String name = node.nodeName();
-            if (StringUtils.in(name, "br", "dd", "dt", "p", "h1", "h2", "h3", "h4", "h5")) {
+            if (StringUtils.in(name, BR_TAG)) {
                 append("\n");
-            } else if ("a".equals(name)) {
+            } else if (A_TAG.equals(name)) {
                 append(String.format(" <%s>", node.absUrl("href")));
             }
         }
 
         
         private void append(String text) {
-            if (text.startsWith("\n")) {
-                width = 0; 
+            if (text.startsWith(SYMBOL_N)) {
+                width = 0;
             }
             boolean b = " ".equals(text) &&
                     (accum.length() == 0 || StringUtils.in(accum.substring(accum.length() - 1), " ", "\n"));

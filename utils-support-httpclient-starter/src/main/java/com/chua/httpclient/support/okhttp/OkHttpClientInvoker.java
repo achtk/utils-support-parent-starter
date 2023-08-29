@@ -11,6 +11,7 @@ import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.IoUtils;
 import com.chua.common.support.utils.ObjectUtils;
 import com.ejlchina.data.Array;
+import com.ejlchina.data.ListMap;
 import com.ejlchina.data.Mapper;
 import com.ejlchina.okhttps.Process;
 import com.ejlchina.okhttps.*;
@@ -133,7 +134,10 @@ public class OkHttpClientInvoker extends AbstractHttpClientInvoker implements Au
         builder.content(httpResult.getBody());
 
         HttpHeader header = new HttpHeader();
-        header.putList(httpResult.getHeaders().toMultimap());
+        ListMap<String> stringListMap = httpResult.allHeaders();
+        for (Map.Entry<String, String> entry : stringListMap.entrySet()) {
+            header.put(entry.getKey(), entry.getValue());
+        }
 
         builder.httpHeader(header);
         return builder.build();

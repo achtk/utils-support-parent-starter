@@ -11,14 +11,16 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+
+import static com.chua.common.support.constant.NumberConstant.NUM_5;
+
 /**
  * 基础类
+ *
  * @author CH
  */
-public class OperatorResultUtil
-{
-    public static CalculateNode aggregate(List<CalculateNode> list, String el, int offset)
-    {
+public class OperatorResultUtil {
+    public static CalculateNode aggregate(List<CalculateNode> list, String el, int offset) {
         checkNonSymbol(list, el, offset);
         Deque<CalculateNode> result = processNonZeroPriorityOperator(list, el, offset);
         result = processQuestionOperator(result);
@@ -63,17 +65,13 @@ public class OperatorResultUtil
     private static Deque<CalculateNode> processNonZeroPriorityOperator(List<CalculateNode> list, String el, int offset)
     {
         Deque<CalculateNode> result = new LinkedList<>(list);
-        for (int i = 5; i >= 1; i--)
-        {
-            int                  priority = i;
-            Deque<CalculateNode> stack    = new LinkedList<>();
+        for (int i = NUM_5; i >= 1; i--) {
+            int priority = i;
+            Deque<CalculateNode> stack = new LinkedList<>();
             result.stream().forEach(node -> {
-                if (stack.isEmpty())
-                {
+                if (stack.isEmpty()) {
                     stack.addLast(node);
-                }
-                else if (Operator.isOperator(stack.peekLast().token()) && ((Operator) stack.peekLast().token()).getPriority() == priority)
-                {
+                } else if (Operator.isOperator(stack.peekLast().token()) && ((Operator) stack.peekLast().token()).getPriority() == priority) {
                     CalculateNode operator = stack.pollLast();
                     CalculateNode leftNode = stack.pollLast();
                     if (Operator.isOperator(leftNode.token()) == false && Operator.isOperator(node.token()) == false)

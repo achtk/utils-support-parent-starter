@@ -1,31 +1,9 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 package com.chua.common.support.extra.asm;
+
+import static com.chua.common.support.constant.NumberConstant.*;
 
 /**
  * The constant pool entries, the BootstrapMethods attribute entries and the (ASM specific) type
@@ -244,7 +222,7 @@ final class SymbolTable {
     
     byte[] inputBytes = classReader.classFileBuffer;
     int currentAttributeOffset = classReader.getFirstAttributeOffset();
-    for (int i = classReader.readUnsignedShort(currentAttributeOffset - 2); i > 0; --i) {
+    for (int i = classReader.readUnsignedShort(currentAttributeOffset - NUM_2); i > 0; --i) {
       String attributeName = classReader.readUtf8(currentAttributeOffset, charBuffer);
       if (Constants.BOOTSTRAP_METHODS.equals(attributeName)) {
         bootstrapMethodCount = classReader.readUnsignedShort(currentAttributeOffset + 6);
@@ -404,7 +382,7 @@ final class SymbolTable {
    * @return the given entry
    */
   private Entry put(final Entry entry) {
-    if (entryCount > (entries.length * 3) / 4) {
+    if (entryCount > (entries.length * NUM_3) / NUM_4) {
       int currentCapacity = entries.length;
       int newCapacity = currentCapacity * 2 + 1;
       Entry[] newEntries = new Entry[newCapacity];

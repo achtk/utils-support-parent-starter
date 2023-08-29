@@ -20,8 +20,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.*;
 
-import static com.chua.common.support.constant.CommonConstant.SYMBOL_HASH;
 import static com.chua.common.support.constant.CommonConstant.SYMBOL_HASH_CHAR;
+import static com.chua.common.support.constant.NumberConstant.*;
 import static java.awt.image.BufferedImage.SCALE_SMOOTH;
 import static java.awt.image.BufferedImage.TYPE_INT_RGB;
 
@@ -455,10 +455,10 @@ public class ImageUtils {
         }
 
         try {
-            if (rows <= 0 || rows > 20) {
+            if (rows <= 0 || rows > NUM_20) {
                 rows = 2;
             }
-            if (cols <= 0 || cols > 20) {
+            if (cols <= 0 || cols > NUM_20) {
                 cols = 2;
             }
             // 读取源图像
@@ -1884,7 +1884,7 @@ public class ImageUtils {
      */
     public static String toHex(int r, int g, int b) {
         // rgb 小于 255
-        if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {
+        if (r < 0 || r > NUM_255 || g < 0 || g > NUM_255 || b < 0 || b > NUM_255) {
             throw new IllegalArgumentException("RGB must be 0~255!");
         }
         return String.format("#%02X%02X%02X", r, g, b);
@@ -1973,7 +1973,7 @@ public class ImageUtils {
         } else {
             // rgb值
             final List<String> rgb = StringUtils.splitList(colorName, ',');
-            if (3 == rgb.size()) {
+            if (THREE == rgb.size()) {
                 final Integer r = toInt(rgb.get(0));
                 final Integer g = toInt(rgb.get(1));
                 final Integer b = toInt(rgb.get(2));
@@ -2847,48 +2847,48 @@ public class ImageUtils {
 
         boolean b1 = (h >= 0 && h <= 10) || (h >= 156 && h <= 180);
         if (b1) {
-            if (s >= 43 && s <= 255 && v >= 46 && v <= 255) {
+            if (s >= NUM_43 && s <= NUM_255 && v >= NUM_46 && v <= NUM_255) {
                 return Color.RED;
             }
         }
 
 
-        if (h >= 11 && h <= 25 && s >= 43 && s <= 255 && v >= 46 && v <= 255) {
+        if (h >= NUM_11 && h <= NUM_25 && s >= NUM_43 && s <= NUM_255 && v >= NUM_46 && v <= NUM_255) {
             return Color.ORANGE;
         }
 
 
-        if (h >= 26 && h <= 34 && s >= 43 && s <= 255 && v >= 46 && v <= 255) {
+        if (h >= NUM_26 && h <= NUM_34 && s >= NUM_43 && s <= NUM_255 && v >= NUM_46 && v <= NUM_255) {
             return Color.YELLOW;
         }
 
-        if (h >= 35 && h <= 77 && s >= 43 && s <= 255 && v >= 46 && v <= 255) {
+        if (h >= NUM_35 && h <= NUM_77 && s >= NUM_43 && s <= NUM_255 && v >= NUM_46 && v <= NUM_255) {
             return Color.GREEN;
         }
 
-        if (h >= 78 && h <= 99 && s >= 43 && s <= 255 && v >= 46 && v <= 255) {
+        if (h >= NUM_78 && h <= NUM_99 && s >= NUM_43 && s <= NUM_255 && v >= NUM_46 && v <= NUM_255) {
             return Color.CYAN;
         }
 
-        if (h >= 100 && h <= 124 && s >= 43 && s <= 255 && v >= 46 && v <= 255) {
+        if (h >= NUM_100 && h <= NUM_124 && s >= NUM_43 && s <= NUM_255 && v >= NUM_46 && v <= NUM_255) {
             return Color.BLUE;
         }
 
-        if (h >= 125 && h <= 155 && s >= 43 && s <= 255 && v >= 46 && v <= 255) {
+        if (h >= NUM_125 && h <= NUM_155 && s >= NUM_43 && s <= NUM_255 && v >= NUM_46 && v <= NUM_255) {
             return Color.MAGENTA;
         }
 
         boolean b = Double.isNaN(h) || (h >= 0 && h <= 180);
         if (b) {
-            if (s >= 0 && s <= 255 && v >= 0 && v <= 46) {
+            if (s >= 0 && s <= NUM_255 && v >= 0 && v <= NUM_46) {
                 return Color.BLACK;
             }
 
-            if (s >= 0 && s <= 88 && v >= 46 && v <= 220) {
+            if (s >= 0 && s <= NUM_88 && v >= NUM_46 && v <= NUM_220) {
                 return Color.GRAY;
             }
 
-            if (s >= 0 && s <= 43 && v >= 221 && v <= 255) {
+            if (s >= 0 && s <= NUM_43 && v >= NUM_221 && v <= NUM_255) {
                 return Color.WHITE;
             }
         }

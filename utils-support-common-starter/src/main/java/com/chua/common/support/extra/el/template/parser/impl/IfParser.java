@@ -11,6 +11,8 @@ import com.chua.common.support.extra.el.template.parser.Parser;
 
 import java.util.Deque;
 
+import static com.chua.common.support.constant.CommonConstant.*;
+
 /**
  * 基础类
  *
@@ -25,11 +27,11 @@ public class IfParser extends Parser {
         }
         int origin = offset;
         offset = skipWhiteSpace(offset, sentence);
-        if (getChar(offset, sentence) != 'i' || getChar(offset + 1, sentence) != 'f') {
+        if (getChar(offset, sentence) != LETTER_LOWERCASE_I || getChar(offset + 1, sentence) != LETTER_LOWERCASE_F) {
             return next.scan(sentence, origin, executions, template, cache);
         }
         offset = skipWhiteSpace(offset + 2, sentence);
-        if ('(' != getChar(offset, sentence)) {
+        if (SYMBOL_LEFT_BRACKETS_CHAR != getChar(offset, sentence)) {
             throw new IllegalFormatException("IF条件没有以(开始进行包围", sentence.substring(0, offset));
         }
         int leftBracketIndex = offset;

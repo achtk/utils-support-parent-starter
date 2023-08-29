@@ -47,6 +47,9 @@ public interface QueryBuilder extends NameHelper {
 
     /**
      * direct values indexed for {@code keys} String collection
+     *
+     * @param keys key
+     * @return QueryFunction
      */
     default QueryFunction<Store, String> get(Collection<String> keys) {
         return keys.stream().map(this::get).reduce(QueryFunction::add).get();

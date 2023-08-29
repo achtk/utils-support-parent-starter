@@ -1,9 +1,12 @@
 package com.chua.common.support.mock.resolver;
 
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.lang.expression.parser.ExpressionParser;
 import com.chua.common.support.mock.MockValue;
-import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.utils.RandomUtils;
+
+import static com.chua.common.support.constant.NumberConstant.NUM_2;
+import static com.chua.common.support.constant.NumberConstant.THREE;
 
 /**
  * ipv4
@@ -25,9 +28,9 @@ public class IpV4PrivateMockResolver implements MockResolver {
      */
     public static String getRandom() {
         int x = RandomUtils.randomInt(1, 101);
-        if (x % 2 == 0) {
+        if (x % NUM_2 == 0) {
             return "10." + RandomUtils.randomInt(0, 256) + "." + RandomUtils.randomInt(0, 256) + "." + RandomUtils.randomInt(0, 256);
-        } else if (x % 3 == 0) {
+        } else if (x % THREE == 0) {
             return "172." + RandomUtils.randomInt(16, 32) + "." + RandomUtils.randomInt(0, 256) + "." + RandomUtils.randomInt(0, 256);
         } else {
             return "192.168." + RandomUtils.randomInt(0, 256) + "." + RandomUtils.randomInt(0, 256);

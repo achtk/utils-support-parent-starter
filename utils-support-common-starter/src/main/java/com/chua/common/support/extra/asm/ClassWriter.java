@@ -1,31 +1,9 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 package com.chua.common.support.extra.asm;
+
+import static com.chua.common.support.constant.NumberConstant.XFFFF;
 
 /**
  * A {@link ClassVisitor} that generates a corresponding ClassFile structure, as defined in the Java
@@ -33,8 +11,8 @@ package com.chua.common.support.extra.asm;
  * scratch", or with one or more {@link ClassReader} and adapter {@link ClassVisitor} to generate a
  * modified class from one or more existing Java classes.
  *
- * @see <a href="https:
  * @author Eric Bruneton
+ * @see <a href="https:
  */
 public class ClassWriter extends ClassVisitor {
 
@@ -313,7 +291,7 @@ public class ClassWriter extends ClassVisitor {
         this.interfaces[i] = symbolTable.addConstantClass(interfaces[i]).index;
       }
     }
-    if (compute == MethodWriter.COMPUTE_MAX_STACK_AND_LOCAL && (version & 0xFFFF) >= Opcodes.V1_7) {
+    if (compute == MethodWriter.COMPUTE_MAX_STACK_AND_LOCAL && (version & XFFFF) >= Opcodes.V1_7) {
       compute = MethodWriter.COMPUTE_MAX_STACK_AND_LOCAL_FROM_FRAMES;
     }
   }
@@ -524,7 +502,7 @@ public class ClassWriter extends ClassVisitor {
       size += 10;
       symbolTable.addConstantUtf8(Constants.ENCLOSING_METHOD);
     }
-    if ((accessFlags & Opcodes.ACC_SYNTHETIC) != 0 && (version & 0xFFFF) < Opcodes.V1_5) {
+    if ((accessFlags & Opcodes.ACC_SYNTHETIC) != 0 && (version & XFFFF) < Opcodes.V1_5) {
       ++attributesCount;
       size += 6;
       symbolTable.addConstantUtf8(Constants.SYNTHETIC);
@@ -617,7 +595,7 @@ public class ClassWriter extends ClassVisitor {
     
     size += symbolTable.getConstantPoolLength();
     int constantPoolCount = symbolTable.getConstantPoolCount();
-    if (constantPoolCount > 0xFFFF) {
+    if (constantPoolCount > XFFFF) {
       throw new ClassTooLargeException(symbolTable.getClassName(), constantPoolCount);
     }
 
@@ -659,19 +637,19 @@ public class ClassWriter extends ClassVisitor {
     }
     if (enclosingClassIndex != 0) {
       result
-          .putShort(symbolTable.addConstantUtf8(Constants.ENCLOSING_METHOD))
-          .putInt(4)
-          .putShort(enclosingClassIndex)
-          .putShort(enclosingMethodIndex);
+              .putShort(symbolTable.addConstantUtf8(Constants.ENCLOSING_METHOD))
+              .putInt(4)
+              .putShort(enclosingClassIndex)
+              .putShort(enclosingMethodIndex);
     }
-    if ((accessFlags & Opcodes.ACC_SYNTHETIC) != 0 && (version & 0xFFFF) < Opcodes.V1_5) {
+    if ((accessFlags & Opcodes.ACC_SYNTHETIC) != 0 && (version & XFFFF) < Opcodes.V1_5) {
       result.putShort(symbolTable.addConstantUtf8(Constants.SYNTHETIC)).putInt(0);
     }
     if (signatureIndex != 0) {
       result
-          .putShort(symbolTable.addConstantUtf8(Constants.SIGNATURE))
-          .putInt(2)
-          .putShort(signatureIndex);
+              .putShort(symbolTable.addConstantUtf8(Constants.SIGNATURE))
+              .putInt(2)
+              .putShort(signatureIndex);
     }
     if (sourceFileIndex != 0) {
       result

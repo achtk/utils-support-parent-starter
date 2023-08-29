@@ -1,31 +1,9 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 package com.chua.common.support.extra.asm;
+
+import static com.chua.common.support.constant.CommonConstant.*;
 
 /**
  * The input and output stack map frames of a basic block.
@@ -333,7 +311,7 @@ class Frame {
         return REFERENCE_KIND | symbolTable.addType(internalName);
       case '[':
         int elementDescriptorOffset = offset + 1;
-        while (buffer.charAt(elementDescriptorOffset) == '[') {
+        while (buffer.charAt(elementDescriptorOffset) == SYMBOL_LEFT_SQUARE_BRACKET_CHAR) {
           ++elementDescriptorOffset;
         }
         int typeValue;
@@ -595,9 +573,9 @@ class Frame {
    */
   private void pop(final String descriptor) {
     char firstDescriptorChar = descriptor.charAt(0);
-    if (firstDescriptorChar == '(') {
+    if (firstDescriptorChar == SYMBOL_LEFT_BRACKETS_CHAR) {
       pop((Type.getArgumentsAndReturnSizes(descriptor) >> 2) - 1);
-    } else if (firstDescriptorChar == 'J' || firstDescriptorChar == 'D') {
+    } else if (firstDescriptorChar == LETTER_UPPERCASE_J || firstDescriptorChar == LETTER_UPPERCASE_D) {
       pop(2);
     } else {
       pop(1);
@@ -1036,7 +1014,7 @@ class Frame {
         pop(argSymbol.value);
         if (opcode != Opcodes.INVOKESTATIC) {
           abstractType1 = pop();
-          if (opcode == Opcodes.INVOKESPECIAL && argSymbol.name.charAt(0) == '<') {
+          if (opcode == Opcodes.INVOKESPECIAL && argSymbol.name.charAt(0) == LESS_THAN) {
             addInitializedType(abstractType1);
           }
         }
@@ -1083,7 +1061,7 @@ class Frame {
       case Opcodes.ANEWARRAY:
         String arrayElementType = argSymbol.value;
         pop();
-        if (arrayElementType.charAt(0) == '[') {
+        if (arrayElementType.charAt(0) == SYMBOL_LEFT_SQUARE_BRACKET_CHAR) {
           push(symbolTable, '[' + arrayElementType);
         } else {
           push(ARRAY_OF | REFERENCE_KIND | symbolTable.addType(arrayElementType));
@@ -1092,7 +1070,7 @@ class Frame {
       case Opcodes.CHECKCAST:
         String castType = argSymbol.value;
         pop();
-        if (castType.charAt(0) == '[') {
+        if (castType.charAt(0) == SYMBOL_LEFT_SQUARE_BRACKET_CHAR) {
           push(symbolTable, castType);
         } else {
           push(REFERENCE_KIND | symbolTable.addType(castType));

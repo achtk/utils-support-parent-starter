@@ -10,8 +10,12 @@
 
 package com.chua.common.support.file.xz.lz;
 
+import static com.chua.common.support.constant.NumberConstant.EIGHT;
+import static com.chua.common.support.constant.NumberConstant.NUM_256;
+
 /**
  * Provides a CRC32 table using the polynomial from IEEE 802.3.
+ *
  * @author Administrator
  */
 class Crc32Hash {
@@ -20,10 +24,10 @@ class Crc32Hash {
     static final int[] CRC_TABLE = new int[256];
 
     static {
-        for (int i = 0; i < 256; ++i) {
+        for (int i = 0; i < NUM_256; ++i) {
             int r = i;
 
-            for (int j = 0; j < 8; ++j) {
+            for (int j = 0; j < EIGHT; ++j) {
                 if ((r & 1) != 0) {
                     r = (r >>> 1) ^ CRC32_POLY;
                 } else {

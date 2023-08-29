@@ -6,6 +6,10 @@ import com.chua.common.support.extra.el.expression.token.ValueResult;
 
 import java.util.Map;
 
+import static com.chua.common.support.constant.CommonConstant.FALSE;
+import static com.chua.common.support.constant.CommonConstant.TRUE;
+import static com.chua.common.support.constant.NameConstant.NULL;
+
 /**
  * 基础类
  *
@@ -15,11 +19,11 @@ public class KeywordNode implements CalculateNode {
     private final Object keywordValue;
 
     public KeywordNode(String literals) {
-        if ("true".equalsIgnoreCase(literals)) {
+        if (TRUE.equalsIgnoreCase(literals)) {
             keywordValue = Boolean.TRUE;
-        } else if ("false".equalsIgnoreCase(literals)) {
+        } else if (FALSE.equalsIgnoreCase(literals)) {
             keywordValue = Boolean.FALSE;
-        } else if ("null".equalsIgnoreCase(literals)) {
+        } else if (NULL.equalsIgnoreCase(literals)) {
             keywordValue = null;
         } else {
             throw new IllegalArgumentException();

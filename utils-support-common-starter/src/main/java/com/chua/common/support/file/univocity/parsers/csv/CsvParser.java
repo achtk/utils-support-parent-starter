@@ -3,11 +3,15 @@ package com.chua.common.support.file.univocity.parsers.csv;
 import com.chua.common.support.file.univocity.parsers.common.AbstractCommonParserSettings;
 import com.chua.common.support.file.univocity.parsers.common.AbstractParser;
 import com.chua.common.support.file.univocity.parsers.common.TextParsingException;
-import com.chua.common.support.file.univocity.parsers.common.input.*;
+import com.chua.common.support.file.univocity.parsers.common.input.DefaultCharAppender;
+import com.chua.common.support.file.univocity.parsers.common.input.ExpandingCharAppender;
+import com.chua.common.support.file.univocity.parsers.common.input.InputAnalysisProcess;
+import com.chua.common.support.file.univocity.parsers.common.input.NoopCharAppender;
 
-import java.io.EOFException;
 import java.io.Reader;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_BLANK_CHAR;
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_NULL_CHAR;
 import static com.chua.common.support.file.univocity.parsers.csv.UnescapedQuoteHandling.*;
 
 /**
@@ -100,7 +104,7 @@ public final class CsvParser extends AbstractParser<CsvParserSettings> {
     }
 
     private final void parseSingleDelimiterRecord() {
-        if (ch <= ' ' && ignoreLeadingWhitespace && whitespaceRangeStart < ch) {
+        if (ch <= SYMBOL_BLANK_CHAR && ignoreLeadingWhitespace && whitespaceRangeStart < ch) {
             ch = input.skipWhitespace(ch, delimiter, quote);
         }
 
@@ -310,7 +314,7 @@ public final class CsvParser extends AbstractParser<CsvParserSettings> {
     }
 
     private void processQuoteEscape() {
-        if (ch == quoteEscape && prev == escapeEscape && escapeEscape != '\0') {
+        if (ch == quoteEscape && prev == escapeEscape && escapeEscape != SYMBOL_NULL_CHAR) {
             if (keepEscape) {
                 output.appender.append(escapeEscape);
             }
@@ -350,7 +354,7 @@ public final class CsvParser extends AbstractParser<CsvParserSettings> {
     }
 
     private void parseQuotedValue() {
-        if (prev != '\0' && parseUnescapedQuotesUntilDelimiter) {
+        if (prev != SYMBOL_NULL_CHAR && parseUnescapedQuotesUntilDelimiter) {
             if (quoteHandling == SKIP_VALUE) {
                 skipValue();
                 return;
@@ -362,19 +366,19 @@ public final class CsvParser extends AbstractParser<CsvParserSettings> {
             output.trim = ignoreTrailingWhitespace;
             ch = output.appender.appendUntil(ch, input, delimiter, newLine);
         } else {
-            if (keepQuotes && prev == '\0') {
+            if (keepQuotes && prev == SYMBOL_NULL_CHAR) {
                 output.appender.append(quote);
             }
             ch = input.nextChar();
 
-            if (trimQuotedLeading && ch <= ' ' && output.appender.length() == 0) {
-                while ((ch = input.nextChar()) <= ' ') {
+            if (trimQuotedLeading && ch <= SYMBOL_BLANK_CHAR && output.appender.length() == 0) {
+                while ((ch = input.nextChar()) <= SYMBOL_BLANK_CHAR) {
                     ;
                 }
             }
 
             while (true) {
-                boolean b = prev == quote && (ch <= ' ' && whitespaceRangeStart < ch || ch == delimiter || ch == newLine);
+                boolean b = prev == quote && (ch <= SYMBOL_BLANK_CHAR && whitespaceRangeStart < ch || ch == delimiter || ch == newLine);
                 if (b) {
                     break;
                 }
@@ -543,7 +547,7 @@ public final class CsvParser extends AbstractParser<CsvParserSettings> {
     }
 
     private void skipWhitespace() {
-        while (ch <= ' ' && match < multiDelimiter.length && ch != newLine && ch != quote && whitespaceRangeStart < ch) {
+        while (ch <= SYMBOL_BLANK_CHAR && match < multiDelimiter.length && ch != newLine && ch != quote && whitespaceRangeStart < ch) {
             ch = input.nextChar();
             if (multiDelimiter[match] == ch) {
                 if (matchDelimiter()) {
@@ -604,12 +608,12 @@ public final class CsvParser extends AbstractParser<CsvParserSettings> {
     }
 
     private void parseMultiDelimiterRecord() {
-        if (ch <= ' ' && ignoreLeadingWhitespace && whitespaceRangeStart < ch) {
+        if (ch <= SYMBOL_BLANK_CHAR && ignoreLeadingWhitespace && whitespaceRangeStart < ch) {
             skipWhitespace();
         }
 
         while (ch != newLine) {
-            if (ch <= ' ' && ignoreLeadingWhitespace && whitespaceRangeStart < ch) {
+            if (ch <= SYMBOL_BLANK_CHAR && ignoreLeadingWhitespace && whitespaceRangeStart < ch) {
                 skipWhitespace();
             }
 
@@ -667,7 +671,7 @@ public final class CsvParser extends AbstractParser<CsvParserSettings> {
     }
 
     private void parseQuotedValueMultiDelimiter() {
-        if (prev != '\0' && parseUnescapedQuotesUntilDelimiter) {
+        if (prev != SYMBOL_NULL_CHAR && parseUnescapedQuotesUntilDelimiter) {
             if (quoteHandling == SKIP_VALUE) {
                 skipValue();
                 return;
@@ -679,19 +683,19 @@ public final class CsvParser extends AbstractParser<CsvParserSettings> {
             output.trim = ignoreTrailingWhitespace;
             appendUntilMultiDelimiter();
         } else {
-            if (keepQuotes && prev == '\0') {
+            if (keepQuotes && prev == SYMBOL_NULL_CHAR) {
                 output.appender.append(quote);
             }
             ch = input.nextChar();
 
-            if (trimQuotedLeading && ch <= ' ' && output.appender.length() == 0) {
-                while ((ch = input.nextChar()) <= ' ') {
+            if (trimQuotedLeading && ch <= SYMBOL_BLANK_CHAR && output.appender.length() == 0) {
+                while ((ch = input.nextChar()) <= SYMBOL_BLANK_CHAR) {
                     ;
                 }
             }
 
             while (true) {
-                boolean b = prev == quote && (ch <= ' ' && whitespaceRangeStart < ch || ch == newLine);
+                boolean b = prev == quote && (ch <= SYMBOL_BLANK_CHAR && whitespaceRangeStart < ch || ch == newLine);
                 if (b) {
                     break;
                 }
@@ -735,7 +739,7 @@ public final class CsvParser extends AbstractParser<CsvParserSettings> {
 
         boolean b1 = keepQuotes && (!unescaped || quoteHandling == STOP_AT_CLOSING_QUOTE);
         // handles whitespaces after quoted value: whitespaces are ignored. Content after whitespaces may be parsed if 'parseUnescapedQuotes' is enabled.
-        if (ch != newLine && ch <= ' ' && whitespaceRangeStart < ch && !matchDelimiterAfterQuote()) {
+        if (ch != newLine && ch <= SYMBOL_BLANK_CHAR && whitespaceRangeStart < ch && !matchDelimiterAfterQuote()) {
             whitespaceAppender.reset();
             do {
                 whitespaceAppender.append(ch);

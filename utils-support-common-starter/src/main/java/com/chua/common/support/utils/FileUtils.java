@@ -3146,7 +3146,7 @@ public class FileUtils {
                         return FileVisitResult.CONTINUE;
                     }
 
-                    if (ArrayUtils.contains(url, file.toFile().getName().replace("\\", "/"))) {
+                    if (ArrayUtils.contains(url, file.toFile().getName().replace(SYMBOL_RIGHT_SLASH, SYMBOL_LEFT_SLASH))) {
                         urls.add(file.toUri().toString());
                     }
                     return super.visitFile(file, attrs);
@@ -3158,7 +3158,7 @@ public class FileUtils {
                         return FileVisitResult.CONTINUE;
                     }
 
-                    if (ArrayUtils.contains(url, dir.toFile().getName().replace("\\", "/"))) {
+                    if (ArrayUtils.contains(url, dir.toFile().getName().replace(SYMBOL_RIGHT_SLASH, SYMBOL_LEFT_SLASH))) {
                         urls.add(dir.toUri().toString());
                     }
                     return super.preVisitDirectory(dir, attrs);

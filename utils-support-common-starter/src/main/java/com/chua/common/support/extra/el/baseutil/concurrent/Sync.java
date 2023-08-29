@@ -7,6 +7,8 @@ import java.lang.reflect.Field;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.LockSupport;
 
+import static com.chua.common.support.constant.NumberConstant.ONE_THOUSAND;
+
 /**
  * 基础类
  *
@@ -81,8 +83,8 @@ public abstract class Sync<E> {
             if (pred == (h = head)) {
                 result = get();
                 if (result == null) {
-                    if (nanos < 1000) {
-                        for (int i = 0; i < 1000; i++) {
+                    if (nanos < ONE_THOUSAND) {
+                        for (int i = 0; i < ONE_THOUSAND; i++) {
                         }
                     } else {
                         LockSupport.parkNanos(nanos);
@@ -99,8 +101,8 @@ public abstract class Sync<E> {
                     return result;
                 }
             } else {
-                if (nanos < 1000) {
-                    for (int i = 0; i < 1000; i++) {
+                if (nanos < ONE_THOUSAND) {
+                    for (int i = 0; i < ONE_THOUSAND; i++) {
                     }
                 } else {
                     LockSupport.parkNanos(nanos);

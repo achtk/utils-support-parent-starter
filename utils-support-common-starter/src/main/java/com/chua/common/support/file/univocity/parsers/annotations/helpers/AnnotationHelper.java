@@ -34,6 +34,8 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static com.chua.common.support.constant.NameConstant.*;
+
 /**
  * Helper class to process fields annotated with {@link Parsed}
  *
@@ -43,6 +45,7 @@ public class AnnotationHelper {
 
     private static final Set<Class> JAVA_LANG_ANNOTATION_TYPES = new HashSet<Class>();
     private static final Set<Class> CUSTOM_ANNOTATION_TYPES = new HashSet<Class>();
+    private static final String JAVA_ANNOTATION = "java.lang.annotation";
     private static AnnotatedElement lastProcessedElement;
     private static Class<? extends Annotation> lastProcessedAnnotationType;
     private static Annotation lastAnnotationFound;
@@ -60,11 +63,11 @@ public class AnnotationHelper {
      * <p> If "'null'" was provided, then "null" will be returned.
      */
     private static String getNullValue(String defaultValue) {
-        if ("null".equals(defaultValue)) {
+        if (NULL.equals(defaultValue)) {
             return null;
         }
-        if ("'null'".equals(defaultValue)) {
-            return "null";
+        if (NULL_CHAR.equals(defaultValue)) {
+            return NULL;
         }
 
         return defaultValue;
@@ -174,7 +177,7 @@ public class AnnotationHelper {
                 } else {
                     Date dateIfNull = null;
                     if (nullRead != null) {
-                        if ("now".equalsIgnoreCase(nullRead)) {
+                        if (NOW.equalsIgnoreCase(nullRead)) {
                             dateIfNull = new Date();
                         } else {
                             if (formats.length == 0) {
@@ -1063,7 +1066,7 @@ public class AnnotationHelper {
         if (JAVA_LANG_ANNOTATION_TYPES.contains(annotationType)) {
             return false;
         }
-        if (annotationType.getName().startsWith("java.lang.annotation")) {
+        if (annotationType.getName().startsWith(JAVA_ANNOTATION)) {
             JAVA_LANG_ANNOTATION_TYPES.add(annotationType);
             return false;
         } else {

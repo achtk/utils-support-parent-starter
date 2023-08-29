@@ -148,15 +148,16 @@ public class ByteArrayInputStream extends InputStream {
      */
     public Number readPackedNumber() throws IOException {
         int b = this.read();
-        if (b < 251) {
+        int v251 = 251, v252 = 252, v253 = 253, v254 = 254;
+        if (b < v251) {
             return b;
-        } else if (b == 251) {
+        } else if (b == v251) {
             return null;
-        } else if (b == 252) {
+        } else if (b == v252) {
             return (long) readInteger(2);
-        } else if (b == 253) {
+        } else if (b == v253) {
             return (long) readInteger(3);
-        } else if (b == 254) {
+        } else if (b == v254) {
             return readLong(8);
         }
         throw new IOException("Unexpected packed number byte " + b);

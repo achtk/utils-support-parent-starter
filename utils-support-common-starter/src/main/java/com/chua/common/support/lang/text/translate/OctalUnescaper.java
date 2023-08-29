@@ -4,6 +4,8 @@ package com.chua.common.support.lang.text.translate;
 import java.io.IOException;
 import java.io.Writer;
 
+import static com.chua.common.support.constant.NumberConstant.NUM_2;
+
 /**
  * Translate escaped octal Strings back to their octal values.
  * <p>
@@ -53,7 +55,7 @@ public class OctalUnescaper extends AbstractCharSequenceTranslator {
 
             if (remaining > 1 && isOctalDigit(input.charAt(next2))) {
                 builder.append(input.charAt(next2));
-                if (remaining > 2 && isZeroToThree(input.charAt(next)) && isOctalDigit(input.charAt(next3))) {
+                if (remaining > NUM_2 && isZeroToThree(input.charAt(next)) && isOctalDigit(input.charAt(next3))) {
                     builder.append(input.charAt(next3));
                 }
             }

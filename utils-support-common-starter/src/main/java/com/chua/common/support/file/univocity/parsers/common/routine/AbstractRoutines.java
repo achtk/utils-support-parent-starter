@@ -943,10 +943,11 @@ public abstract class AbstractRoutines<P extends AbstractCommonParserSettings<?>
         P settings = getParserSettings();
         settings.setMaxCharsPerColumn(-1);
 
+		int l = 1000000;
         //one million columns should be more than enough.
-        if (settings.getMaxColumns() < 1000000) {
-            settings.setMaxColumns(1000000);
-        }
+		if (settings.getMaxColumns() < l) {
+			settings.setMaxColumns(1000000);
+		}
 
         //The parser will return values for the columns selected.
         //By selecting no indexes here, no String objects will be created

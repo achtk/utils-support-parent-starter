@@ -29,6 +29,8 @@ public class FileTypeConverter implements TypeConverter<File> {
     private static final String[] TEMP = new String[]{"Documents", "Downloads", "Desktop"};
     private static final String CHANNEL = "java.nio.channels.Channels$1";
     private static final String CHANNEL_STREAM = "sun.nio.ch.ChannelInputStream";
+    private static final String DATA = "data:";
+    private static final CharSequence BASE64 = "base64,";
 
     @Override
     public File convert(Object value) {
@@ -36,7 +38,7 @@ public class FileTypeConverter implements TypeConverter<File> {
             return null;
         }
 
-        if(ArrayUtils.isArray(value)) {
+        if (ArrayUtils.isArray(value)) {
             int length = Array.getLength(value);
             for (int i = 0; i < length; i++) {
                 Object o = Array.get(value, i);
@@ -88,7 +90,7 @@ public class FileTypeConverter implements TypeConverter<File> {
             }
         }
 
-        if(str.startsWith("data:") && str.contains("base64,")) {
+        if (str.startsWith(DATA) && str.contains(BASE64)) {
             try {
                 //Base64解码
                 byte[] b = Base64.getDecoder().decode(str.substring(str.indexOf("base64,") + 7));

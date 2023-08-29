@@ -1,6 +1,5 @@
 package com.chua.common.support.protocol.server;
 
-import com.chua.common.support.constant.CommonConstant;
 import com.chua.common.support.constant.Projects;
 import com.chua.common.support.context.bean.BeanObject;
 import com.chua.common.support.context.definition.MethodDefinition;
@@ -40,6 +39,9 @@ import static com.chua.common.support.constant.CommonConstant.EMPTY_ARRAY;
 @Slf4j
 public abstract class AbstractServer implements Server, Constant {
 
+    private static final String AUTO = "auto-scanner";
+    private static final String PACKAGES = "packages";
+    private static final String ANY = "*/*";
     protected ServerRequest request;
     protected ConfigureApplicationContext beanFactory;
     private TemplateResolver templateResolver;
@@ -69,12 +71,12 @@ public abstract class AbstractServer implements Server, Constant {
         }
 
 
-        if (request.getBooleanValue("auto-scanner", false)) {
+        if (request.getBooleanValue(AUTO, false)) {
 
             ConfigurationBuilder configuration = new ConfigurationBuilder();
             configuration.addScanners(Scanners.MethodsAnnotated);
-            if (!CollectionUtils.isEmpty(request.getList("packages"))) {
-                configuration.forPackages(request.getList("packages", String.class).toArray(EMPTY_ARRAY));
+            if (!CollectionUtils.isEmpty(request.getList(PACKAGES))) {
+                configuration.forPackages(request.getList(PACKAGES, String.class).toArray(EMPTY_ARRAY));
             } else {
                 configuration.setUrls(new ArrayList<>());
                 configuration.forPackages("");
@@ -210,7 +212,7 @@ public abstract class AbstractServer implements Server, Constant {
      * @return 结果
      */
     protected Resolver getResolver(String produces, String accept, String router) {
-        if (StringUtils.isNullOrEmpty(accept) || "*/*".equals(accept)) {
+        if (StringUtils.isNullOrEmpty(accept) || ANY.equals(accept)) {
             return getResolver(produces, router);
         }
 

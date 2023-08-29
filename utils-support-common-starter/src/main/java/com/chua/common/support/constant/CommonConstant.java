@@ -23,6 +23,14 @@ public final class CommonConstant extends NameConstant{
      */
     public static final String SYMBOL_EOF = "-1";
     /**
+     * @
+     */
+    public static final String SYMBOL_AT = "@";
+    /**
+     * @
+     */
+    public static final char SYMBOL_AT_CHAR = '@';
+    /**
      * 默认缓存大小 8192
      */
     public static final int DEFAULT_BUFFER_SIZE = 2 << 12;
@@ -102,6 +110,10 @@ public final class CommonConstant extends NameConstant{
     /**
      * $
      */
+    public static final char SYMBOL_DOLLAR_CHAR = '$';
+    /**
+     * $
+     */
     public static final String SYMBOL_XPATH = "$.";
     /**
      * " "
@@ -168,9 +180,21 @@ public final class CommonConstant extends NameConstant{
      */
     public static final String SYMBOL_RIGHT_SLASH = "\\";
     /**
-     * \
+     * \\'
      */
     public static final char SYMBOL_RIGHT_SLASH_CHAR = '\\';
+    /**
+     * &&
+     */
+    public static final String SYMBOL_DOUBLE_AND = "&&";
+    /**
+     * ||
+     */
+    public static final String SYMBOL_DOUBLE_PIPE = "||";
+    /**
+     * \'
+     */
+    public static final char SYMBOL_RIGHT_ONE_SLASH_CHAR = '\'';
     /**
      * ,
      */
@@ -199,6 +223,14 @@ public final class CommonConstant extends NameConstant{
      * -
      */
     public static final char SYMBOL_MINUS_CHAR = '-';
+    /**
+     * +
+     */
+    public static final String SYMBOL_PLUS = "+";
+    /**
+     * +
+     */
+    public static final char SYMBOL_PLUS_CHAR = '+';
     /**
      * \r
      */
@@ -264,6 +296,10 @@ public final class CommonConstant extends NameConstant{
      */
     public static final char SYMBOL_T_CHAR = '\t';
     /**
+     * \0
+     */
+    public static final char SYMBOL_NULL_CHAR = '\0';
+    /**
      * ' '
      */
     public static final char SYMBOL_BLANK_CHAR = ' ';
@@ -283,6 +319,10 @@ public final class CommonConstant extends NameConstant{
      * (
      */
     public static final char SYMBOL_LEFT_BRACKETS_CHAR = '(';
+    /**
+     * )
+     */
+    public static final char SYMBOL_RIGHT_BRACKETS_CHAR = ')';
     /**
      * (
      */
@@ -348,6 +388,10 @@ public final class CommonConstant extends NameConstant{
      */
     public static final char SYMBOL_COLON_CHAR = ':';
     /**
+     * ::
+     */
+    public static final String SYMBOL_DOUBLE_COLON = "::";
+    /**
      * ~
      */
     public static final char SYMBOL_WAVY_LINE_CHAR = '~';
@@ -368,13 +412,73 @@ public final class CommonConstant extends NameConstant{
      */
     public static final char LETTER_UPPERCASE_A = 'A';
     /**
+     * 'C'
+     */
+    public static final char LETTER_UPPERCASE_C = 'C';
+    /**
+     * V
+     */
+    public static final char LETTER_UPPERCASE_V = 'V';
+    /**
+     * D
+     */
+    public static final char LETTER_UPPERCASE_D = 'D';
+    /**
+     * J
+     */
+    public static final char LETTER_UPPERCASE_J = 'J';
+    /**
+     * O
+     */
+    public static final char LETTER_UPPERCASE_O = 'O';
+    /**
+     * N
+     */
+    public static final char LETTER_UPPERCASE_N = 'N';
+    /**
+     * I
+     */
+    public static final char LETTER_UPPERCASE_I = 'I';
+    /**
+     * W
+     */
+    public static final char LETTER_UPPERCASE_W = 'W';
+    /**
+     * Y
+     */
+    public static final char LETTER_UPPERCASE_Y = 'Y';
+    /**
      * 'L'
      */
     public static final char LETTER_UPPERCASE_L = 'L';
     /**
-     * 'W'
+     * T
      */
-    public static final char LETTER_UPPERCASE_W = 'W';
+    public static final char LETTER_UPPERCASE_T = 'T';
+    /**
+     * P
+     */
+    public static final char LETTER_UPPERCASE_P = 'P';
+    /**
+     * F
+     */
+    public static final char LETTER_UPPERCASE_F = 'F';
+    /**
+     * M
+     */
+    public static final char LETTER_UPPERCASE_M = 'M';
+    /**
+     * B
+     */
+    public static final char LETTER_UPPERCASE_B = 'B';
+    /**
+     * G
+     */
+    public static final char LETTER_UPPERCASE_G = 'G';
+    /**
+     * Q
+     */
+    public static final char LETTER_UPPERCASE_Q = 'Q';
     /**
      * 'Z'
      */
@@ -399,6 +503,22 @@ public final class CommonConstant extends NameConstant{
      * 'f'
      */
     public static final char LETTER_LOWERCASE_F = 'f';
+    /**
+     * n
+     */
+    public static final char LETTER_LOWERCASE_N = 'n';
+    /**
+     * t
+     */
+    public static final char LETTER_LOWERCASE_T = 't';
+    /**
+     * r
+     */
+    public static final char LETTER_LOWERCASE_R = 'r';
+    /**
+     * e
+     */
+    public static final char LETTER_LOWERCASE_E = 'e';
     /**
      * 'z'
      */
@@ -895,4 +1015,73 @@ public final class CommonConstant extends NameConstant{
      * 解释：该字符串常用于表示 Windows 系统下的文本换行
      */
     public static final String CRLF = "\r\n";
+
+    /**
+     * <
+     */
+    public static final char LESS_THAN = '<';
+    /**
+     * >
+     */
+    public static final char GREATER_THAN = '>';
+
+    /**
+     * '1'
+     */
+    public static final char ONE_CHAR = '1';
+
+    /**
+     * '2'
+     */
+    public static final char TWE_CHAR = '2';
+    /**
+     * 3
+     */
+    public static final char THREE_CHAR = '3';
+
+    /**
+     * '9'
+     */
+    public static final char NIGHT_CHAR = '9';
+    /**
+     * "0"
+     */
+    public static final String ZERO_STR = "0";
+    /**
+     * '1'
+     */
+    public static final String ONE_STR = "1";
+
+    /**
+     * '2'
+     */
+    public static final String TWE_STR = "2";
+    /**
+     * 3
+     */
+    public static final String THREE_STR = "3";
+    /**
+     * 4
+     */
+    public static final String FOUR_STR = "4";
+    /**
+     * 5
+     */
+    public static final String FIVE_STR = "5";
+    /**
+     * 6
+     */
+    public static final String SIX_STR = "6";
+    /**
+     * 7
+     */
+    public static final String SEVEN_STR = "7";
+    /**
+     * 8
+     */
+    public static final String EIGHT_STR = "8";
+    /**
+     * 9
+     */
+    public static final String NIGHT_STR = "9";
 }

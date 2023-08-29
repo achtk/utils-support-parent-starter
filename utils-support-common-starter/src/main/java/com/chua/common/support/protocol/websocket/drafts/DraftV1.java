@@ -23,6 +23,8 @@ import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static com.chua.common.support.constant.NumberConstant.*;
+
 /**
  * Implementation for the RFC 6455 websocket protocol This is the recommended class for your
  * websocket connection
@@ -211,7 +213,7 @@ public class DraftV1 extends com.chua.common.support.protocol.websocket.drafts.D
   public HandshakeState acceptHandshakeAsServer(ClientHandshake handshakedata)
       throws InvalidHandshakeException {
     int v = readVersion(handshakedata);
-    if (v != 13) {
+    if (v != NUM_13) {
       return HandshakeState.NOT_MATCHED;
     }
     HandshakeState extensionState = HandshakeState.NOT_MATCHED;
@@ -434,10 +436,10 @@ public class DraftV1 extends com.chua.common.support.protocol.websocket.drafts.D
 
     if (sizebytes == 1) {
       buf.put((byte) (payloadlengthbytes[0] | getMaskByte(mask)));
-    } else if (sizebytes == 2) {
+    } else if (sizebytes == NUM_2) {
       buf.put((byte) ((byte) 126 | getMaskByte(mask)));
       buf.put(payloadlengthbytes);
-    } else if (sizebytes == 8) {
+    } else if (sizebytes == NUM_8) {
       buf.put((byte) ((byte) 127 | getMaskByte(mask)));
       buf.put(payloadlengthbytes);
     } else {
@@ -478,9 +480,9 @@ public class DraftV1 extends com.chua.common.support.protocol.websocket.drafts.D
     int payloadlength = (byte) (b2 & ~(byte) 128);
     Opcode optcode = toOpcode((byte) (b1 & 15));
 
-    if (!(payloadlength >= 0 && payloadlength <= 125)) {
+    if (!(payloadlength >= 0 && payloadlength <= NUM_125)) {
       TranslatedPayloadMetaData payloadData = translateSingleFramePayloadLength(buffer, optcode,
-          payloadlength, maxpacketsize, realpacketsize);
+              payloadlength, maxpacketsize, realpacketsize);
       payloadlength = payloadData.getPayloadLength();
       realpacketsize = payloadData.getRealPackageSize();
     }
@@ -545,20 +547,20 @@ public class DraftV1 extends com.chua.common.support.protocol.websocket.drafts.D
     if (optcode == Opcode.PING || optcode == Opcode.PONG || optcode == Opcode.CLOSING) {
       throw new InvalidFrameException("more than 125 octets");
     }
-    if (payloadlength == 126) {
-        realpacketsize += 2;
-        translateSingleFrameCheckPacketSize(maxpacketsize, realpacketsize);
-        byte[] sizebytes = new byte[3];
-        sizebytes[1] = buffer.get();
-        sizebytes[2] = buffer.get();
-        payloadlength = new BigInteger(sizebytes).intValue();
+    if (payloadlength == NUM_126) {
+      realpacketsize += 2;
+      translateSingleFrameCheckPacketSize(maxpacketsize, realpacketsize);
+      byte[] sizebytes = new byte[3];
+      sizebytes[1] = buffer.get();
+      sizebytes[2] = buffer.get();
+      payloadlength = new BigInteger(sizebytes).intValue();
     } else {
-        realpacketsize += 8;
-        translateSingleFrameCheckPacketSize(maxpacketsize, realpacketsize);
-        byte[] bytes = new byte[8];
-        for (int i = 0; i < 8; i++) {
-            bytes[i] = buffer.get();
-        }
+      realpacketsize += 8;
+      translateSingleFrameCheckPacketSize(maxpacketsize, realpacketsize);
+      byte[] bytes = new byte[8];
+      for (int i = 0; i < NUM_8; i++) {
+        bytes[i] = buffer.get();
+      }
         long length = new BigInteger(bytes).longValue();
         translateSingleFrameCheckLengthLimit(length);
         payloadlength = (int) length;
@@ -635,9 +637,9 @@ public class DraftV1 extends com.chua.common.support.protocol.websocket.drafts.D
    * @return the size bytes
    */
   private int getSizeBytes(ByteBuffer mes) {
-    if (mes.remaining() <= 125) {
+    if (mes.remaining() <= NUM_125) {
       return 1;
-    } else if (mes.remaining() <= 65535) {
+    } else if (mes.remaining() <= NUM_65535) {
       return 2;
     }
     return 8;

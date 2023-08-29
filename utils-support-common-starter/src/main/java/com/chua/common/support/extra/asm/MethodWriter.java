@@ -1,40 +1,18 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 package com.chua.common.support.extra.asm;
+
+import static com.chua.common.support.constant.NumberConstant.*;
 
 /**
  * A {@link MethodVisitor} that generates a corresponding 'method_info' structure, as defined in the
  * Java Virtual Machine Specification (JVMS).
  *
- * @see <a href="https:
- *     4.6</a>
  * @author Eric Bruneton
  * @author Eugene Kuleshov
+ * @see <a href="https:
+ * 4.6</a>
  */
 final class MethodWriter extends MethodVisitor {
 
@@ -817,19 +795,19 @@ final class MethodWriter extends MethodVisitor {
           stackMapTableEntries.putByte(Frame.SAME_FRAME_EXTENDED - numLocal).putShort(offsetDelta);
           break;
         case Opcodes.F_SAME:
-          if (offsetDelta < 64) {
+          if (offsetDelta < NUM_64) {
             stackMapTableEntries.putByte(offsetDelta);
           } else {
             stackMapTableEntries.putByte(Frame.SAME_FRAME_EXTENDED).putShort(offsetDelta);
           }
           break;
         case Opcodes.F_SAME1:
-          if (offsetDelta < 64) {
+          if (offsetDelta < NUM_64) {
             stackMapTableEntries.putByte(Frame.SAME_LOCALS_1_STACK_ITEM_FRAME + offsetDelta);
           } else {
             stackMapTableEntries
-                .putByte(Frame.SAME_LOCALS_1_STACK_ITEM_FRAME_EXTENDED)
-                .putShort(offsetDelta);
+                    .putByte(Frame.SAME_LOCALS_1_STACK_ITEM_FRAME_EXTENDED)
+                    .putShort(offsetDelta);
           }
           putFrameType(stack[0]);
           break;
@@ -908,7 +886,7 @@ final class MethodWriter extends MethodVisitor {
   public void visitVarInsn(final int opcode, final int varIndex) {
     lastBytecodeOffset = code.length;
     
-    if (varIndex < 4 && opcode != Opcodes.RET) {
+    if (varIndex < NUM_4 && opcode != Opcodes.RET) {
       int optimizedOpcode;
       if (opcode < Opcodes.ISTORE) {
         optimizedOpcode = Constants.ILOAD_0 + ((opcode - Opcodes.ILOAD) << 2) + varIndex;
@@ -916,12 +894,12 @@ final class MethodWriter extends MethodVisitor {
         optimizedOpcode = Constants.ISTORE_0 + ((opcode - Opcodes.ISTORE) << 2) + varIndex;
       }
       code.putByte(optimizedOpcode);
-    } else if (varIndex >= 256) {
+    } else if (varIndex >= NUM_256) {
       code.putByte(Constants.WIDE).put12(opcode, varIndex);
     } else {
       code.put11(opcode, varIndex);
     }
-    
+
     if (currentBasicBlock != null) {
       if (compute == COMPUTE_ALL_FRAMES || compute == COMPUTE_INSERTED_FRAMES) {
         currentBasicBlock.frame.execute(opcode, varIndex, null, null);
@@ -1288,12 +1266,12 @@ final class MethodWriter extends MethodVisitor {
                     || firstDescriptorChar == 'D'));
     if (isLongOrDouble) {
       code.put12(Constants.LDC2_W, constantIndex);
-    } else if (constantIndex >= 256) {
+    } else if (constantIndex >= NUM_256) {
       code.put12(Constants.LDC_W, constantIndex);
     } else {
       code.put11(Opcodes.LDC, constantIndex);
     }
-    
+
     if (currentBasicBlock != null) {
       if (compute == COMPUTE_ALL_FRAMES || compute == COMPUTE_INSERTED_FRAMES) {
         currentBasicBlock.frame.execute(Opcodes.LDC, 0, constantSymbol, symbolTable);
@@ -1311,7 +1289,7 @@ final class MethodWriter extends MethodVisitor {
   public void visitIincInsn(final int varIndex, final int increment) {
     lastBytecodeOffset = code.length;
     
-    if ((varIndex > 255) || (increment > 127) || (increment < -128)) {
+    if ((varIndex > NUM_255) || (increment > NUM_127) || (increment < -NUM_128)) {
       code.putByte(Constants.WIDE).put12(Opcodes.IINC, varIndex).putShort(increment);
     } else {
       code.putByte(Opcodes.IINC).put11(varIndex, increment);
@@ -2084,9 +2062,9 @@ final class MethodWriter extends MethodVisitor {
     int size = 8;
     
     if (code.length > 0) {
-      if (code.length > 65535) {
+      if (code.length > NUM_65535) {
         throw new MethodTooLargeException(
-            symbolTable.getClassName(), name, descriptor, code.length);
+                symbolTable.getClassName(), name, descriptor, code.length);
       }
       symbolTable.addConstantUtf8(Constants.CODE);
       

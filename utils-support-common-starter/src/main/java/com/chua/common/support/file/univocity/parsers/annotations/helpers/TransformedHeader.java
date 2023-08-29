@@ -23,6 +23,7 @@ import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+import static com.chua.common.support.constant.NumberConstant.NUM_2;
 import static com.chua.common.support.file.univocity.parsers.annotations.helpers.AnnotationHelper.findAnnotation;
 
 /**
@@ -93,7 +94,7 @@ public class TransformedHeader {
 	 * @return the current header index.
 	 */
 	public int getHeaderIndex() {
-		if (index == -2) {
+		if (index == -NUM_2) {
 			Parsed annotation = findAnnotation(target, Parsed.class);
 			if (annotation != null) {
 				index = AnnotationRegistry.getValue(target, annotation, "index", annotation.index());

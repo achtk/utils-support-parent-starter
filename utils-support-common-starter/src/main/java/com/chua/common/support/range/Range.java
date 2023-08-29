@@ -14,7 +14,9 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import static com.chua.common.support.constant.CommonConstant.*;
-import static com.chua.common.support.utils.Preconditions.*;
+import static com.chua.common.support.constant.NumberConstant.NUM_2;
+import static com.chua.common.support.utils.Preconditions.checkArgument;
+import static com.chua.common.support.utils.Preconditions.checkNotNull;
 import static com.chua.common.support.utils.RandomUtils.*;
 
 /**
@@ -54,7 +56,7 @@ public final class Range<C extends Comparable> implements Predicate<C>, Serializ
 
         String[] split = base.split(REG, 2);
         String item = split[0];
-        if (split.length == 2) {
+        if (split.length == NUM_2) {
             String item1 = split[1];
             //(1 ~  +∞) or [1 ~  +∞)
             if (!StringUtils.isNullOrEmpty(item) && StringUtils.isNullOrEmpty(item1)) {

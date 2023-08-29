@@ -18,6 +18,8 @@ package com.chua.common.support.file.univocity.parsers.common;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import static com.chua.common.support.constant.NumberConstant.NUM_2;
+
 /**
  * This is the parent class for all configuration classes that define a text format.
  *
@@ -121,7 +123,7 @@ public abstract class Format implements Cloneable {
 		if (lineSeparator == null || lineSeparator.length == 0) {
 			throw new IllegalArgumentException("Invalid line separator. Expected 1 to 2 characters");
 		}
-		if (lineSeparator.length > 2) {
+		if (lineSeparator.length > NUM_2) {
 			throw new IllegalArgumentException("Invalid line separator. Up to 2 characters are expected. Got " + lineSeparator.length + " characters.");
 		}
 		this.lineSeparator = lineSeparator;

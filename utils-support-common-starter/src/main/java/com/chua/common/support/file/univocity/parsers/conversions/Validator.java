@@ -10,6 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.chua.common.support.constant.CommonConstant.GENERAL;
+import static com.chua.common.support.constant.NumberConstant.*;
 import static com.chua.common.support.constant.RegexConstant.*;
 
 /**
@@ -691,17 +692,18 @@ public interface Validator<T> {
     public static boolean isBirthday(int year, int month, int day) {
         // 验证年
         int thisYear = DateUtils.thisYear();
-        if (year < 1900 || year > thisYear) {
+        int v1900 = 1900;
+        if (year < v1900 || year > thisYear) {
             return false;
         }
 
         // 验证月
-        if (month < 1 || month > 12) {
+        if (month < 1 || month > NUM_12) {
             return false;
         }
 
         // 验证日
-        if (day < 1 || day > 31) {
+        if (day < 1 || day > NUM_31) {
             return false;
         }
         // 检查几个特殊月的最大天数
@@ -709,7 +711,7 @@ public interface Validator<T> {
         if (b) {
             return false;
         }
-        if (month == 2) {
+        if (month == NUM_2) {
             // 在2月，非闰年最大28，闰年最大29
             return day < 29 || (day == 29 && DateUtils.isLeapYear(year));
         }

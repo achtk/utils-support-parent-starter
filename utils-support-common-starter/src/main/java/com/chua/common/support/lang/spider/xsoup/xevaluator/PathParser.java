@@ -2,13 +2,16 @@ package com.chua.common.support.lang.spider.xsoup.xevaluator;
 
 import com.chua.common.support.jsoup.select.AbstractEvaluator;
 import com.chua.common.support.jsoup.select.Selector;
-import com.chua.common.support.lang.spider.xsoup.SoupTokenQueue;
 import com.chua.common.support.lang.spider.xsoup.PathEvaluator;
+import com.chua.common.support.lang.spider.xsoup.SoupTokenQueue;
 import com.chua.common.support.utils.Preconditions;
 
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.chua.common.support.constant.NumberConstant.NUM_2;
+import static com.chua.common.support.constant.NumberConstant.NUM_3;
 
 /**
  * Parser of XPath.
@@ -272,13 +275,13 @@ public class PathParser {
                         - 1)));
         if (params.size() == 1) {
             elementOperator = new ElementOperator.Regex(params.get(0));
-        } else if (params.size() == 2) {
+        } else if (params.size() == NUM_2) {
             if (params.get(0).startsWith("@")) {
                 elementOperator = new ElementOperator.Regex(params.get(1), params.get(0).substring(1));
             } else {
                 elementOperator = new ElementOperator.Regex(params.get(0), null, Integer.parseInt(params.get(1)));
             }
-        } else if (params.size() == 3) {
+        } else if (params.size() == NUM_3) {
             elementOperator =
                     new ElementOperator.Regex(params.get(1), params.get(0).substring(1), Integer.parseInt(params.get(2)));
         } else {
@@ -384,6 +387,12 @@ public class PathParser {
     }
 
     interface FunctionEvaluator {
+        /**
+         * 执行
+         *
+         * @param param 参数
+         * @return 结果
+         */
         AbstractEvaluator call(String... param);
     }
 
@@ -410,7 +419,7 @@ public class PathParser {
         }
 
         public void mergeOr() {
-            if (size() >= 2) {
+            if (size() >= NUM_2) {
                 AbstractEvaluator pop1 = pop();
                 AbstractEvaluator pop2 = pop();
                 AbstractEvaluator tempEvaluator = new AbstractCombiningEvaluator.Or(pop2, pop1);

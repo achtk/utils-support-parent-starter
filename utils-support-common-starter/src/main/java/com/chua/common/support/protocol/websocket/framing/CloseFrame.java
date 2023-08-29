@@ -34,6 +34,7 @@ import com.chua.common.support.protocol.websocket.util.Charsetfunctions;
 import java.nio.ByteBuffer;
 
 import static com.chua.common.support.constant.CommonConstant.TWE;
+import static com.chua.common.support.constant.NumberConstant.THREE_THOUSAND;
 
 /**
  * Class to represent a close frame
@@ -236,7 +237,7 @@ public class CloseFrame extends AbstractControlFrame {
             throw new InvalidDataException(PROTOCOL_ERROR,
                     "A close frame must have a closecode if it has a reason");
         }
-        if ((code > CloseFrame.TLS_ERROR && code < 3000)) {
+        if ((code > CloseFrame.TLS_ERROR && code < THREE_THOUSAND)) {
             throw new InvalidDataException(PROTOCOL_ERROR, "Trying to send an illegal close code!");
         }
         if (code == CloseFrame.ABNORMAL_CLOSE || code == CloseFrame.TLS_ERROR

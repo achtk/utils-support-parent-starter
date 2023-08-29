@@ -10,6 +10,8 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_COMMA;
+
 /**
  * include/exclude filter builder
  * <pre>{@code
@@ -91,7 +93,7 @@ public class FilterBuilder implements Predicate<String> {
      */
     public static FilterBuilder parsePackages(String includeExcludeString) {
         List<Predicate<String>> filters = new ArrayList<>();
-        for (String string : includeExcludeString.split(",")) {
+        for (String string : includeExcludeString.split(SYMBOL_COMMA)) {
             String trimmed = string.trim();
             char prefix = trimmed.charAt(0);
             String pattern = prefixPattern(trimmed.substring(1));
@@ -158,7 +160,7 @@ public class FilterBuilder implements Predicate<String> {
      * maps fqn to prefix pattern with a trailing dot, for example {@code packageNamePrefix("a.b") == "a\\.b\\..*}
      */
     private static String prefixPattern(String fqn) {
-        if (!fqn.endsWith(".")) {
+        if (!fqn.endsWith(SYMBOL_COMMA)) {
             fqn += ".";
         }
         return fqn.replace(".", "\\.").replace("$", "\\$") + ".*";

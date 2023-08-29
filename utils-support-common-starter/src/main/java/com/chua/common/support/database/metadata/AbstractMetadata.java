@@ -27,6 +27,7 @@ import java.util.Map;
  */
 public abstract class AbstractMetadata<T> implements Metadata<T> {
 
+    private static final CharSequence THIS = "this$";
     protected String table;
     /**
      * 命名策略
@@ -160,7 +161,7 @@ public abstract class AbstractMetadata<T> implements Metadata<T> {
                 return;
             }
 
-            if (field.getName().contains("this$")) {
+            if (field.getName().contains(THIS)) {
                 return;
             }
 

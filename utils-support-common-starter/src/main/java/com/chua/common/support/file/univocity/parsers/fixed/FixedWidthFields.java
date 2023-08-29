@@ -28,6 +28,8 @@ import com.chua.common.support.file.univocity.parsers.common.NormalizedString;
 import java.util.*;
 import java.util.Map.Entry;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_NULL_CHAR;
+
 /**
  * This class provides the name, length, alignment and padding of each field in a fixed-width record.
  *
@@ -674,7 +676,7 @@ public class FixedWidthFields implements Cloneable {
 	}
 
 	private void setPadding(int position, char padding) {
-		if (padding == '\0') {
+		if (padding == SYMBOL_NULL_CHAR) {
 			throw new IllegalArgumentException("Cannot use the null character as padding");
 		}
 		validateIndex(position);

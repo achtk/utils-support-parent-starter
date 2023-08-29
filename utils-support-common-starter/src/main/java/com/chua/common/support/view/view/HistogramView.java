@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.chua.common.support.constant.NumberConstant.NUM_2;
+
 /**
  * 直方图
  *
@@ -181,7 +183,7 @@ public class HistogramView implements View {
             print.append(WRAP);
             //获取显示的x轴
             if (check) {
-                for (int k = 0; k < ((print.length() - lengthY) / 2 + (comparables.length) / 2) * 2; k++) {
+                for (int k = 0; k < ((print.length() - lengthY) / NUM_2 + (comparables.length) / NUM_2) * NUM_2; k++) {
                     printN.append(LINE_NUMBER_PRINT);
                 }
                 printN.append(WRAP);

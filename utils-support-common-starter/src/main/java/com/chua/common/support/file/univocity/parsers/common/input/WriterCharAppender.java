@@ -21,6 +21,8 @@ import com.chua.common.support.file.univocity.parsers.common.Format;
 import java.io.IOException;
 import java.io.Writer;
 
+import static com.chua.common.support.constant.NumberConstant.NUM_2;
+
 /**
  * Extension of the {@link DefaultCharAppender} class to include facilities for writing to an output. Used by writers extending  {@link AbstractWriter}.
  *
@@ -163,7 +165,7 @@ public class WriterCharAppender extends ExpandingCharAppender {
 	 * Appends the newline character sequence specified in {@link Format#getLineSeparator()}
 	 */
 	public final void appendNewLine() {
-		if (index + 2 >= chars.length) {
+		if (index + NUM_2 >= chars.length) {
 			expand();
 		}
 		chars[index++] = lineSeparator1;

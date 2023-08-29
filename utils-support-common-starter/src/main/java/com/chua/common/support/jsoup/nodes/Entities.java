@@ -327,11 +327,14 @@ public class Entities {
          */
         FALLBACK;
 
+        private static final String US_ASCII = "US-ASCII";
+        private static final String UTF_ = "UTF-";
+
         static CoreCharset byName(final String name) {
-            if ("US-ASCII".equals(name)) {
+            if (US_ASCII.equals(name)) {
                 return ASCII;
             }
-            if (name.startsWith("UTF-")) {
+            if (name.startsWith(UTF_)) {
                 return UTF;
             }
             return FALLBACK;

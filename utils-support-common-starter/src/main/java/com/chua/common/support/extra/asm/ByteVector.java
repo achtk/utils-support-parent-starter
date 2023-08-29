@@ -28,6 +28,8 @@
 package com.chua.common.support.extra.asm;
 
 import static com.chua.common.support.constant.CommonConstant.TWE;
+import static com.chua.common.support.constant.NumberConstant.*;
+import static com.chua.common.support.net.NetUtils.MAX_PORT;
 
 /**
  * A dynamically extensible vector of bytes. This class is roughly equivalent to a DataOutputStream
@@ -139,7 +141,7 @@ public class ByteVector {
    */
   final ByteVector put12(final int byteValue, final int shortValue) {
     int currentLength = length;
-    if (currentLength + 3 > data.length) {
+    if (currentLength + THREE > data.length) {
       enlarge(3);
     }
     byte[] currentData = data;
@@ -161,7 +163,7 @@ public class ByteVector {
    */
   final ByteVector put112(final int byteValue1, final int byteValue2, final int shortValue) {
     int currentLength = length;
-    if (currentLength + 4 > data.length) {
+    if (currentLength + FOUR > data.length) {
       enlarge(4);
     }
     byte[] currentData = data;
@@ -181,7 +183,7 @@ public class ByteVector {
    */
   public ByteVector putInt(final int intValue) {
     int currentLength = length;
-    if (currentLength + 4 > data.length) {
+    if (currentLength + FOUR > data.length) {
       enlarge(4);
     }
     byte[] currentData = data;
@@ -204,7 +206,7 @@ public class ByteVector {
    */
   final ByteVector put122(final int byteValue, final int shortValue1, final int shortValue2) {
     int currentLength = length;
-    if (currentLength + 5 > data.length) {
+    if (currentLength + FIVE > data.length) {
       enlarge(5);
     }
     byte[] currentData = data;
@@ -225,7 +227,7 @@ public class ByteVector {
    */
   public ByteVector putLong(final long longValue) {
     int currentLength = length;
-    if (currentLength + 8 > data.length) {
+    if (currentLength + EIGHT > data.length) {
       enlarge(8);
     }
     byte[] currentData = data;
@@ -252,7 +254,7 @@ public class ByteVector {
    */
   public ByteVector putUtf8(final String stringValue) {
     int charLength = stringValue.length();
-    if (charLength > 65535) {
+    if (charLength > MAX_PORT) {
       throw new IllegalArgumentException("UTF8 string too large");
     }
     int currentLength = length;

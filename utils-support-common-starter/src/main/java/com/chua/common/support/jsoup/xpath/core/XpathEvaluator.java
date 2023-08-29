@@ -15,6 +15,8 @@ import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.chua.common.support.constant.NumberConstant.NUM_2;
+
 /**
  * @author 汪浩淼 [ et.tw@163.com ]
  * @since 14-3-12
@@ -162,7 +164,7 @@ public class XpathEvaluator {
                 if (p.getOpEm() == null) {
                     if (p.getValue().matches("\\d+") && getElIndex(e) == Integer.parseInt(p.getValue())) {
                         return e;
-                    } else if (p.getValue().endsWith("()") && (Boolean) callFilterFunc(p.getValue().substring(0, p.getValue().length() - 2), e)) {
+                    } else if (p.getValue().endsWith("()") && (Boolean) callFilterFunc(p.getValue().substring(0, p.getValue().length() - NUM_2), e)) {
                         return e;
                     }
                     //todo p.value ~= contains(./@href,'renren.com')

@@ -3,7 +3,6 @@ package com.chua.common.support.lang.depends;
 import com.chua.common.support.file.FileMedia;
 import com.chua.common.support.file.zip.Zip;
 import com.chua.common.support.function.InitializingAware;
-import com.chua.common.support.function.SafeConsumer;
 import com.chua.common.support.function.SafeFunction;
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.FileUtils;
@@ -13,8 +12,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static com.chua.common.support.constant.CommonConstant.POM;
+
 /**
  * grape
+ *
  * @author CH
  */
 public class GrapeZip implements InitializingAware {
@@ -44,7 +46,7 @@ public class GrapeZip implements InitializingAware {
             Zip zip = new Zip();
             try (FileInputStream fileInputStream = new FileInputStream(file)) {
                 zip.unFile(fileInputStream, (SafeFunction<FileMedia, Boolean>) fileMedia -> {
-                    if("pom.xml".equals(fileMedia.getName())) {
+                    if (POM.equals(fileMedia.getName())) {
                         GrapeZip.this.stream = fileMedia.getStream();
                         return true;
                     }

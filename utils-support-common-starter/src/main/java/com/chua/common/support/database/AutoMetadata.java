@@ -16,13 +16,17 @@ import lombok.Builder;
 import javax.sql.DataSource;
 import java.util.Map;
 
+import static com.chua.common.support.constant.NameConstant.MASTER;
+
 /**
  * 自动建表
+ *
  * @author CH
  */
 @Builder
 public class AutoMetadata {
 
+    private static final String HIBERNATE = "com.chua.hibernate.support.database.resolver.HibernateMetadataResolver";
     @Builder.Default
     private MetadataResolver metadataResolver = PipelineBuilder.<MetadataResolver>newBuilder()
             .next(it -> {
@@ -30,8 +34,8 @@ public class AutoMetadata {
                     return it;
                 }
 
-                if (ClassUtils.isPresent("com.chua.hibernate.support.database.resolver.HibernateMetadataResolver")) {
-                    return (MetadataResolver) ClassUtils.forObject("com.chua.hibernate.support.database.resolver.HibernateMetadataResolver");
+                if (ClassUtils.isPresent(HIBERNATE)) {
+                    return (MetadataResolver) ClassUtils.forObject(HIBERNATE);
                 }
                 return null;
             }).next(it -> new DelegateMetadataResolver()).execute();
@@ -74,17 +78,17 @@ public class AutoMetadata {
             throw new RuntimeException("数据源不存在");
         }
 
-        if(dataSources.size() == 1) {
+        if (dataSources.size() == 1) {
             return dataSources.values().stream().findFirst().get();
         }
         Table table = type.getDeclaredAnnotation(Table.class);
         String schema = table.schema();
-        if(dataSources.containsKey(schema)) {
+        if (dataSources.containsKey(schema)) {
             return dataSources.get(schema);
         }
 
-        if(dataSources.containsKey("master")) {
-            return dataSources.get("master");
+        if (dataSources.containsKey(MASTER)) {
+            return dataSources.get(MASTER);
         }
 
         return dataSources.values().stream().findFirst().get();

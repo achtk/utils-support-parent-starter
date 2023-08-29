@@ -16,13 +16,16 @@ import java.nio.charset.CharsetEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.chua.common.support.constant.NameConstant.XML;
+import static com.chua.common.support.protocol.server.Constant.VERSION;
+
 /**
  * A HTML Document.
  *
  * @author Jonathan Hedley, jonathan@hedley.net
  */
 public class Document extends Element {
-    private  Connection connection;
+    private Connection connection;
     private OutputSettings outputSettings = new OutputSettings();
     private Parser parser;
     private QuirksMode quirksMode = QuirksMode.NO_QUIRKS;
@@ -382,9 +385,9 @@ public class Document extends Element {
                 Node node = ensureChildNodes().get(0);
                 if (node instanceof XmlDeclaration) {
                     XmlDeclaration decl = (XmlDeclaration) node;
-                    if ("xml".equals(decl.name())) {
+                    if (XML.equals(decl.name())) {
                         decl.attr("encoding", charset().displayName());
-                        if (decl.hasAttr("version")) {
+                        if (decl.hasAttr(VERSION)) {
                             decl.attr("version", "1.0");
                         }
                     } else {

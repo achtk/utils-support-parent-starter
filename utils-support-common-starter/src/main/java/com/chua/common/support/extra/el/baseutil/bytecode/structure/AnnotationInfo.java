@@ -29,7 +29,8 @@ public class AnnotationInfo {
     public void resolve(BinaryData binaryData, AbstractConstantInfo[] constantInfos) {
         int typeIndex = binaryData.readShort();
         type = ((Utf8Info) constantInfos[typeIndex - 1]).getValue();
-        if (type.startsWith("L")) {
+        String l = "L";
+        if (type.startsWith(l)) {
             type = type.substring(1, type.length() - 1);
         }
         int numElementValuePairs = binaryData.readShort();

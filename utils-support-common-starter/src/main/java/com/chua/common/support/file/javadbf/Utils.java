@@ -17,6 +17,8 @@ import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 
+import static com.chua.common.support.constant.NumberConstant.*;
+
 /**
  * Miscelaneous functions required by the JavaDBF package.
  *
@@ -34,7 +36,7 @@ public final class Utils {
             throws IOException {
 
         int bigEndian = 0;
-        for (int shiftBy = 0; shiftBy < 32; shiftBy += 8) {
+        for (int shiftBy = 0; shiftBy < NUM_32; shiftBy += NUM_8) {
             bigEndian |= (in.readUnsignedByte() & 0xff) << shiftBy;
         }
 
@@ -87,7 +89,7 @@ public final class Utils {
 
         num2 |= num1 & mask;
 
-        for (int i = 1; i < 4; i++) {
+        for (int i = 1; i < NUM_4; i++) {
 
             num2 <<= 8;
             mask <<= 8;

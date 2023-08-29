@@ -27,6 +27,8 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 package com.chua.common.support.extra.asm;
 
+import static com.chua.common.support.constant.NumberConstant.NUM_2;
+
 /**
  * A position in the bytecode of a method. Labels are used for jump, goto, and switch instructions,
  * and for try catch blocks. A label designates the <i>instruction</i> that is just after. Note
@@ -418,7 +420,7 @@ public class Label {
       forwardReferences = new int[FORWARD_REFERENCES_CAPACITY_INCREMENT];
     }
     int lastElementIndex = forwardReferences[0];
-    if (lastElementIndex + 2 >= forwardReferences.length) {
+    if (lastElementIndex + NUM_2 >= forwardReferences.length) {
       int[] newValues = new int[forwardReferences.length + FORWARD_REFERENCES_CAPACITY_INCREMENT];
       System.arraycopy(forwardReferences, 0, newValues, 0, forwardReferences.length);
       forwardReferences = newValues;
@@ -449,7 +451,7 @@ public class Label {
       return false;
     }
     boolean hasAsmInstructions = false;
-    for (int i = forwardReferences[0]; i > 0; i -= 2) {
+    for (int i = forwardReferences[0]; i > 0; i -= NUM_2) {
       final int sourceInsnBytecodeOffset = forwardReferences[i - 1];
       final int reference = forwardReferences[i];
       final int relativeOffset = bytecodeOffset - sourceInsnBytecodeOffset;

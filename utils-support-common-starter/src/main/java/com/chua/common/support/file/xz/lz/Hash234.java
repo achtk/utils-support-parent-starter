@@ -12,6 +12,8 @@ package com.chua.common.support.file.xz.lz;
 
 import com.chua.common.support.file.xz.ArrayCache;
 
+import static com.chua.common.support.constant.NumberConstant.NUM_24;
+
 final class Hash234 extends Crc32Hash {
     private static final int HASH_2_SIZE = 1 << 10;
     private static final int HASH_2_MASK = HASH_2_SIZE - 1;
@@ -38,7 +40,7 @@ final class Hash234 extends Crc32Hash {
         h |= h >>> 8;
         h >>>= 1;
         h |= 0xFFFF;
-        if (h > (1 << 24)) {
+        if (h > (1 << NUM_24)) {
             h >>>= 1;
         }
 

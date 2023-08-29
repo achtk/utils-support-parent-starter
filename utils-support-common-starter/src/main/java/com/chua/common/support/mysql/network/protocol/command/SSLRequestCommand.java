@@ -20,6 +20,8 @@ import com.chua.common.support.mysql.network.ClientCapabilities;
 
 import java.io.IOException;
 
+import static com.chua.common.support.constant.NumberConstant.TWENTY_THREE;
+
 /**
  * @author <a href="mailto:stanley.shyiko@gmail.com">Stanley Shyiko</a>
  */
@@ -48,7 +50,7 @@ public class SSLRequestCommand implements Command {
         buffer.writeInteger(clientCapabilities, 4);
         buffer.writeInteger(0, 4);
         buffer.writeInteger(collation, 1);
-        for (int i = 0; i < 23; i++) {
+        for (int i = 0; i < TWENTY_THREE; i++) {
             buffer.write(0);
         }
         return buffer.toByteArray();

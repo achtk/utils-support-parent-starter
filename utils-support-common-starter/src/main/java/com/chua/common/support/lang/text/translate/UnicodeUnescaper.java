@@ -4,6 +4,8 @@ package com.chua.common.support.lang.text.translate;
 import java.io.IOException;
 import java.io.Writer;
 
+import static com.chua.common.support.constant.NumberConstant.NUM_4;
+
 /**
  * Translates escaped Unicode values of the form \\u+\d\d\d\d back to
  * Unicode. It supports multiple 'u' characters and will work with or
@@ -29,7 +31,7 @@ public class UnicodeUnescaper extends AbstractCharSequenceTranslator {
                 i++;
             }
 
-            if (index + i + 4 <= input.length()) {
+            if (index + i + NUM_4 <= input.length()) {
                 // Get 4 hex digits
                 final CharSequence unicode = input.subSequence(index + i, index + i + 4);
 

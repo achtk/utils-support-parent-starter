@@ -329,9 +329,63 @@ public class NumberConstant {
      */
     public static final int LONG_LENGTH = EIGHT;
     /**
+     * 100
+     */
+    public static final int ONE_HUNDRED = 100;
+    /**
      * 1000
      */
     public static final int ONE_THOUSAND = 1000;
+    /**
+     * 2000
+     */
+    public static final int TWE_THOUSAND = 2000;
+    /**
+     * 10000
+     */
+    public static final int TEN_THOUSAND = 10000;
+    /**
+     * 100000
+     */
+    public static final int ONE_THOUSAND_THOUSAND = 10000;
+    /**
+     * 3000
+     */
+    public static final int THREE_THOUSAND = 3000;
+    /**
+     * 64
+     */
+    public static final int NUM_64 = 64;
+    /**
+     * 127
+     */
+    public static final int NUM_127 = 127;
+    /**
+     * 128
+     */
+    public static final int NUM_128 = 128;
+    /**
+     * 256
+     */
+    public static final int NUM_256 = 256;
+    /**
+     * 512
+     */
+    public static final int NUM_512 = 512;
+    /**
+     * 1024
+     */
+    public static final int NUM_1024 = 1024;
+    /**
+     * 2048
+     */
+    public static final int NUM_2048 = 2048;
+    /**
+     * 65535
+     */
+    public static final int NUM_65535 = 65535;
+
+
     /**
      * 0x
      */
@@ -349,6 +403,10 @@ public class NumberConstant {
      */
     public static final float ZERO_FLOAT = 0.0f;
     /**
+     * 0.0D
+     */
+    public static final double ZERO_DOUBLE = 0.0D;
+    /**
      * 1.0f
      */
     public static final float ONE_FLOAT = 1.0f;
@@ -356,6 +414,10 @@ public class NumberConstant {
      * -1.0f
      */
     public static final float NEG_ONE_FLOAT = -1.0f;
+    /**
+     * -1.0d
+     */
+    public static final double NEG_ONE_DOUBLE = -1.0D;
     /**
      * 127
      */
@@ -374,4 +436,219 @@ public class NumberConstant {
     public static final int MAX_256 = 256;
     public static final long K = 1024;
     public static final int NIGHT_TEEN = 90;
+
+    /**
+     * BB
+     */
+    public static final int BB = 0xBB;
+    /**
+     * BF
+     */
+    public static final int BF = 0xBF;
+
+    /**
+     * FE
+     */
+    public static final int FE = 0xFE;
+
+    /**
+     * EF
+     */
+    public static final int EF = 0xEF;
+    /**
+     * FF
+     */
+    public static final int FF = 0xFF;
+    /**
+     * 80
+     */
+    public static final int X80 = 0x80;
+    /**
+     * 00
+     */
+    public static final int X00 = 0x00;
+    /**
+     * 10
+     */
+    public static final int X10 = 0x10;
+    /**
+     * 10
+     */
+    public static final int XFFFF = 0xFFFF;
+    /**
+     * -1
+     */
+    public static final int NUM_NEG_1 = -1;
+    /**
+     * 0
+     */
+    public static final int NUM_0 = INTEGER_ZERO;
+    /**
+     * 1
+     */
+    public static final int NUM_1 = ONE;
+    /**
+     * 2
+     */
+    public static final int NUM_2 = TWE;
+    /**
+     * 3
+     */
+    public static final int NUM_3 = THREE;
+    /**
+     * 4
+     */
+    public static final int NUM_4 = FOUR;
+    /**
+     * 5
+     */
+    public static final int NUM_5 = FIVE;
+    /**
+     * 6
+     */
+    public static final int NUM_6 = SIX;
+    /**
+     * 7
+     */
+    public static final int NUM_7 = SEVEN;
+    /**
+     * 8
+     */
+    public static final int NUM_8 = EIGHT;
+    /**
+     * 9
+     */
+    public static final int NUM_9 = NIGHT;
+    /**
+     * 10
+     */
+    public static final int NUM_10 = TEN;
+    /**
+     * 11
+     */
+    public static final int NUM_11 = 11;
+    /**
+     * 12
+     */
+    public static final int NUM_12 = 12;
+    /**
+     * 13
+     */
+    public static final int NUM_13 = 13;
+    /**
+     * 16
+     */
+    public static final int NUM_16 = 16;
+    /**
+     * 17
+     */
+    public static final int NUM_17 = 17;
+    /**
+     * 20
+     */
+    public static final int NUM_20 = 20;
+    /**
+     * 24
+     */
+    public static final int NUM_24 = 24;
+    /**
+     * 25
+     */
+    public static final int NUM_25 = 25;
+    /**
+     * 26
+     */
+    public static final int NUM_26 = 26;
+    /**
+     * 30
+     */
+    public static final int NUM_30 = 30;
+    /**
+     * 31
+     */
+    public static final int NUM_31 = 31;
+    /**
+     * 32
+     */
+    public static final int NUM_32 = 32;
+    /**
+     * 34
+     */
+    public static final int NUM_34 = 34;
+    /**
+     * 35
+     */
+    public static final int NUM_35 = 45;
+    /**
+     * 43
+     */
+    public static final int NUM_43 = 43;
+    /**
+     * 46
+     */
+    public static final int NUM_46 = 46;
+    /**
+     * 66
+     */
+    public static final int NUM_66 = 66;
+    /**
+     * 77
+     */
+    public static final int NUM_77 = 77;
+    /**
+     * 78
+     */
+    public static final int NUM_78 = 78;
+    /**
+     * 88
+     */
+    public static final int NUM_88 = 88;
+    /**
+     * 90
+     */
+    public static final int NUM_90 = 90;
+    /**
+     * 99
+     */
+    public static final int NUM_99 = 99;
+    /**
+     * 124
+     */
+    public static final int NUM_124 = 124;
+    /**
+     * 125
+     */
+    public static final int NUM_125 = 125;
+    /**
+     * 126
+     */
+    public static final int NUM_126 = 126;
+    /**
+     * 155
+     */
+    public static final int NUM_155 = 155;
+    /**
+     * 180
+     */
+    public static final int NUM_180 = 180;
+    /**
+     * 220
+     */
+    public static final int NUM_220 = 220;
+    /**
+     * 221
+     */
+    public static final int NUM_221 = 221;
+    /**
+     * 255
+     */
+    public static final int NUM_255 = MAX_255;
+    /**
+     * 360
+     */
+    public static final int NUM_360 = 360;
+    /**
+     * 100
+     */
+    public static final int NUM_100 = ONE_HUNDRED;
 }

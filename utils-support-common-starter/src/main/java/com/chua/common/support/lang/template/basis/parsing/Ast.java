@@ -9,7 +9,6 @@ import com.chua.common.support.lang.template.basis.TemplateLoader.Source;
 import com.chua.common.support.lang.template.basis.interpreter.AstInterpreter;
 import com.chua.common.support.lang.template.basis.interpreter.Reflection;
 import com.chua.common.support.lang.template.basis.parsing.Parser.Macros;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,7 +20,10 @@ import java.lang.reflect.Array;
 import java.util.*;
 import java.util.Map.Entry;
 
+import static com.chua.common.support.constant.CommonConstant.*;
 import static com.chua.common.support.constant.NameConstant.LENGTH;
+import static com.chua.common.support.constant.NumberConstant.THREE;
+import static com.chua.common.support.constant.NumberConstant.TWE;
 
 /**
  * Templates are parsed into an abstract syntax tree (AST) nodes by a Parser. This class contains all AST node types.
@@ -656,7 +658,7 @@ public class Ast {
         public FloatLiteral(Span literal) {
             super(literal);
             String text = literal.getText();
-            if (text.charAt(text.length() - 1) == 'f') {
+            if (text.charAt(text.length() - 1) == LETTER_LOWERCASE_F) {
                 text = text.substring(0, text.length() - 1);
             }
             this.value = Float.parseFloat(text);
@@ -766,16 +768,16 @@ public class Ast {
             super(literal);
 
             String text = literal.getText();
-            if (text.length() > 3) {
-                if (text.charAt(2) == 'n') {
+            if (text.length() > THREE) {
+                if (text.charAt(TWE) == LETTER_LOWERCASE_N) {
                     value = '\n';
-                } else if (text.charAt(2) == 'r') {
+                } else if (text.charAt(TWE) == LETTER_LOWERCASE_R) {
                     value = '\r';
-                } else if (text.charAt(2) == 't') {
+                } else if (text.charAt(TWE) == LETTER_LOWERCASE_T) {
                     value = '\t';
-                } else if (text.charAt(2) == '\\') {
+                } else if (text.charAt(TWE) == SYMBOL_RIGHT_SLASH_CHAR) {
                     value = '\\';
-                } else if (text.charAt(2) == '\'') {
+                } else if (text.charAt(TWE) == SYMBOL_RIGHT_ONE_SLASH_CHAR) {
                     value = '\'';
                 } else {
                     Error.error("Unknown escape sequence '" + literal.getText() + "'.", literal);

@@ -1,16 +1,11 @@
 package com.chua.common.support.utils;
 
-import com.alibaba.fastjson2.JSONObject;
 import com.chua.common.support.bean.BeanMap;
 import com.chua.common.support.collection.MultiLinkedValueMap;
 import com.chua.common.support.collection.MultiValueMap;
-import com.chua.common.support.constant.NumberConstant;
 import com.chua.common.support.converter.Converter;
 import com.chua.common.support.function.Splitter;
-import com.chua.common.support.lang.expression.parser.ExpressionParser;
-import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.unit.name.NamingCase;
-import com.chua.common.support.value.Value;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -25,7 +20,7 @@ import java.util.function.Function;
 
 import static com.chua.common.support.constant.CommonConstant.EMPTY_STRING_ARRAY;
 import static com.chua.common.support.constant.CommonConstant.SYMBOL_COMMA;
-import static com.chua.common.support.constant.NumberConstant.DEFAULT_INITIAL_CAPACITY;
+import static com.chua.common.support.constant.NumberConstant.NUM_3;
 
 /**
  * Map工具类
@@ -64,16 +59,15 @@ public class MapUtils {
      * @since 3.4.0
      */
     private static int capacity(int expectedSize) {
-        if (expectedSize < 3) {
+        if (expectedSize < NUM_3) {
             if (expectedSize < 0) {
                 throw new IllegalArgumentException("expectedSize cannot be negative but was: " + expectedSize);
             }
             return expectedSize + 1;
         }
         if (expectedSize < MAX_POWER_OF_TWO) {
-            
-            
-            
+
+
             return (int) ((float) expectedSize / 0.75F + 1.0F);
         }
         return Integer.MAX_VALUE; 

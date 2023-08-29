@@ -16,6 +16,9 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import static com.chua.common.support.constant.CommonConstant.*;
+import static com.chua.common.support.constant.NumberConstant.NUM_100;
+
 /**
  * dbf field
  *
@@ -95,7 +98,8 @@ public class DbfField {
         DbfField field = new DbfField();
 
         byte readByte = in.readByte();
-        if (readByte == (byte) 0x0d) {
+        int x0D = 0x0d;
+        if (readByte == (byte) x0D) {
 
             return null;
         }
@@ -234,7 +238,7 @@ public class DbfField {
             throw new IllegalArgumentException("Field name cannot be null");
         }
 
-        if (name.length() == 0 || name.length() > 100) {
+        if (name.length() == 0 || name.length() > NUM_100) {
 
             throw new IllegalArgumentException("Field name should be of length 0-10");
         }
@@ -311,80 +315,80 @@ public class DbfField {
 
     public String getType() {
         byte dataType1 = getDataType();
-        if ('C' == dataType1) {
+        if (LETTER_UPPERCASE_C == dataType1) {
             return "CHARACTER";
         }
 
-        if ('V' == dataType1) {
+        if (LETTER_UPPERCASE_V == dataType1) {
             return "VARCHAR";
         }
 
-        if ('D' == dataType1) {
+        if (LETTER_UPPERCASE_D == dataType1) {
             return "DATE";
         }
 
-        if ('O' == dataType1) {
+        if (LETTER_UPPERCASE_O == dataType1) {
             return "DOUBLE";
         }
 
-        if ('N' == dataType1) {
+        if (LETTER_UPPERCASE_N == dataType1) {
             return "NUMERIC";
         }
 
-        if ('I' == dataType1) {
+        if (LETTER_UPPERCASE_I == dataType1) {
             return "LONG";
         }
 
 
-        if ('W' == dataType1) {
+        if (LETTER_UPPERCASE_W == dataType1) {
             return "BLOB";
         }
 
-        if ('Y' == dataType1) {
+        if (LETTER_UPPERCASE_Y == dataType1) {
             return "CURRENCY";
         }
 
-        if ('T' == dataType1) {
+        if (LETTER_UPPERCASE_T == dataType1) {
             return "TIMESTAMP";
         }
 
-        if ('@' == dataType1) {
+        if (SYMBOL_AT_CHAR == dataType1) {
             return "TIMESTAMP_DBASE7";
         }
 
-        if ('0' == dataType1) {
+        if (DIGITS_LOWER[0] == dataType1) {
             return "NULL_FLAGS";
         }
 
-        if ('+' == dataType1) {
+        if (SYMBOL_PLUS_CHAR == dataType1) {
             return "AUTOINCREMENT";
         }
 
-        if ('G' == dataType1) {
+        if (LETTER_UPPERCASE_G == dataType1) {
             return "GENERAL_OLE";
         }
 
-        if ('P' == dataType1) {
+        if (LETTER_UPPERCASE_P == dataType1) {
             return "PICTURE";
         }
 
-        if ('F' == dataType1) {
+        if (LETTER_UPPERCASE_F == dataType1) {
             return "FLOATING_POINT";
         }
 
-        if ('M' == dataType1) {
+        if (LETTER_UPPERCASE_M == dataType1) {
             return "MEMO";
         }
 
-        if ('B' == dataType1) {
+        if (LETTER_UPPERCASE_B == dataType1) {
             return "BINARY";
         }
 
-        if ('L' == dataType1) {
+        if (LETTER_UPPERCASE_L == dataType1) {
             return "LOGICAL";
         }
 
-        if ('Q' == dataType1) {
+        if (LETTER_UPPERCASE_Q == dataType1) {
             return "VARBINARY";
         }
 

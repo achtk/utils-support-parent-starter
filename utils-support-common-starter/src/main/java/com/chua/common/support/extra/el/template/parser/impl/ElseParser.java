@@ -1,5 +1,6 @@
 package com.chua.common.support.extra.el.template.parser.impl;
 
+import com.chua.common.support.constant.CommonConstant;
 import com.chua.common.support.extra.el.exception.IllegalFormatException;
 import com.chua.common.support.extra.el.expression.Expression;
 import com.chua.common.support.extra.el.template.ScanMode;
@@ -24,8 +25,8 @@ public class ElseParser extends Parser {
         if (template.getMode() != ScanMode.EXECUTION) {
             return next.scan(sentence, offset, executions, template, cache);
         }
-        if (getChar(offset, sentence) != 'e'
-                || getChar(offset + 1, sentence) != 'l' 
+        if (getChar(offset, sentence) != CommonConstant.LETTER_LOWERCASE_E
+                || getChar(offset + 1, sentence) != 'l'
                 || getChar(offset + 2, sentence) != 's'
                 || getChar(offset + 3, sentence) != 'e'
         ) {

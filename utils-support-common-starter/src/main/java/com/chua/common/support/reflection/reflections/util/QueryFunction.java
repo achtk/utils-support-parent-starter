@@ -17,23 +17,49 @@ import java.util.stream.Stream;
  * @author Administrator
  */
 public interface QueryFunction<C, T> extends Function<C, Set<T>>, NameHelper {
+    /**
+     * 执行
+     *
+     * @param ctx ctx
+     * @return Set
+     */
     @Override
     Set<T> apply(C ctx);
 
+    /**
+     * empty
+     *
+     * @return QueryFunction
+     */
     static <C, T> QueryFunction<Store, T> empty() {
         return ctx -> Collections.emptySet();
     }
 
+    /**
+     * single
+     *
+     * @param element 元素
+     * @return QueryFunction
+     */
     static <C, T> QueryFunction<Store, T> single(T element) {
         return ctx -> Collections.singleton(element);
     }
 
+    /**
+     * set
+     *
+     * @param elements 元素
+     * @return QueryFunction
+     */
     static <C, T> QueryFunction<Store, T> set(Collection<T> elements) {
         return ctx -> new LinkedHashSet<>(elements);
     }
 
     /**
      * filter by predicate <pre>{@code SubTypes.of(type).filter(withPrefix("org"))}</pre>
+     *
+     * @param predicate predicate
+     * @return QueryFunction
      */
     default QueryFunction<C, T> filter(Predicate<? super T> predicate) {
         return ctx -> apply(ctx).stream().filter(predicate).collect(Collectors.toCollection(LinkedHashSet::new));
@@ -41,6 +67,9 @@ public interface QueryFunction<C, T> extends Function<C, Set<T>>, NameHelper {
 
     /**
      * map by function <pre>{@code TypesAnnotated.with(annotation).asClass().map(Annotation::annotationType)}</pre>
+     *
+     * @param function function
+     * @return QueryFunction
      */
     default <R> QueryFunction<C, R> map(Function<? super T, ? extends R> function) {
         return ctx -> apply(ctx).stream().map(function).collect(Collectors.toCollection(LinkedHashSet::new));
@@ -48,6 +77,9 @@ public interface QueryFunction<C, T> extends Function<C, Set<T>>, NameHelper {
 
     /**
      * flatmap by function <pre>{@code QueryFunction<Method> methods = SubTypes.of(type).asClass().flatMap(Methods::of)}</pre>
+     *
+     * @param function function
+     * @return QueryFunction
      */
     default <R> QueryFunction<C, R> flatMap(Function<T, ? extends Function<C, Set<R>>> function) {
         return ctx -> apply(ctx).stream().flatMap(t -> function.apply(t).apply(ctx).stream()).collect(Collectors.toCollection(LinkedHashSet::new));
@@ -55,6 +87,9 @@ public interface QueryFunction<C, T> extends Function<C, Set<T>>, NameHelper {
 
     /**
      * transitively get all by {@code builder} <pre>{@code SuperTypes.of(type).getAll(Annotations::get)}</pre>
+     *
+     * @param builder function
+     * @return QueryFunction
      */
     default QueryFunction<C, T> getAll(Function<T, QueryFunction<C, T>> builder) {
         return getAll(builder, t -> t);
@@ -62,6 +97,10 @@ public interface QueryFunction<C, T> extends Function<C, Set<T>>, NameHelper {
 
     /**
      * transitively get all by {@code builder} <pre>{@code SuperTypes.of(type).getAll(Annotations::get)}</pre>
+     *
+     * @param builder  function
+     * @param traverse function
+     * @return QueryFunction
      */
     default <R> QueryFunction<C, R> getAll(Function<T, QueryFunction<C, R>> builder, Function<R, T> traverse) {
         return ctx -> {

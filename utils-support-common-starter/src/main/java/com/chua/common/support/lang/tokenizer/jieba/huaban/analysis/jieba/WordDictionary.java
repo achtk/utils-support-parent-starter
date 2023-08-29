@@ -1,11 +1,8 @@
 package com.chua.common.support.lang.tokenizer.jieba.huaban.analysis.jieba;
 
 
-import com.chua.common.support.io.CompressInputStream;
-import com.chua.common.support.io.InnerCompressInputStream;
 import com.chua.common.support.resource.repository.Metadata;
 import com.chua.common.support.resource.repository.Repository;
-import com.chua.common.support.utils.IoUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,6 +15,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.Map.Entry;
+
+import static com.chua.common.support.constant.NumberConstant.NUM_2;
 
 /**
  * @author Administrator
@@ -134,7 +133,7 @@ public class WordDictionary {
     private void doAnalysis(String line) {
         String[] tokens = line.split("[\t ]+");
 
-        if (tokens.length < 2) {
+        if (tokens.length < NUM_2) {
             return;
         }
 

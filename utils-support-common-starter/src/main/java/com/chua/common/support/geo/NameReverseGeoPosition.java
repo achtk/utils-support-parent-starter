@@ -2,11 +2,7 @@ package com.chua.common.support.geo;
 
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.constant.Projects;
-import com.chua.common.support.http.HttpClient;
-import com.chua.common.support.http.HttpClientInvoker;
-import com.chua.common.support.http.HttpResponse;
 import com.chua.common.support.io.CompressInnerInputStream;
-import com.chua.common.support.io.CompressInputStream;
 import com.chua.common.support.lang.process.ProgressBar;
 import com.chua.common.support.lang.profile.ProfileProvider;
 import com.chua.common.support.resource.repository.Metadata;
@@ -14,9 +10,12 @@ import com.chua.common.support.resource.repository.Repository;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
-import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
+import static com.chua.common.support.constant.NumberConstant.NUM_3;
 import static java.lang.Math.*;
 
 /**
@@ -107,7 +106,7 @@ public class NameReverseGeoPosition extends ProfileProvider<ReverseGeoPosition> 
     public GeoCity nearestPlace(double latitude, double longitude) {
         GeoName geoName = kdTree.findNearest(new GeoName(latitude, longitude));
         GeoCity geoCity = new GeoCity();
-        if (geoName.nameLocation.length > 3) {
+        if (geoName.nameLocation.length > NUM_3) {
             geoCity.city(geoName.nameLocation[geoName.nameLocation.length - 1]);
         }
         geoCity.latitude(geoName.latitude)

@@ -11,6 +11,8 @@ import com.chua.common.support.extra.el.template.parser.Parser;
 
 import java.util.Deque;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_DOLLAR_CHAR;
+
 /**
  * 基础类
  *
@@ -23,7 +25,7 @@ public class ExpressionParser extends Parser {
         if (template.getMode() != ScanMode.LITERALS) {
             return next.scan(sentence, offset, executions, template, cache);
         }
-        if (getChar(offset, sentence) != '$' || getChar(offset + 1, sentence) != '{') {
+        if (getChar(offset, sentence) != SYMBOL_DOLLAR_CHAR || getChar(offset + 1, sentence) != '{') {
             return next.scan(sentence, offset, executions, template, cache);
         }
         extractLiterals(cache, executions);

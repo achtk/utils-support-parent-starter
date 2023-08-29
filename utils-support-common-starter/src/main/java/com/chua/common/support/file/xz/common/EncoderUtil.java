@@ -32,11 +32,12 @@ public class EncoderUtil extends Util {
 
     public static void encodeVli(OutputStream out, long num)
             throws IOException {
-        while (num >= 0x80) {
-            out.write((byte)(num | 0x80));
+        long x80 = 0x80;
+        while (num >= x80) {
+            out.write((byte) (num | 0x80));
             num >>>= 7;
         }
 
-        out.write((byte)num);
+        out.write((byte) num);
     }
 }

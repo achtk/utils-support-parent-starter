@@ -15,8 +15,11 @@ import java.text.ParseException;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 
+import static com.chua.common.support.constant.NumberConstant.NUM_2;
+
 /**
  * Handles file management commands
+ *
  * @author Guilherme Chaguri
  */
 @SuppressWarnings("unchecked")
@@ -358,7 +361,7 @@ public class FtpFileHandler {
     }
 
     private void mfmt(String[] args) throws IOException {
-        if(args.length < 2) {
+        if (args.length < NUM_2) {
             con.sendResponse(501, "Missing arguments");
             return;
         }
@@ -385,8 +388,8 @@ public class FtpFileHandler {
     private void md5(String path) throws IOException {
         String p = path = path.trim();
 
-        if(p.length() > 2 && p.startsWith("\"") && p.endsWith("\"")) {
-            
+        if (p.length() > NUM_2 && p.startsWith("\"") && p.endsWith("\"")) {
+
             p = p.substring(1, p.length() - 1).trim();
         }
 

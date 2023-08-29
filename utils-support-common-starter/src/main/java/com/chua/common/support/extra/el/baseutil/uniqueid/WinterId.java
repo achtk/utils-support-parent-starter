@@ -1,14 +1,16 @@
 package com.chua.common.support.extra.el.baseutil.uniqueid;
 
 import com.chua.common.support.net.NetUtils;
-import com.chua.common.support.os.Platform;
 
-import java.lang.management.ManagementFactory;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Calendar;
+
+import static com.chua.common.support.constant.NumberConstant.*;
+
 /**
  * 基础类
+ *
  * @author CH
  */
 public class WinterId implements Uid {
@@ -42,7 +44,7 @@ public class WinterId implements Uid {
     public static void main(String[] args) throws SocketException, UnknownHostException {
         WinterId id = WinterId.instance();
         String[] array = new String[1000];
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < ONE_THOUSAND; i++) {
             array[i] = id.generate();
         }
         for (String each : array) {
@@ -101,39 +103,39 @@ public class WinterId implements Uid {
             int year = now.get(Calendar.YEAR);
             cache.append(year);
             int month = now.get(Calendar.MONTH) + 1;
-            if (month >= 10) {
+            if (month >= NUM_10) {
                 cache.append(month);
             } else {
                 cache.append('0').append(month);
             }
             int dayInMonth = now.get(Calendar.DAY_OF_MONTH);
-            if (dayInMonth >= 10) {
+            if (dayInMonth >= NUM_10) {
                 cache.append(dayInMonth);
             } else {
                 cache.append(0).append(dayInMonth);
             }
             int hour = now.get(Calendar.HOUR_OF_DAY);
-            if (hour >= 10) {
+            if (hour >= NUM_10) {
                 cache.append(hour);
             } else {
                 cache.append('0').append(hour);
             }
             int minute = now.get(Calendar.MINUTE);
-            if (minute >= 10) {
+            if (minute >= NUM_10) {
                 cache.append(minute);
             } else {
                 cache.append('0').append(minute);
             }
             int seconds = now.get(Calendar.SECOND);
-            if (seconds >= 10) {
+            if (seconds >= NUM_10) {
                 cache.append(seconds);
             } else {
                 cache.append('0').append(seconds);
             }
             int millSeconds = now.get(Calendar.MILLISECOND);
-            if (millSeconds >= 100) {
+            if (millSeconds >= NUM_100) {
                 cache.append(millSeconds);
-            } else if (millSeconds >= 10) {
+            } else if (millSeconds >= NUM_10) {
                 cache.append(0).append(millSeconds);
             } else {
                 cache.append(0).append(0).append(millSeconds);

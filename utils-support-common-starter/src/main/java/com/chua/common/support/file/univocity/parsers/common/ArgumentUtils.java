@@ -22,6 +22,7 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.util.*;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_BLANK_CHAR;
 import static java.lang.reflect.Array.newInstance;
 
 /**
@@ -562,7 +563,7 @@ public class ArgumentUtils {
 			return input;
 		}
 		int begin = 0;
-		while (left && begin < input.length() && input.charAt(begin) <= ' ') {
+		while (left && begin < input.length() && input.charAt(begin) <= SYMBOL_BLANK_CHAR) {
 			begin++;
 		}
 		if (begin == input.length()) {
@@ -574,7 +575,7 @@ public class ArgumentUtils {
 			end = input.length() - 1;
 		}
 
-		while (right && input.charAt(end) <= ' ') {
+		while (right && input.charAt(end) <= SYMBOL_BLANK_CHAR) {
 			end--;
 		}
 

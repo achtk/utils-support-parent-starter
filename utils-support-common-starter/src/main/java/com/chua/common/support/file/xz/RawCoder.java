@@ -9,6 +9,8 @@
 
 package com.chua.common.support.file.xz;
 
+import static com.chua.common.support.constant.NumberConstant.NUM_3;
+
 class RawCoder {
     static void validate(FilterCoder[] filters)
             throws UnsupportedOptionsException {
@@ -31,7 +33,7 @@ class RawCoder {
             }
         }
 
-        if (changesSizeCount > 3) {
+        if (changesSizeCount > NUM_3) {
             throw new UnsupportedOptionsException(
                     "Unsupported XZ filter chain");
         }

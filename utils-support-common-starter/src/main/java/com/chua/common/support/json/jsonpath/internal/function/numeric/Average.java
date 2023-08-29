@@ -1,5 +1,7 @@
 package com.chua.common.support.json.jsonpath.internal.function.numeric;
 
+import static com.chua.common.support.constant.NumberConstant.ZERO_DOUBLE;
+
 /**
  * Provides the average of a series of numbers in a JSONArray
  * <p>
@@ -20,9 +22,9 @@ public class Average extends AbstractAggregation {
 
     @Override
     protected Number getValue() {
-        if (count != 0d) {
+        if (count != ZERO_DOUBLE) {
             return summation / count;
         }
-        return 0d;
+        return ZERO_DOUBLE;
     }
 }

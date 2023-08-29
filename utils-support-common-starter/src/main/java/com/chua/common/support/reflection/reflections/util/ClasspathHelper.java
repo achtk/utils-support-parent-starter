@@ -303,7 +303,7 @@ public abstract class ClasspathHelper {
             if (manifest != null) {
                 final String classPath = manifest.getMainAttributes().getValue(new Attributes.Name("Class-Path"));
                 if (classPath != null) {
-                    for (String jar : classPath.split(" ")) {
+                    for (String jar : classPath.split(SYMBOL_BLANK)) {
                         validUrl = tryToGetValidUrl(jarFile.getPath(), new File(part).getParent(), jar);
                         if (validUrl != null) {
                             result.add(validUrl);

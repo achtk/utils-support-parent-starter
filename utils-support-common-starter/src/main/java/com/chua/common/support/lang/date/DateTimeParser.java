@@ -1,8 +1,8 @@
 package com.chua.common.support.lang.date;
 
+import com.chua.common.support.function.Joiner;
 import com.chua.common.support.lang.date.lunar.LunarTime;
 import com.chua.common.support.lang.date.lunar.SolarTime;
-import com.chua.common.support.function.Joiner;
 import com.chua.common.support.utils.StringUtils;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
@@ -18,6 +18,9 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+
+import static com.chua.common.support.constant.CommonConstant.*;
+import static com.chua.common.support.constant.NumberConstant.*;
 
 /**
  * 时间分析
@@ -391,8 +394,9 @@ public class DateTimeParser {
             Matcher match = pattern.matcher(timeExpression);
             if (match.find()) {
                 timePoint.tUnit[0] = Integer.parseInt(match.group());
-                if (timePoint.tUnit[0] >= 0 && timePoint.tUnit[0] < 100) {
-                    if (timePoint.tUnit[0] < 30) /**30以下表示2000年以后的年份*/ {
+                if (timePoint.tUnit[0] >= 0 && timePoint.tUnit[0] < ONE_HUNDRED) {
+                    int v30 = 30;
+                    if (timePoint.tUnit[0] < v30) /**30以下表示2000年以后的年份*/ {
                         timePoint.tUnit[0] += 2000;
                         //否则表示1900年以后的年份
                     } else {
@@ -626,11 +630,11 @@ public class DateTimeParser {
             match = pattern.matcher(timeExpression);
             if (match.find()) {
                 //增加对没有明确时间点，只写了“凌晨”这种情况的处理 @author kexm*/
-                if (timePoint.tUnit[3] == -1) {
-                    timePoint.tUnit[3] = RangeTimeEnum.DAY_BREAK.getHourTime();
+                if (timePoint.tUnit[THREE] == -1) {
+                    timePoint.tUnit[THREE] = RangeTimeEnum.DAY_BREAK.getHourTime();
                 }
                 /**处理倾向于未来时间的情况  @author kexm*/
-                preferFuture(3);
+                preferFuture(THREE);
                 isAllDayTime = false;
             }
 
@@ -639,11 +643,11 @@ public class DateTimeParser {
             match = pattern.matcher(timeExpression);
             if (match.find()) {
                 //增加对没有明确时间点，只写了“早上/早晨/早间”这种情况的处理 @author kexm*/
-                if (timePoint.tUnit[3] == -1) {
-                    timePoint.tUnit[3] = RangeTimeEnum.EARLY_MORNING.getHourTime();
+                if (timePoint.tUnit[THREE] == -1) {
+                    timePoint.tUnit[THREE] = RangeTimeEnum.EARLY_MORNING.getHourTime();
                 }
                 /**处理倾向于未来时间的情况  @author kexm*/
-                preferFuture(3);
+                preferFuture(THREE);
                 isAllDayTime = false;
             }
 
@@ -652,7 +656,7 @@ public class DateTimeParser {
             match = pattern.matcher(timeExpression);
             if (match.find()) {
                 //增加对没有明确时间点，只写了“上午”这种情况的处理 @author kexm*/
-                if (timePoint.tUnit[3] == -1) {
+                if (timePoint.tUnit[THREE] == -1) {
                     timePoint.tUnit[3] = RangeTimeEnum.MORNING.getHourTime();
                 }
                 //处理倾向于未来时间的情况  @author kexm*/
@@ -664,15 +668,15 @@ public class DateTimeParser {
             pattern = Pattern.compile(rule);
             match = pattern.matcher(timeExpression);
             if (match.find()) {
-                if (timePoint.tUnit[3] >= 0 && timePoint.tUnit[3] <= 10) {
-                    timePoint.tUnit[3] += 12;
+                if (timePoint.tUnit[THREE] >= 0 && timePoint.tUnit[THREE] <= TEN) {
+                    timePoint.tUnit[THREE] += 12;
                 }
                 //增加对没有明确时间点，只写了“中午/午间”这种情况的处理 @author kexm*/
-                if (timePoint.tUnit[3] == -1) {
-                    timePoint.tUnit[3] = RangeTimeEnum.NOON.getHourTime();
+                if (timePoint.tUnit[THREE] == -1) {
+                    timePoint.tUnit[THREE] = RangeTimeEnum.NOON.getHourTime();
                 }
                 /**处理倾向于未来时间的情况  @author kexm*/
-                preferFuture(3);
+                preferFuture(THREE);
                 isAllDayTime = false;
             }
 
@@ -680,11 +684,11 @@ public class DateTimeParser {
             pattern = Pattern.compile(rule);
             match = pattern.matcher(timeExpression);
             if (match.find()) {
-                if (timePoint.tUnit[3] >= 0 && timePoint.tUnit[3] <= 11) {
+                if (timePoint.tUnit[THREE] >= 0 && timePoint.tUnit[THREE] <= NUM_11) {
                     timePoint.tUnit[3] += 12;
                 }
                 //增加对没有明确时间点，只写了“下午|午后”这种情况的处理  @author kexm*/
-                if (timePoint.tUnit[3] == -1) {
+                if (timePoint.tUnit[THREE] == -1) {
                     timePoint.tUnit[3] = RangeTimeEnum.AFTERNOON.getHourTime();
                 }
                 //处理倾向于未来时间的情况  @author kexm*/
@@ -696,11 +700,11 @@ public class DateTimeParser {
             pattern = Pattern.compile(rule);
             match = pattern.matcher(timeExpression);
             if (match.find()) {
-                if (timePoint.tUnit[3] >= 1 && timePoint.tUnit[3] <= 11) {
+                if (timePoint.tUnit[THREE] >= 1 && timePoint.tUnit[THREE] <= NUM_11) {
                     timePoint.tUnit[3] += 12;
-                } else if (timePoint.tUnit[3] == 12) {
+                } else if (timePoint.tUnit[THREE] == NUM_12) {
                     timePoint.tUnit[3] = 0;
-                } else if (timePoint.tUnit[3] == -1) {
+                } else if (timePoint.tUnit[THREE] == -1) {
                     timePoint.tUnit[3] = RangeTimeEnum.NIGHT.getHourTime();
                 }
 
@@ -890,10 +894,10 @@ public class DateTimeParser {
             pattern = Pattern.compile(rule);
             match = pattern.matcher(timeExpression);
             if (match.find()) {
-                if (timePoint.tUnit[3] >= 0 && timePoint.tUnit[3] <= 10) {
+                if (timePoint.tUnit[THREE] >= 0 && timePoint.tUnit[THREE] <= TEN) {
                     timePoint.tUnit[3] += 12;
                 }
-                if (timePoint.tUnit[3] == -1) {
+                if (timePoint.tUnit[THREE] == -1) {
                     timePoint.tUnit[3] = RangeTimeEnum.NOON.getHourTime();
                 }
                 /**处理倾向于未来时间的情况  @author kexm*/
@@ -906,10 +910,10 @@ public class DateTimeParser {
             pattern = Pattern.compile(rule);
             match = pattern.matcher(timeExpression);
             if (match.find()) {
-                if (timePoint.tUnit[3] >= 0 && timePoint.tUnit[3] <= 11) {
+                if (timePoint.tUnit[THREE] >= 0 && timePoint.tUnit[THREE] <= NUM_11) {
                     timePoint.tUnit[3] += 12;
                 }
-                if (timePoint.tUnit[3] == -1) {
+                if (timePoint.tUnit[THREE] == -1) {
                     timePoint.tUnit[3] = RangeTimeEnum.AFTERNOON.getHourTime();
                 }
                 preferFuture(3);
@@ -920,12 +924,12 @@ public class DateTimeParser {
             pattern = Pattern.compile(rule);
             match = pattern.matcher(timeExpression);
             if (match.find()) {
-                if (timePoint.tUnit[3] >= 1 && timePoint.tUnit[3] <= 11) {
+                if (timePoint.tUnit[THREE] >= 1 && timePoint.tUnit[THREE] <= NUM_11) {
                     timePoint.tUnit[3] += 12;
-                } else if (timePoint.tUnit[3] == 12) {
+                } else if (timePoint.tUnit[THREE] == NUM_12) {
                     timePoint.tUnit[3] = 0;
                 }
-                if (timePoint.tUnit[3] == -1) {
+                if (timePoint.tUnit[THREE] == -1) {
                     timePoint.tUnit[3] = RangeTimeEnum.NIGHT.getHourTime();
                 }
                 preferFuture(3);
@@ -981,7 +985,7 @@ public class DateTimeParser {
             String[] timeGrid = new String[6];
             timeGrid = normalizer.getTimeBase().split("-");
             int[] ini = new int[6];
-            for (int i = 0; i < 6; i++) {
+            for (int i = 0; i < NUM_6; i++) {
                 ini[i] = Integer.parseInt(timeGrid[i]);
             }
 
@@ -1049,13 +1053,13 @@ public class DateTimeParser {
 
             String s = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(calendar.getTime());
             String[] strings = s.split("-");
-            if (flag[0] || flag[1] || flag[2]) {
+            if (flag[0] || flag[1] || flag[NUM_2]) {
                 timePoint.tUnit[0] = Integer.parseInt(strings[0]);
             }
-            if (flag[1] || flag[2]) {
+            if (flag[1] || flag[NUM_2]) {
                 timePoint.tUnit[1] = Integer.parseInt(strings[1]);
             }
-            if (flag[2]) {
+            if (flag[NUM_2]) {
                 timePoint.tUnit[2] = Integer.parseInt(strings[2]);
             }
         }
@@ -1067,7 +1071,7 @@ public class DateTimeParser {
             String[] timeGrid = new String[6];
             timeGrid = normalizer.getOldTimeBase().split("-");
             int[] ini = new int[6];
-            for (int i = 0; i < 6; i++) {
+            for (int i = 0; i < NUM_6; i++) {
                 ini[i] = Integer.parseInt(timeGrid[i]);
             }
 
@@ -1210,7 +1214,7 @@ public class DateTimeParser {
                 } catch (NumberFormatException e) {
                     week = 1;
                 }
-                if (week == 7) {
+                if (week == NUM_7) {
                     week = 1;
                 } else {
                     week++;
@@ -1230,7 +1234,7 @@ public class DateTimeParser {
                 } catch (NumberFormatException e) {
                     week = 1;
                 }
-                if (week == 7) {
+                if (week == NUM_7) {
                     week = 1;
                 } else {
                     week++;
@@ -1250,7 +1254,7 @@ public class DateTimeParser {
                 } catch (NumberFormatException e) {
                     week = 1;
                 }
-                if (week == 7) {
+                if (week == NUM_7) {
                     week = 1;
                 } else {
                     week++;
@@ -1270,7 +1274,7 @@ public class DateTimeParser {
                 } catch (NumberFormatException e) {
                     week = 1;
                 }
-                if (week == 7) {
+                if (week == NUM_7) {
                     week = 1;
                 } else {
                     week++;
@@ -1290,7 +1294,7 @@ public class DateTimeParser {
                 } catch (NumberFormatException e) {
                     week = 1;
                 }
-                if (week == 7) {
+                if (week == NUM_7) {
                     week = 1;
                 } else {
                     week++;
@@ -1303,13 +1307,13 @@ public class DateTimeParser {
 
             String s = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(calendar.getTime());
             String[] timeFin = s.split("-");
-            if (flag[0] || flag[1] || flag[2]) {
+            if (flag[0] || flag[1] || flag[NUM_2]) {
                 timePoint.tUnit[0] = Integer.parseInt(timeFin[0]);
             }
-            if (flag[1] || flag[2]) {
+            if (flag[1] || flag[NUM_2]) {
                 timePoint.tUnit[1] = Integer.parseInt(timeFin[1]);
             }
-            if (flag[2]) {
+            if (flag[NUM_2]) {
                 timePoint.tUnit[2] = Integer.parseInt(timeFin[2]);
             }
 
@@ -1328,7 +1332,7 @@ public class DateTimeParser {
             } else {
                 s += timeGrid[0];
             }
-            for (int i = 1; i < 6; i++) {
+            for (int i = 1; i < NUM_6; i++) {
                 s += "-";
                 if (timePoint.tUnit[i] != -1) {
                     s += Integer.toString(timePoint.tUnit[i]);
@@ -1376,14 +1380,14 @@ public class DateTimeParser {
             }
             String[] resultTmp = new String[6];
             resultTmp[0] = String.valueOf(timePoint.tUnit[0]);
-            if (timePoint.tUnit[0] >= 10 && timePoint.tUnit[0] < 100) {
+            if (timePoint.tUnit[0] >= NUM_10 && timePoint.tUnit[0] < NUM_100) {
                 resultTmp[0] = "19" + timePoint.tUnit[0];
             }
-            if (timePoint.tUnit[0] > 0 && timePoint.tUnit[0] < 10) {
+            if (timePoint.tUnit[0] > 0 && timePoint.tUnit[0] < NUM_10) {
                 resultTmp[0] = "200" + timePoint.tUnit[0];
             }
 
-            for (int i = 1; i < 6; i++) {
+            for (int i = 1; i < NUM_6; i++) {
                 resultTmp[i] = String.valueOf(timePoint.tUnit[i]);
             }
 
@@ -1395,16 +1399,16 @@ public class DateTimeParser {
                 if (Integer.parseInt(resultTmp[1]) != -1) {
                     timeNorm += resultTmp[1] + "月";
                     cale.set(Calendar.MONTH, Integer.valueOf(resultTmp[1]) - 1);
-                    if (Integer.parseInt(resultTmp[2]) != -1) {
+                    if (Integer.parseInt(resultTmp[NUM_2]) != -1) {
                         timeNorm += resultTmp[2] + "日";
                         cale.set(Calendar.DAY_OF_MONTH, Integer.valueOf(resultTmp[2]));
-                        if (Integer.parseInt(resultTmp[3]) != -1) {
+                        if (Integer.parseInt(resultTmp[THREE]) != -1) {
                             timeNorm += resultTmp[3] + "时";
                             cale.set(Calendar.HOUR_OF_DAY, Integer.valueOf(resultTmp[3]));
-                            if (Integer.parseInt(resultTmp[4]) != -1) {
+                            if (Integer.parseInt(resultTmp[NUM_4]) != -1) {
                                 timeNorm += resultTmp[4] + "分";
                                 cale.set(Calendar.MINUTE, Integer.valueOf(resultTmp[4]));
-                                if (Integer.parseInt(resultTmp[5]) != -1) {
+                                if (Integer.parseInt(resultTmp[NUM_5]) != -1) {
                                     timeNorm += resultTmp[5] + "秒";
                                     cale.set(Calendar.SECOND, Integer.valueOf(resultTmp[5]));
                                 }
@@ -1542,7 +1546,7 @@ public class DateTimeParser {
                 }
             }
             //在处理小时这个级别时，如果上文时间是下午的且下文没有主动声明小时级别以上的时间，则也把下文时间设为下午*/
-            if (isFirstTimeSolveContext && checkTimeIndex == 3 && tpOrigin.tUnit[checkTimeIndex] >= 12 && timePoint.tUnit[checkTimeIndex] < 12) {
+            if (isFirstTimeSolveContext && checkTimeIndex == THREE && tpOrigin.tUnit[checkTimeIndex] >= NUM_12 && timePoint.tUnit[checkTimeIndex] < NUM_12) {
                 timePoint.tUnit[checkTimeIndex] += 12;
             }
             isFirstTimeSolveContext = false;
@@ -1617,6 +1621,20 @@ public class DateTimeParser {
         private static final Pattern A_PATTERN = Pattern.compile("[一二两三四五六七八九123456789]万[一二两三四五六七八九123456789](?!(千|百|十))");
         private static final Pattern NB_PATTERN = Pattern.compile("0?[1-9]千[0-9]?[0-9]?[0-9]?");
         private static final Pattern NBW_PATTERN = Pattern.compile("[0-9]+万[0-9]?[0-9]?[0-9]?[0-9]?");
+        private static final String C_ZERO = "零";
+        private static final String C_Y = "一";
+        private static final String C_E = "二";
+        private static final String C_E1 = "两";
+        private static final String C_S = "三";
+        private static final String C_SI = "四";
+        private static final String C_W = "五";
+        private static final String C_L = "六";
+        private static final String C_Q = "七";
+        private static final String TAN = "天";
+        private static final String RI = "日";
+        private static final String MO = "末";
+        private static final String C_B = "八";
+        private static final String C_J = "九";
 
         /**
          * 该方法删除一字符串中所有匹配某一规则字串
@@ -1841,25 +1859,25 @@ public class DateTimeParser {
          * @return 对应的整形数，如果不是大写数字返回-1
          */
         private static int wordToNumber(String s) {
-            if ("零".equals(s) || "0".equals(s)) {
+            if (C_ZERO.equals(s) || ZERO_STR.equals(s)) {
                 return 0;
-            } else if ("一".equals(s) || "1".equals(s)) {
+            } else if (C_Y.equals(s) || ONE_STR.equals(s)) {
                 return 1;
-            } else if ("二".equals(s) || "两".equals(s) || "2".equals(s)) {
+            } else if (C_E.equals(s) || C_E1.equals(s) || TWE_STR.equals(s)) {
                 return 2;
-            } else if ("三".equals(s) || "3".equals(s)) {
+            } else if (C_S.equals(s) || THREE_STR.equals(s)) {
                 return 3;
-            } else if ("四".equals(s) || "4".equals(s)) {
+            } else if (C_SI.equals(s) || FOUR_STR.equals(s)) {
                 return 4;
-            } else if ("五".equals(s) || "5".equals(s)) {
+            } else if (C_W.equals(s) || FIVE_STR.equals(s)) {
                 return 5;
-            } else if ("六".equals(s) || "6".equals(s)) {
+            } else if (C_L.equals(s) || SIX_STR.equals(s)) {
                 return 6;
-            } else if ("七".equals(s) || "天".equals(s) || "日".equals(s) || "末".equals(s) || "7".equals(s)) {
+            } else if (C_Q.equals(s) || TAN.equals(s) || RI.equals(s) || MO.equals(s) || SEVEN_STR.equals(s)) {
                 return 7;
-            } else if ("八".equals(s) || "8".equals(s)) {
+            } else if (C_B.equals(s) || EIGHT_STR.equals(s)) {
                 return 8;
-            } else if ("九".equals(s) || "9".equals(s)) {
+            } else if (C_J.equals(s) || NIGHT_STR.equals(s)) {
                 return 9;
             } else {
                 return -1;
@@ -1874,6 +1892,8 @@ public class DateTimeParser {
         private static final Map<String, Integer[]> DAY = new ConcurrentHashMap<>();
 
 
+        private static final String CJ = "春节";
+
         static {
             DAY.put("中秋节", new Integer[]{8, 15});
             DAY.put("端午节", new Integer[]{5, 5});
@@ -1884,7 +1904,7 @@ public class DateTimeParser {
             DAY.put("重阳节", new Integer[]{9, 9});
             P = Pattern.compile(Arrays.stream(LunarTime.JIE_QI_IN_USE).map(it -> "(" + it + ")").collect(Collectors.joining("|")) + "|春节");
             P1 = Pattern.compile(DAY.keySet().stream().map(it -> {
-                if ("春节".equals(it)) {
+                if (CJ.equals(it)) {
                     return "(" + it + ")";
                 }
                 return "(" + it + ")|(" + it.replace("节", "") + ")";

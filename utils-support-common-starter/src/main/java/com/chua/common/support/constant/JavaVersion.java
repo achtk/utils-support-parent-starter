@@ -3,6 +3,8 @@ package com.chua.common.support.constant;
 
 import com.chua.common.support.utils.NumberUtils;
 
+import static com.chua.common.support.constant.NumberConstant.NUM_2;
+
 /**
  * <p>An enum representing all the versions of the Java specification.
  * This is intended to mirror available values from the
@@ -339,7 +341,7 @@ public enum JavaVersion {
         final float defaultReturnValue = -1f;
         if (value.contains(".")) {
             final String[] toParse = value.split("\\.");
-            if (toParse.length >= 2) {
+            if (toParse.length >= NUM_2) {
                 return NumberUtils.toFloat(toParse[0] + '.' + toParse[1], defaultReturnValue);
             }
         } else {

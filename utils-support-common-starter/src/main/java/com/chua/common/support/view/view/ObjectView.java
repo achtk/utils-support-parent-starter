@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static com.chua.common.support.constant.CommonConstant.MAX_HTTP_CONTENT_LENGTH;
+import static com.chua.common.support.constant.NumberConstant.NUM_32;
 import static java.lang.String.format;
 
 /**
@@ -141,7 +142,7 @@ public class ObjectView implements View {
                 final Character c = (Character) obj;
 
                 // ASCII的可见字符
-                if (c >= 32
+                if (c >= NUM_32
                         && c <= 126) {
                     appendStringBuilder(buf, format("@%s[%s]", className, c));
                 }

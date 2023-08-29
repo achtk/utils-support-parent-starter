@@ -1,6 +1,9 @@
 package com.chua.common.support.constant;
 
 
+import static com.chua.common.support.utils.CardUtils.A;
+import static com.chua.common.support.utils.CardUtils.D;
+
 /**
  * 排序方式（升序或者降序）
  *
@@ -30,9 +33,9 @@ public enum Direction {
 
         // 兼容元数据中ASC和DESC表示
         if (1 == value.length()) {
-            if ("A".equalsIgnoreCase(value)) {
+            if (A.equalsIgnoreCase(value)) {
                 return ASC;
-            } else if ("D".equalsIgnoreCase(value)) {
+            } else if (D.equalsIgnoreCase(value)) {
                 return DESC;
             }
         }

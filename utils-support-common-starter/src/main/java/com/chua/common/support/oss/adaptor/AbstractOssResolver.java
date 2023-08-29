@@ -1,6 +1,5 @@
 package com.chua.common.support.oss.adaptor;
 
-import com.chua.common.support.constant.CommonConstant;
 import com.chua.common.support.function.Splitter;
 import com.chua.common.support.function.strategy.name.OssNamedStrategy;
 import com.chua.common.support.function.strategy.name.RejectStrategy;
@@ -26,6 +25,8 @@ import static com.chua.common.support.constant.CommonConstant.SYMBOL_COMMA;
  */
 public abstract class AbstractOssResolver implements OssResolver {
 
+
+    private static final String IMAGE = "image";
 
     /**
      * 命名策略
@@ -136,7 +137,7 @@ public abstract class AbstractOssResolver implements OssResolver {
             }
 
             String ossPlugins = ossSystem.getOssPlugins();
-            if (null == mediaType || !mediaType.type().startsWith("image") || StringUtils.isBlank(ossPlugins)) {
+            if (null == mediaType || !mediaType.type().startsWith(IMAGE) || StringUtils.isBlank(ossPlugins)) {
                 os.write(bytes);
                 os.flush();
                 return;

@@ -20,6 +20,8 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.util.zip.CheckedInputStream;
 
+import static com.chua.common.support.constant.NumberConstant.*;
+
 /**
  * @author Administrator
  */
@@ -49,14 +51,14 @@ public class IndexDecoder extends IndexBase {
         java.util.zip.CRC32 crc32 = new java.util.zip.CRC32();
         CheckedInputStream inChecked = new CheckedInputStream(in, crc32);
 
-        if (inChecked.read() != 0x00) {
+        if (inChecked.read() != X00) {
             throw new CorruptedInputException("XZ Index is corrupt");
         }
 
         try {
             long count = DecoderUtil.decodeVli(inChecked);
 
-            if (count >= streamFooterFlags.backwardSize / 2) {
+            if (count >= streamFooterFlags.backwardSize / NUM_2) {
                 throw new CorruptedInputException("XZ Index is corrupt");
             }
 
@@ -109,7 +111,7 @@ public class IndexDecoder extends IndexBase {
         }
 
         long value = crc32.getValue();
-        for (int i = 0; i < 4; ++i) {
+        for (int i = 0; i < NUM_4; ++i) {
             if (((value >>> (i * 8)) & 0xFF) != in.read()) {
                 throw new CorruptedInputException("XZ Index is corrupt");
             }

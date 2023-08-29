@@ -20,6 +20,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 
+import static com.chua.common.support.constant.NameConstant.*;
+import static com.chua.common.support.constant.NumberConstant.*;
+
 /**
  * Internal static utilities for handling data.
  *
@@ -70,7 +73,7 @@ public final class DataUtil {
     public static Document load(File file, String charsetName, String baseUri, Parser parser) throws IOException {
         InputStream stream = new FileInputStream(file);
         String name = Normalizer.lowerCase(file.getName());
-        if (name.endsWith(".gz") || name.endsWith(".z")) {
+        if (name.endsWith(SUFFIX_GZ) || name.endsWith(SUFFIX_Z)) {
             boolean zipped;
             try {
                 zipped = (stream.read() == 0x1f && stream.read() == 0x8b);
@@ -180,7 +183,7 @@ public final class DataUtil {
                         }
                     }
                     if (decl != null) {
-                        if ("xml".equalsIgnoreCase(decl.name())) {
+                        if (XML.equalsIgnoreCase(decl.name())) {
                             foundCharset = decl.attr("encoding");
                         }
                     }
@@ -312,7 +315,7 @@ public final class DataUtil {
             return new BomCharset("UTF-32", false);
         } else if (b1) {
             return new BomCharset("UTF-16", false);
-        } else if (bom[0] == (byte) 0xEF && bom[1] == (byte) 0xBB && bom[2] == (byte) 0xBF) {
+        } else if (bom[0] == (byte) EF && bom[1] == (byte) BB && bom[TWE] == (byte) BF) {
             return new BomCharset("UTF-8", true);
         }
         return null;

@@ -25,6 +25,8 @@
 
 package com.chua.common.support.protocol.websocket.util;
 
+import static com.chua.common.support.constant.NumberConstant.*;
+
 /**
  * <p>Encodes and decodes to and from Base64 notation.</p>
  * <p>Homepage: <a href="http://iharder.net/base64">http://iharder.net/base64</a>.</p>
@@ -561,7 +563,7 @@ public class Base64 {
             int e = 0;
             int len2 = len - 2;
             int lineLength = 0;
-            for (; d < len2; d += 3, e += 4) {
+            for (; d < len2; d += THIRD, e += FOUR) {
                 encode3to4(source, d + off, 3, outBuff, e, options);
 
                 lineLength += 4;
@@ -625,26 +627,26 @@ public class Base64 {
         if (destination == null) {
             throw new IllegalArgumentException("Destination array was null.");
         }
-        if (srcOffset < 0 || srcOffset + 3 >= source.length) {
+        if (srcOffset < 0 || srcOffset + THIRD >= source.length) {
             throw new IllegalArgumentException(String.format(
                     "Source array with length %d cannot have offset of %d and still process four bytes.",
                     source.length, srcOffset));
         }
-        if (destOffset < 0 || destOffset + 2 >= destination.length) {
+        if (destOffset < 0 || destOffset + TWE >= destination.length) {
             throw new IllegalArgumentException(String.format(
                     "Destination array with length %d cannot have offset of %d and still store three bytes.",
                     destination.length, destOffset));
         }
         final byte[] decodabet = getDecodabet(options);
 
-        if (source[srcOffset + 2] == EQUALS_SIGN) {
+        if (source[srcOffset + TWE] == EQUALS_SIGN) {
             // Two ways to do the same thing. Don't know which way I like best.
             int outBuff = ((decodabet[source[srcOffset]] & 0xFF) << 18)
                     | ((decodabet[source[srcOffset + 1]] & 0xFF) << 12);
 
             destination[destOffset] = (byte) (outBuff >>> 16);
             return 1;
-        } else if (source[srcOffset + 3] == EQUALS_SIGN) {
+        } else if (source[srcOffset + THIRD] == EQUALS_SIGN) {
             // Two ways to do the same thing. Don't know which way I like best.
             int outBuff = ((decodabet[source[srcOffset]] & 0xFF) << 18)
                     | ((decodabet[source[srcOffset + 1]] & 0xFF) << 12)
@@ -758,14 +760,15 @@ public class Base64 {
                     position = 0;
                 }
             } else {
-                if (decodabet[theByte & 0x7f] > WHITE_SPACE_ENC) {
+                int x7F = 0x7f;
+                if (decodabet[theByte & x7F] > WHITE_SPACE_ENC) {
                     buffer[position++] = (byte) theByte;
                     if (position >= bufferLength) {
                         int len = Base64.decode4to3(buffer, 0, b4, 0, options);
                         out.write(b4, 0, len);
                         position = 0;
                     }
-                } else if (decodabet[theByte & 0x7f] != WHITE_SPACE_ENC) {
+                } else if (decodabet[theByte & x7F] != WHITE_SPACE_ENC) {
                     throw new java.io.IOException("Invalid character in Base64 data.");
                 }
             }

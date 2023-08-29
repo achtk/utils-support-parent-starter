@@ -1,5 +1,7 @@
 package com.chua.common.support.file.univocity.parsers.common.input;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_BLANK_CHAR;
+
 /**
  * A character appender that restores its internal buffer size after expanding to accommodate larger contents.
  *
@@ -53,14 +55,14 @@ public class ElasticCharAppender extends ExpandingCharAppender {
 		int length = index - whitespaceCount;
 
 		int start = 0;
-		while (start < length && chars[start] <= ' ') {
+		while (start < length && chars[start] <= SYMBOL_BLANK_CHAR) {
 			start++;
 		}
 		if (start >= length) {
 			return emptyValue;
 		}
 
-		while (chars[length - 1] <= ' ') {
+		while (chars[length - 1] <= SYMBOL_BLANK_CHAR) {
 			length--;
 		}
 		length -= start;
@@ -77,14 +79,14 @@ public class ElasticCharAppender extends ExpandingCharAppender {
 		int length = index - whitespaceCount;
 
 		int start = 0;
-		while (start < length && chars[start] <= ' ') {
+		while (start < length && chars[start] <= SYMBOL_BLANK_CHAR) {
 			start++;
 		}
 		if (start >= length) {
 			return EMPTY_CHAR_ARRAY;
 		}
 
-		while (chars[length - 1] <= ' ') {
+		while (chars[length - 1] <= SYMBOL_BLANK_CHAR) {
 			length--;
 		}
 		length -= start;

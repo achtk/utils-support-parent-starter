@@ -21,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.chua.common.support.constant.NumberConstant.TEN;
 import static java.util.Calendar.DAY_OF_WEEK;
 import static java.util.Calendar.getInstance;
 
@@ -937,7 +938,7 @@ public class DateUtils {
      * @throws ParseException           如果没有合适的日期模式（或没有合适的日期）
      */
     public static Date parseDate(String str) throws ParseException {
-        if (str.length() > 10 && NumberUtils.isNumber(str)) {
+        if (str.length() > TEN && NumberUtils.isNumber(str)) {
             return new Date(Long.parseLong(str));
         }
         Date date = null;

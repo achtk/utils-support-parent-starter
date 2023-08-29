@@ -148,7 +148,8 @@ public class Bitmap {
         for (long element : elementData) {
             String eleString = Long.toBinaryString(element);
             StringBuilder one = new StringBuilder();
-            for (int i = 0; i < 64 - eleString.length(); i++) {
+            int v64 = 64;
+            for (int i = 0; i < v64 - eleString.length(); i++) {
                 one.append("0");
             }
             one.append(eleString);

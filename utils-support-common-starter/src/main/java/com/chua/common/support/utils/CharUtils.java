@@ -1,7 +1,5 @@
 package com.chua.common.support.utils;
 
-import com.chua.common.support.constant.CommonConstant;
-
 import static com.chua.common.support.constant.CharConstant.BACKSLASH;
 import static com.chua.common.support.constant.CharConstant.SLASH;
 import static com.chua.common.support.constant.CommonConstant.*;
@@ -407,7 +405,7 @@ public class CharUtils {
      */
     public static char toCloseChar(char c) {
         int result = c;
-        if (c >= '1' && c <= '9') {
+        if (c >= ONE_CHAR && c <= NIGHT_CHAR) {
             result = '①' + c - '1';
         } else if (c >= LETTER_UPPERCASE_A && c <= LETTER_UPPERCASE_Z) {
             result = 'Ⓐ' + c - 'A';
@@ -436,7 +434,8 @@ public class CharUtils {
      * @since 5.6.2
      */
     public static char toCloseByNumber(int number) {
-        if (number > 20) {
+        int v20 = 20;
+        if (number > v20) {
             throw new IllegalArgumentException("Number must be [1-20]");
         }
         return (char) ('①' + number - 1);

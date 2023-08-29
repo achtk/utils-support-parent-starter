@@ -202,7 +202,9 @@ public class ClassFileParser {
     }
 
     private void readMagic() {
-        if ((binaryData.readByte() & 0xff) == 0xca
+        int xff = 0xff;
+        int xca = 0xca;
+        if ((binaryData.readByte() & xff) == xca
                 && (binaryData.readByte() & 0xff) == 0xfe
                 && (binaryData.readByte() & 0xff) == 0xba
                 && (binaryData.readByte() & 0xff) == 0xbe) {

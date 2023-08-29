@@ -10,7 +10,8 @@ public class EnumConstant {
     String enumName;
 
     public EnumConstant(String typeName, String enumName) {
-        if (typeName.startsWith("L")) {
+        String l = "L";
+        if (typeName.startsWith(l)) {
             typeName = typeName.substring(1, typeName.length() - 1);
         }
         this.typeName = typeName;

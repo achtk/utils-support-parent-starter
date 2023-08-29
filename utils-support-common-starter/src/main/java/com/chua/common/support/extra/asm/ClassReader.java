@@ -4,8 +4,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static com.chua.common.support.constant.CommonConstant.SYMBOL_LEFT_SQUARE_BRACKET;
-import static com.chua.common.support.constant.CommonConstant.SYMBOL_LEFT_SQUARE_BRACKET_CHAR;
+import static com.chua.common.support.constant.CommonConstant.TWE;
+import static com.chua.common.support.constant.CommonConstant.*;
+import static com.chua.common.support.constant.NumberConstant.*;
 
 /**
  * A parser to make a {@link ClassVisitor} visit a ClassFile structure, as defined in the Java
@@ -168,7 +169,7 @@ public class ClassReader {
             final byte[] classFileBuffer, final int classFileOffset, final boolean checkClassVersion) {
         this.classFileBuffer = classFileBuffer;
         this.b = classFileBuffer;
-        if (checkClassVersion && readShort(classFileOffset + 6) > Opcodes.V19) {
+        if (checkClassVersion && readShort(classFileOffset + SIX) > Opcodes.V19) {
             throw new IllegalArgumentException(
                     "Unsupported class file major version " + readShort(classFileOffset + 6));
         }
@@ -301,7 +302,7 @@ public class ClassReader {
          * FileInputStream("/proc/a_file")). Also in some pathological cases a very small number might
          * be returned, and in this case we use a default size.
          */
-        if (expectedLength < 256) {
+        if (expectedLength < NUM_256) {
             return INPUT_STREAM_DATA_CHUNK_SIZE;
         }
         return Math.min(expectedLength, MAX_BUFFER_SIZE);
@@ -428,9 +429,9 @@ public class ClassReader {
         Attribute attributes = null;
 
         int currentAttributeOffset = getFirstAttributeOffset();
-        for (int i = readUnsignedShort(currentAttributeOffset - 2); i > 0; --i) {
+        for (int i = readUnsignedShort(currentAttributeOffset - TWE); i > 0; --i) {
             String attributeName = readUtf8(currentAttributeOffset, charBuffer);
-            int attributeLength = readInt(currentAttributeOffset + 2);
+            int attributeLength = readInt(currentAttributeOffset + TWE);
             currentAttributeOffset += 6;
             if (Constants.SOURCE_FILE.equals(attributeName)) {
                 sourceFile = readUtf8(currentAttributeOffset, charBuffer);
@@ -1703,7 +1704,7 @@ public class ClassReader {
             if (expandFrames) {
                 computeImplicitFrame(context);
             }
-            for (int offset = stackMapFrameOffset; offset < stackMapTableEndOffset - 2; ++offset) {
+            for (int offset = stackMapFrameOffset; offset < stackMapTableEndOffset - TWE; ++offset) {
                 if (classBuffer[offset] == Frame.ITEM_UNINITIALIZED) {
                     int potentialBytecodeOffset = readUnsignedShort(offset + 1);
                     if (potentialBytecodeOffset >= 0
@@ -2224,7 +2225,7 @@ public class ClassReader {
                 currentOffset += 10;
                 String signature = null;
                 if (typeTable != null) {
-                    for (int i = 0; i < typeTable.length; i += 3) {
+                    for (int i = 0; i < typeTable.length; i += THREE) {
                         if (typeTable[i] == startPc && typeTable[i + 1] == index) {
                             signature = readUtf8(typeTable[i + 2], charBuffer);
                             break;
@@ -2799,7 +2800,8 @@ public class ClassReader {
         Object[] locals = context.currentFrameLocalTypes;
         int numLocal = 0;
         if ((context.currentMethodAccessFlags & Opcodes.ACC_STATIC) == 0) {
-            if ("<init>".equals(context.currentMethodName)) {
+            String INIT = "<init>";
+            if (INIT.equals(context.currentMethodName)) {
                 locals[numLocal++] = Opcodes.UNINITIALIZED_THIS;
             } else {
                 locals[numLocal++] = readClass(header + 2, context.charBuffer);
@@ -2831,7 +2833,7 @@ public class ClassReader {
                     }
                     if (methodDescriptor.charAt(currentMethodDescritorOffset) == 'L') {
                         ++currentMethodDescritorOffset;
-                        while (methodDescriptor.charAt(currentMethodDescritorOffset) != ';') {
+                        while (methodDescriptor.charAt(currentMethodDescritorOffset) != SYMBOL_SEMICOLON_CHAR) {
                             ++currentMethodDescritorOffset;
                         }
                     }
@@ -2840,7 +2842,7 @@ public class ClassReader {
                                     currentArgumentDescriptorStartOffset, ++currentMethodDescritorOffset);
                     break;
                 case 'L':
-                    while (methodDescriptor.charAt(currentMethodDescritorOffset) != ';') {
+                    while (methodDescriptor.charAt(currentMethodDescritorOffset) != SYMBOL_SEMICOLON_CHAR) {
                         ++currentMethodDescritorOffset;
                     }
                     locals[numLocal++] =
@@ -3054,7 +3056,7 @@ public class ClassReader {
     private int[] readBootstrapMethodsAttribute(final int maxStringLength) {
         char[] charBuffer = new char[maxStringLength];
         int currentAttributeOffset = getFirstAttributeOffset();
-        for (int i = readUnsignedShort(currentAttributeOffset - 2); i > 0; --i) {
+        for (int i = readUnsignedShort(currentAttributeOffset - TWE); i > 0; --i) {
             String attributeName = readUtf8(currentAttributeOffset, charBuffer);
             int attributeLength = readInt(currentAttributeOffset + 2);
             currentAttributeOffset += 6;

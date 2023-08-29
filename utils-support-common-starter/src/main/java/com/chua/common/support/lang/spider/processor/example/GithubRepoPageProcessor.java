@@ -5,6 +5,8 @@ import com.chua.common.support.lang.spider.Site;
 import com.chua.common.support.lang.spider.Spider;
 import com.chua.common.support.lang.spider.processor.PageProcessor;
 
+import static com.chua.common.support.constant.NameConstant.NAME;
+
 /**
  * @author code4crafter@gmail.com <br>
  * @since 0.3.2
@@ -18,8 +20,8 @@ public class GithubRepoPageProcessor implements PageProcessor {
         page.addTargetRequests(page.getHtml().links().regex("(https://github\\.com/[\\w\\-]+/[\\w\\-]+)").all());
         page.addTargetRequests(page.getHtml().links().regex("(https://github\\.com/[\\w\\-])").all());
         page.putField("author", page.getUrl().regex("https://github\\.com/(\\w+)/.*").toString());
-        page.putField("name", page.getHtml().xpath("//h1[@class='public']/strong/a/text()").toString());
-        if (page.getResultItems().get("name") == null) {
+        page.putField(NAME, page.getHtml().xpath("//h1[@class='public']/strong/a/text()").toString());
+        if (page.getResultItems().get(NAME) == null) {
             //skip this page
             page.setSkip(true);
         }

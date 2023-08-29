@@ -15,6 +15,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 
+import static com.chua.common.support.constant.NumberConstant.NUM_1024;
+
 /**
  * 基础类
  *
@@ -88,7 +90,7 @@ public class Md5Util {
             randomAccessFile = new RandomAccessFile(file, "r");
             MessageDigest md = MessageDigest.getInstance("MD5");
             byte[] src;
-            if (length > 1024 * 1024) {
+            if (length > NUM_1024 * NUM_1024) {
                 src = new byte[1024 * 1024];
             } else {
                 src = new byte[(int) length];

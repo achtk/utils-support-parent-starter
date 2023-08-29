@@ -8,6 +8,9 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.Map;
 
+import static com.chua.common.support.constant.NumberConstant.NUM_16;
+import static com.chua.common.support.constant.NumberConstant.NUM_2;
+
 /**
  * 基础类
  *
@@ -63,7 +66,7 @@ public class StringUtil {
         }
         int length = hexChars.length / 2;
         byte[] result = new byte[length];
-        for (int i = 0; i < hexChars.length; i += 2) {
+        for (int i = 0; i < hexChars.length; i += NUM_2) {
             int f = toDigit(hexChars[i]) << 4;
             f = f | toDigit(hexChars[i + 1]);
             result[i >> 1] = (byte) f;
@@ -73,7 +76,7 @@ public class StringUtil {
 
     private static int toDigit(char c) {
         int index = 0;
-        for (; index < 16; index++) {
+        for (; index < NUM_16; index++) {
             if (DIGITS_LOWER[index] == c) {
                 return index;
             }

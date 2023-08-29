@@ -19,6 +19,9 @@ import java.io.*;
 import java.net.URL;
 import java.nio.file.Path;
 
+import static com.chua.common.support.constant.NumberConstant.NUM_2;
+import static com.chua.common.support.constant.NumberConstant.NUM_90;
+
 /**
  * 图片
  *
@@ -159,8 +162,8 @@ public class Img implements Serializable {
             // 负数角度转换为正数角度
             degree += 360;
         }
-        if (degree >= 90) {
-            if (degree / 90 % 2 == 1) {
+        if (degree >= NUM_90) {
+            if (degree / NUM_90 % NUM_2 == 1) {
                 int temp = height;
                 height = width;
                 width = temp;

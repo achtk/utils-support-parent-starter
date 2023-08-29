@@ -11,6 +11,9 @@ package com.chua.common.support.file.xz.rangecoder;
 
 import java.io.IOException;
 
+import static com.chua.common.support.constant.NumberConstant.NUM_2;
+import static com.chua.common.support.constant.NumberConstant.NUM_5;
+
 /**
  * @author Administrator
  */
@@ -28,7 +31,7 @@ public abstract class RangeEncoder extends RangeCoder {
     private byte cache;
 
     static {
-        for (int i = (1 << MOVE_REDUCING_BITS) / 2; i < BIT_MODEL_TOTAL;
+        for (int i = (1 << MOVE_REDUCING_BITS) / NUM_2; i < BIT_MODEL_TOTAL;
              i += (1 << MOVE_REDUCING_BITS)) {
             int w = i;
             int bitCount = 0;
@@ -61,7 +64,7 @@ public abstract class RangeEncoder extends RangeCoder {
     }
 
     public int finish() throws IOException {
-        for (int i = 0; i < 5; ++i) {
+        for (int i = 0; i < NUM_5; ++i) {
             shiftLow();
         }
 

@@ -20,7 +20,12 @@ import com.chua.common.support.json.jsonpath.spi.mapper.MappingException;
  * @author Administrator
  */
 public interface Predicate {
-
+    /**
+     * 执行
+     *
+     * @param ctx 参数
+     * @return 结果
+     */
     boolean apply(PredicateContext ctx);
 
     public interface PredicateContext {
@@ -36,7 +41,9 @@ public interface Predicate {
          * Returns the current item being evaluated by this predicate. It will be mapped
          * to the provided class
          *
+         * @param clazz type
          * @return current document
+         * @throws MappingException ex
          */
         <T> T item(Class<T> clazz) throws MappingException;
 

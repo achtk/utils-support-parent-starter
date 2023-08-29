@@ -9,6 +9,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Locale;
 
+import static com.chua.common.support.constant.NumberConstant.NUM_2;
+
 /**
  * This class represents an entry in a Tar archive. It consists
  * of the entry's header, as well as the entry's File. Entries
@@ -339,7 +341,7 @@ public class TarEntry implements TarConstants {
             // REVIEW Would a better check be "(File.separator == '\')"?
 
             if (osname.startsWith("windows")) {
-                if (fileName.length() > 2) {
+                if (fileName.length() > NUM_2) {
                     char ch1 = fileName.charAt(0);
                     char ch2 = fileName.charAt(1);
 

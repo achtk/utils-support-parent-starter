@@ -24,7 +24,9 @@ import com.chua.common.support.json.jsonpath.internal.filter.ValueNodes;
 import java.util.*;
 import java.util.regex.Pattern;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_AT;
 import static com.chua.common.support.constant.CommonConstant.SYMBOL_DOLLAR;
+import static com.chua.common.support.constant.NumberConstant.THREE;
 import static com.chua.common.support.json.jsonpath.internal.Utils.notNull;
 import static com.chua.common.support.json.jsonpath.internal.filter.ValueNodes.PredicateNode;
 import static com.chua.common.support.json.jsonpath.internal.filter.ValueNodes.ValueListNode;
@@ -467,7 +469,7 @@ public class Criteria implements Predicate {
             throw new InvalidPathException("Criteria can not be null");
         }
         String[] split = criteria.trim().split(" ");
-        if (split.length == 3) {
+        if (split.length == THREE) {
             return create(split[0], split[1], split[2]);
         } else if (split.length == 1) {
             return create(split[0], "EXISTS", "true");
@@ -494,7 +496,7 @@ public class Criteria implements Predicate {
 
 
     private static String prefixPath(String key) {
-        if (!key.startsWith(SYMBOL_DOLLAR) && !key.startsWith("@")) {
+        if (!key.startsWith(SYMBOL_DOLLAR) && !key.startsWith(SYMBOL_AT)) {
             key = "@." + key;
         }
         return key;

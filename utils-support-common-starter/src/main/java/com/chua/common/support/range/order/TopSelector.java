@@ -1,9 +1,11 @@
 package com.chua.common.support.range.order;
 
 import com.chua.common.support.lang.math.IntMath;
+
 import java.math.RoundingMode;
 import java.util.*;
 
+import static com.chua.common.support.constant.NumberConstant.NUM_2;
 import static com.chua.common.support.utils.Preconditions.checkArgument;
 import static com.chua.common.support.utils.Preconditions.uncheckedCastNullableTToT;
 import static lombok.Lombok.checkNotNull;
@@ -106,7 +108,7 @@ public class TopSelector<T extends Object> {
         } else if (comparator.compare(elem, uncheckedCastNullableTToT(threshold)) < 0) {
             // Otherwise, we can ignore elem; we've seen k better elements.
             buffer[bufferSize++] = elem;
-            if (bufferSize == 2 * k) {
+            if (bufferSize == NUM_2 * k) {
                 trim();
             }
         }

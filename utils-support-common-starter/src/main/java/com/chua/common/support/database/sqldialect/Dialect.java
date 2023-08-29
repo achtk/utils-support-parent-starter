@@ -27,6 +27,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_DOT;
+import static com.chua.common.support.constant.NumberConstant.NUM_8;
+
 /**
  * 数据方言
  *
@@ -34,8 +37,11 @@ import java.util.function.Function;
  * @since 1.7.0
  */
 public interface Dialect {
+    String MYSQL = "mysql";
+
     /**
      * 检测方言
+     *
      * @param ds 数据源
      * @return 方言
      */
@@ -43,9 +49,9 @@ public interface Dialect {
         try (Connection connection = ds.getConnection()) {
             DatabaseMetaData metaData = connection.getMetaData();
             String driverName = metaData.getDatabaseProductName();
-            if("MYSQL".equalsIgnoreCase(driverName)) {
+            if (MYSQL.equalsIgnoreCase(driverName)) {
                 String databaseProductVersion = metaData.getDatabaseProductVersion();
-                if(NumberUtils.toInt(databaseProductVersion.substring(0, databaseProductVersion.indexOf(".")), 0) >= 8) {
+                if (NumberUtils.toInt(databaseProductVersion.substring(0, databaseProductVersion.indexOf(SYMBOL_DOT)), 0) >= NUM_8) {
                     driverName += "8";
                 }
             }
@@ -122,7 +128,7 @@ public interface Dialect {
         protocol = protocol.replace("jdbc:", "");
         String hibernatePackage = "org.hibernate.dialect";
         String type = hibernatePackage + "." + protocol + "dialect";
-        if ("mysql".equalsIgnoreCase(protocol)) {
+        if (MYSQL.equalsIgnoreCase(protocol)) {
             Enumeration<Driver> drivers = DriverManager.getDrivers();
             while (drivers.hasMoreElements()) {
                 Driver driver = drivers.nextElement();
@@ -142,13 +148,16 @@ public interface Dialect {
         Object extension = ServiceProvider.of("org.hibernate.dialect.Dialect").getExtension(type);
         Dialect dialect = ServiceProvider.of(Dialect.class).getExtension(extension.getClass().getSimpleName().replace("Dialect", ""));
         return ProxyUtils.newProxy(Dialect.class, new DelegateMethodIntercept<>(Dialect.class, new Function<ProxyMethod, Object>() {
+            private String getHibernateDialect = "getHibernateDialect";
+            private static final String DIALECT = "dialect";
+
             @Override
             public Object apply(ProxyMethod proxyMethod) {
-                if (proxyMethod.is("dialect")) {
+                if (proxyMethod.is(DIALECT)) {
                     return extension.getClass().getTypeName();
                 }
 
-                if (proxyMethod.is("getHibernateDialect")) {
+                if (proxyMethod.is(getHibernateDialect)) {
                     return extension;
                 }
 

@@ -6,28 +6,34 @@ import static com.chua.common.support.lang.code.ReturnResultCode.*;
  * @author haoxr
  **/
 public interface ResultCode {
+    int V_200 = 200;
+    int V_403 = 403;
+
     /**
      * 转化编码
+     *
      * @param status 编码
      * @return 结果
      */
     static String transferForHttpCodeStatus(Integer status) {
         return transferForHttpCode(status).getMsg();
     }
+
     /**
      * 转化编码
      * @param status 编码
      * @return 结果
      */
     static ResultCode transferForHttpCode(Integer status) {
-        if(status == 200) {
+        if (status == V_200) {
             return OK;
         }
-        if(status == 403) {
+        if (status == V_403) {
             return RESOURCE_OAUTH_DENIED;
         }
 
-        if(status.toString().startsWith("40")) {
+        String str = "40";
+        if (status.toString().startsWith(str)) {
             return PARAM_ERROR;
         }
 

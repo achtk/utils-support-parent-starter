@@ -5,6 +5,8 @@ import com.chua.common.support.constant.CommonConstant;
 
 import java.util.*;
 
+import static com.chua.common.support.constant.NameConstant.*;
+
 /**
  * dml + query 格式化
  *
@@ -67,6 +69,8 @@ public class DmlFormatter implements Formatter {
     }
 
     private static class FormatProcess {
+        private static final String END = "end";
+        private static final String CASE = "case";
         boolean beginLine = true;
         boolean afterBeginBeforeEnd;
         boolean afterByOrSetOrFromOrSelect;
@@ -85,6 +89,7 @@ public class DmlFormatter implements Formatter {
         String lastToken;
         String token;
         String lcToken;
+        private String between = "between";
 
         public FormatProcess(String sql) {
             tokens = new StringTokenizer(
@@ -182,7 +187,7 @@ public class DmlFormatter implements Formatter {
         }
 
         private void logical() {
-            if ("end".equals(lcToken)) {
+            if (END.equals(lcToken)) {
                 indent--;
             }
             newline();
@@ -200,7 +205,7 @@ public class DmlFormatter implements Formatter {
 
         private void misc() {
             out();
-            if ("between".equals(lcToken)) {
+            if (between.equals(lcToken)) {
                 afterBetween = true;
             }
             if (afterInsert) {
@@ -208,7 +213,7 @@ public class DmlFormatter implements Formatter {
                 afterInsert = false;
             } else {
                 beginLine = false;
-                if ("case".equals(lcToken)) {
+                if (CASE.equals(lcToken)) {
                     indent++;
                 }
             }
@@ -224,10 +229,10 @@ public class DmlFormatter implements Formatter {
             out();
             indent++;
             beginLine = false;
-            if ("update".equals(lcToken)) {
+            if (UPDATE.equalsIgnoreCase(lcToken)) {
                 newline();
             }
-            if ("insert".equals(lcToken)) {
+            if (INSERT.equalsIgnoreCase(lcToken)) {
                 afterInsert = true;
             }
         }
@@ -256,7 +261,7 @@ public class DmlFormatter implements Formatter {
                 newline();
             }
             out();
-            if (!"union".equals(lcToken)) {
+            if (!UNION.equalsIgnoreCase(lcToken)) {
                 indent++;
             }
             newline();

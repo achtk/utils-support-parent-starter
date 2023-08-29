@@ -282,10 +282,11 @@ public abstract class AbstractImageFilter implements ImageFilter {
         dif = max - min;
         sum = max + min;
         l = 0.5 * sum;
+        double f127 = 127.5D;
         if (dif == 0) {
             h = 0.0;
             s = 0.0;
-        } else if (l < 127.5) {
+        } else if (l < f127) {
             s = 255.0 * dif / sum;
         } else {
             s = 255.0 * dif / (510.0 - sum);
@@ -294,7 +295,8 @@ public abstract class AbstractImageFilter implements ImageFilter {
         if (h < 0.0) {
             h += 360.0;
         }
-        if (h > 360.0) {
+        double f360 = 360.0D;
+        if (h > f360) {
             h -= 360.0;
         }
         hsl1[0] = h;
@@ -322,7 +324,8 @@ public abstract class AbstractImageFilter implements ImageFilter {
             tg = (int) l;
             tb = (int) l;
         } else {
-            if (l < 127.5) {
+            double f127 = 127.5D;
+            if (l < f127) {
                 v2 = CLO_255 / (255 + s);
             } else {
                 v2 = l + s - CLO_255 * s * l;
@@ -330,26 +333,28 @@ public abstract class AbstractImageFilter implements ImageFilter {
             v1 = 2 * l - v2;
             v3 = v2 - v1;
             h1 = h + 120.0;
-            if (h1 >= 360.0) {
+            double f360 = 360.0D;
+            if (h1 >= f360) {
                 h1 -= 360.0;
             }
             //计算tr
-            if (h1 < 60) {
+            double f60 = 60.0D, f180 = 180.0D, f240 = 240.0D;
+            if (h1 < f60) {
                 tr = (int) (v1 + v3 * h1 * CLO_60);
-            } else if (h1 < 180.0) {
+            } else if (h1 < f180) {
                 tr = (int) v2;
-            } else if (h1 < 240.0) {
+            } else if (h1 < f240) {
                 tr = (int) (v1 + v3 * (4 - h1 * CLO_60));
             } else {
                 tr = (int) v1;
             }
             //计算tg
             h1 = h;
-            if (h1 < 60.0) {
+            if (h1 < f60) {
                 tg = (int) (v1 + v3 * h1 * CLO_60);
-            } else if (h1 < 180.0) {
+            } else if (h1 < f180) {
                 tg = (int) v2;
-            } else if (h1 < 240.0) {
+            } else if (h1 < f240) {
                 tg = (int) (v1 + v3 * (4 - h1 * CLO_60));
             } else {
                 tg = (int) v1;
@@ -359,11 +364,11 @@ public abstract class AbstractImageFilter implements ImageFilter {
             if (h1 < 0.0) {
                 h1 += 360.0;
             }
-            if (h1 < 60.0) {
+            if (h1 < f60) {
                 tb = (int) (v1 + v3 * h1 * CLO_60);
-            } else if (h1 < 180.0) {
+            } else if (h1 < f180) {
                 tb = (int) v2;
-            } else if (h1 < 240.0) {
+            } else if (h1 < f240) {
                 tb = (int) (v1 + v3 * (4 - h1 * CLO_60));
             } else {
                 tb = (int) v1;

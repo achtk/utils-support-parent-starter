@@ -6,6 +6,8 @@ import com.chua.common.support.utils.ByteUtils;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static com.chua.common.support.constant.NumberConstant.NUM_255;
+
 /**
  * 基础类
  *
@@ -18,7 +20,7 @@ public class SummerId implements Uid {
     private final byte workedId;
 
     public SummerId(int workerId) {
-        if (workerId >= 0 && workerId <= 255) {
+        if (workerId >= 0 && workerId <= NUM_255) {
             this.workedId = (byte) (workerId & 0xff);
         } else {
             throw new UnSupportException("workerid的取值范围为0-255");

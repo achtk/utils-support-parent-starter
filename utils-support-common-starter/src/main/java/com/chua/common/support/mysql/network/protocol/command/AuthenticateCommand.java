@@ -64,7 +64,8 @@ public class AuthenticateCommand implements Command {
         // maximum packet length
         buffer.writeInteger(0, 4);
         buffer.writeInteger(collation, 1);
-        for (int i = 0; i < 23; i++) {
+        int v23 = 23;
+        for (int i = 0; i < v23; i++) {
             buffer.write(0);
         }
         buffer.writeZeroTerminatedString(username);

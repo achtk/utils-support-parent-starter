@@ -27,6 +27,7 @@ import java.util.*;
 @EqualsAndHashCode(callSuper = false)
 public class EventbusEvent {
     private static final String[] EMPTY = new String[0];
+    private static final String SUBSCRIBE = "com.google.common.eventbus.Subscribe";
     /**
      * 名称
      */
@@ -71,7 +72,7 @@ public class EventbusEvent {
         setType(EventbusType.valueOf(String.valueOf(attributes.get("type"))));
         setConfiguration(configuration);
         EventbusType type = subscribe.type();
-        if (type == EventbusType.GUAVA && ClassUtils.isPresent("com.google.common.eventbus.Subscribe")) {
+        if (type == EventbusType.GUAVA && ClassUtils.isPresent(SUBSCRIBE)) {
             setBean(analysisGuavaSubscribe(bean));
         }
     }

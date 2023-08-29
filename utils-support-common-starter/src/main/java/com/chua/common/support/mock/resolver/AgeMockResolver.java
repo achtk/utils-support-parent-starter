@@ -12,6 +12,7 @@ import com.chua.common.support.utils.StringUtils;
 
 import static com.chua.common.support.constant.CommonConstant.SYMBOL_LEFT_BRACKETS;
 import static com.chua.common.support.constant.CommonConstant.SYMBOL_LEFT_SQUARE_BRACKET;
+import static com.chua.common.support.constant.NumberConstant.THREE;
 
 /**
  * age
@@ -45,7 +46,7 @@ public class AgeMockResolver implements MockResolver {
             return String.valueOf(NumberUtils.parseNumber(range.random(), Integer.class));
         }
 
-        if(base.length() > 3) {
+        if (base.length() > THREE) {
             base = mock.symbol() == Mock.Symbol.AFTER ? "0" : "100";
         }
 

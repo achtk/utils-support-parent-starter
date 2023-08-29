@@ -1,6 +1,5 @@
 package com.chua.common.support.net;
 
-import com.chua.common.support.constant.CommonConstant;
 import com.chua.common.support.converter.Converter;
 import com.chua.common.support.utils.CollectionUtils;
 import com.chua.common.support.utils.IoUtils;
@@ -21,6 +20,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
 
 import static com.chua.common.support.constant.CommonConstant.*;
+import static com.chua.common.support.constant.NumberConstant.*;
 import static java.util.Collections.emptyList;
 
 
@@ -41,8 +41,8 @@ public class NetUtils {
     /**
      * valid port range is (0, 65535]
      */
-    private static final int MIN_PORT = 1;
-    private static final int MAX_PORT = 65535;
+    private static final int MIN_PORT = ONE;
+    public static final int MAX_PORT = NUM_65535;
 
     private static final Pattern ADDRESS_PATTERN = Pattern.compile("^\\d{1,3}(\\.\\d{1,3}){3}\\:\\d{1,5}$");
     private static final Pattern LOCAL_IP_PATTERN = Pattern.compile("127(\\.\\d{1,3}){3}$");
@@ -975,14 +975,14 @@ public class NetUtils {
 
     private static void checkHostPattern(String pattern, String[] mask, boolean isIpv4) {
         if (!isIpv4) {
-            if (mask.length != 8 && ipPatternContainExpression(pattern)) {
+            if (mask.length != NUM_8 && ipPatternContainExpression(pattern)) {
                 throw new IllegalArgumentException("If you config ip expression that contains '*' or '-', please fill qualified ip pattern like 234e:0:4567:0:0:0:3d:*. ");
             }
-            if (mask.length != 8 && !pattern.contains("::")) {
+            if (mask.length != NUM_8 && !pattern.contains("::")) {
                 throw new IllegalArgumentException("The host is ipv6, but the pattern is not ipv6 pattern : " + pattern);
             }
         } else {
-            if (mask.length != 4) {
+            if (mask.length != NUM_4) {
                 throw new IllegalArgumentException("The host is ipv4, but the pattern is not ipv4 pattern : " + pattern);
             }
         }
@@ -1019,7 +1019,7 @@ public class NetUtils {
 
 
     public static boolean isIpV6URLStdFormat(String ip) {
-        if ((ip.charAt(0) == '[' && ip.indexOf(']') > 2)) {
+        if ((ip.charAt(0) == '[' && ip.indexOf(']') > NUM_2)) {
             return true;
         } else if (ip.indexOf(SYMBOL_COLON) != ip.lastIndexOf(SYMBOL_COLON)) {
             return true;
@@ -1031,7 +1031,7 @@ public class NetUtils {
     public static String getLegalIp(String ip) {
         
         int ind;
-        if ((ip.charAt(0) == SYMBOL_LEFT_SQUARE_BRACKET_CHAR && (ind = ip.indexOf(SYMBOL_RIGHT_SQUARE_BRACKET_CHAR)) > 2)) {
+        if ((ip.charAt(0) == SYMBOL_LEFT_SQUARE_BRACKET_CHAR && (ind = ip.indexOf(SYMBOL_RIGHT_SQUARE_BRACKET_CHAR)) > NUM_2)) {
             String nhost = ip;
             ip = nhost.substring(0, ind + 1);
             ip = ip.substring(1, ind);

@@ -22,6 +22,7 @@ import java.io.Reader;
 import java.nio.charset.Charset;
 
 import static com.chua.common.support.constant.CommonConstant.TWE;
+import static com.chua.common.support.constant.NumberConstant.*;
 import static com.chua.common.support.file.univocity.parsers.common.ArgumentUtils.toByteArray;
 
 /**
@@ -38,6 +39,7 @@ public final class BomInput extends InputStream {
 	public static final byte[] UTF_16LE_BOM = toByteArray(0xFF, 0xFE);
 	public static final byte[] UTF_32BE_BOM = toByteArray(0x00, 0x00, 0xFE, 0xFF);
 	public static final byte[] UTF_32LE_BOM = toByteArray(0xFF, 0xFE, 0x00, 0x00);
+	private static final String UTF16LE = "UTF-16LE";
 
 	private int bytesRead;
 	private int[] bytes = new int[4];
@@ -56,34 +58,34 @@ public final class BomInput extends InputStream {
 		this.input = input;
 
 		try { //This looks shitty on purpose (all in the name of speed).
-			if ((bytes[0] = next()) == 0xEF) {
-				if ((bytes[1] = next()) == 0xBB) {
-					if ((bytes[TWE] = next()) == 0xBF) {
+			if ((bytes[0] = next()) == EF) {
+				if ((bytes[1] = next()) == BB) {
+					if ((bytes[TWE] = next()) == BF) {
 						setEncoding("UTF-8");
 					}
 				}
-			} else if (bytes[0] == 0xFE) {
-				if ((bytes[1] = next()) == 0xFF) {
+			} else if (bytes[0] == FE) {
+				if ((bytes[1] = next()) == FF) {
 					setEncoding("UTF-16BE");
 				}
-			} else if (bytes[0] == 0xFF) {
-				if ((bytes[1] = next()) == 0xFE) {
-					if ((bytes[TWE] = next()) == 0x00) {
-						if ((bytes[3] = next()) == 0x00) {
+			} else if (bytes[0] == FF) {
+				if ((bytes[1] = next()) == FE) {
+					if ((bytes[TWE] = next()) == X00) {
+						if ((bytes[THREE] = next()) == X00) {
 							setEncoding("UTF-32LE");
 						} else {
-                            //gotcha!
-                            setEncoding("UTF-16LE");
-                        }
+							//gotcha!
+							setEncoding("UTF-16LE");
+						}
 					} else {
-                        //gotcha!
-                        setEncoding("UTF-16LE");
-                    }
+						//gotcha!
+						setEncoding("UTF-16LE");
+					}
 				}
-			} else if (bytes[0] == 0x00) {
-				if ((bytes[1] = next()) == 0x00) {
-					if ((bytes[TWE] = next()) == 0xFE) {
-						if ((bytes[3] = next()) == 0xFF) {
+			} else if (bytes[0] == X00) {
+				if ((bytes[1] = next()) == X00) {
+					if ((bytes[TWE] = next()) == FE) {
+						if ((bytes[THREE] = next()) == FF) {
 							setEncoding("UTF-32BE");
 						}
 					}
@@ -99,25 +101,25 @@ public final class BomInput extends InputStream {
 	private void setEncoding(String encoding) {
         this.encoding = encoding;
         //gotcha!
-        if ("UTF-16LE".equals(encoding)) {
-            //third byte not a 0x00
-            if (bytesRead == 3) {
-                bytesRead = 1;
-                bytes[0] = bytes[2];
-                try {
-                    //reads next byte to be able to decode to a character
-                    bytes[1] = next();
-                } catch (Exception e) {
-                    exception = (IOException) e;
-                }
-                return;
-                //fourth byte not a 0x00
-            } else if (bytesRead == 4) {
-                bytesRead = 2;
-                bytes[0] = bytes[2];
-                bytes[1] = bytes[3];
-                return;
-            }
+		if (UTF16LE.equals(encoding)) {
+			//third byte not a 0x00
+			if (bytesRead == THREE) {
+				bytesRead = 1;
+				bytes[0] = bytes[2];
+				try {
+					//reads next byte to be able to decode to a character
+					bytes[1] = next();
+				} catch (Exception e) {
+					exception = (IOException) e;
+				}
+				return;
+				//fourth byte not a 0x00
+			} else if (bytesRead == FOUR) {
+				bytesRead = 2;
+				bytes[0] = bytes[2];
+				bytes[1] = bytes[3];
+				return;
+			}
 		}
 		this.bytesRead = 0;
 	}

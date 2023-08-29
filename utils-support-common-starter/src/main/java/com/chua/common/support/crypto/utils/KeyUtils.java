@@ -10,6 +10,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.Provider;
 import java.security.SecureRandom;
 
+import static com.chua.common.support.constant.NameConstant.AES;
+
 /**
  * 密钥工具类
  *
@@ -91,7 +93,7 @@ public class KeyUtils {
         algorithm = getMainAlgorithm(algorithm);
 
         final KeyGenerator keyGenerator = getKeyGenerator(algorithm);
-        if (keySize <= 0 && "aes".equalsIgnoreCase(algorithm)) {
+        if (keySize <= 0 && AES.equalsIgnoreCase(algorithm)) {
             // 对于AES的密钥，除非指定，否则强制使用128位
             keySize = 128;
         }

@@ -7,12 +7,12 @@ import com.chua.common.support.resource.ResourceProvider;
 import com.chua.common.support.utils.IoUtils;
 import lombok.*;
 
-import java.io.File;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.nio.file.Files;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.chua.common.support.constant.NumberConstant.NUM_2;
 
 /**
  * qqwry
@@ -75,7 +75,7 @@ public class IpWryPosition extends ProfileProvider<IpPosition>
         String[] split = mainInfo.split(s);
         geoCity.ip(ip);
 
-        if (split.length == 2) {
+        if (split.length == NUM_2) {
             geoCity.province(split[0] + s);
             geoCity.city(split[1]);
         } else {

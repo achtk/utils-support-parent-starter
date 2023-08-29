@@ -12,6 +12,8 @@ import com.chua.common.support.utils.CharUtils;
 
 import java.util.Deque;
 
+import static com.chua.common.support.constant.CommonConstant.*;
+
 /**
  * 基础类
  *
@@ -26,14 +28,14 @@ public class ForEachParser extends Parser {
         }
         int origin = offset;
         offset = skipWhiteSpace(offset, sentence);
-        if (getChar(offset, sentence) != 'f'
+        if (getChar(offset, sentence) != LETTER_LOWERCASE_F
                 || getChar(offset + 1, sentence) != 'o'
                 || getChar(offset + 2, sentence) != 'r'
         ) {
             return next.scan(sentence, origin, executions, template, cache);
         }
         offset = skipWhiteSpace(offset + 3, sentence);
-        if (getChar(offset, sentence) != '(') {
+        if (getChar(offset, sentence) != SYMBOL_LEFT_BRACKETS_CHAR) {
             throw new IllegalFormatException("for循环没有以(开始条件语句", sentence.substring(0, offset));
         }
         offset = skipWhiteSpace(offset + 1, sentence);
@@ -45,11 +47,11 @@ public class ForEachParser extends Parser {
             throw new IllegalFormatException("for循环中的变量命名没有结束", sentence.substring(0, start));
         }
         String itemName = sentence.substring(start, offset);
-        if (getChar(offset, sentence) != ' ') {
+        if (getChar(offset, sentence) != SYMBOL_SPACE_CHAR) {
             throw new IllegalFormatException("for循环语法错误", sentence.substring(0, start));
         }
         offset = skipWhiteSpace(offset + 1, sentence);
-        if (getChar(offset, sentence) != 'i' || getChar(offset + 1, sentence) != 'n') {
+        if (getChar(offset, sentence) != LETTER_LOWERCASE_I || getChar(offset + 1, sentence) != LETTER_LOWERCASE_N) {
             throw new IllegalFormatException("for循环语法错误,缺少IN", sentence.substring(0, start));
         }
         offset = skipWhiteSpace(offset + 2, sentence);

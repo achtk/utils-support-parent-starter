@@ -16,6 +16,8 @@ import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
+import static com.chua.common.support.constant.NumberConstant.NUM_4;
+
 /**
  * PerMessage Deflate Extension (<a href="https://tools.ietf.org/html/rfc7692#section-7">7&#46; The
  * "permessage-deflate" Extension</a> in
@@ -258,7 +260,7 @@ public class PerMessageDeflateExtension extends BaseCompressionExtension {
    * @return true if the data is OK
    */
   private static boolean endsWithTail(byte[] data) {
-    if (data.length < 4) {
+    if (data.length < NUM_4) {
       return false;
     }
 

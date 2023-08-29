@@ -252,7 +252,7 @@ public abstract class AbstractFormatter implements DialectConfigurator {
 
   private String addNewline(String query) {
     query = Util.trimSpacesEnd(query);
-    if (!query.endsWith("\n")) {
+    if (!query.endsWith(SYMBOL_NEWLINE)) {
       query += "\n";
     }
     return query + this.indentation.getIndent();

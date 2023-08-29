@@ -7,7 +7,7 @@ import com.chua.common.support.utils.StringUtils;
 import java.util.Arrays;
 
 import static com.chua.common.support.constant.CommonConstant.SYMBOL_HASH;
-import static com.chua.common.support.constant.CommonConstant.SYMBOL_HASH_CHAR;
+import static com.chua.common.support.constant.NumberConstant.NUM_2;
 
 
 /**
@@ -251,7 +251,7 @@ final class Tokeniser {
             if (numChars == 1) {
                 codeRef[0] = multipointHolder[0];
                 return codeRef;
-            } else if (numChars ==2) {
+            } else if (numChars == NUM_2) {
                 return multipointHolder;
             } else {
                 Validate.fail("Unexpected characters returned for " + nameRef);

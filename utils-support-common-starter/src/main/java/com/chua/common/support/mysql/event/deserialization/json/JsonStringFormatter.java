@@ -20,6 +20,8 @@ import com.chua.common.support.mysql.event.deserialization.ColumnType;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+import static com.chua.common.support.constant.NumberConstant.*;
+
 /**
  * A {@link JsonFormatter} implementation that creates a JSON string representation.
  *
@@ -46,11 +48,12 @@ public class JsonStringFormatter implements JsonFormatter {
      * preceding backslash; and negative values that generic escaping (e.g., {@code \\uXXXX}).
      */
     private static final int[] ESCAPES;
+    private static final CharSequence E = "E";
 
     static {
         int[] escape = new int[128];
         // Generic escape for control characters ...
-        for (int i = 0; i < 32; ++i) {
+        for (int i = 0; i < NUM_32; ++i) {
             escape[i] = ESCAPE_GENERIC;
         }
         // Backslash escape for other specific characters ...
@@ -124,7 +127,7 @@ public class JsonStringFormatter implements JsonFormatter {
     @Override
     public void value(double value) {
                 String str = Double.toString(value);
-        if (str.contains("E")) {
+        if (str.contains(E)) {
             value(new BigDecimal(value));
         } else {
             sb.append(str);
@@ -234,7 +237,7 @@ public class JsonStringFormatter implements JsonFormatter {
     private void unicodeEscape(int charToEscape) {
         sb.append('\\');
         sb.append('u');
-        if (charToEscape > 0xFF) {
+        if (charToEscape > FF) {
             int hi = (charToEscape >> 8) & 0xFF;
             sb.append(HEX_CODES[hi >> 4]);
             sb.append(HEX_CODES[hi & 0xF]);
@@ -250,7 +253,7 @@ public class JsonStringFormatter implements JsonFormatter {
     protected void appendTwoDigitUnsignedInt(int value) {
         assert value >= 0;
         assert value < 100;
-        if (value < 10) {
+        if (value < NUM_10) {
             sb.append("0").append(value);
         } else {
             sb.append(value);
@@ -258,11 +261,11 @@ public class JsonStringFormatter implements JsonFormatter {
     }
 
     protected void appendFourDigitUnsignedInt(int value) {
-        if (value < 10) {
+        if (value < NUM_10) {
             sb.append("000").append(value);
-        } else if (value < 100) {
+        } else if (value < NUM_100) {
             sb.append("00").append(value);
-        } else if (value < 1000) {
+        } else if (value < ONE_THOUSAND) {
             sb.append("0").append(value);
         } else {
             sb.append(value);
@@ -273,20 +276,20 @@ public class JsonStringFormatter implements JsonFormatter {
         assert value > 0;
         assert value < 1000000;
         // Add prefixes if necessary ...
-        if (value < 10) {
+        if (value < NUM_10) {
             sb.append("00000");
-        } else if (value < 100) {
+        } else if (value < NUM_100) {
             sb.append("0000");
-        } else if (value < 1000) {
+        } else if (value < ONE_THOUSAND) {
             sb.append("000");
-        } else if (value < 10000) {
+        } else if (value < TEN_THOUSAND) {
             sb.append("00");
-        } else if (value < 100000) {
+        } else if (value < ONE_THOUSAND_THOUSAND) {
             sb.append("0");
         }
         if (trimTrailingZeros) {
             // Remove any trailing 0's ...
-            for (int i = 0; i != 6; ++i) {
+            for (int i = 0; i != NUM_6; ++i) {
                 if (value % 10 == 0) {
                     value /= 10;
                 }

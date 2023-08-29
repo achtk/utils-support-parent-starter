@@ -11,13 +11,15 @@ package com.chua.common.support.file.xz.common;
 
 import com.chua.common.support.file.xz.CorruptedInputException;
 import com.chua.common.support.file.xz.UnsupportedOptionsException;
-import com.chua.common.support.file.xz.XzFormatException;
 import com.chua.common.support.file.xz.Xz;
+import com.chua.common.support.file.xz.XzException;
 
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.CRC32;
+
+import static com.chua.common.support.constant.NumberConstant.*;
 
 /**
  * @author Administrator
@@ -29,7 +31,7 @@ public class DecoderUtil extends Util {
         crc32.update(buf, off, len);
         long value = crc32.getValue();
 
-        for (int i = 0; i < 4; ++i) {
+        for (int i = 0; i < FOUR; ++i) {
             if ((byte) (value >>> (i * 8)) != buf[refOff + i]) {
                 return false;
             }
@@ -42,11 +44,11 @@ public class DecoderUtil extends Util {
             throws IOException {
         for (int i = 0; i < Xz.HEADER_MAGIC.length; ++i) {
             if (buf[i] != Xz.HEADER_MAGIC[i]) {
-                throw new XzFormatException();
+                throw new XzException();
             }
         }
 
-        if (!isCrc32Valid(buf, Xz.HEADER_MAGIC.length, 2,
+        if (!isCrc32Valid(buf, Xz.HEADER_MAGIC.length, TWE,
                 Xz.HEADER_MAGIC.length + 2)) {
             throw new CorruptedInputException("XZ Stream Header is corrupt");
         }
@@ -61,13 +63,13 @@ public class DecoderUtil extends Util {
 
     public static StreamFlags decodeStreamFooter(byte[] buf)
             throws IOException {
-        if (buf[10] != Xz.FOOTER_MAGIC[0] || buf[11] != Xz.FOOTER_MAGIC[1]) {
+        if (buf[NUM_10] != Xz.FOOTER_MAGIC[0] || buf[NUM_11] != Xz.FOOTER_MAGIC[1]) {
             // NOTE: The exception could be XZFormatException too.
             // It depends on the situation which one is better.
             throw new CorruptedInputException("XZ Stream Footer is corrupt");
         }
 
-        if (!isCrc32Valid(buf, 4, 6, 0)) {
+        if (!isCrc32Valid(buf, NUM_4, NUM_6, 0)) {
             throw new CorruptedInputException("XZ Stream Footer is corrupt");
         }
 
@@ -80,7 +82,7 @@ public class DecoderUtil extends Util {
         }
 
         streamFlags.backwardSize = 0;
-        for (int i = 0; i < 4; ++i) {
+        for (int i = 0; i < NUM_4; ++i) {
             streamFlags.backwardSize |= (buf[i + 4] & 0xFF) << (i * 8);
         }
 
@@ -91,7 +93,7 @@ public class DecoderUtil extends Util {
 
     private static StreamFlags decodeStreamFlags(byte[] buf, int off)
             throws UnsupportedOptionsException {
-        if (buf[off] != 0x00 || (buf[off + 1] & 0xFF) >= 0x10) {
+        if (buf[off] != X00 || (buf[off + 1] & FF) >= X10) {
             throw new UnsupportedOptionsException();
         }
 
@@ -115,7 +117,7 @@ public class DecoderUtil extends Util {
         long num = b & 0x7F;
         int i = 0;
 
-        while ((b & 0x80) != 0x00) {
+        while ((b & X80) != X00) {
             if (++i >= VLI_SIZE_MAX) {
                 throw new CorruptedInputException();
             }

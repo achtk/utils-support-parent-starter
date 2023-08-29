@@ -9,8 +9,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
 
-import static com.chua.common.support.constant.CommonConstant.SYMBOL_HASH;
 import static com.chua.common.support.constant.CommonConstant.SYMBOL_HASH_CHAR;
+import static com.chua.common.support.constant.NumberConstant.NUM_2;
 
 /**
  * Translates XML numeric entities of the form &amp;#[xX]?\d+;? to
@@ -91,7 +91,7 @@ public class NumericEntityUnescaper extends AbstractCharSequenceTranslator {
     public int translate(final CharSequence input, final int index, final Writer writer) throws IOException {
         final int seqEnd = input.length();
         // Uses -2 to ensure there is something after the &#
-        if (input.charAt(index) == '&' && index < seqEnd - 2 && input.charAt(index + 1) == SYMBOL_HASH_CHAR) {
+        if (input.charAt(index) == '&' && index < seqEnd - NUM_2 && input.charAt(index + 1) == SYMBOL_HASH_CHAR) {
             int start = index + 2;
             boolean isHex = false;
 

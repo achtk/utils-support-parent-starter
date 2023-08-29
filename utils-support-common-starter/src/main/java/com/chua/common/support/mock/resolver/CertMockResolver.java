@@ -4,12 +4,12 @@ import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.lang.expression.parser.ExpressionParser;
 import com.chua.common.support.mock.MockValue;
 import com.chua.common.support.utils.CardUtils;
+import com.chua.common.support.utils.RandomUtils;
 import com.chua.common.support.utils.StringUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Random;
 
 /**
  * 身份证
@@ -49,25 +49,26 @@ public class CertMockResolver implements MockResolver {
 
     public static String getRandom() {
 
-        String province = PROVINCE[new Random().nextInt(PROVINCE.length - 1)];
+        String province = PROVINCE[RandomUtils.randomInt(PROVINCE.length - 1)];
 
-        String city = CITY[new Random().nextInt(CITY.length - 1)];
+        String city = CITY[RandomUtils.randomInt(CITY.length - 1)];
 
-        String county = COUNTY[new Random().nextInt(COUNTY.length - 1)];
+        String county = COUNTY[RandomUtils.randomInt(COUNTY.length - 1)];
         SimpleDateFormat dft = new SimpleDateFormat("yyyyMMdd");
         Date beginDate = new Date();
         Calendar date = Calendar.getInstance();
         date.setTime(beginDate);
         date.set(Calendar.DATE,
-                date.get(Calendar.DATE) - new Random().nextInt(365 * 100));
+                date.get(Calendar.DATE) - RandomUtils.randomInt(365 * 100));
         String birth = dft.format(date.getTime());
-        String no = new Random().nextInt(999) + "";
+        String no = RandomUtils.randomInt(999) + "";
         String card17 = province + city + county + birth + no;
         char checkCode18 = CardUtils.getCheckCode18(card17);
-         String card = card17 + checkCode18;
-         if(card.length() < 15) {
-             return card + StringUtils.repeat("1",  15 - card.length());
-         }
-        return card + StringUtils.repeat("1",  18 - card.length());
+        String card = card17 + checkCode18;
+        int v15 = 15;
+        if (card.length() < v15) {
+            return card + StringUtils.repeat("1", 15 - card.length());
+        }
+        return card + StringUtils.repeat("1", 18 - card.length());
     }
 }
