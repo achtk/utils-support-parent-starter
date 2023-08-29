@@ -11,6 +11,9 @@ package com.chua.common.support.file.xz.index;
 
 import com.chua.common.support.file.xz.CorruptedInputException;
 import com.chua.common.support.file.xz.XZIOException;
+import com.chua.common.support.file.xz.check.Check;
+import com.chua.common.support.file.xz.check.Crc32;
+import com.chua.common.support.file.xz.check.Sha256;
 import com.chua.common.support.file.xz.common.DecoderUtil;
 
 import java.io.DataInputStream;
@@ -21,15 +24,15 @@ import java.util.Arrays;
 import java.util.zip.CheckedInputStream;
 
 public class IndexHash extends IndexBase {
-    private com.chua.common.support.file.xz.check.Check hash;
+    private Check hash;
 
     public IndexHash() {
         super(new CorruptedInputException());
 
         try {
-            hash = new com.chua.common.support.file.xz.check.SHA256();
+            hash = new Sha256();
         } catch (java.security.NoSuchAlgorithmException e) {
-            hash = new com.chua.common.support.file.xz.check.CRC32();
+            hash = new Crc32();
         }
     }
 
