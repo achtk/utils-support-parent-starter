@@ -96,9 +96,6 @@ public class EmojiFactory {
 
             if (emojiEnd != -1) {
                 Emoji emoji = getByUnicode(new String(chars, i, emojiEnd - i));
-                String fitzpatrickString = (emojiEnd + 2 <= chars.length) ?
-                        new String(chars, emojiEnd, 2) :
-                        null;
                 return new UnicodeCandidate(emoji, i);
             }
         }

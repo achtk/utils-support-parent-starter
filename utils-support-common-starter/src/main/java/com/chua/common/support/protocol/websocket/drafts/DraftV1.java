@@ -29,7 +29,7 @@ import java.util.*;
  *
  * @author Administrator
  */
-public class Draft_6455 extends com.chua.common.support.protocol.websocket.drafts.Draft {
+public class DraftV1 extends com.chua.common.support.protocol.websocket.drafts.Draft {
 
   /**
    * Handshake specific field for the key
@@ -124,7 +124,7 @@ public class Draft_6455 extends com.chua.common.support.protocol.websocket.draft
    *
    * @since 1.3.5
    */
-  public Draft_6455() {
+  public DraftV1() {
     this(Collections.<IExtension>emptyList());
   }
 
@@ -134,7 +134,7 @@ public class Draft_6455 extends com.chua.common.support.protocol.websocket.draft
    * @param inputExtension the extension which should be used for this draft
    * @since 1.3.5
    */
-  public Draft_6455(IExtension inputExtension) {
+  public DraftV1(IExtension inputExtension) {
     this(Collections.singletonList(inputExtension));
   }
 
@@ -144,7 +144,7 @@ public class Draft_6455 extends com.chua.common.support.protocol.websocket.draft
    * @param inputExtensions the extensions which should be used for this draft
    * @since 1.3.5
    */
-  public Draft_6455(List<IExtension> inputExtensions) {
+  public DraftV1(List<IExtension> inputExtensions) {
     this(inputExtensions, Collections.<IProtocol>singletonList(new Protocol("")));
   }
 
@@ -156,7 +156,7 @@ public class Draft_6455 extends com.chua.common.support.protocol.websocket.draft
    * @param inputProtocols  the protocols which should be used for this draft
    * @since 1.3.7
    */
-  public Draft_6455(List<IExtension> inputExtensions, List<IProtocol> inputProtocols) {
+  public DraftV1(List<IExtension> inputExtensions, List<IProtocol> inputProtocols) {
     this(inputExtensions, inputProtocols, Integer.MAX_VALUE);
   }
 
@@ -169,7 +169,7 @@ public class Draft_6455 extends com.chua.common.support.protocol.websocket.draft
    *                          frames can be bigger)
    * @since 1.4.0
    */
-  public Draft_6455(List<IExtension> inputExtensions, int inputMaxFrameSize) {
+  public DraftV1(List<IExtension> inputExtensions, int inputMaxFrameSize) {
     this(inputExtensions, Collections.<IProtocol>singletonList(new Protocol("")),
         inputMaxFrameSize);
   }
@@ -184,7 +184,7 @@ public class Draft_6455 extends com.chua.common.support.protocol.websocket.draft
    *                          frames can be bigger)
    * @since 1.4.0
    */
-  public Draft_6455(List<IExtension> inputExtensions, List<IProtocol> inputProtocols,
+  public DraftV1(List<IExtension> inputExtensions, List<IProtocol> inputProtocols,
       int inputMaxFrameSize) {
     if (inputExtensions == null || inputProtocols == null || inputMaxFrameSize < 1) {
       throw new IllegalArgumentException();
@@ -401,7 +401,7 @@ public class Draft_6455 extends com.chua.common.support.protocol.websocket.draft
     for (IProtocol knownProtocol : getKnownProtocols()) {
       newProtocols.add(knownProtocol.copyInstance());
     }
-    return new Draft_6455(newExtensions, newProtocols, maxFrameSize);
+    return new DraftV1(newExtensions, newProtocols, maxFrameSize);
   }
 
   @Override
@@ -1037,7 +1037,7 @@ public class Draft_6455 extends com.chua.common.support.protocol.websocket.draft
       return false;
     }
 
-    Draft_6455 that = (Draft_6455) o;
+    DraftV1 that = (DraftV1) o;
 
     if (maxFrameSize != that.getMaxFrameSize()) {
       return false;

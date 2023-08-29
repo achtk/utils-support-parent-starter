@@ -2,12 +2,11 @@ package com.chua.common.support.extra.el.baseutil.bytecode;
 
 import com.chua.common.support.extra.el.baseutil.bytecode.annotation.AnnotationMetadata;
 import com.chua.common.support.extra.el.baseutil.bytecode.structure.AnnotationInfo;
-import com.chua.common.support.extra.el.baseutil.bytecode.structure.Attribute.AbstractAttributeInfo;
-import com.chua.common.support.extra.el.baseutil.bytecode.structure.Attribute.RuntimeVisibleAnnotationsAttriInfo;
 import com.chua.common.support.extra.el.baseutil.bytecode.structure.FieldInfo;
 import com.chua.common.support.extra.el.baseutil.bytecode.structure.MethodInfo;
+import com.chua.common.support.extra.el.baseutil.bytecode.structure.attribute.AbstractAttributeInfo;
+import com.chua.common.support.extra.el.baseutil.bytecode.structure.attribute.RuntimeVisibleAnnotationsAttriInfo;
 import com.chua.common.support.extra.el.baseutil.bytecode.util.AccessFlags;
-import javassist.bytecode.AttributeInfo;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -15,7 +14,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static com.chua.common.support.constant.CommonConstant.*;
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_DOT_CHAR;
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_LEFT_SLASH_CHAR;
 
 /**
  * 基础类
