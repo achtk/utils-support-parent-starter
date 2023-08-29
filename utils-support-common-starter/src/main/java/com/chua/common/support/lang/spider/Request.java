@@ -98,7 +98,7 @@ public class Request implements Serializable {
 
     public <T> Request putExtra(String key, T value) {
         if (extras == null) {
-            extras = new HashMap<String, Object>();
+            extras = new HashMap<>(1 << 4);
         }
         extras.put(key, value);
         return this;

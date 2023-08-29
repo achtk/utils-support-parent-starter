@@ -93,8 +93,6 @@ public abstract class Ordering<T extends Object> implements Comparator<T> {
      *
      * <p><b>Java 8 users:</b> Use {@code thisComparator.reversed()} instead.
      */
-    // type parameter <S> lets us avoid the extra <String> in statements like:
-    // Ordering<String> o = Ordering.<String>natural().reverse();
     public <S extends T> Ordering<S> reverse() {
         return new ReverseOrdering<S>(this);
     }
