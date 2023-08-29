@@ -63,7 +63,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class Spider implements Runnable, Task {
 
     protected Downloader downloader;
-    private final ExecutorService executorService = ThreadUtils.newSingleThreadExecutor("ftp-server");
+    protected ExecutorService executorService = ThreadUtils.newSingleThreadExecutor("ftp-server");
 
     protected List<Pipeline> pipelines = new ArrayList<Pipeline>();
 
@@ -81,7 +81,6 @@ public class Spider implements Runnable, Task {
 
     protected CountableThreadPool threadPool;
 
-    protected ExecutorService executorService;
 
     protected int threadNum = 1;
 
