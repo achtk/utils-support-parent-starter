@@ -16,7 +16,7 @@ import static java.util.stream.Collectors.joining;
  * @since 2018-06-27
  */
 @SuppressWarnings("serial")
-public class GroupBySegmentList extends AbstractISegmentList {
+public class GroupBySegmentList extends AbstractSegmentList {
 
     @Override
     protected boolean transformList(List<ISqlSegment> list, ISqlSegment firstSegment, ISqlSegment lastSegment) {

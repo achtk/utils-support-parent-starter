@@ -4,6 +4,7 @@ import com.chua.common.support.protocol.ftp.server.FtpConnection;
 import com.chua.common.support.protocol.ftp.server.Utils;
 import com.chua.common.support.protocol.ftp.server.api.FtpFileSystem;
 import com.chua.common.support.protocol.ftp.server.api.FtpResponseException;
+import com.chua.common.support.utils.ThreadUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,6 +13,7 @@ import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.util.UUID;
+import java.util.concurrent.ExecutorService;
 
 /**
  * Handles file management commands
@@ -20,6 +22,7 @@ import java.util.UUID;
 @SuppressWarnings("unchecked")
 public class FtpFileHandler {
 
+    private final ExecutorService executorService = ThreadUtils.newProcessorThreadExecutor("ftp-server");
     private final FtpConnection con;
 
     private FtpFileSystem fs = null;
@@ -448,7 +451,7 @@ public class FtpFileHandler {
      * @param in The stream
      */
     private void sendStream(InputStream in) {
-        new Thread(() -> {
+        executorService.execute(() -> {
             try {
                 con.sendData(in);
                 con.sendResponse(226, "File sent!");
@@ -457,7 +460,7 @@ public class FtpFileHandler {
             } catch(Exception ex) {
                 con.sendResponse(451, ex.getMessage());
             }
-        }).start();
+        });
     }
 
     /**
@@ -465,7 +468,7 @@ public class FtpFileHandler {
      * @param out The stream
      */
     private void receiveStream(OutputStream out) {
-        new Thread(() -> {
+        executorService.execute(() -> {
             try {
                 con.receiveData(out);
                 con.sendResponse(226, "File received!");
@@ -474,7 +477,7 @@ public class FtpFileHandler {
             } catch(Exception ex) {
                 con.sendResponse(451, ex.getMessage());
             }
-        }).start();
+        });
     }
 
 }

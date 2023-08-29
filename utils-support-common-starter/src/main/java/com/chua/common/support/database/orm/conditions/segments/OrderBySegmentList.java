@@ -2,7 +2,6 @@
 package com.chua.common.support.database.orm.conditions.segments;
 
 import com.chua.common.support.database.orm.conditions.ISqlSegment;
-import com.chua.common.support.database.orm.conditions.segments.AbstractISegmentList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +17,7 @@ import static java.util.stream.Collectors.joining;
  * @since 2018-06-27
  */
 @SuppressWarnings("serial")
-public class OrderBySegmentList extends AbstractISegmentList {
+public class OrderBySegmentList extends AbstractSegmentList {
 
     @Override
     protected boolean transformList(List<ISqlSegment> list, ISqlSegment firstSegment, ISqlSegment lastSegment) {

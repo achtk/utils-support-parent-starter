@@ -16,7 +16,7 @@ import static com.chua.common.support.constant.CommonConstant.*;
  * @since 2018-06-27
  */
 @SuppressWarnings("serial")
-public class NormalSegmentList extends AbstractISegmentList {
+public class NormalSegmentList extends AbstractSegmentList {
 
     /**
      * 是否处理了的上个 not

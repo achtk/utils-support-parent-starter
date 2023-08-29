@@ -14,6 +14,7 @@ import com.chua.common.support.lang.spider.scheduler.Scheduler;
 import com.chua.common.support.lang.spider.thread.CountableThreadPool;
 import com.chua.common.support.lang.spider.utils.WMCollections;
 import com.chua.common.support.utils.CollectionUtils;
+import com.chua.common.support.utils.ThreadUtils;
 import com.chua.common.support.utils.UrlUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,6 +63,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class Spider implements Runnable, Task {
 
     protected Downloader downloader;
+    private final ExecutorService executorService = ThreadUtils.newSingleThreadExecutor("ftp-server");
 
     protected List<Pipeline> pipelines = new ArrayList<Pipeline>();
 
@@ -480,9 +482,7 @@ public class Spider implements Runnable, Task {
     }
 
     public void runAsync() {
-        Thread thread = new Thread(this);
-        thread.setDaemon(false);
-        thread.start();
+        executorService.execute(this);
     }
 
     /**

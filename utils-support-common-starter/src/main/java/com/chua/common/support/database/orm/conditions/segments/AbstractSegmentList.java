@@ -17,7 +17,7 @@ import static com.chua.common.support.constant.CommonConstant.EMPTY;
  * @since 2018-06-27
  */
 @SuppressWarnings("serial")
-public abstract class AbstractISegmentList extends ArrayList<ISqlSegment> implements ISqlSegment {
+public abstract class AbstractSegmentList extends ArrayList<ISqlSegment> implements ISqlSegment {
 
     /**
      * 最后一个值
