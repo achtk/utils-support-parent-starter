@@ -4,7 +4,7 @@ package com.chua.common.support.lang.spider.example;
 import com.chua.common.support.lang.spider.Site;
 import com.chua.common.support.lang.spider.model.ConsolePageModelPipeline;
 import com.chua.common.support.lang.spider.model.HasKey;
-import com.chua.common.support.lang.spider.model.OOSpider;
+import com.chua.common.support.lang.spider.model.OoSpider;
 import com.chua.common.support.lang.spider.model.annotation.ExtractBy;
 import com.chua.common.support.lang.spider.model.annotation.ExtractByUrl;
 
@@ -35,7 +35,7 @@ public class GithubRepoApi implements HasKey {
     private String url;
 
     public static void main(String[] args) {
-        OOSpider.create(Site.me().setSleepTime(100)
+        OoSpider.create(Site.me().setSleepTime(100)
                         , new ConsolePageModelPipeline(), GithubRepoApi.class)
                 .addUrl("https://api.github.com/repos/code4craft/webmagic").run();
     }

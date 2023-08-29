@@ -15,7 +15,7 @@ package com.chua.common.support.file.xz;
  * already read from the input stream was corrupt too.
  * @author ACHTK
  */
-public class CorruptedInputException extends XZIOException {
+public class CorruptedInputException extends XzException {
     private static final long serialVersionUID = 3L;
 
     /**

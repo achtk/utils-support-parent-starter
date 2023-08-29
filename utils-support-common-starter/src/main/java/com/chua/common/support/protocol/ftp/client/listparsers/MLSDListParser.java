@@ -1,8 +1,8 @@
 package com.chua.common.support.protocol.ftp.client.listparsers;
 
-import com.chua.common.support.protocol.ftp.client.FTPFile;
-import com.chua.common.support.protocol.ftp.client.FTPListParseException;
-import com.chua.common.support.protocol.ftp.client.FTPListParser;
+import com.chua.common.support.protocol.ftp.client.FtpFile;
+import com.chua.common.support.protocol.ftp.client.FtpListParseException;
+import com.chua.common.support.protocol.ftp.client.FtpListParser;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -15,7 +15,7 @@ import java.util.*;
  * @author Carlo Pelliccia
  * @since 1.5
  */
-public class MLSDListParser implements FTPListParser {
+public class MLSDListParser implements FtpListParser {
 
     /**
      * Date format 1 for MLSD date facts (supports millis).
@@ -27,18 +27,18 @@ public class MLSDListParser implements FTPListParser {
      */
     private static final DateFormat MLSD_DATE_FORMAT_2 = new SimpleDateFormat("yyyyMMddHHmmss Z");
 
-    public FTPFile[] parse(String[] lines) throws FTPListParseException {
+    public FtpFile[] parse(String[] lines) throws FtpListParseException {
         ArrayList list = new ArrayList();
         for (int i = 0; i < lines.length; i++) {
-            FTPFile file = parseLine(lines[i]);
+            FtpFile file = parseLine(lines[i]);
             if (file != null) {
                 list.add(file);
             }
         }
         int size = list.size();
-        FTPFile[] ret = new FTPFile[size];
+        FtpFile[] ret = new FtpFile[size];
         for (int i = 0; i < size; i++) {
-            ret[i] = (FTPFile) list.get(i);
+            ret[i] = (FtpFile) list.get(i);
         }
         return ret;
     }
@@ -48,17 +48,17 @@ public class MLSDListParser implements FTPListParser {
      *
      * @param line The line.
      * @return The file, or null if the line has to be ignored.
-     * @throws FTPListParseException If the line is not a valid MLSD entry.
+     * @throws FtpListParseException If the line is not a valid MLSD entry.
      */
-    private FTPFile parseLine(String line) throws FTPListParseException {
-        // According to Extensions to FTP RFC 3659, the file name in a MLSD list response line come after the first space in the line  : https://tools.ietf.org/html/rfc3659
+    private FtpFile parseLine(String line) throws FtpListParseException {
+        // According to Extensions to Ftp RFC 3659, the file name in a MLSD list response line come after the first space in the line  : https://tools.ietf.org/html/rfc3659
         // List line format is <FACTS WITH NO SPACES SEPARATED WITH SEMICOLON> <SPACE> <FILENAME>
         // Example of line that failed before: Type=file;Size=25730;Modify=19940728095854;Perm=; cap;mux.tar.z
         int nameIndex = line.indexOf(" ");
 
         // Throw exception if no name in response line
         if (nameIndex == -1) {
-            throw new FTPListParseException();
+            throw new FtpListParseException();
         }
 
         // Extract the file name.
@@ -77,7 +77,7 @@ public class MLSDListParser implements FTPListParser {
 
         // If no facts, throw exception
         if (list.size() == 0) {
-            throw new FTPListParseException();
+            throw new FtpListParseException();
         }
 
         // Parses the facts.
@@ -86,12 +86,12 @@ public class MLSDListParser implements FTPListParser {
             String aux = (String) i.next();
             int sep = aux.indexOf('=');
             if (sep == -1) {
-                throw new FTPListParseException();
+                throw new FtpListParseException();
             }
             String key = aux.substring(0, sep).trim();
             String value = aux.substring(sep + 1, aux.length()).trim();
             if (key.length() == 0 || value.length() == 0) {
-                throw new FTPListParseException();
+                throw new FtpListParseException();
             }
             facts.setProperty(key, value);
         }
@@ -99,11 +99,11 @@ public class MLSDListParser implements FTPListParser {
         int type;
         String typeString = facts.getProperty("type");
         if (typeString == null) {
-            throw new FTPListParseException();
+            throw new FtpListParseException();
         } else if ("file".equalsIgnoreCase(typeString)) {
-            type = FTPFile.TYPE_FILE;
+            type = FtpFile.TYPE_FILE;
         } else if ("dir".equalsIgnoreCase(typeString)) {
-            type = FTPFile.TYPE_DIRECTORY;
+            type = FtpFile.TYPE_DIRECTORY;
         } else if ("cdir".equalsIgnoreCase(typeString)) {
             // Current directory. Skips...
             return null;
@@ -147,7 +147,7 @@ public class MLSDListParser implements FTPListParser {
             }
         }
         // Done!
-        FTPFile ret = new FTPFile();
+        FtpFile ret = new FtpFile();
         ret.setType(type);
         ret.setModifiedDate(modifiedDate);
         ret.setSize(size);

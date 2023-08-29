@@ -31,7 +31,7 @@ import com.chua.common.support.protocol.websocket.AbstractWebSocket;
 import com.chua.common.support.protocol.websocket.WebSocket;
 import com.chua.common.support.protocol.websocket.WebSocketImpl;
 import com.chua.common.support.protocol.websocket.drafts.Draft;
-import com.chua.common.support.protocol.websocket.drafts.Draft_6455;
+import com.chua.common.support.protocol.websocket.drafts.DraftV1;
 import com.chua.common.support.protocol.websocket.exceptions.InvalidHandshakeException;
 import com.chua.common.support.protocol.websocket.framing.CloseFrame;
 import com.chua.common.support.protocol.websocket.framing.Framedata;
@@ -148,7 +148,7 @@ public abstract class WebSocketClient extends AbstractWebSocket implements Runna
    * @param serverUri the server URI to connect to
    */
   public WebSocketClient(URI serverUri) {
-    this(serverUri, new Draft_6455());
+    this(serverUri, new DraftV1());
   }
 
   /**
@@ -173,7 +173,7 @@ public abstract class WebSocketClient extends AbstractWebSocket implements Runna
    * @since 1.3.8
    */
   public WebSocketClient(URI serverUri, Map<String, String> httpHeaders) {
-    this(serverUri, new Draft_6455(), httpHeaders);
+    this(serverUri, new DraftV1(), httpHeaders);
   }
 
   /**

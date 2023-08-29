@@ -28,7 +28,7 @@ package com.chua.common.support.protocol.websocket.server;
 import com.chua.common.support.protocol.websocket.*;
 import com.chua.common.support.protocol.websocket.drafts.Draft;
 import com.chua.common.support.protocol.websocket.exceptions.WebsocketNotConnectedException;
-import com.chua.common.support.protocol.websocket.exceptions.WrappedIOException;
+import com.chua.common.support.protocol.websocket.exceptions.WrappedException;
 import com.chua.common.support.protocol.websocket.framing.CloseFrame;
 import com.chua.common.support.protocol.websocket.framing.Framedata;
 import com.chua.common.support.protocol.websocket.handshake.ClientHandshake;
@@ -379,7 +379,7 @@ public abstract class WebSocketServer extends AbstractWebSocket implements Runna
           // an other thread may cancel the key
         } catch (ClosedByInterruptException e) {
           return; // do the same stuff as when InterruptedException is thrown
-        } catch (WrappedIOException ex) {
+        } catch (WrappedException ex) {
           handleIOException(key, ex.getConnection(), ex.getIoException());
         } catch (IOException ex) {
           handleIOException(key, null, ex);
@@ -473,7 +473,7 @@ public abstract class WebSocketServer extends AbstractWebSocket implements Runna
    * @throws IOException          if an error happened during read
    */
   private boolean doRead(SelectionKey key, Iterator<SelectionKey> i)
-      throws InterruptedException, WrappedIOException {
+      throws InterruptedException, WrappedException {
     WebSocketImpl conn = (WebSocketImpl) key.attachment();
     ByteBuffer buf = takeBuffer();
     if (conn.getChannel() == null) {
@@ -500,7 +500,7 @@ public abstract class WebSocketServer extends AbstractWebSocket implements Runna
       }
     } catch (IOException e) {
       pushBuffer(buf);
-      throw new WrappedIOException(conn, e);
+      throw new WrappedException(conn, e);
     }
     return true;
   }
@@ -511,14 +511,14 @@ public abstract class WebSocketServer extends AbstractWebSocket implements Runna
    * @param key the selectionkey to write on
    * @throws IOException if an error happened during batch
    */
-  private void doWrite(SelectionKey key) throws WrappedIOException {
+  private void doWrite(SelectionKey key) throws WrappedException {
     WebSocketImpl conn = (WebSocketImpl) key.attachment();
     try {
       if (SocketChannelIOHelper.batch(conn, conn.getChannel()) && key.isValid()) {
         key.interestOps(SelectionKey.OP_READ);
       }
     } catch (IOException e) {
-      throw new WrappedIOException(conn, e);
+      throw new WrappedException(conn, e);
     }
   }
 

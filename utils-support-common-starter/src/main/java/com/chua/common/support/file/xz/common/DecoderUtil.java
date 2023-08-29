@@ -11,7 +11,7 @@ package com.chua.common.support.file.xz.common;
 
 import com.chua.common.support.file.xz.CorruptedInputException;
 import com.chua.common.support.file.xz.UnsupportedOptionsException;
-import com.chua.common.support.file.xz.XZFormatException;
+import com.chua.common.support.file.xz.XzFormatException;
 import com.chua.common.support.file.xz.Xz;
 
 import java.io.EOFException;
@@ -42,7 +42,7 @@ public class DecoderUtil extends Util {
             throws IOException {
         for (int i = 0; i < Xz.HEADER_MAGIC.length; ++i) {
             if (buf[i] != Xz.HEADER_MAGIC[i]) {
-                throw new XZFormatException();
+                throw new XzFormatException();
             }
         }
 

@@ -84,7 +84,7 @@ public class ClassInfoView implements View {
         final Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
 
-            final KVView kvView = new KVView(new TableView.ColumnDefine(TableView.Align.RIGHT), new TableView.ColumnDefine(50, false, TableView.Align.LEFT))
+            final KvView kvView = new KvView(new TableView.ColumnDefine(TableView.Align.RIGHT), new TableView.ColumnDefine(50, false, TableView.Align.LEFT))
                     .add("modifier", StringUtils.modifier(field.getModifiers(), ','))
                     .add("type", StringUtils.classname(field.getType()))
                     .add("name", field.getName());

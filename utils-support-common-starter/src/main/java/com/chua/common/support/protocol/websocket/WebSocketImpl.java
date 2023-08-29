@@ -36,7 +36,7 @@ import com.chua.common.support.protocol.websocket.framing.CloseFrame;
 import com.chua.common.support.protocol.websocket.framing.Framedata;
 import com.chua.common.support.protocol.websocket.framing.PingFrame;
 import com.chua.common.support.protocol.websocket.handshake.*;
-import com.chua.common.support.protocol.websocket.interfaces.ISSLChannel;
+import com.chua.common.support.protocol.websocket.interfaces.SslChannel;
 import com.chua.common.support.protocol.websocket.protocols.IProtocol;
 import com.chua.common.support.protocol.websocket.server.WebSocketServer.WebSocketWorker;
 import com.chua.common.support.protocol.websocket.util.Charsetfunctions;
@@ -824,7 +824,7 @@ public class WebSocketImpl implements WebSocket {
 
     @Override
     public boolean hasSSLSupport() {
-        return channel instanceof ISSLChannel;
+        return channel instanceof SslChannel;
     }
 
     @Override
@@ -833,7 +833,7 @@ public class WebSocketImpl implements WebSocket {
             throw new IllegalArgumentException(
                     "This websocket uses ws instead of wss. No SSLSession available.");
         }
-        return ((ISSLChannel) channel).getSslEngine().getSession();
+        return ((SslChannel) channel).getSslEngine().getSession();
     }
 
     @Override

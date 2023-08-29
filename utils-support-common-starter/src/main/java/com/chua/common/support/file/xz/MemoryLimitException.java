@@ -10,7 +10,7 @@
 package com.chua.common.support.file.xz;
 
 /**
- * Thrown when the memory usage limit given to the XZ decompressor
+ * Thrown when the memory usage limit given to the Xz decompressor
  * would be exceeded.
  * <p>
  * The amount of memory required and the memory usage limit are
@@ -18,7 +18,7 @@ package com.chua.common.support.file.xz;
  *
  * @author Administrator
  */
-public class MemoryLimitException extends XZIOException {
+public class MemoryLimitException extends XzException {
     private static final long serialVersionUID = 3L;
 
     private final int memoryNeeded;

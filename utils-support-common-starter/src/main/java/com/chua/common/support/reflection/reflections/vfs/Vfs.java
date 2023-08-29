@@ -252,7 +252,7 @@ public abstract class Vfs {
      * <p>jarUrl - creates a {@link ZipDir} over a jar url, using Java's {@link JarURLConnection}
      * <p>directory - creates a {@link SystemDir} over a file system directory
      * <p>jboss vfs - for protocols vfs, using jboss vfs (should be provided in classpath)
-     * <p>jboss vfsfile - creates a {@link UrlTypeVFS} for protocols vfszip and vfsfile.
+     * <p>jboss vfsfile - creates a {@link UrlTypeVfs} for protocols vfszip and vfsfile.
      * <p>bundle - for bundle protocol, using eclipse FileLocator (should be provided in classpath)
      * <p>jarInputStream - creates a {@link JarInputDir} over jar files (contains ".jar!/" in it's name), using Java's JarInputStream
      */
@@ -327,7 +327,7 @@ public abstract class Vfs {
 
             @Override
             public Dir createDir(URL url) throws Exception {
-                return new UrlTypeVFS().createDir(url);
+                return new UrlTypeVfs().createDir(url);
             }
         },
         /**

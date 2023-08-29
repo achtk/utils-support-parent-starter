@@ -17,7 +17,7 @@ import com.chua.common.support.file.xz.rangecoder.RangeEncoder;
 
 import java.io.IOException;
 
-public abstract class LZMAEncoder extends LZMACoder {
+public abstract class LZMAEncoder extends LzmaCoder {
     public static final int MODE_FAST = 1;
     public static final int MODE_NORMAL = 2;
 

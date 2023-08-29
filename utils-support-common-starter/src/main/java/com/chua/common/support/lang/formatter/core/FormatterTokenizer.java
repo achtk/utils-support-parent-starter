@@ -1,6 +1,6 @@
 package com.chua.common.support.lang.formatter.core;
 
-import com.chua.common.support.lang.formatter.core.util.JSLikeList;
+import com.chua.common.support.lang.formatter.core.util.JsLikeList;
 import com.chua.common.support.lang.formatter.core.util.RegexUtil;
 import com.chua.common.support.lang.formatter.core.util.Util;
 
@@ -11,7 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.chua.common.support.constant.CommonConstant.SYMBOL_DOT;
-import static com.chua.common.support.constant.CommonConstant.SYMBOL_DOT_CHAR;
+
 /**
  * 基础类
  * @author CH
@@ -56,45 +56,45 @@ public class FormatterTokenizer {
     this.OPERATOR_PATTERN =
         Pattern.compile(
             RegexUtil.createOperatorRegex(
-                new JSLikeList<>(Arrays.asList("<>", "<=", ">=")).with(cfg.operators)));
+                new JsLikeList<>(Arrays.asList("<>", "<=", ">=")).with(cfg.operators)));
 
     //        this.BLOCK_COMMENT_REGEX = /^(\/\*[^]*?(?:\*\/|$))/;
     this.BLOCK_COMMENT_PATTERN = Pattern.compile("^(/\\*(?s).*?(?:\\*/|$))");
     this.LINE_COMMENT_PATTERN =
-        Pattern.compile(RegexUtil.createLineCommentRegex(new JSLikeList<>(cfg.lineCommentTypes)));
+        Pattern.compile(RegexUtil.createLineCommentRegex(new JsLikeList<>(cfg.lineCommentTypes)));
 
     this.RESERVED_TOP_LEVEL_PATTERN =
         Pattern.compile(
-            RegexUtil.createReservedWordRegex(new JSLikeList<>(cfg.reservedTopLevelWords)));
+            RegexUtil.createReservedWordRegex(new JsLikeList<>(cfg.reservedTopLevelWords)));
     this.RESERVED_TOP_LEVEL_NO_INDENT_PATTERN =
         Pattern.compile(
-            RegexUtil.createReservedWordRegex(new JSLikeList<>(cfg.reservedTopLevelWordsNoIndent)));
+            RegexUtil.createReservedWordRegex(new JsLikeList<>(cfg.reservedTopLevelWordsNoIndent)));
     this.RESERVED_NEWLINE_PATTERN =
         Pattern.compile(
-            RegexUtil.createReservedWordRegex(new JSLikeList<>(cfg.reservedNewlineWords)));
+            RegexUtil.createReservedWordRegex(new JsLikeList<>(cfg.reservedNewlineWords)));
     this.RESERVED_PLAIN_PATTERN =
-        Pattern.compile(RegexUtil.createReservedWordRegex(new JSLikeList<>(cfg.reservedWords)));
+        Pattern.compile(RegexUtil.createReservedWordRegex(new JsLikeList<>(cfg.reservedWords)));
 
     this.WORD_PATTERN =
-        Pattern.compile(RegexUtil.createWordRegex(new JSLikeList<>(cfg.specialWordChars)));
+        Pattern.compile(RegexUtil.createWordRegex(new JsLikeList<>(cfg.specialWordChars)));
     this.STRING_PATTERN =
-        Pattern.compile(RegexUtil.createStringRegex(new JSLikeList<>(cfg.stringTypes)));
+        Pattern.compile(RegexUtil.createStringRegex(new JsLikeList<>(cfg.stringTypes)));
 
     this.OPEN_PAREN_PATTERN =
-        Pattern.compile(RegexUtil.createParenRegex(new JSLikeList<>(cfg.openParens)));
+        Pattern.compile(RegexUtil.createParenRegex(new JsLikeList<>(cfg.openParens)));
     this.CLOSE_PAREN_PATTERN =
-        Pattern.compile(RegexUtil.createParenRegex(new JSLikeList<>(cfg.closeParens)));
+        Pattern.compile(RegexUtil.createParenRegex(new JsLikeList<>(cfg.closeParens)));
 
     this.INDEXED_PLACEHOLDER_PATTERN =
         RegexUtil.createPlaceholderRegexPattern(
-            new JSLikeList<>(cfg.indexedPlaceholderTypes), "[0-9]*");
+            new JsLikeList<>(cfg.indexedPlaceholderTypes), "[0-9]*");
     this.IDENT_NAMED_PLACEHOLDER_PATTERN =
         RegexUtil.createPlaceholderRegexPattern(
-            new JSLikeList<>(cfg.namedPlaceholderTypes), "[a-zA-Z0-9._$]+");
+            new JsLikeList<>(cfg.namedPlaceholderTypes), "[a-zA-Z0-9._$]+");
     this.STRING_NAMED_PLACEHOLDER_PATTERN =
         RegexUtil.createPlaceholderRegexPattern(
-            new JSLikeList<>(cfg.namedPlaceholderTypes),
-            RegexUtil.createStringPattern(new JSLikeList<>(cfg.stringTypes)));
+            new JsLikeList<>(cfg.namedPlaceholderTypes),
+            RegexUtil.createStringPattern(new JsLikeList<>(cfg.stringTypes)));
   }
 
   /**
@@ -103,7 +103,7 @@ public class FormatterTokenizer {
    * @param input input The SQL string
    * @return {Object[]} tokens An array of tokens.
    */
-  public JSLikeList<Token> tokenize(String input) {
+  public JsLikeList<Token> tokenize(String input) {
     List<Token> tokens = new ArrayList<>();
     Token token = null;
 
@@ -123,7 +123,7 @@ public class FormatterTokenizer {
         tokens.add(token.withWhitespaceBefore(whitespaceBefore));
       }
     }
-    return new JSLikeList<>(tokens);
+    return new JsLikeList<>(tokens);
   }
 
   private String[] findBeforeWhitespace(String input) {

@@ -1,8 +1,8 @@
 package com.chua.common.support.protocol.ftp.client.listparsers;
 
-import com.chua.common.support.protocol.ftp.client.FTPFile;
-import com.chua.common.support.protocol.ftp.client.FTPListParseException;
-import com.chua.common.support.protocol.ftp.client.FTPListParser;
+import com.chua.common.support.protocol.ftp.client.FtpFile;
+import com.chua.common.support.protocol.ftp.client.FtpListParseException;
+import com.chua.common.support.protocol.ftp.client.FtpListParser;
 
 import java.util.Date;
 import java.util.StringTokenizer;
@@ -12,21 +12,21 @@ import java.util.StringTokenizer;
  *
  * @author Carlo Pelliccia
  */
-public class EPLFListParser implements FTPListParser {
+public class EPLFListParser implements FtpListParser {
 
-    public FTPFile[] parse(String[] lines) throws FTPListParseException {
+    public FtpFile[] parse(String[] lines) throws FtpListParseException {
         int size = lines.length;
-        FTPFile[] ret = null;
+        FtpFile[] ret = null;
         for (int i = 0; i < size; i++) {
             String l = lines[i];
             // Validate the plus sign.
             if (l.charAt(0) != '+') {
-                throw new FTPListParseException();
+                throw new FtpListParseException();
             }
             // Split the facts from the filename.
             int a = l.indexOf('\t');
             if (a == -1) {
-                throw new FTPListParseException();
+                throw new FtpListParseException();
             }
             String facts = l.substring(1, a);
             String name = l.substring(a + 1, l.length());
@@ -66,15 +66,15 @@ public class EPLFListParser implements FTPListParser {
                     }
                 }
             }
-            // Create the related FTPFile object.
+            // Create the related FtpFile object.
             if (ret == null) {
-                ret = new FTPFile[size];
+                ret = new FtpFile[size];
             }
-            ret[i] = new FTPFile();
+            ret[i] = new FtpFile();
             ret[i].setName(name);
             ret[i].setModifiedDate(md);
             ret[i].setSize(fileSize);
-            ret[i].setType(dir ? FTPFile.TYPE_DIRECTORY : FTPFile.TYPE_FILE);
+            ret[i].setType(dir ? FtpFile.TYPE_DIRECTORY : FtpFile.TYPE_FILE);
         }
         return ret;
     }

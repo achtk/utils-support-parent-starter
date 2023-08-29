@@ -147,7 +147,7 @@ public class LookaheadCharInputReader implements CharInputReader {
 				lookahead[length] = reader.nextChar();
 				length++;
 			}
-		} catch (EOFException ex) {
+		} catch (EofException ex) {
 			//ignore.
 		}
 	}

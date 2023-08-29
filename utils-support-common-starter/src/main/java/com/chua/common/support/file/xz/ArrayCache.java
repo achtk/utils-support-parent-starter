@@ -1,65 +1,7 @@
-/*
- * ArrayCache
- *
- * Author: Lasse Collin <lasse.collin@tukaani.org>
- *
- * This file has been put into the public domain.
- * You can do whatever you want with this file.
- */
-
 package com.chua.common.support.file.xz;
 
 /**
  * Caches large arrays for reuse (base class and a dummy cache implementation).
- * <p>
- * When compressing or decompressing many (very) small files in a row, the
- * time spent in construction of new compressor or decompressor objects
- * can be longer than the time spent in actual compression or decompression.
- * A large part of this initialization overhead comes from allocation and
- * garbage collection of large arrays.
- * <p>
- * The {@code ArrayCache} API provides a way to cache large array allocations
- * for reuse. It can give a major performance improvement when compressing or
- * decompressing many tiny files. If you are only (de)compressing one or two
- * files or the files a very big, array caching won't improve anything,
- * although it won't make anything slower either.
- * <p>
- * <b>Important: The users of ArrayCache don't return the allocated arrays
- * back to the cache in all situations.</b>
- * This a reason why it's called a cache instead of a pool.
- * If it is important to be able to return every array back to a cache,
- * {@link ResettableArrayCache} can be useful.
- * <p>
- * In compressors (OutputStreams) the arrays are returned to the cache
- * when a call to {@code finish()} or {@code close()} returns
- * successfully (no exceptions are thrown).
- * <p>
- * In decompressors (InputStreams) the arrays are returned to the cache when
- * the decompression is successfully finished ({@code read} returns {@code -1})
- * or {@code close()} or {@code close(boolean)} is called. This is true even
- * if closing throws an exception.
- * <p>
- * Raw decompressors don't support {@code close(boolean)}. With raw
- * decompressors, if one wants to put the arrays back to the cache without
- * closing the underlying {@code InputStream}, one can wrap the
- * {@code InputStream} into {@link CloseIgnoringInputStream} when creating
- * the decompressor instance. Then one can use {@code close()}.
- * <p>
- * Different cache implementations can be extended from this base class.
- * All cache implementations must be thread safe.
- * <p>
- * This class also works as a dummy cache that simply calls {@code new}
- * to allocate new arrays and doesn't try to cache anything. A statically
- * allocated dummy cache is available via {@link #getDummyCache()}.
- * <p>
- * If no {@code ArrayCache} is specified when constructing a compressor or
- * decompressor, the default {@code ArrayCache} implementation is used.
- * See {@link #getDefaultCache()} and {@link #setDefaultCache(ArrayCache)}.
- * <p>
- * This is a class instead of an interface because it's possible that in the
- * future we may want to cache other array types too. New methods can be
- * added to this class without breaking existing cache implementations.
- *
  * @author ACHTK
  * @since 1.7
  *

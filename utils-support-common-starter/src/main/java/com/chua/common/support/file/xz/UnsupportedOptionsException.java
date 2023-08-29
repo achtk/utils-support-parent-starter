@@ -15,7 +15,7 @@ package com.chua.common.support.file.xz;
  *
  * @author Administrator
  */
-public class UnsupportedOptionsException extends XZIOException {
+public class UnsupportedOptionsException extends XzException {
     private static final long serialVersionUID = 3L;
 
     /**

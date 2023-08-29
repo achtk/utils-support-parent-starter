@@ -15,7 +15,7 @@ import java.util.jar.JarFile;
  * @author CH
  */
 public class HotswapClassLoader extends ClassLoader {
-    private static final Map<String, classInfo> CLASS_INFOS = new HashMap<String, classInfo>();
+    private static final Map<String, ClassInfo> CLASS_INFOS = new HashMap<String, ClassInfo>();
     private static final ParalLock PARAL_LOCK = new ParalLock();
     private final ClassLoader parent;
     /**
@@ -63,7 +63,7 @@ public class HotswapClassLoader extends ClassLoader {
                     if (jarEntry.isDirectory() == false && entryName.endsWith(".class")) {
                         String className = entryName.substring(0, entryName.length() - 6);
                         className = className.replaceAll("/", ".");
-                        CLASS_INFOS.put(className, new classInfo(jarEntry, file.getAbsolutePath()));
+                        CLASS_INFOS.put(className, new ClassInfo(jarEntry, file.getAbsolutePath()));
                     }
                 }
                 try {
@@ -114,7 +114,7 @@ public class HotswapClassLoader extends ClassLoader {
                     if (name.startsWith(each)) {
                         try {
                             if (CLASS_INFOS.containsKey(name)) {
-                                classInfo cInfo = CLASS_INFOS.get(name);
+                                ClassInfo cInfo = CLASS_INFOS.get(name);
                                 JarFile jarFile = null;
                                 InputStream inputStream = null;
                                 try {
@@ -170,11 +170,11 @@ public class HotswapClassLoader extends ClassLoader {
         }
     }
 
-    static class classInfo {
+    static class ClassInfo {
         private final JarEntry jarEntry;
         private final String jarPath;
 
-        public classInfo(JarEntry jarEntry, String jarPath) {
+        public ClassInfo(JarEntry jarEntry, String jarPath) {
             this.jarEntry = jarEntry;
             this.jarPath = jarPath;
         }

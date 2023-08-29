@@ -59,14 +59,14 @@ import java.io.InputStream;
  * apply to
  * {@link java.util.zip.GZIPInputStream java.util.zip.GZIPInputStream} too.)
  *
- * @see SingleXZInputStream
+ * @see SingleXzInputStream
  */
 public class XZInputStream extends InputStream {
     private final ArrayCache arrayCache;
 
     private final int memoryLimit;
     private InputStream in;
-    private SingleXZInputStream xzIn;
+    private SingleXzInputStream xzIn;
     private final boolean verifyCheck;
     private boolean endReached = false;
     private IOException exception = null;
@@ -83,7 +83,7 @@ public class XZInputStream extends InputStream {
      * @param       in          input stream from which XZ-compressed
      *                          data is read
      *
-     * @throws      XZFormatException
+     * @throws      XzFormatException
      *                          input is not in the XZ format
      *
      * @throws      CorruptedInputException
@@ -114,7 +114,7 @@ public class XZInputStream extends InputStream {
      *
      * @param       arrayCache  cache to be used for allocating large arrays
      *
-     * @throws      XZFormatException
+     * @throws      XzFormatException
      *                          input is not in the XZ format
      *
      * @throws      CorruptedInputException
@@ -150,7 +150,7 @@ public class XZInputStream extends InputStream {
      *                          or <code>-1</code> to impose no
      *                          memory usage limit
      *
-     * @throws      XZFormatException
+     * @throws      XzFormatException
      *                          input is not in the XZ format
      *
      * @throws      CorruptedInputException
@@ -186,7 +186,7 @@ public class XZInputStream extends InputStream {
      *
      * @param       arrayCache  cache to be used for allocating large arrays
      *
-     * @throws      XZFormatException
+     * @throws      XzFormatException
      *                          input is not in the XZ format
      *
      * @throws      CorruptedInputException
@@ -242,7 +242,7 @@ public class XZInputStream extends InputStream {
      *                          will be verified; this should almost never
      *                          be set to <code>false</code>
      *
-     * @throws      XZFormatException
+     * @throws      XzFormatException
      *                          input is not in the XZ format
      *
      * @throws      CorruptedInputException
@@ -285,7 +285,7 @@ public class XZInputStream extends InputStream {
      *
      * @param       arrayCache  cache to be used for allocating large arrays
      *
-     * @throws      XZFormatException
+     * @throws      XzFormatException
      *                          input is not in the XZ format
      *
      * @throws      CorruptedInputException
@@ -309,7 +309,7 @@ public class XZInputStream extends InputStream {
         this.in = in;
         this.memoryLimit = memoryLimit;
         this.verifyCheck = verifyCheck;
-        this.xzIn = new SingleXZInputStream(in, memoryLimit, verifyCheck,
+        this.xzIn = new SingleXzInputStream(in, memoryLimit, verifyCheck,
                                             arrayCache);
     }
 
@@ -327,7 +327,7 @@ public class XZInputStream extends InputStream {
      * @throws      UnsupportedOptionsException
      * @throws      MemoryLimitException
      *
-     * @throws      XZIOException if the stream has been closed
+     * @throws      XzException if the stream has been closed
      *
      * @throws      EOFException
      *                          compressed input is truncated or corrupt
@@ -365,7 +365,7 @@ public class XZInputStream extends InputStream {
      * @throws      UnsupportedOptionsException
      * @throws      MemoryLimitException
      *
-     * @throws      XZIOException if the stream has been closed
+     * @throws      XzException if the stream has been closed
      *
      * @throws      EOFException
      *                          compressed input is truncated or corrupt
@@ -380,7 +380,7 @@ public class XZInputStream extends InputStream {
             return 0;
 
         if (in == null)
-            throw new XZIOException("Stream closed");
+            throw new XzException("Stream closed");
 
         if (exception != null)
             throw exception;
@@ -444,9 +444,9 @@ public class XZInputStream extends InputStream {
         inData.readFully(buf, 4, DecoderUtil.STREAM_HEADER_SIZE - 4);
 
         try {
-            xzIn = new SingleXZInputStream(in, memoryLimit, verifyCheck, buf,
+            xzIn = new SingleXzInputStream(in, memoryLimit, verifyCheck, buf,
                                            arrayCache);
-        } catch (XZFormatException e) {
+        } catch (XzFormatException e) {
             // Since this isn't the first .xz Stream, it is more
             // logical to tell that the data is corrupt.
             throw new CorruptedInputException(
@@ -467,7 +467,7 @@ public class XZInputStream extends InputStream {
      */
     public int available() throws IOException {
         if (in == null) {
-            throw new XZIOException("Stream closed");
+            throw new XzException("Stream closed");
         }
 
         if (exception != null) {

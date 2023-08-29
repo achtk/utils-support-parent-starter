@@ -1,12 +1,3 @@
-/*
- * LZMA2Decoder
- *
- * Author: Lasse Collin <lasse.collin@tukaani.org>
- *
- * This file has been put into the public domain.
- * You can do whatever you want with this file.
- */
-
 package com.chua.common.support.file.xz;
 
 import java.io.InputStream;
@@ -26,10 +17,10 @@ class LZMA2Decoder extends LZMA2Coder implements FilterDecoder {
     }
 
     public int getMemoryUsage() {
-        return LZMA2InputStream.getMemoryUsage(dictSize);
+        return Lzma2InputStream.getMemoryUsage(dictSize);
     }
 
     public InputStream getInputStream(InputStream in, ArrayCache arrayCache) {
-        return new LZMA2InputStream(in, dictSize, null, arrayCache);
+        return new Lzma2InputStream(in, dictSize, null, arrayCache);
     }
 }

@@ -417,8 +417,8 @@ abstract class Token {
         }
     }
 
-    final static class CData extends Character {
-        CData(String data) {
+    final static class CharData extends Character {
+        CharData(String data) {
             super();
             this.data(data);
         }
@@ -430,8 +430,8 @@ abstract class Token {
 
     }
 
-    final static class EOF extends Token {
-        EOF() {
+    final static class Eof extends Token {
+        Eof() {
             type = TokenType.EOF;
         }
 
@@ -484,7 +484,7 @@ abstract class Token {
     }
 
     final boolean isCData() {
-        return this instanceof CData;
+        return this instanceof CharData;
     }
 
     final Character asCharacter() {

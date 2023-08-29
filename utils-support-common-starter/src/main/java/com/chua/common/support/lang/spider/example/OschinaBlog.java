@@ -1,7 +1,7 @@
 package com.chua.common.support.lang.spider.example;
 
 import com.chua.common.support.lang.spider.Site;
-import com.chua.common.support.lang.spider.model.OOSpider;
+import com.chua.common.support.lang.spider.model.OoSpider;
 import com.chua.common.support.lang.spider.model.annotation.ExtractBy;
 import com.chua.common.support.lang.spider.model.annotation.TargetUrl;
 import com.chua.common.support.lang.spider.pipeline.JsonFilePageModelPipeline;
@@ -30,7 +30,7 @@ public class OschinaBlog {
 
     public static void main(String[] args) {
         //results will be saved to "/data/webmagic/" in json format
-        OOSpider.create(Site.me(), new JsonFilePageModelPipeline("/data/webmagic/"), OschinaBlog.class)
+        OoSpider.create(Site.me(), new JsonFilePageModelPipeline("/data/webmagic/"), OschinaBlog.class)
                 .addUrl("http://my.oschina.net/flashsword/blog").run();
     }
 

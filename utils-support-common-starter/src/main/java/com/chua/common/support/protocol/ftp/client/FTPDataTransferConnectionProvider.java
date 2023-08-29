@@ -8,19 +8,19 @@ import java.net.Socket;
  *
  * @author cpelliccia
  */
-interface FTPDataTransferConnectionProvider {
+interface FtpDataTransferConnectionProvider {
 
 	/**
 	 * Returns the connection.
 	 *
 	 * @return The connection.
-	 * @throws FTPDataTransferException If an unexpected error occurs.
+	 * @throws FtpDataTransferException If an unexpected error occurs.
 	 */
-	public Socket openDataTransferConnection() throws FTPDataTransferException;
+	Socket openDataTransferConnection() throws FtpDataTransferException;
 
 	/**
 	 * Terminates the provider.
 	 */
-	public void dispose();
+	void dispose();
 
 }

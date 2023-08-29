@@ -1,6 +1,6 @@
 package com.chua.common.support.lang.formatter.core;
 
-import com.chua.common.support.lang.formatter.core.util.JSLikeList;
+import com.chua.common.support.lang.formatter.core.util.JsLikeList;
 import com.chua.common.support.lang.formatter.core.util.Util;
 import com.chua.common.support.lang.formatter.languages.DialectConfigurator;
 
@@ -19,7 +19,7 @@ public abstract class AbstractFormatter implements DialectConfigurator {
   private final InlineBlock inlineBlock;
   private final Params params;
   protected Token previousReservedToken;
-  private JSLikeList<Token> tokens;
+  private JsLikeList<Token> tokens;
   private int index;
 
   /**

@@ -1,6 +1,6 @@
 package com.chua.common.support.extra.el.baseutil.bytecode.structure;
 
-import com.chua.common.support.extra.el.baseutil.bytecode.structure.Attribute.AbstractAttributeInfo;
+import com.chua.common.support.extra.el.baseutil.bytecode.structure.attribute.AbstractAttributeInfo;
 import com.chua.common.support.extra.el.baseutil.bytecode.structure.constantinfo.AbstractConstantInfo;
 import com.chua.common.support.extra.el.baseutil.bytecode.structure.constantinfo.Utf8Info;
 import com.chua.common.support.extra.el.baseutil.bytecode.util.BinaryData;

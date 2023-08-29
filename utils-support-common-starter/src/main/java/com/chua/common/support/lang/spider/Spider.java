@@ -12,7 +12,7 @@ import com.chua.common.support.lang.spider.processor.PageProcessor;
 import com.chua.common.support.lang.spider.scheduler.QueueScheduler;
 import com.chua.common.support.lang.spider.scheduler.Scheduler;
 import com.chua.common.support.lang.spider.thread.CountableThreadPool;
-import com.chua.common.support.lang.spider.utils.WMCollections;
+import com.chua.common.support.lang.spider.utils.WmCollections;
 import com.chua.common.support.utils.CollectionUtils;
 import com.chua.common.support.utils.ThreadUtils;
 import com.chua.common.support.utils.UrlUtils;
@@ -527,7 +527,7 @@ public class Spider implements Runnable, Task {
     }
 
     public <T> T get(String url) {
-        List<String> urls = WMCollections.newArrayList(url);
+        List<String> urls = WmCollections.newArrayList(url);
         List<T> resultItemses = getAll(urls);
         if (resultItemses != null && resultItemses.size() > 0) {
             return resultItemses.get(0);

@@ -17,6 +17,7 @@ package com.chua.common.support.file.univocity.parsers.common.input;
 
 import com.chua.common.support.file.univocity.parsers.common.Format;
 
+import java.io.EOFException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -269,7 +270,7 @@ public abstract class AbstractCharInputReader implements CharInputReader {
 			lineCount++;
 		}
 		ch = '\0';
-		throw new EOFException();
+		throw new EofException();
 	}
 
 	@Override
@@ -329,7 +330,7 @@ public abstract class AbstractCharInputReader implements CharInputReader {
 				nextChar();
 			} while (lineCount < expectedLineCount);
 			skipping = false;
-		} catch (EOFException ex) {
+		} catch (EofException ex) {
 			skipping = false;
 		}
 	}
@@ -354,7 +355,7 @@ public abstract class AbstractCharInputReader implements CharInputReader {
 					return tmp.getAndReset();
 				}
 			} while (true);
-		} catch (EOFException ex) {
+		} catch (EofException ex) {
 			tmp.updateWhitespace();
 			return tmp.getAndReset();
 		} finally {

@@ -61,8 +61,8 @@ public class Util {
     return Stream.of(l1, l2).flatMap(List::stream).collect(Collectors.toList());
   }
 
-  public static JSLikeList<String> sortByLengthDesc(JSLikeList<String> strings) {
-    return new JSLikeList<>(
+  public static JsLikeList<String> sortByLengthDesc(JsLikeList<String> strings) {
+    return new JsLikeList<>(
         strings.stream()
             .sorted(Comparator.comparingInt(String::length).reversed())
             .collect(Collectors.toList()));

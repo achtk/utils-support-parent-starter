@@ -107,7 +107,7 @@ public class UrlPath {
             path = fixPath(path);
             final List<String> split = StringUtils.splitList(path, SYMBOL_LEFT_SLASH_CHAR);
             for (String seg : split) {
-                addInternal(URLDecoder.decodeForPath(seg, charset), false);
+                addInternal(UrlDecoder.decodeForPath(seg, charset), false);
             }
         }
 

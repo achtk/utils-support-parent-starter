@@ -21,18 +21,18 @@ public class RegexUtil {
     return ESCAPE_REGEX_PATTERN.matcher(s).replaceAll("\\\\$0");
   }
 
-  public static String createOperatorRegex(JSLikeList<String> multiLetterOperators) {
+  public static String createOperatorRegex(JsLikeList<String> multiLetterOperators) {
     return String.format(
         "^(%s|.)",
         Util.sortByLengthDesc(multiLetterOperators).map(RegexUtil::escapeRegExp).join("|"));
   }
 
-  public static String createLineCommentRegex(JSLikeList<String> lineCommentTypes) {
+  public static String createLineCommentRegex(JsLikeList<String> lineCommentTypes) {
     return String.format(
         "^((?:%s).*?)(?:\r\n|\r|\n|$)", lineCommentTypes.map(RegexUtil::escapeRegExp).join("|"));
   }
 
-  public static String createReservedWordRegex(JSLikeList<String> reservedWords) {
+  public static String createReservedWordRegex(JsLikeList<String> reservedWords) {
     if (reservedWords.isEmpty()) {
       return "^\b$";
     }
@@ -41,13 +41,13 @@ public class RegexUtil {
     return "(?i)" + "^(" + reservedWordsPattern + ")\\b";
   }
 
-  public static String createWordRegex(JSLikeList<String> specialChars) {
+  public static String createWordRegex(JsLikeList<String> specialChars) {
     return "^([\\p{IsAlphabetic}\\p{Mc}\\p{Me}\\p{Mn}\\p{Nd}\\p{Pc}\\p{IsJoin_Control}"
         + specialChars.join("")
         + "]+)";
   }
 
-  public static String createStringRegex(JSLikeList<String> stringTypes) {
+  public static String createStringRegex(JsLikeList<String> stringTypes) {
     return "^(" + createStringPattern(stringTypes) + ")";
   }
 
@@ -58,11 +58,11 @@ public class RegexUtil {
   * 4. single quoted string using '' or \' to escape
    * 5. national character quoted string using N'' or N\' to escape
   */
-  public static String createStringPattern(JSLikeList<String> stringTypes) {
+  public static String createStringPattern(JsLikeList<String> stringTypes) {
     return stringTypes.map(StringLiteral::get).join("|");
   }
 
-  public static String createParenRegex(JSLikeList<String> parens) {
+  public static String createParenRegex(JsLikeList<String> parens) {
     return "(?i)^(" + parens.map(RegexUtil::escapeParen).join("|") + ")";
   }
 
@@ -76,7 +76,7 @@ public class RegexUtil {
     }
   }
 
-  public static Pattern createPlaceholderRegexPattern(JSLikeList<String> types, String pattern) {
+  public static Pattern createPlaceholderRegexPattern(JsLikeList<String> types, String pattern) {
     if (types.isEmpty()) {
       return null;
     }

@@ -9,6 +9,7 @@ import com.chua.common.support.file.univocity.parsers.common.processor.core.Proc
 import com.chua.common.support.file.univocity.parsers.common.record.Record;
 import com.chua.common.support.file.univocity.parsers.common.record.RecordMetaData;
 
+import java.io.EOFException;
 import java.io.File;
 import java.io.InputStream;
 import java.io.Reader;
@@ -144,7 +145,7 @@ public abstract class AbstractParser<T extends AbstractCommonParserSettings<?>> 
 			}
 
 			stopParsing();
-		} catch (EOFException ex) {
+		} catch (EofException ex) {
 			try {
 				handleEof();
 				while (!output.pendingRecords.isEmpty()) {
@@ -590,7 +591,7 @@ public abstract class AbstractParser<T extends AbstractCommonParserSettings<?>> 
 			}
 			stopParsing();
 			return null;
-		} catch (EOFException ex) {
+		} catch (EofException ex) {
 			String[] row = handleEof();
 			if (output.pendingRecords.isEmpty()) {
 				stopParsing();
@@ -680,7 +681,7 @@ public abstract class AbstractParser<T extends AbstractCommonParserSettings<?>> 
 				}
 			}
 			return null;
-		} catch (EOFException ex) {
+		} catch (EofException ex) {
 			return handleEof();
 		} catch (NullPointerException ex) {
 			if (input != null) {

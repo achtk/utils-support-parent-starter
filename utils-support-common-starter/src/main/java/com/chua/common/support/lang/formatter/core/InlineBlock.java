@@ -1,6 +1,6 @@
 package com.chua.common.support.lang.formatter.core;
 
-import com.chua.common.support.lang.formatter.core.util.JSLikeList;
+import com.chua.common.support.lang.formatter.core.util.JsLikeList;
 
 /**
  * Bookkeeper for inline blocks.
@@ -26,7 +26,7 @@ class InlineBlock {
    * @param tokens Array of all tokens
    * @param index Current token position
    */
-  void beginIfPossible(JSLikeList<Token> tokens, int index) {
+  void beginIfPossible(JsLikeList<Token> tokens, int index) {
     if (this.level == 0 && this.isInlineBlock(tokens, index)) {
       this.level = 1;
     } else if (this.level > 0) {
@@ -50,7 +50,7 @@ class InlineBlock {
     return this.level > 0;
   }
 
-  private boolean isInlineBlock(JSLikeList<Token> tokens, int index) {
+  private boolean isInlineBlock(JsLikeList<Token> tokens, int index) {
     int length = 0;
     int level = 0;
 

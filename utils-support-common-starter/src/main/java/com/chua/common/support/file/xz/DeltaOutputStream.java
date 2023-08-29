@@ -47,7 +47,7 @@ class DeltaOutputStream extends FinishableOutputStream {
             throw exception;
 
         if (finished)
-            throw new XZIOException("Stream finished");
+            throw new XzException("Stream finished");
 
         try {
             while (len > FILTER_BUF_SIZE) {
@@ -70,7 +70,7 @@ class DeltaOutputStream extends FinishableOutputStream {
             throw exception;
 
         if (finished)
-            throw new XZIOException("Stream finished or closed");
+            throw new XzException("Stream finished or closed");
 
         try {
             out.flush();

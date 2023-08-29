@@ -25,7 +25,7 @@
 
 package com.chua.common.support.protocol.websocket;
 
-import com.chua.common.support.protocol.websocket.interfaces.ISSLChannel;
+import com.chua.common.support.protocol.websocket.interfaces.SslChannel;
 
 import javax.net.ssl.SSLEngine;
 import javax.net.ssl.SSLEngineResult;
@@ -52,7 +52,7 @@ import java.util.concurrent.Future;
 /**
  * Implements the relevant portions of the SocketChannel interface with the SSLEngine wrapper.
  */
-public class SSLSocketChannel2 implements ByteChannel, WrappedByteChannel, ISSLChannel {
+public class SSLSocketChannel2 implements ByteChannel, WrappedByteChannel, SslChannel {
 
   /**
    * This object is used to feed the {@link SSLEngine}'s wrap and unwrap methods during the

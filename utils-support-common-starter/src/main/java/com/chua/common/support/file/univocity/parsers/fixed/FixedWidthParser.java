@@ -16,9 +16,11 @@
 package com.chua.common.support.file.univocity.parsers.fixed;
 
 import com.chua.common.support.file.univocity.parsers.common.*;
-import com.chua.common.support.file.univocity.parsers.common.input.EOFException;
+import com.chua.common.support.file.univocity.parsers.common.input.EofException;
 import com.chua.common.support.file.univocity.parsers.common.input.LookaheadCharInputReader;
 import com.chua.common.support.file.univocity.parsers.common.record.Record;
+
+import java.io.EOFException;
 
 /**
  * A fast and flexible fixed-with parser implementation.
@@ -258,7 +260,7 @@ public class FixedWidthParser extends AbstractParser<FixedWidthParserSettings> {
 			while (ch != newLine) {
 				ch = input.nextChar();
 			}
-		} catch (EOFException e) {
+		} catch (EofException e) {
 			//ignore and let the EOF blow up again after the record is generated.
 		}
 	}

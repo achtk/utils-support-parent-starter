@@ -1,16 +1,7 @@
-/*
- * IndexHash
- *
- * Author: Lasse Collin <lasse.collin@tukaani.org>
- *
- * This file has been put into the public domain.
- * You can do whatever you want with this file.
- */
-
 package com.chua.common.support.file.xz.index;
 
 import com.chua.common.support.file.xz.CorruptedInputException;
-import com.chua.common.support.file.xz.XZIOException;
+import com.chua.common.support.file.xz.XzException;
 import com.chua.common.support.file.xz.check.Check;
 import com.chua.common.support.file.xz.check.Crc32;
 import com.chua.common.support.file.xz.check.Sha256;
@@ -37,7 +28,7 @@ public class IndexHash extends IndexBase {
     }
 
     public void add(long unpaddedSize, long uncompressedSize)
-            throws XZIOException {
+            throws XzException {
         super.add(unpaddedSize, uncompressedSize);
 
         ByteBuffer buf = ByteBuffer.allocate(2 * 8);
@@ -71,7 +62,7 @@ public class IndexHash extends IndexBase {
 
             try {
                 stored.add(unpaddedSize, uncompressedSize);
-            } catch (XZIOException e) {
+            } catch (XzException e) {
                 throw new CorruptedInputException("XZ Index is corrupt");
             }
 

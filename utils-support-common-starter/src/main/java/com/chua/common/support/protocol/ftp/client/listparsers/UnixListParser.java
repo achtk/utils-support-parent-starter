@@ -1,8 +1,8 @@
 package com.chua.common.support.protocol.ftp.client.listparsers;
 
-import com.chua.common.support.protocol.ftp.client.FTPFile;
-import com.chua.common.support.protocol.ftp.client.FTPListParseException;
-import com.chua.common.support.protocol.ftp.client.FTPListParser;
+import com.chua.common.support.protocol.ftp.client.FtpFile;
+import com.chua.common.support.protocol.ftp.client.FtpListParseException;
+import com.chua.common.support.protocol.ftp.client.FtpListParser;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
  *
  * @author Carlo Pelliccia
  */
-public class UnixListParser implements FTPListParser {
+public class UnixListParser implements FtpListParser {
 
 	private static final Pattern PATTERN = Pattern
 			.compile("^([dl\\-])[r\\-][w\\-][xSs\\-][r\\-][w\\-][xSs\\-][r\\-][w\\-][xTt\\-]\\s+"
@@ -30,10 +30,10 @@ public class UnixListParser implements FTPListParser {
 	private static final DateFormat DATE_FORMAT = new SimpleDateFormat(
 			"MMM dd yyyy HH:mm", Locale.US);
 
-	public FTPFile[] parse(String[] lines) throws FTPListParseException {
+	public FtpFile[] parse(String[] lines) throws FtpListParseException {
 		int size = lines.length;
 		if (size == 0) {
-			return new FTPFile[0];
+			return new FtpFile[0];
 		}
 		// Removes the "total" line used in MAC style.
 		if (lines[0].startsWith("total")) {
@@ -48,11 +48,11 @@ public class UnixListParser implements FTPListParser {
 		Calendar now = Calendar.getInstance();
 		// Ok, starts parsing.
 		int currentYear = now.get(Calendar.YEAR);
-		FTPFile[] ret = new FTPFile[size];
+		FtpFile[] ret = new FtpFile[size];
 		for (int i = 0; i < size; i++) {
 			Matcher m = PATTERN.matcher(lines[i]);
 			if (m.matches()) {
-				ret[i] = new FTPFile();
+				ret[i] = new FtpFile();
 				// Retrieve the data.
 				String typeString = m.group(1);
 				String sizeString = m.group(2);
@@ -65,20 +65,20 @@ public class UnixListParser implements FTPListParser {
 				String linkedString = m.group(9);
 				// Parse the data.
 				if (typeString.equals("-")) {
-					ret[i].setType(FTPFile.TYPE_FILE);
+					ret[i].setType(FtpFile.TYPE_FILE);
 				} else if (typeString.equals("d")) {
-					ret[i].setType(FTPFile.TYPE_DIRECTORY);
+					ret[i].setType(FtpFile.TYPE_DIRECTORY);
 				} else if (typeString.equals("l")) {
-					ret[i].setType(FTPFile.TYPE_LINK);
+					ret[i].setType(FtpFile.TYPE_LINK);
 					ret[i].setLink(linkedString);
 				} else {
-					throw new FTPListParseException();
+					throw new FtpListParseException();
 				}
 				long fileSize;
 				try {
 					fileSize = Long.parseLong(sizeString);
 				} catch (Throwable t) {
-					throw new FTPListParseException();
+					throw new FtpListParseException();
 				}
 				ret[i].setSize(fileSize);
 				if (dayString.length() == 1) {
@@ -117,7 +117,7 @@ public class UnixListParser implements FTPListParser {
 						md = DATE_FORMAT.parse(mdString.toString());
 					}
 				} catch (ParseException e) {
-					throw new FTPListParseException();
+					throw new FtpListParseException();
 				}
 				if (checkYear) {
 					Calendar mc = Calendar.getInstance();
@@ -130,7 +130,7 @@ public class UnixListParser implements FTPListParser {
 				ret[i].setModifiedDate(md);
 				ret[i].setName(nameString);
 			} else {
-				throw new FTPListParseException();
+				throw new FtpListParseException();
 			}
 		}
 		return ret;

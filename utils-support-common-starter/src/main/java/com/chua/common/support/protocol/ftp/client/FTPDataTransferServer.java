@@ -9,11 +9,11 @@ import java.util.StringTokenizer;
 
 /**
  * This class implements a local server to make data transfer with the remote
- * FTP server.
+ * Ftp server.
  *
  * @author Carlo Pelliccia
  */
-class FTPDataTransferServer implements FTPDataTransferConnectionProvider,
+class FtpDataTransferServer implements FtpDataTransferConnectionProvider,
 		Runnable {
 
 	/**
@@ -39,11 +39,11 @@ class FTPDataTransferServer implements FTPDataTransferConnectionProvider,
 	/**
 	 * Build the object.
 	 *
-	 * @throws FTPDataTransferException If a I/O error occurs.
+	 * @throws FtpDataTransferException If a I/O error occurs.
 	 */
-	public FTPDataTransferServer() throws FTPDataTransferException {
+	public FtpDataTransferServer() throws FtpDataTransferException {
 		boolean useRange = false;
-		String aux = System.getProperty(FTPKeys.ACTIVE_DT_PORT_RANGE);
+		String aux = System.getProperty(FtpKeys.ACTIVE_DT_PORT_RANGE);
 		int start = 0;
 		int stop = 0;
 		if (aux != null) {
@@ -74,7 +74,7 @@ class FTPDataTransferServer implements FTPDataTransferConnectionProvider,
 			if (!valid) {
 				// warning to the developer
 				System.err.println("WARNING: invalid value \"" + aux
-						+ "\" for the " + FTPKeys.ACTIVE_DT_PORT_RANGE
+						+ "\" for the " + FtpKeys.ACTIVE_DT_PORT_RANGE
 						+ " system property. The value should "
 						+ "be in the start-stop form, with "
 						+ "start > 0, stop > 0 and start <= stop.");
@@ -101,7 +101,7 @@ class FTPDataTransferServer implements FTPDataTransferConnectionProvider,
 				}
 			}
 			if (!done) {
-				throw new FTPDataTransferException(
+				throw new FtpDataTransferException(
 						"Cannot open the ServerSocket. "
 								+ "No available port found in range " + aux);
 			}
@@ -112,7 +112,7 @@ class FTPDataTransferServer implements FTPDataTransferConnectionProvider,
 				serverSocket.setReceiveBufferSize(512 * 1024);
 				serverSocket.bind(new InetSocketAddress(0));
 			} catch (IOException e) {
-				throw new FTPDataTransferException(
+				throw new FtpDataTransferException(
 						"Cannot open the ServerSocket", e);
 			}
 		}
@@ -132,7 +132,7 @@ class FTPDataTransferServer implements FTPDataTransferConnectionProvider,
 
 	public void run() {
 		int timeout = 30000;
-		String aux = System.getProperty(FTPKeys.ACTIVE_DT_ACCEPT_TIMEOUT);
+		String aux = System.getProperty(FtpKeys.ACTIVE_DT_ACCEPT_TIMEOUT);
 		if (aux != null) {
 			boolean valid = false;
 			int value;
@@ -148,7 +148,7 @@ class FTPDataTransferServer implements FTPDataTransferConnectionProvider,
 			if (!valid) {
 				// warning to the developer
 				System.err.println("WARNING: invalid value \"" + aux
-						+ "\" for the " + FTPKeys.ACTIVE_DT_ACCEPT_TIMEOUT
+						+ "\" for the " + FtpKeys.ACTIVE_DT_ACCEPT_TIMEOUT
 						+ " system property. The value should "
 						+ "be an integer greater or equal to 0.");
 			}
@@ -185,7 +185,7 @@ class FTPDataTransferServer implements FTPDataTransferConnectionProvider,
 		}
 	}
 
-	public Socket openDataTransferConnection() throws FTPDataTransferException {
+	public Socket openDataTransferConnection() throws FtpDataTransferException {
 		if (socket == null && exception == null) {
 			try {
 				thread.join();
@@ -194,11 +194,11 @@ class FTPDataTransferServer implements FTPDataTransferConnectionProvider,
 			}
 		}
 		if (exception != null) {
-			throw new FTPDataTransferException(
+			throw new FtpDataTransferException(
 					"Cannot receive the incoming connection", exception);
 		}
 		if (socket == null) {
-			throw new FTPDataTransferException("No socket available");
+			throw new FtpDataTransferException("No socket available");
 		}
 		return socket;
 	}

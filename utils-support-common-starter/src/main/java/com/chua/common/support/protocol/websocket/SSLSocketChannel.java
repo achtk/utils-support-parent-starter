@@ -25,7 +25,7 @@
 
 package com.chua.common.support.protocol.websocket;
 
-import com.chua.common.support.protocol.websocket.interfaces.ISSLChannel;
+import com.chua.common.support.protocol.websocket.interfaces.SslChannel;
 import com.chua.common.support.protocol.websocket.util.ByteBufferUtils;
 
 import javax.net.ssl.SSLEngine;
@@ -62,7 +62,7 @@ import java.util.concurrent.ExecutorService;
  * <p>
  * Permission for usage received at May 25, 2017 by Alex Karnezis
  */
-public class SSLSocketChannel implements WrappedByteChannel, ByteChannel, ISSLChannel {
+public class SSLSocketChannel implements WrappedByteChannel, ByteChannel, SslChannel {
 
 
   /**

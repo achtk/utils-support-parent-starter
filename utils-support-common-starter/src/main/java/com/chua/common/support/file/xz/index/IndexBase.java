@@ -9,17 +9,17 @@
 
 package com.chua.common.support.file.xz.index;
 
-import com.chua.common.support.file.xz.XZIOException;
+import com.chua.common.support.file.xz.XzException;
 import com.chua.common.support.file.xz.common.Util;
 
 abstract class IndexBase {
-    private final XZIOException invalidIndexException;
+    private final XzException invalidIndexException;
     long blocksSum = 0;
     long uncompressedSum = 0;
     long indexListSize = 0;
     long recordCount = 0;
 
-    IndexBase(XZIOException invalidIndexException) {
+    IndexBase(XzException invalidIndexException) {
         this.invalidIndexException = invalidIndexException;
     }
 
@@ -41,7 +41,7 @@ abstract class IndexBase {
         return (int)((4 - getUnpaddedIndexSize()) & 3);
     }
 
-    void add(long unpaddedSize, long uncompressedSize) throws XZIOException {
+    void add(long unpaddedSize, long uncompressedSize) throws XzException {
         blocksSum += (unpaddedSize + 3) & ~3;
         uncompressedSum += uncompressedSize;
         indexListSize += Util.getVliSize(unpaddedSize)

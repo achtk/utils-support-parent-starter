@@ -2,7 +2,7 @@ package com.chua.common.support.lang.spider.selector;
 
 
 import com.chua.common.support.jsoup.nodes.Element;
-import com.chua.common.support.lang.spider.xsoup.XPathEvaluator;
+import com.chua.common.support.lang.spider.xsoup.PathEvaluator;
 import com.chua.common.support.lang.spider.xsoup.Xsoup;
 import com.chua.common.support.utils.CollectionUtils;
 
@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class XpathSelector extends BaseElementSelector {
 
-    private final XPathEvaluator xPathEvaluator;
+    private final PathEvaluator xPathEvaluator;
 
     public XpathSelector(String xpathStr) {
         this.xPathEvaluator = Xsoup.compile(xpathStr);

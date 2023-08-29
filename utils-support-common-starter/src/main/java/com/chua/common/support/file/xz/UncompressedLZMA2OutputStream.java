@@ -61,7 +61,7 @@ class UncompressedLZMA2OutputStream extends FinishableOutputStream {
             throw exception;
 
         if (finished)
-            throw new XZIOException("Stream finished or closed");
+            throw new XzException("Stream finished or closed");
 
         try {
             while (len > 0) {
@@ -93,7 +93,7 @@ class UncompressedLZMA2OutputStream extends FinishableOutputStream {
             throw exception;
 
         if (finished)
-            throw new XZIOException("Stream finished or closed");
+            throw new XzException("Stream finished or closed");
 
         try {
             if (uncompPos > 0)
@@ -114,7 +114,7 @@ class UncompressedLZMA2OutputStream extends FinishableOutputStream {
             throw exception;
 
         if (finished)
-            throw new XZIOException("Stream finished or closed");
+            throw new XzException("Stream finished or closed");
 
         try {
             if (uncompPos > 0)

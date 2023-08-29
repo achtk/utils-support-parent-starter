@@ -6,14 +6,14 @@ package com.chua.common.support.protocol.ftp.client;
  * @author Carlo Pelliccia
  * @since 1.3
  */
-interface FTPKeys {
+interface FtpKeys {
 
 	/**
 	 * The key used to retrieve the system property with the port range for
 	 * active data transfers. The value has to be in the
 	 * <em>startPort-endPort</em> form.
 	 */
-	public String ACTIVE_DT_PORT_RANGE = "ftp4j.activeDataTransfer.portRange";
+	String ACTIVE_DT_PORT_RANGE = "ftp4j.activeDataTransfer.portRange";
 
 	/**
 	 * The key used to retrieve the system property with the host IPv4 address

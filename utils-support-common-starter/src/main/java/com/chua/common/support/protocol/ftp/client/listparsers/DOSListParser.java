@@ -1,8 +1,8 @@
 package com.chua.common.support.protocol.ftp.client.listparsers;
 
-import com.chua.common.support.protocol.ftp.client.FTPFile;
-import com.chua.common.support.protocol.ftp.client.FTPListParseException;
-import com.chua.common.support.protocol.ftp.client.FTPListParser;
+import com.chua.common.support.protocol.ftp.client.FtpFile;
+import com.chua.common.support.protocol.ftp.client.FtpListParseException;
+import com.chua.common.support.protocol.ftp.client.FtpListParser;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
  *
  * @author Carlo Pelliccia
  */
-public class DOSListParser implements FTPListParser {
+public class DOSListParser implements FtpListParser {
 
 	private static final Pattern PATTERN = Pattern
 			.compile("^(\\d{2})-(\\d{2})-(\\d{2})\\s+(\\d{2}):(\\d{2})(AM|PM)\\s+"
@@ -25,9 +25,9 @@ public class DOSListParser implements FTPListParser {
 	private static final DateFormat DATE_FORMAT = new SimpleDateFormat(
 			"MM/dd/yy hh:mm a");
 
-	public FTPFile[] parse(String[] lines) throws FTPListParseException {
+	public FtpFile[] parse(String[] lines) throws FtpListParseException {
 		int size = lines.length;
-		FTPFile[] ret = new FTPFile[size];
+		FtpFile[] ret = new FtpFile[size];
 		for (int i = 0; i < size; i++) {
 			Matcher m = PATTERN.matcher(lines[i]);
 			if (m.matches()) {
@@ -39,19 +39,19 @@ public class DOSListParser implements FTPListParser {
 				String ampm = m.group(6);
 				String dirOrSize = m.group(7);
 				String name = m.group(8);
-				ret[i] = new FTPFile();
+				ret[i] = new FtpFile();
 				ret[i].setName(name);
 				if (dirOrSize.equalsIgnoreCase("<DIR>")) {
-					ret[i].setType(FTPFile.TYPE_DIRECTORY);
+					ret[i].setType(FtpFile.TYPE_DIRECTORY);
 					ret[i].setSize(0);
 				} else {
 					long fileSize;
 					try {
 						fileSize = Long.parseLong(dirOrSize);
 					} catch (Throwable t) {
-						throw new FTPListParseException();
+						throw new FtpListParseException();
 					}
-					ret[i].setType(FTPFile.TYPE_FILE);
+					ret[i].setType(FtpFile.TYPE_FILE);
 					ret[i].setSize(fileSize);
 				}
 				String mdString = month + "/" + day + "/" + year + " " + hour
@@ -62,11 +62,11 @@ public class DOSListParser implements FTPListParser {
 						md = DATE_FORMAT.parse(mdString);
 					}
 				} catch (ParseException e) {
-					throw new FTPListParseException();
+					throw new FtpListParseException();
 				}
 				ret[i].setModifiedDate(md);
 			} else {
-				throw new FTPListParseException();
+				throw new FtpListParseException();
 			}
 		}
 		return ret;

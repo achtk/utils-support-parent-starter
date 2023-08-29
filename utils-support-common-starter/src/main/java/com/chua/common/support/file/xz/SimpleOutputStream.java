@@ -54,7 +54,7 @@ class SimpleOutputStream extends FinishableOutputStream {
             throw exception;
 
         if (finished)
-            throw new XZIOException("Stream finished or closed");
+            throw new XzException("Stream finished or closed");
 
         while (len > 0) {
             // Copy more unfiltered data into filterBuf.

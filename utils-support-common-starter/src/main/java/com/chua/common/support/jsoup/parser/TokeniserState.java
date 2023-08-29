@@ -21,7 +21,7 @@ enum TokeniserState {
                     t.emit(r.consume());
                     break;
                 case eof:
-                    t.emit(new Token.EOF());
+                    t.emit(new Token.Eof());
                     break;
                 default:
                     String data = r.consumeData();
@@ -52,7 +52,7 @@ enum TokeniserState {
                     t.emit(replacementChar);
                     break;
                 case eof:
-                    t.emit(new Token.EOF());
+                    t.emit(new Token.Eof());
                     break;
                 default:
                     String data = r.consumeData();
@@ -85,7 +85,7 @@ enum TokeniserState {
                     t.emit(replacementChar);
                     break;
                 case eof:
-                    t.emit(new Token.EOF());
+                    t.emit(new Token.Eof());
                     break;
                 default:
                     String data = r.consumeTo(nullChar);
@@ -1612,7 +1612,7 @@ enum TokeniserState {
             String data = r.consumeTo("]]>");
             t.dataBuffer.append(data);
             if (r.matchConsume("]]>") || r.isEmpty()) {
-                t.emit(new Token.CData(t.dataBuffer.toString()));
+                t.emit(new Token.CharData(t.dataBuffer.toString()));
                 t.transition(Data);
             }// otherwise, buffer underrun, stay in data section
         }
@@ -1686,7 +1686,7 @@ enum TokeniserState {
                 t.emit(replacementChar);
                 break;
             case eof:
-                t.emit(new Token.EOF());
+                t.emit(new Token.Eof());
                 break;
             default:
                 String data = r.consumeRawData();

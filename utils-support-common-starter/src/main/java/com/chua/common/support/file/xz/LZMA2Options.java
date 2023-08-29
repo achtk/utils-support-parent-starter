@@ -52,7 +52,7 @@ public class LZMA2Options extends FilterOptions {
      * we would otherwise hit the limits of signed ints in array indexing.
      * <p>
      * If you really need bigger dictionary for decompression,
-     * use {@link LZMA2InputStream} directly.
+     * use {@link Lzma2InputStream} directly.
      */
     public static final int DICT_SIZE_MAX = 768 << 20;
 
@@ -543,14 +543,14 @@ public class LZMA2Options extends FilterOptions {
      * that was encoded with these options and stored in a .xz file.
      * <p>
      * The returned value may bigger than the value returned by a direct call
-     * to {@link LZMA2InputStream#getMemoryUsage(int)} if the dictionary size
+     * to {@link Lzma2InputStream#getMemoryUsage(int)} if the dictionary size
      * is not 2^n or 2^n&nbsp;+&nbsp;2^(n-1) bytes. This is because the .xz
      * headers store the dictionary size in such a format and other values
      * are rounded up to the next such value. Such rounding is harmess except
      * it might waste some memory if an unsual dictionary size is used.
      * <p>
      * If you use raw LZMA2 streams and unusual dictioanary size, call
-     * {@link LZMA2InputStream#getMemoryUsage} directly to get raw decoder
+     * {@link Lzma2InputStream#getMemoryUsage} directly to get raw decoder
      * memory requirements.
      */
     public int getDecoderMemoryUsage() {
@@ -561,12 +561,12 @@ public class LZMA2Options extends FilterOptions {
         d |= d >>> 4;
         d |= d >>> 8;
         d |= d >>> 16;
-        return LZMA2InputStream.getMemoryUsage(d + 1);
+        return Lzma2InputStream.getMemoryUsage(d + 1);
     }
 
     public InputStream getInputStream(InputStream in, ArrayCache arrayCache)
             throws IOException {
-        return new LZMA2InputStream(in, dictSize, presetDict, arrayCache);
+        return new Lzma2InputStream(in, dictSize, presetDict, arrayCache);
     }
 
     FilterEncoder getFilterEncoder() {

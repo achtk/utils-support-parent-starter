@@ -123,7 +123,7 @@ class BlockOutputStream extends FinishableOutputStream {
         // This is just to be pedantic.
         if (compressedSize < 0 || compressedSize > compressedSizeLimit
                 || uncompressedSize < 0)
-            throw new XZIOException("XZ Stream has grown too big");
+            throw new XzException("XZ Stream has grown too big");
     }
 
     public long getUnpaddedSize() {

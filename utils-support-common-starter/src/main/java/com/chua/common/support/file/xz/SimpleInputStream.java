@@ -60,7 +60,7 @@ class SimpleInputStream extends InputStream {
             return 0;
 
         if (in == null)
-            throw new XZIOException("Stream closed");
+            throw new XzException("Stream closed");
 
         if (exception != null)
             throw exception;
@@ -119,7 +119,7 @@ class SimpleInputStream extends InputStream {
 
     public int available() throws IOException {
         if (in == null)
-            throw new XZIOException("Stream closed");
+            throw new XzException("Stream closed");
 
         if (exception != null)
             throw exception;

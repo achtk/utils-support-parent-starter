@@ -1,21 +1,20 @@
 package com.chua.common.support.lang.spider.xsoup.xevaluator;
 
 
-import com.chua.common.support.jsoup.nodes.Element;
-import com.chua.common.support.lang.spider.xsoup.XElement;
+import com.chua.common.support.lang.spider.xsoup.Element;
 
 /**
  * XPath result.
  *
  * @author code4crafter@gmail.com
  */
-public class DefaultXElement implements XElement {
+public class DefaultXElement implements Element {
 
-    private Element element;
+    private com.chua.common.support.jsoup.nodes.Element element;
 
     private ElementOperator elementOperator;
 
-    public DefaultXElement(Element element, ElementOperator elementOperator) {
+    public DefaultXElement(com.chua.common.support.jsoup.nodes.Element element, ElementOperator elementOperator) {
         this.element = element;
         this.elementOperator = elementOperator;
     }
@@ -38,7 +37,7 @@ public class DefaultXElement implements XElement {
     }
 
     @Override
-    public Element getElement() {
+    public com.chua.common.support.jsoup.nodes.Element getElement() {
         return element;
     }
 }

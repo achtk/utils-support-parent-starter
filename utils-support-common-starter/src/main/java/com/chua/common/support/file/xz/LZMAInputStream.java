@@ -10,8 +10,8 @@
 
 package com.chua.common.support.file.xz;
 
-import com.chua.common.support.file.xz.lz.LZDecoder;
-import com.chua.common.support.file.xz.lzma.LZMADecoder;
+import com.chua.common.support.file.xz.lz.LzDecoder;
+import com.chua.common.support.file.xz.lzma.LzmaDecoder;
 import com.chua.common.support.file.xz.rangecoder.RangeDecoderFromStream;
 
 import java.io.DataInputStream;
@@ -31,7 +31,7 @@ import java.io.InputStream;
  * the end of the LZMA stream.
  * <p>
  * Even when using <code>BufferedInputStream</code>, the performance tends
- * to be worse (maybe 10-20&nbsp;% slower) than with {@link LZMA2InputStream}
+ * to be worse (maybe 10-20&nbsp;% slower) than with {@link Lzma2InputStream}
  * or {@link XZInputStream} (when the .xz file contains LZMA2-compressed data).
  *
  * @since 1.4
@@ -50,9 +50,9 @@ public class LZMAInputStream extends InputStream {
 
     private InputStream in;
     private ArrayCache arrayCache;
-    private LZDecoder lz;
+    private LzDecoder lz;
     private RangeDecoderFromStream rc;
-    private LZMADecoder lzma;
+    private LzmaDecoder lzma;
 
     private boolean endReached = false;
     private boolean relaxedEndCondition = false;
@@ -601,9 +601,9 @@ public class LZMAInputStream extends InputStream {
         if (uncompSize >= 0 && dictSize > uncompSize)
             dictSize = getDictSize((int)uncompSize);
 
-        lz = new LZDecoder(getDictSize(dictSize), presetDict, arrayCache);
+        lz = new LzDecoder(getDictSize(dictSize), presetDict, arrayCache);
         rc = new RangeDecoderFromStream(in);
-        lzma = new LZMADecoder(lz, rc, lc, lp, pb);
+        lzma = new LzmaDecoder(lz, rc, lc, lp, pb);
 
         remainingSize = uncompSize;
     }
@@ -647,7 +647,7 @@ public class LZMAInputStream extends InputStream {
      *
      * @throws      CorruptedInputException
      *
-     * @throws      XZIOException if the stream has been closed
+     * @throws      XzException if the stream has been closed
      *
      * @throws      EOFException
      *                          compressed input is truncated or corrupt
@@ -675,7 +675,7 @@ public class LZMAInputStream extends InputStream {
      *
      * @throws      CorruptedInputException
      *
-     * @throws      XZIOException if the stream has been closed
+     * @throws      XzException if the stream has been closed
      *
      * @throws      EOFException compressed input is truncated or corrupt
      *
@@ -689,7 +689,7 @@ public class LZMAInputStream extends InputStream {
             return 0;
 
         if (in == null)
-            throw new XZIOException("Stream closed");
+            throw new XzException("Stream closed");
 
         if (exception != null)
             throw exception;

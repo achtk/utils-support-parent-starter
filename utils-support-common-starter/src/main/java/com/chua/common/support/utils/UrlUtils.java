@@ -2,7 +2,7 @@ package com.chua.common.support.utils;
 
 import com.chua.common.support.constant.CommonConstant;
 import com.chua.common.support.converter.Converter;
-import com.chua.common.support.lang.net.URLDecoder;
+import com.chua.common.support.lang.net.UrlDecoder;
 import com.chua.common.support.lang.spider.Request;
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,8 +20,8 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipFile;
 
 import static com.chua.common.support.constant.CommonConstant.*;
-import static com.chua.common.support.lang.net.URLEncoder.ALL;
-import static com.chua.common.support.lang.net.URLEncoder.QUERY;
+import static com.chua.common.support.lang.net.UrlEncoder.ALL;
+import static com.chua.common.support.lang.net.UrlEncoder.QUERY;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 
@@ -190,7 +190,7 @@ public class UrlUtils {
         if (null == charset) {
             return content;
         }
-        return com.chua.common.support.lang.net.URLDecoder.decode(content, charset);
+        return UrlDecoder.decode(content, charset);
     }
 
     /**
@@ -207,7 +207,7 @@ public class UrlUtils {
         if (null == charset) {
             return content;
         }
-        return URLDecoder.decode(content, charset, isPlusToSpace);
+        return UrlDecoder.decode(content, charset, isPlusToSpace);
     }
 
     /**

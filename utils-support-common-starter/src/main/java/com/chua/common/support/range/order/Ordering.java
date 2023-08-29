@@ -447,7 +447,7 @@ public abstract class Ordering<T extends Object> implements Comparator<T> {
             list.trimToSize();
             return Collections.unmodifiableList(list);
         } else {
-            TopKSelector<E> selector = TopKSelector.least(k, this);
+            TopSelector<E> selector = TopSelector.least(k, this);
             selector.offerAll(iterator);
             return selector.topK();
         }

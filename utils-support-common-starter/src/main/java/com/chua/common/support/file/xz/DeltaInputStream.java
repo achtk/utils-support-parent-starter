@@ -84,7 +84,7 @@ public class DeltaInputStream extends InputStream {
      * @return      number of bytes read, or <code>-1</code> to indicate
      *              the end of the input stream <code>in</code>
      *
-     * @throws      XZIOException if the stream has been closed
+     * @throws      XzException if the stream has been closed
      *
      * @throws      IOException may be thrown by underlaying input
      *                          stream <code>in</code>
@@ -94,7 +94,7 @@ public class DeltaInputStream extends InputStream {
             return 0;
 
         if (in == null)
-            throw new XZIOException("Stream closed");
+            throw new XzException("Stream closed");
 
         if (exception != null)
             throw exception;
@@ -121,7 +121,7 @@ public class DeltaInputStream extends InputStream {
      */
     public int available() throws IOException {
         if (in == null)
-            throw new XZIOException("Stream closed");
+            throw new XzException("Stream closed");
 
         if (exception != null)
             throw exception;

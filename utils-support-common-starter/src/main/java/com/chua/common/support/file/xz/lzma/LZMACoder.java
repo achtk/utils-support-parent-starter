@@ -12,7 +12,7 @@ package com.chua.common.support.file.xz.lzma;
 
 import com.chua.common.support.file.xz.rangecoder.RangeCoder;
 
-abstract class LZMACoder {
+abstract class LzmaCoder {
     static final int POS_STATES_MAX = 1 << 4;
 
     static final int MATCH_LEN_MIN = 2;
@@ -57,7 +57,7 @@ abstract class LZMACoder {
                : DIST_STATES - 1;
     }
 
-    LZMACoder(int pb) {
+    LzmaCoder(int pb) {
         posMask = (1 << pb) - 1;
     }
 

@@ -53,7 +53,7 @@ public enum Dialect {
     /**
      * TSql
      */
-    TSql(TSqlFormatter::new),
+    TSql(SqlFormatter::new),
     ;
 
     public final Function<FormatConfig, AbstractFormatter> func;

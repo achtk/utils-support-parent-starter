@@ -1,18 +1,16 @@
 package com.chua.common.support.lang.spider.xsoup.xevaluator;
 
 
-import com.chua.common.support.json.jsonpath.internal.filter.Evaluator;
 import com.chua.common.support.jsoup.nodes.Element;
 import com.chua.common.support.jsoup.select.AbstractEvaluator;
 import com.chua.common.support.jsoup.select.Collector;
-import com.chua.common.support.jsoup.select.Elements;
-import com.chua.common.support.lang.spider.xsoup.XElements;
-import com.chua.common.support.lang.spider.xsoup.XPathEvaluator;
+import com.chua.common.support.lang.spider.xsoup.Elements;
+import com.chua.common.support.lang.spider.xsoup.PathEvaluator;
 
 /**
  * @author code4crafter@gmail.com
  */
-public class DefaultXPathEvaluator implements XPathEvaluator {
+public class DefaultXPathEvaluator implements PathEvaluator {
 
     private AbstractEvaluator evaluator;
 
@@ -24,12 +22,12 @@ public class DefaultXPathEvaluator implements XPathEvaluator {
     }
 
     @Override
-    public XElements evaluate(Element element) {
-        Elements elements;
+    public Elements evaluate(Element element) {
+        com.chua.common.support.jsoup.select.Elements elements;
         if (evaluator != null) {
             elements = Collector.collect(evaluator, element);
         } else {
-            elements = new Elements();
+            elements = new com.chua.common.support.jsoup.select.Elements();
             elements.add(element);
         }
         return new DefaultXElements(elements, elementOperator);

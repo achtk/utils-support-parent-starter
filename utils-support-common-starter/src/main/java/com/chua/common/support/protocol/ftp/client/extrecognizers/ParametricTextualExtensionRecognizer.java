@@ -1,8 +1,8 @@
 package com.chua.common.support.protocol.ftp.client.extrecognizers;
 
 
-import com.chua.common.support.protocol.ftp.client.FTPClient;
-import com.chua.common.support.protocol.ftp.client.FTPTextualExtensionRecognizer;
+import com.chua.common.support.protocol.ftp.client.FtpClient;
+import com.chua.common.support.protocol.ftp.client.FtpTextualExtensionRecognizer;
 
 import java.util.ArrayList;
 
@@ -11,10 +11,10 @@ import java.util.ArrayList;
  * or removed at runtime.
  *
  * @author Carlo Pelliccia
- * @see FTPClient#setTextualExtensionRecognizer(FTPTextualExtensionRecognizer)
+ * @see FtpClient#setTextualExtensionRecognizer(FtpTextualExtensionRecognizer)
  */
 public class ParametricTextualExtensionRecognizer implements
-        FTPTextualExtensionRecognizer {
+        FtpTextualExtensionRecognizer {
 
     /**
      * Extension list.

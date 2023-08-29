@@ -14,7 +14,7 @@ import static com.chua.common.support.constant.CommonConstant.SYMBOL_LEFT_SQUARE
  */
 public class NodeTreeBuilderStateMachine {
     BuilderState state = BuilderState.SCOPE;
-    XContext context = new XContext();
+    Context context = new Context();
     int cur = 0;
     StringBuilder accum = new StringBuilder();
 

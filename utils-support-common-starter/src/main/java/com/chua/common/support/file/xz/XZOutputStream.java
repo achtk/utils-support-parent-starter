@@ -300,7 +300,7 @@ public class XZOutputStream extends FinishableOutputStream {
      *                          the filter chain in the middle of a Block
      */
     public void updateFilters(FilterOptions filterOptions)
-            throws XZIOException {
+            throws XzException {
         FilterOptions[] opts = new FilterOptions[1];
         opts[0] = filterOptions;
         updateFilters(opts);
@@ -322,7 +322,7 @@ public class XZOutputStream extends FinishableOutputStream {
      *                          the filter chain in the middle of a Block
      */
     public void updateFilters(FilterOptions[] filterOptions)
-            throws XZIOException {
+            throws XzException {
         if (blockEncoder != null)
             throw new UnsupportedOptionsException("Changing filter options "
                     + "in the middle of a XZ Block not implemented");
@@ -345,10 +345,10 @@ public class XZOutputStream extends FinishableOutputStream {
     /**
      * Writes one byte to be compressed.
      *
-     * @throws      XZIOException
+     * @throws      XzException
      *                          XZ Stream has grown too big
      *
-     * @throws      XZIOException
+     * @throws      XzException
      *                          <code>finish()</code> or <code>close()</code>
      *                          was already called
      *
@@ -371,13 +371,13 @@ public class XZOutputStream extends FinishableOutputStream {
      * @param       off         start offset in <code>buf</code>
      * @param       len         number of bytes to write
      *
-     * @throws      XZIOException
+     * @throws      XzException
      *                          XZ Stream has grown too big: total file size
      *                          about 8&nbsp;EiB or the Index field exceeds
      *                          16&nbsp;GiB; you shouldn't reach these sizes
      *                          in practice
      *
-     * @throws      XZIOException
+     * @throws      XzException
      *                          <code>finish()</code> or <code>close()</code>
      *                          was already called and len &gt; 0
      *
@@ -391,7 +391,7 @@ public class XZOutputStream extends FinishableOutputStream {
             throw exception;
 
         if (finished)
-            throw new XZIOException("Stream finished or closed");
+            throw new XzException("Stream finished or closed");
 
         try {
             if (blockEncoder == null)
@@ -422,10 +422,10 @@ public class XZOutputStream extends FinishableOutputStream {
      * Doing this very often will increase the size of the compressed
      * file a lot (more than plain <code>flush()</code> would do).
      *
-     * @throws      XZIOException
+     * @throws      XzException
      *                          XZ Stream has grown too big
      *
-     * @throws      XZIOException
+     * @throws      XzException
      *                          stream finished or closed
      *
      * @throws      IOException may be thrown by the underlying output stream
@@ -435,7 +435,7 @@ public class XZOutputStream extends FinishableOutputStream {
             throw exception;
 
         if (finished)
-            throw new XZIOException("Stream finished or closed");
+            throw new XzException("Stream finished or closed");
 
         // NOTE: Once there is threading with multiple Blocks, it's possible
         // that this function will be more like a barrier that returns
@@ -467,10 +467,10 @@ public class XZOutputStream extends FinishableOutputStream {
      * such a filter, <code>flush()</code> will call <code>endBlock()</code>
      * before flushing.
      *
-     * @throws      XZIOException
+     * @throws      XzException
      *                          XZ Stream has grown too big
      *
-     * @throws      XZIOException
+     * @throws      XzException
      *                          stream finished or closed
      *
      * @throws      IOException may be thrown by the underlying output stream
@@ -480,7 +480,7 @@ public class XZOutputStream extends FinishableOutputStream {
             throw exception;
 
         if (finished)
-            throw new XZIOException("Stream finished or closed");
+            throw new XzException("Stream finished or closed");
 
         try {
             if (blockEncoder != null) {
@@ -514,7 +514,7 @@ public class XZOutputStream extends FinishableOutputStream {
      * <code>close()</code>. If the stream will be closed anyway, there
      * usually is no need to call <code>finish()</code> separately.
      *
-     * @throws      XZIOException
+     * @throws      XzException
      *                          XZ Stream has grown too big
      *
      * @throws      IOException may be thrown by the underlying output stream
@@ -547,7 +547,7 @@ public class XZOutputStream extends FinishableOutputStream {
      * by <code>finish()</code> is thrown and the exception from the failed
      * <code>out.close()</code> is lost.
      *
-     * @throws      XZIOException
+     * @throws      XzException
      *                          XZ Stream has grown too big
      *
      * @throws      IOException may be thrown by the underlying output stream

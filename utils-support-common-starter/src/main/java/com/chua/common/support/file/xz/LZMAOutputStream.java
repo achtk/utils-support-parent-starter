@@ -242,11 +242,11 @@ public class LZMAOutputStream extends FinishableOutputStream {
             throw exception;
 
         if (finished)
-            throw new XZIOException("Stream finished or closed");
+            throw new XzException("Stream finished or closed");
 
         if (expectedUncompressedSize != -1
                 && expectedUncompressedSize - currentUncompressedSize < len)
-            throw new XZIOException("Expected uncompressed input size ("
+            throw new XzException("Expected uncompressed input size ("
                     + expectedUncompressedSize + " bytes) was exceeded");
 
         currentUncompressedSize += len;
@@ -265,10 +265,10 @@ public class LZMAOutputStream extends FinishableOutputStream {
     }
 
     /**
-     * Flushing isn't supported and will throw XZIOException.
+     * Flushing isn't supported and will throw XzException.
      */
     public void flush() throws IOException {
-        throw new XZIOException("LZMAOutputStream does not support flushing");
+        throw new XzException("LZMAOutputStream does not support flushing");
     }
 
     /**
@@ -282,7 +282,7 @@ public class LZMAOutputStream extends FinishableOutputStream {
             try {
                 if (expectedUncompressedSize != -1
                         && expectedUncompressedSize != currentUncompressedSize)
-                    throw new XZIOException("Expected uncompressed size ("
+                    throw new XzException("Expected uncompressed size ("
                             + expectedUncompressedSize + ") doesn't equal "
                             + "the number of bytes written to the stream ("
                             + currentUncompressedSize + ")");

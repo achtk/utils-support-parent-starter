@@ -9,7 +9,7 @@
 
 package com.chua.common.support.file.xz.index;
 
-import com.chua.common.support.file.xz.XZIOException;
+import com.chua.common.support.file.xz.XzException;
 import com.chua.common.support.file.xz.common.EncoderUtil;
 
 import java.io.IOException;
@@ -22,11 +22,11 @@ public class IndexEncoder extends IndexBase {
             = new ArrayList<IndexRecord>();
 
     public IndexEncoder() {
-        super(new XZIOException("XZ Stream or its Index has grown too big"));
+        super(new XzException("XZ Stream or its Index has grown too big"));
     }
 
     public void add(long unpaddedSize, long uncompressedSize)
-            throws XZIOException {
+            throws XzException {
         super.add(unpaddedSize, uncompressedSize);
         records.add(new IndexRecord(unpaddedSize, uncompressedSize));
     }

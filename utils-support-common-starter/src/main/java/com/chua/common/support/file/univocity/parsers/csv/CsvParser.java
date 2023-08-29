@@ -5,6 +5,7 @@ import com.chua.common.support.file.univocity.parsers.common.AbstractParser;
 import com.chua.common.support.file.univocity.parsers.common.TextParsingException;
 import com.chua.common.support.file.univocity.parsers.common.input.*;
 
+import java.io.EOFException;
 import java.io.Reader;
 
 import static com.chua.common.support.file.univocity.parsers.csv.UnescapedQuoteHandling.*;
@@ -129,12 +130,12 @@ public final class CsvParser extends AbstractParser<CsvParserSettings> {
                                         if (ch == newLine) {
                                             output.emptyParsed();
                                         }
-                                    } catch (EOFException e) {
+                                    } catch (EofException e) {
                                         output.emptyParsed();
                                         return;
                                     }
                                 }
-                            } catch (EOFException e) {
+                            } catch (EofException e) {
                                 return;
                             }
                             continue;
@@ -149,12 +150,12 @@ public final class CsvParser extends AbstractParser<CsvParserSettings> {
                                     if (ch == newLine) {
                                         output.emptyParsed();
                                     }
-                                } catch (EOFException e) {
+                                } catch (EofException e) {
                                     output.emptyParsed();
                                     return;
                                 }
                             }
-                        } catch (EOFException e) {
+                        } catch (EofException e) {
                             return;
                         }
                         continue;

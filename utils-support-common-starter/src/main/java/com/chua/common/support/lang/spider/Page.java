@@ -1,8 +1,8 @@
 package com.chua.common.support.lang.spider;
 
 import com.chua.common.support.lang.spider.selector.Html;
-import com.chua.common.support.lang.spider.selector.Json;
 import com.chua.common.support.lang.spider.selector.Selectable;
+import com.chua.common.support.lang.spider.selector.SpiderJson;
 import com.chua.common.support.lang.spider.utils.HttpConstant;
 import com.chua.common.support.utils.StringUtils;
 import com.chua.common.support.utils.UrlUtils;
@@ -37,7 +37,7 @@ public class Page {
 
     private Html html;
 
-    private Json json;
+    private SpiderJson json;
 
     private String rawText;
 
@@ -98,9 +98,9 @@ public class Page {
      * @return json
      * @since 0.5.0
      */
-    public Json getJson() {
+    public SpiderJson getJson() {
         if (json == null) {
-            json = new Json(rawText);
+            json = new SpiderJson(rawText);
         }
         return json;
     }

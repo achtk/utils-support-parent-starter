@@ -7,7 +7,7 @@ import com.chua.common.support.jsoup.nodes.Element;
 import com.chua.common.support.jsoup.select.NodeTraversor;
 import com.chua.common.support.lang.spider.xsoup.w3c.NodeAdaptors;
 import com.chua.common.support.lang.spider.xsoup.xevaluator.FormattingVisitor;
-import com.chua.common.support.lang.spider.xsoup.xevaluator.XPathParser;
+import com.chua.common.support.lang.spider.xsoup.xevaluator.PathParser;
 
 /**
  * @author code4crafter@gmail.com
@@ -16,16 +16,16 @@ public class Xsoup {
 
     /*-------------     XEvaluator         --------------- */
 
-    public static XElements select(Element element, String xpathStr) {
-        return XPathParser.parse(xpathStr).evaluate(element);
+    public static Elements select(Element element, String xpathStr) {
+        return PathParser.parse(xpathStr).evaluate(element);
     }
 
-    public static XElements select(String html, String xpathStr) {
-        return XPathParser.parse(xpathStr).evaluate(Jsoup.parse(html));
+    public static Elements select(String html, String xpathStr) {
+        return PathParser.parse(xpathStr).evaluate(Jsoup.parse(html));
     }
 
-    public static XPathEvaluator compile(String xpathStr) {
-        return XPathParser.parse(xpathStr);
+    public static PathEvaluator compile(String xpathStr) {
+        return PathParser.parse(xpathStr);
     }
 
     /*-------------     W3cAdaptor         --------------- */
