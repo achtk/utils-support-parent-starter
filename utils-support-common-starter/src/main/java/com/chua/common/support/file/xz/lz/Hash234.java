@@ -12,7 +12,7 @@ package com.chua.common.support.file.xz.lz;
 
 import com.chua.common.support.file.xz.ArrayCache;
 
-final class Hash234 extends CRC32Hash {
+final class Hash234 extends Crc32Hash {
     private static final int HASH_2_SIZE = 1 << 10;
     private static final int HASH_2_MASK = HASH_2_SIZE - 1;
 

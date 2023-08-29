@@ -14,7 +14,7 @@ package com.chua.common.support.file.xz.lz;
  * Provides a CRC32 table using the polynomial from IEEE 802.3.
  * @author Administrator
  */
-class CRC32Hash {
+class Crc32Hash {
     private static final int CRC32_POLY = 0xEDB88320;
 
     static final int[] CRC_TABLE = new int[256];
