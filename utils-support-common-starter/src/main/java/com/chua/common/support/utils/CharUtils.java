@@ -1,7 +1,10 @@
 package com.chua.common.support.utils;
 
+import com.chua.common.support.constant.CommonConstant;
+
 import static com.chua.common.support.constant.CharConstant.BACKSLASH;
 import static com.chua.common.support.constant.CharConstant.SLASH;
+import static com.chua.common.support.constant.CommonConstant.*;
 
 /**
  * char
@@ -406,9 +409,9 @@ public class CharUtils {
         int result = c;
         if (c >= '1' && c <= '9') {
             result = '①' + c - '1';
-        } else if (c >= 'A' && c <= 'Z') {
+        } else if (c >= LETTER_UPPERCASE_A && c <= LETTER_UPPERCASE_Z) {
             result = 'Ⓐ' + c - 'A';
-        } else if (c >= 'a' && c <= 'z') {
+        } else if (c >= LETTER_LOWERCASE_A && c <= LETTER_LOWERCASE_Z) {
             result = 'ⓐ' + c - 'a';
         }
         return (char) result;

@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import static com.chua.common.support.constant.CommonConstant.*;
+
 /**
  * 基础类
  * @author CH
@@ -43,9 +46,9 @@ public class ClassFile
         {
             return;
         }
-        if (superClassName.indexOf('/') != -1)
+        if (superClassName.indexOf(SYMBOL_LEFT_SLASH_CHAR) != -1)
         {
-            superClassName = superClassName.replace('/', '.');
+            superClassName = superClassName.replace(SYMBOL_LEFT_SLASH_CHAR, SYMBOL_DOT_CHAR);
         }
         this.superClassName = superClassName;
     }
@@ -139,9 +142,9 @@ public class ClassFile
 
     void setThisClassName(String thisClassName)
     {
-        if (thisClassName.indexOf('/') != -1)
+        if (thisClassName.indexOf(SYMBOL_LEFT_SLASH_CHAR) != -1)
         {
-            thisClassName = thisClassName.replace('/', '.');
+            thisClassName = thisClassName.replace(SYMBOL_LEFT_SLASH_CHAR, SYMBOL_DOT_CHAR);
         }
         this.thisClassName = thisClassName;
     }

@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.nio.charset.Charset;
 
+import static com.chua.common.support.constant.CommonConstant.TWE;
 import static com.chua.common.support.file.univocity.parsers.common.ArgumentUtils.toByteArray;
 
 /**
@@ -57,7 +58,7 @@ public final class BomInput extends InputStream {
 		try { //This looks shitty on purpose (all in the name of speed).
 			if ((bytes[0] = next()) == 0xEF) {
 				if ((bytes[1] = next()) == 0xBB) {
-					if ((bytes[2] = next()) == 0xBF) {
+					if ((bytes[TWE] = next()) == 0xBF) {
 						setEncoding("UTF-8");
 					}
 				}
@@ -67,7 +68,7 @@ public final class BomInput extends InputStream {
 				}
 			} else if (bytes[0] == 0xFF) {
 				if ((bytes[1] = next()) == 0xFE) {
-					if ((bytes[2] = next()) == 0x00) {
+					if ((bytes[TWE] = next()) == 0x00) {
 						if ((bytes[3] = next()) == 0x00) {
 							setEncoding("UTF-32LE");
 						} else {
@@ -81,7 +82,7 @@ public final class BomInput extends InputStream {
 				}
 			} else if (bytes[0] == 0x00) {
 				if ((bytes[1] = next()) == 0x00) {
-					if ((bytes[2] = next()) == 0xFE) {
+					if ((bytes[TWE] = next()) == 0xFE) {
 						if ((bytes[3] = next()) == 0xFF) {
 							setEncoding("UTF-32BE");
 						}

@@ -1,5 +1,6 @@
 package com.chua.common.support.extra.el.template.parser.impl;
 
+import com.chua.common.support.constant.CommonConstant;
 import com.chua.common.support.extra.el.exception.IllegalFormatException;
 import com.chua.common.support.extra.el.template.ScanMode;
 import com.chua.common.support.extra.el.template.Template;
@@ -14,6 +15,8 @@ import com.chua.common.support.extra.el.template.parser.Parser;
 import java.util.Deque;
 import java.util.LinkedList;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_RIGHT_BIG_PARANTHESES_CHAR;
+
 /**
  * 基础类
  *
@@ -23,7 +26,7 @@ public class EndBraceParser extends Parser {
 
     @Override
     public int parse(String sentence, int offset, Deque<Execution> executions, Template template, StringBuilder cache, Invoker next) {
-        if (template.getMode() != ScanMode.EXECUTION || getChar(offset, sentence) != '}') {
+        if (template.getMode() != ScanMode.EXECUTION || getChar(offset, sentence) != SYMBOL_RIGHT_BIG_PARANTHESES_CHAR) {
             return next.scan(sentence, offset, executions, template, cache);
         }
         Deque<Execution> array = new LinkedList<Execution>();

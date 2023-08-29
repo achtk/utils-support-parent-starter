@@ -8,6 +8,8 @@ import com.chua.common.support.utils.CharUtils;
 
 import java.util.Deque;
 
+import static com.chua.common.support.constant.CommonConstant.*;
+
 /**
  * 基础类
  *
@@ -28,7 +30,7 @@ public class EnumParser extends NodeParser {
         while (CharUtils.isAlphabet(c = getChar(offset, el)) || CharUtils.isDigital(c)) {
             offset++;
         }
-        if (c == '(') {
+        if (c == SYMBOL_LEFT_BRACKETS_CHAR) {
             throw new IllegalArgumentException("非法的el表达式，检查:" + el.substring(origin, offset));
         }
         String literals = el.substring(origin + 1, offset);

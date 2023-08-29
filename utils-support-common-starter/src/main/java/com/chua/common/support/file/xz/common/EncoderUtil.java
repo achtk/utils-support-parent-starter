@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.zip.CRC32;
 
+import static com.chua.common.support.constant.NumberConstant.FOUR;
+
 /**
  * @author Administrator
  */
@@ -23,7 +25,7 @@ public class EncoderUtil extends Util {
         crc32.update(buf);
         long value = crc32.getValue();
 
-        for (int i = 0; i < 4; ++i) {
+        for (int i = 0; i < FOUR; ++i) {
             out.write((byte) (value >>> (i * 8)));
         }
     }

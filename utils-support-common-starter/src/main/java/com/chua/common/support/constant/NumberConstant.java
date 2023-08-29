@@ -211,7 +211,7 @@ public class NumberConstant {
     /**
      * 2
      */
-    public static final int SECOND = 2;
+    public static final int SECOND = TWE;
     /**
      * 3
      */
@@ -219,7 +219,7 @@ public class NumberConstant {
     /**
      * 3
      */
-    public static final int THIRD = 3;
+    public static final int THIRD = THREE;
     /**
      * 4
      */
@@ -227,7 +227,7 @@ public class NumberConstant {
     /**
      * 4
      */
-    public static final int FOURTH = 4;
+    public static final int FOURTH = FOUR;
     /**
      * 5
      */
@@ -235,7 +235,7 @@ public class NumberConstant {
     /**
      * 5
      */
-    public static final int FIFTH = 5;
+    public static final int FIFTH = FIVE;
     /**
      * 6
      */
@@ -243,7 +243,7 @@ public class NumberConstant {
     /**
      * 6
      */
-    public static final int SIXTH = 6;
+    public static final int SIXTH = SIX;
     /**
      * 7
      */
@@ -251,7 +251,7 @@ public class NumberConstant {
     /**
      * 7
      */
-    public static final int SEVENTH = 7;
+    public static final int SEVENTH = SEVEN;
     /**
      * 8
      */
@@ -259,7 +259,7 @@ public class NumberConstant {
     /**
      * 8
      */
-    public static final int EIGHTH = 8;
+    public static final int EIGHTH = EIGHT;
     /**
      * 9
      */

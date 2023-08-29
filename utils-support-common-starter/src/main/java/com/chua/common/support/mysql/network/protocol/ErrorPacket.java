@@ -19,6 +19,9 @@ import com.chua.common.support.mysql.io.ByteArrayInputStream;
 
 import java.io.IOException;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_HASH_CHAR;
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_RIGHT_BIG_PARANTHESES_CHAR;
+
 /**
  * @author <a href="mailto:stanley.shyiko@gmail.com">Stanley Shyiko</a>
  */
@@ -31,7 +34,7 @@ public class ErrorPacket implements Packet {
     public ErrorPacket(byte[] bytes) throws IOException {
         ByteArrayInputStream buffer = new ByteArrayInputStream(bytes);
         this.errorCode = buffer.readInteger(2);
-        if (buffer.peek() == '#') {
+        if (buffer.peek() == SYMBOL_HASH_CHAR) {
             buffer.skip(1);
             this.sqlState = buffer.readString(5);
         }

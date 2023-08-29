@@ -12,6 +12,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_HASH;
+
 /**
  * Object storing extracted result and urls to fetch.<br>
  * Not thread safe.<br>
@@ -144,7 +146,7 @@ public class Page {
      * @param requestString requestString
      */
     public void addTargetRequest(String requestString) {
-        if (StringUtils.isBlank(requestString) || "#".equals(requestString)) {
+        if (StringUtils.isBlank(requestString) || SYMBOL_HASH.equals(requestString)) {
             return;
         }
         requestString = UrlUtils.canonicalizeUrl(requestString, url.toString());

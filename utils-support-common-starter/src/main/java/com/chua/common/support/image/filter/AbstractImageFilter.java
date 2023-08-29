@@ -17,6 +17,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.SecureRandom;
 
+import static com.chua.common.support.constant.CommonConstant.TWE;
+
 
 /**
  * 图像滤镜
@@ -218,7 +220,7 @@ public abstract class AbstractImageFilter implements ImageFilter {
             return rArr;
         } else if (index == 1) {
             return gArr;
-        } else if (index == 2) {
+        } else if (index == TWE) {
             return bArr;
         } else {
             throw new IllegalArgumentException("invalid argument...");

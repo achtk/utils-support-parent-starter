@@ -6,6 +6,9 @@ import com.chua.common.support.utils.StringUtils;
 
 import java.util.Arrays;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_HASH;
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_HASH_CHAR;
+
 
 /**
  * Readers the input stream into tokens.
@@ -188,7 +191,7 @@ final class Tokeniser {
 
         final int[] codeRef = codepointHolder;
         reader.mark();
-        if (reader.matchConsume("#")) {
+        if (reader.matchConsume(SYMBOL_HASH)) {
             boolean isHexMode = reader.matchConsumeIgnoreCase("X");
             String numRef = isHexMode ? reader.consumeHexSequence() : reader.consumeDigitSequence();
             if (numRef.length() == 0) {

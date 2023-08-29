@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_HASH_CHAR;
 import static com.chua.common.support.lang.emoji.EmojiManager.EMOJI_TRIE;
 
 
@@ -209,7 +210,7 @@ public class EmojiFactory {
      * Finds the HTML encoded emoji in the given string starting at the given point, null otherwise
      */
     protected static AliasCandidate getHtmlEncodedEmojiAt(String input, int start) {
-        if (input.length() < start + S4 || input.charAt(start) != AND || input.charAt(start + 1) != '#') {
+        if (input.length() < start + S4 || input.charAt(start) != AND || input.charAt(start + 1) != SYMBOL_HASH_CHAR) {
             return null;
         }
 

@@ -7,6 +7,7 @@ import com.chua.common.support.utils.StringUtils;
 import java.nio.charset.Charset;
 import java.util.Base64;
 
+import static com.chua.common.support.constant.CommonConstant.TWE;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
@@ -206,7 +207,7 @@ public class Base64Encode implements Encode {
             if (isUrlSafe) {
                 // 在URL Safe模式下，=为URL中的关键字符，不需要补充。空余的byte位要去掉。
                 int urlSafeLen = destlen - 2;
-                if (2 == left) {
+                if (TWE == left) {
                     dest[destlen - 2] = encodeTable[i & 0x3f];
                     urlSafeLen += 1;
                 }

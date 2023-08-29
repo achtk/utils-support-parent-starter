@@ -1,5 +1,6 @@
 package com.chua.common.support.resource.finder;
 
+import com.chua.common.support.constant.CommonConstant;
 import com.chua.common.support.function.Joiner;
 import com.chua.common.support.function.SafeConsumer;
 import com.chua.common.support.matcher.PathMatcher;
@@ -14,8 +15,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 
-import static com.chua.common.support.constant.CommonConstant.JAR_URL_SEPARATOR;
-import static com.chua.common.support.constant.CommonConstant.SYMBOL_LEFT_SLASH_CHAR;
+import static com.chua.common.support.constant.CommonConstant.*;
 
 /**
  * 资源查找器
@@ -77,11 +77,11 @@ public abstract class AbstractResourceFinder implements ResourceFinder{
      * @return 是否匹配
      */
     protected boolean isMatch(String name, String matchPath) {
-        if("*".equals(matchPath) || "**".equals(matchPath)) {
+        if(SYMBOL_ASTERISK.equals(matchPath) || SYMBOL_ASTERISK_ANY.equals(matchPath)) {
             return true;
         }
 
-        if(matchPath.contains("*") || matchPath.contains("?")) {
+        if(matchPath.contains(SYMBOL_ASTERISK) || matchPath.contains(SYMBOL_QUESTION)) {
             return pathMatcher.match(matchPath, name);
         }
 
@@ -127,10 +127,10 @@ public abstract class AbstractResourceFinder implements ResourceFinder{
      * @return 路径
      */
     public String getFullPath(String path) {
-        path = path.replace("\\", "/");
+        path = path.replace("\\", SYMBOL_LEFT_SLASH);
         List<String> sep = new LinkedList<>();
-        for (String item : path.split("/")) {
-            if(item.contains("*") || item.contains("?")) {
+        for (String item : path.split(SYMBOL_LEFT_SLASH)) {
+            if(item.contains("*") || item.contains(SYMBOL_QUESTION)) {
                 break;
             }
 
@@ -147,9 +147,9 @@ public abstract class AbstractResourceFinder implements ResourceFinder{
      * @return 路径
      */
     public String getMatchPath(String path) {
-        path = path.replace("\\", "/");
+        path = path.replace("\\", SYMBOL_LEFT_SLASH);
         List<String> sep = new LinkedList<>();
-        for (String item : path.split("/")) {
+        for (String item : path.split(SYMBOL_LEFT_SLASH)) {
             if(item.contains("*") || item.contains("?")) {
                 sep.add(item);
             }

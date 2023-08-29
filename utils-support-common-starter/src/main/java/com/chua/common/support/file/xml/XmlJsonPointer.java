@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_HASH;
 import static java.lang.String.format;
 
 /*
@@ -122,7 +123,7 @@ public class XmlJsonPointer {
         if (pointer == null) {
             throw new NullPointerException("pointer cannot be null");
         }
-        if (pointer.isEmpty() || "#".equals(pointer)) {
+        if (pointer.isEmpty() || SYMBOL_HASH.equals(pointer)) {
             this.refTokens = Collections.emptyList();
             return;
         }

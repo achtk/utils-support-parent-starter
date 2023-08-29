@@ -17,7 +17,7 @@ public final class CommonConstant extends NameConstant{
 
     public static final int MAX_HTTP_CONTENT_LENGTH = 1024 * 1024 * 10;
     public static final int MAX_CACHED_BUILDER_SIZE = 8 * 1024;
-    public static final int MAX_IDLE_BUILDERS = 8;
+    public static final int MAX_IDLE_BUILDERS = NumberConstant.EIGHT;
     /**
      * -1
      */
@@ -62,7 +62,7 @@ public final class CommonConstant extends NameConstant{
      */
     public static final int PAD_LIMIT = 8192;
     public static final String EMPTY = "";
-    public static final int TWE = 2;
+    public static final int TWE = NumberConstant.TWE;
     /**
      * os名称
      */
@@ -282,11 +282,19 @@ public final class CommonConstant extends NameConstant{
     /**
      * (
      */
+    public static final char SYMBOL_LEFT_BRACKETS_CHAR = '(';
+    /**
+     * (
+     */
     public static final String SYMBOL_LEFT_BRACKET = SYMBOL_LEFT_BRACKETS;
     /**
      * *
      */
     public static final String SYMBOL_ASTERISK = "*";
+    /**
+     * **
+     */
+    public static final String SYMBOL_ASTERISK_ANY = "**";
     /**
      * ?
      */

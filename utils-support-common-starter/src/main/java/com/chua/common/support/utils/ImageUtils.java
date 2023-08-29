@@ -20,6 +20,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.*;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_HASH;
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_HASH_CHAR;
 import static java.awt.image.BufferedImage.SCALE_SMOOTH;
 import static java.awt.image.BufferedImage.TYPE_INT_RGB;
 
@@ -1963,7 +1965,7 @@ public class ImageUtils {
         } else if ("LIGHTGOLD".equals(colorName)) {
             // 亮金色
             return hexToColor("#ac9c85");
-        } else if (StringUtils.startWith(colorName, '#')) {
+        } else if (StringUtils.startWith(colorName, SYMBOL_HASH_CHAR)) {
             return hexToColor(colorName);
         } else if (StringUtils.startWith(colorName, '$')) {
             // 由于#在URL传输中无法传输，因此用$代替#

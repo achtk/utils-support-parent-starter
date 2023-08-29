@@ -10,6 +10,10 @@ import com.chua.common.support.extra.el.expression.node.CalculateNode;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_COMMA_CHAR;
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_MINS;
+
 /**
  * 基础类
  * @author CH
@@ -170,9 +174,9 @@ public class CompileObjectMethodNode extends AbstractMethodNode {
         cache.append(beanNode.literals()).append('.').append(methodName).append('(');
         if (argsNodes != null) {
             for (CalculateNode each : argsNodes) {
-                cache.append(each.literals()).append(',');
+                cache.append(each.literals()).append(SYMBOL_COMMA_CHAR);
             }
-            if (cache.charAt(cache.length() - 1) == ',') {
+            if (cache.charAt(cache.length() - 1) == SYMBOL_COMMA_CHAR) {
                 cache.setLength(cache.length() - 1);
             }
         }

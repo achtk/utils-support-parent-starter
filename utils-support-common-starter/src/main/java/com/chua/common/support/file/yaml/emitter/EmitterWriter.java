@@ -23,6 +23,8 @@ import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.chua.common.support.constant.CommonConstant.TWE;
+
 /** @author Nathan Sweet
  * @author Ola Bini */
 class EmitterWriter {
@@ -424,7 +426,7 @@ class EmitterWriter {
 
 	private String determineChomp (String text) {
 		String tail = text.substring(text.length() - 2, text.length() - 1);
-		while (tail.length() < 2) {
+		while (tail.length() < TWE) {
             tail = String.format(" %s", tail);
         }
 		char ceh = tail.charAt(tail.length() - 1);

@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.concurrent.ArrayBlockingQueue;
 
+import static com.chua.common.support.constant.NumberConstant.FOUR;
+
 /**
  * A concurrent character loader for loading a pool of {@link CharBucket} instances using a {@link Reader} in a separate thread
  *
@@ -123,7 +125,7 @@ class ConcurrentCharLoader implements Runnable {
 			int length = -1;
 			try {
 				length = readBucket();
-				if (length >= 0 && length <= 4) {
+				if (length >= 0 && length <= FOUR) {
 					length = readBucket();
 				}
 			} catch (BomInput.BytesProcessedNotificationException e) {

@@ -27,6 +27,8 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 package com.chua.common.support.extra.asm;
 
+import static com.chua.common.support.constant.CommonConstant.TWE;
+
 /**
  * A dynamically extensible vector of bytes. This class is roughly equivalent to a DataOutputStream
  * on top of a ByteArrayOutputStream, but is more efficient.
@@ -99,7 +101,7 @@ public class ByteVector {
    */
   final ByteVector put11(final int byteValue1, final int byteValue2) {
     int currentLength = length;
-    if (currentLength + 2 > data.length) {
+    if (currentLength + TWE > data.length) {
       enlarge(2);
     }
     byte[] currentData = data;
@@ -117,7 +119,7 @@ public class ByteVector {
    */
   public ByteVector putShort(final int shortValue) {
     int currentLength = length;
-    if (currentLength + 2 > data.length) {
+    if (currentLength + TWE > data.length) {
       enlarge(2);
     }
     byte[] currentData = data;
@@ -254,7 +256,7 @@ public class ByteVector {
       throw new IllegalArgumentException("UTF8 string too large");
     }
     int currentLength = length;
-    if (currentLength + 2 + charLength > data.length) {
+    if (currentLength + TWE + charLength > data.length) {
       enlarge(2 + charLength);
     }
     byte[] currentData = data;

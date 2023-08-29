@@ -4,6 +4,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_LEFT_SQUARE_BRACKET;
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_LEFT_SQUARE_BRACKET_CHAR;
+
 /**
  * A parser to make a {@link ClassVisitor} visit a ClassFile structure, as defined in the Java
  * Virtual Machine Specification (JVMS). This class parses the ClassFile content and calls the
@@ -2822,8 +2825,8 @@ public class ClassReader {
                 case 'D':
                     locals[numLocal++] = Opcodes.DOUBLE;
                     break;
-                case '[':
-                    while (methodDescriptor.charAt(currentMethodDescritorOffset) == '[') {
+                case SYMBOL_LEFT_SQUARE_BRACKET_CHAR:
+                    while (methodDescriptor.charAt(currentMethodDescritorOffset) == SYMBOL_LEFT_SQUARE_BRACKET_CHAR) {
                         ++currentMethodDescritorOffset;
                     }
                     if (methodDescriptor.charAt(currentMethodDescritorOffset) == 'L') {

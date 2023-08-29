@@ -388,7 +388,7 @@ public abstract class ClasspathHelper {
         if (name != null) {
             String resourceName = name.replace(".", "/");
             resourceName = resourceName.replace("\\", "/");
-            if (resourceName.startsWith("/")) {
+            if (resourceName.startsWith(SYMBOL_LEFT_SLASH)) {
                 resourceName = resourceName.substring(1);
             }
             return resourceName;

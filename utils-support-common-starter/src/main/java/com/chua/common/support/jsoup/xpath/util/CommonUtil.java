@@ -4,6 +4,9 @@ package com.chua.common.support.jsoup.xpath.util;
 import com.chua.common.support.jsoup.nodes.Element;
 import com.chua.common.support.jsoup.select.Elements;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_LEFT_SLASH;
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_MINS;
+
 /**
  * @author 汪浩淼 [ et.tw@163.com ]
  * Date: 14-3-15
@@ -11,8 +14,8 @@ import com.chua.common.support.jsoup.select.Elements;
  */
 public class CommonUtil {
     public static String getMethodNameFromStr(String str) {
-        if (str.contains("-")) {
-            String[] pies = str.split("-");
+        if (str.contains(SYMBOL_MINS)) {
+            String[] pies = str.split(SYMBOL_MINS);
             StringBuilder sb = new StringBuilder(pies[0]);
             for (int i = 1; i < pies.length; i++) {
                 sb.append(pies[i].substring(0, 1).toUpperCase()).append(pies[i].substring(1));

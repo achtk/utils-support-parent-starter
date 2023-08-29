@@ -10,6 +10,9 @@ import java.security.SecureRandom;
 import java.util.*;
 import java.util.function.Consumer;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_COMMA;
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_LEFT_SLASH;
+
 /**
  * 集合工具类
  *
@@ -814,7 +817,7 @@ public class CollectionUtils {
      * @return 集合是否包含集合1的至少一个元素
      */
     public static boolean contains(Set<String> source, String target) {
-        for (String s : target.split(",")) {
+        for (String s : target.split(SYMBOL_COMMA)) {
             if (source.contains(s)) {
                 return true;
             }

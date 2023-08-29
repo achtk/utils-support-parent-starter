@@ -162,7 +162,7 @@ public class QueryParser {
     }
 
     private void findElements() {
-        if (tq.matchChomp("#")) {
+        if (tq.matchChomp(SYMBOL_HASH)) {
             byId();
         } else if (tq.matchChomp(".")) {
             byClass();

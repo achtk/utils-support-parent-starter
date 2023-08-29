@@ -1,5 +1,6 @@
 package com.chua.groovy.support.example
 
+import com.chua.common.support.file.xml.Xml
 import groovy.xml.MarkupBuilder
 import groovy.xml.XmlSlurper;
 /**
@@ -12,7 +13,8 @@ class XmlExample {
         //解析XML
 //        parseXML();
         //创建XML
-        createXML();
+//        createXML();
+        Xml.toJsonObject(getXml());
     }
     /**
      * 获取XML

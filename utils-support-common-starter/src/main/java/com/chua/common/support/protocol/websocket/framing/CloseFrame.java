@@ -33,6 +33,8 @@ import com.chua.common.support.protocol.websocket.util.Charsetfunctions;
 
 import java.nio.ByteBuffer;
 
+import static com.chua.common.support.constant.CommonConstant.TWE;
+
 /**
  * Class to represent a close frame
  *
@@ -253,7 +255,7 @@ public class CloseFrame extends AbstractControlFrame {
         } else if (payload.remaining() == 1) {
             code = CloseFrame.PROTOCOL_ERROR;
         } else {
-            if (payload.remaining() >= 2) {
+            if (payload.remaining() >= TWE) {
                 ByteBuffer bb = ByteBuffer.allocate(4);
                 bb.position(2);
                 bb.putShort(payload.getShort());

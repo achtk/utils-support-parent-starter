@@ -139,7 +139,7 @@ public abstract class AbstractFormatter implements DialectConfigurator {
   }
 
   private String formatNewlineReservedWord(Token token, String query) {
-    if (Token.isAnd(token) && Token.isBetween(this.tokenLookBehind(2))) {
+    if (Token.isAnd(token) && Token.isBetween(this.tokenLookBehind(TWE))) {
       return this.formatWithSpaces(token, query);
     }
     return this.addNewline(query) + this.equalizeWhitespace(this.show(token)) + " ";
