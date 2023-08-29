@@ -238,6 +238,10 @@ public abstract class Format implements Cloneable {
 		return out.toString();
 	}
 
+	/**
+	 * 获取配置
+	 * @return 配置
+	 */
 	protected abstract TreeMap<String, Object> getConfiguration();
 
 	@Override

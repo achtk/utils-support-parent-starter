@@ -42,7 +42,7 @@ public abstract class AbstractServiceFinder implements ServiceFinder{
         }
         List<ServiceDefinition> serviceDefinitions = find();
 
-        CACHE.computeIfAbsent(this.classLoader, it -> new ConcurrentHashMap<>()).putIfAbsent(service, serviceDefinitions);
+        CACHE.computeIfAbsent(this.classLoader, it -> new ConcurrentHashMap<>(1 << 4)).putIfAbsent(service, serviceDefinitions);
         if (log.isTraceEnabled()) {
             log.trace("The {} service link is loaded successfully", service.getTypeName());
         }

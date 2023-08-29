@@ -32,7 +32,8 @@ public class AutoServiceAutowire implements ServiceAutowire {
             springServiceAutowire = ClassUtils.forObject(SPRING_AUTO);
         }
         AUTOWIRES.add(new InitializingAwareAutoServiceAutowire());
-        if (null == springServiceAutowire && (ClassUtils.isPresent(APPLICATION_CONTEXT) && ClassUtils.isPresent(UTILS))) {
+        boolean b= null == springServiceAutowire && (ClassUtils.isPresent(APPLICATION_CONTEXT) && ClassUtils.isPresent(UTILS));
+        if (b) {
             TypeDescribe typeDescribe = new TypeDescribe(UTILS);
             methodDescribe = typeDescribe.getMethodDescribe("getApplicationContext")
                     .isChain()

@@ -10,6 +10,7 @@ package com.chua.common.support.ansi;
 public interface AnsiElement {
 
     /**
+     * the ANSI escape code
      * @return the ANSI escape code
      */
     @Override

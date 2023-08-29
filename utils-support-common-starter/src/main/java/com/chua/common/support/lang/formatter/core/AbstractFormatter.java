@@ -237,17 +237,17 @@ public abstract class AbstractFormatter implements DialectConfigurator {
    * Converts token to string (uppercasing it if needed)
    */
   private String show(Token token) {
-    if (this.cfg.uppercase
-        && (token.type == TokenTypes.RESERVED
+    boolean b = this.cfg.uppercase
+            && (token.type == TokenTypes.RESERVED
             || token.type == TokenTypes.RESERVED_TOP_LEVEL
             || token.type == TokenTypes.RESERVED_TOP_LEVEL_NO_INDENT
             || token.type == TokenTypes.RESERVED_NEWLINE
             || token.type == TokenTypes.OPEN_PAREN
-            || token.type == TokenTypes.CLOSE_PAREN)) {
+            || token.type == TokenTypes.CLOSE_PAREN);
+    if (b) {
       return token.value.toUpperCase();
-    } else {
-      return token.value;
     }
+    return token.value;
   }
 
   private String addNewline(String query) {

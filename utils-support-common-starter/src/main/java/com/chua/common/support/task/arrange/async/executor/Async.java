@@ -34,7 +34,7 @@ public class Async {
         //保存线程池变量
         Async.executorService = executorService;
         //定义一个map，存放所有的wrapper，key为wrapper的唯一id，value是该wrapper，可以从value中获取wrapper的result
-        Map<String, Worker> forParamUseWrappers = new ConcurrentHashMap<>();
+        Map<String, Worker> forParamUseWrappers = new ConcurrentHashMap<>(1 << 4);
         CompletableFuture[] futures = new CompletableFuture[workers.size()];
         for (int i = 0; i < workers.size(); i++) {
             Worker wrapper = workers.get(i);

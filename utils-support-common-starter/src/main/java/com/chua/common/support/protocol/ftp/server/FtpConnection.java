@@ -79,7 +79,7 @@ public class FtpConnection implements Closeable {
         registerCommand("FEAT", "FEAT", this::feat, false);
         registerCommand("OPTS", "OPTS <option> [value]", this::opts);
 
-        registerFeature("feat"); // Feature Commands (RFC 5797)
+        registerFeature("feat");
         registerFeature("UTF8");
         registerOption("UTF8", "ON");
 

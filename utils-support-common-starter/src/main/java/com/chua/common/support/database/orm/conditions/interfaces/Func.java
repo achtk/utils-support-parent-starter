@@ -17,6 +17,9 @@ public interface Func<Children, R> extends Serializable {
 
     /**
      * ignore
+     *
+     * @param column column
+     * @return this
      */
     default Children isNull(R column) {
         return isNull(true, column);
@@ -34,6 +37,8 @@ public interface Func<Children, R> extends Serializable {
 
     /**
      * ignore
+     * @param column column
+     * @return this
      */
     default Children isNotNull(R column) {
         return isNotNull(true, column);
@@ -51,6 +56,9 @@ public interface Func<Children, R> extends Serializable {
 
     /**
      * ignore
+     * @param column column
+     * @param coll value
+     * @return this
      */
     default Children in(R column, Collection<?> coll) {
         return in(true, column, coll);
@@ -72,6 +80,9 @@ public interface Func<Children, R> extends Serializable {
 
     /**
      * ignore
+     * @param column column
+     * @param values value
+     * @return this
      */
     default Children in(R column, Object... values) {
         return in(true, column, values);
@@ -93,6 +104,9 @@ public interface Func<Children, R> extends Serializable {
 
     /**
      * ignore
+     * @param column column
+     * @param coll value
+     * @return this
      */
     default Children notIn(R column, Collection<?> coll) {
         return notIn(true, column, coll);
@@ -111,6 +125,9 @@ public interface Func<Children, R> extends Serializable {
 
     /**
      * ignore
+     * @param column column
+     * @param value value
+     * @return this
      */
     default Children notIn(R column, Object... value) {
         return notIn(true, column, value);
@@ -129,6 +146,9 @@ public interface Func<Children, R> extends Serializable {
 
     /**
      * ignore
+     * @param column column
+     * @param inValue value
+     * @return this
      */
     default Children inSql(R column, String inValue) {
         return inSql(true, column, inValue);
@@ -161,6 +181,9 @@ public interface Func<Children, R> extends Serializable {
 
     /**
      * ignore
+     * @param column column
+     * @param inValue value
+     * @return this
      */
     default Children gtSql(R column, String inValue) {
         return gtSql(true, column, inValue);
@@ -180,6 +203,9 @@ public interface Func<Children, R> extends Serializable {
 
     /**
      * ignore
+     * @param column column
+     * @param inValue value
+     * @return this
      */
     default Children geSql(R column, String inValue) {
         return geSql(true, column, inValue);
@@ -199,6 +225,9 @@ public interface Func<Children, R> extends Serializable {
 
     /**
      * ignore
+     * @param column column
+     * @param inValue value
+     * @return this
      */
     default Children ltSql(R column, String inValue) {
         return ltSql(true, column, inValue);
@@ -218,6 +247,9 @@ public interface Func<Children, R> extends Serializable {
 
     /**
      * ignore
+     * @param column column
+     * @param inValue value
+     * @return this
      */
     default Children leSql(R column, String inValue) {
         return leSql(true, column, inValue);
@@ -225,6 +257,9 @@ public interface Func<Children, R> extends Serializable {
 
     /**
      * ignore
+     * @param column column
+     * @param inValue value
+     * @return this
      */
     default Children notInSql(R column, String inValue) {
         return notInSql(true, column, inValue);
@@ -253,6 +288,11 @@ public interface Func<Children, R> extends Serializable {
      */
     Children groupBy(boolean condition, R column);
 
+    /**
+     * group by
+     * @param column column
+     * @return this
+     */
     default Children groupBy(R column) {
         return groupBy(true, column);
     }
@@ -266,17 +306,30 @@ public interface Func<Children, R> extends Serializable {
      * @return children
      */
     Children groupBy(boolean condition, List<R> columns);
-
+    /**
+     * group by
+     * @param columns column
+     * @return this
+     */
     default Children groupBy(List<R> columns) {
         return groupBy(true, columns);
     }
-
+    /**
+     * group by
+     * @param column column
+     * @param columns column
+     * @return this
+     */
     default Children groupBy(R column, R... columns) {
         return groupBy(true, column, columns);
     }
 
     /**
      * 分组：GROUP BY 字段, ...
+     * @param condition condition
+     * @param column column
+     * @param columns column
+     * @return this
      */
     Children groupBy(boolean condition, R column, R... columns);
 
@@ -291,7 +344,13 @@ public interface Func<Children, R> extends Serializable {
     default Children orderByAsc(boolean condition, R column) {
         return orderBy(condition, true, column);
     }
-
+    /**
+     * 排序：ORDER BY 字段, ... ASC
+     * <p>例: orderByAsc(true, "id")</p>
+     *
+     * @param column    单个字段
+     * @return children
+     */
     default Children orderByAsc(R column) {
         return orderByAsc(true, column);
     }
@@ -307,17 +366,34 @@ public interface Func<Children, R> extends Serializable {
     default Children orderByAsc(boolean condition, List<R> columns) {
         return orderBy(condition, true, columns);
     }
-
+    /**
+     * 排序：ORDER BY 字段, ... ASC
+     * <p>例: orderByAsc(true, Arrays.asList("id", "name"))</p>
+     *
+     * @param columns   字段数组
+     * @return children
+     */
     default Children orderByAsc(List<R> columns) {
         return orderByAsc(true, columns);
     }
-
+    /**
+     * 排序：ORDER BY 字段, ... ASC
+     * <p>例: orderByAsc(true, Arrays.asList("id", "name"))</p>
+     *
+     * @param column   字段
+     * @param columns   字段数组
+     * @return children
+     */
     default Children orderByAsc(R column, R... columns) {
         return orderByAsc(true, column, columns);
     }
 
     /**
      * 排序：ORDER BY 字段, ... ASC
+     * @param condition 执行条件
+     * @param column   字段
+     * @param columns   字段数组
+     * @return Children
      */
     default Children orderByAsc(boolean condition, R column, R... columns) {
         return orderBy(condition, true, column, columns);
@@ -334,7 +410,13 @@ public interface Func<Children, R> extends Serializable {
     default Children orderByDesc(boolean condition, R column) {
         return orderBy(condition, false, column);
     }
-
+    /**
+     * 排序：ORDER BY 字段, ... DESC
+     * <p>例: orderByDesc(true, "id")</p>
+     *
+     * @param column    字段
+     * @return children
+     */
     default Children orderByDesc(R column) {
         return orderByDesc(true, column);
     }
@@ -350,17 +432,34 @@ public interface Func<Children, R> extends Serializable {
     default Children orderByDesc(boolean condition, List<R> columns) {
         return orderBy(condition, false, columns);
     }
-
+    /**
+     * 排序：ORDER BY 字段, ... DESC
+     * <p>例: orderByDesc(true, Arrays.asList("id", "name"))</p>
+     *
+     * @param columns   字段列表
+     * @return children
+     */
     default Children orderByDesc(List<R> columns) {
         return orderByDesc(true, columns);
     }
-
+    /**
+     * 排序：ORDER BY 字段, ... DESC
+     * <p>例: orderByDesc(true, Arrays.asList("id", "name"))</p>
+     *
+     * @param column   字段
+     * @param columns   字段列表
+     * @return children
+     */
     default Children orderByDesc(R column, R... columns) {
         return orderByDesc(true, column, columns);
     }
 
     /**
      * 排序：ORDER BY 字段, ... DESC
+     * @param condition 执行条件
+     * @param column   字段
+     * @param columns   字段列表
+     * @return Children
      */
     default Children orderByDesc(boolean condition, R column, R... columns) {
         return orderBy(condition, false, column, columns);
@@ -390,11 +489,24 @@ public interface Func<Children, R> extends Serializable {
 
     /**
      * 排序：ORDER BY 字段, ...
+     * <p>例: orderBy(true, Arrays.asList("id", "name"))</p>
+     *
+     * @param condition 执行条件
+     * @param isAsc     是否是 ASC 排序
+     * @param columns   字段列表
+     * @return children
      */
     Children orderBy(boolean condition, boolean isAsc, R column, R... columns);
 
+
     /**
-     * ignore
+     * HAVING ( sql语句 )
+     * <p>例1: having("sum(age) &gt; 10")</p>
+     * <p>例2: having("sum(age) &gt; {0}", 10)</p>
+     *
+     * @param sqlHaving sql 语句
+     * @param params    参数数组
+     * @return children
      */
     default Children having(String sqlHaving, Object... params) {
         return having(true, sqlHaving, params);
@@ -411,9 +523,12 @@ public interface Func<Children, R> extends Serializable {
      * @return children
      */
     Children having(boolean condition, String sqlHaving, Object... params);
-
     /**
-     * ignore
+     * 消费函数
+     *
+     * @param consumer 消费函数
+     * @return children
+     * @since 3.3.1
      */
     default Children func(Consumer<Children> consumer) {
         return func(true, consumer);

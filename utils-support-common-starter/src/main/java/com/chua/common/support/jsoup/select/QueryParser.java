@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.chua.common.support.constant.CommonConstant.SYMBOL_COMMA_CHAR;
+import static com.chua.common.support.constant.CommonConstant.*;
 import static com.chua.common.support.jsoup.internal.Normalizer.normalize;
 
 /**
@@ -168,7 +168,7 @@ public class QueryParser {
             byClass();
         } else if (tq.matchesWord() || tq.matches("*|")) {
             byTag();
-        } else if (tq.matches("[")) {
+        } else if (tq.matches(SYMBOL_LEFT_SQUARE_BRACKET)) {
             byAttribute();
         } else if (tq.matchChomp("*")) {
             allElements();

@@ -30,6 +30,10 @@ public interface IterableResult<T, C extends AbstractContext> extends Iterable<T
 	 */
 	C getContext();
 
+	/**
+	 * 迭代器
+	 * @return 迭代器
+	 */
 	@Override
 	ResultIterator<T, C> iterator();
 }

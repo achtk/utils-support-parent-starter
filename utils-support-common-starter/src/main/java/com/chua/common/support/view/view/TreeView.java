@@ -15,16 +15,24 @@ public class TreeView implements View {
     private static final String STEP_HAS_BOARD = "|   ";
     private static final String STEP_EMPTY_BOARD = "    ";
 
-    // 是否输出耗时
+    /**
+     * 是否输出耗时
+     */
     private final boolean isPrintCost;
 
-    // 根节点
+    /**
+     * 根节点
+     */
     private final TreeViewNode root;
 
-    // 当前节点
+    /**
+     * 当前节点
+     */
     private TreeViewNode current;
 
-    // 最耗时的节点
+    /**
+     * 最耗时的节点
+     */
     private TreeViewNode maxCost;
 
 

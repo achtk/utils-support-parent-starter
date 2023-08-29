@@ -18,7 +18,8 @@ public class EnumParser extends NodeParser {
     @Override
     public int parse(String el, int offset, Deque<CalculateNode> nodes, int function, Invoker next) {
         // 如果是后一种情况，意味着此时应该是一个枚举值而不是属性
-        if ('.' != getChar(offset, el) || (nodes.peek() != null && nodes.peek().token() != ValueResult.TYPE_ENUM)) {
+        boolean b = '.' != getChar(offset, el) || (nodes.peek() != null && nodes.peek().token() != ValueResult.TYPE_ENUM);
+        if (b) {
             return next.parse(el, offset, nodes, function);
         }
         int origin = offset;

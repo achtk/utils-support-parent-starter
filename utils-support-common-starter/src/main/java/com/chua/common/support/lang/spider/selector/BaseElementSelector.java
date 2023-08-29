@@ -52,10 +52,23 @@ public abstract class BaseElementSelector implements Selector, ElementSelector {
         }
     }
 
+    /**
+     * 选择节点
+     * @param element 元素
+     * @return 元素
+     */
     public abstract Element selectElement(Element element);
-
+    /**
+     * 选择节点
+     * @param element 元素
+     * @return 元素
+     */
     public abstract List<Element> selectElements(Element element);
 
+    /**
+     * 是否存在属性
+     * @return 是否存在属性
+     */
     public abstract boolean hasAttribute();
 
 }

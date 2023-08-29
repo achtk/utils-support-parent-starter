@@ -3,7 +3,10 @@ package com.chua.common.support.extra.el.baseutil.bytecode.annotation;
 import com.chua.common.support.constant.ConstantType;
 import com.chua.common.support.extra.el.baseutil.bytecode.structure.MethodInfo;
 import lombok.Data;
-
+/**
+ * 基础类
+ * @author CH
+ */
 @Data
 public class ValuePair {
     private ConstantType elementValueType;

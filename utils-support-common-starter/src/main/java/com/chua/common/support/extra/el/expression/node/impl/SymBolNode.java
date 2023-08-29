@@ -19,7 +19,9 @@ public class SymBolNode implements CalculateNode {
         this.symbol = symbol;
     }
 
-    // 符号节点没有参数计算
+    /**
+     * 符号节点没有参数计算
+     */
     @Override
     public Object calculate(Map<String, Object> variables) {
         throw new UnsupportedOperationException();

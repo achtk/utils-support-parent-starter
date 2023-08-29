@@ -8,5 +8,9 @@ import com.chua.common.support.lang.formatter.core.DialectConfig;
  * @author CH
  */
 public interface DialectConfigurator {
+    /**
+     * 方言配置
+     * @return 配置
+     */
     DialectConfig dialectConfig();
 }

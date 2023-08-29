@@ -2,6 +2,7 @@ package com.chua.common.support.discovery;
 
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.bean.BeanMap;
+import com.chua.common.support.constant.CommonConstant;
 import com.chua.common.support.converter.Converter;
 import com.chua.common.support.lang.net.UrlQuery;
 import com.chua.common.support.lang.robin.Node;
@@ -22,6 +23,7 @@ import java.util.concurrent.*;
 import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_COMMA;
 import static com.chua.common.support.discovery.Constants.*;
 
 /**
@@ -133,7 +135,7 @@ public class MulticastServiceDiscovery implements ServiceDiscovery, Runnable {
         String networkInterfaceDisplayName;
         if (!StringUtils.isEmpty(ignoredInterfaces)
                 && !StringUtils.isEmpty(networkInterfaceDisplayName = networkInterface.getDisplayName())) {
-            for (String ignoredInterface : ignoredInterfaces.split(",")) {
+            for (String ignoredInterface : ignoredInterfaces.split(SYMBOL_COMMA)) {
                 String trimIgnoredInterface = ignoredInterface.trim();
                 boolean matched = false;
                 try {

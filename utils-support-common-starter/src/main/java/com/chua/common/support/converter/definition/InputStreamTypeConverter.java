@@ -84,11 +84,6 @@ public class InputStreamTypeConverter implements TypeConverter<InputStream> {
             try {
                 return Files.newInputStream(Converter.convertIfNecessary(value, File.class).toPath());
             } catch (IOException ignored) {
-//                try {
-//                    return ExpressionUtils.evaluate(value.toString(), InputStream.class);
-//                } catch (Exception e) {
-//                    return new ByteArrayInputStream(((String) value).getBytes(UTF_8));
-//                }
             }
         }
         return null;

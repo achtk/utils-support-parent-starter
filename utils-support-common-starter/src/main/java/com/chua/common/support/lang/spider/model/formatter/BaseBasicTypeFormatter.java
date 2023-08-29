@@ -23,6 +23,12 @@ public abstract class BaseBasicTypeFormatter<T> implements ObjectFormatter<T> {
         return formatTrimmed(raw);
     }
 
+    /**
+     * formatTrimmed
+     * @param raw raw
+     * @return result
+     * @throws Exception ex
+     */
     protected abstract T formatTrimmed(String raw) throws Exception;
 
     public static final List<Class<? extends ObjectFormatter>> BASIC_TYPE_FORMATTERS = Arrays.<Class<? extends ObjectFormatter>>asList(IntegerFormatter.class,

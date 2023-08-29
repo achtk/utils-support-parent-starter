@@ -10,7 +10,10 @@ import java.util.List;
  * @since 0.5.2
  */
 public abstract class AbstractSelectable implements Selectable {
-
+    /**
+     * 获取文本
+     * @return 文本
+     */
     protected abstract List<String> getSourceTexts();
 
     @Override

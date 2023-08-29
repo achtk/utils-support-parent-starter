@@ -6,7 +6,7 @@ package com.chua.common.support.collection;
  * @author CH
  */
 public class Bitmap {
-    /*
+    /**
      *使用long型数组保存点
      */
     private final long[] elementData;

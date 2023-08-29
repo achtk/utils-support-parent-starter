@@ -34,6 +34,11 @@ import java.util.function.Function;
  * @since 1.7.0
  */
 public interface Dialect {
+    /**
+     * 检测方言
+     * @param ds 数据源
+     * @return 方言
+     */
     static Dialect guessDialect(DataSource ds) {
         try (Connection connection = ds.getConnection()) {
             DatabaseMetaData metaData = connection.getMetaData();
@@ -164,6 +169,7 @@ public interface Dialect {
      *
      * @param dataSource 数据库
      * @return 数据源
+     * @throws NotSupportedException 不支持
      */
     static Dialect create(DataSource dataSource) throws NotSupportedException {
         if (null != dataSource) {
@@ -200,6 +206,11 @@ public interface Dialect {
         return sb.toString();
     }
 
+    /**
+     * 创建字段sql片段
+     * @param column 字段
+     * @return sql片段
+     */
     default String createColumn(Column column) {
         StringBuilder sb = new StringBuilder();
         sb.append("`").append(column.getName()).append("`");

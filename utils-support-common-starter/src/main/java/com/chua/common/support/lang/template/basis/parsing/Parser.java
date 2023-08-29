@@ -207,7 +207,7 @@ public class Parser {
 			closing = alias;
 			include = new Include(new Span(openingInclude, closing), path, null, true, alias);
 		} else {
-			include = new Include(new Span(openingInclude, closing), path, new HashMap<Span, AbstractExpression>(), false, null);
+			include = new Include(new Span(openingInclude, closing), path, new HashMap<>(1 << 4), false, null);
 		}
 		includes.add(include);
 		return include;
@@ -216,7 +216,7 @@ public class Parser {
 	/** Does not consume the closing parentheses. **/
 	private Map<Span, AbstractExpression> parseMap (TokenStream stream) {
 		stream.expect(TokenType.LeftParantheses);
-		Map<Span, AbstractExpression> map = new HashMap<>();
+		Map<Span, AbstractExpression> map = new HashMap<>(1 << 4);
 		while (stream.hasMore() && !stream.match(TokenType.RightParantheses, false)) {
 			Span key = stream.expect(TokenType.Identifier).getSpan();
 			stream.expect(TokenType.Colon);

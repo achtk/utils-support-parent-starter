@@ -17,11 +17,16 @@ import java.util.regex.Pattern;
  */
 public abstract class ElementOperator {
 
+    /**
+     * 操作
+     * @param element 元素
+     * @return 结果
+     */
     public abstract String operate(Element element);
 
     public static class AttributeGetter extends ElementOperator {
 
-        private String attribute;
+        private final String attribute;
 
         public AttributeGetter(String attribute) {
             this.attribute = attribute;

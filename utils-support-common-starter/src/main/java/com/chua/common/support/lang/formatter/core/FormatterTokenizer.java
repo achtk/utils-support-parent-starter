@@ -50,7 +50,6 @@ public class FormatterTokenizer {
    *     Special chars that can be found inside of words, like @ and #
    */
   public FormatterTokenizer(DialectConfig cfg) {
-    // this.WHITESPACE_PATTERN = Pattern.compile("^(\\s+)");
     this.NUMBER_PATTERN =
         Pattern.compile(
             "^((-\\s*)?[0-9]+(\\.[0-9]+)?([eE]-?[0-9]+(\\.[0-9]+)?)?|0x[0-9a-fA-F]+|0b[01]+)\\b");
@@ -138,11 +137,6 @@ public class FormatterTokenizer {
       new String(chars, 0, index), new String(chars, index, beforeLength - index)
     };
   }
-
-  // private String getWhitespace(String input) {
-  //   String firstMatch = getFirstMatch(input, this.WHITESPACE_PATTERN);
-  //   return firstMatch != null ? firstMatch : "";
-  // }
 
   private Token getNextToken(String input, Token previousToken) {
     return Util.firstNotnull(

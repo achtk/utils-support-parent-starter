@@ -92,8 +92,9 @@ public class HistogramView implements View {
      * @param array 传入数组
      * @return 最大值的key是max，最小值的key是min
      */
+    @SuppressWarnings("ALL")
     private static Map<String, Comparable> getMaxAndMin(Comparable[] array) {
-        Map<String, Comparable> data = new HashMap<String, Comparable>();
+        Map<String, Comparable> data = new HashMap<>(1 << 4);
         data.put("max", array[0]);
         data.put("min", array[0]);
         for (int i = 0; i < array.length; i++) {

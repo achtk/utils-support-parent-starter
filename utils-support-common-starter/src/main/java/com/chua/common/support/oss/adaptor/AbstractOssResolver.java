@@ -1,5 +1,6 @@
 package com.chua.common.support.oss.adaptor;
 
+import com.chua.common.support.constant.CommonConstant;
 import com.chua.common.support.function.Splitter;
 import com.chua.common.support.function.strategy.name.OssNamedStrategy;
 import com.chua.common.support.function.strategy.name.RejectStrategy;
@@ -15,6 +16,8 @@ import com.chua.common.support.utils.StringUtils;
 
 import java.io.*;
 import java.util.Optional;
+
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_COMMA;
 
 /**
  * oss
@@ -154,7 +157,7 @@ public abstract class AbstractOssResolver implements OssResolver {
      * @param os         流
      */
     private void renderPlugin(String format, String ossPlugins, byte[] bytes, OutputStream os) {
-        for (String name : Splitter.on(",").trimResults().omitEmptyStrings().splitToList(ossPlugins)) {
+        for (String name : Splitter.on(SYMBOL_COMMA).trimResults().omitEmptyStrings().splitToList(ossPlugins)) {
             ImageFilter imageFilter = ServiceProvider.of(ImageFilter.class).getNewExtension(name);
             if (null == imageFilter) {
                 imageFilter = ServiceProvider.of(ImageFilter.class).getNewExtension("com.chua.common.support.image.filter." + name + "Filter");

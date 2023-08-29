@@ -74,13 +74,6 @@ public abstract class SqlUtils {
     }
 
     public static String getSelectBody(String tableName, String alisa, String asAlisa, String escapeSymbol) {
-//        TableInfo tableInfo = TableInfoHelper.getTableInfo(tableName);
-//        Assert.notNull(tableInfo, "can not find TableInfo Cache by \"%s\"", tableName);
-//        String s = tableInfo.chooseSelect(TableFieldInfo::isSelect);
-//        if (alisa == null) {
-//            return s;
-//        }
-//        return getNewSelectBody(s, alisa, asAlisa, escapeSymbol);
         return "";
     }
 

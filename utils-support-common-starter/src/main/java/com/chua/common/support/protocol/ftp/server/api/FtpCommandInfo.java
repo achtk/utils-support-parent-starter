@@ -30,6 +30,12 @@ public class FtpCommandInfo {
          */
         void run(String argument) throws IOException;
 
+        /**
+         * 运行命名
+         * @param info 命名
+         * @param argument 参数
+         * @throws IOException IO
+         */
         default void run(FtpCommandInfo info, String argument) throws IOException {
             if(argument.isEmpty()) {
                 throw new FtpResponseException(501, "Missing parameters");
@@ -51,11 +57,22 @@ public class FtpCommandInfo {
          */
         void run() throws IOException;
 
+        /**
+         * 运行
+         * @param argument The argument
+         * @throws IOException IO
+         */
         @Override
         default void run(String argument) throws IOException {
             run();
         }
 
+        /**
+         * 运行
+         * @param info 命名
+         * @param argument 参数
+         * @throws IOException IO
+         */
         @Override
         default void run(FtpCommandInfo info, String argument) throws IOException {
             run();
@@ -76,11 +93,23 @@ public class FtpCommandInfo {
          */
         void run(String[] argument) throws IOException;
 
+        /**
+         * 运行
+         * @param argument The argument
+         * @throws IOException IO
+         */
+
         @Override
         default void run(String argument) throws IOException {
             run(argument.split("\\s+"));
         }
 
+        /**
+         * 运行
+         * @param info 命名
+         * @param argument 参数
+         * @throws IOException IO
+         */
         @Override
         default void run(FtpCommandInfo info, String argument) throws IOException {
             run(argument.split("\\s+"));

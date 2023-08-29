@@ -15,11 +15,14 @@
  ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.csv;
 
+import com.chua.common.support.constant.CommonConstant;
 import com.chua.common.support.file.univocity.parsers.common.ArgumentUtils;
 import com.chua.common.support.file.univocity.parsers.common.input.InputAnalysisProcess;
 
 import java.util.*;
 import java.util.Map.Entry;
+
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_BLANK_CHAR;
 
 /**
  * An {@link InputAnalysisProcess} to detect column delimiters, quotes and quote escapes in a CSV input.
@@ -141,7 +144,7 @@ public abstract class AbstractCsvFormatDetector implements InputAnalysisProcess 
                 } else if (inQuote == '\0') {
                     char prev = '\0';
                     int j = i;
-                    while (prev <= ' ' && --j >= 0) {
+                    while (prev <= SYMBOL_BLANK_CHAR && --j >= 0) {
                         prev = characters[j];
                     }
                     if (j < 0 || !Character.isLetterOrDigit(prev)) {
@@ -265,10 +268,10 @@ public abstract class AbstractCsvFormatDetector implements InputAnalysisProcess 
         char delimiterMax = max(sums, totals, suggestedDelimiter);
         char delimiterMin = min(sums, totals, suggestedDelimiter);
 
-        if (delimiterMin == ' ' || delimiterMax == ' ') {
+        if (delimiterMin == SYMBOL_BLANK_CHAR || delimiterMax == SYMBOL_BLANK_CHAR) {
             boolean hasOtherDelimiters = false;
             for (Entry<Character, Integer> e : sums.entrySet()) {
-                if (e.getValue() == 0 && e.getKey() != ' ') {
+                if (e.getValue() == 0 && e.getKey() != SYMBOL_BLANK_CHAR) {
                     hasOtherDelimiters = true;
                     break;
                 }

@@ -14,6 +14,7 @@ public interface Join<Children> extends Serializable {
 
     /**
      * ignore
+     * @return Children
      */
     default Children or() {
         return or(true);
@@ -29,6 +30,9 @@ public interface Join<Children> extends Serializable {
 
     /**
      * ignore
+     * @param applySql sql
+     * @param values params
+     * @return children
      */
     default Children apply(String applySql, Object... values) {
         return apply(true, applySql, values);
@@ -48,7 +52,12 @@ public interface Join<Children> extends Serializable {
     Children apply(boolean condition, String applySql, Object... values);
 
     /**
-     * ignore
+     * 无视优化规则直接拼接到 sql 的最后(有sql注入的风险,请谨慎使用)
+     * <p>例: last("limit 1")</p>
+     * <p>注意只能调用一次,多次调用以最后一次为准</p>
+     *
+     * @param lastSql   sql语句
+     * @return children
      */
     default Children last(String lastSql) {
         return last(true, lastSql);
@@ -66,7 +75,10 @@ public interface Join<Children> extends Serializable {
     Children last(boolean condition, String lastSql);
 
     /**
-     * ignore
+     * sql 注释(会拼接在 sql 的最后面)
+     *
+     * @param comment   sql注释
+     * @return children
      */
     default Children comment(String comment) {
         return comment(true, comment);
@@ -82,7 +94,11 @@ public interface Join<Children> extends Serializable {
     Children comment(boolean condition, String comment);
 
     /**
-     * ignore
+     * sql 起始句（会拼接在SQL语句的起始处）
+     *
+     * @param firstSql  起始语句
+     * @return children
+     * @since 3.3.1
      */
     default Children first(String firstSql) {
         return first(true, firstSql);
@@ -99,7 +115,13 @@ public interface Join<Children> extends Serializable {
     Children first(boolean condition, String firstSql);
 
     /**
-     * ignore
+     * 拼接 EXISTS ( sql语句 )
+     * <p>!! sql 注入方法 !!</p>
+     * <p>例: exists("select id from table where age = 1")</p>
+     *
+     * @param existsSql sql语句
+     * @param values    数据数组
+     * @return children
      */
     default Children exists(String existsSql, Object... values) {
         return exists(true, existsSql, values);
@@ -118,7 +140,13 @@ public interface Join<Children> extends Serializable {
     Children exists(boolean condition, String existsSql, Object... values);
 
     /**
-     * ignore
+     * 拼接 NOT EXISTS ( sql语句 )
+     * <p>!! sql 注入方法 !!</p>
+     * <p>例: notExists("select id from table where age = 1")</p>
+     *
+     * @param existsSql sql语句
+     * @param values    数据数组
+     * @return children
      */
     default Children notExists(String existsSql, Object... values) {
         return notExists(true, existsSql, values);

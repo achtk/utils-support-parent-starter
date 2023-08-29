@@ -1127,8 +1127,9 @@ class Frame {
       
       
       int concreteOutputType = dim + inputLocals[abstractOutputType & VALUE_MASK];
-      if ((abstractOutputType & TOP_IF_LONG_OR_DOUBLE_FLAG) != 0
-          && (concreteOutputType == LONG || concreteOutputType == DOUBLE)) {
+      boolean b = (abstractOutputType & TOP_IF_LONG_OR_DOUBLE_FLAG) != 0
+              && (concreteOutputType == LONG || concreteOutputType == DOUBLE);
+      if (b) {
         concreteOutputType = TOP;
       }
       return concreteOutputType;
@@ -1137,8 +1138,9 @@ class Frame {
       
       
       int concreteOutputType = dim + inputStack[numStack - (abstractOutputType & VALUE_MASK)];
-      if ((abstractOutputType & TOP_IF_LONG_OR_DOUBLE_FLAG) != 0
-          && (concreteOutputType == LONG || concreteOutputType == DOUBLE)) {
+      boolean b = (abstractOutputType & TOP_IF_LONG_OR_DOUBLE_FLAG) != 0
+              && (concreteOutputType == LONG || concreteOutputType == DOUBLE);
+      if (b) {
         concreteOutputType = TOP;
       }
       return concreteOutputType;

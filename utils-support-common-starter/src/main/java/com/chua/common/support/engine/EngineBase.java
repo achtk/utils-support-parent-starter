@@ -82,6 +82,13 @@ public abstract class EngineBase implements Engine {
         return newFailureInstance(target, configuration.type());
     }
 
+    /**
+     * 实例化异常
+     * @param target 目标类型
+     * @param type 实现
+     * @return 结果
+     * @param <T> 类型
+     */
     public abstract  <T> T newFailureInstance(Class<T> target, String type);
 
     private Object newInstance(String name, Map<String, SortedSet<ServiceDefinition>> stringSortedSetMap, Class<?> target, String type) {

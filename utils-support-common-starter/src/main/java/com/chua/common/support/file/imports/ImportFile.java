@@ -26,6 +26,7 @@ public interface ImportFile {
      * @param inputStream 输入流
      * @param type        类型
      * @param <T>         类型
+     * @return result
      */
     default <T> List<T> imports(InputStream inputStream, Class<T> type) {
         List<T> rs = new LinkedList<>();

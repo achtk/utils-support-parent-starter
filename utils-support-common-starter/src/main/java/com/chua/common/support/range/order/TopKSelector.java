@@ -61,7 +61,7 @@ public class TopKSelector<T extends Object> {
     private final int k;
     private final Comparator<? super T> comparator;
 
-    /*
+    /**
      * We are currently considering the elements in buffer in the range [0, bufferSize) as candidates
      * for the top k elements. Whenever the buffer is filled, we quickselect the top k elements to the
      * range [0, k) and ignore the remaining elements.

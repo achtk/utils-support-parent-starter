@@ -17,8 +17,6 @@ public class MonitorExample {
         Spider githubSpider = Spider.create(new GithubRepoPageProcessor())
                 .addUrl("https://github.com/code4craft");
 
-//        SpiderMonitor.instance().register(zhihuSpider);
-//        SpiderMonitor.instance().register(githubSpider);
         zhihuSpider.start();
         githubSpider.start();
     }

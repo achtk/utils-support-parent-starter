@@ -23,7 +23,7 @@ public class JavaReflection extends Reflection {
 		Class cls = obj instanceof Class ? (Class)obj : obj.getClass();
 		Map<String, Field> fields = fieldCache.get(cls);
 		if (fields == null) {
-			fields = new ConcurrentHashMap<String, Field>();
+			fields = new ConcurrentHashMap<>(1 << 4);
 			fieldCache.put(cls, fields);
 		}
 
@@ -71,7 +71,7 @@ public class JavaReflection extends Reflection {
 		Class cls = obj instanceof Class ? (Class)obj : obj.getClass();
 		Map<MethodSignature, Method> methods = methodCache.get(cls);
 		if (methods == null) {
-			methods = new ConcurrentHashMap<MethodSignature, Method>();
+			methods = new ConcurrentHashMap<>(1 << 4);
 			methodCache.put(cls, methods);
 		}
 
@@ -201,34 +201,41 @@ public class JavaReflection extends Reflection {
 	 * relax the type constraint a little, as we'll invoke a method via reflection. That means the from type will always be boxed,
 	 * as the {@link Method#invoke(Object, Object...)} method takes objects. **/
 	private static boolean isPrimitiveAssignableFrom (Class from, Class to) {
-		if ((from == Boolean.class || from == boolean.class) && (to == boolean.class || to == Boolean.class)) {
+		boolean b = (from == Boolean.class || from == boolean.class) && (to == boolean.class || to == Boolean.class);
+		if (b) {
             return true;
         }
-		if ((from == Integer.class || from == int.class) && (to == int.class || to == Integer.class)) {
+		b =  (from == Integer.class || from == int.class) && (to == int.class || to == Integer.class);
+		if (b) {
             return true;
         }
-		if ((from == Float.class || from == float.class) && (to == float.class || to == Float.class)) {
+		b = (from == Float.class || from == float.class) && (to == float.class || to == Float.class);
+		if (b) {
             return true;
         }
-		if ((from == Double.class || from == double.class) && (to == double.class || to == Double.class)) {
+		b = (from == Double.class || from == double.class) && (to == double.class || to == Double.class);
+		if (b) {
             return true;
         }
-		if ((from == Byte.class || from == byte.class) && (to == byte.class || to == Byte.class)) {
+		b = (from == Byte.class || from == byte.class) && (to == byte.class || to == Byte.class);
+		if (b) {
             return true;
         }
-		if ((from == Short.class || from == short.class) && (to == short.class || to == Short.class)) {
+		b = (from == Short.class || from == short.class) && (to == short.class || to == Short.class);
+		if (b) {
             return true;
         }
-		if ((from == Long.class || from == long.class) && (to == long.class || to == Long.class)) {
+		b = (from == Long.class || from == long.class) && (to == long.class || to == Long.class);
+		if (b) {
             return true;
         }
-		if ((from == Character.class || from == char.class) && (to == char.class || to == Character.class)) {
+
+		b = (from == Character.class || from == char.class) && (to == char.class || to == Character.class);
+		if (b) {
             return true;
         }
-		if(to == Object[].class) {
-            return true;
-        }
-		return false;
+
+		return to == Object[].class;
 	}
 
 	/** Returns whether the from type can be coerced to the to type. The coercion rules follow those of Java. See JLS 5.1.2

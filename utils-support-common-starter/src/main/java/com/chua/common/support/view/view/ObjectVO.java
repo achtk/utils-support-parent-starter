@@ -1,5 +1,7 @@
 package com.chua.common.support.view.view;
 
+import lombok.ToString;
+
 /**
  * <pre>
  * 包装一层，解决json输出问题
@@ -8,6 +10,7 @@ package com.chua.common.support.view.view;
  *
  * @author hengyunabc 2022-08-24
  */
+@ToString
 public class ObjectVO {
     private Object object;
     private Integer expand;

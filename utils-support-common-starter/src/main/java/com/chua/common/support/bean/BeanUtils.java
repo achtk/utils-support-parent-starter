@@ -197,7 +197,8 @@ public class BeanUtils {
             }
 
             Class<?> type = field.getType();
-            if(propertyDescriptorValue.getClass().isArray() && (!type.isArray() || Collection.class.isAssignableFrom(type))) {
+            boolean b = propertyDescriptorValue.getClass().isArray() && (!type.isArray() || Collection.class.isAssignableFrom(type));
+            if(b) {
                 propertyDescriptorValue = Converter.convertIfNecessary(propertyDescriptorValue, String.class);
             }
             for (ReadFeature readFeature : features) {

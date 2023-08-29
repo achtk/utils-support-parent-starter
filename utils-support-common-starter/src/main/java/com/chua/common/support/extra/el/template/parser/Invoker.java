@@ -11,5 +11,15 @@ import java.util.Deque;
  * @author CH
  */
 public interface Invoker {
+    /**
+     * 执行
+     *
+     * @param sentence   sentence
+     * @param offset     offset
+     * @param executions executions
+     * @param template   template
+     * @param cache      cache
+     * @return result
+     */
     int scan(String sentence, int offset, Deque<Execution> executions, Template template, StringBuilder cache);
 }

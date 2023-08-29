@@ -208,7 +208,6 @@ public class Reflections implements NameHelper {
                 keys += map.size();
                 values += map.values().stream().mapToLong(Set::size).sum();
             }
-//            log.info(format("Reflections took %d ms to scan %d urls, producing %d keys and %d values", System.currentTimeMillis() - start, urls.size(), keys, values));
         }
         return storeMap;
     }

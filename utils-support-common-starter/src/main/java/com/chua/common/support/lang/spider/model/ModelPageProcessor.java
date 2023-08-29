@@ -52,7 +52,8 @@ class ModelPageProcessor implements PageProcessor {
                 extractLinks(page, pageModelExtractor.getTargetUrlRegionSelector(), pageModelExtractor.getTargetUrlPatterns());
             }
             Object process = pageModelExtractor.process(page);
-            if (process == null || (process instanceof List && ((List) process).size() == 0)) {
+            boolean b = process == null || (process instanceof List && ((List) process).size() == 0);
+            if (b) {
                 continue;
             }
             postProcessPageModel(pageModelExtractor.getClazz(), process);

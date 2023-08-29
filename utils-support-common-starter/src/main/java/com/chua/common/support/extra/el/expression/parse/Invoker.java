@@ -10,5 +10,14 @@ import java.util.Deque;
  * @author CH
  */
 public interface Invoker {
+    /**
+     * 執行
+     *
+     * @param el       节点
+     * @param offset   位置
+     * @param nodes    元素
+     * @param function 回调
+     * @return 结果
+     */
     int parse(String el, int offset, Deque<CalculateNode> nodes, int function);
 }

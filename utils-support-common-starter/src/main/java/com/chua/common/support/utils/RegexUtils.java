@@ -628,8 +628,9 @@ public class RegexUtils {
 
         char[] strChars = str.toCharArray();
         for (char c : strChars) {
-            if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9')
-                    || c == '+' || c == '/' || c == '=') {
+            boolean b = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9')
+                    || c == '+' || c == '/' || c == '=';
+            if (b) {
                 continue;
             } else {
                 return false;

@@ -60,5 +60,10 @@ public abstract class LineSeparatorDetector implements InputAnalysisProcess {
         apply(lineSeparator1, lineSeparator2);
     }
 
+    /**
+     * 執行
+     * @param lineSeparator1 Separator
+     * @param lineSeparator2 Separator
+     */
     protected abstract void apply(char lineSeparator1, char lineSeparator2);
 }

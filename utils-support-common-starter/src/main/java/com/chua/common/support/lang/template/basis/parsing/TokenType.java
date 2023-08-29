@@ -11,48 +11,173 @@ import java.util.Comparator;
  * @author Administrator
  */
 public enum TokenType {
-    
+    /**
+     * TextBlock
+     */
     TextBlock("a text block"),
+    /**
+     * TextBlock
+     */
     Period(".", "."),
+    /**
+     * TextBlock
+     */
     Comma(",", ","),
+    /**
+     * TextBlock
+     */
     Semicolon(";", ";"),
+    /**
+     * TextBlock
+     */
     Colon(":", ":"),
+    /**
+     * TextBlock
+     */
     Plus("+", "+"),
+    /**
+     * TextBlock
+     */
     Minus("-", "-"),
+    /**
+     * TextBlock
+     */
     Asterisk("*", "*"),
+    /**
+     * TextBlock
+     */
     ForwardSlash("/", "/"),
+    /**
+     * TextBlock
+     */
     Percentage("%", "%"),
+    /**
+     * TextBlock
+     */
     LeftParantheses("(", ")"),
+    /**
+     * TextBlock
+     */
     RightParantheses(")", ")"),
+    /**
+     * TextBlock
+     */
     LeftBracket("[", "["),
+    /**
+     * TextBlock
+     */
     RightBracket("]", "]"),
+    /**
+     * TextBlock
+     */
     LeftCurly("{", "{"),
-    RightCurly("}"), 
+    /**
+     * TextBlock
+     */
+    RightCurly("}"),
+    /**
+     * TextBlock
+     */
     Less("<", "<"),
+    /**
+     * TextBlock
+     */
     Greater(">", ">"),
+    /**
+     * TextBlock
+     */
     LessEqual("<=", "<="),
+    /**
+     * TextBlock
+     */
     GreaterEqual(">=", ">="),
+    /**
+     * TextBlock
+     */
     Equal("==", "=="),
+    /**
+     * TextBlock
+     */
     NotEqual("!=", "!="),
+    /**
+     * TextBlock
+     */
     Assignment("=", "="),
+    /**
+     * TextBlock
+     */
     And("&&", "&&"),
+    /**
+     * TextBlock
+     */
     Or("||", "||"),
+    /**
+     * TextBlock
+     */
     Xor("^", "^"),
+    /**
+     * TextBlock
+     */
     Not("!", "!"),
+    /**
+     * TextBlock
+     */
     Questionmark("?", "?"),
+    /**
+     * TextBlock
+     */
     DoubleQuote("\"", "\""),
+    /**
+     * TextBlock
+     */
     Backtick("`", "`"),
+    /**
+     * TextBlock
+     */
     BooleanLiteral("true or false"),
+    /**
+     * TextBlock
+     */
     DoubleLiteral("a double floating point number"),
+    /**
+     * TextBlock
+     */
     FloatLiteral("a floating point number"),
+    /**
+     * TextBlock
+     */
     LongLiteral("a long integer number"),
+    /**
+     * TextBlock
+     */
     IntegerLiteral("an integer number"),
+    /**
+     * TextBlock
+     */
     ShortLiteral("a short integer number"),
+    /**
+     * TextBlock
+     */
     ByteLiteral("a byte integer number"),
+    /**
+     * TextBlock
+     */
     CharacterLiteral("a character"),
+    /**
+     * TextBlock
+     */
     StringLiteral("a string"),
+    /**
+     * TextBlock
+     */
     RawStringLiteral("a string"),
+    /**
+     * TextBlock
+     */
     NullLiteral("null"),
+    /**
+     * TextBlock
+     */
     Identifier("an identifier");
     
 

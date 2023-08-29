@@ -51,12 +51,13 @@ public class RegexUtil {
     return "^(" + createStringPattern(stringTypes) + ")";
   }
 
-  // This enables the following string patterns:
-  // 1. backtick quoted string using `` to escape
-  // 2. square bracket quoted string (SQL Server) using ]] to escape
-  // 3. double quoted string using "" or \" to escape
-  // 4. single quoted string using '' or \' to escape
-  // 5. national character quoted string using N'' or N\' to escape
+  /** This enables the following string patterns:
+  * 1. backtick quoted string using `` to escape
+  * 2. square bracket quoted string (SQL Server) using ]] to escape
+  * 3. double quoted string using "" or \" to escape
+  * 4. single quoted string using '' or \' to escape
+   * 5. national character quoted string using N'' or N\' to escape
+  */
   public static String createStringPattern(JSLikeList<String> stringTypes) {
     return stringTypes.map(StringLiteral::get).join("|");
   }

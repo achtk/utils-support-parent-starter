@@ -12,11 +12,14 @@ import java.util.List;
 public interface IGroupCallback {
     /**
      * 成功后，可以从wrapper里去getWorkResult
+     * @param workers works
      */
     void success(List<Worker> workers);
 
     /**
      * 失败了，也可以从wrapper里去getWorkResult
+     * @param workers works
+     * @param e  e
      */
     void failure(List<Worker> workers, Exception e);
 }

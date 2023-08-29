@@ -21,8 +21,10 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static com.chua.common.support.constant.CommonConstant.EMPTY;
+
 /**
  * 基础类
+ *
  * @author CH
  */
 public class CsvUtil {
@@ -40,6 +42,11 @@ public class CsvUtil {
 
     @FunctionalInterface
     public interface HeaderName {
+        /**
+         * header value
+         * @param fieldName name
+         * @return value
+         */
         String name(String fieldName);
     }
 
@@ -144,8 +151,8 @@ public class CsvUtil {
     }
 
     private static <T> CsvEntity[] defineCsvHeader(Class<T> type, List<String> content, Function<String, String> headerName) {
-        List<CsvEntity> csvEntities = new ArrayList<>();
-        Map<String, ValueAccessor> map = new HashMap<>();
+        List<CsvEntity> csvEntities = new ArrayList<>(1 << 4);
+        Map<String, ValueAccessor> map = new HashMap<>(1 << 4);
         Arrays.stream(type.getDeclaredFields()).forEach(field -> {
             if (field.isAnnotationPresent(CsvHeaderName.class)) {
                 map.put(EMPTY.equals(field.getAnnotation(CsvHeaderName.class).value()) ? field.getName() : field.getAnnotation(CsvHeaderName.class).value(), new ValueAccessor(field));
@@ -183,8 +190,12 @@ public class CsvUtil {
                         }
                         lastContentIndex = index + 1;
                     }
+                    return;
                 }
-                case '"': state = state == 0 ? 1 : 0;
+                case '"': {
+                    state = state == 0 ? 1 : 0;
+                    return;
+                }
                 default:
                     break;
             }

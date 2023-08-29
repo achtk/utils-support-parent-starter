@@ -11,13 +11,14 @@ public abstract class AbstractConstantInfo {
 
     /**
      * 该常量类型解析除了tag字节以外的内容，并且返回解析完成后计数器的值
+     * @param binaryData 二级制数据
      */
     public abstract void resolve(BinaryData binaryData);
 
     /**
      * 使用常量池中的数据解析一些描述字符串链接等
      *
-     * @param constantPool
+     * @param constantPool 二级制数据
      */
     public abstract void resolve(AbstractConstantInfo[] constantPool);
 }

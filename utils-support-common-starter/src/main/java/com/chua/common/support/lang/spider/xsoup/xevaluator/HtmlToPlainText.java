@@ -76,8 +76,9 @@ public class HtmlToPlainText {
             if (text.startsWith("\n")) {
                 width = 0; 
             }
-            if (" ".equals(text) &&
-                    (accum.length() == 0 || StringUtils.in(accum.substring(accum.length() - 1), " ", "\n"))) {
+            boolean b = " ".equals(text) &&
+                    (accum.length() == 0 || StringUtils.in(accum.substring(accum.length() - 1), " ", "\n"));
+            if (b) {
                 return; 
             }
 

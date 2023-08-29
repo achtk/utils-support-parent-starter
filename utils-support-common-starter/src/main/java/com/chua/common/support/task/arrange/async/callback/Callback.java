@@ -21,6 +21,9 @@ public interface Callback<T, V> {
 
     /**
      * 耗时操作执行完毕后，就给value注入值
+     * @param success success
+     * @param param param
+     * @param workResult  result
      */
     void result(boolean success, T param, WorkResult<V> workResult);
 }

@@ -7,7 +7,6 @@ package com.chua.common.support.protocol.ftp.client;
  * object by calling its addCommunicationListener() method.
  *
  * @author Carlo Pelliccia
- * @see FTPClient#addCommunicationListener(FTPCommunicationListener)
  */
 public interface FTPCommunicationListener {
 

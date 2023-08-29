@@ -18,7 +18,9 @@ public class OperatorNode implements CalculateNode
         this.operatorType = operatorType;
     }
 
-    // 操作符节点不会有计算动作
+    /**
+     * 操作符节点不会有计算动作
+     */
     @Override
     public Object calculate(Map<String, Object> variables)
     {

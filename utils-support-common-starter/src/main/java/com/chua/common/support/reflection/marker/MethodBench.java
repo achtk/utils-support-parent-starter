@@ -45,17 +45,6 @@ public class MethodBench implements Bench {
      * @return 结果
      */
     private Value<Object> executeExpress(Object[] args) {
-//        try {
-//            ExpressionParser expressionParser = new ExpressionParser();
-//            expressionParser.setVariable("source", this.entity);
-//            if (!express.contains("#source.")) {
-//                return expressionParser.compile("#source." + express);
-//            }
-//            return expressionParser.compile(express);
-//        } catch (Throwable e) {
-//            return NullValue.empty();
-//        }
-
         return NullValue.INSTANCE;
     }
 

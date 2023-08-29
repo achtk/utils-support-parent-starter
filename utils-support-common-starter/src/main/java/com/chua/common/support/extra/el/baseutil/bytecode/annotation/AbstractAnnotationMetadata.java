@@ -66,7 +66,7 @@ public abstract class AbstractAnnotationMetadata implements AnnotationMetadata {
     @Override
     public Annotation annotation() {
         if (annotation == null) {
-            final Map<String, Object> values = new HashMap<String, Object>();
+            final Map<String, Object> values = new HashMap<>(attributes.size());
             for (Map.Entry<String, ValuePair> entry : attributes.entrySet()) {
                 switch (entry.getValue().getElementValueType()) {
                     case BOOLEAN:
@@ -233,6 +233,7 @@ public abstract class AbstractAnnotationMetadata implements AnnotationMetadata {
                             default:
                                 break;
                         }
+                    default:
                         break;
                 }
             }

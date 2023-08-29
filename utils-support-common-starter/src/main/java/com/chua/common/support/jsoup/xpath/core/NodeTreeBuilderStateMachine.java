@@ -4,6 +4,8 @@ import com.chua.common.support.jsoup.xpath.model.Node;
 import com.chua.common.support.jsoup.xpath.model.Predicate;
 import com.chua.common.support.jsoup.xpath.util.EmMap;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_LEFT_SQUARE_BRACKET_CHAR;
+
 /**
  * 用于生成xpath语法树的有限状态机
  *
@@ -48,7 +50,7 @@ public class NodeTreeBuilderStateMachine {
             public void parser(NodeTreeBuilderStateMachine stateMachine, char[] xpath) {
                 int curtmp = stateMachine.cur;
                 StringBuilder accumTmp = new StringBuilder();
-                while (curtmp < xpath.length && xpath[curtmp] != '[' && xpath[curtmp] != '/') {
+                while (curtmp < xpath.length && xpath[curtmp] != SYMBOL_LEFT_SQUARE_BRACKET_CHAR && xpath[curtmp] != '/') {
                     if (xpath[curtmp] == ':') {
                         stateMachine.context.xpathTr.getLast().setAxis(accumTmp.toString());
                         stateMachine.cur = curtmp + 2;
@@ -67,7 +69,7 @@ public class NodeTreeBuilderStateMachine {
         TAG {
             @Override
             public void parser(NodeTreeBuilderStateMachine stateMachine, char[] xpath) {
-                while (stateMachine.cur < xpath.length && xpath[stateMachine.cur] != '[' && xpath[stateMachine.cur] != '/') {
+                while (stateMachine.cur < xpath.length && xpath[stateMachine.cur] != SYMBOL_LEFT_SQUARE_BRACKET_CHAR && xpath[stateMachine.cur] != '/') {
                     stateMachine.accum.append(xpath[stateMachine.cur]);
                     stateMachine.cur += 1;
                 }
@@ -77,7 +79,7 @@ public class NodeTreeBuilderStateMachine {
                     stateMachine.state = END;
                 } else if (xpath[stateMachine.cur] == '/') {
                     stateMachine.state = SCOPE;
-                } else if (xpath[stateMachine.cur] == '[') {
+                } else if (xpath[stateMachine.cur] == SYMBOL_LEFT_SQUARE_BRACKET_CHAR) {
                     stateMachine.state = PREDICATE;
                 }
             }

@@ -28,15 +28,18 @@ public interface QueryBuilder extends NameHelper {
      * direct values indexed for {@code key} String
      * <p>safely returns an empty {@code Set<String>} if {@code index/key} not found
      * <p>this is the only function accessing the {@link Store} multimap
+     * @param key key
+     * @return QueryFunction
      */
     default QueryFunction<Store, String> get(String key) {
         return store -> new LinkedHashSet<>(store.getOrDefault(index(), Collections.emptyMap()).getOrDefault(key, Collections.emptySet()));
     }
 
-    // get/getAll/getAllIncluding
 
     /**
      * direct values indexed for {@code AnnotatedElement}
+     * @param element element
+     * @return QueryFunction
      */
     default QueryFunction<Store, String> get(AnnotatedElement element) {
         return get(toName(element));
@@ -51,6 +54,8 @@ public interface QueryBuilder extends NameHelper {
 
     /**
      * transitive values indexed for {@code keys} String collection, not including {@code keys}
+     * @param keys key
+     * @return QueryFunction
      */
     default QueryFunction<Store, String> getAll(Collection<String> keys) {
         return QueryFunction.set(keys).getAll(this::get);
@@ -58,6 +63,8 @@ public interface QueryBuilder extends NameHelper {
 
     /**
      * transitive values indexed for {@code key} String, including {@code key}
+     * @param key key
+     * @return QueryFunction
      */
     default QueryFunction<Store, String> getAllIncluding(String key) {
         return QueryFunction.single(key).add(QueryFunction.single(key).getAll(this::get));
@@ -65,6 +72,8 @@ public interface QueryBuilder extends NameHelper {
 
     /**
      * transitive values indexed for {@code keys} String collection, including {@code keys}
+     * @param keys key
+     * @return QueryFunction
      */
     default QueryFunction<Store, String> getAllIncluding(Collection<String> keys) {
         return QueryFunction.set(keys).add(QueryFunction.set(keys).getAll(this::get));
@@ -74,6 +83,8 @@ public interface QueryBuilder extends NameHelper {
 
     /**
      * transitive values indexed for {@code keys} String collection, not including {@code keys}
+     * @param keys key
+     * @return QueryFunction
      */
     default QueryFunction<Store, String> of(Collection<String> keys) {
         return getAll(keys);
@@ -81,6 +92,8 @@ public interface QueryBuilder extends NameHelper {
 
     /**
      * transitive values indexed for {@code key} String, not including {@code key}
+     * @param key key
+     * @return QueryFunction
      */
     default QueryFunction<Store, String> of(String key) {
         return getAll(Collections.singletonList(key));
@@ -88,6 +101,8 @@ public interface QueryBuilder extends NameHelper {
 
     /**
      * transitive values indexed for {@code AnnotatedElement} varargs, not including
+     * @param elements elements
+     * @return QueryFunction
      */
     default QueryFunction<Store, String> of(AnnotatedElement... elements) {
         return getAll(toNames(elements));
@@ -95,6 +110,8 @@ public interface QueryBuilder extends NameHelper {
 
     /**
      * transitive values indexed for {@code AnnotatedElement} set, not including
+     * @param elements elements
+     * @return QueryFunction
      */
     default QueryFunction<Store, String> of(Set<? extends AnnotatedElement> elements) {
         return getAll(toNames(elements));
@@ -102,6 +119,9 @@ public interface QueryBuilder extends NameHelper {
 
     /**
      * transitive values indexed for {@code keys} String collection, not including {@code keys}. <p><i>same as {@link #of(Collection)}</i>
+     *
+     * @param keys keys
+     * @return QueryFunction
      */
     default QueryFunction<Store, String> with(Collection<String> keys) {
         return of(keys);
@@ -109,6 +129,9 @@ public interface QueryBuilder extends NameHelper {
 
     /**
      * transitive values indexed for {@code key} String, not including {@code key}. <p><i>same as {@link #of(String)}</i>
+     *
+     * @param key key
+     * @return QueryFunction
      */
     default QueryFunction<Store, String> with(String key) {
         return of(key);
@@ -116,6 +139,8 @@ public interface QueryBuilder extends NameHelper {
 
     /**
      * transitive values indexed for {@code AnnotatedElements} varargs, not including. <p><i>same as {@link #of(AnnotatedElement...)}</i>
+     * @param keys keys
+     * @return QueryFunction
      */
     default QueryFunction<Store, String> with(AnnotatedElement... keys) {
         return of(keys);
@@ -123,6 +148,8 @@ public interface QueryBuilder extends NameHelper {
 
     /**
      * transitive values indexed for {@code AnnotatedElements} set, not including. <p><i>same as {@link #of(Set)}</i>
+     * @param keys keys
+     * @return QueryFunction
      */
     default QueryFunction<Store, String> with(Set<? extends AnnotatedElement> keys) {
         return of(keys);
@@ -132,6 +159,8 @@ public interface QueryBuilder extends NameHelper {
 
     /**
      * transitive {@link QueryFunction#getAll(Function)} values by applying this {@link #get(String)} on each {@code queryFunction} value, including
+     * @param queryFunction queryFunction
+     * @return QueryFunction
      */
     default <T> QueryFunction<Store, T> of(QueryFunction queryFunction) {
         return queryFunction.add(queryFunction.getAll((Function<String, QueryFunction<Store, String>>) this::get));

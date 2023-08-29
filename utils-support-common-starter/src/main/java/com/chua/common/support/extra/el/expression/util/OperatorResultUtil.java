@@ -175,7 +175,7 @@ public class OperatorResultUtil
         }
         else
         {
-            return !(value instanceof Number) || !(((Number) value).floatValue() < 0);
+            return !(value instanceof Number && ((Number) value).floatValue() < 0);
         }
     }
 }

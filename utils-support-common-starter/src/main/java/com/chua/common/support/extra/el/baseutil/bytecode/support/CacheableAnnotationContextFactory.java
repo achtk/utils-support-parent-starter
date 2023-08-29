@@ -14,8 +14,19 @@ public abstract class CacheableAnnotationContextFactory implements AnnotationCon
     protected Map<String, AnnotationContext> resourceNameAnnotationContextStore = new ConcurrentHashMap<>();
     protected Map<Field, AnnotationContext> fieldAnnotationContextStore = new ConcurrentHashMap<>();
 
+    /**
+     * 构建上下文
+     * @param resourceName 名称
+     * @param classLoader 加载器
+     * @return 结果
+     */
     protected abstract AnnotationContext build(String resourceName, ClassLoader classLoader);
-
+    /**
+     * 构建上下文
+     * @param method 名称
+     * @param classLoader 加载器
+     * @return 结果
+     */
     protected abstract AnnotationContext build(Method method, ClassLoader classLoader);
 
     @Override
@@ -37,7 +48,12 @@ public abstract class CacheableAnnotationContextFactory implements AnnotationCon
     public AnnotationContext get(Field field, ClassLoader classLoader) {
         return fieldAnnotationContextStore.computeIfAbsent(field, f -> build(f, classLoader));
     }
-
+    /**
+     * 构建上下文
+     * @param field 名称
+     * @param classLoader 加载器
+     * @return 结果
+     */
     protected abstract AnnotationContext build(Field field, ClassLoader classLoader);
 
     @Override

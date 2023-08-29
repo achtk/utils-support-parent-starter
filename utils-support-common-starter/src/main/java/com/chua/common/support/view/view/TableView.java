@@ -222,7 +222,7 @@ public class TableView implements View {
         }
     }
 
-    /*
+    /**
      * 获取表格高度
      */
     private int getTableHigh() {
@@ -233,7 +233,7 @@ public class TableView implements View {
         return tableHigh;
     }
 
-    /*
+    /**
      * 打印分隔行
      */
     private String drawSeparationLine(int[] widthCacheArray) {

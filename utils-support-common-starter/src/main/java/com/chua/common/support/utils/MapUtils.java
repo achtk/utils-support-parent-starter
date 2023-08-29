@@ -1291,7 +1291,7 @@ public class MapUtils {
      * @return map
      */
     public static <K, V>Map<K, V> ofHashMap(K k, V v) {
-        Map<K, V> rs = new HashMap<>();
+        Map<K, V> rs = new HashMap<>(1 << 4);
         rs.put(k, v);
         return rs;
     }

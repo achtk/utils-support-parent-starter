@@ -241,7 +241,7 @@ public class XML {
      * @return true if the close tag is processed.
      * @throws JSONException
      */
-    private static boolean parse(XMLTokener x, XmlToJSONObject context, String name, XMLParserConfiguration config)
+    private static boolean parse(XMLTokener x, XmlToJSONObject context, String name, XmlParserConfiguration config)
             throws JSONException {
         char c;
         int i;
@@ -562,7 +562,7 @@ public class XML {
      * @throws JSONException Thrown if there is an errors while parsing the string
      */
     public static JsonObject toJsonObject(String string) throws JSONException {
-        return toJsonObject(string, XMLParserConfiguration.ORIGINAL);
+        return toJsonObject(string, XmlParserConfiguration.ORIGINAL);
     }
 
     /**
@@ -582,7 +582,7 @@ public class XML {
      * @throws JSONException Thrown if there is an errors while parsing the string
      */
     public static JsonObject toJsonObject(Reader reader) throws JSONException {
-        return toJsonObject(reader, XMLParserConfiguration.ORIGINAL);
+        return toJsonObject(reader, XmlParserConfiguration.ORIGINAL);
     }
 
     /**
@@ -608,9 +608,9 @@ public class XML {
      */
     public static JsonObject toJsonObject(Reader reader, boolean keepStrings) throws JSONException {
         if (keepStrings) {
-            return toJsonObject(reader, XMLParserConfiguration.KEEP_STRINGS);
+            return toJsonObject(reader, XmlParserConfiguration.KEEP_STRINGS);
         }
-        return toJsonObject(reader, XMLParserConfiguration.ORIGINAL);
+        return toJsonObject(reader, XmlParserConfiguration.ORIGINAL);
     }
 
     /**
@@ -633,7 +633,7 @@ public class XML {
      * @return A JSONObject containing the structured data from the XML string.
      * @throws JSONException Thrown if there is an errors while parsing the string
      */
-    public static JsonObject toJsonObject(Reader reader, XMLParserConfiguration config) throws JSONException {
+    public static JsonObject toJsonObject(Reader reader, XmlParserConfiguration config) throws JSONException {
         XmlToJSONObject jo = new XmlToJSONObject();
         XMLTokener x = new XMLTokener(reader);
         while (x.more()) {
@@ -690,7 +690,7 @@ public class XML {
      * @return A JSONObject containing the structured data from the XML string.
      * @throws JSONException Thrown if there is an errors while parsing the string
      */
-    public static JsonObject toJsonObject(String string, XMLParserConfiguration config) throws JSONException {
+    public static JsonObject toJsonObject(String string, XmlParserConfiguration config) throws JSONException {
         return toJsonObject(new StringReader(string), config);
     }
 
@@ -702,7 +702,7 @@ public class XML {
      * @throws JSONException Thrown if there is an error parsing the string
      */
     public static String toString(Object object) throws JSONException {
-        return toString(object, null, XMLParserConfiguration.ORIGINAL);
+        return toString(object, null, XmlParserConfiguration.ORIGINAL);
     }
 
     /**
@@ -714,7 +714,7 @@ public class XML {
      * @throws JSONException Thrown if there is an error parsing the string
      */
     public static String toString(final Object object, final String tagName) {
-        return toString(object, tagName, XMLParserConfiguration.ORIGINAL);
+        return toString(object, tagName, XmlParserConfiguration.ORIGINAL);
     }
 
     /**
@@ -726,7 +726,7 @@ public class XML {
      * @return A string.
      * @throws JSONException Thrown if there is an error parsing the string
      */
-    public static String toString(final Object object, final String tagName, final XMLParserConfiguration config)
+    public static String toString(final Object object, final String tagName, final XmlParserConfiguration config)
             throws JSONException {
         return toString(object, tagName, config, 0, 0);
     }
@@ -743,7 +743,7 @@ public class XML {
      * @return
      * @throws JSONException
      */
-    private static String toString(final Object object, final String tagName, final XMLParserConfiguration config, int indentFactor, int indent)
+    private static String toString(final Object object, final String tagName, final XmlParserConfiguration config, int indentFactor, int indent)
             throws JSONException {
         StringBuilder sb = new StringBuilder();
         JSONArray ja;
@@ -870,7 +870,7 @@ public class XML {
      * @throws JSONException Thrown if there is an error parsing the string
      */
     public static String toString(Object object, int indentFactor) {
-        return toString(object, null, XMLParserConfiguration.ORIGINAL, indentFactor);
+        return toString(object, null, XmlParserConfiguration.ORIGINAL, indentFactor);
     }
 
     /**
@@ -883,7 +883,7 @@ public class XML {
      * @throws JSONException Thrown if there is an error parsing the string
      */
     public static String toString(final Object object, final String tagName, int indentFactor) {
-        return toString(object, tagName, XMLParserConfiguration.ORIGINAL, indentFactor);
+        return toString(object, tagName, XmlParserConfiguration.ORIGINAL, indentFactor);
     }
 
     /**
@@ -896,7 +896,7 @@ public class XML {
      * @return A string.
      * @throws JSONException Thrown if there is an error parsing the string
      */
-    public static String toString(final Object object, final String tagName, final XMLParserConfiguration config, int indentFactor)
+    public static String toString(final Object object, final String tagName, final XmlParserConfiguration config, int indentFactor)
             throws JSONException {
         return toString(object, tagName, config, indentFactor, 0);
     }

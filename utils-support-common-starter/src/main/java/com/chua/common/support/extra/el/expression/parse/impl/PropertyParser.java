@@ -17,9 +17,10 @@ public class PropertyParser extends NodeParser {
 
     @Override
     public int parse(String el, int offset, Deque<CalculateNode> nodes, int function, Invoker next) {
-        
-        if ('.' != getChar(offset, el)
-                || (nodes.peek() != null && nodes.peek().token() == ValueResult.TYPE_ENUM)) {
+
+        boolean b = '.' != getChar(offset, el)
+                || (nodes.peek() != null && nodes.peek().token() == ValueResult.TYPE_ENUM);
+        if (b) {
             return next.parse(el, offset, nodes, function);
         }
         int origin = offset;

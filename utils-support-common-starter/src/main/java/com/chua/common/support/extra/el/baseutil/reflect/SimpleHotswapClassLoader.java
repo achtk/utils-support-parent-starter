@@ -65,7 +65,6 @@ public class SimpleHotswapClassLoader extends URLClassLoader {
                         inputStream = new FileInputStream(file);
                         byte[] src = new byte[inputStream.available()];
                         inputStream.read(src);
-                        //inputStream.close();
                         Class<?> c = defineClass(name, src, 0, src.length);
                         classMap.put(name, c);
                         return c;

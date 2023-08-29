@@ -13,8 +13,9 @@ public class BaseSelectorUtils {
      * @return text
      */
     public static String preParse(String text) {
-        if (((text.startsWith("<tr>") || text.startsWith("<tr ")) && text.endsWith("</tr>"))
-                || ((text.startsWith("<td>") || text.startsWith("<td ")) && text.endsWith("</td>"))) {
+        boolean b = ((text.startsWith("<tr>") || text.startsWith("<tr ")) && text.endsWith("</tr>"))
+                || ((text.startsWith("<td>") || text.startsWith("<td ")) && text.endsWith("</td>"));
+        if (b) {
             text = "<table>" + text + "</table>";
         }
         return text;

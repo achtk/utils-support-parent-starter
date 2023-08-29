@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class StandardSqlFormatter extends AbstractFormatter {
 
-  // https://jakewheat.github.io/sql-overview/sql-2008-foundation-grammar.html#reserved-word
+  /** https://jakewheat.github.io/sql-overview/sql-2008-foundation-grammar.html#reserved-word */
   private static final List<String> RESERVED_WORDS =
       Arrays.asList(
           "ABS",

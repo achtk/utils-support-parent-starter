@@ -9,6 +9,9 @@ import com.chua.common.support.lang.spider.Page;
  * @since 0.2.0
  */
 public interface AfterExtractor {
-
+    /**
+     * 后处理器
+     * @param page 页面
+     */
     void afterProcess(Page page);
 }

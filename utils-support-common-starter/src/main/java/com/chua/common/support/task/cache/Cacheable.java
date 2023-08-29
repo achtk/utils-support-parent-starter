@@ -36,6 +36,7 @@ public interface Cacheable extends InitializingAware, DisposableAware {
 
     /**
      * 缓存器
+     * @param configuration 配置
      * @return 缓存器
      */
     static Cacheable auto(CacheConfiguration configuration) {

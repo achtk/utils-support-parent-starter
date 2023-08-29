@@ -10,6 +10,7 @@ public interface GrapeStringResolver {
      * 生成运行环境
      *
      * @param args              依赖
+     * @param cachePat cache
      * @param parentClassLoader classloader
      * @return 环境
      */

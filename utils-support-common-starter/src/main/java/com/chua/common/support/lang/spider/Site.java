@@ -98,7 +98,7 @@ public class Site {
      */
     public Site addCookie(String domain, String name, String value) {
         if (!cookies.containsKey(domain)) {
-            cookies.put(domain, new HashMap<String, String>());
+            cookies.put(domain, new HashMap<>(1 << 4));
         }
         cookies.get(domain).put(name, value);
         return this;

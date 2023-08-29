@@ -17,7 +17,7 @@ public interface Engine extends AutoCloseable {
      * @return 初始化引擎
      */
     static Engine auto(DetectionConfiguration configuration) {
-        if(StringUtils.isEmpty(configuration.engine())) {
+        if (StringUtils.isEmpty(configuration.engine())) {
             return ServiceProvider.of(Engine.class).getObjectProvider(configuration);
         }
         return ServiceProvider.of(Engine.class).getNewExtension(configuration.engine(), configuration);
@@ -49,6 +49,7 @@ public interface Engine extends AutoCloseable {
      *
      * @param target 目标类型
      * @param <T>    类型
+     * @return 目标类实现
      */
     default <T> T get(Class<T> target) {
         return get(null, target);
@@ -60,6 +61,7 @@ public interface Engine extends AutoCloseable {
      * @param name   实现
      * @param target 目标类型
      * @param <T>    类型
+     * @return 目标类实现
      */
     <T> T get(String name, Class<T> target);
 }

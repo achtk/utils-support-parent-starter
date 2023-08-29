@@ -6,5 +6,9 @@ package com.chua.common.support.extra.el.template.execution;
  * @author CH
  */
 public interface InvokerOnExecute {
+    /**
+     * 執行
+     * @param value value
+     */
     void invoke(Object value);
 }

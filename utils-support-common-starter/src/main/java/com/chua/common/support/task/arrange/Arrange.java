@@ -43,6 +43,8 @@ public interface Arrange {
      * 开始
      *
      * @param timeout 超时时间
+     * @throws ExecutionException 执行异常
+     * @throws InterruptedException 执行异常
      */
     void start(int timeout) throws ExecutionException, InterruptedException;
 
@@ -51,6 +53,10 @@ public interface Arrange {
      */
     void stop();
 
+    /**
+     * 获取线程
+     * @return 线程
+     */
     default String getThreadCount() {
         return Async.getThreadCount();
     }

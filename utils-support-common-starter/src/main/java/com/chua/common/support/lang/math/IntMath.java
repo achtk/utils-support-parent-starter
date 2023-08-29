@@ -80,6 +80,7 @@ public class IntMath {
         switch (mode) {
             case UNNECESSARY:
                 checkRoundingUnnecessary(isPowerOfTwo(x));
+                return 0;
             case DOWN:
             case FLOOR:
                 return (Integer.SIZE - 1) - Integer.numberOfLeadingZeros(x);
@@ -124,6 +125,7 @@ public class IntMath {
             case UNNECESSARY:
                 checkRoundingUnnecessary(x == floorPow);
                 // fall through
+                return 0;
             case FLOOR:
             case DOWN:
                 return logFloor;
@@ -234,7 +236,8 @@ public class IntMath {
         int sqrtFloor = sqrtFloor(x);
         switch (mode) {
             case UNNECESSARY:
-                checkRoundingUnnecessary(sqrtFloor * sqrtFloor == x); 
+                checkRoundingUnnecessary(sqrtFloor * sqrtFloor == x);
+                return 0;
             case FLOOR:
             case DOWN:
                 return sqrtFloor;
@@ -301,6 +304,7 @@ public class IntMath {
             case UNNECESSARY:
                 checkRoundingUnnecessary(rem == 0);
                 // fall through
+                return 0;
             case DOWN:
                 increment = false;
                 break;

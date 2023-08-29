@@ -1,5 +1,6 @@
 package com.chua.common.support.net;
 
+import com.chua.common.support.constant.CommonConstant;
 import com.chua.common.support.converter.Converter;
 import com.chua.common.support.utils.CollectionUtils;
 import com.chua.common.support.utils.IoUtils;
@@ -951,74 +952,6 @@ public class NetUtils {
     }
 
     /**
-     * @param pattern
-     * @param host
-     * @param port
-     * @return
-     * @throws UnknownHostException
-     */
-    public static boolean matchIpRange(String pattern, String host, int port) throws UnknownHostException {
-        if (pattern == null || host == null) {
-            throw new IllegalArgumentException("Illegal Argument pattern or hostName. Pattern:" + pattern + ", Host:" + host);
-        }
-        pattern = pattern.trim();
-        if ("*.*.*.*".equals(pattern) || "*".equals(pattern)) {
-            return true;
-        }
-
-        InetAddress inetAddress = InetAddress.getByName(host);
-        boolean isIpv4 = isValidV4Address(inetAddress);
-        String[] hostAndPort = getPatternHostAndPort(pattern, isIpv4);
-        if (hostAndPort[1] != null && !hostAndPort[1].equals(String.valueOf(port))) {
-            return false;
-        }
-        pattern = hostAndPort[0];
-
-        String splitCharacter = SPLIT_IPV4_CHARACTER;
-        if (!isIpv4) {
-            splitCharacter = SPLIT_IPV6_CHARACTER;
-        }
-        String[] mask = pattern.split(splitCharacter);
-        
-        checkHostPattern(pattern, mask, isIpv4);
-
-        host = inetAddress.getHostAddress();
-        if (pattern.equals(host)) {
-            return true;
-        }
-
-        
-        if (!ipPatternContainExpression(pattern)) {
-            InetAddress patternAddress = InetAddress.getByName(pattern);
-            return patternAddress.getHostAddress().equals(host);
-        }
-
-        String[] ipAddress = host.split(splitCharacter);
-
-        for (int i = 0; i < mask.length; i++) {
-            if ("*".equals(mask[i]) || mask[i].equals(ipAddress[i])) {
-                continue;
-            } else if (mask[i].contains("-")) {
-                String[] rangeNumStrs = StringUtils.split(mask[i], '-');
-                if (rangeNumStrs.length != 2) {
-                    throw new IllegalArgumentException("There is wrong format of ip Address: " + mask[i]);
-                }
-                Integer min = getNumOfIpSegment(rangeNumStrs[0], isIpv4);
-                Integer max = getNumOfIpSegment(rangeNumStrs[1], isIpv4);
-                Integer ip = getNumOfIpSegment(ipAddress[i], isIpv4);
-                if (ip < min || ip > max) {
-                    return false;
-                }
-            } else if ("0".equals(ipAddress[i]) && ("0".equals(mask[i]) || "00".equals(mask[i]) || "000".equals(mask[i]) || "0000".equals(mask[i]))) {
-                continue;
-            } else if (!mask[i].equals(ipAddress[i])) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
      * is multicast address or not
      *
      * @param host ipv4 address
@@ -1088,7 +1021,7 @@ public class NetUtils {
     public static boolean isIpV6URLStdFormat(String ip) {
         if ((ip.charAt(0) == '[' && ip.indexOf(']') > 2)) {
             return true;
-        } else if (ip.indexOf(":") != ip.lastIndexOf(":")) {
+        } else if (ip.indexOf(SYMBOL_COLON) != ip.lastIndexOf(SYMBOL_COLON)) {
             return true;
         } else {
             return false;
@@ -1098,7 +1031,7 @@ public class NetUtils {
     public static String getLegalIp(String ip) {
         
         int ind;
-        if ((ip.charAt(0) == '[' && (ind = ip.indexOf(']')) > 2)) {
+        if ((ip.charAt(0) == SYMBOL_LEFT_SQUARE_BRACKET_CHAR && (ind = ip.indexOf(SYMBOL_RIGHT_SQUARE_BRACKET_CHAR)) > 2)) {
             String nhost = ip;
             ip = nhost.substring(0, ind + 1);
             ip = ip.substring(1, ind);

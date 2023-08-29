@@ -53,7 +53,7 @@ import static com.chua.common.support.constant.CommonConstant.EMPTY;
  * @author Administrator
  * @since 1.0
  */
-@SuppressWarnings("deprecation") // StringEscapeUtils
+@SuppressWarnings("deprecation")
 public abstract class ToStringStyle implements Serializable {
 
     /**
@@ -474,8 +474,9 @@ public abstract class ToStringStyle implements Serializable {
      * @param detail    output detail or not
      */
     protected void appendInternal(final StringBuffer buffer, final String fieldName, final Object value, final boolean detail) {
-        if (isRegistered(value)
-                && !(value instanceof Number || value instanceof Boolean || value instanceof Character)) {
+        boolean b = isRegistered(value)
+                && !(value instanceof Number || value instanceof Boolean || value instanceof Character);
+        if (b) {
             appendCyclicObject(buffer, fieldName, value);
             return;
         }

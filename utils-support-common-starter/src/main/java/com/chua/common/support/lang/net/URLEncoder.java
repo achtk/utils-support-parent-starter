@@ -147,7 +147,6 @@ public class URLEncoder {
 
         // Add the remaining literals
         //non-zero-length segment without any colon ":"
-        //encoder.addSafeCharacter(':');
         encoder.addSafeCharacter('@');
 
         return encoder;

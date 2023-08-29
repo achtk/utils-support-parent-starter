@@ -403,7 +403,7 @@ final class AnnotationWriter extends AbstractAnnotationVisitor {
    * @param output where the attribute must be put.
    */
   void putAnnotations(final int attributeNameIndex, final ByteVector output) {
-    int attributeLength = 2; // For num_annotations.
+    int attributeLength = 2;
     int numAnnotations = 0;
     AnnotationWriter annotationWriter = this;
     AnnotationWriter firstAnnotation = null;

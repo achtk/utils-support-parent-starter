@@ -26,7 +26,7 @@ public abstract class Ordering<T extends Object> implements Comparator<T> {
      * <p><b>Java 8 users:</b> use {@link Comparator#naturalOrder} instead.
      */
     
-    @SuppressWarnings("unchecked") // TODO(kevinb): right way to explain this??
+    @SuppressWarnings("unchecked")
     public static <C extends Comparable> Ordering<C> natural() {
         return (Ordering<C>) NaturalOrdering.INSTANCE;
     }

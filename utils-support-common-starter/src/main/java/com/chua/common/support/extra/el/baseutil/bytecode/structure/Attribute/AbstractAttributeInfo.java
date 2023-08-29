@@ -48,8 +48,16 @@ public abstract class AbstractAttributeInfo {
         return length;
     }
 
+    /**
+     * 处理数据
+     * @param binaryData 数据
+     * @param constantInfos 常量
+     */
     protected abstract void resolve(BinaryData binaryData, AbstractConstantInfo[] constantInfos);
-
+    /**
+     * 处理数据
+     * @param binaryData 数据
+     */
     protected void ignoreParse(BinaryData binaryData) {
         binaryData.addIndex(length);
     }

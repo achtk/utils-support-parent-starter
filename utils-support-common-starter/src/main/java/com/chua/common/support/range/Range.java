@@ -717,7 +717,7 @@ public final class Range<C extends Comparable> implements Predicate<C>, Serializ
         }
     }
 
-    @SuppressWarnings("unchecked") // this method may throw CCE
+    @SuppressWarnings("unchecked")
     static int compareOrThrow(Comparable left, Comparable right) {
         return left.compareTo(right);
     }

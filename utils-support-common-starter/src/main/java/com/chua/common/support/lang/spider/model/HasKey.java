@@ -13,7 +13,8 @@ import com.chua.common.support.lang.spider.utils.Experimental;
 public interface HasKey {
 
     /**
-     * @return key
+     * key
+     * @return key key
      */
-    public String key();
+    String key();
 }

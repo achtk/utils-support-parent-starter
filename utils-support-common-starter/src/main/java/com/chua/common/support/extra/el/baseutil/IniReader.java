@@ -106,19 +106,32 @@ public class IniReader {
         /**
          * 返回一个属性的所有值
          *
-         * @param property
-         * @return
+         * @param property name
+         * @return value
          */
         String[] getValues(String property);
 
+        /**
+         * keys
+         * @return keys
+         */
         Set<String> keySet();
     }
 
     public interface Section extends PropertyValueStore {
+        /**
+         * name
+         * @return name
+         */
         String name();
     }
 
     public interface IniFile extends PropertyValueStore {
+        /**
+         * Section
+         * @param name name
+         * @return Section
+         */
         Section getSection(String name);
     }
 

@@ -79,7 +79,7 @@ public class TemplateContext {
 
 	/** Internal. Pushes a new "scope" onto the stack. **/
 	public void push () {
-		Map<String, Object> newScope = freeScopes.size() > 0 ? freeScopes.remove(freeScopes.size() - 1) : new HashMap<String, Object>();
+		Map<String, Object> newScope = freeScopes.size() > 0 ? freeScopes.remove(freeScopes.size() - 1) : new HashMap<>(1 << 4);
 		scopes.add(newScope);
 	}
 

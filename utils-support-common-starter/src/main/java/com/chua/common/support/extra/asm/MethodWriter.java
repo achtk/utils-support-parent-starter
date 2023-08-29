@@ -649,7 +649,7 @@ final class MethodWriter extends MethodVisitor {
   @Override
   public AbstractAnnotationVisitor visitAnnotationDefault() {
     defaultValue = new ByteVector();
-    return new AnnotationWriter(symbolTable, /* useNamedValues = */ false, defaultValue, null);
+    return new AnnotationWriter(symbolTable, false, defaultValue, null);
   }
 
   @Override
@@ -873,7 +873,8 @@ final class MethodWriter extends MethodVisitor {
         }
         relativeStackSize = size;
       }
-      if ((opcode >= Opcodes.IRETURN && opcode <= Opcodes.RETURN) || opcode == Opcodes.ATHROW) {
+      boolean b = (opcode >= Opcodes.IRETURN && opcode <= Opcodes.RETURN) || opcode == Opcodes.ATHROW;
+      if (b) {
         endCurrentBasicBlockWithNoSuccessor();
       }
     }
@@ -1315,9 +1316,10 @@ final class MethodWriter extends MethodVisitor {
     } else {
       code.putByte(Opcodes.IINC).put11(varIndex, increment);
     }
-    
-    if (currentBasicBlock != null
-        && (compute == COMPUTE_ALL_FRAMES || compute == COMPUTE_INSERTED_FRAMES)) {
+
+    boolean b = currentBasicBlock != null
+            && (compute == COMPUTE_ALL_FRAMES || compute == COMPUTE_INSERTED_FRAMES);
+    if (b) {
       currentBasicBlock.frame.execute(Opcodes.IINC, varIndex, null, null);
     }
     if (compute != COMPUTE_NOTHING) {
@@ -1640,7 +1642,7 @@ final class MethodWriter extends MethodVisitor {
           code.data[endOffset] = (byte) Opcodes.ATHROW;
           
           
-          int frameIndex = visitFrameStart(startOffset, /* numLocal = */ 0, /* numStack = */ 1);
+          int frameIndex = visitFrameStart(startOffset,  0, 1);
           currentFrame[frameIndex] =
               Frame.getAbstractTypeFromInternalName(symbolTable, "java/lang/Throwable");
           visitFrameEnd();

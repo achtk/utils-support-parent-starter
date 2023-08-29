@@ -14,7 +14,7 @@ interface FTPDataTransferConnectionProvider {
 	 * Returns the connection.
 	 *
 	 * @return The connection.
-	 * @throws FTPException If an unexpected error occurs.
+	 * @throws FTPDataTransferException If an unexpected error occurs.
 	 */
 	public Socket openDataTransferConnection() throws FTPDataTransferException;
 

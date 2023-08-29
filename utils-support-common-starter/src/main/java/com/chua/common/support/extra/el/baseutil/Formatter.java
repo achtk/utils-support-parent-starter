@@ -54,6 +54,11 @@ public class Formatter {
     }
 
     static abstract class Segment {
+        /**
+         * 输出
+         * @param builder 数据
+         * @param params 参数
+         */
         abstract void output(StringBuilder builder, Object... params);
     }
 

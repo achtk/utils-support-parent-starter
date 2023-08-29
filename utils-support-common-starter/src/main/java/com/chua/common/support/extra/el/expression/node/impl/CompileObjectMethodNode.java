@@ -186,6 +186,12 @@ public class CompileObjectMethodNode extends AbstractMethodNode {
     }
 
     public interface Invoker {
+        /**
+         * incoe
+         * @param host object
+         * @param params params
+         * @return result
+         */
         Object invoke(Object host, Object[] params);
     }
 }

@@ -20,7 +20,8 @@ public final class PropertyNames {
             throw new RuntimeException("Error parsing property name '" + name + "'.  Didn't start with 'is', 'get' or 'set'.");
         }
 
-        if (name.length() == 1 || (name.length() > 1 && !Character.isUpperCase(name.charAt(1)))) {
+        boolean b = name.length() == 1 || (name.length() > 1 && !Character.isUpperCase(name.charAt(1)));
+        if (b) {
             name = name.substring(0, 1).toLowerCase(Locale.ENGLISH) + name.substring(1);
         }
 

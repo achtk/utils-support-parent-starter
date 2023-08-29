@@ -17,6 +17,7 @@ public interface HttpClient {
     /**
      * get
      *
+     * @param httpMethod method
      * @return get
      */
     static HttpClientBuilder newHttpMethod(HttpMethod httpMethod) {

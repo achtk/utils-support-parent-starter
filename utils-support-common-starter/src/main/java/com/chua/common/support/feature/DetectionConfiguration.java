@@ -124,7 +124,7 @@ public class DetectionConfiguration implements Serializable {
     private int top = 10;
 
     public Map<String, Object> toMap() {
-        Map<String, Object> arguments = new ConcurrentHashMap<>();
+        Map<String, Object> arguments = new ConcurrentHashMap<>(1 << 4);
         arguments.put("width", width);
         arguments.put("height", height);
         arguments.put("centerCrop", centerCrop);

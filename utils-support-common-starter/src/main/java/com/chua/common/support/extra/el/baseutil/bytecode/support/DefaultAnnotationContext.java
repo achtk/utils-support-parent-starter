@@ -23,9 +23,9 @@ public class DefaultAnnotationContext implements AnnotationContext
     }
 
     @Override
-    public boolean isAnnotationPresent(Class<? extends Annotation> ckass)
+    public boolean isAnnotationPresent(Class<? extends Annotation> annotationType)
     {
-        String resourceName = ckass.getName().replace('.', '/');
+        String resourceName = annotationType.getName().replace('.', '/');
         for (AnnotationMetadata annotationMetadata : metadataList)
         {
             if (find(annotationMetadata, resourceName) != null)
@@ -37,9 +37,9 @@ public class DefaultAnnotationContext implements AnnotationContext
     }
 
     @Override
-    public <E extends Annotation> E getAnnotation(Class<E> ckass)
+    public <E extends Annotation> E getAnnotation(Class<E> annotationType)
     {
-        return (E) getAnnotationMetadata(ckass).annotation();
+        return (E) getAnnotationMetadata(annotationType).annotation();
     }
 
     private AnnotationMetadata find(AnnotationMetadata metadata, String resourceName)
@@ -72,18 +72,18 @@ public class DefaultAnnotationContext implements AnnotationContext
     }
 
     @Override
-    public <E extends Annotation> List<E> getAnnotations(Class<E> ckass)
+    public <E extends Annotation> List<E> getAnnotations(Class<E> annotationType)
     {
-        if (getAnnotationStore().containsKey(ckass))
+        if (getAnnotationStore().containsKey(annotationType))
         {
-            return (List<E>) getAnnotationStore().get(ckass);
+            return (List<E>) getAnnotationStore().get(annotationType);
         }
         List<E> list = new LinkedList<E>();
-        for (AnnotationMetadata each : getAnnotationMetadatas(ckass))
+        for (AnnotationMetadata each : listAnnotationMetadata(annotationType))
         {
             list.add((E) each.annotation());
         }
-        getAnnotationStore().put(ckass, (List<Annotation>) list);
+        getAnnotationStore().put(annotationType, (List<Annotation>) list);
         return list;
     }
 
@@ -113,7 +113,7 @@ public class DefaultAnnotationContext implements AnnotationContext
     }
 
     @Override
-    public List<AnnotationMetadata> getAnnotationMetadatas(Class<? extends Annotation> ckass)
+    public List<AnnotationMetadata> listAnnotationMetadata(Class<? extends Annotation> ckass)
     {
         if (getMetadataStore().containsKey(ckass))
         {

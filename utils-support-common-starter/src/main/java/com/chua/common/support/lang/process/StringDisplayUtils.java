@@ -14,9 +14,6 @@ class StringDisplayUtils {
      * Returns the display width of a Unicode character on terminal.
      */
     static int getCharDisplayLength(char c) {
-        // wcwidth is actually implemented in jline3: no need to implement our own
-        // control characters will have -1 wcwidth, but actually 0 when displayed
-//        return Math.max(wcwidth(c), 0);
         return 1;
     }
 

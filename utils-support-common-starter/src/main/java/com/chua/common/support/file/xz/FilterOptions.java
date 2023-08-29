@@ -52,6 +52,7 @@ public abstract class FilterOptions implements Cloneable {
 
     /**
      * Gets how much memory the encoder will need with these options.
+     * @return result
      */
     public abstract int getEncoderMemoryUsage();
 
@@ -75,6 +76,9 @@ public abstract class FilterOptions implements Cloneable {
      * the compressed data in the .xz container format instead of using
      * a raw stream. To use this filter in a .xz file, pass this object
      * to XZOutputStream.
+     * @param out out
+     * @param arrayCache array
+     * @return stream
      */
     public abstract FinishableOutputStream getOutputStream(
             FinishableOutputStream out, ArrayCache arrayCache);
@@ -82,6 +86,7 @@ public abstract class FilterOptions implements Cloneable {
     /**
      * Gets how much memory the decoder will need to decompress the data
      * that was encoded with these options.
+     * @return result
      */
     public abstract int getDecoderMemoryUsage();
 
@@ -97,10 +102,18 @@ public abstract class FilterOptions implements Cloneable {
     /**
      * Gets a raw (no XZ headers) decoder input stream using these options
      * and the given ArrayCache.
+     * @param in stream
+     * @param arrayCache array
+     * @return stream
+     * @throws IOException IO
      */
     public abstract InputStream getInputStream(
             InputStream in, ArrayCache arrayCache) throws IOException;
 
+    /**
+     * 获取解码器
+     * @return 解码器
+     */
     abstract FilterEncoder getFilterEncoder();
 
     FilterOptions() {}

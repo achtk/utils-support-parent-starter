@@ -89,6 +89,7 @@ public interface DoubleLinkedList<E> {
 
     /**
      * 第一个元素
+     * @return 元素
      */
     E first();
 

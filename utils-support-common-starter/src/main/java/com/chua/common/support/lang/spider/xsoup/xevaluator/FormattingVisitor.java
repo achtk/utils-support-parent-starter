@@ -49,8 +49,9 @@ public class FormattingVisitor implements NodeVisitor {
         if (text.startsWith("\n")) {
             width = 0; 
         }
-        if (SYMBOL_BLANK.equals(text) && (accum.length() == 0 || StringUtils.in(accum.substring(accum.length()
-                - 1), " ", "\n"))) {
+        boolean b = SYMBOL_BLANK.equals(text) && (accum.length() == 0 || StringUtils.in(accum.substring(accum.length()
+                - 1), " ", "\n"));
+        if (b) {
             return; 
         }
 

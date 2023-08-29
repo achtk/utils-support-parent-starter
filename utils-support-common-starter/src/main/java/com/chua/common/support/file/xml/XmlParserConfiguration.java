@@ -12,17 +12,17 @@ import java.util.*;
  * @author AylwardJ
  */
 @SuppressWarnings({""})
-public class XMLParserConfiguration {
+public class XmlParserConfiguration {
     /**
      * Original Configuration of the XML Parser.
      */
-    public static final XMLParserConfiguration ORIGINAL
-            = new XMLParserConfiguration();
+    public static final XmlParserConfiguration ORIGINAL
+            = new XmlParserConfiguration();
     /**
      * Original configuration of the XML Parser except that values are kept as strings.
      */
-    public static final XMLParserConfiguration KEEP_STRINGS
-            = new XMLParserConfiguration().withKeepStrings(true);
+    public static final XmlParserConfiguration KEEP_STRINGS
+            = new XmlParserConfiguration().withKeepStrings(true);
 
     /**
      * When parsing the XML into JSON, specifies if values should be kept as strings (<code>true</code>), or if
@@ -59,7 +59,7 @@ public class XMLParserConfiguration {
      * Default parser configuration. Does not keep strings (tries to implicitly convert
      * values), and the CDATA Tag Name is "content".
      */
-    public XMLParserConfiguration() {
+    public XmlParserConfiguration() {
         this.keepStrings = false;
         this.cDataTagName = "content";
         this.convertNilAttributeToNull = false;
@@ -77,7 +77,7 @@ public class XMLParserConfiguration {
      * This constructor may be removed in a future release.
      */
     @Deprecated
-    public XMLParserConfiguration(final boolean keepStrings) {
+    public XmlParserConfiguration(final boolean keepStrings) {
         this(keepStrings, "content", false);
     }
 
@@ -93,7 +93,7 @@ public class XMLParserConfiguration {
      * This constructor may be removed in a future release.
      */
     @Deprecated
-    public XMLParserConfiguration(final String cDataTagName) {
+    public XmlParserConfiguration(final String cDataTagName) {
         this(false, cDataTagName, false);
     }
 
@@ -109,7 +109,7 @@ public class XMLParserConfiguration {
      * This constructor may be removed in a future release.
      */
     @Deprecated
-    public XMLParserConfiguration(final boolean keepStrings, final String cDataTagName) {
+    public XmlParserConfiguration(final boolean keepStrings, final String cDataTagName) {
         this.keepStrings = keepStrings;
         this.cDataTagName = cDataTagName;
         this.convertNilAttributeToNull = false;
@@ -129,7 +129,7 @@ public class XMLParserConfiguration {
      * This constructor may be removed or marked private in a future release.
      */
     @Deprecated
-    public XMLParserConfiguration(final boolean keepStrings, final String cDataTagName, final boolean convertNilAttributeToNull) {
+    public XmlParserConfiguration(final boolean keepStrings, final String cDataTagName, final boolean convertNilAttributeToNull) {
         this.keepStrings = keepStrings;
         this.cDataTagName = cDataTagName;
         this.convertNilAttributeToNull = convertNilAttributeToNull;
@@ -148,7 +148,7 @@ public class XMLParserConfiguration {
      *                                  xsi:type="integer" as integer,  xsi:type="string" as string
      * @param forceList                 <code>new HashSet<String>()</code> to parse the provided tags' values as arrays
      */
-    private XMLParserConfiguration(final boolean keepStrings, final String cDataTagName,
+    private XmlParserConfiguration(final boolean keepStrings, final String cDataTagName,
                                    final boolean convertNilAttributeToNull, final Map<String, XMLXsiTypeConverter<?>> xsiTypeMap, final Set<String> forceList) {
         this.keepStrings = keepStrings;
         this.cDataTagName = cDataTagName;
@@ -161,13 +161,13 @@ public class XMLParserConfiguration {
      * Provides a new instance of the same configuration.
      */
     @Override
-    protected XMLParserConfiguration clone() {
+    protected XmlParserConfiguration clone() {
         // future modifications to this method should always ensure a "deep"
         // clone in the case of collections. i.e. if a Map is added as a configuration
         // item, a new map instance should be created and if possible each value in the
         // map should be cloned as well. If the values of the map are known to also
         // be immutable, then a shallow clone of the map is acceptable.
-        return new XMLParserConfiguration(
+        return new XmlParserConfiguration(
                 this.keepStrings,
                 this.cDataTagName,
                 this.convertNilAttributeToNull,
@@ -193,8 +193,8 @@ public class XMLParserConfiguration {
      * @param newVal new value to use for the <code>keepStrings</code> configuration option.
      * @return The existing configuration will not be modified. A new configuration is returned.
      */
-    public XMLParserConfiguration withKeepStrings(final boolean newVal) {
-        XMLParserConfiguration newConfig = this.clone();
+    public XmlParserConfiguration withKeepStrings(final boolean newVal) {
+        XmlParserConfiguration newConfig = this.clone();
         newConfig.keepStrings = newVal;
         return newConfig;
     }
@@ -218,8 +218,8 @@ public class XMLParserConfiguration {
      * @param newVal new value to use for the <code>cDataTagName</code> configuration option.
      * @return The existing configuration will not be modified. A new configuration is returned.
      */
-    public XMLParserConfiguration withcDataTagName(final String newVal) {
-        XMLParserConfiguration newConfig = this.clone();
+    public XmlParserConfiguration withcDataTagName(final String newVal) {
+        XmlParserConfiguration newConfig = this.clone();
         newConfig.cDataTagName = newVal;
         return newConfig;
     }
@@ -243,8 +243,8 @@ public class XMLParserConfiguration {
      * @param newVal new value to use for the <code>convertNilAttributeToNull</code> configuration option.
      * @return The existing configuration will not be modified. A new configuration is returned.
      */
-    public XMLParserConfiguration withConvertNilAttributeToNull(final boolean newVal) {
-        XMLParserConfiguration newConfig = this.clone();
+    public XmlParserConfiguration withConvertNilAttributeToNull(final boolean newVal) {
+        XmlParserConfiguration newConfig = this.clone();
         newConfig.convertNilAttributeToNull = newVal;
         return newConfig;
     }
@@ -271,8 +271,8 @@ public class XMLParserConfiguration {
      *                   xsi:type="integer" as integer,  xsi:type="string" as string
      * @return The existing configuration will not be modified. A new configuration is returned.
      */
-    public XMLParserConfiguration withXsiTypeMap(final Map<String, XMLXsiTypeConverter<?>> xsiTypeMap) {
-        XMLParserConfiguration newConfig = this.clone();
+    public XmlParserConfiguration withXsiTypeMap(final Map<String, XMLXsiTypeConverter<?>> xsiTypeMap) {
+        XmlParserConfiguration newConfig = this.clone();
         Map<String, XMLXsiTypeConverter<?>> cloneXsiTypeMap = new HashMap<String, XMLXsiTypeConverter<?>>(xsiTypeMap);
         newConfig.xsiTypeMap = Collections.unmodifiableMap(cloneXsiTypeMap);
         return newConfig;
@@ -295,8 +295,8 @@ public class XMLParserConfiguration {
      * @param forceList {@code new HashSet<String>()} to parse the provided tags' values as arrays
      * @return The existing configuration will not be modified. A new configuration is returned.
      */
-    public XMLParserConfiguration withForceList(final Set<String> forceList) {
-        XMLParserConfiguration newConfig = this.clone();
+    public XmlParserConfiguration withForceList(final Set<String> forceList) {
+        XmlParserConfiguration newConfig = this.clone();
         Set<String> cloneForceList = new HashSet<String>(forceList);
         newConfig.forceList = Collections.unmodifiableSet(cloneForceList);
         return newConfig;

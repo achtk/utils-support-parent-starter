@@ -566,7 +566,6 @@ public class Spider implements Runnable, Task {
             newUrlCondition.await(emptySleepTime, TimeUnit.MILLISECONDS);
             return false;
         } catch (InterruptedException e) {
-            // logger.warn("waitNewUrl - interrupted, error {}", e);
             return true;
         } finally {
             newUrlLock.unlock();

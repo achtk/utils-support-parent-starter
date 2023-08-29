@@ -5,6 +5,10 @@ import io.github.karlatemp.unsafeaccessor.Unsafe;
 
 import java.lang.reflect.Field;
 
+/**
+ * 基础类
+ * @author CH
+ */
 public class ValueAccessor {
     protected Field field;
     private long offset;

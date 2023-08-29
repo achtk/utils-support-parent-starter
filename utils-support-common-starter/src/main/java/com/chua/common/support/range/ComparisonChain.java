@@ -7,12 +7,16 @@ import java.util.Comparator;
 
 /**
  * ComparisonChain
+ *
  * @author CH
  */
 public abstract class ComparisonChain {
-    private ComparisonChain() {}
+    private ComparisonChain() {
+    }
 
-    /** Begins a new chained comparison statement. See example in the class documentation. */
+    /**
+     * Begins a new chained comparison statement. See example in the class documentation.
+     */
     public static ComparisonChain start() {
         return ACTIVE;
     }
@@ -143,6 +147,9 @@ public abstract class ComparisonChain {
      * for raw {@code Comparable} types in Guava in general is tracked as <a
      * href="https://github.com/google/guava/issues/989">#989</a>.)
      *
+     * @param left  Comparable
+     * @param right Comparable
+     * @return ComparisonChain
      * @throws ClassCastException if the parameters are not mutually comparable
      */
     public abstract ComparisonChain compare(Comparable<?> left, Comparable<?> right);
@@ -150,6 +157,10 @@ public abstract class ComparisonChain {
     /**
      * Compares two objects using a comparator, <i>if</i> the result of this comparison chain has not
      * already been determined.
+     *
+     * @param left       Comparable
+     * @param right      Comparable
+     * @param comparator comparator
      */
     public abstract <T extends Object> ComparisonChain compare(
             T left, T right, Comparator<T> comparator);
@@ -157,33 +168,51 @@ public abstract class ComparisonChain {
     /**
      * Compares two {@code int} values , <i>if</i> the result of
      * this comparison chain has not already been determined.
+     *
+     * @param left  Comparable
+     * @param right Comparable
+     * @return ComparisonChain
      */
     public abstract ComparisonChain compare(int left, int right);
 
     /**
      * Compares two {@code long} values , <i>if</i> the result of
      * this comparison chain has not already been determined.
+     *
+     * @param left  Comparable
+     * @param right Comparable
+     * @return ComparisonChain
      */
     public abstract ComparisonChain compare(long left, long right);
 
     /**
      * Compares two {@code float} values as specified by {@link Float#compare}, <i>if</i> the result
      * of this comparison chain has not already been determined.
+     *
+     * @param left  Comparable
+     * @param right Comparable
      */
     public abstract ComparisonChain compare(float left, float right);
 
     /**
      * Compares two {@code double} values as specified by {@link Double#compare}, <i>if</i> the result
      * of this comparison chain has not already been determined.
+     *
+     * @param left  Comparable
+     * @param right Comparable
+     * @return ComparisonChain
      */
     public abstract ComparisonChain compare(double left, double right);
 
     /**
      * Discouraged synonym for {@link #compareFalseFirst}.
      *
-     * @deprecated Use {@link #compareFalseFirst}; or, if the parameters passed are being either
-     *     negated or reversed, undo the negation or reversal and use {@link #compareTrueFirst}.
+     * @param left  Comparable
+     * @param right Comparable
+     * @return ComparisonChain
      * @since 19.0
+     * @deprecated Use {@link #compareFalseFirst}; or, if the parameters passed are being either
+     * negated or reversed, undo the negation or reversal and use {@link #compareTrueFirst}.
      */
     @Deprecated
     public final ComparisonChain compare(Boolean left, Boolean right) {
@@ -194,6 +223,9 @@ public abstract class ComparisonChain {
      * Compares two {@code boolean} values, considering {@code true} to be less than {@code false},
      * <i>if</i> the result of this comparison chain has not already been determined.
      *
+     * @param left  Comparable
+     * @param right Comparable
+     * @return ComparisonChain
      * @since 12.0
      */
     public abstract ComparisonChain compareTrueFirst(boolean left, boolean right);
@@ -202,6 +234,8 @@ public abstract class ComparisonChain {
      * Compares two {@code boolean} values, considering {@code false} to be less than {@code true},
      * <i>if</i> the result of this comparison chain has not already been determined.
      *
+     * @param left  Comparable
+     * @param right Comparable
      * @since 12.0 (present as {@code compare} since 2.0)
      */
     public abstract ComparisonChain compareFalseFirst(boolean left, boolean right);
@@ -209,6 +243,8 @@ public abstract class ComparisonChain {
     /**
      * Ends this comparison chain and returns its result: a value having the same sign as the first
      * nonzero comparison result in the chain, or zero if every result was zero.
+     *
+     * @return result
      */
     public abstract int result();
 }

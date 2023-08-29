@@ -122,8 +122,6 @@ public class HotswapClassLoader extends ClassLoader {
                                     inputStream = jarFile.getInputStream(cInfo.jarEntry);
                                     byte[] src = new byte[inputStream.available()];
                                     inputStream.read(src);
-                                    //inputStream.close();
-                                    //jarFile.close();
                                     c = defineClass(name, src, 0, src.length);
                                     reloadClassMap.put(name, c);
                                     return c;
@@ -144,7 +142,6 @@ public class HotswapClassLoader extends ClassLoader {
                                         inputStream = new FileInputStream(file);
                                         byte[] src = new byte[inputStream.available()];
                                         inputStream.read(src);
-                                        //inputStream.close();
                                         c = defineClass(name, src, 0, src.length);
                                         reloadClassMap.put(name, c);
                                         return c;

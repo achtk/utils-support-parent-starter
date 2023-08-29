@@ -450,6 +450,7 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
 
     /**
      * 子类返回一个自己的新对象
+     * @return 自身
      */
     protected abstract Children instance();
 
@@ -669,7 +670,9 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
      */
     @FunctionalInterface
     public interface DoSomething {
-
+        /**
+         * 执行
+         */
         void doIt();
     }
 }

@@ -256,6 +256,8 @@ public abstract class DiscreteDomain<C extends Comparable> {
      *
      * <p>Note that this function is necessarily well-defined for any discrete type.
      *
+     * @param start start
+     * @param end end
      * @return the distance as described above, or {@link Long#MIN_VALUE} or {@link Long#MAX_VALUE} if
      *     the distance is too small or too large, respectively.
      */
@@ -267,7 +269,6 @@ public abstract class DiscreteDomain<C extends Comparable> {
      * input of type {@code C}.
      *
      * <p>The default implementation throws {@code NoSuchElementException}.
-     *
      * @return the minimum value of type {@code C}; never null
      * @throws NoSuchElementException if the type has no (practical) minimum value; for example,
      *     {@link java.math.BigInteger}

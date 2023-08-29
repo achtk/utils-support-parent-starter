@@ -87,7 +87,7 @@ public class SimpleYamlReader {
                         if (parent.level < level) {
                             if (parent.type == UNKNOWN) {
                                 parent.type = MAP;
-                                parent.value = new HashMap<String, Element>();
+                                parent.value = new HashMap<>(1 << 4);
                             } else if (parent.type == MAP) {
                                 ;
                             } else {
@@ -110,7 +110,7 @@ public class SimpleYamlReader {
             }
             seqenceId++;
         }
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>(1 << 4);
         for (Element element : seqence) {
             switch (element.type) {
                 case UNKNOWN: {

@@ -258,7 +258,8 @@ class PageModelExtractor {
                         default:
                             value = fieldExtractor.getSelector().selectList(html);
                     }
-                    if ((value == null || value.size() == 0) && fieldExtractor.isNotNull()) {
+                    boolean b = (value == null || value.size() == 0) && fieldExtractor.isNotNull();
+                    if (b) {
                         return null;
                     }
                     if (fieldExtractor.getObjectFormatter() != null) {

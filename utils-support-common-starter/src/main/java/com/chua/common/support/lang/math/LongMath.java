@@ -87,6 +87,7 @@ public class LongMath {
         switch (mode) {
             case UNNECESSARY:
                 checkRoundingUnnecessary(isPowerOfTwo(x));
+                return 0;
             case DOWN:
             case FLOOR:
                 return (Long.SIZE - 1) - Long.numberOfLeadingZeros(x);
@@ -129,6 +130,7 @@ public class LongMath {
         switch (mode) {
             case UNNECESSARY:
                 checkRoundingUnnecessary(x == floorPow);
+                return 0;
             case FLOOR:
             case DOWN:
                 return logFloor;
@@ -364,6 +366,7 @@ public class LongMath {
             case UNNECESSARY:
                 checkRoundingUnnecessary(rem == 0);
                 // fall through
+                return 0;
             case DOWN:
                 increment = false;
                 break;
@@ -1263,8 +1266,9 @@ public class LongMath {
                         throw new AssertionError("impossible");
                 }
             }
+            default:
+                throw new AssertionError("impossible");
         }
-        throw new AssertionError("impossible");
     }
 
     private LongMath() {}

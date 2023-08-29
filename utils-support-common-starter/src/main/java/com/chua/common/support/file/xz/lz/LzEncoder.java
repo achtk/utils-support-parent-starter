@@ -431,11 +431,13 @@ public abstract class LzEncoder {
 
     /**
      * Runs match finder for the next byte and returns the matches found.
+     * @return Matches
      */
     public abstract Matches getMatches();
 
     /**
      * Skips the given number of bytes in the match finder.
+     * @param len length
      */
     public abstract void skip(int len);
 }

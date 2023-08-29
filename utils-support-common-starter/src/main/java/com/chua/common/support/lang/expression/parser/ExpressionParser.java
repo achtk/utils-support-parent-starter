@@ -15,6 +15,10 @@ import static com.chua.common.support.mapping.database.SqlResolver.PATTERN;
  * @author CH
  */
 public interface ExpressionParser {
+    /**
+     * 创建解析器
+     * @return 解析器
+     */
     static ExpressionParser create() {
         return ServiceProvider.of(ExpressionParser.class).getNewExtension("el");
     }

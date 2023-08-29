@@ -17,17 +17,23 @@ import static com.chua.common.support.lang.date.constant.DateFormatConstant.YYYY
  */
 public class Utils {
 
-    // Permission Categories
+    /**
+     * Permission Categories
+     */
     public static final int CAT_OWNER = 6;
     public static final int CAT_GROUP = 3;
     public static final int CAT_PUBLIC = 0;
 
-    // Permission Types
+    /**
+     * Permission Types
+     */
     public static final int TYPE_READ = 2;
     public static final int TYPE_WRITE = 1;
     public static final int TYPE_EXECUTE = 0;
 
-    // Time
+    /**
+     * Time
+     */
     private static final long SIX_MONTHS = 183L * 24L * 60L * 60L * 1000L;
 
     public static String toListTimestamp(long time) {
