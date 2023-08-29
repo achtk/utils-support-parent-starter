@@ -10,7 +10,7 @@ Public Domain.
  * @author JSON.org
  * @version 2015-12-09
  */
-public class JSONException extends RuntimeException {
+public class XmlJsonException extends RuntimeException {
     /**
      * Serialization ID
      */
@@ -21,7 +21,7 @@ public class JSONException extends RuntimeException {
      *
      * @param message Detail about the reason for the exception.
      */
-    public JSONException(final String message) {
+    public XmlJsonException(final String message) {
         super(message);
     }
 
@@ -31,7 +31,7 @@ public class JSONException extends RuntimeException {
      * @param message Detail about the reason for the exception.
      * @param cause   The cause.
      */
-    public JSONException(final String message, final Throwable cause) {
+    public XmlJsonException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
@@ -40,7 +40,7 @@ public class JSONException extends RuntimeException {
      *
      * @param cause The cause.
      */
-    public JSONException(final Throwable cause) {
+    public XmlJsonException(final Throwable cause) {
         super(cause.getMessage(), cause);
     }
 

@@ -4,6 +4,8 @@ package com.chua.common.support.file.xml;
 Public Domain.
  */
 
+import com.alibaba.fastjson2.JSONException;
+
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -14,12 +16,12 @@ import java.util.*;
 
 
 /**
- * A JSONArray is an ordered sequence of values. Its external text form is a
+ * A XmlJsonArray is an ordered sequence of values. Its external text form is a
  * string wrapped in square brackets with commas separating the values. The
  * internal form is an object having <code>get</code> and <code>opt</code>
  * methods for accessing the values by index, and <code>put</code> methods for
  * adding or replacing values. The values can be any of these types:
- * <code>Boolean</code>, <code>JSONArray</code>, <code>JSONObject</code>,
+ * <code>Boolean</code>, <code>XmlJsonArray</code>, <code>JSONObject</code>,
  * <code>Number</code>, <code>String</code>, or the
  * <code>JSONObject.NULL object</code>.
  * <p>
@@ -57,30 +59,30 @@ import java.util.*;
  * @author JSON.org
  * @version 2016-08/15
  */
-public class JSONArray implements Iterable<Object> {
+public class XmlJsonArray implements Iterable<Object> {
 
     /**
-     * The arrayList where the JSONArray's properties are kept.
+     * The arrayList where the XmlJsonArray's properties are kept.
      */
     private final ArrayList<Object> myArrayList;
 
     /**
-     * Construct an empty JSONArray.
+     * Construct an empty XmlJsonArray.
      */
-    public JSONArray() {
+    public XmlJsonArray() {
         this.myArrayList = new ArrayList<Object>();
     }
 
     /**
-     * Construct a JSONArray from a JSONTokener.
+     * Construct a XmlJsonArray from a JSONTokener.
      *
      * @param x A JSONTokener
      * @throws JSONException If there is a syntax error.
      */
-    public JSONArray(JSONTokener x) throws JSONException {
+    public XmlJsonArray(XmlJsonTokener x) throws XmlJsonException {
         this();
         if (x.nextClean() != '[') {
-            throw x.syntaxError("A JSONArray text must start with '['");
+            throw x.syntaxError("A XmlJsonArray text must start with '['");
         }
 
         char nextChar = x.nextClean();
@@ -93,7 +95,7 @@ public class JSONArray implements Iterable<Object> {
             for (; ; ) {
                 if (x.nextClean() == ',') {
                     x.back();
-                    this.myArrayList.add(XmlToJSONObject.NULL);
+                    this.myArrayList.add(XmlToJsonObject.NULL);
                 } else {
                     x.back();
                     this.myArrayList.add(x.nextValue());
@@ -123,23 +125,23 @@ public class JSONArray implements Iterable<Object> {
     }
 
     /**
-     * Construct a JSONArray from a source JSON text.
+     * Construct a XmlJsonArray from a source JSON text.
      *
      * @param source A string that begins with <code>[</code>&nbsp;<small>(left
      *               bracket)</small> and ends with <code>]</code>
      *               &nbsp;<small>(right bracket)</small>.
      * @throws JSONException If there is a syntax error.
      */
-    public JSONArray(String source) throws JSONException {
-        this(new JSONTokener(source));
+    public XmlJsonArray(String source) throws JSONException {
+        this(new XmlJsonTokener(source));
     }
 
     /**
-     * Construct a JSONArray from a Collection.
+     * Construct a XmlJsonArray from a Collection.
      *
      * @param collection A Collection.
      */
-    public JSONArray(Collection<?> collection) {
+    public XmlJsonArray(Collection<?> collection) {
         if (collection == null) {
             this.myArrayList = new ArrayList<Object>();
         } else {
@@ -149,11 +151,11 @@ public class JSONArray implements Iterable<Object> {
     }
 
     /**
-     * Construct a JSONArray from an Iterable. This is a shallow copy.
+     * Construct a XmlJsonArray from an Iterable. This is a shallow copy.
      *
      * @param iter A Iterable collection.
      */
-    public JSONArray(Iterable<?> iter) {
+    public XmlJsonArray(Iterable<?> iter) {
         this();
         if (iter == null) {
             return;
@@ -162,47 +164,47 @@ public class JSONArray implements Iterable<Object> {
     }
 
     /**
-     * Construct a JSONArray from another JSONArray. This is a shallow copy.
+     * Construct a XmlJsonArray from another XmlJsonArray. This is a shallow copy.
      *
      * @param array A array.
      */
-    public JSONArray(JSONArray array) {
+    public XmlJsonArray(XmlJsonArray array) {
         if (array == null) {
             this.myArrayList = new ArrayList<Object>();
         } else {
             // shallow copy directly the internal array lists as any wrapping
-            // should have been done already in the original JSONArray
+            // should have been done already in the original XmlJsonArray
             this.myArrayList = new ArrayList<Object>(array.myArrayList);
         }
     }
 
     /**
-     * Construct a JSONArray from an array.
+     * Construct a XmlJsonArray from an array.
      *
      * @param array Array. If the parameter passed is null, or not an array, an
      *              exception will be thrown.
      * @throws JSONException        If not an array or if an array value is non-finite number.
      * @throws NullPointerException Thrown if the array parameter is null.
      */
-    public JSONArray(Object array) throws JSONException {
+    public XmlJsonArray(Object array) throws JSONException {
         this();
         if (!array.getClass().isArray()) {
             throw new JSONException(
-                    "JSONArray initial value should be a string or collection or array.");
+                    "XmlJsonArray initial value should be a string or collection or array.");
         }
         this.addAll(array, true);
     }
 
     /**
-     * Construct a JSONArray with the specified initial capacity.
+     * Construct a XmlJsonArray with the specified initial capacity.
      *
-     * @param initialCapacity the initial capacity of the JSONArray.
+     * @param initialCapacity the initial capacity of the XmlJsonArray.
      * @throws JSONException If the initial capacity is negative.
      */
-    public JSONArray(int initialCapacity) throws JSONException {
+    public XmlJsonArray(int initialCapacity) throws JSONException {
         if (initialCapacity < 0) {
             throw new JSONException(
-                    "JSONArray initial capacity cannot be negative.");
+                    "XmlJsonArray initial capacity cannot be negative.");
         }
         this.myArrayList = new ArrayList<Object>(initialCapacity);
     }
@@ -222,7 +224,7 @@ public class JSONArray implements Iterable<Object> {
     public Object get(int index) throws JSONException {
         Object object = this.opt(index);
         if (object == null) {
-            throw new JSONException("JSONArray[" + index + "] not found.");
+            throw new JSONException("XmlJsonArray[" + index + "] not found.");
         }
         return object;
     }
@@ -307,7 +309,7 @@ public class JSONArray implements Iterable<Object> {
             if (object instanceof Number) {
                 return (Number) object;
             }
-            return XmlToJSONObject.stringToNumber(object.toString());
+            return XmlToJsonObject.stringToNumber(object.toString());
         } catch (Exception e) {
             throw wrongValueFormatException(index, "number", object, e);
         }
@@ -330,7 +332,7 @@ public class JSONArray implements Iterable<Object> {
             // If it did, I would re-implement this with the Enum.valueOf
             // method and place any thrown exception in the JSONException
             throw wrongValueFormatException(index, "enum of type "
-                    + XmlToJSONObject.quote(clazz.getSimpleName()), opt(index), null);
+                    + XmlToJsonObject.quote(clazz.getSimpleName()), opt(index), null);
         }
         return val;
     }
@@ -348,7 +350,7 @@ public class JSONArray implements Iterable<Object> {
      */
     public BigDecimal getBigDecimal(int index) throws JSONException {
         Object object = this.get(index);
-        BigDecimal val = XmlToJSONObject.objectToBigDecimal(object, null);
+        BigDecimal val = XmlToJsonObject.objectToBigDecimal(object, null);
         if (val == null) {
             throw wrongValueFormatException(index, "BigDecimal", object, null);
         }
@@ -365,7 +367,7 @@ public class JSONArray implements Iterable<Object> {
      */
     public BigInteger getBigInteger(int index) throws JSONException {
         Object object = this.get(index);
-        BigInteger val = XmlToJSONObject.objectToBigInteger(object, null);
+        BigInteger val = XmlToJsonObject.objectToBigInteger(object, null);
         if (val == null) {
             throw wrongValueFormatException(index, "BigInteger", object, null);
         }
@@ -392,19 +394,19 @@ public class JSONArray implements Iterable<Object> {
     }
 
     /**
-     * Get the JSONArray associated with an index.
+     * Get the XmlJsonArray associated with an index.
      *
      * @param index The index must be between 0 and length() - 1.
-     * @return A JSONArray value.
+     * @return A XmlJsonArray value.
      * @throws JSONException If there is no value for the index. or if the value is not a
-     *                       JSONArray
+     *                       XmlJsonArray
      */
-    public JSONArray getJSONArray(int index) throws JSONException {
+    public XmlJsonArray getJsonArray(int index) throws JSONException {
         Object object = this.get(index);
-        if (object instanceof JSONArray) {
-            return (JSONArray) object;
+        if (object instanceof XmlJsonArray) {
+            return (XmlJsonArray) object;
         }
-        throw wrongValueFormatException(index, "JSONArray", object, null);
+        throw wrongValueFormatException(index, "XmlJsonArray", object, null);
     }
 
     /**
@@ -415,10 +417,10 @@ public class JSONArray implements Iterable<Object> {
      * @throws JSONException If there is no value for the index or if the value is not a
      *                       JSONObject
      */
-    public XmlToJSONObject getJSONObject(int index) throws JSONException {
+    public XmlToJsonObject getJsonObject(int index) throws JSONException {
         Object object = this.get(index);
-        if (object instanceof XmlToJSONObject) {
-            return (XmlToJSONObject) object;
+        if (object instanceof XmlToJsonObject) {
+            return (XmlToJsonObject) object;
         }
         throw wrongValueFormatException(index, "JSONObject", object, null);
     }
@@ -465,11 +467,11 @@ public class JSONArray implements Iterable<Object> {
      * @return true if the value at the index is <code>null</code>, or if there is no value.
      */
     public boolean isNull(int index) {
-        return XmlToJSONObject.NULL.equals(this.opt(index));
+        return XmlToJsonObject.NULL.equals(this.opt(index));
     }
 
     /**
-     * Make a string from the contents of this JSONArray. The
+     * Make a string from the contents of this XmlJsonArray. The
      * <code>separator</code> string is inserted between each element. Warning:
      * This method assumes that the data structure is acyclical.
      *
@@ -484,17 +486,17 @@ public class JSONArray implements Iterable<Object> {
         }
 
         StringBuilder sb = new StringBuilder(
-                XmlToJSONObject.valueToString(this.myArrayList.get(0)));
+                XmlToJsonObject.valueToString(this.myArrayList.get(0)));
 
         for (int i = 1; i < len; i++) {
             sb.append(separator)
-                    .append(XmlToJSONObject.valueToString(this.myArrayList.get(i)));
+                    .append(XmlToJsonObject.valueToString(this.myArrayList.get(i)));
         }
         return sb.toString();
     }
 
     /**
-     * Get the number of elements in the JSONArray, included nulls.
+     * Get the number of elements in the XmlJsonArray, included nulls.
      *
      * @return The length (or size).
      */
@@ -503,8 +505,8 @@ public class JSONArray implements Iterable<Object> {
     }
 
     /**
-     * Removes all of the elements from this JSONArray.
-     * The JSONArray will be empty after this call returns.
+     * Removes all of the elements from this XmlJsonArray.
+     * The XmlJsonArray will be empty after this call returns.
      */
     public void clear() {
         this.myArrayList.clear();
@@ -670,7 +672,7 @@ public class JSONArray implements Iterable<Object> {
     public <E extends Enum<E>> E optEnum(Class<E> clazz, int index, E defaultValue) {
         try {
             Object val = this.opt(index);
-            if (XmlToJSONObject.NULL.equals(val)) {
+            if (XmlToJsonObject.NULL.equals(val)) {
                 return defaultValue;
             }
             if (clazz.isAssignableFrom(val.getClass())) {
@@ -698,7 +700,7 @@ public class JSONArray implements Iterable<Object> {
      */
     public BigInteger optBigInteger(int index, BigInteger defaultValue) {
         Object val = this.opt(index);
-        return XmlToJSONObject.objectToBigInteger(val, defaultValue);
+        return XmlToJsonObject.objectToBigInteger(val, defaultValue);
     }
 
     /**
@@ -715,19 +717,19 @@ public class JSONArray implements Iterable<Object> {
      */
     public BigDecimal optBigDecimal(int index, BigDecimal defaultValue) {
         Object val = this.opt(index);
-        return XmlToJSONObject.objectToBigDecimal(val, defaultValue);
+        return XmlToJsonObject.objectToBigDecimal(val, defaultValue);
     }
 
     /**
-     * Get the optional JSONArray associated with an index.
+     * Get the optional XmlJsonArray associated with an index.
      *
      * @param index subscript
-     * @return A JSONArray value, or null if the index has no value, or if the
-     * value is not a JSONArray.
+     * @return A XmlJsonArray value, or null if the index has no value, or if the
+     * value is not a XmlJsonArray.
      */
-    public JSONArray optJSONArray(int index) {
+    public XmlJsonArray optJSONArray(int index) {
         Object o = this.opt(index);
-        return o instanceof JSONArray ? (JSONArray) o : null;
+        return o instanceof XmlJsonArray ? (XmlJsonArray) o : null;
     }
 
     /**
@@ -738,9 +740,9 @@ public class JSONArray implements Iterable<Object> {
      * @param index The index must be between 0 and length() - 1.
      * @return A JSONObject value.
      */
-    public XmlToJSONObject optJSONObject(int index) {
+    public XmlToJsonObject optJSONObject(int index) {
         Object o = this.opt(index);
-        return o instanceof XmlToJSONObject ? (XmlToJSONObject) o : null;
+        return o instanceof XmlToJsonObject ? (XmlToJsonObject) o : null;
     }
 
     /**
@@ -797,7 +799,7 @@ public class JSONArray implements Iterable<Object> {
      */
     public Number optNumber(int index, Number defaultValue) {
         Object val = this.opt(index);
-        if (XmlToJSONObject.NULL.equals(val)) {
+        if (XmlToJsonObject.NULL.equals(val)) {
             return defaultValue;
         }
         if (val instanceof Number) {
@@ -806,7 +808,7 @@ public class JSONArray implements Iterable<Object> {
 
         if (val instanceof String) {
             try {
-                return XmlToJSONObject.stringToNumber((String) val);
+                return XmlToJsonObject.stringToNumber((String) val);
             } catch (Exception e) {
                 return defaultValue;
             }
@@ -836,7 +838,7 @@ public class JSONArray implements Iterable<Object> {
      */
     public String optString(int index, String defaultValue) {
         Object object = this.opt(index);
-        return XmlToJSONObject.NULL.equals(object) ? defaultValue : object
+        return XmlToJsonObject.NULL.equals(object) ? defaultValue : object
                 .toString();
     }
 
@@ -846,20 +848,20 @@ public class JSONArray implements Iterable<Object> {
      * @param value A boolean value.
      * @return this.
      */
-    public JSONArray put(boolean value) {
+    public XmlJsonArray put(boolean value) {
         return this.put(value ? Boolean.TRUE : Boolean.FALSE);
     }
 
     /**
-     * Put a value in the JSONArray, where the value will be a JSONArray which
+     * Put a value in the XmlJsonArray, where the value will be a XmlJsonArray which
      * is produced from a Collection.
      *
      * @param value A Collection value.
      * @return this.
      * @throws JSONException If the value is non-finite number.
      */
-    public JSONArray put(Collection<?> value) {
-        return this.put(new JSONArray(value));
+    public XmlJsonArray put(Collection<?> value) {
+        return this.put(new XmlJsonArray(value));
     }
 
     /**
@@ -869,7 +871,7 @@ public class JSONArray implements Iterable<Object> {
      * @return this.
      * @throws JSONException if the value is not finite.
      */
-    public JSONArray put(double value) throws JSONException {
+    public XmlJsonArray put(double value) throws JSONException {
         return this.put(Double.valueOf(value));
     }
 
@@ -880,7 +882,7 @@ public class JSONArray implements Iterable<Object> {
      * @return this.
      * @throws JSONException if the value is not finite.
      */
-    public JSONArray put(float value) throws JSONException {
+    public XmlJsonArray put(float value) throws JSONException {
         return this.put(Float.valueOf(value));
     }
 
@@ -890,7 +892,7 @@ public class JSONArray implements Iterable<Object> {
      * @param value An int value.
      * @return this.
      */
-    public JSONArray put(int value) {
+    public XmlJsonArray put(int value) {
         return this.put(Integer.valueOf(value));
     }
 
@@ -900,12 +902,12 @@ public class JSONArray implements Iterable<Object> {
      * @param value A long value.
      * @return this.
      */
-    public JSONArray put(long value) {
+    public XmlJsonArray put(long value) {
         return this.put(Long.valueOf(value));
     }
 
     /**
-     * Put a value in the JSONArray, where the value will be a JSONObject which
+     * Put a value in the XmlJsonArray, where the value will be a JSONObject which
      * is produced from a Map.
      *
      * @param value A Map value.
@@ -913,28 +915,28 @@ public class JSONArray implements Iterable<Object> {
      * @throws JSONException        If a value in the map is non-finite number.
      * @throws NullPointerException If a key in the map is <code>null</code>
      */
-    public JSONArray put(Map<?, ?> value) {
-        return this.put(new XmlToJSONObject(value));
+    public XmlJsonArray put(Map<?, ?> value) {
+        return this.put(new XmlToJsonObject(value));
     }
 
     /**
      * Append an object value. This increases the array's length by one.
      *
      * @param value An object value. The value should be a Boolean, Double,
-     *              Integer, JSONArray, JSONObject, Long, or String, or the
+     *              Integer, XmlJsonArray, JSONObject, Long, or String, or the
      *              JSONObject.NULL object.
      * @return this.
      * @throws JSONException If the value is non-finite number.
      */
-    public JSONArray put(Object value) {
-        XmlToJSONObject.testValidity(value);
+    public XmlJsonArray put(Object value) {
+        XmlToJsonObject.testValidity(value);
         this.myArrayList.add(value);
         return this;
     }
 
     /**
-     * Put or replace a boolean value in the JSONArray. If the index is greater
-     * than the length of the JSONArray, then null elements will be added as
+     * Put or replace a boolean value in the XmlJsonArray. If the index is greater
+     * than the length of the XmlJsonArray, then null elements will be added as
      * necessary to pad it out.
      *
      * @param index The subscript.
@@ -942,12 +944,12 @@ public class JSONArray implements Iterable<Object> {
      * @return this.
      * @throws JSONException If the index is negative.
      */
-    public JSONArray put(int index, boolean value) throws JSONException {
+    public XmlJsonArray put(int index, boolean value) throws JSONException {
         return this.put(index, value ? Boolean.TRUE : Boolean.FALSE);
     }
 
     /**
-     * Put a value in the JSONArray, where the value will be a JSONArray which
+     * Put a value in the XmlJsonArray, where the value will be a XmlJsonArray which
      * is produced from a Collection.
      *
      * @param index The subscript.
@@ -955,13 +957,13 @@ public class JSONArray implements Iterable<Object> {
      * @return this.
      * @throws JSONException If the index is negative or if the value is non-finite.
      */
-    public JSONArray put(int index, Collection<?> value) throws JSONException {
-        return this.put(index, new JSONArray(value));
+    public XmlJsonArray put(int index, Collection<?> value) throws JSONException {
+        return this.put(index, new XmlJsonArray(value));
     }
 
     /**
      * Put or replace a double value. If the index is greater than the length of
-     * the JSONArray, then null elements will be added as necessary to pad it
+     * the XmlJsonArray, then null elements will be added as necessary to pad it
      * out.
      *
      * @param index The subscript.
@@ -969,13 +971,13 @@ public class JSONArray implements Iterable<Object> {
      * @return this.
      * @throws JSONException If the index is negative or if the value is non-finite.
      */
-    public JSONArray put(int index, double value) throws JSONException {
+    public XmlJsonArray put(int index, double value) throws JSONException {
         return this.put(index, Double.valueOf(value));
     }
 
     /**
      * Put or replace a float value. If the index is greater than the length of
-     * the JSONArray, then null elements will be added as necessary to pad it
+     * the XmlJsonArray, then null elements will be added as necessary to pad it
      * out.
      *
      * @param index The subscript.
@@ -983,13 +985,13 @@ public class JSONArray implements Iterable<Object> {
      * @return this.
      * @throws JSONException If the index is negative or if the value is non-finite.
      */
-    public JSONArray put(int index, float value) throws JSONException {
+    public XmlJsonArray put(int index, float value) throws JSONException {
         return this.put(index, Float.valueOf(value));
     }
 
     /**
      * Put or replace an int value. If the index is greater than the length of
-     * the JSONArray, then null elements will be added as necessary to pad it
+     * the XmlJsonArray, then null elements will be added as necessary to pad it
      * out.
      *
      * @param index The subscript.
@@ -997,13 +999,13 @@ public class JSONArray implements Iterable<Object> {
      * @return this.
      * @throws JSONException If the index is negative.
      */
-    public JSONArray put(int index, int value) throws JSONException {
+    public XmlJsonArray put(int index, int value) throws JSONException {
         return this.put(index, Integer.valueOf(value));
     }
 
     /**
      * Put or replace a long value. If the index is greater than the length of
-     * the JSONArray, then null elements will be added as necessary to pad it
+     * the XmlJsonArray, then null elements will be added as necessary to pad it
      * out.
      *
      * @param index The subscript.
@@ -1011,12 +1013,12 @@ public class JSONArray implements Iterable<Object> {
      * @return this.
      * @throws JSONException If the index is negative.
      */
-    public JSONArray put(int index, long value) throws JSONException {
+    public XmlJsonArray put(int index, long value) throws JSONException {
         return this.put(index, Long.valueOf(value));
     }
 
     /**
-     * Put a value in the JSONArray, where the value will be a JSONObject that
+     * Put a value in the XmlJsonArray, where the value will be a JSONObject that
      * is produced from a Map.
      *
      * @param index The subscript.
@@ -1026,30 +1028,30 @@ public class JSONArray implements Iterable<Object> {
      *                              number.
      * @throws NullPointerException If a key in the map is <code>null</code>
      */
-    public JSONArray put(int index, Map<?, ?> value) throws JSONException {
-        this.put(index, new XmlToJSONObject(value));
+    public XmlJsonArray put(int index, Map<?, ?> value) throws JSONException {
+        this.put(index, new XmlToJsonObject(value));
         return this;
     }
 
     /**
-     * Put or replace an object value in the JSONArray. If the index is greater
-     * than the length of the JSONArray, then null elements will be added as
+     * Put or replace an object value in the XmlJsonArray. If the index is greater
+     * than the length of the XmlJsonArray, then null elements will be added as
      * necessary to pad it out.
      *
      * @param index The subscript.
      * @param value The value to put into the array. The value should be a
-     *              Boolean, Double, Integer, JSONArray, JSONObject, Long, or
+     *              Boolean, Double, Integer, XmlJsonArray, JSONObject, Long, or
      *              String, or the JSONObject.NULL object.
      * @return this.
      * @throws JSONException If the index is negative or if the value is an invalid
      *                       number.
      */
-    public JSONArray put(int index, Object value) throws JSONException {
+    public XmlJsonArray put(int index, Object value) throws JSONException {
         if (index < 0) {
-            throw new JSONException("JSONArray[" + index + "] not found.");
+            throw new JSONException("XmlJsonArray[" + index + "] not found.");
         }
         if (index < this.length()) {
-            XmlToJSONObject.testValidity(value);
+            XmlToJsonObject.testValidity(value);
             this.myArrayList.set(index, value);
             return this;
         }
@@ -1062,40 +1064,40 @@ public class JSONArray implements Iterable<Object> {
         this.myArrayList.ensureCapacity(index + 1);
         while (index != this.length()) {
             // we don't need to test validity of NULL objects
-            this.myArrayList.add(XmlToJSONObject.NULL);
+            this.myArrayList.add(XmlToJsonObject.NULL);
         }
         return this.put(value);
     }
 
     /**
-     * Put a collection's elements in to the JSONArray.
+     * Put a collection's elements in to the XmlJsonArray.
      *
      * @param collection A Collection.
      * @return this.
      */
-    public JSONArray putAll(Collection<?> collection) {
+    public XmlJsonArray putAll(Collection<?> collection) {
         this.addAll(collection, false);
         return this;
     }
 
     /**
-     * Put an Iterable's elements in to the JSONArray.
+     * Put an Iterable's elements in to the XmlJsonArray.
      *
      * @param iter An Iterable.
      * @return this.
      */
-    public JSONArray putAll(Iterable<?> iter) {
+    public XmlJsonArray putAll(Iterable<?> iter) {
         this.addAll(iter, false);
         return this;
     }
 
     /**
-     * Put a JSONArray's elements in to the JSONArray.
+     * Put a XmlJsonArray's elements in to the XmlJsonArray.
      *
-     * @param array A JSONArray.
+     * @param array A XmlJsonArray.
      * @return this.
      */
-    public JSONArray putAll(JSONArray array) {
+    public XmlJsonArray putAll(XmlJsonArray array) {
         // directly copy the elements from the source array to this one
         // as all wrapping should have been done already in the source.
         this.myArrayList.addAll(array.myArrayList);
@@ -1103,62 +1105,62 @@ public class JSONArray implements Iterable<Object> {
     }
 
     /**
-     * Put an array's elements in to the JSONArray.
+     * Put an array's elements in to the XmlJsonArray.
      *
      * @param array Array. If the parameter passed is null, or not an array or Iterable, an
      *              exception will be thrown.
      * @return this.
-     * @throws JSONException        If not an array, JSONArray, Iterable or if an value is non-finite number.
+     * @throws JSONException        If not an array, XmlJsonArray, Iterable or if an value is non-finite number.
      * @throws NullPointerException Thrown if the array parameter is null.
      */
-    public JSONArray putAll(Object array) throws JSONException {
+    public XmlJsonArray putAll(Object array) throws JSONException {
         this.addAll(array, false);
         return this;
     }
 
     /**
-     * Creates a JSONPointer using an initialization string and tries to
-     * match it to an item within this JSONArray. For example, given a
-     * JSONArray initialized with this document:
+     * Creates a XmlJsonPointer using an initialization string and tries to
+     * match it to an item within this XmlJsonArray. For example, given a
+     * XmlJsonArray initialized with this document:
      * <pre>
      * [
      *     {"b":"c"}
      * ]
      * </pre>
-     * and this JSONPointer string:
+     * and this XmlJsonPointer string:
      * <pre>
      * "/0/b"
      * </pre>
      * Then this method will return the String "c"
      * A JSONPointerException may be thrown from code called by this method.
      *
-     * @param jsonPointer string that can be used to create a JSONPointer
-     * @return the item matched by the JSONPointer, otherwise null
+     * @param jsonPointer string that can be used to create a XmlJsonPointer
+     * @return the item matched by the XmlJsonPointer, otherwise null
      */
     public Object query(String jsonPointer) {
-        return query(new JSONPointer(jsonPointer));
+        return query(new XmlJsonPointer(jsonPointer));
     }
 
     /**
-     * Uses a user initialized JSONPointer  and tries to
-     * match it to an item within this JSONArray. For example, given a
-     * JSONArray initialized with this document:
+     * Uses a user initialized XmlJsonPointer  and tries to
+     * match it to an item within this XmlJsonArray. For example, given a
+     * XmlJsonArray initialized with this document:
      * <pre>
      * [
      *     {"b":"c"}
      * ]
      * </pre>
-     * and this JSONPointer:
+     * and this XmlJsonPointer:
      * <pre>
      * "/0/b"
      * </pre>
      * Then this method will return the String "c"
      * A JSONPointerException may be thrown from code called by this method.
      *
-     * @param jsonPointer string that can be used to create a JSONPointer
-     * @return the item matched by the JSONPointer, otherwise null
+     * @param jsonPointer string that can be used to create a XmlJsonPointer
+     * @return the item matched by the XmlJsonPointer, otherwise null
      */
-    public Object query(JSONPointer jsonPointer) {
+    public Object query(XmlJsonPointer jsonPointer) {
         return jsonPointer.queryFrom(this);
     }
 
@@ -1171,7 +1173,7 @@ public class JSONArray implements Iterable<Object> {
      * @throws IllegalArgumentException if {@code jsonPointer} has invalid syntax
      */
     public Object optQuery(String jsonPointer) {
-        return optQuery(new JSONPointer(jsonPointer));
+        return optQuery(new XmlJsonPointer(jsonPointer));
     }
 
     /**
@@ -1182,10 +1184,10 @@ public class JSONArray implements Iterable<Object> {
      * @return the queried value or {@code null}
      * @throws IllegalArgumentException if {@code jsonPointer} has invalid syntax
      */
-    public Object optQuery(JSONPointer jsonPointer) {
+    public Object optQuery(XmlJsonPointer jsonPointer) {
         try {
             return jsonPointer.queryFrom(this);
-        } catch (JSONPointerException e) {
+        } catch (XmlJsonPointerException e) {
             return null;
         }
     }
@@ -1207,40 +1209,40 @@ public class JSONArray implements Iterable<Object> {
      * Determine if two JSONArrays are similar.
      * They must contain similar sequences.
      *
-     * @param other The other JSONArray
+     * @param other The other XmlJsonArray
      * @return true if they are equal
      */
     public boolean similar(Object other) {
-        if (!(other instanceof JSONArray)) {
+        if (!(other instanceof XmlJsonArray)) {
             return false;
         }
         int len = this.length();
-        if (len != ((JSONArray) other).length()) {
+        if (len != ((XmlJsonArray) other).length()) {
             return false;
         }
         for (int i = 0; i < len; i += 1) {
             Object valueThis = this.myArrayList.get(i);
-            Object valueOther = ((JSONArray) other).myArrayList.get(i);
+            Object valueOther = ((XmlJsonArray) other).myArrayList.get(i);
             if (valueThis == valueOther) {
                 continue;
             }
             if (valueThis == null) {
                 return false;
             }
-            if (valueThis instanceof XmlToJSONObject) {
-                if (!((XmlToJSONObject) valueThis).similar(valueOther)) {
+            if (valueThis instanceof XmlToJsonObject) {
+                if (!((XmlToJsonObject) valueThis).similar(valueOther)) {
                     return false;
                 }
-            } else if (valueThis instanceof JSONArray) {
-                if (!((JSONArray) valueThis).similar(valueOther)) {
+            } else if (valueThis instanceof XmlJsonArray) {
+                if (!((XmlJsonArray) valueThis).similar(valueOther)) {
                     return false;
                 }
             } else if (valueThis instanceof Number && valueOther instanceof Number) {
-                if (!XmlToJSONObject.isNumberSimilar((Number) valueThis, (Number) valueOther)) {
+                if (!XmlToJsonObject.isNumberSimilar((Number) valueThis, (Number) valueOther)) {
                     return false;
                 }
-            } else if (valueThis instanceof JsonString && valueOther instanceof JsonString) {
-                if (!((JsonString) valueThis).toJSONString().equals(((JsonString) valueOther).toJSONString())) {
+            } else if (valueThis instanceof XmlJsonString && valueOther instanceof XmlJsonString) {
+                if (!((XmlJsonString) valueThis).toJsonString().equals(((XmlJsonString) valueOther).toJsonString())) {
                     return false;
                 }
             } else if (!valueThis.equals(valueOther)) {
@@ -1251,20 +1253,20 @@ public class JSONArray implements Iterable<Object> {
     }
 
     /**
-     * Produce a JSONObject by combining a JSONArray of names with the values of
-     * this JSONArray.
+     * Produce a JSONObject by combining a XmlJsonArray of names with the values of
+     * this XmlJsonArray.
      *
-     * @param names A JSONArray containing a list of key strings. These will be
+     * @param names A XmlJsonArray containing a list of key strings. These will be
      *              paired with the values.
-     * @return A JSONObject, or null if there are no names or if this JSONArray
+     * @return A JSONObject, or null if there are no names or if this XmlJsonArray
      * has no values.
      * @throws JSONException If any of the names are null.
      */
-    public XmlToJSONObject toJSONObject(JSONArray names) throws JSONException {
+    public XmlToJsonObject toJSONObject(XmlJsonArray names) throws JSONException {
         if (names == null || names.isEmpty() || this.isEmpty()) {
             return null;
         }
-        XmlToJSONObject jo = new XmlToJSONObject(names.length());
+        XmlToJsonObject jo = new XmlToJsonObject(names.length());
         for (int i = 0; i < names.length(); i += 1) {
             jo.put(names.getString(i), this.opt(i));
         }
@@ -1272,7 +1274,7 @@ public class JSONArray implements Iterable<Object> {
     }
 
     /**
-     * Make a JSON text of this JSONArray. For compactness, no unnecessary
+     * Make a JSON text of this XmlJsonArray. For compactness, no unnecessary
      * whitespace is added. If it is not possible to produce a syntactically
      * correct JSON text then null will be returned instead. This could occur if
      * the array contains an invalid number.
@@ -1293,9 +1295,9 @@ public class JSONArray implements Iterable<Object> {
     }
 
     /**
-     * Make a pretty-printed JSON text of this JSONArray.
+     * Make a pretty-printed JSON text of this XmlJsonArray.
      *
-     * <p>If <pre> {@code indentFactor > 0}</pre> and the {@link JSONArray} has only
+     * <p>If <pre> {@code indentFactor > 0}</pre> and the {@link XmlJsonArray} has only
      * one element, then the array will be output on a single line:
      * <pre>{@code [1]}</pre>
      *
@@ -1327,7 +1329,7 @@ public class JSONArray implements Iterable<Object> {
     }
 
     /**
-     * Write the contents of the JSONArray as JSON text to a writer. For
+     * Write the contents of the XmlJsonArray as JSON text to a writer. For
      * compactness, no whitespace is added.
      * <p><b>
      * Warning: This method assumes that the data structure is acyclical.
@@ -1342,9 +1344,9 @@ public class JSONArray implements Iterable<Object> {
     }
 
     /**
-     * Write the contents of the JSONArray as JSON text to a writer.
+     * Write the contents of the XmlJsonArray as JSON text to a writer.
      *
-     * <p>If <pre>{@code indentFactor > 0}</pre> and the {@link JSONArray} has only
+     * <p>If <pre>{@code indentFactor > 0}</pre> and the {@link XmlJsonArray} has only
      * one element, then the array will be output on a single line:
      * <pre>{@code [1]}</pre>
      *
@@ -1376,10 +1378,10 @@ public class JSONArray implements Iterable<Object> {
 
             if (length == 1) {
                 try {
-                    XmlToJSONObject.writeValue(writer, this.myArrayList.get(0),
+                    XmlToJsonObject.writeValue(writer, this.myArrayList.get(0),
                             indentFactor, indent);
                 } catch (Exception e) {
-                    throw new JSONException("Unable to write JSONArray value at index: 0", e);
+                    throw new JSONException("Unable to write XmlJsonArray value at index: 0", e);
                 }
             } else if (length != 0) {
                 final int newIndent = indent + indentFactor;
@@ -1391,30 +1393,30 @@ public class JSONArray implements Iterable<Object> {
                     if (indentFactor > 0) {
                         writer.write('\n');
                     }
-                    XmlToJSONObject.indent(writer, newIndent);
+                    XmlToJsonObject.indent(writer, newIndent);
                     try {
-                        XmlToJSONObject.writeValue(writer, this.myArrayList.get(i),
+                        XmlToJsonObject.writeValue(writer, this.myArrayList.get(i),
                                 indentFactor, newIndent);
                     } catch (Exception e) {
-                        throw new JSONException("Unable to write JSONArray value at index: " + i, e);
+                        throw new JSONException("Unable to write XmlJsonArray value at index: " + i, e);
                     }
                     needsComma = true;
                 }
                 if (indentFactor > 0) {
                     writer.write('\n');
                 }
-                XmlToJSONObject.indent(writer, indent);
+                XmlToJsonObject.indent(writer, indent);
             }
             writer.write(']');
             return writer;
         } catch (IOException e) {
-            throw new JSONException(e);
+            throw new XmlJsonException(e);
         }
     }
 
     /**
      * Returns a java.util.List containing all of the elements in this array.
-     * If an element in the array is a JSONArray or JSONObject it will also
+     * If an element in the array is a XmlJsonArray or JSONObject it will also
      * be converted to a List and a Map respectively.
      * <p>
      * Warning: This method assumes that the data structure is acyclical.
@@ -1424,12 +1426,12 @@ public class JSONArray implements Iterable<Object> {
     public List<Object> toList() {
         List<Object> results = new ArrayList<Object>(this.myArrayList.size());
         for (Object element : this.myArrayList) {
-            if (element == null || XmlToJSONObject.NULL.equals(element)) {
+            if (element == null || XmlToJsonObject.NULL.equals(element)) {
                 results.add(null);
-            } else if (element instanceof JSONArray) {
-                results.add(((JSONArray) element).toList());
-            } else if (element instanceof XmlToJSONObject) {
-                results.add(((XmlToJSONObject) element).toMap());
+            } else if (element instanceof XmlJsonArray) {
+                results.add(((XmlJsonArray) element).toList());
+            } else if (element instanceof XmlToJsonObject) {
+                results.add(((XmlToJsonObject) element).toMap());
             } else {
                 results.add(element);
             }
@@ -1438,26 +1440,26 @@ public class JSONArray implements Iterable<Object> {
     }
 
     /**
-     * Check if JSONArray is empty.
+     * Check if XmlJsonArray is empty.
      *
-     * @return true if JSONArray is empty, otherwise false.
+     * @return true if XmlJsonArray is empty, otherwise false.
      */
     public boolean isEmpty() {
         return this.myArrayList.isEmpty();
     }
 
     /**
-     * Add a collection's elements to the JSONArray.
+     * Add a collection's elements to the XmlJsonArray.
      *
      * @param collection A Collection.
-     * @param wrap       {@code true} to call {@link XmlToJSONObject#wrap(Object)} for each item,
+     * @param wrap       {@code true} to call {@link XmlToJsonObject#wrap(Object)} for each item,
      *                   {@code false} to add the items directly
      */
     private void addAll(Collection<?> collection, boolean wrap) {
         this.myArrayList.ensureCapacity(this.myArrayList.size() + collection.size());
         if (wrap) {
             for (Object o : collection) {
-                this.put(XmlToJSONObject.wrap(o));
+                this.put(XmlToJsonObject.wrap(o));
             }
         } else {
             for (Object o : collection) {
@@ -1467,16 +1469,16 @@ public class JSONArray implements Iterable<Object> {
     }
 
     /**
-     * Add an Iterable's elements to the JSONArray.
+     * Add an Iterable's elements to the XmlJsonArray.
      *
      * @param iter An Iterable.
-     * @param wrap {@code true} to call {@link XmlToJSONObject#wrap(Object)} for each item,
+     * @param wrap {@code true} to call {@link XmlToJsonObject#wrap(Object)} for each item,
      *             {@code false} to add the items directly
      */
     private void addAll(Iterable<?> iter, boolean wrap) {
         if (wrap) {
             for (Object o : iter) {
-                this.put(XmlToJSONObject.wrap(o));
+                this.put(XmlToJsonObject.wrap(o));
             }
         } else {
             for (Object o : iter) {
@@ -1486,12 +1488,12 @@ public class JSONArray implements Iterable<Object> {
     }
 
     /**
-     * Add an array's elements to the JSONArray.
+     * Add an array's elements to the XmlJsonArray.
      *
      * @param array Array. If the parameter passed is null, or not an array,
-     *              JSONArray, Collection, or Iterable, an exception will be
+     *              XmlJsonArray, Collection, or Iterable, an exception will be
      *              thrown.
-     * @param wrap  {@code true} to call {@link XmlToJSONObject#wrap(Object)} for each item,
+     * @param wrap  {@code true} to call {@link XmlToJsonObject#wrap(Object)} for each item,
      *              {@code false} to add the items directly
      * @throws JSONException        If not an array or if an array value is non-finite number.
      * @throws NullPointerException Thrown if the array parameter is null.
@@ -1502,25 +1504,25 @@ public class JSONArray implements Iterable<Object> {
             this.myArrayList.ensureCapacity(this.myArrayList.size() + length);
             if (wrap) {
                 for (int i = 0; i < length; i += 1) {
-                    this.put(XmlToJSONObject.wrap(Array.get(array, i)));
+                    this.put(XmlToJsonObject.wrap(Array.get(array, i)));
                 }
             } else {
                 for (int i = 0; i < length; i += 1) {
                     this.put(Array.get(array, i));
                 }
             }
-        } else if (array instanceof JSONArray) {
+        } else if (array instanceof XmlJsonArray) {
             // use the built in array list `addAll` as all object
             // wrapping should have been completed in the original
-            // JSONArray
-            this.myArrayList.addAll(((JSONArray) array).myArrayList);
+            // XmlJsonArray
+            this.myArrayList.addAll(((XmlJsonArray) array).myArrayList);
         } else if (array instanceof Collection) {
             this.addAll((Collection<?>) array, wrap);
         } else if (array instanceof Iterable) {
             this.addAll((Iterable<?>) array, wrap);
         } else {
             throw new JSONException(
-                    "JSONArray initial value should be a string or collection or array.");
+                    "XmlJsonArray initial value should be a string or collection or array.");
         }
     }
 
@@ -1539,17 +1541,17 @@ public class JSONArray implements Iterable<Object> {
             Throwable cause) {
         if (value == null) {
             return new JSONException(
-                    "JSONArray[" + idx + "] is not a " + valueType + " (null)."
+                    "XmlJsonArray[" + idx + "] is not a " + valueType + " (null)."
                     , cause);
         }
         // don't try to toString collections or known object types that could be large.
-        if (value instanceof Map || value instanceof Iterable || value instanceof XmlToJSONObject) {
+        if (value instanceof Map || value instanceof Iterable || value instanceof XmlToJsonObject) {
             return new JSONException(
-                    "JSONArray[" + idx + "] is not a " + valueType + " (" + value.getClass() + ")."
+                    "XmlJsonArray[" + idx + "] is not a " + valueType + " (" + value.getClass() + ")."
                     , cause);
         }
         return new JSONException(
-                "JSONArray[" + idx + "] is not a " + valueType + " (" + value.getClass() + " : " + value + ")."
+                "XmlJsonArray[" + idx + "] is not a " + valueType + " (" + value.getClass() + " : " + value + ")."
                 , cause);
     }
 

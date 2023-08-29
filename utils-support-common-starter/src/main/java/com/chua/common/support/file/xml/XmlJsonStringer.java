@@ -37,11 +37,11 @@ import java.io.StringWriter;
  * @author JSON.org
  * @version 2015-12-09
  */
-public class JSONStringer extends JSONWriter {
+public class XmlJsonStringer extends XmlJsonWriter {
     /**
      * Make a fresh JSONStringer. It can be used to build one JSON text.
      */
-    public JSONStringer() {
+    public XmlJsonStringer() {
         super(new StringWriter());
     }
 

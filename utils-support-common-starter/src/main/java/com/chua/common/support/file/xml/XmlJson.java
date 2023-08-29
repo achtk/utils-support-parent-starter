@@ -4,40 +4,40 @@ package com.chua.common.support.file.xml;
 Public Domain.
 */
 
-import static com.chua.common.support.file.xml.XML.*;
+import static com.chua.common.support.file.xml.Xml.*;
 
 /**
- * This provides static methods to convert an XML text into a JSONArray or
- * JSONObject, and to covert a JSONArray or JSONObject into an XML text using
+ * This provides static methods to convert an XML text into a XmlJsonArray or
+ * JSONObject, and to covert a XmlJsonArray or JSONObject into an XML text using
  * the JsonML transform.
  *
  * @author JSON.org
  * @version 2016-01-30
  */
-public class JSONML {
+public class XmlJson {
     /**
-     * Parse XML values and store them in a JSONArray.
+     * Parse XML values and store them in a XmlJsonArray.
      *
-     * @param x           The XMLTokener containing the source string.
+     * @param x           The XmlTokenizer containing the source string.
      * @param arrayForm   true if array form, false if object form.
-     * @param ja          The JSONArray that is containing the current tag or null
+     * @param ja          The XmlJsonArray that is containing the current tag or null
      *                    if we are at the outermost level.
      * @param keepStrings Don't type-convert text nodes and attribute values
-     * @return A JSONArray if the value is the outermost tag, otherwise null.
-     * @throws JSONException if a parsing error occurs
+     * @return A XmlJsonArray if the value is the outermost tag, otherwise null.
+     * @throws XmlJsonException if a parsing error occurs
      */
     private static Object parse(
-            XMLTokener x,
+            XmlTokenizer x,
             boolean arrayForm,
-            JSONArray ja,
+            XmlJsonArray ja,
             boolean keepStrings
-    ) throws JSONException {
+    ) throws XmlJsonException {
         String attribute;
         char c;
         String closeTag = null;
         int i;
-        JSONArray newja = null;
-        XmlToJSONObject newjo = null;
+        XmlJsonArray newja = null;
+        XmlToJsonObject newjo = null;
         Object token;
         String tagName = null;
 
@@ -61,7 +61,7 @@ public class JSONML {
 
                         token = x.nextToken();
                         if (!(token instanceof String)) {
-                            throw new JSONException(
+                            throw new XmlJsonException(
                                     "Expected a closing name instead of '" +
                                             token + "'.");
                         }
@@ -118,8 +118,8 @@ public class JSONML {
                         throw x.syntaxError("Bad tagName '" + token + "'.");
                     }
                     tagName = (String) token;
-                    newja = new JSONArray();
-                    newjo = new XmlToJSONObject();
+                    newja = new XmlJsonArray();
+                    newjo = new XmlToJsonObject();
                     if (arrayForm) {
                         newja.put(tagName);
                         if (ja != null) {
@@ -215,30 +215,30 @@ public class JSONML {
 
     /**
      * Convert a well-formed (but not necessarily valid) XML string into a
-     * JSONArray using the JsonML transform. Each XML tag is represented as
-     * a JSONArray in which the first element is the tag name. If the tag has
+     * XmlJsonArray using the JsonML transform. Each XML tag is represented as
+     * a XmlJsonArray in which the first element is the tag name. If the tag has
      * attributes, then the second element will be JSONObject containing the
      * name/value pairs. If the tag contains children, then strings and
      * JSONArrays will represent the child tags.
      * Comments, prologs, DTDs, and <pre>{@code &lt;[ [ ]]>}</pre> are ignored.
      *
      * @param string The source string.
-     * @return A JSONArray containing the structured data from the XML string.
-     * @throws JSONException Thrown on error converting to a JSONArray
+     * @return A XmlJsonArray containing the structured data from the XML string.
+     * @throws XmlJsonException Thrown on error converting to a XmlJsonArray
      */
-    public static JSONArray toJSONArray(String string) throws JSONException {
-        return (JSONArray) parse(new XMLTokener(string), true, null, false);
+    public static XmlJsonArray toJsonArray(String string) throws XmlJsonException {
+        return (XmlJsonArray) parse(new XmlTokenizer(string), true, null, false);
     }
 
 
     /**
      * Convert a well-formed (but not necessarily valid) XML string into a
-     * JSONArray using the JsonML transform. Each XML tag is represented as
-     * a JSONArray in which the first element is the tag name. If the tag has
+     * XmlJsonArray using the JsonML transform. Each XML tag is represented as
+     * a XmlJsonArray in which the first element is the tag name. If the tag has
      * attributes, then the second element will be JSONObject containing the
      * name/value pairs. If the tag contains children, then strings and
      * JSONArrays will represent the child tags.
-     * As opposed to toJSONArray this method does not attempt to convert
+     * As opposed to toJsonArray this method does not attempt to convert
      * any text node or attribute value to any type
      * but just leaves it as a string.
      * Comments, prologs, DTDs, and <pre>{@code &lt;[ [ ]]>}</pre> are ignored.
@@ -246,52 +246,52 @@ public class JSONML {
      * @param string      The source string.
      * @param keepStrings If true, then values will not be coerced into boolean
      *                    or numeric values and will instead be left as strings
-     * @return A JSONArray containing the structured data from the XML string.
-     * @throws JSONException Thrown on error converting to a JSONArray
+     * @return A XmlJsonArray containing the structured data from the XML string.
+     * @throws XmlJsonException Thrown on error converting to a XmlJsonArray
      */
-    public static JSONArray toJSONArray(String string, boolean keepStrings) throws JSONException {
-        return (JSONArray) parse(new XMLTokener(string), true, null, keepStrings);
+    public static XmlJsonArray toJsonArray(String string, boolean keepStrings) throws XmlJsonException {
+        return (XmlJsonArray) parse(new XmlTokenizer(string), true, null, keepStrings);
     }
 
 
     /**
      * Convert a well-formed (but not necessarily valid) XML string into a
-     * JSONArray using the JsonML transform. Each XML tag is represented as
-     * a JSONArray in which the first element is the tag name. If the tag has
+     * XmlJsonArray using the JsonML transform. Each XML tag is represented as
+     * a XmlJsonArray in which the first element is the tag name. If the tag has
      * attributes, then the second element will be JSONObject containing the
      * name/value pairs. If the tag contains children, then strings and
      * JSONArrays will represent the child content and tags.
-     * As opposed to toJSONArray this method does not attempt to convert
+     * As opposed to toJsonArray this method does not attempt to convert
      * any text node or attribute value to any type
      * but just leaves it as a string.
      * Comments, prologs, DTDs, and <pre>{@code &lt;[ [ ]]>}</pre> are ignored.
      *
-     * @param x           An XMLTokener.
+     * @param x           An XmlTokenizer.
      * @param keepStrings If true, then values will not be coerced into boolean
      *                    or numeric values and will instead be left as strings
-     * @return A JSONArray containing the structured data from the XML string.
-     * @throws JSONException Thrown on error converting to a JSONArray
+     * @return A XmlJsonArray containing the structured data from the XML string.
+     * @throws XmlJsonException Thrown on error converting to a XmlJsonArray
      */
-    public static JSONArray toJSONArray(XMLTokener x, boolean keepStrings) throws JSONException {
-        return (JSONArray) parse(x, true, null, keepStrings);
+    public static XmlJsonArray toJsonArray(XmlTokenizer x, boolean keepStrings) throws XmlJsonException {
+        return (XmlJsonArray) parse(x, true, null, keepStrings);
     }
 
 
     /**
      * Convert a well-formed (but not necessarily valid) XML string into a
-     * JSONArray using the JsonML transform. Each XML tag is represented as
-     * a JSONArray in which the first element is the tag name. If the tag has
+     * XmlJsonArray using the JsonML transform. Each XML tag is represented as
+     * a XmlJsonArray in which the first element is the tag name. If the tag has
      * attributes, then the second element will be JSONObject containing the
      * name/value pairs. If the tag contains children, then strings and
      * JSONArrays will represent the child content and tags.
      * Comments, prologs, DTDs, and <pre>{@code &lt;[ [ ]]>}</pre> are ignored.
      *
-     * @param x An XMLTokener.
-     * @return A JSONArray containing the structured data from the XML string.
-     * @throws JSONException Thrown on error converting to a JSONArray
+     * @param x An XmlTokenizer.
+     * @return A XmlJsonArray containing the structured data from the XML string.
+     * @throws XmlJsonException Thrown on error converting to a XmlJsonArray
      */
-    public static JSONArray toJSONArray(XMLTokener x) throws JSONException {
-        return (JSONArray) parse(x, true, null, false);
+    public static XmlJsonArray toJsonArray(XmlTokenizer x) throws XmlJsonException {
+        return (XmlJsonArray) parse(x, true, null, false);
     }
 
 
@@ -307,10 +307,10 @@ public class JSONML {
      *
      * @param string The XML source text.
      * @return A JSONObject containing the structured data from the XML string.
-     * @throws JSONException Thrown on error converting to a JSONObject
+     * @throws XmlJsonException Thrown on error converting to a JSONObject
      */
-    public static XmlToJSONObject toJSONObject(String string) throws JSONException {
-        return (XmlToJSONObject) parse(new XMLTokener(string), false, null, false);
+    public static XmlJsonException toJSONObject(String string) throws XmlJsonException {
+        return (XmlJsonException) parse(new XmlTokenizer(string), false, null, false);
     }
 
 
@@ -328,10 +328,10 @@ public class JSONML {
      * @param keepStrings If true, then values will not be coerced into boolean
      *                    or numeric values and will instead be left as strings
      * @return A JSONObject containing the structured data from the XML string.
-     * @throws JSONException Thrown on error converting to a JSONObject
+     * @throws XmlJsonException Thrown on error converting to a JSONObject
      */
-    public static XmlToJSONObject toJSONObject(String string, boolean keepStrings) throws JSONException {
-        return (XmlToJSONObject) parse(new XMLTokener(string), false, null, keepStrings);
+    public static XmlJsonException toJSONObject(String string, boolean keepStrings) throws XmlJsonException {
+        return (XmlJsonException) parse(new XmlTokenizer(string), false, null, keepStrings);
     }
 
 
@@ -345,12 +345,12 @@ public class JSONML {
      * <p>
      * Comments, prologs, DTDs, and <pre>{@code &lt;[ [ ]]>}</pre> are ignored.
      *
-     * @param x An XMLTokener of the XML source text.
+     * @param x An XmlTokenizer of the XML source text.
      * @return A JSONObject containing the structured data from the XML string.
-     * @throws JSONException Thrown on error converting to a JSONObject
+     * @throws XmlJsonException Thrown on error converting to a JSONObject
      */
-    public static XmlToJSONObject toJSONObject(XMLTokener x) throws JSONException {
-        return (XmlToJSONObject) parse(x, false, null, false);
+    public static XmlJsonException toJSONObject(XmlTokenizer x) throws XmlJsonException {
+        return (XmlJsonException) parse(x, false, null, false);
     }
 
 
@@ -364,27 +364,27 @@ public class JSONML {
      * <p>
      * Comments, prologs, DTDs, and <pre>{@code &lt;[ [ ]]>}</pre> are ignored.
      *
-     * @param x           An XMLTokener of the XML source text.
+     * @param x           An XmlTokenizer of the XML source text.
      * @param keepStrings If true, then values will not be coerced into boolean
      *                    or numeric values and will instead be left as strings
      * @return A JSONObject containing the structured data from the XML string.
-     * @throws JSONException Thrown on error converting to a JSONObject
+     * @throws XmlJsonException Thrown on error converting to a JSONObject
      */
-    public static XmlToJSONObject toJSONObject(XMLTokener x, boolean keepStrings) throws JSONException {
-        return (XmlToJSONObject) parse(x, false, null, keepStrings);
+    public static XmlJsonException toJSONObject(XmlTokenizer x, boolean keepStrings) throws XmlJsonException {
+        return (XmlJsonException) parse(x, false, null, keepStrings);
     }
 
 
     /**
-     * Reverse the JSONML transformation, making an XML text from a JSONArray.
+     * Reverse the JSONML transformation, making an XML text from a XmlJsonArray.
      *
-     * @param ja A JSONArray.
+     * @param ja A XmlJsonArray.
      * @return An XML string.
-     * @throws JSONException Thrown on error converting to a string
+     * @throws XmlJsonException Thrown on error converting to a string
      */
-    public static String toString(JSONArray ja) throws JSONException {
+    public static String toString(XmlJsonArray ja) throws XmlJsonException {
         int i;
-        XmlToJSONObject jo;
+        XmlToJsonObject jo;
         int length;
         Object object;
         StringBuilder sb = new StringBuilder();
@@ -399,9 +399,9 @@ public class JSONML {
         sb.append(tagName);
 
         object = ja.opt(1);
-        if (object instanceof XmlToJSONObject) {
+        if (object instanceof XmlToJsonObject) {
             i = 2;
-            jo = (XmlToJSONObject) object;
+            jo = (XmlToJsonObject) object;
 
 // Emit the attributes
 
@@ -436,12 +436,12 @@ public class JSONML {
                 if (object != null) {
                     if (object instanceof String) {
                         sb.append(escape(object.toString()));
-                    } else if (object instanceof XmlToJSONObject) {
-                        sb.append(toString((XmlToJSONObject) object));
-                    } else if (object instanceof JSONArray) {
-                        sb.append(toString((JSONArray) object));
+                    } else if (object instanceof XmlJsonException) {
+                        sb.append(toString((XmlToJsonObject) object));
+                    } else if (object instanceof XmlJsonArray) {
+                        sb.append(toString((XmlJsonArray) object));
                     } else {
-                        sb.append(object.toString());
+                        sb.append(object);
                     }
                 }
             } while (i < length);
@@ -461,12 +461,12 @@ public class JSONML {
      *
      * @param jo A JSONObject.
      * @return An XML string.
-     * @throws JSONException Thrown on error converting to a string
+     * @throws XmlJsonException Thrown on error converting to a string
      */
-    public static String toString(XmlToJSONObject jo) throws JSONException {
+    public static String toString(XmlToJsonObject jo) throws XmlJsonException {
         StringBuilder sb = new StringBuilder();
         int i;
-        JSONArray ja;
+        XmlJsonArray ja;
         int length;
         Object object;
         String tagName;
@@ -515,10 +515,10 @@ public class JSONML {
                 if (object != null) {
                     if (object instanceof String) {
                         sb.append(escape(object.toString()));
-                    } else if (object instanceof XmlToJSONObject) {
-                        sb.append(toString((XmlToJSONObject) object));
-                    } else if (object instanceof JSONArray) {
-                        sb.append(toString((JSONArray) object));
+                    } else if (object instanceof XmlToJsonObject) {
+                        sb.append(toString((XmlToJsonObject) object));
+                    } else if (object instanceof XmlJsonArray) {
+                        sb.append(toString((XmlJsonArray) object));
                     } else {
                         sb.append(object.toString());
                     }

@@ -1,6 +1,6 @@
 package com.chua.common.support.file.transfer;
 
-import com.chua.common.support.file.xml.XML;
+import com.chua.common.support.file.xml.Xml;
 import com.chua.common.support.json.JsonObject;
 import com.chua.common.support.utils.IoUtils;
 import lombok.SneakyThrows;
@@ -21,7 +21,7 @@ public class XmlToJsonFileConverter extends AbstractFileConverter {
         String charset = getString("charset", "utf-8");
         JsonObject jsonObject;
         try (InputStreamReader isr = new InputStreamReader(sourcePath, charset)) {
-            jsonObject = XML.toJsonObject(isr);
+            jsonObject = Xml.toJsonObject(isr);
         }
         IoUtils.write(jsonObject.toString(), targetPath, charset);
     }

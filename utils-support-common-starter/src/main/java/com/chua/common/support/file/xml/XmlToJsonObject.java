@@ -27,7 +27,7 @@ import java.util.regex.Pattern;
  * object having <code>get</code> and <code>opt</code> methods for accessing
  * the values by name, and <code>put</code> methods for adding or replacing
  * values by name. The values can be any of these types: <code>Boolean</code>,
- * <code>JSONArray</code>, <code>JSONObject</code>, <code>Number</code>,
+ * <code>XmlJsonArray</code>, <code>JSONObject</code>, <code>Number</code>,
  * <code>String</code>, or the <code>JSONObject.NULL</code> object. A
  * JSONObject constructor can be used to convert an external form JSON text
  * into an internal form whose values can be retrieved with the
@@ -74,7 +74,7 @@ import java.util.regex.Pattern;
  * @version 2016-08-15
  */
 @SuppressWarnings("ALL")
-public class XmlToJSONObject extends JsonObject {
+public class XmlToJsonObject extends JsonObject {
     /**
      * JSONObject.NULL is equivalent to the value that JavaScript calls null,
      * whilst Java's null is equivalent to the value that JavaScript calls
@@ -151,7 +151,7 @@ public class XmlToJSONObject extends JsonObject {
     /**
      * Construct an empty JSONObject.
      */
-    public XmlToJSONObject() {
+    public XmlToJsonObject() {
         super(new LinkedHashMap<>());
     }
 
@@ -163,7 +163,7 @@ public class XmlToJSONObject extends JsonObject {
      * @param jo    A JSONObject.
      * @param names An array of strings.
      */
-    public XmlToJSONObject(XmlToJSONObject jo, String... names) {
+    public XmlToJsonObject(XmlToJsonObject jo, String... names) {
         this(names.length);
         for (int i = 0; i < names.length; i += 1) {
             try {
@@ -177,10 +177,10 @@ public class XmlToJSONObject extends JsonObject {
      * Construct a JSONObject from a JSONTokener.
      *
      * @param x A JSONTokener object containing the source string.
-     * @throws JSONException If there is a syntax error in the source string or a
+     * @throws XmlJsonException If there is a syntax error in the source string or a
      *                       duplicated key.
      */
-    public XmlToJSONObject(JSONTokener x) throws JSONException {
+    public XmlToJsonObject(XmlJsonTokener x) throws XmlJsonException {
         this();
         char c;
         String key;
@@ -252,10 +252,10 @@ public class XmlToJSONObject extends JsonObject {
      *
      * @param m A map object that can be used to initialize the contents of
      *          the JSONObject.
-     * @throws JSONException        If a value in the map is non-finite number.
+     * @throws XmlJsonException        If a value in the map is non-finite number.
      * @throws NullPointerException If a key in the map is <code>null</code>
      */
-    public XmlToJSONObject(Map<?, ?> m) {
+    public XmlToJsonObject(Map<?, ?> m) {
         super(m);
         if (m == null) {
             this.source = new HashMap<String, Object>();
@@ -312,17 +312,17 @@ public class XmlToJSONObject extends JsonObject {
      * </pre>
      * The resulting JSON object would contain <code>"FullName": "Larry Fine"</code>
      * <p>
-     * The {@link JSONPropertyIgnore} annotation can be used to force the bean property
-     * to not be serialized into JSON. If both {@link JSONPropertyIgnore} and
+     * The {@link XMlJsonPropertyIgnore} annotation can be used to force the bean property
+     * to not be serialized into JSON. If both {@link XMlJsonPropertyIgnore} and
      * {@link JSONPropertyName} are defined on the same method, a depth comparison is
      * performed and the one closest to the concrete class being serialized is used.
-     * If both annotations are at the same level, then the {@link JSONPropertyIgnore}
+     * If both annotations are at the same level, then the {@link XMlJsonPropertyIgnore}
      * annotation takes precedent and the field is not serialized.
      * For example, the following declaration would prevent the <code>getName</code>
      * method from being serialized:
      * <pre>
      * &#64;JSONPropertyName("FullName")
-     * &#64;JSONPropertyIgnore
+     * &#64;XMlJsonPropertyIgnore
      * public String getName() { return this.name; }
      * </pre>
      * <p>
@@ -330,12 +330,12 @@ public class XmlToJSONObject extends JsonObject {
      * @param bean An object that has getter methods that should be used to make
      *             a JSONObject.
      */
-    public XmlToJSONObject(Object bean) {
+    public XmlToJsonObject(Object bean) {
         this();
         this.populateMap(bean);
     }
 
-    private XmlToJSONObject(Object bean, Set<Object> objectsRecord) {
+    private XmlToJsonObject(Object bean, Set<Object> objectsRecord) {
         this();
         this.populateMap(bean, objectsRecord);
     }
@@ -352,7 +352,7 @@ public class XmlToJSONObject extends JsonObject {
      * @param names  An array of strings, the names of the fields to be obtained
      *               from the object.
      */
-    public XmlToJSONObject(Object object, String... names) {
+    public XmlToJsonObject(Object object, String... names) {
         this(names.length);
         Class<?> c = object.getClass();
         for (int i = 0; i < names.length; i += 1) {
@@ -371,11 +371,11 @@ public class XmlToJSONObject extends JsonObject {
      * @param source A string beginning with <code>{</code>&nbsp;<small>(left
      *               brace)</small> and ending with <code>}</code>
      *               &nbsp;<small>(right brace)</small>.
-     * @throws JSONException If there is a syntax error in the source string or a
+     * @throws XmlJsonException If there is a syntax error in the source string or a
      *                       duplicated key.
      */
-    public XmlToJSONObject(String source) throws JSONException {
-        this(new JSONTokener(source));
+    public XmlToJsonObject(String source) throws XmlJsonException {
+        this(new XmlJsonTokener(source));
     }
 
     /**
@@ -383,9 +383,9 @@ public class XmlToJSONObject extends JsonObject {
      *
      * @param baseName The ResourceBundle base name.
      * @param locale   The Locale to load the ResourceBundle for.
-     * @throws JSONException If any JSONExceptions are detected.
+     * @throws XmlJsonException If any JSONExceptions are detected.
      */
-    public XmlToJSONObject(String baseName, Locale locale) throws JSONException {
+    public XmlToJsonObject(String baseName, Locale locale) throws XmlJsonException {
         this();
         ResourceBundle bundle = ResourceBundle.getBundle(baseName, locale,
                 Thread.currentThread().getContextClassLoader());
@@ -403,12 +403,12 @@ public class XmlToJSONObject extends JsonObject {
 
                 String[] path = ((String) key).split("\\.");
                 int last = path.length - 1;
-                XmlToJSONObject target = this;
+                XmlToJsonObject target = this;
                 for (int i = 0; i < last; i += 1) {
                     String segment = path[i];
-                    XmlToJSONObject nextTarget = target.optJSONObject(segment);
+                    XmlToJsonObject nextTarget = target.optJSONObject(segment);
                     if (nextTarget == null) {
-                        nextTarget = new XmlToJSONObject();
+                        nextTarget = new XmlToJsonObject();
                         target.put(segment, nextTarget);
                     }
                     target = nextTarget;
@@ -425,38 +425,38 @@ public class XmlToJSONObject extends JsonObject {
      *
      * @param initialCapacity initial capacity of the internal map.
      */
-    protected XmlToJSONObject(int initialCapacity) {
+    protected XmlToJsonObject(int initialCapacity) {
         super(new LinkedHashMap<>());
     }
 
     /**
      * Accumulate values under a key. It is similar to the put method except
-     * that if there is already an object stored under the key then a JSONArray
+     * that if there is already an object stored under the key then a XmlJsonArray
      * is stored under the key to hold all of the accumulated values. If there
-     * is already a JSONArray, then the new value is appended to it. In
+     * is already a XmlJsonArray, then the new value is appended to it. In
      * contrast, the put method replaces the previous value.
      * <p>
-     * If only one value is accumulated that is not a JSONArray, then the result
+     * If only one value is accumulated that is not a XmlJsonArray, then the result
      * will be the same as using put. But if multiple values are accumulated,
      * then the result will be like append.
      *
      * @param key   A key string.
      * @param value An object to be accumulated under the key.
      * @return this.
-     * @throws JSONException        If the value is non-finite number.
+     * @throws XmlJsonException        If the value is non-finite number.
      * @throws NullPointerException If the key is <code>null</code>.
      */
-    public XmlToJSONObject accumulate(String key, Object value) throws JSONException {
+    public XmlToJsonObject accumulate(String key, Object value) throws XmlJsonException {
         testValidity(value);
         Object object = this.opt(key);
         if (object == null) {
             this.put(key,
-                    value instanceof JSONArray ? new JSONArray().put(value)
+                    value instanceof XmlJsonArray ? new XmlJsonArray().put(value)
                             : value);
-        } else if (object instanceof JSONArray) {
-            ((JSONArray) object).put(value);
+        } else if (object instanceof XmlJsonArray) {
+            ((XmlJsonArray) object).put(value);
         } else {
-            this.put(key, new JSONArray().put(object).put(value));
+            this.put(key, new XmlJsonArray().put(object).put(value));
         }
         return this;
     }
@@ -464,25 +464,25 @@ public class XmlToJSONObject extends JsonObject {
     /**
      * Append values to the array under a key. If the key does not exist in the
      * JSONObject, then the key is put in the JSONObject with its value being a
-     * JSONArray containing the value parameter. If the key was already
-     * associated with a JSONArray, then the value parameter is appended to it.
+     * XmlJsonArray containing the value parameter. If the key was already
+     * associated with a XmlJsonArray, then the value parameter is appended to it.
      *
      * @param key   A key string.
      * @param value An object to be accumulated under the key.
      * @return this.
-     * @throws JSONException        If the value is non-finite number or if the current value associated with
-     *                              the key is not a JSONArray.
+     * @throws XmlJsonException        If the value is non-finite number or if the current value associated with
+     *                              the key is not a XmlJsonArray.
      * @throws NullPointerException If the key is <code>null</code>.
      */
-    public XmlToJSONObject append(String key, Object value) throws JSONException {
+    public XmlToJsonObject append(String key, Object value) throws XmlJsonException {
         testValidity(value);
         Object object = this.opt(key);
         if (object == null) {
-            this.put(key, new JSONArray().put(value));
-        } else if (object instanceof JSONArray) {
-            this.put(key, ((JSONArray) object).put(value));
+            this.put(key, new XmlJsonArray().put(value));
+        } else if (object instanceof XmlJsonArray) {
+            this.put(key, ((XmlJsonArray) object).put(value));
         } else {
-            throw wrongValueFormatException(key, "JSONArray", null, null);
+            throw wrongValueFormatException(key, "XmlJsonArray", null, null);
         }
         return this;
     }
@@ -519,15 +519,15 @@ public class XmlToJSONObject extends JsonObject {
      *
      * @param key A key string.
      * @return The object associated with the key.
-     * @throws JSONException if the key is not found.
+     * @throws XmlJsonException if the key is not found.
      */
-    public Object get(String key) throws JSONException {
+    public Object get(String key) throws XmlJsonException {
         if (key == null) {
-            throw new JSONException("Null key.");
+            throw new XmlJsonException("Null key.");
         }
         Object object = this.opt(key);
         if (object == null) {
-            throw new JSONException("JSONObject[" + quote(key) + "] not found.");
+            throw new XmlJsonException("JSONObject[" + quote(key) + "] not found.");
         }
         return object;
     }
@@ -539,15 +539,15 @@ public class XmlToJSONObject extends JsonObject {
      * @param clazz The type of enum to retrieve.
      * @param key   A key string.
      * @return The enum value associated with the key
-     * @throws JSONException if the key is not found or if the value cannot be converted
+     * @throws XmlJsonException if the key is not found or if the value cannot be converted
      *                       to an enum.
      */
-    public <E extends Enum<E>> E getEnum(Class<E> clazz, String key) throws JSONException {
+    public <E extends Enum<E>> E getEnum(Class<E> clazz, String key) throws XmlJsonException {
         E val = optEnum(clazz, key);
         if (val == null) {
-            // JSONException should really take a throwable argument.
+            // XmlJsonException should really take a throwable argument.
             // If it did, I would re-implement this with the Enum.valueOf
-            // method and place any thrown exception in the JSONException
+            // method and place any thrown exception in the XmlJsonException
             throw wrongValueFormatException(key, "enum of type " + quote(clazz.getSimpleName()), opt(key), null);
         }
         return val;
@@ -558,10 +558,10 @@ public class XmlToJSONObject extends JsonObject {
      *
      * @param key A key string.
      * @return The truth.
-     * @throws JSONException if the value is not a Boolean or the String "true" or
+     * @throws XmlJsonException if the value is not a Boolean or the String "true" or
      *                       "false".
      */
-    public Boolean getBoolean(String key) throws JSONException {
+    public Boolean getBoolean(String key) throws XmlJsonException {
         Object object = this.get(key);
         if (object.equals(Boolean.FALSE)
                 || (object instanceof String && ((String) object)
@@ -580,10 +580,10 @@ public class XmlToJSONObject extends JsonObject {
      *
      * @param key A key string.
      * @return The numeric value.
-     * @throws JSONException if the key is not found or if the value cannot
+     * @throws XmlJsonException if the key is not found or if the value cannot
      *                       be converted to BigInteger.
      */
-    public BigInteger getBigInteger(String key) throws JSONException {
+    public BigInteger getBigInteger(String key) throws XmlJsonException {
         Object object = this.get(key);
         BigInteger ret = objectToBigInteger(object, null);
         if (ret != null) {
@@ -600,10 +600,10 @@ public class XmlToJSONObject extends JsonObject {
      *
      * @param key A key string.
      * @return The numeric value.
-     * @throws JSONException if the key is not found or if the value
+     * @throws XmlJsonException if the key is not found or if the value
      *                       cannot be converted to BigDecimal.
      */
-    public BigDecimal getBigDecimal(String key) throws JSONException {
+    public BigDecimal getBigDecimal(String key) throws XmlJsonException {
         Object object = this.get(key);
         BigDecimal ret = objectToBigDecimal(object, null);
         if (ret != null) {
@@ -617,10 +617,10 @@ public class XmlToJSONObject extends JsonObject {
      *
      * @param key A key string.
      * @return The numeric value.
-     * @throws JSONException if the key is not found or if the value is not a Number
+     * @throws XmlJsonException if the key is not found or if the value is not a Number
      *                       object and cannot be converted to a number.
      */
-    public Double getDouble(String key) throws JSONException {
+    public Double getDouble(String key) throws XmlJsonException {
         final Object object = this.get(key);
         if (object instanceof Number) {
             return ((Number) object).doubleValue();
@@ -637,10 +637,10 @@ public class XmlToJSONObject extends JsonObject {
      *
      * @param key A key string.
      * @return The numeric value.
-     * @throws JSONException if the key is not found or if the value is not a Number
+     * @throws XmlJsonException if the key is not found or if the value is not a Number
      *                       object and cannot be converted to a number.
      */
-    public Float getFloat(String key) throws JSONException {
+    public Float getFloat(String key) throws XmlJsonException {
         final Object object = this.get(key);
         if (object instanceof Number) {
             return ((Number) object).floatValue();
@@ -657,10 +657,10 @@ public class XmlToJSONObject extends JsonObject {
      *
      * @param key A key string.
      * @return The numeric value.
-     * @throws JSONException if the key is not found or if the value is not a Number
+     * @throws XmlJsonException if the key is not found or if the value is not a Number
      *                       object and cannot be converted to a number.
      */
-    public Number getNumber(String key) throws JSONException {
+    public Number getNumber(String key) throws XmlJsonException {
         Object object = this.get(key);
         try {
             if (object instanceof Number) {
@@ -677,10 +677,10 @@ public class XmlToJSONObject extends JsonObject {
      *
      * @param key A key string.
      * @return The integer value.
-     * @throws JSONException if the key is not found or if the value cannot be converted
+     * @throws XmlJsonException if the key is not found or if the value cannot be converted
      *                       to an integer.
      */
-    public int getInt(String key) throws JSONException {
+    public int getInt(String key) throws XmlJsonException {
         final Object object = this.get(key);
         if (object instanceof Number) {
             return ((Number) object).intValue();
@@ -693,18 +693,18 @@ public class XmlToJSONObject extends JsonObject {
     }
 
     /**
-     * Get the JSONArray value associated with a key.
+     * Get the XmlJsonArray value associated with a key.
      *
      * @param key A key string.
-     * @return A JSONArray which is the value.
-     * @throws JSONException if the key is not found or if the value is not a JSONArray.
+     * @return A XmlJsonArray which is the value.
+     * @throws XmlJsonException if the key is not found or if the value is not a XmlJsonArray.
      */
-    public JSONArray getJSONArray(String key) throws JSONException {
+    public XmlJsonArray getJSONArray(String key) throws XmlJsonException {
         Object object = this.get(key);
-        if (object instanceof JSONArray) {
-            return (JSONArray) object;
+        if (object instanceof XmlJsonArray) {
+            return (XmlJsonArray) object;
         }
-        throw wrongValueFormatException(key, "JSONArray", object, null);
+        throw wrongValueFormatException(key, "XmlJsonArray", object, null);
     }
 
     /**
@@ -712,12 +712,12 @@ public class XmlToJSONObject extends JsonObject {
      *
      * @param key A key string.
      * @return A JSONObject which is the value.
-     * @throws JSONException if the key is not found or if the value is not a JSONObject.
+     * @throws XmlJsonException if the key is not found or if the value is not a JSONObject.
      */
-    public XmlToJSONObject getJSONObject(String key) throws JSONException {
+    public XmlToJsonObject getJSONObject(String key) throws XmlJsonException {
         Object object = this.get(key);
-        if (object instanceof XmlToJSONObject) {
-            return (XmlToJSONObject) object;
+        if (object instanceof XmlToJsonObject) {
+            return (XmlToJsonObject) object;
         }
         throw wrongValueFormatException(key, "JSONObject", object, null);
     }
@@ -727,10 +727,10 @@ public class XmlToJSONObject extends JsonObject {
      *
      * @param key A key string.
      * @return The long value.
-     * @throws JSONException if the key is not found or if the value cannot be converted
+     * @throws XmlJsonException if the key is not found or if the value cannot be converted
      *                       to a long.
      */
-    public Long getLong(String key) throws JSONException {
+    public Long getLong(String key) throws XmlJsonException {
         final Object object = this.get(key);
         if (object instanceof Number) {
             return ((Number) object).longValue();
@@ -748,7 +748,7 @@ public class XmlToJSONObject extends JsonObject {
      * @param jo JSON object
      * @return An array of field names, or null if there are no names.
      */
-    public static String[] getNames(XmlToJSONObject jo) {
+    public static String[] getNames(XmlToJsonObject jo) {
         if (jo.isEmpty()) {
             return null;
         }
@@ -783,9 +783,9 @@ public class XmlToJSONObject extends JsonObject {
      *
      * @param key A key string.
      * @return A string which is the value.
-     * @throws JSONException if there is no string value for the key.
+     * @throws XmlJsonException if there is no string value for the key.
      */
-    public String getString(String key) throws JSONException {
+    public String getString(String key) throws XmlJsonException {
         Object object = this.get(key);
         if (object instanceof String) {
             return (String) object;
@@ -813,10 +813,10 @@ public class XmlToJSONObject extends JsonObject {
      *
      * @param key A key string.
      * @return this.
-     * @throws JSONException If there is already a property with this name that is not an
+     * @throws XmlJsonException If there is already a property with this name that is not an
      *                       Integer, Long, Double, or Float.
      */
-    public XmlToJSONObject increment(String key) throws JSONException {
+    public XmlToJsonObject increment(String key) throws XmlJsonException {
         Object value = this.opt(key);
         if (value == null) {
             this.put(key, 1);
@@ -833,7 +833,7 @@ public class XmlToJSONObject extends JsonObject {
         } else if (value instanceof BigDecimal) {
             this.put(key, ((BigDecimal) value).add(BigDecimal.ONE));
         } else {
-            throw new JSONException("Unable to increment [" + quote(key) + "].");
+            throw new XmlJsonException("Unable to increment [" + quote(key) + "].");
         }
         return this;
     }
@@ -847,7 +847,7 @@ public class XmlToJSONObject extends JsonObject {
      * is the JSONObject.NULL object.
      */
     public boolean isNull(String key) {
-        return XmlToJSONObject.NULL.equals(this.opt(key));
+        return XmlToJsonObject.NULL.equals(this.opt(key));
     }
 
     /**
@@ -914,17 +914,17 @@ public class XmlToJSONObject extends JsonObject {
     }
 
     /**
-     * Produce a JSONArray containing the names of the elements of this
+     * Produce a XmlJsonArray containing the names of the elements of this
      * JSONObject.
      *
-     * @return A JSONArray containing the key strings, or null if the JSONObject
+     * @return A XmlJsonArray containing the key strings, or null if the JSONObject
      * is empty.
      */
-    public JSONArray names() {
+    public XmlJsonArray names() {
         if (this.source.isEmpty()) {
             return null;
         }
-        return new JSONArray(this.source.keySet());
+        return new XmlJsonArray(this.source.keySet());
     }
 
     /**
@@ -932,11 +932,11 @@ public class XmlToJSONObject extends JsonObject {
      *
      * @param number A Number
      * @return A String.
-     * @throws JSONException If n is a non-finite number.
+     * @throws XmlJsonException If n is a non-finite number.
      */
-    public static String numberToString(Number number) throws JSONException {
+    public static String numberToString(Number number) throws XmlJsonException {
         if (number == null) {
-            throw new JSONException("Null pointer");
+            throw new XmlJsonException("Null pointer");
         }
         testValidity(number);
 
@@ -1265,15 +1265,15 @@ public class XmlToJSONObject extends JsonObject {
     }
 
     /**
-     * Get an optional JSONArray associated with a key. It returns null if there
-     * is no such key, or if its value is not a JSONArray.
+     * Get an optional XmlJsonArray associated with a key. It returns null if there
+     * is no such key, or if its value is not a XmlJsonArray.
      *
      * @param key A key string.
-     * @return A JSONArray which is the value.
+     * @return A XmlJsonArray which is the value.
      */
-    public JSONArray optJSONArray(String key) {
+    public XmlJsonArray optJSONArray(String key) {
         Object o = this.opt(key);
-        return o instanceof JSONArray ? (JSONArray) o : null;
+        return o instanceof XmlJsonArray ? (XmlJsonArray) o : null;
     }
 
     /**
@@ -1283,7 +1283,7 @@ public class XmlToJSONObject extends JsonObject {
      * @param key A key string.
      * @return A JSONObject which is the value.
      */
-    public XmlToJSONObject optJSONObject(String key) {
+    public XmlToJsonObject optJSONObject(String key) {
         return this.optJSONObject(key, null);
     }
 
@@ -1295,9 +1295,9 @@ public class XmlToJSONObject extends JsonObject {
      * @param defaultValue The default.
      * @return An JSONObject which is the value.
      */
-    public XmlToJSONObject optJSONObject(String key, XmlToJSONObject defaultValue) {
+    public XmlToJsonObject optJSONObject(String key, XmlToJsonObject defaultValue) {
         Object object = this.opt(key);
-        return object instanceof XmlToJSONObject ? (XmlToJSONObject) object : defaultValue;
+        return object instanceof XmlToJsonObject ? (XmlToJsonObject) object : defaultValue;
     }
 
     /**
@@ -1399,7 +1399,7 @@ public class XmlToJSONObject extends JsonObject {
      * bean can not be recursive.
      *
      * @param bean the bean
-     * @see XmlToJSONObject#XmlToJSONObject(Object)
+     * @see XmlToJsonObject#XmlToJsonObject(Object)
      */
     private void populateMap(Object bean) {
         populateMap(bean, Collections.newSetFromMap(new IdentityHashMap<Object, Boolean>()));
@@ -1461,16 +1461,16 @@ public class XmlToJSONObject extends JsonObject {
     }
 
     private static String getKeyNameFromMethod(Method method) {
-        final int ignoreDepth = getAnnotationDepth(method, JSONPropertyIgnore.class);
+        final int ignoreDepth = getAnnotationDepth(method, XmlJsonPropertyIgnore.class);
         if (ignoreDepth > 0) {
-            final int forcedNameDepth = getAnnotationDepth(method, JSONPropertyName.class);
+            final int forcedNameDepth = getAnnotationDepth(method, XmlJsonPropertyName.class);
             if (forcedNameDepth < 0 || ignoreDepth <= forcedNameDepth) {
                 // the hierarchy asked to ignore, and the nearest name override
                 // was higher or non-existent
                 return null;
             }
         }
-        JSONPropertyName annotation = getAnnotation(method, JSONPropertyName.class);
+        XmlJsonPropertyName annotation = getAnnotation(method, XmlJsonPropertyName.class);
         if (annotation != null && annotation.value() != null && !annotation.value().isEmpty()) {
             return annotation.value();
         }
@@ -1609,25 +1609,25 @@ public class XmlToJSONObject extends JsonObject {
      * @param key   A key string.
      * @param value A boolean which is the value.
      * @return this.
-     * @throws JSONException        If the value is non-finite number.
+     * @throws XmlJsonException        If the value is non-finite number.
      * @throws NullPointerException If the key is <code>null</code>.
      */
-    public XmlToJSONObject put(String key, boolean value) throws JSONException {
+    public XmlToJsonObject put(String key, boolean value) throws XmlJsonException {
         return this.put(key, value ? Boolean.TRUE : Boolean.FALSE);
     }
 
     /**
      * Put a key/value pair in the JSONObject, where the value will be a
-     * JSONArray which is produced from a Collection.
+     * XmlJsonArray which is produced from a Collection.
      *
      * @param key   A key string.
      * @param value A Collection value.
      * @return this.
-     * @throws JSONException        If the value is non-finite number.
+     * @throws XmlJsonException        If the value is non-finite number.
      * @throws NullPointerException If the key is <code>null</code>.
      */
-    public XmlToJSONObject put(String key, Collection<?> value) throws JSONException {
-        return this.put(key, new JSONArray(value));
+    public XmlToJsonObject put(String key, Collection<?> value) throws XmlJsonException {
+        return this.put(key, new XmlJsonArray(value));
     }
 
     /**
@@ -1636,10 +1636,10 @@ public class XmlToJSONObject extends JsonObject {
      * @param key   A key string.
      * @param value A double which is the value.
      * @return this.
-     * @throws JSONException        If the value is non-finite number.
+     * @throws XmlJsonException        If the value is non-finite number.
      * @throws NullPointerException If the key is <code>null</code>.
      */
-    public XmlToJSONObject put(String key, double value) throws JSONException {
+    public XmlToJsonObject put(String key, double value) throws XmlJsonException {
         return this.put(key, Double.valueOf(value));
     }
 
@@ -1649,10 +1649,10 @@ public class XmlToJSONObject extends JsonObject {
      * @param key   A key string.
      * @param value A float which is the value.
      * @return this.
-     * @throws JSONException        If the value is non-finite number.
+     * @throws XmlJsonException        If the value is non-finite number.
      * @throws NullPointerException If the key is <code>null</code>.
      */
-    public XmlToJSONObject put(String key, float value) throws JSONException {
+    public XmlToJsonObject put(String key, float value) throws XmlJsonException {
         return this.put(key, Float.valueOf(value));
     }
 
@@ -1662,10 +1662,10 @@ public class XmlToJSONObject extends JsonObject {
      * @param key   A key string.
      * @param value An int which is the value.
      * @return this.
-     * @throws JSONException        If the value is non-finite number.
+     * @throws XmlJsonException        If the value is non-finite number.
      * @throws NullPointerException If the key is <code>null</code>.
      */
-    public XmlToJSONObject put(String key, int value) throws JSONException {
+    public XmlToJsonObject put(String key, int value) throws XmlJsonException {
         return this.put(key, Integer.valueOf(value));
     }
 
@@ -1675,10 +1675,10 @@ public class XmlToJSONObject extends JsonObject {
      * @param key   A key string.
      * @param value A long which is the value.
      * @return this.
-     * @throws JSONException        If the value is non-finite number.
+     * @throws XmlJsonException        If the value is non-finite number.
      * @throws NullPointerException If the key is <code>null</code>.
      */
-    public XmlToJSONObject put(String key, long value) throws JSONException {
+    public XmlToJsonObject put(String key, long value) throws XmlJsonException {
         return this.put(key, Long.valueOf(value));
     }
 
@@ -1689,11 +1689,11 @@ public class XmlToJSONObject extends JsonObject {
      * @param key   A key string.
      * @param value A Map value.
      * @return this.
-     * @throws JSONException        If the value is non-finite number.
+     * @throws XmlJsonException        If the value is non-finite number.
      * @throws NullPointerException If the key is <code>null</code>.
      */
-    public XmlToJSONObject put(String key, Map<?, ?> value) throws JSONException {
-        return this.put(key, new XmlToJSONObject(value));
+    public XmlToJsonObject put(String key, Map<?, ?> value) throws XmlJsonException {
+        return this.put(key, new XmlToJsonObject(value));
     }
 
     /**
@@ -1702,13 +1702,13 @@ public class XmlToJSONObject extends JsonObject {
      *
      * @param key   A key string.
      * @param value An object which is the value. It should be of one of these
-     *              types: Boolean, Double, Integer, JSONArray, JSONObject, Long,
+     *              types: Boolean, Double, Integer, XmlJsonArray, JSONObject, Long,
      *              String, or the JSONObject.NULL object.
      * @return this.
-     * @throws JSONException        If the value is non-finite number.
+     * @throws XmlJsonException        If the value is non-finite number.
      * @throws NullPointerException If the key is <code>null</code>.
      */
-    public XmlToJSONObject put(String key, Object value) throws JSONException {
+    public XmlToJsonObject put(String key, Object value) throws XmlJsonException {
         if (key == null) {
             throw new NullPointerException("Null key.");
         }
@@ -1729,12 +1729,12 @@ public class XmlToJSONObject extends JsonObject {
      * @param key   key to insert into
      * @param value value to insert
      * @return this.
-     * @throws JSONException if the key is a duplicate
+     * @throws XmlJsonException if the key is a duplicate
      */
-    public XmlToJSONObject putOnce(String key, Object value) throws JSONException {
+    public XmlToJsonObject putOnce(String key, Object value) throws XmlJsonException {
         if (key != null && value != null) {
             if (this.opt(key) != null) {
-                throw new JSONException("Duplicate key \"" + key + "\"");
+                throw new XmlJsonException("Duplicate key \"" + key + "\"");
             }
             return this.put(key, value);
         }
@@ -1747,12 +1747,12 @@ public class XmlToJSONObject extends JsonObject {
      *
      * @param key   A key string.
      * @param value An object which is the value. It should be of one of these
-     *              types: Boolean, Double, Integer, JSONArray, JSONObject, Long,
+     *              types: Boolean, Double, Integer, XmlJsonArray, JSONObject, Long,
      *              String, or the JSONObject.NULL object.
      * @return this.
-     * @throws JSONException If the value is a non-finite number.
+     * @throws XmlJsonException If the value is a non-finite number.
      */
-    public XmlToJSONObject putOpt(String key, Object value) throws JSONException {
+    public XmlToJsonObject putOpt(String key, Object value) throws XmlJsonException {
         if (key != null && value != null) {
             return this.put(key, value);
         }
@@ -1760,7 +1760,7 @@ public class XmlToJSONObject extends JsonObject {
     }
 
     /**
-     * Creates a JSONPointer using an initialization string and tries to
+     * Creates a XMlJsonPointer using an initialization string and tries to
      * match it to an item within this JSONObject. For example, given a
      * JSONObject initialized with this document:
      * <pre>
@@ -1768,22 +1768,22 @@ public class XmlToJSONObject extends JsonObject {
      *     "a":{"b":"c"}
      * }
      * </pre>
-     * and this JSONPointer string:
+     * and this XMlJsonPointer string:
      * <pre>
      * "/a/b"
      * </pre>
      * Then this method will return the String "c".
      * A JSONPointerException may be thrown from code called by this method.
      *
-     * @param jsonPointer string that can be used to create a JSONPointer
-     * @return the item matched by the JSONPointer, otherwise null
+     * @param jsonPointer string that can be used to create a XMlJsonPointer
+     * @return the item matched by the XMlJsonPointer, otherwise null
      */
     public Object query(String jsonPointer) {
-        return query(new JSONPointer(jsonPointer));
+        return query(new XmlJsonPointer(jsonPointer));
     }
 
     /**
-     * Uses a user initialized JSONPointer  and tries to
+     * Uses a user initialized XMlJsonPointer  and tries to
      * match it to an item within this JSONObject. For example, given a
      * JSONObject initialized with this document:
      * <pre>
@@ -1791,17 +1791,17 @@ public class XmlToJSONObject extends JsonObject {
      *     "a":{"b":"c"}
      * }
      * </pre>
-     * and this JSONPointer:
+     * and this XMlJsonPointer:
      * <pre>
      * "/a/b"
      * </pre>
      * Then this method will return the String "c".
      * A JSONPointerException may be thrown from code called by this method.
      *
-     * @param jsonPointer string that can be used to create a JSONPointer
-     * @return the item matched by the JSONPointer, otherwise null
+     * @param jsonPointer string that can be used to create a XMlJsonPointer
+     * @return the item matched by the XMlJsonPointer, otherwise null
      */
-    public Object query(JSONPointer jsonPointer) {
+    public Object query(XmlJsonPointer jsonPointer) {
         return jsonPointer.queryFrom(this);
     }
 
@@ -1814,7 +1814,7 @@ public class XmlToJSONObject extends JsonObject {
      * @throws IllegalArgumentException if {@code jsonPointer} has invalid syntax
      */
     public Object optQuery(String jsonPointer) {
-        return optQuery(new JSONPointer(jsonPointer));
+        return optQuery(new XmlJsonPointer(jsonPointer));
     }
 
     /**
@@ -1825,10 +1825,10 @@ public class XmlToJSONObject extends JsonObject {
      * @return the queried value or {@code null}
      * @throws IllegalArgumentException if {@code jsonPointer} has invalid syntax
      */
-    public Object optQuery(JSONPointer jsonPointer) {
+    public Object optQuery(XmlJsonPointer jsonPointer) {
         try {
             return jsonPointer.queryFrom(this);
-        } catch (JSONPointerException e) {
+        } catch (XmlJsonPointerException e) {
             return null;
         }
     }
@@ -1936,36 +1936,36 @@ public class XmlToJSONObject extends JsonObject {
      */
     public boolean similar(Object other) {
         try {
-            if (!(other instanceof XmlToJSONObject)) {
+            if (!(other instanceof XmlToJsonObject)) {
                 return false;
             }
-            if (!this.keySet().equals(((XmlToJSONObject) other).keySet())) {
+            if (!this.keySet().equals(((XmlToJsonObject) other).keySet())) {
                 return false;
             }
             for (final Map.Entry<String, ?> entry : this.entrySet()) {
                 String name = entry.getKey();
                 Object valueThis = entry.getValue();
-                Object valueOther = ((XmlToJSONObject) other).get(name);
+                Object valueOther = ((XmlToJsonObject) other).get(name);
                 if (valueThis == valueOther) {
                     continue;
                 }
                 if (valueThis == null) {
                     return false;
                 }
-                if (valueThis instanceof XmlToJSONObject) {
-                    if (!((XmlToJSONObject) valueThis).similar(valueOther)) {
+                if (valueThis instanceof XmlToJsonObject) {
+                    if (!((XmlToJsonObject) valueThis).similar(valueOther)) {
                         return false;
                     }
-                } else if (valueThis instanceof JSONArray) {
-                    if (!((JSONArray) valueThis).similar(valueOther)) {
+                } else if (valueThis instanceof XmlJsonArray) {
+                    if (!((XmlJsonArray) valueThis).similar(valueOther)) {
                         return false;
                     }
                 } else if (valueThis instanceof Number && valueOther instanceof Number) {
                     if (!isNumberSimilar((Number) valueThis, (Number) valueOther)) {
                         return false;
                     }
-                } else if (valueThis instanceof JsonString && valueOther instanceof JsonString) {
-                    if (!((JsonString) valueThis).toJSONString().equals(((JsonString) valueOther).toJSONString())) {
+                } else if (valueThis instanceof XmlJsonString && valueOther instanceof XmlJsonString) {
+                    if (!((XmlJsonString) valueThis).toJsonString().equals(((XmlJsonString) valueOther).toJsonString())) {
                         return false;
                     }
                 } else if (!valueThis.equals(valueOther)) {
@@ -2046,7 +2046,7 @@ public class XmlToJSONObject extends JsonObject {
      * @param val value to convert
      * @return Number representation of the value.
      * @throws NumberFormatException thrown if the value is not a valid number. A public
-     *                               caller should catch this and wrap it in a {@link JSONException} if applicable.
+     *                               caller should catch this and wrap it in a {@link XmlJsonException} if applicable.
      */
     protected static Number stringToNumber(final String val) throws NumberFormatException {
         char initial = val.charAt(0);
@@ -2131,7 +2131,7 @@ public class XmlToJSONObject extends JsonObject {
             return Boolean.FALSE;
         }
         if ("null".equalsIgnoreCase(string)) {
-            return XmlToJSONObject.NULL;
+            return XmlToJsonObject.NULL;
         }
 
         /*
@@ -2153,28 +2153,28 @@ public class XmlToJSONObject extends JsonObject {
      * Throw an exception if the object is a NaN or infinite number.
      *
      * @param o The object to test.
-     * @throws JSONException If o is a non-finite number.
+     * @throws XmlJsonException If o is a non-finite number.
      */
-    public static void testValidity(Object o) throws JSONException {
+    public static void testValidity(Object o) throws XmlJsonException {
         if (o instanceof Number && !numberIsFinite((Number) o)) {
-            throw new JSONException("JSON does not allow non-finite numbers.");
+            throw new XmlJsonException("JSON does not allow non-finite numbers.");
         }
     }
 
     /**
-     * Produce a JSONArray containing the values of the members of this
+     * Produce a XmlJsonArray containing the values of the members of this
      * JSONObject.
      *
-     * @param names A JSONArray containing a list of key strings. This determines
+     * @param names A XmlJsonArray containing a list of key strings. This determines
      *              the sequence of the values in the result.
-     * @return A JSONArray of values.
-     * @throws JSONException If any of the values are non-finite numbers.
+     * @return A XmlJsonArray of values.
+     * @throws XmlJsonException If any of the values are non-finite numbers.
      */
-    public JSONArray toJSONArray(JSONArray names) throws JSONException {
+    public XmlJsonArray toJSONArray(XmlJsonArray names) throws XmlJsonException {
         if (names == null || names.isEmpty()) {
             return null;
         }
-        JSONArray ja = new JSONArray();
+        XmlJsonArray ja = new XmlJsonArray();
         for (int i = 0; i < names.length(); i += 1) {
             ja.put(this.opt(names.getString(i)));
         }
@@ -2206,7 +2206,7 @@ public class XmlToJSONObject extends JsonObject {
     /**
      * Make a pretty-printed JSON text of this JSONObject.
      *
-     * <p>If <pre>{@code indentFactor > 0}</pre> and the {@link XmlToJSONObject}
+     * <p>If <pre>{@code indentFactor > 0}</pre> and the {@link XmlToJsonObject}
      * has only one key, then the object will be output on a single line:
      * <pre>{@code {"key": 1}}</pre>
      *
@@ -2225,10 +2225,10 @@ public class XmlToJSONObject extends JsonObject {
      * of the object, beginning with <code>{</code>&nbsp;<small>(left
      * brace)</small> and ending with <code>}</code>&nbsp;<small>(right
      * brace)</small>.
-     * @throws JSONException If the object contains an invalid number.
+     * @throws XmlJsonException If the object contains an invalid number.
      */
     @SuppressWarnings("resource")
-    public String toString(int indentFactor) throws JSONException {
+    public String toString(int indentFactor) throws XmlJsonException {
         StringWriter w = new StringWriter();
         synchronized (w.getBuffer()) {
             return this.write(w, indentFactor, 0).toString();
@@ -2241,7 +2241,7 @@ public class XmlToJSONObject extends JsonObject {
      * JSON text. The method is required to produce a strictly conforming text.
      * If the object does not contain a toJSONString method (which is the most
      * common case), then a text will be produced by other means. If the value
-     * is an array or Collection, then a JSONArray will be made from it and its
+     * is an array or Collection, then a XmlJsonArray will be made from it and its
      * toJSONString method will be called. If the value is a MAP, then a
      * JSONObject will be made from it and its toJSONString method will be
      * called. Otherwise, the value's toString method will be called, and the
@@ -2255,19 +2255,19 @@ public class XmlToJSONObject extends JsonObject {
      * object, beginning with <code>{</code>&nbsp;<small>(left
      * brace)</small> and ending with <code>}</code>&nbsp;<small>(right
      * brace)</small>.
-     * @throws JSONException If the value is or contains an invalid number.
+     * @throws XmlJsonException If the value is or contains an invalid number.
      */
-    public static String valueToString(Object value) throws JSONException {
+    public static String valueToString(Object value) throws XmlJsonException {
         // moves the implementation to JSONWriter as:
         // 1. It makes more sense to be part of the writer class
         // 2. For Android support this method is not available. By implementing it in the Writer
         //    Android users can use the writer with the built in Android JSONObject implementation.
-        return JSONWriter.valueToString(value);
+        return XmlJsonWriter.valueToString(value);
     }
 
     /**
      * Wrap an object, if necessary. If the object is <code>null</code>, return the NULL
-     * object. If it is an array or collection, wrap it in a JSONArray. If it is
+     * object. If it is an array or collection, wrap it in a XmlJsonArray. If it is
      * a map, wrap it in a JSONObject. If it is a standard property (Double,
      * String, et al) then it is already wrapped. Otherwise, if it comes from
      * one of the java packages, turn it into a string. And if it doesn't, try
@@ -2285,8 +2285,8 @@ public class XmlToJSONObject extends JsonObject {
             if (NULL.equals(object)) {
                 return NULL;
             }
-            if (object instanceof XmlToJSONObject || object instanceof JSONArray
-                    || NULL.equals(object) || object instanceof JsonString
+            if (object instanceof XmlToJsonObject || object instanceof XmlJsonArray
+                    || NULL.equals(object) || object instanceof XmlJsonString
                     || object instanceof Byte || object instanceof Character
                     || object instanceof Short || object instanceof Integer
                     || object instanceof Long || object instanceof Boolean
@@ -2298,14 +2298,14 @@ public class XmlToJSONObject extends JsonObject {
 
             if (object instanceof Collection) {
                 Collection<?> coll = (Collection<?>) object;
-                return new JSONArray(coll);
+                return new XmlJsonArray(coll);
             }
             if (object.getClass().isArray()) {
-                return new JSONArray(object);
+                return new XmlJsonArray(object);
             }
             if (object instanceof Map) {
                 Map<?, ?> map = (Map<?, ?>) object;
-                return new XmlToJSONObject(map);
+                return new XmlToJsonObject(map);
             }
             Package objectPackage = object.getClass().getPackage();
             String objectPackageName = objectPackage != null ? objectPackage
@@ -2316,10 +2316,10 @@ public class XmlToJSONObject extends JsonObject {
                 return object.toString();
             }
             if (objectsRecord != null) {
-                return new XmlToJSONObject(object, objectsRecord);
+                return new XmlToJsonObject(object, objectsRecord);
             }
-            return new XmlToJSONObject(object);
-        } catch (JSONException exception) {
+            return new XmlToJsonObject(object);
+        } catch (XmlJsonException exception) {
             throw exception;
         } catch (Exception exception) {
             return null;
@@ -2335,23 +2335,23 @@ public class XmlToJSONObject extends JsonObject {
      *
      * @param writer the writer object
      * @return The writer.
-     * @throws JSONException if a called function has an error
+     * @throws XmlJsonException if a called function has an error
      */
-    public Writer write(Writer writer) throws JSONException {
+    public Writer write(Writer writer) throws XmlJsonException {
         return this.write(writer, 0, 0);
     }
 
     @SuppressWarnings("resource")
     static final Writer writeValue(Writer writer, Object value,
-                                   int indentFactor, int indent) throws JSONException, IOException {
+                                   int indentFactor, int indent) throws XmlJsonException, IOException {
         if (value == null || value.equals(null)) {
             writer.write("null");
-        } else if (value instanceof JsonString) {
+        } else if (value instanceof XmlJsonString) {
             Object o;
             try {
-                o = ((JsonString) value).toJSONString();
+                o = ((XmlJsonString) value).toJsonString();
             } catch (Exception e) {
-                throw new JSONException(e);
+                throw new XmlJsonException(e);
             }
             writer.write(o != null ? o.toString() : quote(value.toString()));
         } else if (value instanceof Number) {
@@ -2368,18 +2368,18 @@ public class XmlToJSONObject extends JsonObject {
             writer.write(value.toString());
         } else if (value instanceof Enum<?>) {
             writer.write(quote(((Enum<?>) value).name()));
-        } else if (value instanceof XmlToJSONObject) {
-            ((XmlToJSONObject) value).write(writer, indentFactor, indent);
-        } else if (value instanceof JSONArray) {
-            ((JSONArray) value).write(writer, indentFactor, indent);
+        } else if (value instanceof XmlToJsonObject) {
+            ((XmlToJsonObject) value).write(writer, indentFactor, indent);
+        } else if (value instanceof XmlJsonArray) {
+            ((XmlJsonArray) value).write(writer, indentFactor, indent);
         } else if (value instanceof Map) {
             Map<?, ?> map = (Map<?, ?>) value;
-            new XmlToJSONObject(map).write(writer, indentFactor, indent);
+            new XmlToJsonObject(map).write(writer, indentFactor, indent);
         } else if (value instanceof Collection) {
             Collection<?> coll = (Collection<?>) value;
-            new JSONArray(coll).write(writer, indentFactor, indent);
+            new XmlJsonArray(coll).write(writer, indentFactor, indent);
         } else if (value.getClass().isArray()) {
-            new JSONArray(value).write(writer, indentFactor, indent);
+            new XmlJsonArray(value).write(writer, indentFactor, indent);
         } else {
             quote(value.toString(), writer);
         }
@@ -2395,7 +2395,7 @@ public class XmlToJSONObject extends JsonObject {
     /**
      * Write the contents of the JSONObject as JSON text to a writer.
      *
-     * <p>If <pre>{@code indentFactor > 0}</pre> and the {@link XmlToJSONObject}
+     * <p>If <pre>{@code indentFactor > 0}</pre> and the {@link XmlToJsonObject}
      * has only one key, then the object will be output on a single line:
      * <pre>{@code {"key": 1}}</pre>
      *
@@ -2413,12 +2413,12 @@ public class XmlToJSONObject extends JsonObject {
      * @param indentFactor The number of spaces to add to each level of indentation.
      * @param indent       The indentation of the top level.
      * @return The writer.
-     * @throws JSONException if a called function has an error or a write error
+     * @throws XmlJsonException if a called function has an error or a write error
      *                       occurs
      */
     @SuppressWarnings("resource")
     public Writer write(Writer writer, int indentFactor, int indent)
-            throws JSONException {
+            throws XmlJsonException {
         try {
             boolean needsComma = false;
             final int length = this.length();
@@ -2435,7 +2435,7 @@ public class XmlToJSONObject extends JsonObject {
                 try {
                     writeValue(writer, entry.getValue(), indentFactor, indent);
                 } catch (Exception e) {
-                    throw new JSONException("Unable to write JSONObject value for key: " + key, e);
+                    throw new XmlJsonException("Unable to write JSONObject value for key: " + key, e);
                 }
             } else if (length != 0) {
                 final int newIndent = indent + indentFactor;
@@ -2456,7 +2456,7 @@ public class XmlToJSONObject extends JsonObject {
                     try {
                         writeValue(writer, entry.getValue(), indentFactor, newIndent);
                     } catch (Exception e) {
-                        throw new JSONException("Unable to write JSONObject value for key: " + key, e);
+                        throw new XmlJsonException("Unable to write JSONObject value for key: " + key, e);
                     }
                     needsComma = true;
                 }
@@ -2468,13 +2468,13 @@ public class XmlToJSONObject extends JsonObject {
             writer.write('}');
             return writer;
         } catch (IOException exception) {
-            throw new JSONException(exception);
+            throw new XmlJsonException(exception);
         }
     }
 
     /**
      * Returns a java.util.Map containing all of the entries in this object.
-     * If an entry in the object is a JSONArray or JSONObject it will also
+     * If an entry in the object is a XmlJsonArray or JSONObject it will also
      * be converted.
      * <p>
      * Warning: This method assumes that the data structure is acyclical.
@@ -2487,10 +2487,10 @@ public class XmlToJSONObject extends JsonObject {
             Object value;
             if (entry.getValue() == null || NULL.equals(entry.getValue())) {
                 value = null;
-            } else if (entry.getValue() instanceof XmlToJSONObject) {
-                value = ((XmlToJSONObject) entry.getValue()).toMap();
-            } else if (entry.getValue() instanceof JSONArray) {
-                value = ((JSONArray) entry.getValue()).toList();
+            } else if (entry.getValue() instanceof XmlToJsonObject) {
+                value = ((XmlToJsonObject) entry.getValue()).toMap();
+            } else if (entry.getValue() instanceof XmlJsonArray) {
+                value = ((XmlJsonArray) entry.getValue()).toList();
             } else {
                 value = entry.getValue();
             }
@@ -2500,43 +2500,43 @@ public class XmlToJSONObject extends JsonObject {
     }
 
     /**
-     * Create a new JSONException in a common format for incorrect conversions.
+     * Create a new XmlJsonException in a common format for incorrect conversions.
      *
      * @param key       name of the key
      * @param valueType the type of value being coerced to
      * @param cause     optional cause of the coercion failure
-     * @return JSONException that can be thrown.
+     * @return XmlJsonException that can be thrown.
      */
-    private static JSONException wrongValueFormatException(
+    private static XmlJsonException wrongValueFormatException(
             String key,
             String valueType,
             Object value,
             Throwable cause) {
         if (value == null) {
 
-            return new JSONException(
+            return new XmlJsonException(
                     "JSONObject[" + quote(key) + "] is not a " + valueType + " (null)."
                     , cause);
         }
         // don't try to toString collections or known object types that could be large.
-        if (value instanceof Map || value instanceof Iterable || value instanceof XmlToJSONObject) {
-            return new JSONException(
+        if (value instanceof Map || value instanceof Iterable || value instanceof XmlToJsonObject) {
+            return new XmlJsonException(
                     "JSONObject[" + quote(key) + "] is not a " + valueType + " (" + value.getClass() + ")."
                     , cause);
         }
-        return new JSONException(
+        return new XmlJsonException(
                 "JSONObject[" + quote(key) + "] is not a " + valueType + " (" + value.getClass() + " : " + value + ")."
                 , cause);
     }
 
     /**
-     * Create a new JSONException in a common format for recursive object definition.
+     * Create a new XmlJsonException in a common format for recursive object definition.
      *
      * @param key name of the key
-     * @return JSONException that can be thrown.
+     * @return XmlJsonException that can be thrown.
      */
-    private static JSONException recursivelyDefinedObjectException(String key) {
-        return new JSONException(
+    private static XmlJsonException recursivelyDefinedObjectException(String key) {
+        return new XmlJsonException(
                 "JavaBean object contains recursively defined member variable of key " + quote(key)
         );
     }

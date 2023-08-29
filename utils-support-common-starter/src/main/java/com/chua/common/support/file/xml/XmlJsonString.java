@@ -8,12 +8,12 @@ Public Domain.
  * json str
  * @author Administrator
  */
-public interface JsonString {
+public interface XmlJsonString {
     /**
      * The <code>toJSONString</code> method allows a class to produce its own JSON
      * serialization.
      *
      * @return A strictly syntactically correct JSON text.
      */
-    String toJSONString();
+    String toJsonString();
 }

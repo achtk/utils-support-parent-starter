@@ -1,5 +1,7 @@
 package com.chua.common.support.file.xml;
 
+import com.alibaba.fastjson2.JSONArray;
+
 import java.io.*;
 
 /*
@@ -14,7 +16,7 @@ Public Domain.
  * @author JSON.org
  * @version 2014-05-03
  */
-public class JSONTokener {
+public class XmlJsonTokener {
     /**
      * current read character position on the current line.
      */
@@ -54,7 +56,7 @@ public class JSONTokener {
      *
      * @param reader A reader.
      */
-    public JSONTokener(Reader reader) {
+    public XmlJsonTokener(Reader reader) {
         this.reader = reader.markSupported()
                 ? reader
                 : new BufferedReader(reader);
@@ -73,7 +75,7 @@ public class JSONTokener {
      *
      * @param inputStream The source.
      */
-    public JSONTokener(InputStream inputStream) {
+    public XmlJsonTokener(InputStream inputStream) {
         this(new InputStreamReader(inputStream));
     }
 
@@ -83,7 +85,7 @@ public class JSONTokener {
      *
      * @param s A source string.
      */
-    public JSONTokener(String s) {
+    public XmlJsonTokener(String s) {
         this(new StringReader(s));
     }
 
@@ -93,12 +95,12 @@ public class JSONTokener {
      * so that you can test for a digit or letter before attempting to parse
      * the next number or identifier.
      *
-     * @throws JSONException Thrown if trying to step back more than 1 step
+     * @throws XmlJsonException Thrown if trying to step back more than 1 step
      *                       or if already at the start of the string
      */
-    public void back() throws JSONException {
+    public void back() throws XmlJsonException {
         if (this.usePrevious || this.index <= 0) {
-            throw new JSONException("Stepping back two steps is not supported");
+            throw new XmlJsonException("Stepping back two steps is not supported");
         }
         this.decrementIndexes();
         this.usePrevious = true;
@@ -153,17 +155,17 @@ public class JSONTokener {
      * can consume.
      *
      * @return true if not yet at the end of the source.
-     * @throws JSONException thrown if there is an error stepping forward
+     * @throws XmlJsonException thrown if there is an error stepping forward
      *                       or backward while checking for more data.
      */
-    public boolean more() throws JSONException {
+    public boolean more() throws XmlJsonException {
         if (this.usePrevious) {
             return true;
         }
         try {
             this.reader.mark(1);
         } catch (IOException e) {
-            throw new JSONException("Unable to preserve stream position", e);
+            throw new XmlJsonException("Unable to preserve stream position", e);
         }
         try {
             // -1 is EOF, but next() can not consume the null character '\0'
@@ -173,7 +175,7 @@ public class JSONTokener {
             }
             this.reader.reset();
         } catch (IOException e) {
-            throw new JSONException("Unable to read the next character from the stream", e);
+            throw new XmlJsonException("Unable to read the next character from the stream", e);
         }
         return true;
     }
@@ -183,9 +185,9 @@ public class JSONTokener {
      * Get the next character in the source string.
      *
      * @return The next character, or 0 if past the end of the source string.
-     * @throws JSONException Thrown if there is an error reading the source string.
+     * @throws XmlJsonException Thrown if there is an error reading the source string.
      */
-    public char next() throws JSONException {
+    public char next() throws XmlJsonException {
         int c;
         if (this.usePrevious) {
             this.usePrevious = false;
@@ -194,7 +196,7 @@ public class JSONTokener {
             try {
                 c = this.reader.read();
             } catch (IOException exception) {
-                throw new JSONException(exception);
+                throw new XmlJsonException(exception);
             }
         }
         if (c <= 0) {
@@ -246,9 +248,9 @@ public class JSONTokener {
      *
      * @param c The character to match.
      * @return The character.
-     * @throws JSONException if the character does not match.
+     * @throws XmlJsonException if the character does not match.
      */
-    public char next(char c) throws JSONException {
+    public char next(char c) throws XmlJsonException {
         char n = this.next();
         if (n != c) {
             if (n > 0) {
@@ -266,10 +268,10 @@ public class JSONTokener {
      *
      * @param n The number of characters to take.
      * @return A string of n characters.
-     * @throws JSONException Substring bounds error if there are not
+     * @throws XmlJsonException Substring bounds error if there are not
      *                       n characters remaining in the source string.
      */
-    public String next(int n) throws JSONException {
+    public String next(int n) throws XmlJsonException {
         if (n == 0) {
             return "";
         }
@@ -292,9 +294,9 @@ public class JSONTokener {
      * Get the next char in the string, skipping whitespace.
      *
      * @return A character, or 0 if there are no more characters.
-     * @throws JSONException Thrown if there is an error reading the source string.
+     * @throws XmlJsonException Thrown if there is an error reading the source string.
      */
-    public char nextClean() throws JSONException {
+    public char nextClean() throws XmlJsonException {
         for (; ; ) {
             char c = this.next();
             if (c == 0 || c > ' ') {
@@ -314,9 +316,9 @@ public class JSONTokener {
      *              <code>"</code>&nbsp;<small>(double quote)</small> or
      *              <code>'</code>&nbsp;<small>(single quote)</small>.
      * @return A String.
-     * @throws JSONException Unterminated string.
+     * @throws XmlJsonException Unterminated string.
      */
-    public String nextString(char quote) throws JSONException {
+    public String nextString(char quote) throws XmlJsonException {
         char c;
         StringBuilder sb = new StringBuilder();
         for (; ; ) {
@@ -377,10 +379,10 @@ public class JSONTokener {
      *
      * @param delimiter A delimiter character.
      * @return A string.
-     * @throws JSONException Thrown if there is an error while searching
+     * @throws XmlJsonException Thrown if there is an error while searching
      *                       for the delimiter
      */
-    public String nextTo(char delimiter) throws JSONException {
+    public String nextTo(char delimiter) throws XmlJsonException {
         StringBuilder sb = new StringBuilder();
         for (; ; ) {
             char c = this.next();
@@ -401,10 +403,10 @@ public class JSONTokener {
      *
      * @param delimiters A set of delimiter characters.
      * @return A string, trimmed.
-     * @throws JSONException Thrown if there is an error while searching
+     * @throws XmlJsonException Thrown if there is an error while searching
      *                       for the delimiter
      */
-    public String nextTo(String delimiters) throws JSONException {
+    public String nextTo(String delimiters) throws XmlJsonException {
         char c;
         StringBuilder sb = new StringBuilder();
         for (; ; ) {
@@ -426,9 +428,9 @@ public class JSONTokener {
      * JSONArray, JSONObject, Long, or String, or the JSONObject.NULL object.
      *
      * @return An object.
-     * @throws JSONException If syntax error.
+     * @throws XmlJsonException If syntax error.
      */
-    public Object nextValue() throws JSONException {
+    public Object nextValue() throws XmlJsonException {
         char c = this.nextClean();
         String string;
 
@@ -439,16 +441,16 @@ public class JSONTokener {
             case '{':
                 this.back();
                 try {
-                    return new XmlToJSONObject(this);
+                    return new XmlToJsonObject(this);
                 } catch (StackOverflowError e) {
-                    throw new JSONException("JSON Array or Object depth too large to process.", e);
+                    throw new XmlJsonException("JSON Array or Object depth too large to process.", e);
                 }
             case '[':
                 this.back();
                 try {
                     return new JSONArray(this);
                 } catch (StackOverflowError e) {
-                    throw new JSONException("JSON Array or Object depth too large to process.", e);
+                    throw new XmlJsonException("JSON Array or Object depth too large to process.", e);
                 }
             default:
         }
@@ -475,7 +477,7 @@ public class JSONTokener {
         if ("".equals(string)) {
             throw this.syntaxError("Missing value");
         }
-        return XmlToJSONObject.stringToValue(string);
+        return XmlToJsonObject.stringToValue(string);
     }
 
 
@@ -486,10 +488,10 @@ public class JSONTokener {
      * @param to A character to skip to.
      * @return The requested character, or zero if the requested character
      * is not found.
-     * @throws JSONException Thrown if there is an error while searching
+     * @throws XmlJsonException Thrown if there is an error while searching
      *                       for the to character
      */
-    public char skipTo(char to) throws JSONException {
+    public char skipTo(char to) throws XmlJsonException {
         char c;
         try {
             long startIndex = this.index;
@@ -511,31 +513,31 @@ public class JSONTokener {
             } while (c != to);
             this.reader.mark(1);
         } catch (IOException exception) {
-            throw new JSONException(exception);
+            throw new XmlJsonException(exception);
         }
         this.back();
         return c;
     }
 
     /**
-     * Make a JSONException to signal a syntax error.
+     * Make a XmlJsonException to signal a syntax error.
      *
      * @param message The error message.
-     * @return A JSONException object, suitable for throwing
+     * @return A XmlJsonException object, suitable for throwing
      */
-    public JSONException syntaxError(String message) {
-        return new JSONException(message + this.toString());
+    public XmlJsonException syntaxError(String message) {
+        return new XmlJsonException(message + this.toString());
     }
 
     /**
-     * Make a JSONException to signal a syntax error.
+     * Make a XmlJsonException to signal a syntax error.
      *
      * @param message  The error message.
      * @param causedBy The throwable that caused the error.
-     * @return A JSONException object, suitable for throwing
+     * @return A XmlJsonException object, suitable for throwing
      */
-    public JSONException syntaxError(String message, Throwable causedBy) {
-        return new JSONException(message + this.toString(), causedBy);
+    public XmlJsonException syntaxError(String message, Throwable causedBy) {
+        return new XmlJsonException(message + this.toString(), causedBy);
     }
 
     /**

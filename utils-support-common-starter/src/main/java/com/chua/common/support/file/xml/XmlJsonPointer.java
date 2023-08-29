@@ -1,5 +1,8 @@
 package com.chua.common.support.file.xml;
 
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONException;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -26,14 +29,14 @@ Public Domain.
  * is successful, the matched item is returned. A matched item may be a
  * JSONObject, a JSONArray, or a JSON value. If the JSONPointer string building
  * fails, an appropriate exception is thrown. If the navigation fails to find
- * a match, a JSONPointerException is thrown.
+ * a match, a XmlJsonPointerException is thrown.
  *
  * @author JSON.org
  * @version 2016-05-14
  */
-public class JSONPointer {
+public class XmlJsonPointer {
 
-        private static final String ENCODING = "utf-8";
+    private static final String ENCODING = "utf-8";
 
     /**
      * This class allows the user to build a JSONPointer in steps, using
@@ -49,8 +52,8 @@ public class JSONPointer {
          *
          * @return a JSONPointer object
          */
-        public JSONPointer build() {
-            return new JSONPointer(this.refTokens);
+        public XmlJsonPointer build() {
+            return new XmlJsonPointer(this.refTokens);
         }
 
         /**
@@ -115,7 +118,7 @@ public class JSONPointer {
      * @param pointer the JSON String or URI Fragment representation of the JSON pointer.
      * @throws IllegalArgumentException if {@code pointer} is not a valid JSON pointer
      */
-    public JSONPointer(final String pointer) {
+    public XmlJsonPointer(final String pointer) {
         if (pointer == null) {
             throw new NullPointerException("pointer cannot be null");
         }
@@ -155,7 +158,7 @@ public class JSONPointer {
         //    this.refTokens.add(unescape(token));
     }
 
-    public JSONPointer(List<String> refTokens) {
+    public XmlJsonPointer(List<String> refTokens) {
         this.refTokens = new ArrayList<String>(refTokens);
     }
 
@@ -168,26 +171,26 @@ public class JSONPointer {
 
     /**
      * Evaluates this JSON Pointer on the given {@code document}. The {@code document}
-     * is usually a {@link XmlToJSONObject} or a {@link JSONArray} instance, but the empty
+     * is usually a {@link XmlToJsonObject} or a {@link JSONArray} instance, but the empty
      * JSON Pointer ({@code ""}) can be evaluated on any JSON values and in such case the
      * returned value will be {@code document} itself.
      *
      * @param document the JSON document which should be the subject of querying.
      * @return the result of the evaluation
-     * @throws JSONPointerException if an error occurs during evaluation
+     * @throws XmlJsonPointerException if an error occurs during evaluation
      */
-    public Object queryFrom(Object document) throws JSONPointerException {
+    public Object queryFrom(Object document) throws XmlJsonPointerException {
         if (this.refTokens.isEmpty()) {
             return document;
         }
         Object current = document;
         for (String token : this.refTokens) {
-            if (current instanceof XmlToJSONObject) {
-                current = ((XmlToJSONObject) current).opt(unescape(token));
+            if (current instanceof XmlToJsonObject) {
+                current = ((XmlToJsonObject) current).opt(unescape(token));
             } else if (current instanceof JSONArray) {
                 current = readByIndexToken(current, token);
             } else {
-                throw new JSONPointerException(format(
+                throw new XmlJsonPointerException(format(
                         "value [%s] is not an array or object therefore its key %s cannot be resolved", current,
                         token));
             }
@@ -201,23 +204,23 @@ public class JSONPointer {
      * @param current    the JSONArray to be evaluated
      * @param indexToken the array index in string form
      * @return the matched object. If no matching item is found a
-     * @throws JSONPointerException is thrown if the index is out of bounds
+     * @throws XmlJsonPointerException is thrown if the index is out of bounds
      */
-    private static Object readByIndexToken(Object current, String indexToken) throws JSONPointerException {
+    private static Object readByIndexToken(Object current, String indexToken) throws XmlJsonPointerException {
         try {
             int index = Integer.parseInt(indexToken);
-            JSONArray currentArr = (JSONArray) current;
+            XmlJsonArray currentArr = (XmlJsonArray) current;
             if (index >= currentArr.length()) {
-                throw new JSONPointerException(format("index %s is out of bounds - the array has %d elements", indexToken,
+                throw new XmlJsonPointerException(format("index %s is out of bounds - the array has %d elements", indexToken,
                         Integer.valueOf(currentArr.length())));
             }
             try {
                 return currentArr.get(index);
             } catch (JSONException e) {
-                throw new JSONPointerException("Error reading value at index position " + index, e);
+                throw new XmlJsonPointerException("Error reading value at index position " + index, e);
             }
         } catch (NumberFormatException e) {
-            throw new JSONPointerException(format("%s is not an array index", indexToken), e);
+            throw new XmlJsonPointerException(format("%s is not an array index", indexToken), e);
         }
     }
 

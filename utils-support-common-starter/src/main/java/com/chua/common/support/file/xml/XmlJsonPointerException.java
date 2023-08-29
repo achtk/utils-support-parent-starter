@@ -5,20 +5,20 @@ Public Domain.
 */
 
 /**
- * The JSONPointerException is thrown by {@link JSONPointer} if an error occurs
+ * The JSONPointerException is thrown by {@link XmlJsonPointer} if an error occurs
  * during evaluating a pointer.
  *
  * @author JSON.org
  * @version 2016-05-13
  */
-public class JSONPointerException extends JSONException {
+public class XmlJsonPointerException extends XmlJsonException {
     private static final long serialVersionUID = 8872944667561856751L;
 
-    public JSONPointerException(String message) {
+    public XmlJsonPointerException(String message) {
         super(message);
     }
 
-    public JSONPointerException(String message, Throwable cause) {
+    public XmlJsonPointerException(String message, Throwable cause) {
         super(message, cause);
     }
 

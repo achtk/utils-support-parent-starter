@@ -5,8 +5,8 @@ import com.chua.common.support.converter.Converter;
 import com.chua.common.support.database.transfer.AbstractWriterChannel;
 import com.chua.common.support.database.transfer.collection.SinkTable;
 import com.chua.common.support.file.export.ExportConfiguration;
-import com.chua.common.support.file.xml.XML;
-import com.chua.common.support.file.xml.XmlToJSONObject;
+import com.chua.common.support.file.xml.Xml;
+import com.chua.common.support.file.xml.XmlToJsonObject;
 import com.chua.common.support.function.DisposableAware;
 import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.json.JsonArray;
@@ -51,15 +51,15 @@ public class XmlWriterChannel extends AbstractWriterChannel implements Initializ
 
     @Override
     public SinkTable createSinkTable() {
-        JsonObject jsonObject = XML.toJsonObject(createReader());
+        JsonObject jsonObject = Xml.toJsonObject(createReader());
         JsonObject data = jsonObject.getJsonObject("data");
         JsonArray jsonArray = data.getJsonArray("item");
         List<Map<String, Object>> tpl = new LinkedList<>();
         jsonArray.forEach(it -> {
             Map<String, Object> item = new LinkedHashMap<>();
-            XmlToJSONObject xml = (XmlToJSONObject) it;
+            XmlToJsonObject xml = (XmlToJsonObject) it;
             xml.forEach((k, v) -> {
-                XmlToJSONObject v1 = (XmlToJSONObject) v;
+                XmlToJsonObject v1 = (XmlToJsonObject) v;
                 Pair pair = dataMapping.getPair(k);
                 if(null == pair) {
                     pair = dataMapping.getPair(v1.get("describe").toString());

@@ -3,8 +3,8 @@ package com.chua.common.support.file.imports;
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.file.export.ExportConfiguration;
 import com.chua.common.support.file.univocity.parsers.csv.CsvParserSettings;
-import com.chua.common.support.file.xml.JSONArray;
-import com.chua.common.support.file.xml.XML;
+import com.chua.common.support.file.xml.Xml;
+import com.chua.common.support.file.xml.XmlJsonArray;
 import com.chua.common.support.json.JsonObject;
 
 import java.io.InputStream;
@@ -30,7 +30,7 @@ public class XmlImportFile extends AbstractImportFile {
     public <T> void imports(InputStream inputStream, Class<T> type, ImportListener<T> listener) {
         JsonObject jsonObject = null;
         try (InputStreamReader reader = new InputStreamReader(inputStream, configuration.charset())) {
-            jsonObject = XML.toJsonObject(reader, false);
+            jsonObject = Xml.toJsonObject(reader, false);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -53,8 +53,8 @@ public class XmlImportFile extends AbstractImportFile {
         Set<String> strings = jsonObject.keySet();
         for (String string : strings) {
             Object o = jsonObject.getObject(string);
-            if (o instanceof JSONArray) {
-                doAnalysisCollection((JSONArray) o, type, listener);
+            if (o instanceof XmlJsonArray) {
+                doAnalysisCollection((XmlJsonArray) o, type, listener);
                 continue;
             }
 
@@ -73,7 +73,7 @@ public class XmlImportFile extends AbstractImportFile {
      * @param type      类型
      * @param listener  监听
      */
-    private <T> void doAnalysisCollection(JSONArray jsonArray, Class<T> type, ImportListener<T> listener) {
+    private <T> void doAnalysisCollection(XmlJsonArray jsonArray, Class<T> type, ImportListener<T> listener) {
         int size = jsonArray.length();
         skip = skip - 1;
         for (int i = 0; i < size; i++) {
@@ -81,7 +81,7 @@ public class XmlImportFile extends AbstractImportFile {
                 continue;
             }
 
-            listener.accept(doAnalysis(type, jsonArray.getJSONObject(i)));
+            listener.accept(doAnalysis(type, jsonArray.getJsonObject(i)));
             if (listener.isEnd(i + 1)) {
                 break;
             }

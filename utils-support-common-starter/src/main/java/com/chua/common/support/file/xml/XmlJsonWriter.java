@@ -9,20 +9,20 @@ Public Domain.
 */
 
 /**
- * JSONWriter provides a quick and convenient way of producing JSON text.
+ * XmlJsonWriter provides a quick and convenient way of producing JSON text.
  * The texts produced strictly conform to JSON syntax rules. No whitespace is
  * added, so the results are ready for transmission or storage. Each instance of
- * JSONWriter can produce one JSON text.
+ * XmlJsonWriter can produce one JSON text.
  * <p>
- * A JSONWriter instance provides a <code>value</code> method for appending
+ * A XmlJsonWriter instance provides a <code>value</code> method for appending
  * values to the
  * text, and a <code>key</code>
  * method for adding keys before values in objects. There are <code>array</code>
  * and <code>endArray</code> methods that make and bound array values, and
  * <code>object</code> and <code>endObject</code> methods which make and bound
- * object values. All of these methods return the JSONWriter instance,
+ * object values. All of these methods return the XmlJsonWriter instance,
  * permitting a cascade style. For example, <pre>
- * new JSONWriter(myWriter)
+ * new XmlJsonWriter(myWriter)
  *     .object()
  *         .key("JSON")
  *         .value("Hello, World!")
@@ -30,7 +30,7 @@ Public Domain.
  * {"JSON":"Hello, World!"}</pre>
  * <p>
  * The first method called must be <code>array</code> or <code>object</code>.
- * There are no methods for adding commas or colons. JSONWriter adds them for
+ * There are no methods for adding commas or colons. XmlJsonWriter adds them for
  * you. Objects and arrays can be nested up to 200 levels deep.
  * <p>
  * This can sometimes be easier than using a JSONObject to build a string.
@@ -38,7 +38,7 @@ Public Domain.
  * @author JSON.org
  * @version 2016-08-08
  */
-public class JSONWriter {
+public class XmlJsonWriter {
     private static final int MAX_DEPTH = 200;
 
     /**
@@ -60,7 +60,7 @@ public class JSONWriter {
     /**
      * The object/array stack.
      */
-    private final XmlToJSONObject[] stack;
+    private final XmlToJsonObject[] stack;
 
     /**
      * The stack top index. A value of 0 indicates that the stack is empty.
@@ -73,14 +73,14 @@ public class JSONWriter {
     protected Appendable writer;
 
     /**
-     * Make a fresh JSONWriter. It can be used to build one JSON text.
+     * Make a fresh XmlJsonWriter. It can be used to build one JSON text.
      *
      * @param w an appendable object
      */
-    public JSONWriter(Appendable w) {
+    public XmlJsonWriter(Appendable w) {
         this.comma = false;
         this.mode = 'i';
-        this.stack = new XmlToJSONObject[MAX_DEPTH];
+        this.stack = new XmlToJsonObject[MAX_DEPTH];
         this.top = 0;
         this.writer = w;
     }
@@ -90,11 +90,11 @@ public class JSONWriter {
      *
      * @param string A string value.
      * @return this
-     * @throws JSONException If the value is out of sequence.
+     * @throws XmlJsonException If the value is out of sequence.
      */
-    private JSONWriter append(String string) throws JSONException {
+    private XmlJsonWriter append(String string) throws XmlJsonException {
         if (string == null) {
-            throw new JSONException("Null pointer");
+            throw new XmlJsonException("Null pointer");
         }
         if (this.mode == 'o' || this.mode == 'a') {
             try {
@@ -106,7 +106,7 @@ public class JSONWriter {
                 // Android as of API 25 does not support this exception constructor
                 // however we won't worry about it. If an exception is happening here
                 // it will just throw a "Method not found" exception instead.
-                throw new JSONException(e);
+                throw new XmlJsonException(e);
             }
             if (this.mode == 'o') {
                 this.mode = 'k';
@@ -114,7 +114,7 @@ public class JSONWriter {
             this.comma = true;
             return this;
         }
-        throw new JSONException("Value out of sequence.");
+        throw new XmlJsonException("Value out of sequence.");
     }
 
     /**
@@ -123,18 +123,18 @@ public class JSONWriter {
      * <code>endArray</code> method must be called to mark the array's end.
      *
      * @return this
-     * @throws JSONException If the nesting is too deep, or if the object is
+     * @throws XmlJsonException If the nesting is too deep, or if the object is
      *                       started in the wrong place (for example as a key or after the end of the
      *                       outermost array or object).
      */
-    public JSONWriter array() throws JSONException {
+    public XmlJsonWriter array() throws XmlJsonException {
         if (this.mode == 'i' || this.mode == 'o' || this.mode == 'a') {
             this.push(null);
             this.append("[");
             this.comma = false;
             return this;
         }
-        throw new JSONException("Misplaced array.");
+        throw new XmlJsonException("Misplaced array.");
     }
 
     /**
@@ -143,11 +143,11 @@ public class JSONWriter {
      * @param m Mode
      * @param c Closing character
      * @return this
-     * @throws JSONException If unbalanced.
+     * @throws XmlJsonException If unbalanced.
      */
-    private JSONWriter end(char m, char c) throws JSONException {
+    private XmlJsonWriter end(char m, char c) throws XmlJsonException {
         if (this.mode != m) {
-            throw new JSONException(m == 'a'
+            throw new XmlJsonException(m == 'a'
                     ? "Misplaced endArray."
                     : "Misplaced endObject.");
         }
@@ -158,7 +158,7 @@ public class JSONWriter {
             // Android as of API 25 does not support this exception constructor
             // however we won't worry about it. If an exception is happening here
             // it will just throw a "Method not found" exception instead.
-            throw new JSONException(e);
+            throw new XmlJsonException(e);
         }
         this.comma = true;
         return this;
@@ -169,9 +169,9 @@ public class JSONWriter {
      * <code>array</code>.
      *
      * @return this
-     * @throws JSONException If incorrectly nested.
+     * @throws XmlJsonException If incorrectly nested.
      */
-    public JSONWriter endArray() throws JSONException {
+    public XmlJsonWriter endArray() throws XmlJsonException {
         return this.end('a', ']');
     }
 
@@ -180,9 +180,9 @@ public class JSONWriter {
      * <code>object</code>.
      *
      * @return this
-     * @throws JSONException If incorrectly nested.
+     * @throws XmlJsonException If incorrectly nested.
      */
-    public JSONWriter endObject() throws JSONException {
+    public XmlJsonWriter endObject() throws XmlJsonException {
         return this.end('k', '}');
     }
 
@@ -192,25 +192,25 @@ public class JSONWriter {
      *
      * @param string A key string.
      * @return this
-     * @throws JSONException If the key is out of place. For example, keys
+     * @throws XmlJsonException If the key is out of place. For example, keys
      *                       do not belong in arrays or if the key is null.
      */
-    public JSONWriter key(String string) throws JSONException {
+    public XmlJsonWriter key(String string) throws XmlJsonException {
         if (string == null) {
-            throw new JSONException("Null key.");
+            throw new XmlJsonException("Null key.");
         }
         if (this.mode == 'k') {
             try {
-                XmlToJSONObject topObject = this.stack[this.top - 1];
+                XmlToJsonObject topObject = this.stack[this.top - 1];
                 // don't use the built in putOnce method to maintain Android support
                 if (topObject.has(string)) {
-                    throw new JSONException("Duplicate key \"" + string + "\"");
+                    throw new XmlJsonException("Duplicate key \"" + string + "\"");
                 }
                 topObject.put(string, true);
                 if (this.comma) {
                     this.writer.append(',');
                 }
-                this.writer.append(XmlToJSONObject.quote(string));
+                this.writer.append(XmlToJsonObject.quote(string));
                 this.writer.append(':');
                 this.comma = false;
                 this.mode = 'o';
@@ -219,10 +219,10 @@ public class JSONWriter {
                 // Android as of API 25 does not support this exception constructor
                 // however we won't worry about it. If an exception is happening here
                 // it will just throw a "Method not found" exception instead.
-                throw new JSONException(e);
+                throw new XmlJsonException(e);
             }
         }
-        throw new JSONException("Misplaced key.");
+        throw new XmlJsonException("Misplaced key.");
     }
 
 
@@ -232,21 +232,21 @@ public class JSONWriter {
      * <code>endObject</code> method must be called to mark the object's end.
      *
      * @return this
-     * @throws JSONException If the nesting is too deep, or if the object is
+     * @throws XmlJsonException If the nesting is too deep, or if the object is
      *                       started in the wrong place (for example as a key or after the end of the
      *                       outermost array or object).
      */
-    public JSONWriter object() throws JSONException {
+    public XmlJsonWriter object() throws XmlJsonException {
         if (this.mode == 'i') {
             this.mode = 'o';
         }
         if (this.mode == 'o' || this.mode == 'a') {
             this.append("{");
-            this.push(new XmlToJSONObject());
+            this.push(new XmlToJsonObject());
             this.comma = false;
             return this;
         }
-        throw new JSONException("Misplaced object.");
+        throw new XmlJsonException("Misplaced object.");
 
     }
 
@@ -255,15 +255,15 @@ public class JSONWriter {
      * Pop an array or object scope.
      *
      * @param c The scope to close.
-     * @throws JSONException If nesting is wrong.
+     * @throws XmlJsonException If nesting is wrong.
      */
-    private void pop(char c) throws JSONException {
+    private void pop(char c) throws XmlJsonException {
         if (this.top <= 0) {
-            throw new JSONException("Nesting error.");
+            throw new XmlJsonException("Nesting error.");
         }
         char m = this.stack[this.top - 1] == null ? 'a' : 'k';
         if (m != c) {
-            throw new JSONException("Nesting error.");
+            throw new XmlJsonException("Nesting error.");
         }
         this.top -= 1;
         this.mode = this.top == 0
@@ -277,11 +277,11 @@ public class JSONWriter {
      * Push an array or object scope.
      *
      * @param jo The scope to open.
-     * @throws JSONException If nesting is too deep.
+     * @throws XmlJsonException If nesting is too deep.
      */
-    private void push(XmlToJSONObject jo) throws JSONException {
+    private void push(XmlToJsonObject jo) throws XmlJsonException {
         if (this.top >= MAX_DEPTH) {
-            throw new JSONException("Nesting too deep.");
+            throw new XmlJsonException("Nesting too deep.");
         }
         this.stack[this.top] = jo;
         this.mode = jo == null ? 'a' : 'k';
@@ -291,54 +291,54 @@ public class JSONWriter {
     /**
      * @param value The value to be serialized.
      * @return string
-     * @throws JSONException If the value is or contains an invalid number.
+     * @throws XmlJsonException If the value is or contains an invalid number.
      */
-    public static String valueToString(Object value) throws JSONException {
+    public static String valueToString(Object value) throws XmlJsonException {
         if (value == null || value.equals(null)) {
             return "null";
         }
-        if (value instanceof JsonString) {
+        if (value instanceof XmlJsonString) {
             String object;
             try {
-                object = ((JsonString) value).toJSONString();
+                object = ((XmlJsonString) value).toJsonString();
             } catch (Exception e) {
-                throw new JSONException(e);
+                throw new XmlJsonException(e);
             }
             if (object != null) {
                 return object;
             }
-            throw new JSONException("Bad value from toJSONString: " + object);
+            throw new XmlJsonException("Bad value from toJSONString: " + object);
         }
         if (value instanceof Number) {
             // not all Numbers may match actual JSON Numbers. i.e. Fractions or Complex
-            final String numberAsString = XmlToJSONObject.numberToString((Number) value);
-            if (XmlToJSONObject.NUMBER_PATTERN.matcher(numberAsString).matches()) {
+            final String numberAsString = XmlToJsonObject.numberToString((Number) value);
+            if (XmlToJsonObject.NUMBER_PATTERN.matcher(numberAsString).matches()) {
                 // Close enough to a JSON number that we will return it unquoted
                 return numberAsString;
             }
             // The Number value is not a valid JSON number.
             // Instead we will quote it as a string
-            return XmlToJSONObject.quote(numberAsString);
+            return XmlToJsonObject.quote(numberAsString);
         }
-        if (value instanceof Boolean || value instanceof XmlToJSONObject
-                || value instanceof JSONArray) {
+        if (value instanceof Boolean || value instanceof XmlToJsonObject
+                || value instanceof XmlJsonArray) {
             return value.toString();
         }
         if (value instanceof Map) {
             Map<?, ?> map = (Map<?, ?>) value;
-            return new XmlToJSONObject(map).toString();
+            return new XmlToJsonObject(map).toString();
         }
         if (value instanceof Collection) {
             Collection<?> coll = (Collection<?>) value;
-            return new JSONArray(coll).toString();
+            return new XmlJsonArray(coll).toString();
         }
         if (value.getClass().isArray()) {
-            return new JSONArray(value).toString();
+            return new XmlJsonArray(value).toString();
         }
         if (value instanceof Enum<?>) {
-            return XmlToJSONObject.quote(((Enum<?>) value).name());
+            return XmlToJsonObject.quote(((Enum<?>) value).name());
         }
-        return XmlToJSONObject.quote(value.toString());
+        return XmlToJsonObject.quote(value.toString());
     }
 
     /**
@@ -347,9 +347,9 @@ public class JSONWriter {
      *
      * @param b A boolean.
      * @return this
-     * @throws JSONException if a called function has an error
+     * @throws XmlJsonException if a called function has an error
      */
-    public JSONWriter value(boolean b) throws JSONException {
+    public XmlJsonWriter value(boolean b) throws XmlJsonException {
         return this.append(b ? "true" : "false");
     }
 
@@ -358,9 +358,9 @@ public class JSONWriter {
      *
      * @param d A double.
      * @return this
-     * @throws JSONException If the number is not finite.
+     * @throws XmlJsonException If the number is not finite.
      */
-    public JSONWriter value(double d) throws JSONException {
+    public XmlJsonWriter value(double d) throws XmlJsonException {
         return this.value(Double.valueOf(d));
     }
 
@@ -369,9 +369,9 @@ public class JSONWriter {
      *
      * @param l A long.
      * @return this
-     * @throws JSONException if a called function has an error
+     * @throws XmlJsonException if a called function has an error
      */
-    public JSONWriter value(long l) throws JSONException {
+    public XmlJsonWriter value(long l) throws XmlJsonException {
         return this.append(Long.toString(l));
     }
 
@@ -380,11 +380,11 @@ public class JSONWriter {
      * Append an object value.
      *
      * @param object The object to append. It can be null, or a Boolean, Number,
-     *               String, JSONObject, or JSONArray, or an object that implements JSONString.
+     *               String, JSONObject, or XmlJsonArray, or an object that implements JSONString.
      * @return this
-     * @throws JSONException If the value is out of sequence.
+     * @throws XmlJsonException If the value is out of sequence.
      */
-    public JSONWriter value(Object object) throws JSONException {
+    public XmlJsonWriter value(Object object) throws XmlJsonException {
         return this.append(valueToString(object));
     }
 }

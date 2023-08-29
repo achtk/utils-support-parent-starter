@@ -1,12 +1,10 @@
 package com.chua.common.support.file.xml;
 
-/*
-Public Domain.
-*/
+import com.alibaba.fastjson2.JSONException;
 
 import java.io.Reader;
 
-import static com.chua.common.support.file.xml.XML.*;
+import static com.chua.common.support.file.xml.Xml.*;
 
 /**
  * The XMLTokener extends the JSONTokener to provide additional methods
@@ -15,7 +13,7 @@ import static com.chua.common.support.file.xml.XML.*;
  * @author JSON.org
  * @version 2015-12-09
  */
-public class XMLTokener extends JSONTokener {
+public class XmlTokenizer extends XmlJsonTokener {
 
 
     /**
@@ -38,7 +36,7 @@ public class XMLTokener extends JSONTokener {
      *
      * @param r A source reader.
      */
-    public XMLTokener(Reader r) {
+    public XmlTokenizer(Reader r) {
         super(r);
     }
 
@@ -47,7 +45,7 @@ public class XMLTokener extends JSONTokener {
      *
      * @param s A source string.
      */
-    public XMLTokener(String s) {
+    public XmlTokenizer(String s) {
         super(s);
     }
 

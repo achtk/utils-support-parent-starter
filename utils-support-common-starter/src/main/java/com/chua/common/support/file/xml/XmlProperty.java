@@ -4,6 +4,8 @@ package com.chua.common.support.file.xml;
 Public Domain.
 */
 
+import com.alibaba.fastjson2.JSONException;
+
 import java.util.Enumeration;
 import java.util.Properties;
 
@@ -13,7 +15,7 @@ import java.util.Properties;
  * @author JSON.org
  * @version 2015-05-05
  */
-public class Property {
+public class XmlProperty {
     /**
      * Converts a property file object into a JSONObject. The property file object is a table of name value pairs.
      *
@@ -21,9 +23,9 @@ public class Property {
      * @return JSONObject
      * @throws JSONException if a called function has an error
      */
-    public static XmlToJSONObject toJSONObject(Properties properties) throws JSONException {
+    public static XmlToJsonObject toJSONObject(Properties properties) throws JSONException {
         // can't use the new constructor for Android support
-        XmlToJSONObject jo = new XmlToJSONObject();
+        XmlToJsonObject jo = new XmlToJsonObject();
         if (properties != null && !properties.isEmpty()) {
             Enumeration<?> enumProperties = properties.propertyNames();
             while (enumProperties.hasMoreElements()) {
@@ -41,13 +43,13 @@ public class Property {
      * @return java.util.Properties
      * @throws JSONException if a called function has an error
      */
-    public static Properties toProperties(XmlToJSONObject jo) throws JSONException {
+    public static Properties toProperties(XmlToJsonObject jo) throws JSONException {
         Properties properties = new Properties();
         if (jo != null) {
             // Don't use the new entrySet API to maintain Android support
             for (final String key : jo.keySet()) {
                 Object value = jo.opt(key);
-                if (!XmlToJSONObject.NULL.equals(value)) {
+                if (!XmlToJsonObject.NULL.equals(value)) {
                     properties.put(key, value.toString());
                 }
             }

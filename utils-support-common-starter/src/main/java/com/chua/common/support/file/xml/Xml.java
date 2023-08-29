@@ -23,7 +23,7 @@ import static com.chua.common.support.constant.CommonConstant.*;
  * @version 2016-08-10
  */
 @SuppressWarnings("boxing")
-public class XML {
+public class Xml {
 
     /**
      * The Character '&amp;'.
@@ -200,7 +200,7 @@ public class XML {
                 final int semic = string.indexOf(';', i);
                 if (semic > i) {
                     final String entity = string.substring(i + 1, semic);
-                    sb.append(XMLTokener.unescapeEntity(entity));
+                    sb.append(XmlTokenizer.unescapeEntity(entity));
                     i += entity.length() + 1;
                 } else {
                     sb.append(c);
@@ -217,16 +217,16 @@ public class XML {
      * allowed in tagNames and attributes.
      *
      * @param string A string.
-     * @throws JSONException Thrown if the string contains whitespace or is empty.
+     * @throws XmlJsonException Thrown if the string contains whitespace or is empty.
      */
-    public static void noSpace(String string) throws JSONException {
+    public static void noSpace(String string) throws XmlJsonException {
         int i, length = string.length();
         if (length == 0) {
-            throw new JSONException("Empty string.");
+            throw new XmlJsonException("Empty string.");
         }
         for (i = 0; i < length; i += 1) {
             if (Character.isWhitespace(string.charAt(i))) {
-                throw new JSONException("'" + string
+                throw new XmlJsonException("'" + string
                         + "' contains a space character.");
             }
         }
@@ -239,17 +239,17 @@ public class XML {
      * @param context The JSONObject that will include the new material.
      * @param name    The tag name.
      * @return true if the close tag is processed.
-     * @throws JSONException
+     * @throws XmlJsonException
      */
-    private static boolean parse(XMLTokener x, XmlToJSONObject context, String name, XmlParserConfiguration config)
-            throws JSONException {
+    private static boolean parse(XmlTokenizer x, XmlToJsonObject context, String name, XmlParserConfiguration config)
+            throws XmlJsonException {
         char c;
         int i;
-        XmlToJSONObject jsonObject = null;
+        XmlToJsonObject jsonObject = null;
         String string;
         String tagName;
         Object token;
-        XMLXsiTypeConverter<?> xmlXsiTypeConverter;
+        XmlXsiTypeConverter<?> xmlXsiTypeConverter;
 
         // <!-- ... -->
         // <! ... >
@@ -318,7 +318,7 @@ public class XML {
         } else {
             tagName = (String) token;
             token = null;
-            jsonObject = new XmlToJSONObject();
+            jsonObject = new XmlToJsonObject();
             boolean nilAttributeFound = false;
             xmlXsiTypeConverter = null;
             for (; ; ) {
@@ -360,15 +360,15 @@ public class XML {
                     }
                     if (config.getForceList().contains(tagName)) {
                         if (nilAttributeFound) {
-                            context.append(tagName, XmlToJSONObject.NULL);
+                            context.append(tagName, XmlToJsonObject.NULL);
                         } else if (jsonObject.length() > 0) {
                             context.append(tagName, jsonObject);
                         } else {
-                            context.put(tagName, new JSONArray());
+                            context.put(tagName, new XmlJsonArray());
                         }
                     } else {
                         if (nilAttributeFound) {
-                            context.accumulate(tagName, XmlToJSONObject.NULL);
+                            context.accumulate(tagName, XmlToJsonObject.NULL);
                         } else if (jsonObject.length() > 0) {
                             context.accumulate(tagName, jsonObject);
                         } else {
@@ -402,7 +402,7 @@ public class XML {
                             if (parse(x, jsonObject, tagName, config)) {
                                 if (config.getForceList().contains(tagName)) {
                                     if (jsonObject.length() == 0) {
-                                        context.put(tagName, new JSONArray());
+                                        context.put(tagName, new XmlJsonArray());
                                     } else if (jsonObject.length() == 1
                                             && jsonObject.opt(config.getcDataTagName()) != null) {
                                         context.append(tagName, jsonObject.opt(config.getcDataTagName()));
@@ -438,7 +438,7 @@ public class XML {
      * @param typeConverter value converter to convert string to integer, boolean e.t.c
      * @return JSON value of this string or the string
      */
-    public static Object stringToValue(String string, XMLXsiTypeConverter<?> typeConverter) {
+    public static Object stringToValue(String string, XmlXsiTypeConverter<?> typeConverter) {
         if (typeConverter != null) {
             return typeConverter.convert(string);
         }
@@ -446,7 +446,7 @@ public class XML {
     }
 
     /**
-     * This method is the same as {@link XmlToJSONObject#stringToValue(String)}.
+     * This method is the same as {@link XmlToJsonObject#stringToValue(String)}.
      *
      * @param string String to convert
      * @return JSON value of this string or the string
@@ -463,7 +463,7 @@ public class XML {
             return Boolean.FALSE;
         }
         if ("null".equalsIgnoreCase(string)) {
-            return XmlToJSONObject.NULL;
+            return XmlToJsonObject.NULL;
         }
 
         /*
@@ -483,7 +483,7 @@ public class XML {
     }
 
     /**
-     * direct copy of {@link XmlToJSONObject#stringToNumber(String)} to maintain Android support.
+     * direct copy of {@link XmlToJsonObject#stringToNumber(String)} to maintain Android support.
      */
     private static Number stringToNumber(final String val) throws NumberFormatException {
         char initial = val.charAt(0);
@@ -537,7 +537,7 @@ public class XML {
     }
 
     /**
-     * direct copy of {@link XmlToJSONObject#isDecimalNotation(String)} to maintain Android support.
+     * direct copy of {@link XmlToJsonObject#isDecimalNotation(String)} to maintain Android support.
      */
     private static boolean isDecimalNotation(final String val) {
         return val.indexOf('.') > -1 || val.indexOf('e') > -1
@@ -559,9 +559,9 @@ public class XML {
      *
      * @param string The source string.
      * @return A JSONObject containing the structured data from the XML string.
-     * @throws JSONException Thrown if there is an errors while parsing the string
+     * @throws XmlJsonException Thrown if there is an errors while parsing the string
      */
-    public static JsonObject toJsonObject(String string) throws JSONException {
+    public static JsonObject toJsonObject(String string) throws XmlJsonException {
         return toJsonObject(string, XmlParserConfiguration.ORIGINAL);
     }
 
@@ -579,9 +579,9 @@ public class XML {
      *
      * @param reader The XML source reader.
      * @return A JSONObject containing the structured data from the XML string.
-     * @throws JSONException Thrown if there is an errors while parsing the string
+     * @throws XmlJsonException Thrown if there is an errors while parsing the string
      */
-    public static JsonObject toJsonObject(Reader reader) throws JSONException {
+    public static JsonObject toJsonObject(Reader reader) throws XmlJsonException {
         return toJsonObject(reader, XmlParserConfiguration.ORIGINAL);
     }
 
@@ -604,9 +604,9 @@ public class XML {
      * @param keepStrings If true, then values will not be coerced into boolean
      *                    or numeric values and will instead be left as strings
      * @return A JSONObject containing the structured data from the XML string.
-     * @throws JSONException Thrown if there is an errors while parsing the string
+     * @throws XmlJsonException Thrown if there is an errors while parsing the string
      */
-    public static JsonObject toJsonObject(Reader reader, boolean keepStrings) throws JSONException {
+    public static JsonObject toJsonObject(Reader reader, boolean keepStrings) throws XmlJsonException {
         if (keepStrings) {
             return toJsonObject(reader, XmlParserConfiguration.KEEP_STRINGS);
         }
@@ -631,11 +631,11 @@ public class XML {
      * @param reader The XML source reader.
      * @param config Configuration options for the parser
      * @return A JSONObject containing the structured data from the XML string.
-     * @throws JSONException Thrown if there is an errors while parsing the string
+     * @throws XmlJsonException Thrown if there is an errors while parsing the string
      */
-    public static JsonObject toJsonObject(Reader reader, XmlParserConfiguration config) throws JSONException {
-        XmlToJSONObject jo = new XmlToJSONObject();
-        XMLTokener x = new XMLTokener(reader);
+    public static JsonObject toJsonObject(Reader reader, XmlParserConfiguration config) throws XmlJsonException {
+        XmlToJsonObject jo = new XmlToJsonObject();
+        XmlTokenizer x = new XmlTokenizer(reader);
         while (x.more()) {
             x.skipPast("<");
             if (x.more()) {
@@ -664,9 +664,9 @@ public class XML {
      * @param keepStrings If true, then values will not be coerced into boolean
      *                    or numeric values and will instead be left as strings
      * @return A JSONObject containing the structured data from the XML string.
-     * @throws JSONException Thrown if there is an errors while parsing the string
+     * @throws XmlJsonException Thrown if there is an errors while parsing the string
      */
-    public static JsonObject toJsonObject(String string, boolean keepStrings) throws JSONException {
+    public static JsonObject toJsonObject(String string, boolean keepStrings) throws XmlJsonException {
         return toJsonObject(new StringReader(string), keepStrings);
     }
 
@@ -688,9 +688,9 @@ public class XML {
      * @param string The source string.
      * @param config Configuration options for the parser.
      * @return A JSONObject containing the structured data from the XML string.
-     * @throws JSONException Thrown if there is an errors while parsing the string
+     * @throws XmlJsonException Thrown if there is an errors while parsing the string
      */
-    public static JsonObject toJsonObject(String string, XmlParserConfiguration config) throws JSONException {
+    public static JsonObject toJsonObject(String string, XmlParserConfiguration config) throws XmlJsonException {
         return toJsonObject(new StringReader(string), config);
     }
 
@@ -699,9 +699,9 @@ public class XML {
      *
      * @param object A JSONObject.
      * @return A string.
-     * @throws JSONException Thrown if there is an error parsing the string
+     * @throws XmlJsonException Thrown if there is an error parsing the string
      */
-    public static String toString(Object object) throws JSONException {
+    public static String toString(Object object) throws XmlJsonException {
         return toString(object, null, XmlParserConfiguration.ORIGINAL);
     }
 
@@ -711,7 +711,7 @@ public class XML {
      * @param object  A JSONObject.
      * @param tagName The optional name of the enclosing tag.
      * @return A string.
-     * @throws JSONException Thrown if there is an error parsing the string
+     * @throws XmlJsonException Thrown if there is an error parsing the string
      */
     public static String toString(final Object object, final String tagName) {
         return toString(object, tagName, XmlParserConfiguration.ORIGINAL);
@@ -724,10 +724,10 @@ public class XML {
      * @param tagName The optional name of the enclosing tag.
      * @param config  Configuration that can control output to XML.
      * @return A string.
-     * @throws JSONException Thrown if there is an error parsing the string
+     * @throws XmlJsonException Thrown if there is an error parsing the string
      */
     public static String toString(final Object object, final String tagName, final XmlParserConfiguration config)
-            throws JSONException {
+            throws XmlJsonException {
         return toString(object, tagName, config, 0, 0);
     }
 
@@ -741,16 +741,16 @@ public class XML {
      * @param indentFactor The number of spaces to add to each level of indentation.
      * @param indent       The current ident level in spaces.
      * @return
-     * @throws JSONException
+     * @throws XmlJsonException
      */
     private static String toString(final Object object, final String tagName, final XmlParserConfiguration config, int indentFactor, int indent)
-            throws JSONException {
+            throws XmlJsonException {
         StringBuilder sb = new StringBuilder();
-        JSONArray ja;
-        XmlToJSONObject jo;
+        XmlJsonArray ja;
+        XmlToJsonObject jo;
         String string;
 
-        if (object instanceof XmlToJSONObject) {
+        if (object instanceof XmlToJsonObject) {
 
             if (tagName != null) {
                 sb.append(indent(indent));
@@ -763,18 +763,18 @@ public class XML {
                 }
             }
 
-            jo = (XmlToJSONObject) object;
+            jo = (XmlToJsonObject) object;
             for (final String key : jo.keySet()) {
                 Object value = jo.opt(key);
                 if (value == null) {
                     value = "";
                 } else if (value.getClass().isArray()) {
-                    value = new JSONArray(value);
+                    value = new XmlJsonArray(value);
                 }
 
                 if (key.equals(config.getcDataTagName())) {
-                    if (value instanceof JSONArray) {
-                        ja = (JSONArray) value;
+                    if (value instanceof XmlJsonArray) {
+                        ja = (XmlJsonArray)  value;
                         int jaLength = ja.length();
                         for (int i = 0; i < jaLength; i++) {
                             if (i > 0) {
@@ -788,12 +788,12 @@ public class XML {
                     }
 
 
-                } else if (value instanceof JSONArray) {
-                    ja = (JSONArray) value;
+                } else if (value instanceof XmlJsonArray) {
+                    ja = (XmlJsonArray) value;
                     int jaLength = ja.length();
                     for (int i = 0; i < jaLength; i++) {
                         Object val = ja.opt(i);
-                        if (val instanceof JSONArray) {
+                        if (val instanceof XmlJsonArray) {
                             sb.append('<');
                             sb.append(key);
                             sb.append('>');
@@ -833,12 +833,12 @@ public class XML {
 
         }
 
-        boolean b = object != null && (object instanceof JSONArray || object.getClass().isArray());
+        boolean b = object != null && (object instanceof XmlJsonArray || object.getClass().isArray());
         if (b) {
             if (object.getClass().isArray()) {
-                ja = new JSONArray(object);
+                ja = new XmlJsonArray(object);
             } else {
-                ja = (JSONArray) object;
+                ja = (XmlJsonArray) object;
             }
             int jaLength = ja.length();
             for (int i = 0; i < jaLength; i++) {
@@ -867,7 +867,7 @@ public class XML {
      * @param object       A JSONObject.
      * @param indentFactor The number of spaces to add to each level of indentation.
      * @return A string.
-     * @throws JSONException Thrown if there is an error parsing the string
+     * @throws XmlJsonException Thrown if there is an error parsing the string
      */
     public static String toString(Object object, int indentFactor) {
         return toString(object, null, XmlParserConfiguration.ORIGINAL, indentFactor);
@@ -880,7 +880,7 @@ public class XML {
      * @param tagName      The optional name of the enclosing tag.
      * @param indentFactor The number of spaces to add to each level of indentation.
      * @return A string.
-     * @throws JSONException Thrown if there is an error parsing the string
+     * @throws XmlJsonException Thrown if there is an error parsing the string
      */
     public static String toString(final Object object, final String tagName, int indentFactor) {
         return toString(object, tagName, XmlParserConfiguration.ORIGINAL, indentFactor);
@@ -894,10 +894,10 @@ public class XML {
      * @param config       Configuration that can control output to XML.
      * @param indentFactor The number of spaces to add to each level of indentation.
      * @return A string.
-     * @throws JSONException Thrown if there is an error parsing the string
+     * @throws XmlJsonException Thrown if there is an error parsing the string
      */
     public static String toString(final Object object, final String tagName, final XmlParserConfiguration config, int indentFactor)
-            throws JSONException {
+            throws XmlJsonException {
         return toString(object, tagName, config, indentFactor, 0);
     }
 

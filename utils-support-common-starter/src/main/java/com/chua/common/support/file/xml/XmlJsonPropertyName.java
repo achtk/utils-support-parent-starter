@@ -17,7 +17,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Retention(RUNTIME)
 @Target({METHOD})
-public @interface JSONPropertyName {
+public @interface XmlJsonPropertyName {
     /**
      * @return The name of the property as to be used in the JSON Object.
      */

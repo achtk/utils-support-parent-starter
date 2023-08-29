@@ -47,7 +47,7 @@ public class XmlParserConfiguration {
     /**
      * This will allow type conversion for values in XML if xsi:type attribute is defined
      */
-    private Map<String, XMLXsiTypeConverter<?>> xsiTypeMap;
+    private Map<String, XmlXsiTypeConverter<?>> xsiTypeMap;
 
     /**
      * When parsing the XML into JSON, specifies the tags whose values should be converted
@@ -144,12 +144,12 @@ public class XmlParserConfiguration {
      *                                  to use that value as the JSONObject key name to process as CDATA.
      * @param convertNilAttributeToNull <code>true</code> to parse values with attribute xsi:nil="true" as null.
      *                                  <code>false</code> to parse values with attribute xsi:nil="true" as {"xsi:nil":true}.
-     * @param xsiTypeMap                <code>new HashMap<String, XMLXsiTypeConverter<?>>()</code> to parse values with attribute
+     * @param xsiTypeMap                <code>new HashMap<String, XmlXsiTypeConverter<?>>()</code> to parse values with attribute
      *                                  xsi:type="integer" as integer,  xsi:type="string" as string
      * @param forceList                 <code>new HashSet<String>()</code> to parse the provided tags' values as arrays
      */
     private XmlParserConfiguration(final boolean keepStrings, final String cDataTagName,
-                                   final boolean convertNilAttributeToNull, final Map<String, XMLXsiTypeConverter<?>> xsiTypeMap, final Set<String> forceList) {
+                                   final boolean convertNilAttributeToNull, final Map<String, XmlXsiTypeConverter<?>> xsiTypeMap, final Set<String> forceList) {
         this.keepStrings = keepStrings;
         this.cDataTagName = cDataTagName;
         this.convertNilAttributeToNull = convertNilAttributeToNull;
@@ -252,28 +252,28 @@ public class XmlParserConfiguration {
     /**
      * When parsing the XML into JSON, specifies that the values with attribute xsi:type
      * will be converted to target type defined to client in this configuration
-     * {@code Map<String, XMLXsiTypeConverter<?>>} to parse values with attribute
+     * {@code Map<String, XmlXsiTypeConverter<?>>} to parse values with attribute
      * xsi:type="integer" as integer,  xsi:type="string" as string
      *
      * @return <code>xsiTypeMap</code> unmodifiable configuration map.
      */
-    public Map<String, XMLXsiTypeConverter<?>> getXsiTypeMap() {
+    public Map<String, XmlXsiTypeConverter<?>> getXsiTypeMap() {
         return this.xsiTypeMap;
     }
 
     /**
      * When parsing the XML into JSON, specifies that the values with attribute xsi:type
      * will be converted to target type defined to client in this configuration
-     * {@code Map<String, XMLXsiTypeConverter<?>>} to parse values with attribute
+     * {@code Map<String, XmlXsiTypeConverter<?>>} to parse values with attribute
      * xsi:type="integer" as integer,  xsi:type="string" as string
      *
-     * @param xsiTypeMap {@code new HashMap<String, XMLXsiTypeConverter<?>>()} to parse values with attribute
+     * @param xsiTypeMap {@code new HashMap<String, XmlXsiTypeConverter<?>>()} to parse values with attribute
      *                   xsi:type="integer" as integer,  xsi:type="string" as string
      * @return The existing configuration will not be modified. A new configuration is returned.
      */
-    public XmlParserConfiguration withXsiTypeMap(final Map<String, XMLXsiTypeConverter<?>> xsiTypeMap) {
+    public XmlParserConfiguration withXsiTypeMap(final Map<String, XmlXsiTypeConverter<?>> xsiTypeMap) {
         XmlParserConfiguration newConfig = this.clone();
-        Map<String, XMLXsiTypeConverter<?>> cloneXsiTypeMap = new HashMap<String, XMLXsiTypeConverter<?>>(xsiTypeMap);
+        Map<String, XmlXsiTypeConverter<?>> cloneXsiTypeMap = new HashMap<String, XmlXsiTypeConverter<?>>(xsiTypeMap);
         newConfig.xsiTypeMap = Collections.unmodifiableMap(cloneXsiTypeMap);
         return newConfig;
     }

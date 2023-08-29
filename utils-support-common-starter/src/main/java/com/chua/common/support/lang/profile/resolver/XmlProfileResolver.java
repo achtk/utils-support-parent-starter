@@ -1,7 +1,7 @@
 package com.chua.common.support.lang.profile.resolver;
 
 import com.chua.common.support.annotations.Spi;
-import com.chua.common.support.file.xml.XML;
+import com.chua.common.support.file.xml.Xml;
 import com.chua.common.support.json.Json;
 import com.chua.common.support.json.JsonObject;
 import com.chua.common.support.lang.profile.value.MapProfileValue;
@@ -26,7 +26,7 @@ public class XmlProfileResolver implements ProfileResolver {
     @Override
     public List<ProfileValue> resolve(String resourceUrl, InputStream inputStream) {
         try (InputStreamReader isr = new InputStreamReader(inputStream, UTF_8)) {
-            JsonObject jsonObject = XML.toJsonObject(isr);
+            JsonObject jsonObject = Xml.toJsonObject(isr);
             String string = jsonObject.toString();
             return Collections.singletonList(new MapProfileValue(resourceUrl, Json.fromJson(string, Map.class)));
         } catch (Throwable e) {
