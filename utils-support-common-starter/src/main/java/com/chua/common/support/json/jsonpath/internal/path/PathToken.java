@@ -221,16 +221,38 @@ public abstract class PathToken {
         ctx.addResult(currentPath, parent, pathFunction.invoke(currentPath, parent, model, ctx, null));
     }
 
+    /**
+     * calc
+     * @param currentPath path
+     * @param parent parent
+     * @param model model
+     * @param ctx ctx
+     */
     public abstract void evaluate(String currentPath, PathRef parent, Object model, EvaluationContextImpl ctx);
 
+    /**
+     * isTokenDefinite
+     * @return rs
+     */
     public abstract boolean isTokenDefinite();
-
+    /**
+     * getPathFragment
+     * @return rs
+     */
     protected abstract String getPathFragment();
 
+    /**
+     * next
+     * @param next next
+     */
     public void setNext(final PathToken next) {
         this.next = next;
     }
 
+    /**
+     * next
+     * @return token
+     */
     public PathToken getNext() {
         return this.next;
     }

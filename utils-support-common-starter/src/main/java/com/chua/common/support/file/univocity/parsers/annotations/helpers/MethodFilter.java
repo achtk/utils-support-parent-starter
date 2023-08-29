@@ -62,6 +62,11 @@ public enum MethodFilter {
 	}
 
 	private interface Filter {
+		/**
+		 * 拒绝
+		 * @param method 方法
+		 * @return 结果
+		 */
 		boolean reject(Method method);
 	}
 

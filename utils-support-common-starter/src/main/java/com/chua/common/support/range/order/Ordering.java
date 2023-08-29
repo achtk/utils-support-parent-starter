@@ -13,6 +13,7 @@ import static com.chua.common.support.utils.Preconditions.checkNotNull;
 
 /**
  * order
+ *
  * @author CH
  */
 public abstract class Ordering<T extends Object> implements Comparator<T> {
@@ -25,7 +26,7 @@ public abstract class Ordering<T extends Object> implements Comparator<T> {
      *
      * <p><b>Java 8 users:</b> use {@link Comparator#naturalOrder} instead.
      */
-    
+
     @SuppressWarnings("unchecked")
     public static <C extends Comparable> Ordering<C> natural() {
         return (Ordering<C>) NaturalOrdering.INSTANCE;
@@ -44,9 +45,9 @@ public abstract class Ordering<T extends Object> implements Comparator<T> {
      *
      * @param comparator the comparator that defines the order
      * @return comparator itself if it is already an {@code Ordering}; otherwise an ordering that
-     *     wraps that comparator
+     * wraps that comparator
      */
-    
+
     public static <T extends Object> Ordering<T> from(Comparator<T> comparator) {
         return (comparator instanceof Ordering)
                 ? (Ordering<T>) comparator
@@ -58,7 +59,7 @@ public abstract class Ordering<T extends Object> implements Comparator<T> {
      *
      * @deprecated no need to use this
      */
-    
+
     @Deprecated
     public static <T extends Object> Ordering<T> from(Ordering<T> ordering) {
         return checkNotNull(ordering);
@@ -72,7 +73,7 @@ public abstract class Ordering<T extends Object> implements Comparator<T> {
      *
      * <p><b>Java 8 users:</b> Use {@code Comparator.comparing(Object::toString)} instead.
      */
-    
+
     public static Ordering<Object> usingToString() {
         return UsingToStringOrdering.INSTANCE;
     }
@@ -81,7 +82,8 @@ public abstract class Ordering<T extends Object> implements Comparator<T> {
      * Constructs a new instance of this class (only invokable by the subclass constructor, typically
      * implicit).
      */
-    protected Ordering() {}
+    protected Ordering() {
+    }
 
     // Instance-based factories (and any static equivalents)
 
@@ -93,7 +95,6 @@ public abstract class Ordering<T extends Object> implements Comparator<T> {
      */
     // type parameter <S> lets us avoid the extra <String> in statements like:
     // Ordering<String> o = Ordering.<String>natural().reverse();
-    
     public <S extends T> Ordering<S> reverse() {
         return new ReverseOrdering<S>(this);
     }
@@ -111,7 +112,7 @@ public abstract class Ordering<T extends Object> implements Comparator<T> {
      * <p><b>Java 8 users:</b> Use {@code Comparator.comparing(function, thisComparator)} instead (you
      * can omit the comparator if it is the natural order).
      */
-    
+
     public <F extends Object> Ordering<F> onResultOf(Function<F, ? extends T> function) {
         return new ByFunctionOrdering<>(function, this);
     }
@@ -133,7 +134,7 @@ public abstract class Ordering<T extends Object> implements Comparator<T> {
      * Depending on what {@code secondaryComparator} is, one of the other overloads of {@code
      * thenComparing} may be even more useful.
      */
-    
+
     public <U extends T> Ordering<U> compound(Comparator<? super U> secondaryComparator) {
         return new CompoundOrdering<U>(this, checkNotNull(secondaryComparator));
     }
@@ -157,7 +158,7 @@ public abstract class Ordering<T extends Object> implements Comparator<T> {
      *
      * @param comparators the comparators to try in order
      */
-    
+
     public static <T extends Object> Ordering<T> compound(
             Iterable<? extends Comparator<? super T>> comparators) {
         return new CompoundOrdering<T>(comparators);
@@ -187,10 +188,16 @@ public abstract class Ordering<T extends Object> implements Comparator<T> {
         return new LexicographicalOrdering<S>(this);
     }
 
-    // Regular instance methods
+    /**
+     * Regular instance methods
+     *
+     * @param left  value
+     * @param right value
+     * @return instance
+     */
 
     @Override
-    public abstract int compare( T left,  T right);
+    public abstract int compare(T left, T right);
 
     /**
      * Returns the least of the specified values according to this ordering. If there are multiple
@@ -202,11 +209,11 @@ public abstract class Ordering<T extends Object> implements Comparator<T> {
      *
      * @param iterator the iterator whose minimum element is to be determined
      * @throws NoSuchElementException if {@code iterator} is empty
-     * @throws ClassCastException if the parameters are not <i>mutually comparable</i> under this
-     *     ordering.
+     * @throws ClassCastException     if the parameters are not <i>mutually comparable</i> under this
+     *                                ordering.
      * @since 11.0
      */
-    
+
     public <E extends T> E min(Iterator<E> iterator) {
         // let this throw NoSuchElementException as necessary
         E minSoFar = iterator.next();
@@ -229,10 +236,10 @@ public abstract class Ordering<T extends Object> implements Comparator<T> {
      *
      * @param iterable the iterable whose minimum element is to be determined
      * @throws NoSuchElementException if {@code iterable} is empty
-     * @throws ClassCastException if the parameters are not <i>mutually comparable</i> under this
-     *     ordering.
+     * @throws ClassCastException     if the parameters are not <i>mutually comparable</i> under this
+     *                                ordering.
      */
-    
+
     public <E extends T> E min(Iterable<E> iterable) {
         return min(iterable.iterator());
     }
@@ -250,10 +257,10 @@ public abstract class Ordering<T extends Object> implements Comparator<T> {
      * @param a value to compare, returned if less than or equal to b.
      * @param b value to compare.
      * @throws ClassCastException if the parameters are not <i>mutually comparable</i> under this
-     *     ordering.
+     *                            ordering.
      */
-    
-    public <E extends T> E min( E a,  E b) {
+
+    public <E extends T> E min(E a, E b) {
         return (compare(a, b) <= 0) ? a : b;
     }
 
@@ -264,16 +271,16 @@ public abstract class Ordering<T extends Object> implements Comparator<T> {
      * <p><b>Java 8 users:</b> Use {@code Collections.min(Arrays.asList(a, b, c...), thisComparator)}
      * instead (but note that it does not guarantee which tied minimum element is returned).
      *
-     * @param a value to compare, returned if less than or equal to the rest.
-     * @param b value to compare
-     * @param c value to compare
+     * @param a    value to compare, returned if less than or equal to the rest.
+     * @param b    value to compare
+     * @param c    value to compare
      * @param rest values to compare
      * @throws ClassCastException if the parameters are not <i>mutually comparable</i> under this
-     *     ordering.
+     *                            ordering.
      */
-    
+
     public <E extends T> E min(
-             E a,  E b,  E c, E... rest) {
+            E a, E b, E c, E... rest) {
         E minSoFar = min(min(a, b), c);
 
         for (E r : rest) {
@@ -293,11 +300,11 @@ public abstract class Ordering<T extends Object> implements Comparator<T> {
      *
      * @param iterator the iterator whose maximum element is to be determined
      * @throws NoSuchElementException if {@code iterator} is empty
-     * @throws ClassCastException if the parameters are not <i>mutually comparable</i> under this
-     *     ordering.
+     * @throws ClassCastException     if the parameters are not <i>mutually comparable</i> under this
+     *                                ordering.
      * @since 11.0
      */
-    
+
     public <E extends T> E max(Iterator<E> iterator) {
         // let this throw NoSuchElementException as necessary
         E maxSoFar = iterator.next();
@@ -320,10 +327,10 @@ public abstract class Ordering<T extends Object> implements Comparator<T> {
      *
      * @param iterable the iterable whose maximum element is to be determined
      * @throws NoSuchElementException if {@code iterable} is empty
-     * @throws ClassCastException if the parameters are not <i>mutually comparable</i> under this
-     *     ordering.
+     * @throws ClassCastException     if the parameters are not <i>mutually comparable</i> under this
+     *                                ordering.
      */
-    
+
     public <E extends T> E max(Iterable<E> iterable) {
         return max(iterable.iterator());
     }
@@ -341,10 +348,10 @@ public abstract class Ordering<T extends Object> implements Comparator<T> {
      * @param a value to compare, returned if greater than or equal to b.
      * @param b value to compare.
      * @throws ClassCastException if the parameters are not <i>mutually comparable</i> under this
-     *     ordering.
+     *                            ordering.
      */
-    
-    public <E extends T> E max( E a,  E b) {
+
+    public <E extends T> E max(E a, E b) {
         return (compare(a, b) >= 0) ? a : b;
     }
 
@@ -355,16 +362,16 @@ public abstract class Ordering<T extends Object> implements Comparator<T> {
      * <p><b>Java 8 users:</b> Use {@code Collections.max(Arrays.asList(a, b, c...), thisComparator)}
      * instead (but note that it does not guarantee which tied maximum element is returned).
      *
-     * @param a value to compare, returned if greater than or equal to the rest.
-     * @param b value to compare
-     * @param c value to compare
+     * @param a    value to compare, returned if greater than or equal to the rest.
+     * @param b    value to compare
+     * @param c    value to compare
      * @param rest values to compare
      * @throws ClassCastException if the parameters are not <i>mutually comparable</i> under this
-     *     ordering.
+     *                            ordering.
      */
-    
+
     public <E extends T> E max(
-             E a,  E b,  E c, E... rest) {
+            E a, E b, E c, E... rest) {
         E maxSoFar = max(max(a, b), c);
 
         for (E r : rest) {
@@ -386,7 +393,7 @@ public abstract class Ordering<T extends Object> implements Comparator<T> {
      * thisComparator))} instead.
      *
      * @return an immutable {@code RandomAccess} list of the {@code k} least elements in ascending
-     *     order
+     * order
      * @throws IllegalArgumentException if {@code k} is negative
      * @since 8.0
      */
@@ -399,7 +406,7 @@ public abstract class Ordering<T extends Object> implements Comparator<T> {
                 // specialized for k much smaller than n.
 
                 @SuppressWarnings("unchecked")
-                E[] array = collection.toArray((E[])Array.newInstance(collection.iterator().next().getClass(), 0));
+                E[] array = collection.toArray((E[]) Array.newInstance(collection.iterator().next().getClass(), 0));
                 Arrays.sort(array, this);
                 if (array.length > k) {
                     array = Arrays.copyOf(array, k);
@@ -422,7 +429,7 @@ public abstract class Ordering<T extends Object> implements Comparator<T> {
      * thisComparator))} instead.
      *
      * @return an immutable {@code RandomAccess} list of the {@code k} least elements in ascending
-     *     order
+     * order
      * @throws IllegalArgumentException if {@code k} is negative
      * @since 14.0
      */
@@ -460,7 +467,7 @@ public abstract class Ordering<T extends Object> implements Comparator<T> {
      * thisComparator))} instead.
      *
      * @return an immutable {@code RandomAccess} list of the {@code k} greatest elements in
-     *     <i>descending order</i>
+     * <i>descending order</i>
      * @throws IllegalArgumentException if {@code k} is negative
      * @since 8.0
      */
@@ -482,7 +489,7 @@ public abstract class Ordering<T extends Object> implements Comparator<T> {
      * thisComparator))} instead.
      *
      * @return an immutable {@code RandomAccess} list of the {@code k} greatest elements in
-     *     <i>descending order</i>
+     * <i>descending order</i>
      * @throws IllegalArgumentException if {@code k} is negative
      * @since 14.0
      */
@@ -496,12 +503,12 @@ public abstract class Ordering<T extends Object> implements Comparator<T> {
      * {@code key} using the binary search algorithm. The list must be sorted using this ordering.
      *
      * @param sortedList the list to be searched
-     * @param key the key to be searched for
+     * @param key        the key to be searched for
      * @deprecated Use {@link Collections#binarySearch(List, Object, Comparator)} directly.
      */
     @Deprecated
     public int binarySearch(
-            List<? extends T> sortedList,  T key) {
+            List<? extends T> sortedList, T key) {
         return Collections.binarySearch(sortedList, key, this);
     }
 

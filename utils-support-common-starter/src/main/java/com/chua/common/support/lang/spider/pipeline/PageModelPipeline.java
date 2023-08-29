@@ -10,6 +10,11 @@ import com.chua.common.support.lang.spider.Task;
  */
 public interface PageModelPipeline<T> {
 
+    /**
+     * 执行
+     * @param t 对象
+     * @param task 任务
+     */
     void process(T t, Task task);
 
 }

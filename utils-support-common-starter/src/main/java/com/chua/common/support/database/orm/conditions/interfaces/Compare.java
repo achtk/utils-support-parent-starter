@@ -16,7 +16,9 @@ public interface Compare<Children, R> extends Serializable {
 
     /**
      * ignore
+     *
      * @param params param
+     * @return children
      */
     default <V> Children allEq(Map<R, V> params) {
         return allEq(params, true);
@@ -24,8 +26,10 @@ public interface Compare<Children, R> extends Serializable {
 
     /**
      * ignore
-     * @param params param
+     *
+     * @param params      param
      * @param null2IsNull null to is null
+     * @return children
      */
     default <V> Children allEq(Map<R, V> params, boolean null2IsNull) {
         return allEq(true, params, null2IsNull);
@@ -43,8 +47,10 @@ public interface Compare<Children, R> extends Serializable {
 
     /**
      * ignore
+     *
      * @param params param
      * @param filter filter
+     * @return children
      */
     default <V> Children allEq(BiPredicate<R, V> filter, Map<R, V> params) {
         return allEq(filter, params, true);
@@ -52,9 +58,11 @@ public interface Compare<Children, R> extends Serializable {
 
     /**
      * ignore
-     * @param params param
-     * @param filter filter
-     * @param null2IsNull  null2IsNull
+     *
+     * @param params      param
+     * @param filter      filter
+     * @param null2IsNull null2IsNull
+     * @return children
      */
     default <V> Children allEq(BiPredicate<R, V> filter, Map<R, V> params, boolean null2IsNull) {
         return allEq(true, filter, params, null2IsNull);
@@ -73,8 +81,10 @@ public interface Compare<Children, R> extends Serializable {
 
     /**
      * ignore
+     *
      * @param column column
-     * @param val  value
+     * @param val    value
+     * @return children
      */
     default Children eq(R column, Object val) {
         return eq(true, column, val);
@@ -92,8 +102,10 @@ public interface Compare<Children, R> extends Serializable {
 
     /**
      * ignore
+     *
      * @param column column
-     * @param val value
+     * @param val    value
+     * @return children
      */
     default Children ne(R column, Object val) {
         return ne(true, column, val);
@@ -111,8 +123,10 @@ public interface Compare<Children, R> extends Serializable {
 
     /**
      * ignore
+     *
      * @param column column
-     * @param val value
+     * @param val    value
+     * @return children
      */
     default Children gt(R column, Object val) {
         return gt(true, column, val);
@@ -130,8 +144,10 @@ public interface Compare<Children, R> extends Serializable {
 
     /**
      * ignore
+     *
      * @param column column
-     * @param val value
+     * @param val    value
+     * @return children
      */
     default Children ge(R column, Object val) {
         return ge(true, column, val);
@@ -149,8 +165,10 @@ public interface Compare<Children, R> extends Serializable {
 
     /**
      * ignore
+     *
      * @param column column
-     * @param val value
+     * @param val    value
+     * @return children
      */
     default Children lt(R column, Object val) {
         return lt(true, column, val);
@@ -168,8 +186,10 @@ public interface Compare<Children, R> extends Serializable {
 
     /**
      * ignore
+     *
      * @param column column
-     * @param val value
+     * @param val    value
+     * @return children
      */
     default Children le(R column, Object val) {
         return le(true, column, val);
@@ -187,9 +207,11 @@ public interface Compare<Children, R> extends Serializable {
 
     /**
      * ignore
+     *
      * @param column column
-     * @param val1 value
-     * @param val2 value
+     * @param val1   value
+     * @param val2   value
+     * @return children
      */
     default Children between(R column, Object val1, Object val2) {
         return between(true, column, val1, val2);
@@ -208,9 +230,11 @@ public interface Compare<Children, R> extends Serializable {
 
     /**
      * ignore
+     *
      * @param column column
-     * @param val1 value
-     * @param val2 value
+     * @param val1   value
+     * @param val2   value
+     * @return children
      */
     default Children notBetween(R column, Object val1, Object val2) {
         return notBetween(true, column, val1, val2);
@@ -229,8 +253,10 @@ public interface Compare<Children, R> extends Serializable {
 
     /**
      * ignore
+     *
      * @param column column
-     * @param val value
+     * @param val    value
+     * @return children
      */
     default Children like(R column, Object val) {
         return like(true, column, val);
@@ -248,8 +274,10 @@ public interface Compare<Children, R> extends Serializable {
 
     /**
      * ignore
+     *
      * @param column column
-     * @param val value
+     * @param val    value
+     * @return children
      */
     default Children notLike(R column, Object val) {
         return notLike(true, column, val);
@@ -267,8 +295,10 @@ public interface Compare<Children, R> extends Serializable {
 
     /**
      * ignore
+     *
      * @param column column
-     * @param val value
+     * @param val    value
+     * @return children
      */
     default Children notLikeLeft(R column, Object val) {
         return notLikeLeft(true, column, val);
@@ -278,16 +308,18 @@ public interface Compare<Children, R> extends Serializable {
      * NOT LIKE '%值'
      *
      * @param condition condition
-     * @param column column
-     * @param val value
+     * @param column    column
+     * @param val       value
      * @return children
      */
     Children notLikeLeft(boolean condition, R column, Object val);
 
     /**
      * ignore
+     *
      * @param column column
-     * @param val value
+     * @param val    value
+     * @return children
      */
     default Children notLikeRight(R column, Object val) {
         return notLikeRight(true, column, val);
@@ -297,16 +329,18 @@ public interface Compare<Children, R> extends Serializable {
      * NOT LIKE '值%'
      *
      * @param condition conditon
-     * @param column column
-     * @param val value
+     * @param column    column
+     * @param val       value
      * @return children
      */
     Children notLikeRight(boolean condition, R column, Object val);
 
     /**
      * ignore
+     *
      * @param column column
-     * @param val value
+     * @param val    value
+     * @return children
      */
     default Children likeLeft(R column, Object val) {
         return likeLeft(true, column, val);
@@ -324,8 +358,10 @@ public interface Compare<Children, R> extends Serializable {
 
     /**
      * ignore
+     *
      * @param column column
-     * @param val value
+     * @param val    value
+     * @return children
      */
     default Children likeRight(R column, Object val) {
         return likeRight(true, column, val);

@@ -7,15 +7,27 @@ import com.chua.common.support.extra.el.template.execution.impl.StringExecution;
 import com.chua.common.support.utils.CharUtils;
 
 import java.util.Deque;
+
 /**
  * 基础类
+ *
  * @author CH
  */
-public abstract class Parser
-{
+public abstract class Parser {
 
     protected static final Execution[] EMPTY_BODY = new Execution[0];
 
+    /**
+     * execute
+     *
+     * @param sentence   sentence
+     * @param offset     offset
+     * @param executions executions
+     * @param template   template
+     * @param cache      cache
+     * @param next       next
+     * @return result
+     */
     public abstract int parse(String sentence, int offset, Deque<Execution> executions, Template template, StringBuilder cache, Invoker next);
 
     /**
@@ -25,43 +37,35 @@ public abstract class Parser
      * @param offset
      * @return
      */
-    protected int findMethodBodyBegin(String sentence, int offset)
-    {
+    protected int findMethodBodyBegin(String sentence, int offset) {
         offset = skipWhiteSpace(offset, sentence);
-        if ('{' != getChar(offset, sentence))
-        {
+        if ('{' != getChar(offset, sentence)) {
             throw new IllegalFormatException("方法体没有以{开始", sentence.substring(0, offset));
         }
         offset++;
         return offset;
     }
 
-    protected void extractLiterals(StringBuilder cache, Deque<Execution> executions)
-    {
-        if (cache.length() != 0)
-        {
+    protected void extractLiterals(StringBuilder cache, Deque<Execution> executions) {
+        if (cache.length() != 0) {
             Execution execution = new StringExecution(cache.toString());
             cache.setLength(0);
             executions.push(execution);
         }
     }
 
-    protected char getChar(int offset, String sentence)
-    {
+    protected char getChar(int offset, String sentence) {
         return offset >= sentence.length() ? (char) CharUtils.EOI : sentence.charAt(offset);
     }
 
-    protected int skipWhiteSpace(int offset, String el)
-    {
-        while (CharUtils.isWhitespace(getChar(offset, el)))
-        {
+    protected int skipWhiteSpace(int offset, String el) {
+        while (CharUtils.isWhitespace(getChar(offset, el))) {
             offset++;
         }
         return offset;
     }
 
-    protected boolean isExecutionBegin(int offset, String sentence)
-    {
+    protected boolean isExecutionBegin(int offset, String sentence) {
         char c1 = getChar(offset, sentence);
         char c2 = getChar(offset + 1, sentence);
         return c1 == '<' && c2 == '%';
@@ -74,34 +78,25 @@ public abstract class Parser
      * @param offset
      * @return
      */
-    protected int findEndRightBracket(String sentence, int offset)
-    {
+    protected int findEndRightBracket(String sentence, int offset) {
         offset++;
-        int length              = sentence.length();
+        int length = sentence.length();
         int countForLeftBracket = 0;
-        do
-        {
+        do {
             char c = getChar(offset, sentence);
-            if (c == '(')
-            {
+            if (c == '(') {
                 countForLeftBracket++;
-            }
-            else if (c == ')')
-            {
-                if (countForLeftBracket > 0)
-                {
+            } else if (c == ')') {
+                if (countForLeftBracket > 0) {
                     countForLeftBracket--;
-                }
-                else
-                {
+                } else {
                     // 此时找到if的括号的封闭括号
                     break;
                 }
             }
             offset++;
         } while (offset < length);
-        if (offset >= length)
-        {
+        if (offset >= length) {
             return -1;
         }
         return offset;
@@ -114,19 +109,15 @@ public abstract class Parser
      * @param sentence
      * @return
      */
-    protected int findExectionEnd(int startIndex, String sentence)
-    {
+    protected int findExectionEnd(int startIndex, String sentence) {
         int offset = startIndex;
         int length = sentence.length();
-        while (offset < length)
-        {
+        while (offset < length) {
             char c = getChar(offset, sentence);
-            if (c == '%')
-            {
+            if (c == '%') {
                 offset = skipWhiteSpace(offset + 1, sentence);
                 c = getChar(offset, sentence);
-                if (c == '>')
-                {
+                if (c == '>') {
                     return offset;
                 }
             }

@@ -37,6 +37,7 @@ public interface Func<Children, R> extends Serializable {
 
     /**
      * ignore
+     *
      * @param column column
      * @return this
      */
@@ -56,8 +57,9 @@ public interface Func<Children, R> extends Serializable {
 
     /**
      * ignore
+     *
      * @param column column
-     * @param coll value
+     * @param coll   value
      * @return this
      */
     default Children in(R column, Collection<?> coll) {
@@ -80,6 +82,7 @@ public interface Func<Children, R> extends Serializable {
 
     /**
      * ignore
+     *
      * @param column column
      * @param values value
      * @return this
@@ -104,8 +107,9 @@ public interface Func<Children, R> extends Serializable {
 
     /**
      * ignore
+     *
      * @param column column
-     * @param coll value
+     * @param coll   value
      * @return this
      */
     default Children notIn(R column, Collection<?> coll) {
@@ -125,8 +129,9 @@ public interface Func<Children, R> extends Serializable {
 
     /**
      * ignore
+     *
      * @param column column
-     * @param value value
+     * @param value  value
      * @return this
      */
     default Children notIn(R column, Object... value) {
@@ -146,7 +151,8 @@ public interface Func<Children, R> extends Serializable {
 
     /**
      * ignore
-     * @param column column
+     *
+     * @param column  column
      * @param inValue value
      * @return this
      */
@@ -181,7 +187,8 @@ public interface Func<Children, R> extends Serializable {
 
     /**
      * ignore
-     * @param column column
+     *
+     * @param column  column
      * @param inValue value
      * @return this
      */
@@ -203,7 +210,8 @@ public interface Func<Children, R> extends Serializable {
 
     /**
      * ignore
-     * @param column column
+     *
+     * @param column  column
      * @param inValue value
      * @return this
      */
@@ -225,7 +233,8 @@ public interface Func<Children, R> extends Serializable {
 
     /**
      * ignore
-     * @param column column
+     *
+     * @param column  column
      * @param inValue value
      * @return this
      */
@@ -247,7 +256,8 @@ public interface Func<Children, R> extends Serializable {
 
     /**
      * ignore
-     * @param column column
+     *
+     * @param column  column
      * @param inValue value
      * @return this
      */
@@ -257,7 +267,8 @@ public interface Func<Children, R> extends Serializable {
 
     /**
      * ignore
-     * @param column column
+     *
+     * @param column  column
      * @param inValue value
      * @return this
      */
@@ -290,6 +301,7 @@ public interface Func<Children, R> extends Serializable {
 
     /**
      * group by
+     *
      * @param column column
      * @return this
      */
@@ -306,17 +318,21 @@ public interface Func<Children, R> extends Serializable {
      * @return children
      */
     Children groupBy(boolean condition, List<R> columns);
+
     /**
      * group by
+     *
      * @param columns column
      * @return this
      */
     default Children groupBy(List<R> columns) {
         return groupBy(true, columns);
     }
+
     /**
      * group by
-     * @param column column
+     *
+     * @param column  column
      * @param columns column
      * @return this
      */
@@ -326,9 +342,10 @@ public interface Func<Children, R> extends Serializable {
 
     /**
      * 分组：GROUP BY 字段, ...
+     *
      * @param condition condition
-     * @param column column
-     * @param columns column
+     * @param column    column
+     * @param columns   column
      * @return this
      */
     Children groupBy(boolean condition, R column, R... columns);
@@ -344,11 +361,12 @@ public interface Func<Children, R> extends Serializable {
     default Children orderByAsc(boolean condition, R column) {
         return orderBy(condition, true, column);
     }
+
     /**
      * 排序：ORDER BY 字段, ... ASC
      * <p>例: orderByAsc(true, "id")</p>
      *
-     * @param column    单个字段
+     * @param column 单个字段
      * @return children
      */
     default Children orderByAsc(R column) {
@@ -366,22 +384,24 @@ public interface Func<Children, R> extends Serializable {
     default Children orderByAsc(boolean condition, List<R> columns) {
         return orderBy(condition, true, columns);
     }
+
     /**
      * 排序：ORDER BY 字段, ... ASC
      * <p>例: orderByAsc(true, Arrays.asList("id", "name"))</p>
      *
-     * @param columns   字段数组
+     * @param columns 字段数组
      * @return children
      */
     default Children orderByAsc(List<R> columns) {
         return orderByAsc(true, columns);
     }
+
     /**
      * 排序：ORDER BY 字段, ... ASC
      * <p>例: orderByAsc(true, Arrays.asList("id", "name"))</p>
      *
-     * @param column   字段
-     * @param columns   字段数组
+     * @param column  字段
+     * @param columns 字段数组
      * @return children
      */
     default Children orderByAsc(R column, R... columns) {
@@ -390,8 +410,9 @@ public interface Func<Children, R> extends Serializable {
 
     /**
      * 排序：ORDER BY 字段, ... ASC
+     *
      * @param condition 执行条件
-     * @param column   字段
+     * @param column    字段
      * @param columns   字段数组
      * @return Children
      */
@@ -410,11 +431,12 @@ public interface Func<Children, R> extends Serializable {
     default Children orderByDesc(boolean condition, R column) {
         return orderBy(condition, false, column);
     }
+
     /**
      * 排序：ORDER BY 字段, ... DESC
      * <p>例: orderByDesc(true, "id")</p>
      *
-     * @param column    字段
+     * @param column 字段
      * @return children
      */
     default Children orderByDesc(R column) {
@@ -432,22 +454,24 @@ public interface Func<Children, R> extends Serializable {
     default Children orderByDesc(boolean condition, List<R> columns) {
         return orderBy(condition, false, columns);
     }
+
     /**
      * 排序：ORDER BY 字段, ... DESC
      * <p>例: orderByDesc(true, Arrays.asList("id", "name"))</p>
      *
-     * @param columns   字段列表
+     * @param columns 字段列表
      * @return children
      */
     default Children orderByDesc(List<R> columns) {
         return orderByDesc(true, columns);
     }
+
     /**
      * 排序：ORDER BY 字段, ... DESC
      * <p>例: orderByDesc(true, Arrays.asList("id", "name"))</p>
      *
-     * @param column   字段
-     * @param columns   字段列表
+     * @param column  字段
+     * @param columns 字段列表
      * @return children
      */
     default Children orderByDesc(R column, R... columns) {
@@ -456,8 +480,9 @@ public interface Func<Children, R> extends Serializable {
 
     /**
      * 排序：ORDER BY 字段, ... DESC
+     *
      * @param condition 执行条件
-     * @param column   字段
+     * @param column    字段
      * @param columns   字段列表
      * @return Children
      */
@@ -523,6 +548,7 @@ public interface Func<Children, R> extends Serializable {
      * @return children
      */
     Children having(boolean condition, String sqlHaving, Object... params);
+
     /**
      * 消费函数
      *
@@ -537,7 +563,8 @@ public interface Func<Children, R> extends Serializable {
     /**
      * 消费函数
      *
-     * @param consumer 消费函数
+     * @param condition 條件
+     * @param consumer  消费函数
      * @return children
      * @since 3.3.1
      */

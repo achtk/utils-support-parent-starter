@@ -6,8 +6,10 @@ import com.chua.common.support.lang.tokenizer.jieba.huaban.analysis.jieba.Charac
 import com.chua.common.support.utils.CharUtils;
 
 import java.util.Deque;
+
 /**
  * 基础类
+ *
  * @author CH
  */
 public abstract class NodeParser {
@@ -15,10 +17,12 @@ public abstract class NodeParser {
     /**
      * 在解析节点后返回新的偏移量
      *
-     * @param el
-     * @param offset
-     * @param nodes
-     * @return
+     * @param el       节点
+     * @param offset   便宜
+     * @param nodes    队列
+     * @param function function
+     * @param next     下个执行器
+     * @return 偏移量
      */
     public abstract int parse(String el, int offset, Deque<CalculateNode> nodes, int function, Invoker next);
 

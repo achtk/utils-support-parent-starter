@@ -14,6 +14,7 @@ public interface Join<Children> extends Serializable {
 
     /**
      * ignore
+     *
      * @return Children
      */
     default Children or() {
@@ -30,8 +31,9 @@ public interface Join<Children> extends Serializable {
 
     /**
      * ignore
+     *
      * @param applySql sql
-     * @param values params
+     * @param values   params
      * @return children
      */
     default Children apply(String applySql, Object... values) {
@@ -47,6 +49,7 @@ public interface Join<Children> extends Serializable {
      *
      * @param condition 执行条件
      * @param values    数据数组
+     * @param applySql  sql片段
      * @return children
      */
     Children apply(boolean condition, String applySql, Object... values);
@@ -56,7 +59,7 @@ public interface Join<Children> extends Serializable {
      * <p>例: last("limit 1")</p>
      * <p>注意只能调用一次,多次调用以最后一次为准</p>
      *
-     * @param lastSql   sql语句
+     * @param lastSql sql语句
      * @return children
      */
     default Children last(String lastSql) {
@@ -77,7 +80,7 @@ public interface Join<Children> extends Serializable {
     /**
      * sql 注释(会拼接在 sql 的最后面)
      *
-     * @param comment   sql注释
+     * @param comment sql注释
      * @return children
      */
     default Children comment(String comment) {
@@ -96,7 +99,7 @@ public interface Join<Children> extends Serializable {
     /**
      * sql 起始句（会拼接在SQL语句的起始处）
      *
-     * @param firstSql  起始语句
+     * @param firstSql 起始语句
      * @return children
      * @since 3.3.1
      */

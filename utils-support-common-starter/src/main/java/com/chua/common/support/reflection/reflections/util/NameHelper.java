@@ -119,6 +119,7 @@ public interface NameHelper {
      *
      * @param typeName 类型
      * @param loaders  加载器
+     * @return Class
      */
     default Class<?> forClass(String typeName, ClassLoader... loaders) {
         if (STRING_LIST.contains(typeName)) {

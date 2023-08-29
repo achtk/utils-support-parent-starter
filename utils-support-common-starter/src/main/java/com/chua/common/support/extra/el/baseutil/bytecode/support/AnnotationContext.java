@@ -74,6 +74,7 @@ public interface AnnotationContext {
      * 是否满足要求的注解
      *
      * @param annotationType 注解
+     * @param element 元素
      * @return 是否存在
      */
     static boolean isAnnotationPresent(Class<? extends Annotation> annotationType, AnnotatedElement element) {

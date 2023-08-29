@@ -161,6 +161,7 @@ public abstract class ComparisonChain {
      * @param left       Comparable
      * @param right      Comparable
      * @param comparator comparator
+     * @return ComparisonChain
      */
     public abstract <T extends Object> ComparisonChain compare(
             T left, T right, Comparator<T> comparator);
@@ -191,6 +192,7 @@ public abstract class ComparisonChain {
      *
      * @param left  Comparable
      * @param right Comparable
+     * @return ComparisonChain
      */
     public abstract ComparisonChain compare(float left, float right);
 
@@ -236,6 +238,7 @@ public abstract class ComparisonChain {
      *
      * @param left  Comparable
      * @param right Comparable
+     * @return ComparisonChain
      * @since 12.0 (present as {@code compare} since 2.0)
      */
     public abstract ComparisonChain compareFalseFirst(boolean left, boolean right);

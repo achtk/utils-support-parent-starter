@@ -44,16 +44,19 @@ public interface Path {
     EvaluationContext evaluate(Object document, Object rootDocument, JsonConfiguration configuration, boolean forUpdate);
 
     /**
+     * definite
      * @return true id this path is definite
      */
     boolean isDefinite();
 
     /**
+     * function
      * @return true id this path is a function
      */
     boolean isFunctionPath();
 
     /**
+     * root path
      * @return true id this path is starts with '$' and false if the path starts with '@'
      */
     boolean isRootPath();

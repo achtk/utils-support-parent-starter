@@ -10,6 +10,7 @@ public interface ObjectFactory<T> {
      * 构建对象
      *
      * @return 对象
+     * @throws Exception ex
      */
     T makeObject() throws Exception;
 

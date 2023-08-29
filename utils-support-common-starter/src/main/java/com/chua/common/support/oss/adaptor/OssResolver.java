@@ -16,6 +16,10 @@ import java.io.OutputStream;
  */
 public interface OssResolver extends AutoCloseable {
 
+    /**
+     * 关闭
+     * @throws Exception ex
+     */
     @Override
     default void close() throws Exception {
 

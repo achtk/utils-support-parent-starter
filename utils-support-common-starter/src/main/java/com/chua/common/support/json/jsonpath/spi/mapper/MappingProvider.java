@@ -26,6 +26,7 @@ public interface MappingProvider {
 
 
     /**
+     * 調用
      * @param source        object to map
      * @param targetType    the type the source object should be mapped to
      * @param configuration current configuration
@@ -35,6 +36,7 @@ public interface MappingProvider {
     <T> T map(Object source, Class<T> targetType, JsonConfiguration configuration);
 
     /**
+     * 調用
      * @param source        object to map
      * @param targetType    the type the source object should be mapped to
      * @param configuration current configuration

@@ -8,6 +8,10 @@ import static com.chua.common.support.constant.ConstantType.*;
  * @author CH
  */
 public interface MethodNode extends CalculateNode {
+    /**
+     * 设置值
+     * @param argsNodes 节点
+     */
     void setArgsNodes(CalculateNode[] argsNodes);
 
     class MethodNodeUtil {

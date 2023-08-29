@@ -9,9 +9,18 @@ import com.chua.common.support.lang.spider.Task;
  * @since 0.5.0
  */
 public interface MonitorableScheduler extends Scheduler {
+    /**
+     * 获取请求数量
+     * @param task 任务
+     * @return 数量
+     */
 
-    public int getLeftRequestsCount(Task task);
-
-    public int getTotalRequestsCount(Task task);
+    int getLeftRequestsCount(Task task);
+    /**
+     * 获取总请求数量
+     * @param task 任务
+     * @return 数量
+     */
+    int getTotalRequestsCount(Task task);
 
 }
