@@ -11,14 +11,14 @@ Public Domain.
  * @author JSON.org
  * @version 2015-12-09
  */
-public class HTTPTokener extends JSONTokener {
+public class HttpTokener extends JSONTokener {
 
     /**
      * Construct an HTTPTokener from a string.
      *
      * @param string A source string.
      */
-    public HTTPTokener(String string) {
+    public HttpTokener(String string) {
         super(string);
     }
 

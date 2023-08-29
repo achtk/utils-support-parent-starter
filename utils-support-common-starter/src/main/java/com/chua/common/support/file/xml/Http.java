@@ -12,7 +12,7 @@ import java.util.Locale;
  * @author JSON.org
  * @version 2015-12-09
  */
-public class HTTP {
+public class Http {
 
     /**
      * Carriage return/line feed.
@@ -54,7 +54,7 @@ public class HTTP {
      */
     public static XmlToJSONObject toJsonObject(String string) throws JSONException {
         XmlToJSONObject jo = new XmlToJSONObject();
-        HTTPTokener x = new HTTPTokener(string);
+        HttpTokener x = new HttpTokener(string);
         String token;
 
         token = x.nextToken();
