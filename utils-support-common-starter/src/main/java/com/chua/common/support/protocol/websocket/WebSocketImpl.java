@@ -25,10 +25,10 @@
 
 package com.chua.common.support.protocol.websocket;
 
-import com.chua.common.support.protocol.constant.Role;
 import com.chua.common.support.protocol.constant.ReadyState;
+import com.chua.common.support.protocol.constant.Role;
 import com.chua.common.support.protocol.websocket.drafts.Draft;
-import com.chua.common.support.protocol.websocket.drafts.Draft_6455;
+import com.chua.common.support.protocol.websocket.drafts.DraftV1;
 import com.chua.common.support.protocol.websocket.enums.CloseHandshakeType;
 import com.chua.common.support.protocol.websocket.enums.HandshakeState;
 import com.chua.common.support.protocol.websocket.exceptions.*;
@@ -174,7 +174,7 @@ public class WebSocketImpl implements WebSocket {
         // draft.copyInstance will be called when the draft is first needed
         if (drafts == null || drafts.isEmpty()) {
             knownDrafts = new ArrayList<>();
-            knownDrafts.add(new Draft_6455());
+            knownDrafts.add(new DraftV1());
         } else {
             knownDrafts = drafts;
         }
@@ -841,10 +841,10 @@ public class WebSocketImpl implements WebSocket {
         if (draft == null) {
             return null;
         }
-        if (!(draft instanceof Draft_6455)) {
+        if (!(draft instanceof DraftV1)) {
             throw new IllegalArgumentException("This draft does not support Sec-WebSocket-Protocol");
         }
-        return ((Draft_6455) draft).getProtocol();
+        return ((DraftV1) draft).getProtocol();
     }
 
     @Override
