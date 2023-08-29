@@ -76,14 +76,14 @@ public abstract class Check {
                 return new None();
 
             case Xz.CHECK_CRC32:
-                return new CRC32();
+                return new Crc32();
 
             case Xz.CHECK_CRC64:
-                return new CRC64();
+                return new Crc64();
 
             case Xz.CHECK_SHA256:
                 try {
-                    return new SHA256();
+                    return new Sha256();
                 } catch (java.security.NoSuchAlgorithmException ignored) {
                 }
                 break;

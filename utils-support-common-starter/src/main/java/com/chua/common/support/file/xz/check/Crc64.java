@@ -13,7 +13,7 @@ package com.chua.common.support.file.xz.check;
 /**
  * @author Administrator
  */
-public class CRC64 extends Check {
+public class Crc64 extends Check {
     private static final long[][] TABLE = new long[4][256];
 
     static {
@@ -36,7 +36,7 @@ public class CRC64 extends Check {
 
     private long crc = -1;
 
-    public CRC64() {
+    public Crc64() {
         size = 8;
         name = "CRC64";
     }

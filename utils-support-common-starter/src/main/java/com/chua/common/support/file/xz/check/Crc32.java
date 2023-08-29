@@ -1,18 +1,9 @@
-/*
- * CRC32
- *
- * Author: Lasse Collin <lasse.collin@tukaani.org>
- *
- * This file has been put into the public domain.
- * You can do whatever you want with this file.
- */
-
 package com.chua.common.support.file.xz.check;
 
-public class CRC32 extends Check {
+public class Crc32 extends Check {
     private final java.util.zip.CRC32 state = new java.util.zip.CRC32();
 
-    public CRC32() {
+    public Crc32() {
         size = 4;
         name = "CRC32";
     }
