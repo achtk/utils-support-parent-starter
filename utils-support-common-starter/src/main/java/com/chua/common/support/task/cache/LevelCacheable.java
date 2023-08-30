@@ -4,32 +4,30 @@ import com.chua.common.support.utils.IoUtils;
 import com.chua.common.support.utils.ObjectUtils;
 import com.chua.common.support.value.TimeValue;
 import com.chua.common.support.value.Value;
-import org.mapdb.DB;
-import org.mapdb.DBMaker;
-import org.mapdb.HTreeMap;
+import org.iq80.leveldb.DB;
 
 import java.time.Duration;
 import java.util.Map;
 
 /**
- * mapdb
+ * leveldb
  *
  * @author CH
  */
 @SuppressWarnings("ALL")
-public class MapCacheable extends AbstractCacheable {
+public class LevelCacheable extends AbstractCacheable {
 
 
     private HTreeMap marker;
 
-    public MapCacheable() {
+    public LevelCacheable() {
     }
 
-    public MapCacheable(Map<String, Object> config) {
+    public LevelCacheable(Map<String, Object> config) {
         super(config);
     }
 
-    public MapCacheable(CacheConfiguration config) {
+    public LevelCacheable(CacheConfiguration config) {
         super(config);
     }
 

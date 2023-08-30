@@ -2,13 +2,12 @@ package com.chua.common.support.reflection.reflections;
 
 import com.chua.common.support.reflection.reflections.scanners.MemberUsageResourceScanner;
 import com.chua.common.support.reflection.reflections.scanners.MethodParameterNamesResourceScanner;
+import com.chua.common.support.reflection.reflections.scanners.ResourceScanner;
 import com.chua.common.support.reflection.reflections.scanners.Scanners;
 import com.chua.common.support.reflection.reflections.serializers.Serializer;
 import com.chua.common.support.reflection.reflections.serializers.XmlSerializer;
 import com.chua.common.support.reflection.reflections.util.*;
 import com.chua.common.support.reflection.reflections.vfs.Vfs;
-import com.chua.common.support.reflection.reflections.scanners.ResourceScanner;
-
 import javassist.bytecode.ClassFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +27,6 @@ import java.util.stream.StreamSupport;
 import static com.chua.common.support.reflection.reflections.ReflectionUtils.withAnnotation;
 import static com.chua.common.support.reflection.reflections.ReflectionUtils.withAnyParameterAnnotation;
 import static com.chua.common.support.reflection.reflections.scanners.Scanners.*;
-import static java.lang.String.format;
 
 /**
  * Reflections one-stop-shop object
@@ -156,7 +154,7 @@ public class Reflections implements NameHelper {
             Vfs.Dir dir = null;
             try {
                 dir = Vfs.fromURL(url);
-                for (Vfs.File file : dir.getFiles()) {
+                for (Vfs.VfsFile file : dir.getFiles()) {
                     if (doFilter(file, configuration.getInputsFilter())) {
                         ClassFile classFile = null;
                         for (ResourceScanner resourceScanner : configuration.getScanners()) {
@@ -212,13 +210,13 @@ public class Reflections implements NameHelper {
         return storeMap;
     }
 
-    private boolean doFilter(Vfs.File file, Predicate<String> predicate) {
+    private boolean doFilter(Vfs.VfsFile file, Predicate<String> predicate) {
         String path = file.getRelativePath();
         String fqn = path.replace('/', '.');
         return predicate == null || predicate.test(path) || predicate.test(fqn);
     }
 
-    private ClassFile getClassFile(Vfs.File file) {
+    private ClassFile getClassFile(Vfs.VfsFile file) {
         try (DataInputStream dis = new DataInputStream(new BufferedInputStream(file.openInputStream()))) {
             return new ClassFile(dis);
         } catch (Exception e) {
@@ -257,7 +255,7 @@ public class Reflections implements NameHelper {
      */
     public static Reflections collect(String packagePrefix, Predicate<String> resourceNameFilter, Serializer serializer) {
         Collection<URL> urls = ClasspathHelper.forPackage(packagePrefix);
-        Iterable<Vfs.File> files = Vfs.findFiles(urls, packagePrefix, resourceNameFilter);
+        Iterable<Vfs.VfsFile> files = Vfs.findFiles(urls, packagePrefix, resourceNameFilter);
         Reflections reflections = new Reflections();
         StreamSupport.stream(files.spliterator(), false)
                 .forEach(file -> {

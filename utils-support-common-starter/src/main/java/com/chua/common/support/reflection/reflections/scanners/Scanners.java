@@ -113,7 +113,7 @@ public enum Scanners implements ResourceScanner, QueryBuilder, NameHelper {
         }
 
         @Override
-        public List<Map.Entry<String, String>> scan(Vfs.File file) {
+        public List<Map.Entry<String, String>> scan(Vfs.VfsFile file) {
             return Collections.singletonList(entry(file.getName(), file.getRelativePath()));
         }
 

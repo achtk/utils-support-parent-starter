@@ -3,10 +3,12 @@ package com.chua.hikvision.support;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.parser.Feature;
 import com.alibaba.fastjson2.JSONObject;
-import com.chua.hikvision.support.adaptor.CameraFactory;
-import com.chua.hikvision.support.adaptor.RegionFactory;
+import com.boren.school.attendance.support.adaptor.CameraFactory;
+import com.boren.school.attendance.support.adaptor.EntranceFactory;
+import com.boren.school.attendance.support.adaptor.RegionFactory;
 import com.hikvision.artemis.sdk.ArtemisHttpUtil;
 import com.hikvision.artemis.sdk.config.ArtemisConfig;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,10 +18,11 @@ import java.util.Map;
  *
  * @author CH
  */
+@Slf4j
 public class HikvisionClient {
     private static final String CODE = "code";
     private static final String DATA = "data";
-    private String[] protocol;
+    private final String[] protocol;
     /**
      * artemis路径
      */
@@ -44,6 +47,14 @@ public class HikvisionClient {
      */
     public CameraFactory getCameraFactory() {
         return new CameraFactory(this);
+    }
+    /**
+     * 获取门禁接口
+     *
+     * @return 获取门禁接口
+     */
+    public EntranceFactory getEntranceFactory() {
+        return new EntranceFactory(this);
     }
 
     /**
@@ -108,13 +119,13 @@ public class HikvisionClient {
         }
 
         JSONObject artemisObject = JSONObject.parseObject(artemis);
+        log.info("返回状态码: {}", artemisObject.get(CODE));
         if (isFailure(artemisObject)) {
             try {
                 return type.newInstance();
             } catch (Exception ignored) {
             }
         }
-
         return JSON.parseObject(artemisObject.getString(DATA), type, Feature.IgnoreNotMatch);
     }
 

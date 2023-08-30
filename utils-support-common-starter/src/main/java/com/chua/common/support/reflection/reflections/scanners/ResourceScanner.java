@@ -23,7 +23,7 @@ public interface ResourceScanner {
     /**
      * scan the given {@code file} and produces list of {@link Map.Entry} key/values
      */
-    default List<Map.Entry<String, String>> scan(Vfs.File file) {
+    default List<Map.Entry<String, String>> scan(Vfs.VfsFile file) {
         return null;
     }
 

@@ -23,10 +23,10 @@ public class ZipDir implements Vfs.Dir {
     }
 
     @Override
-    public Iterable<Vfs.File> getFiles() {
+    public Iterable<Vfs.VfsFile> getFiles() {
         return () -> jarFile.stream()
                 .filter(entry -> !entry.isDirectory())
-                .map(entry -> (Vfs.File) new ZipFile(ZipDir.this, entry))
+                .map(entry -> (Vfs.VfsFile) new ZipFile(ZipDir.this, entry))
                 .iterator();
     }
 

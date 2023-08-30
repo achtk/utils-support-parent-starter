@@ -20,7 +20,7 @@ import java.util.stream.StreamSupport;
 /**
  * a simple virtual file system bridge
  * <p>use the {@link Vfs#fromURL(URL)} to get a {@link Dir},
- * then use {@link Dir#getFiles()} to iterate over the {@link File}
+ * then use {@link Dir#getFiles()} to iterate over the {@link VfsFile}
  * <p>for example:
  * <pre>
  *      Vfs.Dir dir = Vfs.fromURL(url);
@@ -59,7 +59,7 @@ public abstract class Vfs {
     public interface Dir {
         String getPath();
 
-        Iterable<File> getFiles();
+        Iterable<VfsFile> getFiles();
 
         default void close() {
         }
@@ -68,7 +68,7 @@ public abstract class Vfs {
     /**
      * an abstract vfs file
      */
-    public interface File {
+    public interface VfsFile {
         String getName();
 
         String getRelativePath();
@@ -146,10 +146,10 @@ public abstract class Vfs {
     }
 
     /**
-     * return an iterable of all {@link File} in given urls, starting with given packagePrefix and matching nameFilter
+     * return an iterable of all {@link VfsFile} in given urls, starting with given packagePrefix and matching nameFilter
      */
-    public static Iterable<File> findFiles(final Collection<URL> inUrls, final String packagePrefix, final Predicate<String> nameFilter) {
-        Predicate<File> fileNamePredicate = file -> {
+    public static Iterable<VfsFile> findFiles(final Collection<URL> inUrls, final String packagePrefix, final Predicate<String> nameFilter) {
+        Predicate<VfsFile> fileNamePredicate = file -> {
             String path = file.getRelativePath();
             if (path.startsWith(packagePrefix)) {
                 String filename = path.substring(path.indexOf(packagePrefix) + packagePrefix.length());
@@ -162,9 +162,9 @@ public abstract class Vfs {
     }
 
     /**
-     * return an iterable of all {@link File} in given urls, matching filePredicate
+     * return an iterable of all {@link VfsFile} in given urls, matching filePredicate
      */
-    public static Iterable<File> findFiles(final Collection<URL> urls, final Predicate<File> filePredicate) {
+    public static Iterable<VfsFile> findFiles(final Collection<URL> urls, final Predicate<VfsFile> filePredicate) {
         return () -> urls.stream()
                 .flatMap(url -> {
                     try {

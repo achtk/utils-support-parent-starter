@@ -29,8 +29,8 @@ public class JarInputDir implements Vfs.Dir {
     }
 
     @Override
-    public Iterable<Vfs.File> getFiles() {
-        return () -> new Iterator<Vfs.File>() {
+    public Iterable<Vfs.VfsFile> getFiles() {
+        return () -> new Iterator<Vfs.VfsFile>() {
             {
                 try {
                     jarInputStream = new JarInputStream(url.openConnection().getInputStream());
@@ -39,7 +39,7 @@ public class JarInputDir implements Vfs.Dir {
                 }
             }
 
-            Vfs.File entry = null;
+            Vfs.VfsFile entry = null;
 
             @Override
             public boolean hasNext() {
@@ -47,13 +47,13 @@ public class JarInputDir implements Vfs.Dir {
             }
 
             @Override
-            public Vfs.File next() {
-                Vfs.File next = entry;
+            public Vfs.VfsFile next() {
+                Vfs.VfsFile next = entry;
                 entry = null;
                 return next;
             }
 
-            private Vfs.File computeNext() {
+            private Vfs.VfsFile computeNext() {
                 while (true) {
                     try {
                         ZipEntry entry = jarInputStream.getNextJarEntry();

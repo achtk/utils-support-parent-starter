@@ -544,6 +544,10 @@ public class NumberConstant {
      */
     public static final int NUM_17 = 17;
     /**
+     * 18
+     */
+    public static final int NUM_18 = 18;
+    /**
      * 20
      */
     public static final int NUM_20 = 20;

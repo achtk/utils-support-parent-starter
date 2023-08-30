@@ -93,6 +93,9 @@
   grant SELECT, REPLICATION SLAVE, REPLICATION CLIENT on *.* to '<user>'@'%';
   grant process on *.* to '<user>'@'%';
   flush privileges;
+  
+  
+  REVOKE privilege_type ON database_name.table_name FROM 'username'@'%';
   ```
 
 - **列转行**

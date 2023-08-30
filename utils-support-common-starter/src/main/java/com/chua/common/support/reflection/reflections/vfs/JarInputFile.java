@@ -7,7 +7,7 @@ import java.util.zip.ZipEntry;
 /**
  * @author Administrator
  */
-public class JarInputFile implements Vfs.File {
+public class JarInputFile implements Vfs.VfsFile {
     private final ZipEntry entry;
     private final JarInputDir jarInputDir;
     private final long fromIndex;

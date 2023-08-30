@@ -86,7 +86,7 @@ public class HttpRequest {
      */
     public boolean isFormData() {
         for (String value : header.values()) {
-            if (value.startsWith(HttpConstant.FORM_DATA)) {
+            if (null != value && value.startsWith(HttpConstant.FORM_DATA)) {
                 return true;
             }
         }
@@ -105,6 +105,7 @@ public class HttpRequest {
                 continue;
             }
             if (value instanceof byte[] || value instanceof File || value instanceof InputStream) {
+                header.add(HttpConstant.CONTENT_TYPE, HttpConstant.FORM_DATA);
                 return true;
             }
         }

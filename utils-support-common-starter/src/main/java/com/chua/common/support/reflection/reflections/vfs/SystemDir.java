@@ -29,7 +29,7 @@ public class SystemDir implements Vfs.Dir {
     }
 
     @Override
-    public Iterable<Vfs.File> getFiles() {
+    public Iterable<Vfs.VfsFile> getFiles() {
         if (file == null || !file.exists()) {
             return Collections.emptyList();
         }
@@ -37,7 +37,7 @@ public class SystemDir implements Vfs.Dir {
             try {
                 return Files.walk(file.toPath())
                         .filter(Files::isRegularFile)
-                        .map(path -> (Vfs.File) new SystemFile(SystemDir.this, path.toFile()))
+                        .map(path -> (Vfs.VfsFile) new SystemFile(SystemDir.this, path.toFile()))
                         .iterator();
             } catch (IOException e) {
                 throw new ReflectionsException("could not get files for " + file, e);

@@ -8,6 +8,7 @@ import com.chua.common.support.http.HttpResponse;
 import com.chua.common.support.http.*;
 import com.chua.common.support.http.invoke.AbstractHttpClientInvoker;
 import com.chua.common.support.http.render.Render;
+import com.chua.common.support.lang.exception.NotSupportedException;
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.CollectionUtils;
 import com.chua.common.support.utils.StringUtils;
@@ -40,6 +41,7 @@ import org.apache.http.ssl.SSLContextBuilder;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+import java.io.File;
 import java.net.InetAddress;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
@@ -246,6 +248,33 @@ public class UnirestClientInvoker extends AbstractHttpClientInvoker {
     /**
      * 响应
      *
+     * @param body 请求
+     * @return 响应
+     */
+    private HttpResponse doAnalysisResponse(Body body) {
+
+        try {
+            if (body instanceof MultipartBody) {
+                return createResponseEntity(((MultipartBody) body).asBytes());
+            }
+
+            if(body instanceof RequestBodyEntity) {
+                return createResponseEntity(((RequestBodyEntity) body).asBytes());
+            }
+
+            if(body instanceof JsonPatchRequest) {
+                return createResponseEntity(((JsonPatchRequest) body).asBytes());
+            }
+
+            throw new NotSupportedException();
+        } catch (Exception e) {
+            return createResponseServerErrorEntity(e);
+        }
+    }
+
+    /**
+     * 响应
+     *
      * @param request 请求
      * @return 响应
      */
@@ -349,7 +378,7 @@ public class UnirestClientInvoker extends AbstractHttpClientInvoker {
      * @param request 请求
      * @return
      */
-    private RequestBodyEntity doAnalysisRequest(HttpRequestWithBody request) {
+    private kong.unirest.HttpRequest doAnalysisRequest(HttpRequestWithBody request) {
         doAnalysisRequest(this.httpMethod.name());
         request.connectTimeout((int) this.request.getConnectTimeout());
 
@@ -362,8 +391,14 @@ public class UnirestClientInvoker extends AbstractHttpClientInvoker {
         }
 
         //上传文件
-        if (this.request.isFormData() && this.request.hasBin()) {
-            return request.body(this.request.getBody());
+        if (this.request.hasBin() && this.request.isFormData()) {
+            MultipartBody field = null;
+            Map<String, Object> body = this.request.getBody();
+            for (Map.Entry<String, Object> entry : body.entrySet()) {
+                Object value = entry.getValue();
+                field = request.field(entry.getKey(), (File) value);
+            }
+            return field;
         }
 
         String contentType = CollectionUtils.findFirst(request.getHeaders().get(HttpHeaders.CONTENT_TYPE), "*");
