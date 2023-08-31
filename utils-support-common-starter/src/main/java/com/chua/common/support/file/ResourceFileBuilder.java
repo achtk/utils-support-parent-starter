@@ -1,13 +1,12 @@
 package com.chua.common.support.file;
 
-import com.chua.common.support.binary.ByteSource;
+import com.chua.common.support.binary.BaseByteSource;
 import com.chua.common.support.binary.ByteSourceArray;
 import com.chua.common.support.binary.ByteSourceFile;
 import com.chua.common.support.binary.ByteSourceUrl;
 import com.chua.common.support.file.folder.FolderResourceFile;
 import com.chua.common.support.media.MediaType;
 import com.chua.common.support.media.MediaTypeFactory;
-import com.chua.common.support.resource.ResourceConfiguration;
 import com.chua.common.support.resource.ResourceProvider;
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.ContentTypeUtils;
@@ -169,7 +168,7 @@ public class ResourceFileBuilder {
 
 
         String name = createResourceFile(file);
-        ByteSource byteSource = configuration.getByteSource();
+        BaseByteSource byteSource = configuration.getByteSource();
 
         if (byteSource instanceof ByteSourceUrl) {
             if (((ByteSourceUrl) byteSource).isFile()) {

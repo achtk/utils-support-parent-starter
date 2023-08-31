@@ -33,7 +33,7 @@ import com.chua.common.support.protocol.constant.Opcode;
  *
  * @author Administrator
  */
-public class BinaryFrame extends DataFrame {
+public class BinaryFrame extends BaseDataFrame {
 
   /**
    * constructor which sets the opcode of this frame to binary

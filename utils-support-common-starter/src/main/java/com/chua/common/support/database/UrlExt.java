@@ -20,7 +20,7 @@ public class UrlExt {
     private boolean useUnicode = true;
 
     @Builder.Default
-    private boolean useSSL = false;
+    private boolean useSsl = false;
     @Builder.Default
     private String characterEncoding = "UTF-8";
 }

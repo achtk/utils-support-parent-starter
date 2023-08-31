@@ -8,7 +8,7 @@ import java.io.*;
  * @author CH
  * @since 2022-01-14
  */
-public class ByteSourceFile extends ByteSource {
+public class ByteSourceFile extends BaseByteSource {
     private final File file;
 
     public ByteSourceFile(final File file) {

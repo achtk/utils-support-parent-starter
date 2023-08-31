@@ -9,7 +9,7 @@
 
 package com.chua.common.support.file.xz;
 
-import com.chua.common.support.file.xz.check.Check;
+import com.chua.common.support.file.xz.check.BaseCheck;
 import com.chua.common.support.file.xz.common.EncoderUtil;
 import com.chua.common.support.file.xz.common.StreamFlags;
 import com.chua.common.support.file.xz.index.IndexEncoder;
@@ -57,7 +57,7 @@ public class XZOutputStream extends AbstractFinishableOutputStream {
 
     private OutputStream out;
     private final StreamFlags streamFlags = new StreamFlags();
-    private final Check check;
+    private final BaseCheck check;
     private final IndexEncoder index = new IndexEncoder();
 
     private BlockOutputStream blockEncoder = null;
@@ -282,7 +282,7 @@ public class XZOutputStream extends AbstractFinishableOutputStream {
         updateFilters(filterOptions);
 
         streamFlags.checkType = checkType;
-        check = Check.getInstance(checkType);
+        check = BaseCheck.getInstance(checkType);
 
         encodeStreamHeader();
     }

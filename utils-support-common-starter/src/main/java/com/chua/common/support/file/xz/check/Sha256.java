@@ -9,7 +9,7 @@
 
 package com.chua.common.support.file.xz.check;
 
-public class Sha256 extends Check {
+public class Sha256 extends BaseCheck {
     private final java.security.MessageDigest sha256;
 
     public Sha256() throws java.security.NoSuchAlgorithmException {

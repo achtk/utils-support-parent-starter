@@ -32,7 +32,7 @@ import com.chua.common.support.protocol.constant.Opcode;
  *
  * @author Administrator
  */
-public class ContinuousFrame extends DataFrame {
+public class ContinuousFrame extends BaseDataFrame {
 
   /**
    * constructor which sets the opcode of this frame to continuous

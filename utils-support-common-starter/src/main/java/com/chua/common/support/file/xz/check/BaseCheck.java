@@ -15,7 +15,7 @@ import com.chua.common.support.file.xz.Xz;
 /**
  * @author Administrator
  */
-public abstract class Check {
+public abstract class BaseCheck {
     int size;
     String name;
 
@@ -69,7 +69,7 @@ public abstract class Check {
      * @return 实例
      * @throws UnsupportedOptionsException ex
      */
-    public static Check getInstance(int checkType)
+    public static BaseCheck getInstance(int checkType)
             throws UnsupportedOptionsException {
         switch (checkType) {
             case Xz.CHECK_NONE:

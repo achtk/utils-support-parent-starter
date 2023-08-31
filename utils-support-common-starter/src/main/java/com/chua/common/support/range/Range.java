@@ -730,7 +730,7 @@ public final class Range<C extends Comparable> implements Predicate<C>, Serializ
 
         @Override
         public int compare(Range<?> left, Range<?> right) {
-            return ComparisonChain.start()
+            return BaseComparisonChain.start()
                     .compare(left.lowerBound, right.lowerBound)
                     .compare(left.upperBound, right.upperBound)
                     .result();

@@ -1,6 +1,6 @@
 package com.chua.common.support.file.xz.check;
 
-public class Crc32 extends Check {
+public class Crc32 extends BaseCheck {
     private final java.util.zip.CRC32 state = new java.util.zip.CRC32();
 
     public Crc32() {

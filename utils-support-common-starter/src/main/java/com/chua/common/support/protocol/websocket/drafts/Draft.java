@@ -200,7 +200,7 @@ public abstract class Draft {
     if (op != Opcode.BINARY && op != Opcode.TEXT) {
       throw new IllegalArgumentException("Only Opcode.BINARY or  Opcode.TEXT are allowed");
     }
-    DataFrame bui = null;
+    BaseDataFrame bui = null;
     if (continuousFrameType != null) {
       bui = new ContinuousFrame();
     } else {

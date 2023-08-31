@@ -1,7 +1,7 @@
 package com.chua.common.support.file.compress;
 
 import com.chua.common.support.annotations.Spi;
-import com.chua.common.support.binary.ByteSource;
+import com.chua.common.support.binary.BaseByteSource;
 import com.chua.common.support.binary.ByteSourceArray;
 import com.chua.common.support.binary.ByteSourceInputStream;
 import com.chua.common.support.file.AbstractResourceFile;
@@ -223,7 +223,7 @@ public class TarFile extends AbstractResourceFile implements CompressFile<TarInp
     }
 
     @Override
-    public ByteSource openInputStream(String name) throws IOException {
+    public BaseByteSource openInputStream(String name) throws IOException {
         File file = toFile();
         try {
             return new ByteSourceInputStream(new CompressInputStream(file, name));

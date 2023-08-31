@@ -272,7 +272,7 @@ public class Xml {
                 token = x.nextToken();
                 if (CDATA.equals(token)) {
                     if (x.next() == SYMBOL_LEFT_SQUARE_BRACKET_CHAR) {
-                        string = x.nextCharDATA();
+                        string = x.nextCharData();
                         if (string.length() > 0) {
                             context.accumulate(config.getcDataTagName(), string);
                         }

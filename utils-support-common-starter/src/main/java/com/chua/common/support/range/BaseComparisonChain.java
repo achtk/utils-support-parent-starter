@@ -10,62 +10,62 @@ import java.util.Comparator;
  *
  * @author CH
  */
-public abstract class ComparisonChain {
-    private ComparisonChain() {
+public abstract class BaseComparisonChain {
+    private BaseComparisonChain() {
     }
 
     /**
      * Begins a new chained comparison statement. See example in the class documentation.
      */
-    public static ComparisonChain start() {
+    public static BaseComparisonChain start() {
         return ACTIVE;
     }
 
-    private static final ComparisonChain ACTIVE =
-            new ComparisonChain() {
+    private static final BaseComparisonChain ACTIVE =
+            new BaseComparisonChain() {
                 @SuppressWarnings("unchecked") // unsafe; see discussion on supertype
                 @Override
-                public ComparisonChain compare(Comparable<?> left, Comparable<?> right) {
+                public BaseComparisonChain compare(Comparable<?> left, Comparable<?> right) {
                     return classify(((Comparable<Object>) left).compareTo(right));
                 }
 
                 @Override
-                public <T extends Object> ComparisonChain compare(
+                public <T extends Object> BaseComparisonChain compare(
                         T left, T right, Comparator<T> comparator) {
                     return classify(comparator.compare(left, right));
                 }
 
                 @Override
-                public ComparisonChain compare(int left, int right) {
+                public BaseComparisonChain compare(int left, int right) {
                     return classify(IntMath.compare(left, right));
                 }
 
                 @Override
-                public ComparisonChain compare(long left, long right) {
+                public BaseComparisonChain compare(long left, long right) {
                     return classify(LongMath.compare(left, right));
                 }
 
                 @Override
-                public ComparisonChain compare(float left, float right) {
+                public BaseComparisonChain compare(float left, float right) {
                     return classify(Float.compare(left, right));
                 }
 
                 @Override
-                public ComparisonChain compare(double left, double right) {
+                public BaseComparisonChain compare(double left, double right) {
                     return classify(Double.compare(left, right));
                 }
 
                 @Override
-                public ComparisonChain compareTrueFirst(boolean left, boolean right) {
+                public BaseComparisonChain compareTrueFirst(boolean left, boolean right) {
                     return classify(AbstractCut.compare(right, left));
                 }
 
                 @Override
-                public ComparisonChain compareFalseFirst(boolean left, boolean right) {
+                public BaseComparisonChain compareFalseFirst(boolean left, boolean right) {
                     return classify(AbstractCut.compare(left, right));
                 }
 
-                ComparisonChain classify(int result) {
+                BaseComparisonChain classify(int result) {
                     return (result < 0) ? LESS : (result > 0) ? GREATER : ACTIVE;
                 }
 
@@ -75,11 +75,11 @@ public abstract class ComparisonChain {
                 }
             };
 
-    private static final ComparisonChain LESS = new InactiveComparisonChain(-1);
+    private static final BaseComparisonChain LESS = new InactiveComparisonChain(-1);
 
-    private static final ComparisonChain GREATER = new InactiveComparisonChain(1);
+    private static final BaseComparisonChain GREATER = new InactiveComparisonChain(1);
 
-    private static final class InactiveComparisonChain extends ComparisonChain {
+    private static final class InactiveComparisonChain extends BaseComparisonChain {
         final int result;
 
         InactiveComparisonChain(int result) {
@@ -87,43 +87,43 @@ public abstract class ComparisonChain {
         }
 
         @Override
-        public ComparisonChain compare(Comparable<?> left, Comparable<?> right) {
+        public BaseComparisonChain compare(Comparable<?> left, Comparable<?> right) {
             return this;
         }
 
         @Override
-        public <T extends Object> ComparisonChain compare(
+        public <T extends Object> BaseComparisonChain compare(
                 T left, T right, Comparator<T> comparator) {
             return this;
         }
 
         @Override
-        public ComparisonChain compare(int left, int right) {
+        public BaseComparisonChain compare(int left, int right) {
             return this;
         }
 
         @Override
-        public ComparisonChain compare(long left, long right) {
+        public BaseComparisonChain compare(long left, long right) {
             return this;
         }
 
         @Override
-        public ComparisonChain compare(float left, float right) {
+        public BaseComparisonChain compare(float left, float right) {
             return this;
         }
 
         @Override
-        public ComparisonChain compare(double left, double right) {
+        public BaseComparisonChain compare(double left, double right) {
             return this;
         }
 
         @Override
-        public ComparisonChain compareTrueFirst(boolean left, boolean right) {
+        public BaseComparisonChain compareTrueFirst(boolean left, boolean right) {
             return this;
         }
 
         @Override
-        public ComparisonChain compareFalseFirst(boolean left, boolean right) {
+        public BaseComparisonChain compareFalseFirst(boolean left, boolean right) {
             return this;
         }
 
@@ -152,7 +152,7 @@ public abstract class ComparisonChain {
      * @return ComparisonChain
      * @throws ClassCastException if the parameters are not mutually comparable
      */
-    public abstract ComparisonChain compare(Comparable<?> left, Comparable<?> right);
+    public abstract BaseComparisonChain compare(Comparable<?> left, Comparable<?> right);
 
     /**
      * Compares two objects using a comparator, <i>if</i> the result of this comparison chain has not
@@ -163,7 +163,7 @@ public abstract class ComparisonChain {
      * @param comparator comparator
      * @return ComparisonChain
      */
-    public abstract <T extends Object> ComparisonChain compare(
+    public abstract <T extends Object> BaseComparisonChain compare(
             T left, T right, Comparator<T> comparator);
 
     /**
@@ -174,7 +174,7 @@ public abstract class ComparisonChain {
      * @param right Comparable
      * @return ComparisonChain
      */
-    public abstract ComparisonChain compare(int left, int right);
+    public abstract BaseComparisonChain compare(int left, int right);
 
     /**
      * Compares two {@code long} values , <i>if</i> the result of
@@ -184,7 +184,7 @@ public abstract class ComparisonChain {
      * @param right Comparable
      * @return ComparisonChain
      */
-    public abstract ComparisonChain compare(long left, long right);
+    public abstract BaseComparisonChain compare(long left, long right);
 
     /**
      * Compares two {@code float} values as specified by {@link Float#compare}, <i>if</i> the result
@@ -194,7 +194,7 @@ public abstract class ComparisonChain {
      * @param right Comparable
      * @return ComparisonChain
      */
-    public abstract ComparisonChain compare(float left, float right);
+    public abstract BaseComparisonChain compare(float left, float right);
 
     /**
      * Compares two {@code double} values as specified by {@link Double#compare}, <i>if</i> the result
@@ -204,7 +204,7 @@ public abstract class ComparisonChain {
      * @param right Comparable
      * @return ComparisonChain
      */
-    public abstract ComparisonChain compare(double left, double right);
+    public abstract BaseComparisonChain compare(double left, double right);
 
     /**
      * Discouraged synonym for {@link #compareFalseFirst}.
@@ -217,7 +217,7 @@ public abstract class ComparisonChain {
      * negated or reversed, undo the negation or reversal and use {@link #compareTrueFirst}.
      */
     @Deprecated
-    public final ComparisonChain compare(Boolean left, Boolean right) {
+    public final BaseComparisonChain compare(Boolean left, Boolean right) {
         return compareFalseFirst(left, right);
     }
 
@@ -230,7 +230,7 @@ public abstract class ComparisonChain {
      * @return ComparisonChain
      * @since 12.0
      */
-    public abstract ComparisonChain compareTrueFirst(boolean left, boolean right);
+    public abstract BaseComparisonChain compareTrueFirst(boolean left, boolean right);
 
     /**
      * Compares two {@code boolean} values, considering {@code false} to be less than {@code true},
@@ -241,7 +241,7 @@ public abstract class ComparisonChain {
      * @return ComparisonChain
      * @since 12.0 (present as {@code compare} since 2.0)
      */
-    public abstract ComparisonChain compareFalseFirst(boolean left, boolean right);
+    public abstract BaseComparisonChain compareFalseFirst(boolean left, boolean right);
 
     /**
      * Ends this comparison chain and returns its result: a value having the same sign as the first

@@ -1,6 +1,6 @@
 package com.chua.common.support.file.filesystem;
 
-import com.chua.common.support.binary.ByteSource;
+import com.chua.common.support.binary.BaseByteSource;
 import com.chua.common.support.binary.ByteSourceArray;
 import com.chua.common.support.binary.ByteSourceInputStream;
 import com.chua.common.support.file.ResourceFile;
@@ -27,12 +27,12 @@ import static com.chua.common.support.constant.CommonConstant.UNKNOWN;
  */
 public abstract class BaseOsFileSystem {
 
-    private ByteSource byteSource;
+    private BaseByteSource byteSource;
     private static final String BASE64 = ";base64,";
 
     private String contentType = UNKNOWN;
 
-    private BaseOsFileSystem(ByteSource byteSource) {
+    private BaseOsFileSystem(BaseByteSource byteSource) {
         this.byteSource = byteSource;
     }
 

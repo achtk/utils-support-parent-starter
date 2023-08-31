@@ -34,7 +34,7 @@ import com.chua.common.support.protocol.websocket.util.Charsetfunctions;
  *
  * @author Administrator
  */
-public class TextFrame extends DataFrame {
+public class TextFrame extends BaseDataFrame {
 
   /**
    * constructor which sets the opcode of this frame to text

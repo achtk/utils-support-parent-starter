@@ -9,7 +9,7 @@
 
 package com.chua.common.support.file.xz.check;
 
-public class None extends Check {
+public class None extends BaseCheck {
     public None() {
         size = 0;
         name = "None";

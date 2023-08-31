@@ -12,7 +12,7 @@ import java.io.InputStream;
  * @author CH
  * @since 2022-01-14
  */
-public class ByteSourceArray extends ByteSource {
+public class ByteSourceArray extends BaseByteSource {
     private final byte[] bytes;
 
     public ByteSourceArray(final String filename, final byte[] bytes) {

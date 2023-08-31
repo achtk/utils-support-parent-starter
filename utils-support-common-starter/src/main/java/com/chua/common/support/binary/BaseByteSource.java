@@ -9,10 +9,10 @@ import java.io.InputStream;
  * @author CH
  * @since 2022-01-14
  */
-public abstract class ByteSource {
+public abstract class BaseByteSource {
     private final String filename;
 
-    public ByteSource(final String filename) {
+    public BaseByteSource(final String filename) {
         this.filename = filename;
     }
 

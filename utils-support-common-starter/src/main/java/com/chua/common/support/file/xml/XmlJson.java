@@ -84,7 +84,7 @@ public class XmlJson {
                             token = x.nextToken();
                             if ("CDATA".equals(token) && x.next() == '[') {
                                 if (ja != null) {
-                                    ja.put(x.nextCharDATA());
+                                    ja.put(x.nextCharData());
                                 }
                             } else {
                                 throw x.syntaxError("Expected 'CDATA['");

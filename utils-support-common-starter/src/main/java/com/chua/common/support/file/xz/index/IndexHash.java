@@ -2,7 +2,7 @@ package com.chua.common.support.file.xz.index;
 
 import com.chua.common.support.file.xz.CorruptedInputException;
 import com.chua.common.support.file.xz.XzException;
-import com.chua.common.support.file.xz.check.Check;
+import com.chua.common.support.file.xz.check.BaseCheck;
 import com.chua.common.support.file.xz.check.Crc32;
 import com.chua.common.support.file.xz.check.Sha256;
 import com.chua.common.support.file.xz.common.DecoderUtil;
@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.zip.CheckedInputStream;
 
 public class IndexHash extends BaseIndexBase {
-    private Check hash;
+    private BaseCheck hash;
 
     public IndexHash() {
         super(new CorruptedInputException());

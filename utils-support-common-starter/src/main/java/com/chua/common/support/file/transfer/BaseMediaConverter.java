@@ -1,6 +1,6 @@
 package com.chua.common.support.file.transfer;
 
-import com.chua.common.support.binary.ByteSource;
+import com.chua.common.support.binary.BaseByteSource;
 import com.chua.common.support.binary.ByteSourceArray;
 import com.chua.common.support.collection.*;
 import com.chua.common.support.file.filesystem.BaseOsFileSystem;
@@ -252,7 +252,7 @@ public abstract class BaseMediaConverter {
      */
     public static class InputStreamMediaConverter extends BaseMediaConverter {
 
-        private ByteSource byteSource;
+        private BaseByteSource byteSource;
 
         @SneakyThrows
         @Override
@@ -322,7 +322,7 @@ public abstract class BaseMediaConverter {
      */
     public static class FileSystemMediaConverter extends BaseMediaConverter {
 
-        private ByteSource byteSource;
+        private BaseByteSource byteSource;
         private final BaseOsFileSystem fileSystem;
 
         public FileSystemMediaConverter(BaseOsFileSystem fileSystem) {

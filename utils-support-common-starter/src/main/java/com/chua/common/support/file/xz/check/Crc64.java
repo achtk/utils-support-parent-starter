@@ -15,7 +15,7 @@ import static com.chua.common.support.constant.NumberConstant.*;
 /**
  * @author Administrator
  */
-public class Crc64 extends Check {
+public class Crc64 extends BaseCheck {
     private static final long[][] TABLE = new long[4][256];
 
     static {

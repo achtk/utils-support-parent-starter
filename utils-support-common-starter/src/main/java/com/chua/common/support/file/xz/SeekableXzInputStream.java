@@ -1,6 +1,6 @@
 package com.chua.common.support.file.xz;
 
-import com.chua.common.support.file.xz.check.Check;
+import com.chua.common.support.file.xz.check.BaseCheck;
 import com.chua.common.support.file.xz.common.DecoderUtil;
 import com.chua.common.support.file.xz.common.StreamFlags;
 import com.chua.common.support.file.xz.index.BlockInfo;
@@ -148,7 +148,7 @@ public class SeekableXzInputStream extends SeekableInputStream {
      * Integrity Check in the current Xz Stream. The constructor leaves
      * this to point to the Check of the first Stream.
      */
-    private Check check;
+    private BaseCheck check;
 
     /**
      * Flag indicating if the integrity checks will be verified.
@@ -508,7 +508,7 @@ public class SeekableXzInputStream extends SeekableInputStream {
 
             // Check that the Check ID is supported. Store it in case this
             // is the first Stream in the file.
-            check = Check.getInstance(streamFooter.checkType);
+            check = BaseCheck.getInstance(streamFooter.checkType);
 
             // Remember which Check IDs have been seen.
             checkTypes |= 1 << streamFooter.checkType;
@@ -1056,7 +1056,7 @@ public class SeekableXzInputStream extends SeekableInputStream {
 
             // Since it is possible that this Block is from a different
             // Stream than the previous Block, initialize a new Check.
-            check = Check.getInstance(curBlockInfo.getCheckType());
+            check = BaseCheck.getInstance(curBlockInfo.getCheckType());
 
             // Create a new Block decoder.
             initBlockDecoder();

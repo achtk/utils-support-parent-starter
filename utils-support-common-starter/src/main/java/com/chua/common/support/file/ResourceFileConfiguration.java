@@ -1,6 +1,6 @@
 package com.chua.common.support.file;
 
-import com.chua.common.support.binary.ByteSource;
+import com.chua.common.support.binary.BaseByteSource;
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -38,7 +38,7 @@ public class ResourceFileConfiguration {
     /**
      * 文件
      */
-    private ByteSource byteSource;
+    private BaseByteSource byteSource;
     /**
      * 源文件
      */

@@ -13,7 +13,7 @@ import java.io.InputStream;
  * @author CH
  * @since 2022-01-14
  */
-public class ByteSourceInputStream extends ByteSource {
+public class ByteSourceInputStream extends BaseByteSource {
     private static final int BLOCK_SIZE = 1024;
 
     private final InputStream is;

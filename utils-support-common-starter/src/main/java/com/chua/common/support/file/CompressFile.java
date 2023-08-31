@@ -1,6 +1,6 @@
 package com.chua.common.support.file;
 
-import com.chua.common.support.binary.ByteSource;
+import com.chua.common.support.binary.BaseByteSource;
 import com.chua.common.support.function.Splitter;
 import com.chua.common.support.resource.resource.Resource;
 
@@ -126,5 +126,5 @@ public interface CompressFile<IO, Entry> {
      * @return 流
      * @throws IOException ex
      */
-    ByteSource openInputStream(String name) throws IOException;
+    BaseByteSource openInputStream(String name) throws IOException;
 }

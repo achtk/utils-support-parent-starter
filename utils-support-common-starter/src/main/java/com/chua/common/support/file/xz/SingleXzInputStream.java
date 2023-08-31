@@ -1,6 +1,6 @@
 package com.chua.common.support.file.xz;
 
-import com.chua.common.support.file.xz.check.Check;
+import com.chua.common.support.file.xz.check.BaseCheck;
 import com.chua.common.support.file.xz.common.DecoderUtil;
 import com.chua.common.support.file.xz.common.StreamFlags;
 import com.chua.common.support.file.xz.index.IndexHash;
@@ -36,7 +36,7 @@ public class SingleXzInputStream extends InputStream {
     private final ArrayCache arrayCache;
     private final int memoryLimit;
     private final StreamFlags streamHeaderFlags;
-    private final Check check;
+    private final BaseCheck check;
     private final boolean verifyCheck;
     private BlockInputStream blockDecoder = null;
     private final IndexHash indexHash = new IndexHash();
@@ -307,7 +307,7 @@ public class SingleXzInputStream extends InputStream {
         this.memoryLimit = memoryLimit;
         this.verifyCheck = verifyCheck;
         streamHeaderFlags = DecoderUtil.decodeStreamHeader(streamHeader);
-        check = Check.getInstance(streamHeaderFlags.checkType);
+        check = BaseCheck.getInstance(streamHeaderFlags.checkType);
     }
 
     /**

@@ -1,6 +1,6 @@
 package com.chua.common.support.file;
 
-import com.chua.common.support.binary.ByteSource;
+import com.chua.common.support.binary.BaseByteSource;
 import com.chua.common.support.file.transfer.BaseMediaConverter;
 import com.chua.common.support.lang.proxy.DelegateMethodIntercept;
 import com.chua.common.support.lang.proxy.ProxyUtils;
@@ -82,7 +82,7 @@ public abstract class AbstractResourceFile implements ResourceFile {
 
     @Override
     public InputStream openInputStream() throws IOException {
-        ByteSource byteSource = resourceConfiguration.getByteSource();
+        BaseByteSource byteSource = resourceConfiguration.getByteSource();
         if (null != byteSource) {
             return byteSource.getInputStream();
         }

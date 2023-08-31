@@ -9,7 +9,7 @@
 
 package com.chua.common.support.file.xz;
 
-import com.chua.common.support.file.xz.check.Check;
+import com.chua.common.support.file.xz.check.BaseCheck;
 import com.chua.common.support.file.xz.common.DecoderUtil;
 
 import java.io.ByteArrayInputStream;
@@ -22,7 +22,7 @@ class BlockInputStream extends InputStream {
     private final DataInputStream inData;
     private final CountingInputStream inCounted;
     private InputStream filterChain;
-    private final Check check;
+    private final BaseCheck check;
     private final boolean verifyCheck;
 
     private long uncompressedSizeInHeader = -1;
@@ -35,7 +35,7 @@ class BlockInputStream extends InputStream {
     private final byte[] tempBuf = new byte[1];
 
     public BlockInputStream(InputStream in,
-                            Check check, boolean verifyCheck,
+                            BaseCheck check, boolean verifyCheck,
                             int memoryLimit,
                             long unpaddedSizeInIndex,
                             long uncompressedSizeInIndex,

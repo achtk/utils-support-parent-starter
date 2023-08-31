@@ -9,7 +9,7 @@
 
 package com.chua.common.support.file.xz;
 
-import com.chua.common.support.file.xz.check.Check;
+import com.chua.common.support.file.xz.check.BaseCheck;
 import com.chua.common.support.file.xz.common.EncoderUtil;
 
 import java.io.ByteArrayOutputStream;
@@ -20,7 +20,7 @@ class BlockOutputStream extends AbstractFinishableOutputStream {
     private final OutputStream out;
     private final CountingOutputStream outCounted;
     private AbstractFinishableOutputStream filterChain;
-    private final Check check;
+    private final BaseCheck check;
 
     private final int headerSize;
     private final long compressedSizeLimit;
@@ -29,7 +29,7 @@ class BlockOutputStream extends AbstractFinishableOutputStream {
     private final byte[] tempBuf = new byte[1];
 
     public BlockOutputStream(OutputStream out, FilterEncoder[] filters,
-                             Check check, ArrayCache arrayCache)
+                             BaseCheck check, ArrayCache arrayCache)
             throws IOException {
         this.out = out;
         this.check = check;

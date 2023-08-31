@@ -140,7 +140,7 @@ public class PerMessageDeflateExtension extends BaseCompressionExtension {
   @Override
   public void decodeFrame(Framedata inputFrame) throws InvalidDataException {
     // Only DataFrames can be decompressed.
-    if (!(inputFrame instanceof DataFrame)) {
+    if (!(inputFrame instanceof BaseDataFrame)) {
       return;
     }
 
@@ -207,7 +207,7 @@ public class PerMessageDeflateExtension extends BaseCompressionExtension {
   @Override
   public void encodeFrame(Framedata inputFrame) {
     // Only DataFrames can be decompressed.
-    if (!(inputFrame instanceof DataFrame)) {
+    if (!(inputFrame instanceof BaseDataFrame)) {
       return;
     }
 
@@ -217,7 +217,7 @@ public class PerMessageDeflateExtension extends BaseCompressionExtension {
     }
     // Only the first frame's RSV1 must be set.
     if (!(inputFrame instanceof ContinuousFrame)) {
-      ((DataFrame) inputFrame).setRsv1(true);
+      ((BaseDataFrame) inputFrame).setRsv1(true);
     }
 
     deflater.setInput(payloadData);
