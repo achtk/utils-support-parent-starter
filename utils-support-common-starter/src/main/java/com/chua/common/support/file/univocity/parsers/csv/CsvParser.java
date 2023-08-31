@@ -100,6 +100,9 @@ public final class CsvParser extends BaseParser<CsvParserSettings> {
         }
     }
 
+    /**
+     * 解析单个记录分隔符
+     */
     private final void parseSingleDelimiterRecord() {
         if (ch <= SYMBOL_BLANK_CHAR && ignoreLeadingWhitespace && whitespaceRangeStart < ch) {
             ch = input.skipWhitespace(ch, delimiter, quote);
@@ -350,6 +353,9 @@ public final class CsvParser extends BaseParser<CsvParserSettings> {
         }
     }
 
+    /**
+     * 解析引用值
+     */
     private void parseQuotedValue() {
         if (prev != SYMBOL_NULL_CHAR && parseUnescapedQuotesUntilDelimiter) {
             if (quoteHandling == SKIP_VALUE) {
@@ -667,6 +673,9 @@ public final class CsvParser extends BaseParser<CsvParserSettings> {
         saveMatchingCharacters();
     }
 
+    /**
+     * 解析引用值多分隔符
+     */
     private void parseQuotedValueMultiDelimiter() {
         if (prev != SYMBOL_NULL_CHAR && parseUnescapedQuotesUntilDelimiter) {
             if (quoteHandling == SKIP_VALUE) {

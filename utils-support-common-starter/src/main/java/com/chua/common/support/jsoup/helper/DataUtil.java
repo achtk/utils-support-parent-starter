@@ -128,6 +128,16 @@ public final class DataUtil {
         }
     }
 
+    /**
+     * 解析输入流
+     *
+     * @param input       输入
+     * @param charsetName 字符集名称
+     * @param baseUri     基础uri
+     * @param parser      解析器
+     * @return {@link Document}
+     * @throws IOException ioexception
+     */
     static Document parseInputStream(InputStream input, String charsetName, String baseUri, Parser parser) throws IOException {
         if (input == null) {
             return new Document(baseUri);

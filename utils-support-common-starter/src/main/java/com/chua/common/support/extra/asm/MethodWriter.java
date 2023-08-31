@@ -706,12 +706,7 @@ final class MethodWriter extends BaseMethodVisitor {
   }
 
   @Override
-  public void visitFrame(
-      final int type,
-      final int numLocal,
-      final Object[] local,
-      final int numStack,
-      final Object[] stack) {
+  public void visitFrame(final int type, final int numLocal, final Object[] local, final int numStack, final Object[] stack) {
     if (compute == COMPUTE_ALL_FRAMES) {
       return;
     }

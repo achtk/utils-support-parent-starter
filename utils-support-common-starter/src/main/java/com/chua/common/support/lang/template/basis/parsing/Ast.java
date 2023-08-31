@@ -1270,16 +1270,12 @@ public class Ast {
                 if (object == null) {
                     Error.error("Couldn't find object in context.", getSpan());
                 }
-
                 Object[] argumentValues = getCachedArguments();
                 List<AbstractExpression> arguments = getArguments();
                 for (int i = 0, n = argumentValues.length; i < n; i++) {
                     AbstractExpression expr = arguments.get(i);
                     argumentValues[i] = expr.evaluate(template, context, out);
                 }
-
-                // if the object we call the method on is a Macros instance, lookup the macro by name
-                // and execute its node list
                 if (object instanceof Macros) {
                     Macros macros = (Macros) object;
                     Macro macro = macros.get(getMethod().getName().getText());
@@ -1289,7 +1285,6 @@ public class Ast {
                         }
                         TemplateContext macroContext = macro.getMacroContext();
 
-                        // Set all included macros on the macro's context
                         for (String variable : context.getVariables()) {
                             Object value = context.get(variable);
                             if (value instanceof Macros) {
@@ -1297,7 +1292,6 @@ public class Ast {
                             }
                         }
 
-                        // Set arguments
                         for (int i = 0; i < arguments.size(); i++) {
                             Object arg = argumentValues[i];
                             String name = macro.getArgumentNames().get(i).getText();
@@ -1312,28 +1306,24 @@ public class Ast {
                     }
                 }
 
-                // Otherwise try to find a corresponding method or field pointing to a lambda.
                 Object method = getCachedMethod();
                 if (method != null) {
                     try {
                         return BaseReflection.getInstance().callMethod(object, method, argumentValues);
-                    } catch (Throwable t) {
-                        // fall through
+                    } catch (Throwable ignored) {
                     }
                 }
 
                 method = BaseReflection.getInstance().getMethod(object, getMethod().getName().getText(), argumentValues);
                 if (method != null) {
-                    // found the method on the object, call it
                     setCachedMethod(method);
                     try {
                         return BaseReflection.getInstance().callMethod(object, method, argumentValues);
                     } catch (Throwable t) {
                         Error.error(t.getMessage(), getSpan(), t);
-                        return null; // never reached
+                        return null;
                     }
                 } else {
-                    // didn't find the method on the object, try to find a field pointing to a lambda
                     Object field = BaseReflection.getInstance().getField(object, getMethod().getName().getText());
                     if (field == null) {
                         Error.error("Couldn't find method '" + getMethod().getName().getText() + "' for object of type '" + object.getClass().getSimpleName() + "'.",
@@ -1350,7 +1340,7 @@ public class Ast {
                         return BaseReflection.getInstance().callMethod(function, method, argumentValues);
                     } catch (Throwable t) {
                         Error.error(t.getMessage(), getSpan(), t);
-                        return null; // never reached
+                        return null;
                     }
                 }
             } finally {

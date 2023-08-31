@@ -58,18 +58,7 @@ class ScalarAnalysis {
 		if ("".equals(scalar)) {
             return new ScalarAnalysis(scalar, false, false, false, false, false, true, false);
         }
-		boolean blockIndicators = false;
-		boolean flowIndicators = false;
-		boolean lineBreaks = false;
-		boolean specialCharacters = false;
-
-		boolean inlineBreaks = false;
-		boolean leadingSpaces = false;
-		boolean leadingBreaks = false;
-		boolean trailingSpaces = false;
-		boolean trailingBreaks = false;
-		boolean inlineBreaksSpaces = false;
-		boolean mixedBreaksSpaces = false;
+		boolean blockIndicators = false, flowIndicators = false, lineBreaks = false, specialCharacters = false, inlineBreaks = false, leadingSpaces = false, leadingBreaks = false, trailingSpaces = false, trailingBreaks = false, inlineBreaksSpaces = false, mixedBreaksSpaces = false;
 
 		if (DOCUMENT_INDICATOR.matcher(scalar).matches()) {
 			blockIndicators = true;
@@ -78,11 +67,7 @@ class ScalarAnalysis {
 
 		boolean preceededBySpace = true;
 		boolean followedBySpace = scalar.length() == 1 || NULL_BL_T_LINEBR.indexOf(scalar.charAt(1)) != -1;
-
-		boolean spaces = false;
-		boolean breaks = false;
-		boolean mixed = false;
-		boolean leading = false;
+		boolean spaces = false, breaks = false, mixed = false, leading = false;
 
 		int index = 0;
 
@@ -191,11 +176,7 @@ class ScalarAnalysis {
 			preceededBySpace = NULL_BL_T_LINEBR.indexOf(ceh) != -1;
 			followedBySpace = index + 1 >= scalar.length() || NULL_BL_T_LINEBR.indexOf(scalar.charAt(index + 1)) != -1;
 		}
-		boolean allowFlowPlain = true;
-		boolean allowBlockPlain = true;
-		boolean allowSingleQuoted = true;
-		boolean allowDoubleQuoted = true;
-		boolean allowBlock = true;
+		boolean allowFlowPlain = true, allowBlockPlain = true, allowSingleQuoted = true, allowDoubleQuoted = true, allowBlock = true;
 
 		if (leadingSpaces || leadingBreaks || trailingSpaces) {
             allowFlowPlain = allowBlockPlain = allowBlock = false;

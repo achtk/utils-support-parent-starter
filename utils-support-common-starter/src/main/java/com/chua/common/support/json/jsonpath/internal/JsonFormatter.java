@@ -36,16 +36,12 @@ public class JsonFormatter {
     }
 
     public static String prettyPrint(String input) {
-
         input = input.replaceAll("[\\r\\n]", "");
-
         StringBuilder output = new StringBuilder(input.length() * 2);
         int mode = MODE_BETWEEN;
         int depth = 0;
-
         for (int i = 0; i < input.length(); ++i) {
             char ch = input.charAt(i);
-
             switch (mode) {
                 case MODE_BETWEEN:
                     switch (ch) {

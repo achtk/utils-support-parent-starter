@@ -251,6 +251,7 @@ public class PathCompiler {
     }
 
     /**
+     * 解析函数参数
      * Parse the parameters of a function call, either the caller has supplied JSON data, or the caller has supplied
      * another path expression which must be evaluated and in turn invoked against the root document.  In this tokenizer
      * we're only concerned with parsing the path thus the output of this function is a list of parameters with the Path
@@ -274,6 +275,7 @@ public class PathCompiler {
      * <p>
      * The above is a valid function call, we're first summing 10 + avg of 1...10 (5.5) so the total should be 15.5
      *
+     * @param funcName 函数名字
      * @return An ordered list of parameters that are to processed via the function.  Typically functions either process
      * an array of values and/or can consume parameters in addition to the values provided from the consumption of
      * an array.

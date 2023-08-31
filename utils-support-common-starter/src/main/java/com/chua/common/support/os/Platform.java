@@ -30,9 +30,17 @@ public enum Platform {
     private static final String PRE = "library";
     static final String PRE_PREFIX = "library_openpnp";
 
+    /**
+     * 提取本地二进制
+     *
+     * @param os   操作系统
+     * @param arch 拱
+     * @param dll  dll
+     * @param root 根
+     * @return {@link Path}
+     */
     private static Path extractNativeBinary(final OS os, final Arch arch, String dll, String root) {
         final Set<String> location = new LinkedHashSet<>();
-
         switch (os) {
             case LINUX:
                 dll += ".so";
@@ -93,25 +101,20 @@ public enum Platform {
             default:
                 throw new UnsupportedPlatformException(os, arch);
         }
-
         if(StringUtils.isNotEmpty(root)) {
             location.addAll(FileUtils.find(root, dll));
         }
         log.info("Selected native binary \"{}\".", location);
-
         Path destination = null;
         for (String s : location) {
-
             final InputStream binary = Platform.load(s);
             if (null == binary) {
                 continue;
             }
-
             try {
                 destination = new File(s).toPath();
             } catch (Exception ignored) {
             }
-
             if(null == destination) {
                 if (OS.WINDOWS.equals(os)) {
                     destination = new TemporaryDirectory().deleteOldInstancesOnStart().getPath().resolve("./" + s).normalize();
@@ -119,7 +122,6 @@ public enum Platform {
                     destination = new TemporaryDirectory().markDeleteOnExit().getPath().resolve("./" + s).normalize();
                 }
             }
-
             try {
                 log.info("Copying native binary to \"{}\".", destination);
                 if(Files.exists(destination)) {
@@ -131,14 +133,18 @@ public enum Platform {
             } catch (final IOException ioe) {
                 throw new IllegalStateException(String.format("Error writing native library to \"%s\".", destination), ioe);
             }
-
             log.info("Extracted native binary to \"{}\".", destination);
             break;
         }
-
         return destination;
     }
 
+    /**
+     * 加載
+     *
+     * @param s s
+     * @return {@link InputStream}
+     */
     public static InputStream load(String s) {
         try {
             URL url = UrlUtils.createUrl(s);
@@ -217,6 +223,12 @@ public enum Platform {
         return new PlatformKey(OS.ANY, key);
     }
 
+    /**
+     * 临时目录
+     *
+     * @author Administrator
+     * @date 2023/08/31
+     */
     private static class TemporaryDirectory {
         final Path path;
 
@@ -228,10 +240,20 @@ public enum Platform {
             }
         }
 
+        /**
+         * 获取路径
+         *
+         * @return {@link Path}
+         */
         public Path getPath() {
             return path;
         }
 
+        /**
+         * 删除旧实例
+         *
+         * @return {@link TemporaryDirectory}
+         */
         public TemporaryDirectory deleteOldInstancesOnStart() {
             Path tempDirectory = path.getParent();
 
@@ -250,6 +272,11 @@ public enum Platform {
             return this;
         }
 
+        /**
+         * 删除退出
+         *
+         * @return {@link TemporaryDirectory}
+         */
         public TemporaryDirectory markDeleteOnExit() {
             Runtime.getRuntime().addShutdownHook(new Thread() {
                 @Override
@@ -261,6 +288,11 @@ public enum Platform {
             return this;
         }
 
+        /**
+         * 删除
+         *
+         * @param path 路径
+         */
         private void delete(Path path) {
             if (!Files.exists(path)) {
                 return;
@@ -286,11 +318,19 @@ public enum Platform {
             }
         }
 
+        /**
+         * 删除
+         */
         public void delete() {
             delete(path);
         }
     }
 
+    /**
+     * 删除库路径
+     *
+     * @param path 路径
+     */
     public static void removeLibraryPath(final Path path) {
         final String normalizedPath = path.normalize().toString();
 
@@ -311,6 +351,11 @@ public enum Platform {
         }
     }
 
+    /**
+     * 添加库路径
+     *
+     * @param path 路径
+     */
     public static void addLibraryPath(final Path path) {
         final String normalizedPath = path.normalize().toString();
 
