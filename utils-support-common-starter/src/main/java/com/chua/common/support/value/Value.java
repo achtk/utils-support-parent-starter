@@ -98,6 +98,7 @@ public interface Value<T> extends Serializable {
      * @param defaultValue 默认值
      * @return 值
      */
+    @SuppressWarnings("ALL")
     default T getDefaultValue(Object defaultValue) {
         return Optional.ofNullable(getValue()).orElse((T) defaultValue);
     }
@@ -109,6 +110,7 @@ public interface Value<T> extends Serializable {
      * @param <E>    类型
      * @return 值
      */
+    @SuppressWarnings("ALL")
     default <E> E getValue(Class<E> target) {
         if (target == Object.class) {
             return (E) getValue();
