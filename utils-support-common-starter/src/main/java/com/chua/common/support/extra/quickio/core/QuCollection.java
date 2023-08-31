@@ -256,7 +256,8 @@ final class QuCollection<T extends IoEntity> implements Collection<T> {
         engine.iteration((key, value) -> {
             long id = Codec.decodeKey(key);
             T t = Codec.decode(value, clazz);
-            if (t != null && (minT.get() == null || id < minT.get().objectId())) {
+            boolean b = t != null && (minT.get() == null || id < minT.get().objectId());
+            if (b) {
                 if (predicate != null && !predicate.test(t)) {
                     return;
                 }
@@ -279,7 +280,8 @@ final class QuCollection<T extends IoEntity> implements Collection<T> {
         engine.iteration((key, value) -> {
             long id = Codec.decodeKey(key);
             T t = Codec.decode(value, clazz);
-            if (t != null && (maxT.get() == null || id > maxT.get().objectId())) {
+            boolean b = t != null && (maxT.get() == null || id > maxT.get().objectId());
+            if (b) {
                 if (predicate != null && !predicate.test(t)) {
                     return;
                 }

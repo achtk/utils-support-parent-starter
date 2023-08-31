@@ -9,7 +9,7 @@ import com.chua.common.support.jsoup.select.NodeVisitor;
 import com.chua.common.support.utils.StringUtils;
 
 import static com.chua.common.support.constant.CommonConstant.SYMBOL_N;
-import static com.chua.common.support.constant.NameConstant.A_TAG;
+import static com.chua.common.support.constant.NameConstant.*;
 import static com.chua.common.support.lang.spider.xsoup.xevaluator.FormattingVisitor.BR_TAG;
 import static com.chua.common.support.lang.spider.xsoup.xevaluator.FormattingVisitor.TEXT_TAG;
 
@@ -56,9 +56,9 @@ public class HtmlToPlainText {
             String name = node.nodeName();
             if (node instanceof TextNode) {
                 append(((TextNode) node).text()); 
-            } else if ("li".equals(name)) {
+            } else if (LI_TAG.equals(name)) {
                 append("\n * ");
-            } else if ("dt".equals(name)) {
+            } else if (DT_TAG.equals(name)) {
                 append("  ");
             } else if (StringUtils.in(name, TEXT_TAG)) {
                 append("\n");

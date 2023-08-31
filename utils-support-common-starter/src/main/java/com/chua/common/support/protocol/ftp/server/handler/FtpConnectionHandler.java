@@ -15,6 +15,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import static com.chua.common.support.constant.NameConstant.SITE;
+import static com.chua.common.support.net.NetUtils.*;
 
 /**
  * Handles special connection-based commands
@@ -156,9 +157,12 @@ public class FtpConnectionHandler {
     private void type(String type) throws IOException {
         type = type.toUpperCase();
 
-        if(type.startsWith("A")) {
+        String a  = "A";
+        String l  = "L";
+        String i  = "I";
+        if(type.startsWith(a)) {
             ascii = true;
-        } else if(type.startsWith("L") || type.startsWith("I")) {
+        } else if(type.startsWith(l) || type.startsWith(i)) {
             ascii = false;
         } else {
             con.sendResponse(500, "Unknown type " + type);
@@ -168,19 +172,21 @@ public class FtpConnectionHandler {
     }
 
     private void stru(String structure) throws IOException {
-        if("F".equalsIgnoreCase(structure)) {
+        String f = "F";
+        if(f.equalsIgnoreCase(structure)) {
             con.sendResponse(200, "The structure type was set to file");
-        } else {
-            con.sendResponse(504, "Unsupported structure type");
+            return;
         }
+        con.sendResponse(504, "Unsupported structure type");
     }
 
     private void mode(String mode) throws IOException {
-        if("S".equalsIgnoreCase(mode)) {
+        String s = "S";
+        if(s.equalsIgnoreCase(mode)) {
             con.sendResponse(200, "The mode was set to stream");
-        } else {
-            con.sendResponse(504, "Unsupported mode");
+            return;
         }
+        con.sendResponse(504, "Unsupported mode");
     }
 
     private void host(String host) throws IOException {
@@ -288,7 +294,7 @@ public class FtpConnectionHandler {
         String host = passiveServer.getInetAddress().getHostAddress();
         int port = passiveServer.getLocalPort();
 
-        if("0.0.0.0".equals(host)) {
+        if(ANY_HOST.equals(host)) {
             
             host = InetAddress.getLocalHost().getHostAddress();
         }
@@ -335,8 +341,8 @@ public class FtpConnectionHandler {
     private void auth(String mechanism) throws IOException {
         mechanism = mechanism.toUpperCase();
 
-        if("TLS".equals(mechanism) || "TLS-C".equals(mechanism) ||
-            "SSL".equals(mechanism) || "TLS-P".equals(mechanism)) {
+        if(TLS.equals(mechanism) || TLS_C.equals(mechanism) ||
+                SLL.equals(mechanism) || TLS_P.equals(mechanism)) {
             
 
             SSLContext ssl = con.getServer().getSslContext();
@@ -368,15 +374,16 @@ public class FtpConnectionHandler {
     private void prot(String level) {
         level = level.toUpperCase();
 
+        String c = "C", p = "P", s = "S", e = "E";
         if(!con.isSslEnabled()) {
             con.sendResponse(503, "You can't update the protection level in an insecure connection");
-        } else if("C".equals(level)) {
+        } else if(c.equals(level)) {
             secureData = false;
             con.sendResponse(200, "Protection level set to clear");
-        } else if("P".equals(level)) {
+        } else if(p.equals(level)) {
             secureData = true;
             con.sendResponse(200, "Protection level set to private");
-        } else if("S".equals(level) || "E".equals(level)) {
+        } else if(s.equals(level) || e.equals(level)) {
             con.sendResponse(521, "Unsupported protection level");
         } else {
             con.sendResponse(502, "Unknown protection level");
@@ -391,7 +398,7 @@ public class FtpConnectionHandler {
         String host = passiveServer.getInetAddress().getHostAddress();
         int port = passiveServer.getLocalPort();
 
-        if("0.0.0.0".equals(host)) {
+        if(ANY_HOST.equals(host)) {
             
             host = InetAddress.getLocalHost().getHostAddress();
         }

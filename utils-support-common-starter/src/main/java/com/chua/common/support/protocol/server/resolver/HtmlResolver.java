@@ -27,6 +27,7 @@ public class HtmlResolver extends AbstractResolver {
     final Repository repository = Repository.current().add(Repository.classpath(true));
 
     final Metadata notfound = Repository.classpath().first("static/404.html");
+    private static final String MODEL_AND_VIEW = "org.springframework.web.servlet.ModelAndView";
 
     public HtmlResolver(BeanFactory beanFactory) {
         super(beanFactory);
@@ -42,7 +43,7 @@ public class HtmlResolver extends AbstractResolver {
             source = StringUtils.utf8Bytes(resolveModel((Model) obj));
         } else if (obj instanceof String) {
             source = StringUtils.utf8Bytes(resolveString(obj.toString()));
-        } else if("org.springframework.web.servlet.ModelAndView".equals(obj.getClass().getTypeName())) {
+        } else if(MODEL_AND_VIEW.equals(obj.getClass().getTypeName())) {
             source = StringUtils.utf8Bytes(resolveString(Objects.requireNonNull(ClassUtils.getFieldValue("view", obj)).toString()));
         }
 

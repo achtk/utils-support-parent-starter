@@ -3,6 +3,8 @@ package com.chua.common.support.constant;
 
 import com.chua.common.support.utils.NumberUtils;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_DOT;
+import static com.chua.common.support.constant.NumberConstant.NUM_10;
 import static com.chua.common.support.constant.NumberConstant.NUM_2;
 
 /**
@@ -291,13 +293,13 @@ public enum JavaVersion {
                 return JAVA_17;
             default:
                 final float v = toFloatVersion(versionStr);
-                if ((v - 1.) < 1.) { 
+                if ((v - 1.f) < 1.f) {
                     final int firstComma = Math.max(versionStr.indexOf('.'), versionStr.indexOf(','));
                     final int end = Math.max(versionStr.length(), versionStr.indexOf(',', firstComma));
-                    if (Float.parseFloat(versionStr.substring(firstComma + 1, end)) > .9f) {
+                    if (Float.parseFloat(versionStr.substring(firstComma + 1, end)) > 0.9f) {
                         return JAVA_RECENT;
                     }
-                } else if (v > 10) {
+                } else if (v > NUM_10) {
                     return JAVA_RECENT;
                 }
                 return null;
@@ -339,7 +341,7 @@ public enum JavaVersion {
      */
     private static float toFloatVersion(final String value) {
         final float defaultReturnValue = -1f;
-        if (value.contains(".")) {
+        if (value.contains(SYMBOL_DOT)) {
             final String[] toParse = value.split("\\.");
             if (toParse.length >= NUM_2) {
                 return NumberUtils.toFloat(toParse[0] + '.' + toParse[1], defaultReturnValue);

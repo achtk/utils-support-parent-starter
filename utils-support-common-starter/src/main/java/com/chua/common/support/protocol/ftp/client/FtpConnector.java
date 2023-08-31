@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
+import static com.chua.common.support.constant.CommonConstant.*;
+
 /**
  * This abstract class is the base for creating a connector. Connectors are used
  * by the client to establish connections with remote servers.
@@ -58,9 +60,9 @@ public abstract class FtpConnector {
      */
     protected FtpConnector(boolean useSuggestedAddressForDataConnectionsDefValue) {
         String sysprop = System.getProperty(FtpKeys.PASSIVE_DT_USE_SUGGESTED_ADDRESS);
-        if ("true".equalsIgnoreCase(sysprop) || "yes".equalsIgnoreCase(sysprop) || "1".equals(sysprop)) {
+        if (TRUE.equalsIgnoreCase(sysprop) || YES.equalsIgnoreCase(sysprop) || ONE_STR.equals(sysprop)) {
             useSuggestedAddressForDataConnections = true;
-        } else if ("false".equalsIgnoreCase(sysprop) || "no".equalsIgnoreCase(sysprop) || "0".equals(sysprop)) {
+        } else if (FALSE.equalsIgnoreCase(sysprop) || NO.equalsIgnoreCase(sysprop) || ZERO.equals(sysprop)) {
             useSuggestedAddressForDataConnections = false;
         } else {
             useSuggestedAddressForDataConnections = useSuggestedAddressForDataConnectionsDefValue;

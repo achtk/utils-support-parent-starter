@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_ASTERISK_ANY;
 import static com.chua.common.support.constant.NumberConstant.NUM_2;
 
 /**
@@ -41,6 +42,7 @@ public class HistogramView implements View {
      * 空格
      */
     private static final String SPACE = " ";
+    private static final String REGEX = "[^\\x00-\\xff]";
     private Comparable[] comparables;
 
     public HistogramView(Comparable[] comparables) {
@@ -144,7 +146,7 @@ public class HistogramView implements View {
         }
         data.append(new StringBuffer(info).append(data));
         //补全不够的长度
-        for (int k = 0; k < length - data.toString().replaceAll("[^\\x00-\\xff]", "**").length(); k++) {
+        for (int k = 0; k < length - data.toString().replaceAll(REGEX, SYMBOL_ASTERISK_ANY).length(); k++) {
             dataX.append(SPACE);
         }
         return dataX.append(data).toString();

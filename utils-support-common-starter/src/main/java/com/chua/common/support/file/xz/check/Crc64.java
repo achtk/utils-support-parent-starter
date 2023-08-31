@@ -10,6 +10,8 @@
 
 package com.chua.common.support.file.xz.check;
 
+import static com.chua.common.support.constant.NumberConstant.*;
+
 /**
  * @author Administrator
  */
@@ -19,10 +21,10 @@ public class Crc64 extends Check {
     static {
         final long poly64 = 0xC96C5795D7870F42L;
 
-        for (int s = 0; s < 4; ++s) {
-            for (int b = 0; b < 256; ++b) {
+        for (int s = 0; s < NUM_4; ++s) {
+            for (int b = 0; b < NUM_256; ++b) {
                 long r = s == 0 ? b : TABLE[s - 1][b];
-                for (int i = 0; i < 8; ++i) {
+                for (int i = 0; i < NUM_8; ++i) {
                     if ((r & 1) == 1) {
                         r = (r >>> 1) ^ poly64;
                     } else {
@@ -46,7 +48,7 @@ public class Crc64 extends Check {
         final int end = off + len;
         int i = off;
 
-        for (int end4 = end - 3; i < end4; i += 4) {
+        for (int end4 = end - NUM_3; i < end4; i += NUM_4) {
             final int tmp = (int) crc;
             crc = TABLE[3][(tmp & 0xFF) ^ (buf[i] & 0xFF)] ^
                     TABLE[2][((tmp >>> 8) & 0xFF) ^ (buf[i + 1] & 0xFF)] ^

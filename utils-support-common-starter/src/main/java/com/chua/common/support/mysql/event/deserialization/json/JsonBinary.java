@@ -24,6 +24,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.charset.Charset;
 
+import static com.chua.common.support.constant.NumberConstant.*;
+
 /**
  * Utility to parse the binary-encoded value of a MySQL {@code JSON} type, translating the encoded representation into
  * method calls on a supplied {@link JsonFormatter} implementation.
@@ -817,7 +819,7 @@ public class JsonBinary {
 
     protected BigInteger readUInt64() throws IOException {
         byte[] bigEndian = new byte[8];
-        for (int i = 8; i != 0; --i) {
+        for (int i = NUM_8; i != 0; --i) {
             bigEndian[i - 1] = (byte) (reader.read() & 0xFF);
         }
         return new BigInteger(1, bigEndian);
@@ -834,7 +836,7 @@ public class JsonBinary {
      */
     protected int readVariableInt() throws IOException {
         int length = 0;
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < NUM_5; i++) {
             byte b = (byte) reader.read();
             length |= (b & 0x7F) << (7 * i);
             if ((b & 0x80) == 0) {
@@ -846,11 +848,11 @@ public class JsonBinary {
 
     protected Boolean readLiteral() throws IOException {
         byte b = (byte) reader.read();
-        if (b == 0x00) {
+        if (b == X00) {
             return null;
-        } else if (b == 0x01) {
+        } else if (b == X01) {
             return Boolean.TRUE;
-        } else if (b == 0x02) {
+        } else if (b == X02) {
             return Boolean.FALSE;
         }
         throw new IOException("Unexpected value '" + asHex(b) + "' for literal");

@@ -105,7 +105,7 @@ final class Indexer {
         if (!new ReflectObject<>(list.get(0)).containsAnnotation(Index.class)) {
             return;
         }
-        Map<String, Boolean> guardMap = new HashMap<>();
+        Map<String, Boolean> guardMap = new HashMap<>(list.size());
         list.forEach(t -> {
             List<IndexObject> indexObjects = extractIndexObjects(t);
             indexObjects.forEach(indexObject -> {

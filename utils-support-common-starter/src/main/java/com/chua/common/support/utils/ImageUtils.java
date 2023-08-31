@@ -17,10 +17,11 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.*;
 import java.io.*;
 import java.net.URL;
-import java.util.List;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Random;
 
-import static com.chua.common.support.constant.CommonConstant.SYMBOL_HASH_CHAR;
 import static com.chua.common.support.constant.NumberConstant.*;
 import static java.awt.image.BufferedImage.SCALE_SMOOTH;
 import static java.awt.image.BufferedImage.TYPE_INT_RGB;
@@ -1910,81 +1911,6 @@ public class ImageUtils {
      */
     public static Color getColor(int rgb) {
         return new Color(rgb);
-    }
-
-    /**
-     * 将颜色值转换成具体的颜色类型 汇集了常用的颜色集，支持以下几种形式：
-     *
-     * <pre>
-     * 1. 颜色的英文名（大小写皆可）
-     * 2. 16进制表示，例如：#fcf6d6或者$fcf6d6
-     * 3. RGB形式，例如：13,148,252
-     * </pre>
-     * <p>
-     * 方法来自：com.lnwazg.kit
-     *
-     * @param colorName 颜色的英文名，16进制表示或RGB表示
-     * @return {@link Color}
-     * @since 4.1.14
-     */
-    public static Color getColor(String colorName) {
-        if (StringUtils.isEmpty(colorName)) {
-            return null;
-        }
-        colorName = colorName.toUpperCase();
-
-        if ("BLACK".equals(colorName)) {
-            return Color.BLACK;
-        } else if ("WHITE".equals(colorName)) {
-            return Color.WHITE;
-        } else if ("LIGHTGRAY".equals(colorName) || "LIGHT_GRAY".equals(colorName)) {
-            return Color.LIGHT_GRAY;
-        } else if ("GRAY".equals(colorName)) {
-            return Color.GRAY;
-        } else if ("DARKGRAY".equals(colorName) || "DARK_GRAY".equals(colorName)) {
-            return Color.DARK_GRAY;
-        } else if ("RED".equals(colorName)) {
-            return Color.RED;
-        } else if ("PINK".equals(colorName)) {
-            return Color.PINK;
-        } else if ("ORANGE".equals(colorName)) {
-            return Color.ORANGE;
-        } else if ("YELLOW".equals(colorName)) {
-            return Color.YELLOW;
-        } else if ("GREEN".equals(colorName)) {
-            return Color.GREEN;
-        } else if ("MAGENTA".equals(colorName)) {
-            return Color.MAGENTA;
-        } else if ("CYAN".equals(colorName)) {
-            return Color.CYAN;
-        } else if ("BLUE".equals(colorName)) {
-            return Color.BLUE;
-        } else if ("DARKGOLD".equals(colorName)) {
-            // 暗金色
-            return hexToColor("#9e7e67");
-        } else if ("LIGHTGOLD".equals(colorName)) {
-            // 亮金色
-            return hexToColor("#ac9c85");
-        } else if (StringUtils.startWith(colorName, SYMBOL_HASH_CHAR)) {
-            return hexToColor(colorName);
-        } else if (StringUtils.startWith(colorName, '$')) {
-            // 由于#在URL传输中无法传输，因此用$代替#
-            return hexToColor("#" + colorName.substring(1));
-        } else {
-            // rgb值
-            final List<String> rgb = StringUtils.splitList(colorName, ',');
-            if (THREE == rgb.size()) {
-                final Integer r = toInt(rgb.get(0));
-                final Integer g = toInt(rgb.get(1));
-                final Integer b = toInt(rgb.get(2));
-                if (!ArrayUtils.hasNull(r, g, b)) {
-                    return new Color(r, g, b);
-                }
-            } else {
-                return null;
-            }
-        }
-        return null;
     }
 
     /**

@@ -1084,4 +1084,24 @@ public final class CommonConstant extends NameConstant{
      * 9
      */
     public static final String NIGHT_STR = "9";
+    /**
+     * "on"
+     */
+    public static final String ON = "on";
+    /**
+     * "yes"
+     */
+    public static final String YES = "yes";
+    /**
+     * "no"
+     */
+    public static final String NO = "no";
+    /**
+     * "off"
+     */
+    public static final String OFF = "off";
+    /**
+     * ...
+     */
+    public static final String PATH_MORE = "...";
 }

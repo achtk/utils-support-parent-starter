@@ -15,6 +15,9 @@
  ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.common.input;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_NULL_CHAR;
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_N_CHAR;
+
 /**
  * An {@link InputAnalysisProcess} to detect the line separators used in the input.
  *
@@ -43,16 +46,16 @@ public abstract class LineSeparatorDetector implements InputAnalysisProcess {
         char lineSeparator1 = separator1;
         char lineSeparator2 = separator2;
 
-        if (separator1 != '\0') {
-            if (separator1 == '\n') {
-                lineSeparator1 = '\n';
-                lineSeparator2 = '\0';
+        if (separator1 != SYMBOL_NULL_CHAR) {
+            if (separator1 == SYMBOL_N_CHAR) {
+                lineSeparator1 = SYMBOL_N_CHAR;
+                lineSeparator2 = SYMBOL_NULL_CHAR;
             } else {
-                lineSeparator1 = '\r';
-                if (separator2 == '\n') {
-                    lineSeparator2 = '\n';
+                lineSeparator1 = SYMBOL_N_CHAR;
+                if (separator2 == SYMBOL_N_CHAR) {
+                    lineSeparator2 = SYMBOL_N_CHAR;
                 } else {
-                    lineSeparator2 = '\0';
+                    lineSeparator2 = SYMBOL_NULL_CHAR;
                 }
             }
         }

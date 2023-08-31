@@ -468,6 +468,14 @@ public class NumberConstant {
      */
     public static final int X00 = 0x00;
     /**
+     * 01
+     */
+    public static final int X01 = 0x01;
+    /**
+     * 02
+     */
+    public static final int X02 = 0x02;
+    /**
      * 10
      */
     public static final int X10 = 0x10;

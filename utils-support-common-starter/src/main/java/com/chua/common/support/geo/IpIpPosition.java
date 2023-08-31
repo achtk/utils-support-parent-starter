@@ -16,6 +16,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_COLON;
+import static com.chua.common.support.constant.NumberConstant.NUM_4;
+import static com.chua.common.support.net.NetUtils.KEEP_HOST;
+
 /**
  *
  * @author CH
@@ -26,6 +30,16 @@ public class IpIpPosition extends ProfileProvider<IpPosition> implements IpPosit
     private static final List<Ipv4Info> I_PV_4_INFOS = new LinkedList<>();
 
     private static final String RESOURCE = "**/ip.xz";
+    private static final String SHEN = "省";
+    private static final String GZ = "广州";
+    private static final String CD = "成都";
+    private static final String SY = "沈阳";
+    private static final String DX = "大学";
+    private static final String XY = "学院";
+    private static final String DB = "东北";
+    private static final String JYW = "局域网";
+    private static final String BLDZ = "保留地址";
+    private static final String BJDZ = "本机地址";
     private final Ipv4Info UNKNOWN = new Ipv4Info(0, 0, "未知", "未知", "未知", "未知", 0, 0, "未知");
 
     public static final Map<String, String> COUNTRY_GEO = new HashMap<String, String>() {
@@ -402,7 +416,7 @@ public class IpIpPosition extends ProfileProvider<IpPosition> implements IpPosit
         if (ip == null) {
             return UNKNOWN;
         }
-        if (ip.contains(":") || !IpUtils.isIp(ip)) {
+        if (ip.contains(SYMBOL_COLON) || !IpUtils.isIp(ip)) {
             return UNKNOWN;
         }
 
@@ -450,7 +464,7 @@ public class IpIpPosition extends ProfileProvider<IpPosition> implements IpPosit
             return null;
         }
         String[] split = row.split("\\s+", 4);
-        if (split.length != 4) {
+        if (split.length != NUM_4) {
             return null;
         }
         String startIp = split[0].trim();
@@ -465,13 +479,13 @@ public class IpIpPosition extends ProfileProvider<IpPosition> implements IpPosit
         long endLong = IpUtils.ip2Long(endIp);
         String region = split[2].trim();
         String isp = split[3].replaceAll("CZ88\\.NET", "").trim();
-        if ("255.255.255.0".equals(startIp)) {
+        if (KEEP_HOST.equals(startIp)) {
             region = "保留地址";
             isp = "保留地址";
         }
         String tmp = region.substring(0, 2);
         String city = region.substring(2);
-        if (city.startsWith("省")) {
+        if (city.startsWith(SHEN)) {
             city = city.substring(1);
         }
         String country;
@@ -486,36 +500,36 @@ public class IpIpPosition extends ProfileProvider<IpPosition> implements IpPosit
             if (g != null) {
                 geo = g;
             }
-        } else if ("广州".equals(tmp)) {
+        } else if (GZ.equals(tmp)) {
             country = "中国";
             province = "广东";
             address = region;
             geo = PROVINCE_GEO.get("广东");
-        } else if ("成都".equals(tmp)) {
+        } else if (CD.equals(tmp)) {
             country = "中国";
             province = "四川";
             address = region;
             geo = PROVINCE_GEO.get("四川");
-        } else if ("沈阳".equals(tmp)) {
+        } else if (SY.equals(tmp)) {
             country = "中国";
             province = "辽宁";
             address = region;
             geo = PROVINCE_GEO.get("辽宁");
-        } else if (region.contains("大学") || region.contains("学院") || region.contains("东北")) {
+        } else if (region.contains(DX) || region.contains(XY) || region.contains(DB)) {
             country = "中国";
             province = "";
             address = region;
             geo = PROVINCE_GEO.get("中国");
-        } else if (region.contains("局域网") || isp.contains("局域网")) {
-            country = "局域网";
+        } else if (region.contains(JYW) || isp.contains(JYW)) {
+            country = JYW;
             province = "";
             address = region;
-        } else if (region.contains("保留地址") || isp.contains("保留地址")) {
-            country = "保留地址";
+        } else if (region.contains(BLDZ) || isp.contains(BLDZ)) {
+            country = BLDZ;
             province = "";
             address = region;
-        } else if (region.contains("本机地址") || isp.contains("本机地址")) {
-            country = "本机地址";
+        } else if (region.contains(BJDZ) || isp.contains(BJDZ)) {
+            country = BJDZ;
             province = "";
             address = region;
         } else {

@@ -8,6 +8,9 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import static com.chua.common.support.constant.CommonConstant.*;
+import static com.chua.common.support.constant.NumberConstant.NUM_3;
+
 /**
  * This class is used to represent a communication channel with a Ftp server.
  *
@@ -157,11 +160,11 @@ public class FtpCommunicationChannel {
 			do {
 				statement = read();
 			} while (statement.trim().length() == 0);
-			if (statement.startsWith("\n")) {
+			if (statement.startsWith(SYMBOL_N)) {
 				statement = statement.substring(1);
 			}
 			int l = statement.length();
-			if (code == 0 && l < 3) {
+			if (code == 0 && l < NUM_3) {
 				throw new FtpIllegalReplyException();
 			}
 			int aux;
@@ -181,18 +184,17 @@ public class FtpCommunicationChannel {
 				code = aux;
 			}
 			if (aux > 0) {
-				if (l > 3) {
+				if (l > NUM_3) {
 					char s = statement.charAt(3);
-					String message = statement.substring(4, l);
-					messages.add(message);
-					if (s == ' ') {
+					messages.add(statement.substring(4, l));
+					if (s == SYMBOL_BLANK_CHAR) {
 						break;
-					} else if (s == '-') {
+					} else if (s == SYMBOL_MINUS_CHAR) {
 						continue;
 					} else {
 						throw new FtpIllegalReplyException();
 					}
-				} else if (l == 3) {
+				} else if (l == NUM_3) {
 					break;
 				} else {
 					messages.add(statement);

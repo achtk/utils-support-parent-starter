@@ -12,9 +12,9 @@ import java.io.OutputStream;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
-import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 
+import static com.chua.common.support.constant.CommonConstant.*;
 import static com.chua.common.support.constant.NumberConstant.NUM_2;
 
 /**
@@ -103,11 +103,11 @@ public class FtpFileHandler {
     }
 
     private Object getFile(String path) throws IOException {
-        if("...".equals(path) || "..".equals(path)) {
+        if(PATH_MORE.equals(path) || SYMBOL_DOUBLE_DOT.equals(path)) {
             return fs.getParent(cwd);
-        } else if("/".equals(path)) {
+        } else if(SYMBOL_LEFT_SLASH.equals(path)) {
             return fs.getRoot();
-        } else if(path.startsWith("/")) {
+        } else if(path.startsWith(SYMBOL_LEFT_SLASH)) {
             return fs.findFile(fs.getRoot(), path.substring(1));
         } else {
             return fs.findFile(cwd, path);
@@ -388,7 +388,7 @@ public class FtpFileHandler {
     private void md5(String path) throws IOException {
         String p = path = path.trim();
 
-        if (p.length() > NUM_2 && p.startsWith("\"") && p.endsWith("\"")) {
+        if (p.length() > NUM_2 && p.startsWith(SYMBOL_QUOTE) && p.endsWith(SYMBOL_QUOTE)) {
 
             p = p.substring(1, p.length() - 1).trim();
         }

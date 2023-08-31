@@ -32,6 +32,10 @@ import static java.util.Collections.emptyList;
  * @since 2021/1/7
  */
 public class NetUtils {
+    public static final String TLS = "TLS";
+    public static final String TLS_C = "TLS-C";
+    public static final String TLS_P = "TLS-P";
+    public static final String SLL = "SSL";
     /**
      * returned port range is [30000, 39999]
      */
@@ -62,6 +66,10 @@ public class NetUtils {
     private static final BitSet USED_PORT = new BitSet(65536);
 
     public static final String LOCAL_HOST = "127.0.0.1";
+    /**
+     * 保留地址
+     */
+    public static final String KEEP_HOST = "255.255.255.0";
     /**
      * 任意地址
      */

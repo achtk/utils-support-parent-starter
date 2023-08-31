@@ -18,6 +18,8 @@ package com.chua.common.support.file.univocity.parsers.common.input;
 import java.io.Reader;
 import java.util.Arrays;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_BLANK_CHAR;
+
 /**
  * A special implementation of {@link CharInputReader} that wraps another {@link CharInputReader} and
  * collects a sequence of characters from the wrapped input, in order to analyze what the buffer contains
@@ -212,7 +214,7 @@ public class LookaheadCharInputReader implements CharInputReader {
 
 	@Override
 	public char skipWhitespace(char ch, char stopChar1, char stopChar2) {
-		while (start < length && ch <= ' ' && ch != stopChar1 && ch != newLine && ch != stopChar2 && whitespaceRangeStart < ch) {
+		while (start < length && ch <= SYMBOL_BLANK_CHAR && ch != stopChar1 && ch != newLine && ch != stopChar2 && whitespaceRangeStart < ch) {
 			ch = lookahead[start++];
 		}
 		return reader.skipWhitespace(ch, stopChar1, stopChar2);
