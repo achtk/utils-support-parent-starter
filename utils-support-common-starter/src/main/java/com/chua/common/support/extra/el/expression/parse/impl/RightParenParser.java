@@ -10,6 +10,9 @@ import com.chua.common.support.extra.el.expression.util.OperatorResultUtil;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
+
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_RIGHT_BRACKETS_CHAR;
+
 /**
  * 基础类
  * @author CH

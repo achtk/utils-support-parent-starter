@@ -30,8 +30,7 @@ package com.chua.common.support.extra.asm;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
-import static com.chua.common.support.constant.CommonConstant.LETTER_UPPERCASE_V;
-import static com.chua.common.support.constant.CommonConstant.SYMBOL_RIGHT_BRACKETS_CHAR;
+import static com.chua.common.support.constant.CommonConstant.*;
 
 /**
  * A Java field or method type. This class can be used to make it easier to manipulate type and

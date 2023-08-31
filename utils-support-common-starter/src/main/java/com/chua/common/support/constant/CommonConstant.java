@@ -1013,7 +1013,7 @@ public final class CommonConstant extends NameConstant{
     /**
      * UUID
      */
-    public static final String UUID = "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$";
+    public static final String UUID_REGEX = "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$";
     /**
      * 不带横线的UUID
      */

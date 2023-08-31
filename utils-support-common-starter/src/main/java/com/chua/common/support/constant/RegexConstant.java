@@ -151,7 +151,7 @@ public class RegexConstant {
     /**
      * UUID
      */
-    public final static Pattern UUID = Pattern.compile(CommonConstant.UUID, Pattern.CASE_INSENSITIVE);
+    public final static Pattern UUID = Pattern.compile(CommonConstant.UUID_REGEX, Pattern.CASE_INSENSITIVE);
     /**
      * 不带横线的UUID
      */

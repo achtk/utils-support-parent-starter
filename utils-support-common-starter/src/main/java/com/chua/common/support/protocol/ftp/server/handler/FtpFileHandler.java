@@ -12,6 +12,7 @@ import java.io.OutputStream;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 
 import static com.chua.common.support.constant.CommonConstant.*;
