@@ -19,7 +19,7 @@ import com.chua.common.support.mysql.io.BufferedSocketInputStream;
 import com.chua.common.support.mysql.io.ByteArrayInputStream;
 import com.chua.common.support.mysql.io.ByteArrayOutputStream;
 import com.chua.common.support.mysql.network.IdentityVerificationException;
-import com.chua.common.support.mysql.network.SSLSocketFactory;
+import com.chua.common.support.mysql.network.SslSocketFactory;
 import com.chua.common.support.mysql.network.protocol.command.Command;
 
 import javax.net.ssl.HostnameVerifier;
@@ -83,7 +83,7 @@ public class PacketChannel implements Channel {
         write(command, 0);
     }
 
-    public void upgradeToSSL(SSLSocketFactory sslSocketFactory, HostnameVerifier hostnameVerifier) throws IOException {
+    public void upgradeToSSL(SslSocketFactory sslSocketFactory, HostnameVerifier hostnameVerifier) throws IOException {
         SSLSocket sslSocket = sslSocketFactory.createSocket(this.socket);
         sslSocket.startHandshake();
         socket = sslSocket;

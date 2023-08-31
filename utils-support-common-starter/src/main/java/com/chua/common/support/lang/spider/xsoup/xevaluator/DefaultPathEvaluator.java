@@ -8,15 +8,18 @@ import com.chua.common.support.lang.spider.xsoup.Elements;
 import com.chua.common.support.lang.spider.xsoup.PathEvaluator;
 
 /**
+ * 默认路径评估者
+ *
  * @author code4crafter@gmail.com
+ * @date 2023/08/31
  */
-public class DefaultXPathEvaluator implements PathEvaluator {
+public class DefaultPathEvaluator implements PathEvaluator {
 
     private AbstractEvaluator evaluator;
 
     private ElementOperator elementOperator;
 
-    public DefaultXPathEvaluator(AbstractEvaluator evaluator, ElementOperator elementOperator) {
+    public DefaultPathEvaluator(AbstractEvaluator evaluator, ElementOperator elementOperator) {
         this.evaluator = evaluator;
         this.elementOperator = elementOperator;
     }
@@ -30,7 +33,7 @@ public class DefaultXPathEvaluator implements PathEvaluator {
             elements = new com.chua.common.support.jsoup.select.Elements();
             elements.add(element);
         }
-        return new DefaultXElements(elements, elementOperator);
+        return new DefaultElements(elements, elementOperator);
     }
 
     @Override

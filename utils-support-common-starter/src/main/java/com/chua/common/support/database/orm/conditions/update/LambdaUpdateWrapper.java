@@ -2,7 +2,7 @@
 package com.chua.common.support.database.orm.conditions.update;
 
 import com.chua.common.support.database.orm.conditions.AbstractLambdaWrapper;
-import com.chua.common.support.database.orm.conditions.SFunction;
+import com.chua.common.support.database.orm.conditions.SerFunction;
 import com.chua.common.support.database.orm.conditions.SharedString;
 import com.chua.common.support.database.orm.conditions.segments.MergeSegments;
 import com.chua.common.support.utils.CollectionUtils;
@@ -24,7 +24,7 @@ import static com.chua.common.support.constant.CommonConstant.SYMBOL_EQUALS;
  */
 @SuppressWarnings("serial")
 public class LambdaUpdateWrapper<T> extends AbstractLambdaWrapper<T, LambdaUpdateWrapper<T>>
-    implements Update<LambdaUpdateWrapper<T>, SFunction<T, ?>> {
+    implements Update<LambdaUpdateWrapper<T>, SerFunction<T, ?>> {
 
     /**
      * SQL 更新字段内容，例如：name='1', age=2
@@ -64,7 +64,7 @@ public class LambdaUpdateWrapper<T> extends AbstractLambdaWrapper<T, LambdaUpdat
     }
 
     @Override
-    public LambdaUpdateWrapper<T> set(boolean condition, SFunction<T, ?> column, Object val, String mapping) {
+    public LambdaUpdateWrapper<T> set(boolean condition, SerFunction<T, ?> column, Object val, String mapping) {
         return maybeDo(condition, () -> {
             String sql = formatParam(mapping, val);
             sqlSet.add(columnToString(column) + SYMBOL_EQUALS + sql);

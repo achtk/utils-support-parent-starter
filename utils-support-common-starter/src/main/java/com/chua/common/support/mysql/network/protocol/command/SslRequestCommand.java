@@ -25,7 +25,7 @@ import static com.chua.common.support.constant.NumberConstant.TWENTY_THREE;
 /**
  * @author <a href="mailto:stanley.shyiko@gmail.com">Stanley Shyiko</a>
  */
-public class SSLRequestCommand implements Command {
+public class SslRequestCommand implements Command {
 
     private int clientCapabilities;
     private int collation;

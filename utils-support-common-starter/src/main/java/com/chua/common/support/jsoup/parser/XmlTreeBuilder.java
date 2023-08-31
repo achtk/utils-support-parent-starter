@@ -111,7 +111,7 @@ public class XmlTreeBuilder extends TreeBuilder {
 
     void insert(Token.Character token) {
         final String data = token.getData();
-        insertNode(token.isCData() ? new CDataNode(data) : new TextNode(data), token);
+        insertNode(token.isCData() ? new CharDataNode(data) : new TextNode(data), token);
     }
 
     void insert(Token.Doctype d) {

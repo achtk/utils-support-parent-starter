@@ -1441,7 +1441,7 @@ public class Element extends Node {
 
     private static void appendNormalisedText(StringBuilder accum, TextNode textNode) {
         String text = textNode.getWholeText();
-        if (preserveWhitespace(textNode.parentNode) || textNode instanceof CDataNode) {
+        if (preserveWhitespace(textNode.parentNode) || textNode instanceof CharDataNode) {
             accum.append(text);
             return;
         }
@@ -1528,11 +1528,11 @@ public class Element extends Node {
                 Element element = (Element) childNode;
                 String elementData = element.data();
                 sb.append(elementData);
-            } else if (childNode instanceof CDataNode) {
+            } else if (childNode instanceof CharDataNode) {
                 // this shouldn't really happen because the html parser won't see the cdata as anything special when parsing script.
                 // but incase another type gets through.
-                CDataNode cDataNode = (CDataNode) childNode;
-                sb.append(cDataNode.getWholeText());
+                CharDataNode charDataNode = (CharDataNode) childNode;
+                sb.append(charDataNode.getWholeText());
             }
         }
         return sb.toString();

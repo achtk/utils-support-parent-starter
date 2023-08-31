@@ -16,6 +16,6 @@ public class FormUrlencoded {
      * query中的value，默认除"-", "_", ".", "*"外都编码<br>
      * 这个类似于JDK提供的{@link java.net.URLEncoder}
      */
-    public static final PercentCodec ALL = PercentCodec.of(RFC3986.UNRESERVED)
+    public static final PercentCodec ALL = PercentCodec.of(Rfc3986.UNRESERVED)
             .removeSafe('~').addSafe('*').setEncodeSpaceAsPlus(true);
 }

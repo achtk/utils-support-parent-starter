@@ -50,9 +50,9 @@ import java.util.concurrent.ExecutorService;
  * user to implement much of the communication establishment procedure himself. More information
  * about it can be found here: http://docs.oracle.com/javase/8/docs/technotes/guides/security/jsse/JSSERefGuide.html#SSLEngine
  * <p>
- * {@link SSLSocketChannel} implements the handshake protocol, required to establish a connection
+ * {@link SslSocketChannel} implements the handshake protocol, required to establish a connection
  * between two peers, which is common for both client and server and provides the abstract {@link
- * SSLSocketChannel#read(ByteBuffer)} and {@link SSLSocketChannel#write(ByteBuffer)} (String)}
+ * SslSocketChannel#read(ByteBuffer)} and {@link SslSocketChannel#write(ByteBuffer)} (String)}
  * methods, that need to be implemented by the specific SSL/TLS peer that is going to extend this
  * class.
  *
@@ -62,7 +62,7 @@ import java.util.concurrent.ExecutorService;
  * <p>
  * Permission for usage received at May 25, 2017 by Alex Karnezis
  */
-public class SSLSocketChannel implements WrappedByteChannel, ByteChannel, SslChannel {
+public class SslSocketChannel implements WrappedByteChannel, ByteChannel, SslChannel {
 
 
   /**
@@ -87,7 +87,7 @@ public class SSLSocketChannel implements WrappedByteChannel, ByteChannel, SslCha
 
   /**
    * Will contain this peer's encrypted data, that will be generated after {@link
-   * SSLEngine#wrap(ByteBuffer, ByteBuffer)} is applied on {@link SSLSocketChannel#myAppData}. It
+   * SSLEngine#wrap(ByteBuffer, ByteBuffer)} is applied on {@link SslSocketChannel#myAppData}. It
    * should be initialized using {@link SSLSession#getPacketBufferSize()}, which returns the size up
    * to which, SSL/TLS packets will be generated from the engine under a session. All SSLEngine
    * network buffers should be sized at least this large to avoid insufficient space problems when
@@ -121,8 +121,8 @@ public class SSLSocketChannel implements WrappedByteChannel, ByteChannel, SslCha
   private ExecutorService executor;
 
 
-  public SSLSocketChannel(SocketChannel inputSocketChannel, SSLEngine inputEngine,
-      ExecutorService inputExecutor, SelectionKey key) throws IOException {
+  public SslSocketChannel(SocketChannel inputSocketChannel, SSLEngine inputEngine,
+                          ExecutorService inputExecutor, SelectionKey key) throws IOException {
     if (inputSocketChannel == null || inputEngine == null || executor == inputExecutor) {
       throw new IllegalArgumentException("parameter must not be null");
     }

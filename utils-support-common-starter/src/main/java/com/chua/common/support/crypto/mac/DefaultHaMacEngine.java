@@ -16,7 +16,7 @@ import java.security.spec.AlgorithmParameterSpec;
  * @author Looly
  * @since 4.5.13
  */
-public class DefaultHMacEngine implements MacEngine {
+public class DefaultHaMacEngine implements MacEngine {
 
     private Mac mac;
 
@@ -29,7 +29,7 @@ public class DefaultHMacEngine implements MacEngine {
      * @param key       密钥
      * @since 4.5.13
      */
-    public DefaultHMacEngine(String algorithm, byte[] key) {
+    public DefaultHaMacEngine(String algorithm, byte[] key) {
         this(algorithm, (null == key) ? null : new SecretKeySpec(key, algorithm));
     }
 
@@ -40,7 +40,7 @@ public class DefaultHMacEngine implements MacEngine {
      * @param key       密钥
      * @since 4.5.13
      */
-    public DefaultHMacEngine(String algorithm, Key key) {
+    public DefaultHaMacEngine(String algorithm, Key key) {
         this(algorithm, key, null);
     }
 
@@ -52,7 +52,7 @@ public class DefaultHMacEngine implements MacEngine {
      * @param spec      {@link AlgorithmParameterSpec}
      * @since 5.7.12
      */
-    public DefaultHMacEngine(String algorithm, Key key, AlgorithmParameterSpec spec) {
+    public DefaultHaMacEngine(String algorithm, Key key, AlgorithmParameterSpec spec) {
         init(algorithm, key, spec);
     }
     // ------------------------------------------------------------------------------------------- Constructor end
@@ -64,7 +64,7 @@ public class DefaultHMacEngine implements MacEngine {
      * @param key       密钥
      * @return this
      */
-    public DefaultHMacEngine init(String algorithm, byte[] key) {
+    public DefaultHaMacEngine init(String algorithm, byte[] key) {
         return init(algorithm, (null == key) ? null : new SecretKeySpec(key, algorithm));
     }
 
@@ -76,7 +76,7 @@ public class DefaultHMacEngine implements MacEngine {
      * @return this
      * @throws CryptoException Cause by IOException
      */
-    public DefaultHMacEngine init(String algorithm, Key key) {
+    public DefaultHaMacEngine init(String algorithm, Key key) {
         return init(algorithm, key, null);
     }
 
@@ -90,7 +90,7 @@ public class DefaultHMacEngine implements MacEngine {
      * @throws IllegalArgumentException Cause by IOException
      * @since 5.7.12
      */
-    public DefaultHMacEngine init(String algorithm, Key key, AlgorithmParameterSpec spec) {
+    public DefaultHaMacEngine init(String algorithm, Key key, AlgorithmParameterSpec spec) {
         try {
             mac = SecureUtils.createMac(algorithm);
             if (null == key) {

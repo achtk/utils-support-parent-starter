@@ -24,32 +24,32 @@ import static java.util.stream.Collectors.joining;
  */
 @SuppressWarnings("serial")
 public abstract class AbstractLambdaWrapper<T, Children extends AbstractLambdaWrapper<T, Children>>
-    extends AbstractWrapper<T, SFunction<T, ?>, Children> {
+    extends AbstractWrapper<T, SerFunction<T, ?>, Children> {
 
     private Map<String, Column> columnMap = null;
     private boolean initColumnMap = false;
 
     @Override
     @SafeVarargs
-    protected final String columnsToString(SFunction<T, ?>... columns) {
+    protected final String columnsToString(SerFunction<T, ?>... columns) {
         return columnsToString(true, columns);
     }
 
     @SafeVarargs
-    protected final String columnsToString(boolean onlyColumn, SFunction<T, ?>... columns) {
+    protected final String columnsToString(boolean onlyColumn, SerFunction<T, ?>... columns) {
         return columnsToString(onlyColumn, Arrays.asList(columns));
     }
 
-    protected final String columnsToString(boolean onlyColumn, List<SFunction<T, ?>> columns) {
+    protected final String columnsToString(boolean onlyColumn, List<SerFunction<T, ?>> columns) {
         return columns.stream().map(i -> columnToString(i, onlyColumn)).collect(joining(SYMBOL_COMMA));
     }
 
     @Override
-    protected String columnToString(SFunction<T, ?> column) {
+    protected String columnToString(SerFunction<T, ?> column) {
         return columnToString(column, true);
     }
 
-    protected String columnToString(SFunction<T, ?> column, boolean onlyColumn) {
+    protected String columnToString(SerFunction<T, ?> column, boolean onlyColumn) {
         Column cache = getColumnCache(column);
         return cache.getName();
     }
@@ -61,7 +61,7 @@ public abstract class AbstractLambdaWrapper<T, Children extends AbstractLambdaWr
      *
      * @return 列
      */
-    protected Column getColumnCache(SFunction<T, ?> column) {
+    protected Column getColumnCache(SerFunction<T, ?> column) {
         LambdaMeta meta = LambdaUtils.extract(column);
         String fieldName = PropertyNames.methodToProperty(meta.getImplMethodName());
         Class<?> instantiatedClass = meta.getInstantiatedClass();

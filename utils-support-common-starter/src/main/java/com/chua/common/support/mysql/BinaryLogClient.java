@@ -53,7 +53,7 @@ import java.util.concurrent.locks.ReentrantLock;
 @Slf4j
 public class BinaryLogClient implements BinaryLogClientMXBean {
 
-    private static final SSLSocketFactory DEFAULT_REQUIRED_SSL_MODE_SOCKET_FACTORY = new DefaultSSLSocketFactory() {
+    private static final SslSocketFactory DEFAULT_REQUIRED_SSL_MODE_SOCKET_FACTORY = new DefaultSslSocketFactory() {
 
         @Override
         protected void initSslContext(SSLContext sc) throws GeneralSecurityException {
@@ -76,7 +76,7 @@ public class BinaryLogClient implements BinaryLogClientMXBean {
             }, null);
         }
     };
-    private static final SSLSocketFactory DEFAULT_VERIFY_CA_SSL_MODE_SOCKET_FACTORY = new DefaultSSLSocketFactory();
+    private static final SslSocketFactory DEFAULT_VERIFY_CA_SSL_MODE_SOCKET_FACTORY = new DefaultSslSocketFactory();
 
     // https://dev.mysql.com/doc/internals/en/sending-more-than-16mbyte.html
     private static final int MAX_PACKET_LENGTH = 16777215;
@@ -108,7 +108,7 @@ public class BinaryLogClient implements BinaryLogClientMXBean {
     private final List<LifecycleListener> lifecycleListeners = new CopyOnWriteArrayList<LifecycleListener>();
 
     private SocketFactory socketFactory;
-    private SSLSocketFactory sslSocketFactory;
+    private SslSocketFactory sslSocketFactory;
 
     private volatile PacketChannel channel;
     private volatile boolean connected;
@@ -434,7 +434,7 @@ public class BinaryLogClient implements BinaryLogClientMXBean {
     /**
      * @param sslSocketFactory custom ssl socket factory
      */
-    public void setSslSocketFactory(SSLSocketFactory sslSocketFactory) {
+    public void setSslSocketFactory(SslSocketFactory sslSocketFactory) {
         this.sslSocketFactory = sslSocketFactory;
     }
 
@@ -694,10 +694,10 @@ public class BinaryLogClient implements BinaryLogClientMXBean {
                 throw new IOException("MySQL server does not support SSL");
             }
             if (serverSupportsSSL) {
-                SSLRequestCommand sslRequestCommand = new SSLRequestCommand();
+                SslRequestCommand sslRequestCommand = new SslRequestCommand();
                 sslRequestCommand.setCollation(collation);
                 channel.write(sslRequestCommand, packetNumber++);
-                SSLSocketFactory sslSocketFactory =
+                SslSocketFactory sslSocketFactory =
                         this.sslSocketFactory != null ?
                                 this.sslSocketFactory :
                                 sslMode == SSLMode.REQUIRED || sslMode == SSLMode.PREFERRED ?

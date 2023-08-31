@@ -100,19 +100,19 @@ public class PathParser {
 
     private PathEvaluator combineXPathEvaluator(String subQuery) {
         PathEvaluator xPathEvaluator = collectXPathEvaluator();
-        return new CombingXPathEvaluator(xPathEvaluator, parse(subQuery));
+        return new CombingPathEvaluator(xPathEvaluator, parse(subQuery));
     }
 
     private PathEvaluator collectXPathEvaluator() {
         if (noEvalAllow) {
-            return new DefaultXPathEvaluator(null, elementOperator);
+            return new DefaultPathEvaluator(null, elementOperator);
         }
 
         if (evals.size() == 1) {
-            return new DefaultXPathEvaluator(evals.get(0), elementOperator);
+            return new DefaultPathEvaluator(evals.get(0), elementOperator);
         }
 
-        return new DefaultXPathEvaluator(new AbstractCombiningEvaluator.And(evals), elementOperator);
+        return new DefaultPathEvaluator(new AbstractCombiningEvaluator.And(evals), elementOperator);
     }
 
     private void combinator(String combinator) {
@@ -127,10 +127,10 @@ public class PathParser {
         evals.clear();
         String subQuery = consumeSubQuery();
         PathEvaluator tmpEval = parse(subQuery);
-        if (!(tmpEval instanceof DefaultXPathEvaluator)) {
+        if (!(tmpEval instanceof DefaultPathEvaluator)) {
             throw new IllegalArgumentException(String.format("Error XPath in %s", subQuery));
         }
-        DefaultXPathEvaluator newEval = (DefaultXPathEvaluator) tmpEval;
+        DefaultPathEvaluator newEval = (DefaultPathEvaluator) tmpEval;
         if (newEval.getElementOperator() != null) {
             elementOperator = newEval.getElementOperator();
         }

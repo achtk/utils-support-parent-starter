@@ -2,9 +2,8 @@ package com.chua.common.support.lang.lambda;
 
 
 import com.chua.common.support.database.entity.Column;
-import com.chua.common.support.database.metadata.DelegateMetadata;
 import com.chua.common.support.database.metadata.Metadata;
-import com.chua.common.support.database.orm.conditions.SFunction;
+import com.chua.common.support.database.orm.conditions.SerFunction;
 import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.MapUtils;
 
@@ -35,7 +34,7 @@ public final class LambdaUtils {
      * @param <T>  类型，被调用的 Function 对象的目标类型
      * @return 返回解析后的结果
      */
-    public static <T> LambdaMeta extract(SFunction<T, ?> func) {
+    public static <T> LambdaMeta extract(SerFunction<T, ?> func) {
         // 1. IDEA 调试模式下 lambda 表达式是一个代理
         if (func instanceof Proxy) {
             return new IdeaProxyLambdaMeta((Proxy) func);

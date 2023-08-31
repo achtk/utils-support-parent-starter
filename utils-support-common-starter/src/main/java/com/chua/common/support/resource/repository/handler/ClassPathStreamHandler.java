@@ -14,10 +14,10 @@ import java.net.URLStreamHandler;
 public class ClassPathStreamHandler extends URLStreamHandler {
     @Override
     protected URLConnection openConnection(URL u) throws IOException {
-        return new ClassPathURLConnection(u);
+        return new ClassPathUrlConnection(u);
     }
 
-    final class ClassPathURLConnection extends URLConnection {
+    final class ClassPathUrlConnection extends URLConnection {
 
         /**
          * Constructs a URL connection to the specified URL. A connection to
@@ -25,7 +25,7 @@ public class ClassPathStreamHandler extends URLStreamHandler {
          *
          * @param url the specified URL.
          */
-        protected ClassPathURLConnection(URL url) {
+        protected ClassPathUrlConnection(URL url) {
             super(url);
         }
 

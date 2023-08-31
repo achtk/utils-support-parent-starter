@@ -41,7 +41,7 @@ import java.util.concurrent.ExecutorService;
  * WebSocketFactory that can be configured to only support specific protocols and cipher suites.
  * @author Administrator
  */
-public class SslParametersWebSocketServerFactory extends DefaultSSLWebSocketServerFactory {
+public class SslParametersWebSocketServerFactory extends DefaultSslWebSocketServerFactory {
 
   private final SSLParameters sslParameters;
 

@@ -40,7 +40,7 @@ import java.util.concurrent.ExecutorService;
  * WebSocketFactory that can be configured to only support specific protocols and cipher suites.
  * @author Administrator
  */
-public class CustomSSLWebSocketServerFactory extends DefaultSSLWebSocketServerFactory {
+public class CustomSslWebSocketServerFactory extends DefaultSslWebSocketServerFactory {
 
   /**
    * The enabled protocols saved as a String array
@@ -62,8 +62,8 @@ public class CustomSSLWebSocketServerFactory extends DefaultSSLWebSocketServerFa
    * @param enabledCiphersuites - only these cipher suites are enabled, when <code>null</code>
    *                            default settings will be used.
    */
-  public CustomSSLWebSocketServerFactory(SSLContext sslContext, String[] enabledProtocols,
-      String[] enabledCiphersuites) {
+  public CustomSslWebSocketServerFactory(SSLContext sslContext, String[] enabledProtocols,
+                                         String[] enabledCiphersuites) {
     this(sslContext, ThreadUtils.newSingleThreadScheduledExecutor(), enabledProtocols,
         enabledCiphersuites);
   }
@@ -79,8 +79,8 @@ public class CustomSSLWebSocketServerFactory extends DefaultSSLWebSocketServerFa
    * @param enabledCiphersuites - only these cipher suites are enabled, when <code>null</code>
    *                            default settings will be used.
    */
-  public CustomSSLWebSocketServerFactory(SSLContext sslContext, ExecutorService executerService,
-      String[] enabledProtocols, String[] enabledCiphersuites) {
+  public CustomSslWebSocketServerFactory(SSLContext sslContext, ExecutorService executerService,
+                                         String[] enabledProtocols, String[] enabledCiphersuites) {
     super(sslContext, executerService);
     this.enabledProtocols = enabledProtocols;
     this.enabledCiphersuites = enabledCiphersuites;

@@ -1,7 +1,6 @@
 package com.chua.common.support.lang.net;
 
 
-import com.chua.common.support.constant.CommonConstant;
 import com.chua.common.support.utils.StringUtils;
 import com.chua.common.support.utils.UrlUtils;
 
@@ -12,7 +11,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLStreamHandler;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 import static com.chua.common.support.constant.CommonConstant.SYMBOL_LEFT_SLASH;
@@ -427,7 +425,7 @@ public final class UrlBuilder implements Serializable {
      * @return 标识符，例如#后边的部分
      */
     public String getFragmentEncoded() {
-        return RFC3986.FRAGMENT.encode(this.fragment, this.charset);
+        return Rfc3986.FRAGMENT.encode(this.fragment, this.charset);
     }
 
     /**

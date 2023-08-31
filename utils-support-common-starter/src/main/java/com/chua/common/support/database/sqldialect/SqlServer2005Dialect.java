@@ -11,7 +11,7 @@ import com.chua.common.support.utils.StringUtils;
  * @author CH
  */
 @Spi("sqlserver2005")
-public class SQLServer2005Dialect extends OracleDialect {
+public class SqlServer2005Dialect extends OracleDialect {
     private static final String SELECT = "select";
     private static final String SD = "select distinct";
 

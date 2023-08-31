@@ -12,7 +12,7 @@ import static com.chua.common.support.constant.CommonConstant.*;
  * @author looly
  * @since 5.7.16
  */
-public class RFC3986 {
+public class Rfc3986 {
 
     /**
      * gen-delims = ":" / "/" / "?" / "#" / "[" / "]" / "@"

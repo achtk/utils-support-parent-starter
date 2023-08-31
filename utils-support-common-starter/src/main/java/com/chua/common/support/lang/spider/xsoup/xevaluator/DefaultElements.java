@@ -11,13 +11,13 @@ import java.util.List;
  *
  * @author code4crafter@gmail.com
  */
-public class DefaultXElements extends ArrayList<Element> implements Elements {
+public class DefaultElements extends ArrayList<Element> implements Elements {
 
     private com.chua.common.support.jsoup.select.Elements elements;
 
     private ElementOperator elementOperator;
 
-    public DefaultXElements(com.chua.common.support.jsoup.select.Elements elements, ElementOperator elementOperator) {
+    public DefaultElements(com.chua.common.support.jsoup.select.Elements elements, ElementOperator elementOperator) {
         this.elements = elements;
         this.elementOperator = elementOperator;
         initList();

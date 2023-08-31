@@ -299,7 +299,7 @@ public class HtmlTreeBuilder extends TreeBuilder {
         final String data = characterToken.getData();
 
         if (characterToken.isCData()) {
-            node = new CDataNode(data);
+            node = new CharDataNode(data);
         } else if (isContentForTagData(tagName)) {
             node = new DataNode(data);
         } else {

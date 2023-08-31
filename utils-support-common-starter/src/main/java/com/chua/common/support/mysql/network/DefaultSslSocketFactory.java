@@ -25,18 +25,18 @@ import java.security.GeneralSecurityException;
 /**
  * @author <a href="mailto:stanley.shyiko@gmail.com">Stanley Shyiko</a>
  */
-public class DefaultSSLSocketFactory implements SSLSocketFactory {
+public class DefaultSslSocketFactory implements SslSocketFactory {
 
     private final String protocol;
 
-    public DefaultSSLSocketFactory() {
+    public DefaultSslSocketFactory() {
         this("TLSv1");
     }
 
     /**
      * @param protocol TLSv1, TLSv1.1 or TLSv1.2 (the last two require JDK 7+)
      */
-    public DefaultSSLSocketFactory(String protocol) {
+    public DefaultSslSocketFactory(String protocol) {
         this.protocol = protocol;
     }
 

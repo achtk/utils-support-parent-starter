@@ -2,10 +2,9 @@
 package com.chua.common.support.database.orm.conditions.query;
 
 import com.chua.common.support.database.entity.Column;
-import com.chua.common.support.database.metadata.DelegateMetadata;
 import com.chua.common.support.database.metadata.Metadata;
 import com.chua.common.support.database.orm.conditions.AbstractLambdaWrapper;
-import com.chua.common.support.database.orm.conditions.SFunction;
+import com.chua.common.support.database.orm.conditions.SerFunction;
 import com.chua.common.support.database.orm.conditions.SharedString;
 import com.chua.common.support.database.orm.conditions.segments.MergeSegments;
 import com.chua.common.support.utils.CollectionUtils;
@@ -24,7 +23,7 @@ import java.util.function.Predicate;
  */
 @SuppressWarnings("serial")
 public class LambdaQueryWrapper<T> extends AbstractLambdaWrapper<T, LambdaQueryWrapper<T>>
-    implements Query<LambdaQueryWrapper<T>, T, SFunction<T, ?>> {
+    implements Query<LambdaQueryWrapper<T>, T, SerFunction<T, ?>> {
 
     /**
      * 查询字段
@@ -61,7 +60,7 @@ public class LambdaQueryWrapper<T> extends AbstractLambdaWrapper<T, LambdaQueryW
     }
 
     @Override
-    public LambdaQueryWrapper<T> select(boolean condition, List<SFunction<T, ?>> columns) {
+    public LambdaQueryWrapper<T> select(boolean condition, List<SerFunction<T, ?>> columns) {
         if (condition && CollectionUtils.isNotEmpty(columns)) {
             this.sqlSelect.setStringValue(columnsToString(false, columns));
         }

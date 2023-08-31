@@ -8,8 +8,8 @@ import java.io.IOException;
  * A Character Data node, to support CDATA sections.
  * @author Administrator
  */
-public class CDataNode extends TextNode {
-    public CDataNode(String text) {
+public class CharDataNode extends TextNode {
+    public CharDataNode(String text) {
         super(text);
     }
 
@@ -44,7 +44,7 @@ public class CDataNode extends TextNode {
     }
 
     @Override
-    public CDataNode clone() {
-        return (CDataNode) super.clone();
+    public CharDataNode clone() {
+        return (CharDataNode) super.clone();
     }
 }

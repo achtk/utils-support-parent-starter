@@ -409,7 +409,7 @@ public abstract class WebSocketServer extends AbstractWebSocket implements Runna
       WrappedByteChannel c = ((WrappedByteChannel) conn.getChannel());
       ByteBuffer buf = takeBuffer();
       try {
-        if (SocketChannelIOHelper.readMore(buf, conn, c)) {
+        if (SocketChannelHelper.readMore(buf, conn, c)) {
           iqueue.add(conn);
         }
         if (buf.hasRemaining()) {
@@ -483,7 +483,7 @@ public abstract class WebSocketServer extends AbstractWebSocket implements Runna
       return false;
     }
     try {
-      if (SocketChannelIOHelper.read(buf, conn, conn.getChannel())) {
+      if (SocketChannelHelper.read(buf, conn, conn.getChannel())) {
         if (buf.hasRemaining()) {
           conn.inQueue.put(buf);
           queue(conn);
@@ -514,7 +514,7 @@ public abstract class WebSocketServer extends AbstractWebSocket implements Runna
   private void doWrite(SelectionKey key) throws WrappedException {
     WebSocketImpl conn = (WebSocketImpl) key.attachment();
     try {
-      if (SocketChannelIOHelper.batch(conn, conn.getChannel()) && key.isValid()) {
+      if (SocketChannelHelper.batch(conn, conn.getChannel()) && key.isValid()) {
         key.interestOps(SelectionKey.OP_READ);
       }
     } catch (IOException e) {

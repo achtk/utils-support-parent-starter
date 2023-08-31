@@ -1,18 +1,3 @@
-/*******************************************************************************
- * Copyright 2015 Univocity Software Pty Ltd
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.csv;
 
 import com.chua.common.support.file.univocity.parsers.common.ArgumentUtils;
@@ -38,7 +23,7 @@ public abstract class AbstractCsvFormatDetector implements InputAnalysisProcess 
     private final char suggestedQuote;
     private final char suggestedQuoteEscape;
     private char[] allowedDelimiters;
-    private char[] delimiterPreference;
+    private final char[] delimiterPreference;
 
     /**
      * Builds a new {@code CsvFormatDetector}
@@ -72,7 +57,7 @@ public abstract class AbstractCsvFormatDetector implements InputAnalysisProcess 
     }
 
     protected Map<Character, Integer> calculateTotals(List<Map<Character, Integer>> symbolsPerRow) {
-        Map<Character, Integer> out = new LinkedHashMap<Character, Integer>();
+        Map<Character, Integer> out = new LinkedHashMap<>();
 
         for (Map<Character, Integer> rowStats : symbolsPerRow) {
             for (Entry<Character, Integer> symbolStats : rowStats.entrySet()) {
@@ -145,13 +130,10 @@ public abstract class AbstractCsvFormatDetector implements InputAnalysisProcess 
                 }
                 continue;
             }
-
             if (inQuote != '\0') {
                 continue;
             }
-
             afterNewLine = false;
-
             boolean exp = (ch == '\r' || ch == '\n' || ch == normalizedNewLine) && symbols.size() > 0;
             if (isSymbol(ch)) {
                 allSymbols.add(ch);
@@ -162,23 +144,18 @@ public abstract class AbstractCsvFormatDetector implements InputAnalysisProcess 
                 if (symbolsPerRow.size() == MAX_ROW_SAMPLES) {
                     break;
                 }
-                symbols = new LinkedHashMap<Character, Integer>();
+                symbols = new LinkedHashMap<>();
             }
         }
-
         if (symbols.size() > 0 && length < characters.length) {
             symbolsPerRow.add(symbols);
         }
-
         if (length >= characters.length && i >= length && symbolsPerRow.size() > 1) {
             symbolsPerRow.remove(symbolsPerRow.size() - 1);
         }
-
         Map<Character, Integer> totals = calculateTotals(symbolsPerRow);
-
-        Map<Character, Integer> sums = new LinkedHashMap<Character, Integer>();
-        Set<Character> toRemove = new HashSet<Character>();
-
+        Map<Character, Integer> sums = new LinkedHashMap<>();
+        Set<Character> toRemove = new HashSet<>();
         for (Map<Character, Integer> prev : symbolsPerRow) {
             for (Map<Character, Integer> current : symbolsPerRow) {
                 for (Character symbol : allSymbols) {
@@ -187,7 +164,6 @@ public abstract class AbstractCsvFormatDetector implements InputAnalysisProcess 
                     if (previousCount == null && currentCount == null) {
                         toRemove.add(symbol);
                     }
-
                     if (previousCount == null || currentCount == null) {
                         continue;
                     }
@@ -195,9 +171,8 @@ public abstract class AbstractCsvFormatDetector implements InputAnalysisProcess 
                 }
             }
         }
-
         if (toRemove.size() == sums.size()) {
-            Map<Character, Integer> lineCount = new LinkedHashMap<Character, Integer>();
+            Map<Character, Integer> lineCount = new LinkedHashMap<>();
             for (i = 0; i < symbolsPerRow.size(); i++) {
                 for (Character symbolInRow : symbolsPerRow.get(i).keySet()) {
                     Integer count = lineCount.get(symbolInRow);
@@ -207,14 +182,12 @@ public abstract class AbstractCsvFormatDetector implements InputAnalysisProcess 
                     lineCount.put(symbolInRow, count + 1);
                 }
             }
-
             Integer highestLineCount = null;
             for (Entry<Character, Integer> e : lineCount.entrySet()) {
                 if (highestLineCount == null || highestLineCount < e.getValue()) {
                     highestLineCount = e.getValue();
                 }
             }
-
             Character bestCandidate = null;
             for (Entry<Character, Integer> e : lineCount.entrySet()) {
                 if (e.getValue().equals(highestLineCount)) {
@@ -226,31 +199,25 @@ public abstract class AbstractCsvFormatDetector implements InputAnalysisProcess 
                     }
                 }
             }
-
             if (bestCandidate != null) {
                 toRemove.remove(bestCandidate);
             }
         }
-
         sums.keySet().removeAll(toRemove);
-
         if (allowedDelimiters.length > 0) {
-            Set<Character> toRetain = new HashSet<Character>();
+            Set<Character> toRetain = new HashSet<>();
             for (char c : allowedDelimiters) {
                 toRetain.add(c);
             }
             sums.keySet().retainAll(toRetain);
         }
-
         char delimiter = pickDelimiter(sums, totals);
-
         char quote;
         if (doubleQuoteCount == 0 && singleQuoteCount == 0) {
             quote = suggestedQuote;
         } else {
             quote = doubleQuoteCount >= singleQuoteCount ? '"' : '\'';
         }
-
         escape.remove(delimiter);
         char quoteEscape = doubleQuoteCount == 0 && singleQuoteCount == 0 ? suggestedQuoteEscape : max(escape, totals, quote);
         apply(delimiter, quote, quoteEscape);

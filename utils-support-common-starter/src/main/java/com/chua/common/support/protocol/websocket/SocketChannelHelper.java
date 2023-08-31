@@ -34,9 +34,9 @@ import java.nio.channels.ByteChannel;
 /**
  * @author Administrator
  */
-public class SocketChannelIOHelper {
+public class SocketChannelHelper {
 
-  private SocketChannelIOHelper() {
+  private SocketChannelHelper() {
     throw new IllegalStateException("Utility class");
   }
 

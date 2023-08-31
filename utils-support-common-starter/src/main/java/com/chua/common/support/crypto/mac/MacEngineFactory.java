@@ -39,6 +39,6 @@ public class MacEngineFactory {
             // HmacSM3算法是BC库实现的，忽略加盐
             return ServiceProvider.of(MacEngine.class).getExtension(HmacAlgorithm.HMAC_SM3.getValue());
         }
-        return new DefaultHMacEngine(algorithm, key, spec);
+        return new DefaultHaMacEngine(algorithm, key, spec);
     }
 }

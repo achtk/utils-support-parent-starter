@@ -46,16 +46,16 @@ import java.util.concurrent.ExecutorService;
 /**
  * @author Administrator
  */
-public class DefaultSSLWebSocketServerFactory implements WebSocketServerFactory {
+public class DefaultSslWebSocketServerFactory implements WebSocketServerFactory {
 
     protected SSLContext sslcontext;
     protected ExecutorService exec;
 
-    public DefaultSSLWebSocketServerFactory(SSLContext sslContext) {
+    public DefaultSslWebSocketServerFactory(SSLContext sslContext) {
         this(sslContext, ThreadUtils.newSingleThreadScheduledExecutor());
     }
 
-    public DefaultSSLWebSocketServerFactory(SSLContext sslContext, ExecutorService exec) {
+    public DefaultSslWebSocketServerFactory(SSLContext sslContext, ExecutorService exec) {
         if (sslContext == null || exec == null) {
             throw new IllegalArgumentException();
         }

@@ -11,15 +11,15 @@ import java.util.List;
 /**
  * @author code4crafter@gmail.com
  */
-public class CombingXPathEvaluator implements PathEvaluator {
+public class CombingPathEvaluator implements PathEvaluator {
 
     private final List<PathEvaluator> xPathEvaluators;
 
-    public CombingXPathEvaluator(List<PathEvaluator> xPathEvaluators) {
+    public CombingPathEvaluator(List<PathEvaluator> xPathEvaluators) {
         this.xPathEvaluators = xPathEvaluators;
     }
 
-    public CombingXPathEvaluator(PathEvaluator... xPathEvaluators) {
+    public CombingPathEvaluator(PathEvaluator... xPathEvaluators) {
         this.xPathEvaluators = Arrays.asList(xPathEvaluators);
     }
 

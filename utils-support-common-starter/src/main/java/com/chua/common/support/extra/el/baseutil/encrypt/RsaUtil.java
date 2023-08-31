@@ -14,7 +14,7 @@ import java.security.spec.X509EncodedKeySpec;
  *
  * @author admin
  */
-public class RSAUtil implements EnDecrpt
+public class RsaUtil implements EnDecrpt
 {
 
     private final String algorithms;
@@ -26,14 +26,14 @@ public class RSAUtil implements EnDecrpt
     private Signature  sign;
     private Signature  check;
 
-    public RSAUtil(String algorithms)
+    public RsaUtil(String algorithms)
     {
         this.algorithms = algorithms;
     }
 
     public static void main(String[] args) throws IOException
     {
-        new RSAUtil("SHA1WithRSA").buildKey();
+        new RsaUtil("SHA1WithRSA").buildKey();
     }
 
     /**
