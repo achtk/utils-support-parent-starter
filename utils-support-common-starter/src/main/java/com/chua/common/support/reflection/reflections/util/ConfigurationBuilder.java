@@ -48,8 +48,8 @@ public class ConfigurationBuilder implements Configuration {
      * constructs a {@link ConfigurationBuilder}.
      * <p>each parameter in {@code params} is referred by its type:
      * <ul>
-     *     <li>{@link String} - add urls using {@link ClasspathHelper#forPackage(String, ClassLoader...)} and an input filter
-     *     <li>{@link Class} - add urls using {@link ClasspathHelper#forClass(Class, ClassLoader...)} and an input filter
+     *     <li>{@link String} - add urls using {@link AbstractClasspathHelper#forPackage(String, ClassLoader...)} and an input filter
+     *     <li>{@link Class} - add urls using {@link AbstractClasspathHelper#forClass(Class, ClassLoader...)} and an input filter
      *     <li>{@link Scanner} - use scanner, overriding default scanners
      *     <li>{@link URL} - add url for scanning
      *     <li>{@link Predicate} - set/override inputs filter
@@ -93,7 +93,7 @@ public class ConfigurationBuilder implements Configuration {
                 builder.forPackage((String) param, loaders);
                 inputsFilter.includePackage((String) param);
             } else if (param instanceof Class && !Scanner.class.isAssignableFrom((Class) param)) {
-                builder.addUrls(ClasspathHelper.forClass((Class) param, loaders));
+                builder.addUrls(AbstractClasspathHelper.forClass((Class) param, loaders));
                 inputsFilter.includePackage(((Class) param).getPackage().getName());
             } else if (param instanceof URL) {
                 builder.addUrls((URL) param);
@@ -114,21 +114,21 @@ public class ConfigurationBuilder implements Configuration {
 
         if (builder.getUrls().isEmpty()) {
             // scan all classpath if no urls provided todo avoid
-            builder.addUrls(ClasspathHelper.forClassLoader(loaders));
+            builder.addUrls(AbstractClasspathHelper.forClassLoader(loaders));
         }
 
         return builder;
     }
 
     /**
-     * {@link #addUrls(URL...)} by applying {@link ClasspathHelper#forPackage(String, ClassLoader...)} for the given {@code pkg}
+     * {@link #addUrls(URL...)} by applying {@link AbstractClasspathHelper#forPackage(String, ClassLoader...)} for the given {@code pkg}
      */
     public ConfigurationBuilder forPackage(String pkg, ClassLoader... classLoaders) {
-        return addUrls(ClasspathHelper.forPackage(pkg, classLoaders));
+        return addUrls(AbstractClasspathHelper.forPackage(pkg, classLoaders));
     }
 
     /**
-     * {@link #addUrls(URL...)} by applying {@link ClasspathHelper#forPackage(String, ClassLoader...)} for the given {@code packages}
+     * {@link #addUrls(URL...)} by applying {@link AbstractClasspathHelper#forPackage(String, ClassLoader...)} for the given {@code packages}
      */
     public ConfigurationBuilder forPackages(String... packages) {
         for (String pkg : packages) {
@@ -169,7 +169,7 @@ public class ConfigurationBuilder implements Configuration {
 
     /**
      * set the urls to be scanned
-     * <p>use {@link ClasspathHelper} convenient methods to get the relevant urls
+     * <p>use {@link AbstractClasspathHelper} convenient methods to get the relevant urls
      * <p>see also {@link #forPackages(String...)}
      */
     public ConfigurationBuilder setUrls(Collection<URL> urls) {
@@ -179,7 +179,7 @@ public class ConfigurationBuilder implements Configuration {
 
     /**
      * set the urls to be scanned
-     * <p>use {@link ClasspathHelper} convenient methods to get the relevant urls
+     * <p>use {@link AbstractClasspathHelper} convenient methods to get the relevant urls
      * <p>see also {@link #forPackages(String...)}
      */
     public ConfigurationBuilder setUrls(URL... urls) {
@@ -188,7 +188,7 @@ public class ConfigurationBuilder implements Configuration {
 
     /**
      * add urls to be scanned
-     * <p>use {@link ClasspathHelper} convenient methods to get the relevant urls
+     * <p>use {@link AbstractClasspathHelper} convenient methods to get the relevant urls
      * <p>see also {@link #forPackages(String...)}
      */
     public ConfigurationBuilder addUrls(Collection<URL> urls) {
@@ -198,7 +198,7 @@ public class ConfigurationBuilder implements Configuration {
 
     /**
      * add urls to be scanned
-     * <p>use {@link ClasspathHelper} convenient methods to get the relevant urls
+     * <p>use {@link AbstractClasspathHelper} convenient methods to get the relevant urls
      * <p>see also {@link #forPackages(String...)}
      */
     public ConfigurationBuilder addUrls(URL... urls) {

@@ -151,11 +151,11 @@ public class Attribute {
    * @return the byte array form of this attribute.
    */
   protected ByteVector write(
-      final ClassWriter classWriter,
-      final byte[] code,
-      final int codeLength,
-      final int maxStack,
-      final int maxLocals) {
+          final AbstractClassWriter classWriter,
+          final byte[] code,
+          final int codeLength,
+          final int maxStack,
+          final int maxLocals) {
     return new ByteVector(content);
   }
 
@@ -216,7 +216,7 @@ public class Attribute {
       final int codeLength,
       final int maxStack,
       final int maxLocals) {
-    final ClassWriter classWriter = symbolTable.classWriter;
+    final AbstractClassWriter classWriter = symbolTable.classWriter;
     int size = 0;
     Attribute attribute = this;
     while (attribute != null) {
@@ -304,7 +304,7 @@ public class Attribute {
       final int maxStack,
       final int maxLocals,
       final ByteVector output) {
-    final ClassWriter classWriter = symbolTable.classWriter;
+    final AbstractClassWriter classWriter = symbolTable.classWriter;
     Attribute attribute = this;
     while (attribute != null) {
       ByteVector attributeContent =

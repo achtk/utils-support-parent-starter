@@ -41,13 +41,13 @@ final class Edge {
 
   /**
    * A control flow graph edge corresponding to a jump or ret instruction. Only used with {@link
-   * ClassWriter#COMPUTE_FRAMES}.
+   * AbstractClassWriter#COMPUTE_FRAMES}.
    */
   static final int JUMP = 0;
 
   /**
    * A control flow graph edge corresponding to an exception handler. Only used with {@link
-   * ClassWriter#COMPUTE_MAXS}.
+   * AbstractClassWriter#COMPUTE_MAXS}.
    */
   static final int EXCEPTION = 0x7FFFFFFF;
 
@@ -55,14 +55,14 @@ final class Edge {
    * Information about this control flow graph edge.
    *
    * <ul>
-   *   <li>If {@link ClassWriter#COMPUTE_MAXS} is used, this field contains either a stack size
+   *   <li>If {@link AbstractClassWriter#COMPUTE_MAXS} is used, this field contains either a stack size
    *       delta (for an edge corresponding to a jump instruction), or the value EXCEPTION (for an
    *       edge corresponding to an exception handler). The stack size delta is the stack size just
    *       after the jump instruction, minus the stack size at the beginning of the predecessor
    *       basic block, i.e. the one containing the jump instruction.
-   *   <li>If {@link ClassWriter#COMPUTE_FRAMES} is used, this field contains either the value JUMP
+   *   <li>If {@link AbstractClassWriter#COMPUTE_FRAMES} is used, this field contains either the value JUMP
    *       (for an edge corresponding to a jump instruction), or the index, in the {@link
-   *       ClassWriter} type table, of the exception type that is handled (for an edge corresponding
+   *       AbstractClassWriter} type table, of the exception type that is handled (for an edge corresponding
    *       to an exception handler).
    * </ul>
    */

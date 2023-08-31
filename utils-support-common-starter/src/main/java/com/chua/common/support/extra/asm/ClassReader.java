@@ -9,9 +9,9 @@ import static com.chua.common.support.constant.CommonConstant.*;
 import static com.chua.common.support.constant.NumberConstant.*;
 
 /**
- * A parser to make a {@link ClassVisitor} visit a ClassFile structure, as defined in the Java
+ * A parser to make a {@link AbstractClassVisitor} visit a ClassFile structure, as defined in the Java
  * Virtual Machine Specification (JVMS). This class parses the ClassFile content and calls the
- * appropriate visit methods of a given {@link ClassVisitor} for each field, method and bytecode
+ * appropriate visit methods of a given {@link AbstractClassVisitor} for each field, method and bytecode
  * instruction encountered.
  *
  * @author Eugene Kuleshov
@@ -28,7 +28,7 @@ public class ClassReader {
     /**
      * A flag to skip the SourceFile, SourceDebugExtension, LocalVariableTable,
      * LocalVariableTypeTable, LineNumberTable and MethodParameters attributes. If this flag is set
-     * these attributes are neither parsed nor visited (i.e. {@link ClassVisitor#visitSource}, {@link
+     * these attributes are neither parsed nor visited (i.e. {@link AbstractClassVisitor#visitSource}, {@link
      * MethodVisitor#visitLocalVariable}, {@link MethodVisitor#visitLineNumber} and {@link
      * MethodVisitor#visitParameter} are not called).
      */
@@ -37,7 +37,7 @@ public class ClassReader {
     /**
      * A flag to skip the StackMap and StackMapTable attributes. If this flag is set these attributes
      * are neither parsed nor visited (i.e. {@link MethodVisitor#visitFrame} is not called). This flag
-     * is useful when the {@link ClassWriter#COMPUTE_FRAMES} option is used: it avoids visiting frames
+     * is useful when the {@link AbstractClassWriter#COMPUTE_FRAMES} option is used: it avoids visiting frames
      * that will be ignored and recomputed from scratch.
      */
     public static final int SKIP_FRAMES = 4;
@@ -314,7 +314,7 @@ public class ClassReader {
      * and Synthetic flags when bytecode is before 1.5 and those flags are represented by attributes.
      *
      * @return the class access flags.
-     * @see ClassVisitor#visit(int, int, String, String, String, String[])
+     * @see AbstractClassVisitor#visit(int, int, String, String, String, String[])
      */
     public int getAccess() {
         return readUnsignedShort(header);
@@ -324,7 +324,7 @@ public class ClassReader {
      * Returns the internal name of the class (see {@link Type#getInternalName()}).
      *
      * @return the internal class name.
-     * @see ClassVisitor#visit(int, int, String, String, String, String[])
+     * @see AbstractClassVisitor#visit(int, int, String, String, String, String[])
      */
     public String getClassName() {
         return readClass(header + 2, new char[maxStringLength]);
@@ -335,7 +335,7 @@ public class ClassReader {
      * interfaces, the super class is {@link Object}.
      *
      * @return the internal name of the super class, or {@literal null} for {@link Object} class.
-     * @see ClassVisitor#visit(int, int, String, String, String, String[])
+     * @see AbstractClassVisitor#visit(int, int, String, String, String, String[])
      */
     public String getSuperName() {
         return readClass(header + 4, new char[maxStringLength]);
@@ -346,7 +346,7 @@ public class ClassReader {
      *
      * @return the internal names of the directly implemented interfaces. Inherited implemented
      * interfaces are not returned.
-     * @see ClassVisitor#visit(int, int, String, String, String, String[])
+     * @see AbstractClassVisitor#visit(int, int, String, String, String, String[])
      */
     public String[] getInterfaces() {
         int currentOffset = header + 6;
@@ -367,30 +367,30 @@ public class ClassReader {
      * Makes the given visitor visit the JVMS ClassFile structure passed to the constructor of this
      * {@link ClassReader}.
      *
-     * @param classVisitor   the visitor that must visit this class.
-     * @param parsingOptions the options to use to parse this class. One or more of {@link
-     *                       #SKIP_CODE}, {@link #SKIP_DEBUG}, {@link #SKIP_FRAMES} or {@link #EXPAND_FRAMES}.
+     * @param abstractClassVisitor the visitor that must visit this class.
+     * @param parsingOptions       the options to use to parse this class. One or more of {@link
+     *                             #SKIP_CODE}, {@link #SKIP_DEBUG}, {@link #SKIP_FRAMES} or {@link #EXPAND_FRAMES}.
      */
-    public void accept(final ClassVisitor classVisitor, final int parsingOptions) {
-        accept(classVisitor, new Attribute[0], parsingOptions);
+    public void accept(final AbstractClassVisitor abstractClassVisitor, final int parsingOptions) {
+        accept(abstractClassVisitor, new Attribute[0], parsingOptions);
     }
 
     /**
      * Makes the given visitor visit the JVMS ClassFile structure passed to the constructor of this
      * {@link ClassReader}.
      *
-     * @param classVisitor        the visitor that must visit this class.
-     * @param attributePrototypes prototypes of the attributes that must be parsed during the visit of
-     *                            the class. Any attribute whose type is not equal to the type of one the prototypes will not
-     *                            be parsed: its byte array value will be passed unchanged to the ClassWriter. <i>This may
-     *                            corrupt it if this value contains references to the constant pool, or has syntactic or
-     *                            semantic links with a class element that has been transformed by a class adapter between
-     *                            the reader and the writer</i>.
-     * @param parsingOptions      the options to use to parse this class. One or more of {@link
-     *                            #SKIP_CODE}, {@link #SKIP_DEBUG}, {@link #SKIP_FRAMES} or {@link #EXPAND_FRAMES}.
+     * @param abstractClassVisitor the visitor that must visit this class.
+     * @param attributePrototypes  prototypes of the attributes that must be parsed during the visit of
+     *                             the class. Any attribute whose type is not equal to the type of one the prototypes will not
+     *                             be parsed: its byte array value will be passed unchanged to the ClassWriter. <i>This may
+     *                             corrupt it if this value contains references to the constant pool, or has syntactic or
+     *                             semantic links with a class element that has been transformed by a class adapter between
+     *                             the reader and the writer</i>.
+     * @param parsingOptions       the options to use to parse this class. One or more of {@link
+     *                             #SKIP_CODE}, {@link #SKIP_DEBUG}, {@link #SKIP_FRAMES} or {@link #EXPAND_FRAMES}.
      */
     public void accept(
-            final ClassVisitor classVisitor,
+            final AbstractClassVisitor abstractClassVisitor,
             final Attribute[] attributePrototypes,
             final int parsingOptions) {
         Context context = new Context();
@@ -490,22 +490,22 @@ public class ClassReader {
             currentAttributeOffset += attributeLength;
         }
 
-        classVisitor.visit(
+        abstractClassVisitor.visit(
                 readInt(cpInfoOffsets[1] - 7), accessFlags, thisClass, signature, superClass, interfaces);
 
         boolean b = (parsingOptions & SKIP_DEBUG) == 0
                 && (sourceFile != null || sourceDebugExtension != null);
         if (b) {
-            classVisitor.visitSource(sourceFile, sourceDebugExtension);
+            abstractClassVisitor.visitSource(sourceFile, sourceDebugExtension);
         }
 
         if (moduleOffset != 0) {
             readModuleAttributes(
-                    classVisitor, context, moduleOffset, modulePackagesOffset, moduleMainClass);
+                    abstractClassVisitor, context, moduleOffset, modulePackagesOffset, moduleMainClass);
         }
 
         if (nestHostClass != null) {
-            classVisitor.visitNestHost(nestHostClass);
+            abstractClassVisitor.visitNestHost(nestHostClass);
         }
 
         if (enclosingMethodOffset != 0) {
@@ -513,7 +513,7 @@ public class ClassReader {
             int methodIndex = readUnsignedShort(enclosingMethodOffset + 2);
             String name = methodIndex == 0 ? null : readUtf8(cpInfoOffsets[methodIndex], charBuffer);
             String type = methodIndex == 0 ? null : readUtf8(cpInfoOffsets[methodIndex] + 2, charBuffer);
-            classVisitor.visitOuterClass(className, name, type);
+            abstractClassVisitor.visitOuterClass(className, name, type);
         }
 
         if (runtimeVisibleAnnotationsOffset != 0) {
@@ -524,7 +524,7 @@ public class ClassReader {
                 currentAnnotationOffset += 2;
                 currentAnnotationOffset =
                         readElementValues(
-                                classVisitor.visitAnnotation(annotationDescriptor, true),
+                                abstractClassVisitor.visitAnnotation(annotationDescriptor, true),
                                 currentAnnotationOffset,
                                 true,
                                 charBuffer);
@@ -539,7 +539,7 @@ public class ClassReader {
                 currentAnnotationOffset += 2;
                 currentAnnotationOffset =
                         readElementValues(
-                                classVisitor.visitAnnotation(annotationDescriptor, false),
+                                abstractClassVisitor.visitAnnotation(annotationDescriptor, false),
                                 currentAnnotationOffset,
                                 true,
                                 charBuffer);
@@ -555,7 +555,7 @@ public class ClassReader {
                 currentAnnotationOffset += 2;
                 currentAnnotationOffset =
                         readElementValues(
-                                classVisitor.visitTypeAnnotation(
+                                abstractClassVisitor.visitTypeAnnotation(
                                         context.currentTypeAnnotationTarget,
                                         context.currentTypeAnnotationTargetPath,
                                         annotationDescriptor,
@@ -575,7 +575,7 @@ public class ClassReader {
                 currentAnnotationOffset += 2;
                 currentAnnotationOffset =
                         readElementValues(
-                                classVisitor.visitTypeAnnotation(
+                                abstractClassVisitor.visitTypeAnnotation(
                                         context.currentTypeAnnotationTarget,
                                         context.currentTypeAnnotationTargetPath,
                                         annotationDescriptor,
@@ -589,7 +589,7 @@ public class ClassReader {
         while (attributes != null) {
             Attribute nextAttribute = attributes.nextAttribute;
             attributes.nextAttribute = null;
-            classVisitor.visitAttribute(attributes);
+            abstractClassVisitor.visitAttribute(attributes);
             attributes = nextAttribute;
         }
 
@@ -597,7 +597,7 @@ public class ClassReader {
             int numberOfNestMembers = readUnsignedShort(nestMembersOffset);
             int currentNestMemberOffset = nestMembersOffset + 2;
             while (numberOfNestMembers-- > 0) {
-                classVisitor.visitNestMember(readClass(currentNestMemberOffset, charBuffer));
+                abstractClassVisitor.visitNestMember(readClass(currentNestMemberOffset, charBuffer));
                 currentNestMemberOffset += 2;
             }
         }
@@ -606,7 +606,7 @@ public class ClassReader {
             int numberOfPermittedSubclasses = readUnsignedShort(permittedSubclassesOffset);
             int currentPermittedSubclassesOffset = permittedSubclassesOffset + 2;
             while (numberOfPermittedSubclasses-- > 0) {
-                classVisitor.visitPermittedSubclass(
+                abstractClassVisitor.visitPermittedSubclass(
                         readClass(currentPermittedSubclassesOffset, charBuffer));
                 currentPermittedSubclassesOffset += 2;
             }
@@ -616,7 +616,7 @@ public class ClassReader {
             int numberOfClasses = readUnsignedShort(innerClassesOffset);
             int currentClassesOffset = innerClassesOffset + 2;
             while (numberOfClasses-- > 0) {
-                classVisitor.visitInnerClass(
+                abstractClassVisitor.visitInnerClass(
                         readClass(currentClassesOffset, charBuffer),
                         readClass(currentClassesOffset + 2, charBuffer),
                         readUtf8(currentClassesOffset + 4, charBuffer),
@@ -629,29 +629,29 @@ public class ClassReader {
             int recordComponentsCount = readUnsignedShort(recordOffset);
             recordOffset += 2;
             while (recordComponentsCount-- > 0) {
-                recordOffset = readRecordComponent(classVisitor, context, recordOffset);
+                recordOffset = readRecordComponent(abstractClassVisitor, context, recordOffset);
             }
         }
 
         int fieldsCount = readUnsignedShort(currentOffset);
         currentOffset += 2;
         while (fieldsCount-- > 0) {
-            currentOffset = readField(classVisitor, context, currentOffset);
+            currentOffset = readField(abstractClassVisitor, context, currentOffset);
         }
         int methodsCount = readUnsignedShort(currentOffset);
         currentOffset += 2;
         while (methodsCount-- > 0) {
-            currentOffset = readMethod(classVisitor, context, currentOffset);
+            currentOffset = readMethod(abstractClassVisitor, context, currentOffset);
         }
 
-        classVisitor.visitEnd();
+        abstractClassVisitor.visitEnd();
     }
 
 
     /**
      * Reads the Module, ModulePackages and ModuleMainClass attributes and visit them.
      *
-     * @param classVisitor         the current class visitor
+     * @param abstractClassVisitor         the current class visitor
      * @param context              information about the class being parsed.
      * @param moduleOffset         the offset of the Module attribute (excluding the attribute_info's
      *                             attribute_name_index and attribute_length fields).
@@ -661,7 +661,7 @@ public class ClassReader {
      *                             null}.
      */
     private void readModuleAttributes(
-            final ClassVisitor classVisitor,
+            final AbstractClassVisitor abstractClassVisitor,
             final Context context,
             final int moduleOffset,
             final int modulePackagesOffset,
@@ -673,7 +673,7 @@ public class ClassReader {
         int moduleFlags = readUnsignedShort(currentOffset + 2);
         String moduleVersion = readUtf8(currentOffset + 4, buffer);
         currentOffset += 6;
-        ModuleVisitor moduleVisitor = classVisitor.visitModule(moduleName, moduleFlags, moduleVersion);
+        ModuleVisitor moduleVisitor = abstractClassVisitor.visitModule(moduleName, moduleFlags, moduleVersion);
         if (moduleVisitor == null) {
             return;
         }
@@ -764,13 +764,13 @@ public class ClassReader {
     /**
      * Reads a record component and visit it.
      *
-     * @param classVisitor          the current class visitor
+     * @param abstractClassVisitor  the current class visitor
      * @param context               information about the class being parsed.
      * @param recordComponentOffset the offset of the current record component.
      * @return the offset of the first byte following the record component.
      */
     private int readRecordComponent(
-            final ClassVisitor classVisitor, final Context context, final int recordComponentOffset) {
+            final AbstractClassVisitor abstractClassVisitor, final Context context, final int recordComponentOffset) {
         char[] charBuffer = context.charBuffer;
 
         int currentOffset = recordComponentOffset;
@@ -819,7 +819,7 @@ public class ClassReader {
         }
 
         RecordComponentVisitor recordComponentVisitor =
-                classVisitor.visitRecordComponent(name, descriptor, signature);
+                abstractClassVisitor.visitRecordComponent(name, descriptor, signature);
         if (recordComponentVisitor == null) {
             return currentOffset;
         }
@@ -908,13 +908,13 @@ public class ClassReader {
     /**
      * Reads a JVMS field_info structure and makes the given visitor visit it.
      *
-     * @param classVisitor    the visitor that must visit the field.
-     * @param context         information about the class being parsed.
-     * @param fieldInfoOffset the start offset of the field_info structure.
+     * @param abstractClassVisitor the visitor that must visit the field.
+     * @param context              information about the class being parsed.
+     * @param fieldInfoOffset      the start offset of the field_info structure.
      * @return the offset of the first byte following the field_info structure.
      */
     private int readField(
-            final ClassVisitor classVisitor, final Context context, final int fieldInfoOffset) {
+            final AbstractClassVisitor abstractClassVisitor, final Context context, final int fieldInfoOffset) {
         char[] charBuffer = context.charBuffer;
 
         int currentOffset = fieldInfoOffset;
@@ -971,7 +971,7 @@ public class ClassReader {
         }
 
         FieldVisitor fieldVisitor =
-                classVisitor.visitField(accessFlags, name, descriptor, signature, constantValue);
+                abstractClassVisitor.visitField(accessFlags, name, descriptor, signature, constantValue);
         if (fieldVisitor == null) {
             return currentOffset;
         }
@@ -1060,13 +1060,13 @@ public class ClassReader {
     /**
      * Reads a JVMS method_info structure and makes the given visitor visit it.
      *
-     * @param classVisitor     the visitor that must visit the method.
-     * @param context          information about the class being parsed.
-     * @param methodInfoOffset the start offset of the method_info structure.
+     * @param abstractClassVisitor the visitor that must visit the method.
+     * @param context              information about the class being parsed.
+     * @param methodInfoOffset     the start offset of the method_info structure.
      * @return the offset of the first byte following the method_info structure.
      */
     private int readMethod(
-            final ClassVisitor classVisitor, final Context context, final int methodInfoOffset) {
+            final AbstractClassVisitor abstractClassVisitor, final Context context, final int methodInfoOffset) {
         char[] charBuffer = context.charBuffer;
 
         int currentOffset = methodInfoOffset;
@@ -1148,7 +1148,7 @@ public class ClassReader {
         }
 
         MethodVisitor methodVisitor =
-                classVisitor.visitMethod(
+                abstractClassVisitor.visitMethod(
                         context.currentMethodAccessFlags,
                         context.currentMethodName,
                         context.currentMethodDescriptor,

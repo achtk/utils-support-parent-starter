@@ -21,7 +21,7 @@ import static com.chua.common.support.constant.CommonConstant.*;
  *
  * @author Administrator
  */
-public abstract class ClasspathHelper {
+public abstract class AbstractClasspathHelper {
 
     /**
      * Gets the current thread context class loader.

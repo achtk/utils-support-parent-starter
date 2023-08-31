@@ -37,7 +37,7 @@ package com.chua.common.support.extra.asm;
  *
  * @author Eric Bruneton
  */
-public abstract class ClassVisitor {
+public abstract class AbstractClassVisitor {
 
   /**
    * The ASM API version implemented by this visitor. The value of this field must be one of the
@@ -45,40 +45,42 @@ public abstract class ClassVisitor {
    */
   protected final int api;
 
-  /** The class visitor to which this visitor must delegate method calls. May be {@literal null}. */
-  protected ClassVisitor cv;
+  /**
+   * The class visitor to which this visitor must delegate method calls. May be {@literal null}.
+   */
+  protected AbstractClassVisitor cv;
 
   /**
-   * Constructs a new {@link ClassVisitor}.
+   * Constructs a new {@link AbstractClassVisitor}.
    *
    * @param api the ASM API version implemented by this visitor. Must be one of the {@code
-   *     ASM}<i>x</i> values in {@link Opcodes}.
+   *            ASM}<i>x</i> values in {@link Opcodes}.
    */
-  protected ClassVisitor(final int api) {
+  protected AbstractClassVisitor(final int api) {
     this(api, null);
   }
 
   /**
-   * Constructs a new {@link ClassVisitor}.
+   * Constructs a new {@link AbstractClassVisitor}.
    *
-   * @param api the ASM API version implemented by this visitor. Must be one of the {@code
-   *     ASM}<i>x</i> values in {@link Opcodes}.
-   * @param classVisitor the class visitor to which this visitor must delegate method calls. May be
-   *     null.
+   * @param api                  the ASM API version implemented by this visitor. Must be one of the {@code
+   *                             ASM}<i>x</i> values in {@link Opcodes}.
+   * @param abstractClassVisitor the class visitor to which this visitor must delegate method calls. May be
+   *                             null.
    */
-  protected ClassVisitor(final int api, final ClassVisitor classVisitor) {
+  protected AbstractClassVisitor(final int api, final AbstractClassVisitor abstractClassVisitor) {
     if (api != Opcodes.ASM9
-        && api != Opcodes.ASM8
-        && api != Opcodes.ASM7
-        && api != Opcodes.ASM6
-        && api != Opcodes.ASM5
-        && api != Opcodes.ASM4
-        && api != Opcodes.ASM10_EXPERIMENTAL) {
+            && api != Opcodes.ASM8
+            && api != Opcodes.ASM7
+            && api != Opcodes.ASM6
+            && api != Opcodes.ASM5
+            && api != Opcodes.ASM4
+            && api != Opcodes.ASM10_EXPERIMENTAL) {
       throw new IllegalArgumentException("Unsupported api " + api);
     }
     // SPRING PATCH: no preview mode check for ASM experimental
     this.api = api;
-    this.cv = classVisitor;
+    this.cv = abstractClassVisitor;
   }
 
   /**

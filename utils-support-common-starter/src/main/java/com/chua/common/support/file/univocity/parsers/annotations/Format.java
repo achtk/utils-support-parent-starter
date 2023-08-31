@@ -15,7 +15,7 @@
  ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.annotations;
 
-import com.chua.common.support.file.univocity.parsers.common.processor.BeanProcessor;
+import com.chua.common.support.file.univocity.parsers.common.processor.AbstractBeanProcessor;
 import com.chua.common.support.file.univocity.parsers.common.processor.BeanWriterProcessor;
 import com.chua.common.support.file.univocity.parsers.conversions.Conversion;
 import com.chua.common.support.file.univocity.parsers.conversions.Conversions;
@@ -34,12 +34,12 @@ import java.lang.annotation.*;
  * <li>formats="#0,00", options="decimalSeparator=,".</li>
  * <li>The "decimalSeparator" property will be used to identify which method in DecimalFormat to invoke. In this case, the method "setDecimalSeparator", with the value on the right hand side of the = operator</li>
  * </ul>
- * <p>Commonly used for java beans processed using {@link BeanProcessor} and/or {@link BeanWriterProcessor}</p>
+ * <p>Commonly used for java beans processed using {@link AbstractBeanProcessor} and/or {@link BeanWriterProcessor}</p>
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
  * @see Conversion
  * @see Conversions
- * @see BeanProcessor
+ * @see AbstractBeanProcessor
  * @see BeanWriterProcessor
  */
 @Retention(RetentionPolicy.RUNTIME)

@@ -19,10 +19,10 @@ final class SymbolTable {
 
   /**
    * The ClassWriter to which this SymbolTable belongs. This is only used to get access to {@link
-   * ClassWriter#getCommonSuperClass} and to serialize custom attributes with {@link
+   * AbstractClassWriter#getCommonSuperClass} and to serialize custom attributes with {@link
    * Attribute#write}.
    */
-  final ClassWriter classWriter;
+  final AbstractClassWriter classWriter;
 
   /**
    * The ClassReader from which this SymbolTable was constructed, or {@literal null} if it was
@@ -96,7 +96,7 @@ final class SymbolTable {
    *
    * @param classWriter a ClassWriter.
    */
-  SymbolTable(final ClassWriter classWriter) {
+  SymbolTable(final AbstractClassWriter classWriter) {
     this.classWriter = classWriter;
     this.sourceClassReader = null;
     this.entries = new Entry[256];
@@ -110,13 +110,13 @@ final class SymbolTable {
    *
    * @param classWriter a ClassWriter.
    * @param classReader the ClassReader whose constant pool and bootstrap methods must be copied to
-   *     initialize the SymbolTable.
+   *                    initialize the SymbolTable.
    */
-  SymbolTable(final ClassWriter classWriter, final ClassReader classReader) {
+  SymbolTable(final AbstractClassWriter classWriter, final ClassReader classReader) {
     this.classWriter = classWriter;
     this.sourceClassReader = classReader;
 
-    
+
     byte[] inputBytes = classReader.classFileBuffer;
     int constantPoolOffset = classReader.getItem(1) - 1;
     int constantPoolLength = classReader.header - constantPoolOffset;

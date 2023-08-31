@@ -22,7 +22,7 @@ import java.util.Map;
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
  * @see AbstractParser
  * @see Processor
- * @see com.chua.common.support.file.univocity.parsers.common.processor.BeanProcessor
+ * @see com.chua.common.support.file.univocity.parsers.common.processor.AbstractBeanProcessor
  */
 @SuppressWarnings("ALL")
 public abstract class AbstractMultiBeanProcessor<C extends AbstractContext> implements Processor<C>, ConversionProcessor {
@@ -61,11 +61,11 @@ public abstract class AbstractMultiBeanProcessor<C extends AbstractContext> impl
 	}
 
 	/**
-	 * Returns the {@link com.chua.common.support.file.univocity.parsers.common.processor.BeanProcessor} responsible for processing a given class
+	 * Returns the {@link com.chua.common.support.file.univocity.parsers.common.processor.AbstractBeanProcessor} responsible for processing a given class
 	 *
 	 * @param type the type of java bean being processed
 	 * @param <T>  the type of java bean being processed
-	 * @return the {@link com.chua.common.support.file.univocity.parsers.common.processor.BeanProcessor} that handles java beans of the given class.
+	 * @return the {@link com.chua.common.support.file.univocity.parsers.common.processor.AbstractBeanProcessor} that handles java beans of the given class.
 	 */
 	public <T> AbstractBeanProcessor<T, C> getProcessorOfType(Class<T> type) {
 		AbstractBeanProcessor<T, C> processor = processorMap.get(type);

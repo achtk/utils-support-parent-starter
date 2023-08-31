@@ -16,7 +16,7 @@
 package com.chua.common.support.file.univocity.parsers.annotations;
 
 import com.chua.common.support.file.univocity.parsers.common.AbstractCommonSettings;
-import com.chua.common.support.file.univocity.parsers.common.processor.BeanProcessor;
+import com.chua.common.support.file.univocity.parsers.common.processor.AbstractBeanProcessor;
 import com.chua.common.support.file.univocity.parsers.common.processor.BeanWriterProcessor;
 
 import java.lang.annotation.*;
@@ -43,7 +43,7 @@ import java.lang.annotation.*;
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
  * @see BeanWriterProcessor
- * @see BeanProcessor
+ * @see AbstractBeanProcessor
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited

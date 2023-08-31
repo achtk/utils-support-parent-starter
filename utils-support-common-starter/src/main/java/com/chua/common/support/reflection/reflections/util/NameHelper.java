@@ -117,7 +117,7 @@ public interface NameHelper {
 
     /**
      * tries to resolve a java type name to a Class
-     * <p>if optional {@link ClassLoader}s are not specified, then both {@link ClasspathHelper#contextClassLoader()} and {@link ClasspathHelper#staticClassLoader()} are used
+     * <p>if optional {@link ClassLoader}s are not specified, then both {@link AbstractClasspathHelper#contextClassLoader()} and {@link AbstractClasspathHelper#staticClassLoader()} are used
      *
      * @param typeName 类型
      * @param loaders  加载器
@@ -142,7 +142,7 @@ public interface NameHelper {
                 type = typeName;
             }
 
-            for (ClassLoader classLoader : ClasspathHelper.classLoaders(loaders)) {
+            for (ClassLoader classLoader : AbstractClasspathHelper.classLoaders(loaders)) {
                 if (type.contains("[")) {
                     try {
                         return Class.forName(type, false, classLoader);

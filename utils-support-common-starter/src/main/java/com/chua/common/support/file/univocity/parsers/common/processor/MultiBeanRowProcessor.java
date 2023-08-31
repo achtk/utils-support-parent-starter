@@ -37,7 +37,7 @@ import java.util.Map;
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
  * @see AbstractParser
  * @see RowProcessor
- * @see BeanProcessor
+ * @see AbstractBeanProcessor
  * @see MultiBeanProcessor
  */
 public abstract class MultiBeanRowProcessor extends AbstractMultiBeanRowProcessor<ParsingContext> implements RowProcessor {

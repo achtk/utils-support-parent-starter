@@ -19,9 +19,9 @@ import java.nio.charset.Charset;
  * Time: 10:36
  * @since 0.6.2
  */
-public abstract class CharsetUtils {
+public class CharsetUtils {
 
-    private static Logger logger = LoggerFactory.getLogger(CharsetUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(CharsetUtils.class);
 
     public static String detectCharset(String contentType, byte[] contentBytes) throws IOException {
         String charset;

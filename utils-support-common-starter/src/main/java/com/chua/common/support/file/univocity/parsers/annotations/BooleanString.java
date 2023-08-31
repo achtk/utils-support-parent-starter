@@ -15,7 +15,7 @@
  ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.annotations;
 
-import com.chua.common.support.file.univocity.parsers.common.processor.BeanProcessor;
+import com.chua.common.support.file.univocity.parsers.common.processor.AbstractBeanProcessor;
 import com.chua.common.support.file.univocity.parsers.common.processor.BeanWriterProcessor;
 import com.chua.common.support.file.univocity.parsers.conversions.BooleanConversion;
 import com.chua.common.support.file.univocity.parsers.conversions.Conversion;
@@ -28,12 +28,12 @@ import java.lang.annotation.*;
  * If a parsed value exists in {@link BooleanString#trueStrings()}, then the field will receive true.
  * If a parsed value exists in  {@link BooleanString#falseStrings()} then the field will receive false.
  * <p>A {@link BooleanConversion}  will be assigned to this field
- * <p>Commonly used for java beans processed using {@link BeanProcessor} and/or {@link BeanWriterProcessor}
+ * <p>Commonly used for java beans processed using {@link AbstractBeanProcessor} and/or {@link BeanWriterProcessor}
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
  * @see Conversion
  * @see Conversions
- * @see BeanProcessor
+ * @see AbstractBeanProcessor
  * @see BeanWriterProcessor
  */
 @Retention(RetentionPolicy.RUNTIME)

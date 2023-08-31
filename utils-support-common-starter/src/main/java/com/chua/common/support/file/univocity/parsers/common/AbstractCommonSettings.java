@@ -18,7 +18,7 @@ package com.chua.common.support.file.univocity.parsers.common;
 import com.chua.common.support.file.univocity.parsers.annotations.Headers;
 import com.chua.common.support.file.univocity.parsers.annotations.Parsed;
 import com.chua.common.support.file.univocity.parsers.common.fields.*;
-import com.chua.common.support.file.univocity.parsers.common.processor.BeanProcessor;
+import com.chua.common.support.file.univocity.parsers.common.processor.AbstractBeanProcessor;
 import com.chua.common.support.file.univocity.parsers.common.processor.BeanWriterProcessor;
 import com.chua.common.support.file.univocity.parsers.common.processor.RowProcessor;
 import com.chua.common.support.file.univocity.parsers.common.processor.RowWriterProcessor;
@@ -447,7 +447,7 @@ public abstract class AbstractCommonSettings<F extends Format> implements Clonea
 	/**
 	 * Indicates whether this settings object can automatically derive configuration options. This is used, for example, to define the headers when the user
 	 * provides a {@link BeanWriterProcessor} where the bean class contains a {@link Headers} annotation, or to enable header extraction when the bean class of a
-	 * {@link BeanProcessor} has attributes mapping to header names.
+	 * {@link AbstractBeanProcessor} has attributes mapping to header names.
 	 *
 	 * <p>Defaults to {@code true}</p>
 	 *
@@ -460,7 +460,7 @@ public abstract class AbstractCommonSettings<F extends Format> implements Clonea
 	/**
 	 * Indicates whether this settings object can automatically derive configuration options. This is used, for example, to define the headers when the user
 	 * provides a {@link BeanWriterProcessor} where the bean class contains a {@link Headers} annotation, or to enable header extraction when the bean class of a
-	 * {@link BeanProcessor} has attributes mapping to header names.
+	 * {@link AbstractBeanProcessor} has attributes mapping to header names.
 	 *
 	 * @param autoConfigurationEnabled a flag to turn the automatic configuration feature on/off.
 	 */

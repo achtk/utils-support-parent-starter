@@ -1,7 +1,7 @@
 package com.chua.common.support.reflection.reflections.scanners;
 
 import com.chua.common.support.reflection.reflections.ReflectionsException;
-import com.chua.common.support.reflection.reflections.util.ClasspathHelper;
+import com.chua.common.support.reflection.reflections.util.AbstractClasspathHelper;
 import com.chua.common.support.reflection.reflections.util.JavassistHelper;
 import javassist.*;
 import javassist.bytecode.ClassFile;
@@ -24,7 +24,7 @@ public class MemberUsageResourceScanner implements ResourceScanner {
     private volatile ClassPool classPool;
 
     public MemberUsageResourceScanner() {
-        this(ClasspathHelper.classLoaders());
+        this(AbstractClasspathHelper.classLoaders());
     }
 
     public MemberUsageResourceScanner(ClassLoader[] classLoaders) {

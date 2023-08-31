@@ -16,7 +16,10 @@
 package com.chua.common.support.file.univocity.parsers.common.processor.core;
 
 import com.chua.common.support.file.univocity.parsers.annotations.helpers.MethodFilter;
-import com.chua.common.support.file.univocity.parsers.common.*;
+import com.chua.common.support.file.univocity.parsers.common.AbstractCommonSettings;
+import com.chua.common.support.file.univocity.parsers.common.AbstractContext;
+import com.chua.common.support.file.univocity.parsers.common.AbstractParser;
+import com.chua.common.support.file.univocity.parsers.common.AbstractWriter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -73,7 +76,7 @@ public abstract class AbstractBeanListProcessor<T, C extends AbstractContext> ex
 	 *
 	 * @param bean    java bean generated with the information extracted by the parser for an individual record
 	 * @param context A contextual object with information and controls over the current state of the parsing process
-	 * @see com.chua.common.support.file.univocity.parsers.common.processor.BeanProcessor
+	 * @see com.chua.common.support.file.univocity.parsers.common.processor.AbstractBeanProcessor
 	 */
 	@Override
 	public void beanProcessed(T bean, C context) {

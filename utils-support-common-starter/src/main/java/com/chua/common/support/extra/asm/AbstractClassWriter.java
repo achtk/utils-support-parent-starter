@@ -6,15 +6,15 @@ package com.chua.common.support.extra.asm;
 import static com.chua.common.support.constant.NumberConstant.XFFFF;
 
 /**
- * A {@link ClassVisitor} that generates a corresponding ClassFile structure, as defined in the Java
+ * A {@link AbstractClassVisitor} that generates a corresponding ClassFile structure, as defined in the Java
  * Virtual Machine Specification (JVMS). It can be used alone, to generate a Java class "from
- * scratch", or with one or more {@link ClassReader} and adapter {@link ClassVisitor} to generate a
+ * scratch", or with one or more {@link ClassReader} and adapter {@link AbstractClassVisitor} to generate a
  * modified class from one or more existing Java classes.
  *
  * @author Eric Bruneton
  * @see <a href="https:
  */
-public class ClassWriter extends ClassVisitor {
+public class AbstractClassWriter extends AbstractClassVisitor {
 
   /**
    * A flag to automatically compute the maximum stack size and the maximum number of local
@@ -28,7 +28,7 @@ public class ClassWriter extends ClassVisitor {
    * bytecode instructions in between. If stack map frames are not present or must be recomputed,
    * used {@link #COMPUTE_FRAMES} instead.
    *
-   * @see #ClassWriter(int)
+   * @see #AbstractClassWriter(int)
    */
   public static final int COMPUTE_MAXS = 1;
 
@@ -39,7 +39,7 @@ public class ClassWriter extends ClassVisitor {
    * MethodVisitor#visitMaxs} method are also ignored and recomputed from the bytecode. In other
    * words, {@link #COMPUTE_FRAMES} implies {@link #COMPUTE_MAXS}.
    *
-   * @see #ClassWriter(int)
+   * @see #AbstractClassWriter(int)
    */
   public static final int COMPUTE_FRAMES = 2;
 
@@ -199,22 +199,19 @@ public class ClassWriter extends ClassVisitor {
    */
   private int compute;
 
-  
-  
-  
 
   /**
-   * Constructs a new {@link ClassWriter} object.
+   * Constructs a new {@link AbstractClassWriter} object.
    *
    * @param flags option flags that can be used to modify the default behavior of this class. Must
-   *     be zero or more of {@link #COMPUTE_MAXS} and {@link #COMPUTE_FRAMES}.
+   *              be zero or more of {@link #COMPUTE_MAXS} and {@link #COMPUTE_FRAMES}.
    */
-  public ClassWriter(final int flags) {
+  public AbstractClassWriter(final int flags) {
     this(null, flags);
   }
 
   /**
-   * Constructs a new {@link ClassWriter} object and enables optimizations for "mostly add" bytecode
+   * Constructs a new {@link AbstractClassWriter} object and enables optimizations for "mostly add" bytecode
    * transformations. These optimizations are the following:
    *
    * <ul>
@@ -226,18 +223,18 @@ public class ClassWriter extends ClassVisitor {
    *       original class bytecode (i.e. without emitting visit events for all the method
    *       instructions), which saves a <i>lot</i> of time. Untransformed methods are detected by
    *       the fact that the {@link ClassReader} receives {@link MethodVisitor} objects that come
-   *       from a {@link ClassWriter} (and not from any other {@link ClassVisitor} instance).
+   *       from a {@link AbstractClassWriter} (and not from any other {@link AbstractClassVisitor} instance).
    * </ul>
    *
    * @param classReader the {@link ClassReader} used to read the original class. It will be used to
-   *     copy the entire constant pool and bootstrap methods from the original class and also to
-   *     copy other fragments of original bytecode where applicable.
-   * @param flags option flags that can be used to modify the default behavior of this class. Must
-   *     be zero or more of {@link #COMPUTE_MAXS} and {@link #COMPUTE_FRAMES}. <i>These option flags
-   *     do not affect methods that are copied as is in the new class. This means that neither the
-   *     maximum stack size nor the stack frames will be computed for these methods</i>.
+   *                    copy the entire constant pool and bootstrap methods from the original class and also to
+   *                    copy other fragments of original bytecode where applicable.
+   * @param flags       option flags that can be used to modify the default behavior of this class. Must
+   *                    be zero or more of {@link #COMPUTE_MAXS} and {@link #COMPUTE_FRAMES}. <i>These option flags
+   *                    do not affect methods that are copied as is in the new class. This means that neither the
+   *                    maximum stack size nor the stack frames will be computed for these methods</i>.
    */
-  public ClassWriter(final ClassReader classReader, final int flags) {
+  public AbstractClassWriter(final ClassReader classReader, final int flags) {
     super(/* latest api = */ Opcodes.ASM9);
     this.flags = flags;
     symbolTable = classReader == null ? new SymbolTable(this) : new SymbolTable(this, classReader);
@@ -1042,7 +1039,7 @@ public class ClassWriter extends ClassVisitor {
 
   /**
    * Returns the {@link ClassLoader} to be used by the default implementation of {@link
-   * #getCommonSuperClass(String, String)}, that of this {@link ClassWriter}'s runtime type by
+   * #getCommonSuperClass(String, String)}, that of this {@link AbstractClassWriter}'s runtime type by
    * default.
    *
    * @return ClassLoader

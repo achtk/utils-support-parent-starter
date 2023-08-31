@@ -115,7 +115,7 @@ public abstract class AbstractCommonParserSettings<F extends Format> extends Abs
      * @see com.chua.common.support.file.univocity.parsers.common.processor.ObjectRowListProcessor
      * @see com.chua.common.support.file.univocity.parsers.common.processor.MasterDetailProcessor
      * @see com.chua.common.support.file.univocity.parsers.common.processor.MasterDetailListProcessor
-     * @see com.chua.common.support.file.univocity.parsers.common.processor.BeanProcessor
+     * @see com.chua.common.support.file.univocity.parsers.common.processor.AbstractBeanProcessor
      * @see com.chua.common.support.file.univocity.parsers.common.processor.BeanListProcessor
      */
     public RowProcessor getRowProcessor() {
@@ -135,9 +135,9 @@ public abstract class AbstractCommonParserSettings<F extends Format> extends Abs
      * @see com.chua.common.support.file.univocity.parsers.common.processor.ObjectRowListProcessor
      * @see com.chua.common.support.file.univocity.parsers.common.processor.MasterDetailProcessor
      * @see com.chua.common.support.file.univocity.parsers.common.processor.MasterDetailListProcessor
-     * @see com.chua.common.support.file.univocity.parsers.common.processor.BeanProcessor
+     * @see com.chua.common.support.file.univocity.parsers.common.processor.AbstractBeanProcessor
      * @see com.chua.common.support.file.univocity.parsers.common.processor.BeanListProcessor
-     *  Use the {@link #setProcessor(Processor)} method as it allows format-specific processors to be built to work with different implementations of
+     * Use the {@link #setProcessor(Processor)} method as it allows format-specific processors to be built to work with different implementations of
      * {@link AbstractContext}.
      * Implementations based on {@link RowProcessor} allow only parsers who provide a {@link ParsingContext} to be used.
      */

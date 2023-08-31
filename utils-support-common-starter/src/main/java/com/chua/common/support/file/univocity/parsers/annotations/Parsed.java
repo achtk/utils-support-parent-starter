@@ -17,7 +17,7 @@ package com.chua.common.support.file.univocity.parsers.annotations;
 
 import com.chua.common.support.file.univocity.parsers.annotations.helpers.AnnotationHelper;
 import com.chua.common.support.file.univocity.parsers.common.AbstractCommonParserSettings;
-import com.chua.common.support.file.univocity.parsers.common.processor.BeanProcessor;
+import com.chua.common.support.file.univocity.parsers.common.processor.AbstractBeanProcessor;
 import com.chua.common.support.file.univocity.parsers.common.processor.BeanWriterProcessor;
 import com.chua.common.support.file.univocity.parsers.conversions.BigDecimalConversion;
 import com.chua.common.support.file.univocity.parsers.conversions.Conversion;
@@ -30,13 +30,13 @@ import java.lang.annotation.*;
  * of the existing {@link Conversion} implementations in package {@link com.chua.common.support.file.univocity.parsers.conversions}.
  *
  *
- * <p>Commonly used for java beans processed using {@link BeanProcessor} and/or {@link BeanWriterProcessor}
+ * <p>Commonly used for java beans processed using {@link AbstractBeanProcessor} and/or {@link BeanWriterProcessor}
  * <p><i>Implementation note:</i> All annotations in @Parsed fields are processed by {@link AnnotationHelper}
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
  * @see Conversion
  * @see Conversions
- * @see BeanProcessor
+ * @see AbstractBeanProcessor
  * @see BeanWriterProcessor
  * @see AnnotationHelper
  */

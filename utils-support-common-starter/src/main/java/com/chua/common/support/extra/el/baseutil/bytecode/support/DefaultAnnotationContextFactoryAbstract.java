@@ -8,20 +8,18 @@ import java.lang.reflect.Method;
 import java.util.List;
 /**
  * 基础类
+ *
  * @author CH
  */
-public class DefaultAnnotationContextFactory extends CacheableAnnotationContextFactory
-{
+public class DefaultAnnotationContextFactoryAbstract extends AbstractCacheableAnnotationContextFactory {
     @Override
-    protected AnnotationContext build(String resourceName, ClassLoader classLoader)
-    {
+    protected AnnotationContext build(String resourceName, ClassLoader classLoader) {
         List<AnnotationMetadata> annotationMetadataList = BytecodeUtil.findAnnotationsOnClass(resourceName, classLoader);
         return new DefaultAnnotationContext(annotationMetadataList);
     }
 
     @Override
-    protected AnnotationContext build(Method method, ClassLoader classLoader)
-    {
+    protected AnnotationContext build(Method method, ClassLoader classLoader) {
         List<AnnotationMetadata> annotationsOnMethod = BytecodeUtil.findAnnotationsOnMethod(method, classLoader);
         return new DefaultAnnotationContext(annotationsOnMethod);
     }

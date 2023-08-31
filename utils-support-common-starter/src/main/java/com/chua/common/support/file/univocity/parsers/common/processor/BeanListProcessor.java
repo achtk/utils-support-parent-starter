@@ -1,15 +1,15 @@
 package com.chua.common.support.file.univocity.parsers.common.processor;
 
+import com.chua.common.support.file.univocity.parsers.common.AbstractContext;
 import com.chua.common.support.file.univocity.parsers.common.AbstractParser;
 import com.chua.common.support.file.univocity.parsers.common.AbstractWriter;
-import com.chua.common.support.file.univocity.parsers.common.AbstractContext;
 import com.chua.common.support.file.univocity.parsers.common.ParsingContext;
 import com.chua.common.support.file.univocity.parsers.common.processor.core.AbstractBeanListProcessor;
 
 import java.util.List;
 
 /**
- * A convenience {@link BeanProcessor} implementation for storing all java objects generated form the parsed input into a list.
+ * A convenience {@link AbstractBeanProcessor} implementation for storing all java objects generated form the parsed input into a list.
  * A typical use case of this class will be:
  *
  * <hr><blockquote><pre>{@code
@@ -22,7 +22,7 @@ import java.util.List;
  *
  * @param <T> the annotated class type.
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
- * @see BeanProcessor
+ * @see AbstractBeanProcessor
  * @see RowProcessor
  * @see AbstractParser
  * @see AbstractBeanListProcessor

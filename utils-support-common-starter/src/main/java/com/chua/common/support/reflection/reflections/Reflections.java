@@ -123,7 +123,7 @@ public class Reflections implements NameHelper {
      *     .forPackage(prefix)
      *     .setScanners(scanners))
      * }</pre>
-     * <p>uses {@link ClasspathHelper#forPackage(String, ClassLoader...)} to resolve urls from given {@code prefix}
+     * <p>uses {@link AbstractClasspathHelper#forPackage(String, ClassLoader...)} to resolve urls from given {@code prefix}
      * <p>optional {@code scanners} defaults to {@link Scanners#TypesAnnotated} and {@link Scanners#SubTypes}
      */
     public Reflections(String prefix, ResourceScanner... resourceScanners) {
@@ -254,7 +254,7 @@ public class Reflections implements NameHelper {
      * <i>prefer using a designated directory (for example META-INF/reflections but not just META-INF), so that collect can work much faster</i>
      */
     public static Reflections collect(String packagePrefix, Predicate<String> resourceNameFilter, Serializer serializer) {
-        Collection<URL> urls = ClasspathHelper.forPackage(packagePrefix);
+        Collection<URL> urls = AbstractClasspathHelper.forPackage(packagePrefix);
         Iterable<Vfs.VfsFile> files = Vfs.findFiles(urls, packagePrefix, resourceNameFilter);
         Reflections reflections = new Reflections();
         StreamSupport.stream(files.spliterator(), false)

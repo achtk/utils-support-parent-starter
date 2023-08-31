@@ -1,6 +1,6 @@
 package com.chua.common.support.reflection.reflections;
 
-import com.chua.common.support.reflection.reflections.util.ClasspathHelper;
+import com.chua.common.support.reflection.reflections.util.AbstractClasspathHelper;
 import com.chua.common.support.reflection.reflections.util.QueryFunction;
 import com.chua.common.support.reflection.reflections.util.ReflectionUtilsPredicates;
 import com.chua.common.support.reflection.reflections.util.UtilQueryBuilder;
@@ -182,7 +182,7 @@ public abstract class ReflectionUtils extends ReflectionUtilsPredicates {
      * query url resources using {@link ClassLoader#getResources(String)} <pre>{@code get(Resources.with(name)) -> Set<URL> }</pre>
      */
     public static final UtilQueryBuilder<String, URL> RESOURCES =
-            element -> ctx -> new HashSet<>(ClasspathHelper.forResource(element));
+            element -> ctx -> new HashSet<>(AbstractClasspathHelper.forResource(element));
 
     public static <T extends AnnotatedElement> UtilQueryBuilder<AnnotatedElement, T> extendType() {
         return element -> {

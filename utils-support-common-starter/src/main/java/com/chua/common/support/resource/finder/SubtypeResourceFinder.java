@@ -2,7 +2,7 @@ package com.chua.common.support.resource.finder;
 
 import com.chua.common.support.reflection.reflections.Reflections;
 import com.chua.common.support.reflection.reflections.scanners.Scanners;
-import com.chua.common.support.reflection.reflections.util.ClasspathHelper;
+import com.chua.common.support.reflection.reflections.util.AbstractClasspathHelper;
 import com.chua.common.support.reflection.reflections.util.ConfigurationBuilder;
 import com.chua.common.support.resource.ResourceConfiguration;
 import com.chua.common.support.resource.resource.ClassResource;
@@ -57,7 +57,7 @@ public class SubtypeResourceFinder extends AbstractResourceFinder {
         if (URL_PROTOCOL_FILE.equals(resource.getProtocol())) {
             configurationBuilder.setUrls(resource);
         } else {
-            configurationBuilder.filterInputsBy(s -> s.startsWith(name)).setUrls(ClasspathHelper.forPackage(name, classLoader));
+            configurationBuilder.filterInputsBy(s -> s.startsWith(name)).setUrls(AbstractClasspathHelper.forPackage(name, classLoader));
         }
         return new Reflections(configurationBuilder);
     }

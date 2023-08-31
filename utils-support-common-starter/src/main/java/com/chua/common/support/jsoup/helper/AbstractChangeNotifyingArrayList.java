@@ -8,8 +8,8 @@ import java.util.Collection;
  *
  * @author Administrator
  */
-public abstract class ChangeNotifyingArrayList<E> extends ArrayList<E> {
-    public ChangeNotifyingArrayList(int initialCapacity) {
+public abstract class AbstractChangeNotifyingArrayList<E> extends ArrayList<E> {
+    public AbstractChangeNotifyingArrayList(int initialCapacity) {
         super(initialCapacity);
     }
 

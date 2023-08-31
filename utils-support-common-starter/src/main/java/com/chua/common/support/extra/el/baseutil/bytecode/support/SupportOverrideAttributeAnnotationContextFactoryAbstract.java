@@ -15,8 +15,8 @@ import java.util.List;
  *
  * @author CH
  */
-public class SupportOverrideAttributeAnnotationContextFactory extends CacheableAnnotationContextFactory {
-    protected SupportOverrideAttributeAnnotationContextFactory() {
+public class SupportOverrideAttributeAnnotationContextFactoryAbstract extends AbstractCacheableAnnotationContextFactory {
+    protected SupportOverrideAttributeAnnotationContextFactoryAbstract() {
     }
 
     private AnnotationContext castToSupportOverrideContext(List<AnnotationMetadata> annotationsOnClass) {

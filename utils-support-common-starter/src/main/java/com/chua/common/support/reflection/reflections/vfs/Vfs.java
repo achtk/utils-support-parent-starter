@@ -2,7 +2,7 @@ package com.chua.common.support.reflection.reflections.vfs;
 
 import com.chua.common.support.reflection.reflections.Reflections;
 import com.chua.common.support.reflection.reflections.ReflectionsException;
-import com.chua.common.support.reflection.reflections.util.ClasspathHelper;
+import com.chua.common.support.reflection.reflections.util.AbstractClasspathHelper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -387,7 +387,7 @@ public abstract class Vfs {
 
             @Override
             public Dir createDir(URL url) throws Exception {
-                return fromURL((URL) ClasspathHelper.contextClassLoader().
+                return fromURL((URL) AbstractClasspathHelper.contextClassLoader().
                         loadClass("org.eclipse.core.runtime.FileLocator").getMethod("resolve", URL.class).invoke(null, url));
             }
         },

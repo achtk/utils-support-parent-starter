@@ -2,7 +2,7 @@ package com.chua.common.support.spi.finder;
 
 import com.chua.common.support.reflection.reflections.Reflections;
 import com.chua.common.support.reflection.reflections.scanners.Scanners;
-import com.chua.common.support.reflection.reflections.util.ClasspathHelper;
+import com.chua.common.support.reflection.reflections.util.AbstractClasspathHelper;
 import com.chua.common.support.reflection.reflections.util.ConfigurationBuilder;
 import com.chua.common.support.spi.ServiceDefinition;
 
@@ -80,7 +80,7 @@ public class SamePackageServiceFinder extends AbstractServiceFinder {
                 public boolean test(String s) {
                     return s.startsWith(packageDirName);
                 }
-            }).setUrls(ClasspathHelper.forPackage(packageDirName, getClassLoader()));
+            }).setUrls(AbstractClasspathHelper.forPackage(packageDirName, getClassLoader()));
         }
         Reflections reflections = new Reflections(configurationBuilder);
         Set subTypesOf = reflections.getSubTypesOf(service);

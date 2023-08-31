@@ -1,6 +1,6 @@
 package com.chua.common.support.jsoup.nodes;
 
-import com.chua.common.support.jsoup.helper.ChangeNotifyingArrayList;
+import com.chua.common.support.jsoup.helper.AbstractChangeNotifyingArrayList;
 import com.chua.common.support.jsoup.helper.Validate;
 import com.chua.common.support.jsoup.parser.ParseSettings;
 import com.chua.common.support.jsoup.parser.Tag;
@@ -84,7 +84,7 @@ public class Element extends Node {
 
     protected List<Node> ensureChildNodes() {
         if (childNodes == EmptyNodes) {
-            childNodes = new NodeList(this, 4);
+            childNodes = new NodeListAbstract(this, 4);
         }
         return childNodes;
     }
@@ -1811,7 +1811,7 @@ public class Element extends Node {
     protected Element doClone( Node parent) {
         Element clone = (Element) super.doClone(parent);
         clone.attributes = attributes != null ? attributes.clone() : null;
-        clone.childNodes = new NodeList(clone, childNodes.size());
+        clone.childNodes = new NodeListAbstract(clone, childNodes.size());
         clone.childNodes.addAll(childNodes); // the children then get iterated and cloned in Node.clone
 
         return clone;
@@ -1871,10 +1871,10 @@ public class Element extends Node {
         return (Element) super.filter(nodeFilter);
     }
 
-    private static final class NodeList extends ChangeNotifyingArrayList<Node> {
+    private static final class NodeListAbstract extends AbstractChangeNotifyingArrayList<Node> {
         private final Element owner;
 
-        NodeList(Element owner, int initialCapacity) {
+        NodeListAbstract(Element owner, int initialCapacity) {
             super(initialCapacity);
             this.owner = owner;
         }

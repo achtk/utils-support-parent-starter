@@ -35,7 +35,7 @@ import java.util.List;
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
  * @see AbstractParser
  * @see RowProcessor
- * @see BeanProcessor
+ * @see AbstractBeanProcessor
  * @see MultiBeanProcessor
  */
 public class MultiBeanListProcessor extends AbstractMultiBeanListProcessor<ParsingContext> implements RowProcessor {

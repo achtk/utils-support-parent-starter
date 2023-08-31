@@ -7,17 +7,19 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 /**
  * 基础类
+ *
  * @author CH
  */
-public abstract class CacheableAnnotationContextFactory implements AnnotationContextFactory {
+public abstract class AbstractCacheableAnnotationContextFactory implements AnnotationContextFactory {
     protected Map<Method, AnnotationContext> methodAnnotationContextStore = new ConcurrentHashMap<>();
     protected Map<String, AnnotationContext> resourceNameAnnotationContextStore = new ConcurrentHashMap<>();
     protected Map<Field, AnnotationContext> fieldAnnotationContextStore = new ConcurrentHashMap<>();
 
     /**
      * 构建上下文
+     *
      * @param resourceName 名称
-     * @param classLoader 加载器
+     * @param classLoader  加载器
      * @return 结果
      */
     protected abstract AnnotationContext build(String resourceName, ClassLoader classLoader);

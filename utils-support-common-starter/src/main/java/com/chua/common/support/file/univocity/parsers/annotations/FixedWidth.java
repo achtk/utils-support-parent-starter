@@ -15,7 +15,7 @@
  ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.annotations;
 
-import com.chua.common.support.file.univocity.parsers.common.processor.BeanProcessor;
+import com.chua.common.support.file.univocity.parsers.common.processor.AbstractBeanProcessor;
 import com.chua.common.support.file.univocity.parsers.common.processor.BeanWriterProcessor;
 import com.chua.common.support.file.univocity.parsers.fixed.*;
 
@@ -25,7 +25,7 @@ import java.lang.annotation.*;
  * The {@code @FixedWidth} annotation, along with the {@link Parsed} annotation, allows users to configure the length,
  * alignment and padding of fields parsed/written using the {@link FixedWidthParser} and {@link FixedWidthWriter}
  *
- * <p>Commonly used for java beans processed using {@link BeanProcessor} and/or {@link BeanWriterProcessor}
+ * <p>Commonly used for java beans processed using {@link AbstractBeanProcessor} and/or {@link BeanWriterProcessor}
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
  * @see FixedWidthFields
@@ -33,7 +33,7 @@ import java.lang.annotation.*;
  * @see FixedWidthWriter
  * @see FixedWidthParserSettings
  * @see FixedWidthWriterSettings
- * @see BeanProcessor
+ * @see AbstractBeanProcessor
  * @see BeanWriterProcessor
  */
 @Retention(RetentionPolicy.RUNTIME)

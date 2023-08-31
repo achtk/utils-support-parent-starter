@@ -58,7 +58,7 @@ public interface AnnotationContext {
 
     List<AnnotationMetadata> listAnnotationMetadata(Class<? extends Annotation> annotationType);
 
-    SupportOverrideAttributeAnnotationContextFactory ANNOTATION_CONTEXT_FACTORY = new SupportOverrideAttributeAnnotationContextFactory();
+    SupportOverrideAttributeAnnotationContextFactoryAbstract ANNOTATION_CONTEXT_FACTORY = new SupportOverrideAttributeAnnotationContextFactoryAbstract();
 
     /**
      * 获取上下文

@@ -802,7 +802,7 @@ public abstract class AbstractRoutines<P extends AbstractCommonParserSettings<?>
 	public <T> IterableResult<T, ParsingContext> iterate(final Class<T> beanType, final Reader input) {
 		final Object[] beanHolder = new Object[1];
 
-		BeanProcessor<T> processor = new BeanProcessor<T>(beanType) {
+		AbstractBeanProcessor<T> processor = new AbstractBeanProcessor<T>(beanType) {
 			@Override
 			public void beanProcessed(T bean, ParsingContext context) {
 				beanHolder[0] = bean;

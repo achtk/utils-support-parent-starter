@@ -188,7 +188,7 @@ public class TypeReference {
    * Constructs a new TypeReference.
    *
    * @param typeRef the int encoded value of the type reference, as received in a visit method
-   *     related to type annotations, such as {@link ClassVisitor#visitTypeAnnotation}.
+   *     related to type annotations, such as {@link AbstractClassVisitor#visitTypeAnnotation}.
    */
   public TypeReference(final int typeRef) {
     this.targetTypeAndInfo = typeRef;

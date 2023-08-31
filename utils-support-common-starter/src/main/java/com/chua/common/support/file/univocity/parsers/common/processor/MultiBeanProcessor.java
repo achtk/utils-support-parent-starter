@@ -34,7 +34,7 @@ import com.chua.common.support.file.univocity.parsers.common.processor.core.Abst
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
  * @see AbstractParser
  * @see RowProcessor
- * @see BeanProcessor
+ * @see AbstractBeanProcessor
  */
 public abstract class MultiBeanProcessor extends AbstractMultiBeanProcessor<ParsingContext> implements RowProcessor {
 

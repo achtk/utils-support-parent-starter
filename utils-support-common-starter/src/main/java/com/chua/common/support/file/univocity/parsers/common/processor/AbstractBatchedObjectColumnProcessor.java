@@ -18,7 +18,6 @@ package com.chua.common.support.file.univocity.parsers.common.processor;
 import com.chua.common.support.file.univocity.parsers.common.AbstractParser;
 import com.chua.common.support.file.univocity.parsers.common.ParsingContext;
 import com.chua.common.support.file.univocity.parsers.common.processor.core.AbstractBatchedColumnProcessor;
-import com.chua.common.support.file.univocity.parsers.common.processor.core.AbstractBatchedObjectColumnProcessor;
 import com.chua.common.support.file.univocity.parsers.conversions.Conversion;
 
 /**
@@ -40,15 +39,15 @@ import com.chua.common.support.file.univocity.parsers.conversions.Conversion;
  * @see AbstractBatchedColumnProcessor
  * @see Conversion
  */
-public abstract class BatchedObjectColumnProcessor extends AbstractBatchedObjectColumnProcessor<ParsingContext> implements RowProcessor {
+public abstract class AbstractBatchedObjectColumnProcessor extends com.chua.common.support.file.univocity.parsers.common.processor.core.AbstractBatchedObjectColumnProcessor<ParsingContext> implements RowProcessor {
 
 
 	/**
-	 * Constructs a batched column processor configured to invoke the {@link #batchesProcessed} method after a given number of rows has been processed.
+	 * Constructs a batched column processor configured to invoke the {@link #AbstractBatchedObjectColumnProcessor} method after a given number of rows has been processed.
 	 *
 	 * @param rowsPerBatch the number of rows to process in each batch.
 	 */
-	public BatchedObjectColumnProcessor(int rowsPerBatch) {
+	public AbstractBatchedObjectColumnProcessor(int rowsPerBatch) {
 		super(rowsPerBatch);
 	}
 

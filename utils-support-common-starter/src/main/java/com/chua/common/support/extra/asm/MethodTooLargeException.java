@@ -28,7 +28,7 @@
 package com.chua.common.support.extra.asm;
 
 /**
- * Exception thrown when the Code attribute of a method produced by a {@link ClassWriter} is too
+ * Exception thrown when the Code attribute of a method produced by a {@link AbstractClassWriter} is too
  * large.
  *
  * @author Jason Zaugg

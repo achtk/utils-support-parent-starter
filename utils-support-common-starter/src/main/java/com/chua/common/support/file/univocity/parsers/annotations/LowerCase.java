@@ -15,7 +15,7 @@
  ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.annotations;
 
-import com.chua.common.support.file.univocity.parsers.common.processor.BeanProcessor;
+import com.chua.common.support.file.univocity.parsers.common.processor.AbstractBeanProcessor;
 import com.chua.common.support.file.univocity.parsers.common.processor.BeanWriterProcessor;
 import com.chua.common.support.file.univocity.parsers.conversions.Conversion;
 import com.chua.common.support.file.univocity.parsers.conversions.Conversions;
@@ -26,12 +26,12 @@ import java.lang.annotation.*;
 /**
  * Indicates the String value of a field must be converted to lower case using {@link LowerCaseConversion}.
  *
- * <p>Commonly used for java beans processed using {@link BeanProcessor} and/or {@link BeanWriterProcessor}
+ * <p>Commonly used for java beans processed using {@link AbstractBeanProcessor} and/or {@link BeanWriterProcessor}
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
  * @see Conversion
  * @see Conversions
- * @see BeanProcessor
+ * @see AbstractBeanProcessor
  * @see BeanWriterProcessor
  */
 @Retention(RetentionPolicy.RUNTIME)
