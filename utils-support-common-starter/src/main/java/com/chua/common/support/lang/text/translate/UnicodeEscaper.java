@@ -6,10 +6,13 @@ import java.io.Writer;
 
 /**
  * Translates code points to their Unicode escaped value.
+ *
  * @author Administrator
  * @since 1.0
  */
 public class UnicodeEscaper extends AbstractCodePointTranslator {
+
+    private static final int X4F = 0xffff;
 
     /**
      * Constructs a {@code UnicodeEscaper} above the specified value (exclusive).
@@ -114,7 +117,7 @@ public class UnicodeEscaper extends AbstractCodePointTranslator {
             return false;
         }
 
-        if (codePoint > 0xffff) {
+        if (codePoint > X4F) {
             writer.write(toUtf16Escape(codePoint));
         } else {
             writer.write("\\u");

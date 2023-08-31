@@ -5,26 +5,25 @@ import com.chua.common.support.extra.el.expression.token.Token;
 import com.chua.common.support.extra.el.expression.token.ValueResult;
 
 import java.util.Map;
+
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_DOT_CHAR;
+
 /**
  * 基础类
+ *
  * @author CH
  */
-public class NumberNode implements CalculateNode
-{
+public class NumberNode implements CalculateNode {
     private Number value;
 
     public NumberNode(String literals)
     {
-        if (literals.indexOf('.') > -1)
-        {
+        if (literals.indexOf(SYMBOL_DOT_CHAR) > -1) {
             value = Float.valueOf(literals);
-            if (Float.isInfinite((Float) value))
-            {
+            if (Float.isInfinite((Float) value)) {
                 value = Double.valueOf(literals);
             }
-        }
-        else
-        {
+        } else {
             try
             {
                 value = Integer.valueOf(literals);

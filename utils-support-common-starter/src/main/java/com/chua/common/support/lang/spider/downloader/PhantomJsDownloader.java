@@ -20,6 +20,7 @@ import java.io.InputStreamReader;
  */
 public class PhantomJsDownloader extends AbstractDownloader {
     private static final Logger logger = LoggerFactory.getLogger(PhantomJsDownloader.class);
+    private static final CharSequence HTTP_FAILURE = "HTTP request failed";
     private static String crawlJsPath;
     private static String phantomJsCommand = "phantomjs"; 
 
@@ -94,7 +95,7 @@ public class PhantomJsDownloader extends AbstractDownloader {
         Page page = Page.fail();
         try {
             String content = getPage(request);
-            if (!content.contains("HTTP request failed")) {
+            if (!content.contains(HTTP_FAILURE)) {
                 page.setDownloadSuccess(true);
                 page.setRawText(content);
                 page.setUrl(new PlainText(request.getUrl()));

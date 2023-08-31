@@ -28,6 +28,7 @@ import java.util.List;
  */
 public abstract class PathToken {
 
+    private static final String SYMBOL = "[-1]";
     private PathToken prev;
     private PathToken next;
     private Boolean definite = null;
@@ -86,7 +87,7 @@ public abstract class PathToken {
             PathRef pathRef = ctx.forUpdate() ? PathRef.create(model, property) : PathRef.NO_OP;
             if (isLeaf()) {
                 String idx = "[" + String.valueOf(upstreamArrayIndex) + "]";
-                if ("[-1]".equals(idx) || ctx.getRoot().getTail().prev().getPathFragment().equals(idx)) {
+                if (SYMBOL.equals(idx) || ctx.getRoot().getTail().prev().getPathFragment().equals(idx)) {
                     ctx.addResult(evalPath, pathRef, propertyVal);
                 }
             } else {

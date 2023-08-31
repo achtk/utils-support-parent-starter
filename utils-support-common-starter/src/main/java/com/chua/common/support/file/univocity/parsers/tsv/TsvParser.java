@@ -17,6 +17,9 @@ package com.chua.common.support.file.univocity.parsers.tsv;
 
 import com.chua.common.support.file.univocity.parsers.common.AbstractParser;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_SPACE_CHAR;
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_T_CHAR;
+
 /**
  * A very fast TSV parser implementation.
  *
@@ -59,8 +62,8 @@ public class TsvParser extends AbstractParser<TsvParserSettings> {
 	 */
 	@Override
 	protected void parseRecord() {
-		if (ignoreLeadingWhitespace && ch != '\t' && ch <= ' ' && whitespaceRangeStart < ch) {
-			ch = input.skipWhitespace(ch, '\t', escapeChar);
+		if (ignoreLeadingWhitespace && ch != SYMBOL_T_CHAR && ch <= SYMBOL_SPACE_CHAR && whitespaceRangeStart < ch) {
+			ch = input.skipWhitespace(ch, SYMBOL_T_CHAR, escapeChar);
 		}
 
 		while (ch != newLine) {
@@ -75,18 +78,18 @@ public class TsvParser extends AbstractParser<TsvParserSettings> {
 	}
 
 	private void parseField() {
-		if (ignoreLeadingWhitespace && ch != '\t' && ch <= ' ' && whitespaceRangeStart < ch) {
-			ch = input.skipWhitespace(ch, '\t', escapeChar);
+		if (ignoreLeadingWhitespace && ch != SYMBOL_T_CHAR && ch <= SYMBOL_SPACE_CHAR && whitespaceRangeStart < ch) {
+			ch = input.skipWhitespace(ch, SYMBOL_T_CHAR, escapeChar);
 		}
 
-		if (ch == '\t') {
+		if (ch == SYMBOL_T_CHAR) {
 			output.emptyParsed();
 		} else {
-			while (ch != '\t' && ch != newLine) {
+			while (ch != SYMBOL_T_CHAR && ch != newLine) {
 				if (ch == escapeChar) {
 					ch = input.nextChar();
 					if (ch == 't' || ch == escapedTabChar) {
-						output.appender.append('\t');
+						output.appender.append(SYMBOL_T_CHAR);
 					} else if (ch == 'n') {
 						output.appender.append('\n');
 					} else if (ch == '\\') {

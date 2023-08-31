@@ -290,7 +290,9 @@ public interface Repository {
 
     /**
      * 远程路径资源
+     *
      * @param url 地址
+     * @return this
      */
     Repository remoteResource(String url);
 }

@@ -3,6 +3,8 @@ package com.chua.common.support.view;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import static com.chua.common.support.constant.CommonConstant.DOWNLOAD;
+
 /**
  * 视图
  *
@@ -23,7 +25,7 @@ public class ViewPreview {
      */
     public static ViewPreview of(String mode) {
         ViewPreview viewPreview = new ViewPreview();
-        if ("download".equalsIgnoreCase(mode)) {
+        if (DOWNLOAD.equalsIgnoreCase(mode)) {
             viewPreview.setContentType(OCTET_STREAM);
         }
         return viewPreview;

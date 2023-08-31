@@ -21,6 +21,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_ASTERISK;
+
 /**
  * 系统命令
  *
@@ -157,7 +159,7 @@ public class SystemCommand {
     }
 
     private String ansi(String name, String s) {
-        if (name.contains("*")) {
+        if (name.contains(SYMBOL_ASTERISK)) {
             return name;
         }
         return name.replace(s, AnsiOutput.toString(AnsiColor.RED, s));
@@ -166,8 +168,8 @@ public class SystemCommand {
     final static PathMatcher MATCHER = new AntPathMatcher();
 
     private boolean isMatch(String s, String name) {
-        if (name.contains("*")) {
-            return MATCHER.match("*" + name + "*", s);
+        if (name.contains(SYMBOL_ASTERISK)) {
+            return MATCHER.match(SYMBOL_ASTERISK + name + SYMBOL_ASTERISK, s);
         }
         return s.contains(name);
     }

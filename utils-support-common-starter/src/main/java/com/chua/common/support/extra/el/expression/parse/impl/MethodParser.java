@@ -11,15 +11,20 @@ import com.chua.common.support.extra.el.expression.util.Functions;
 import com.chua.common.support.utils.CharUtils;
 
 import java.util.Deque;
+
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_DOT_CHAR;
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_LEFT_BRACKETS_CHAR;
+
 /**
  * 基础类
+ *
  * @author CH
  */
 public class MethodParser extends NodeParser {
 
     @Override
     public int parse(String el, int offset, Deque<CalculateNode> nodes, int function, Invoker next) {
-        if ('.' != getChar(offset, el)) {
+        if (SYMBOL_DOT_CHAR != getChar(offset, el)) {
             return next.parse(el, offset, nodes, function);
         }
         int origin = offset;
@@ -29,7 +34,7 @@ public class MethodParser extends NodeParser {
             offset++;
         }
         // 该情况意味着是属性
-        if (c != '(') {
+        if (c != SYMBOL_LEFT_BRACKETS_CHAR) {
             return next.parse(el, offset, nodes, function);
         }
         String literals = el.substring(origin + 1, offset);

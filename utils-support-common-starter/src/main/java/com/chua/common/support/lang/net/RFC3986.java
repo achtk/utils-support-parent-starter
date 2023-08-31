@@ -3,6 +3,8 @@ package com.chua.common.support.lang.net;
 
 import com.chua.common.support.crypto.PercentCodec;
 
+import static com.chua.common.support.constant.CommonConstant.*;
+
 /**
  * rfc3986 : https://www.ietf.org/rfc/rfc3986.html 编码实现<br>
  * 定义见：https://www.ietf.org/rfc/rfc3986.html#appendix-A
@@ -85,15 +87,15 @@ public class RFC3986 {
         StringBuilder sb = new StringBuilder();
 
         // ALPHA
-        for (char c = 'A'; c <= 'Z'; c++) {
+        for (char c = LETTER_UPPERCASE_A; c <= LETTER_UPPERCASE_Z; c++) {
             sb.append(c);
         }
-        for (char c = 'a'; c <= 'z'; c++) {
+        for (char c = LETTER_LOWERCASE_A; c <= LETTER_LOWERCASE_Z; c++) {
             sb.append(c);
         }
 
         // DIGIT
-        for (char c = '0'; c <= '9'; c++) {
+        for (char c = LETTER_ZERO; c <= LETTER_NIGHT; c++) {
             sb.append(c);
         }
 

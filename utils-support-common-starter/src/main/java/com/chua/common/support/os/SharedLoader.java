@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.nio.file.Path;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_COMMA;
+
 /**
  * 动态链接库加载器
  *
@@ -15,7 +17,7 @@ public class SharedLoader {
     private Path libraryPath;
 
     private SharedLoader(String nativeLibraryName) {
-        for (String s : nativeLibraryName.split(",")) {
+        for (String s : nativeLibraryName.split(SYMBOL_COMMA)) {
             try {
                 System.loadLibrary(nativeLibraryName);
                 log.info("Loaded existing OpenCV library \"{}\" from library path.", nativeLibraryName);

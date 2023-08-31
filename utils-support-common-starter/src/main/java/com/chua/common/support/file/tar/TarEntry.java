@@ -9,7 +9,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Locale;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_LEFT_SLASH;
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_LEFT_SLASH_CHAR;
 import static com.chua.common.support.constant.NumberConstant.NUM_2;
+import static com.chua.common.support.constant.Projects.WINDOWS;
 
 /**
  * This class represents an entry in a Tar archive. It consists
@@ -107,6 +110,7 @@ public class TarEntry implements TarConstants {
      * Convert millis to seconds
      */
     public static final int MILLIS_PER_SECOND = 1000;
+    private static final CharSequence NETWARE = "netware";
     /**
      * The entry's name.
      */
@@ -282,8 +286,8 @@ public class TarEntry implements TarConstants {
             this.linkFlag = LF_DIR;
 
             int nameLength = normalizedName.length();
-            if (nameLength == 0 || normalizedName.charAt(nameLength - 1) != '/') {
-                this.name = normalizedName + "/";
+            if (nameLength == 0 || normalizedName.charAt(nameLength - 1) != SYMBOL_LEFT_SLASH_CHAR) {
+                this.name = normalizedName + SYMBOL_LEFT_SLASH;
             } else {
                 this.name = normalizedName;
             }
@@ -340,7 +344,7 @@ public class TarEntry implements TarConstants {
             // Strip off drive letters!
             // REVIEW Would a better check be "(File.separator == '\')"?
 
-            if (osname.startsWith("windows")) {
+            if (osname.startsWith(WINDOWS)) {
                 if (fileName.length() > NUM_2) {
                     char ch1 = fileName.charAt(0);
                     char ch2 = fileName.charAt(1);
@@ -352,7 +356,7 @@ public class TarEntry implements TarConstants {
                         fileName = fileName.substring(2);
                     }
                 }
-            } else if (osname.contains("netware")) {
+            } else if (osname.contains(NETWARE)) {
                 int colon = fileName.indexOf(':');
                 if (colon != -1) {
                     fileName = fileName.substring(colon + 1);
@@ -365,7 +369,7 @@ public class TarEntry implements TarConstants {
         // No absolute pathnames
         // Windows (and Posix?) paths can start with "\\NetworkDrive\",
         // so we loop on starting /'s.
-        while (!preserveLeadingSlashes && fileName.startsWith("/")) {
+        while (!preserveLeadingSlashes && fileName.startsWith(SYMBOL_LEFT_SLASH)) {
             fileName = fileName.substring(1);
         }
         return fileName;
@@ -1126,11 +1130,11 @@ public class TarEntry implements TarConstants {
                         : TarUtils.parseName(header, offset, PREFIXLEN, encoding);
                 // SunOS tar -E does not add / to directory names, so fix
                 // up to be consistent
-                if (isDirectory() && !name.endsWith("/")) {
-                    name += "/";
+                if (isDirectory() && !name.endsWith(SYMBOL_LEFT_SLASH)) {
+                    name += SYMBOL_LEFT_SLASH;
                 }
                 if (!prefix.isEmpty()) {
-                    name = prefix + "/" + name;
+                    name = prefix + SYMBOL_LEFT_SLASH + name;
                 }
             }
         }

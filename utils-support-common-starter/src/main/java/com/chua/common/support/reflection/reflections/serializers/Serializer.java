@@ -14,13 +14,27 @@ import java.io.InputStream;
 public interface Serializer {
     /**
      * reads the input stream into a new Reflections instance, populating it's store
+     *
+     * @param inputStream is
+     * @return ref
      */
     Reflections read(InputStream inputStream);
 
     /**
      * saves a Reflections instance into the given filename
+     *
+     * @param reflections ref
+     * @param filename    filename
+     * @return file
      */
     File save(Reflections reflections, String filename);
+
+    /**
+     * 预处理
+     *
+     * @param filename file name
+     * @return file
+     */
 
     static File prepareFile(String filename) {
         File file = new File(filename);

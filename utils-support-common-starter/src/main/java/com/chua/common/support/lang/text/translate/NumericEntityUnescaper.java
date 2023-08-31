@@ -9,8 +9,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
 
-import static com.chua.common.support.constant.CommonConstant.SYMBOL_HASH_CHAR;
+import static com.chua.common.support.constant.CommonConstant.*;
 import static com.chua.common.support.constant.NumberConstant.NUM_2;
+import static com.chua.common.support.constant.NumberConstant.XFFFF;
 
 /**
  * Translates XML numeric entities of the form &amp;#[xX]?\d+;? to
@@ -91,12 +92,12 @@ public class NumericEntityUnescaper extends AbstractCharSequenceTranslator {
     public int translate(final CharSequence input, final int index, final Writer writer) throws IOException {
         final int seqEnd = input.length();
         // Uses -2 to ensure there is something after the &#
-        if (input.charAt(index) == '&' && index < seqEnd - NUM_2 && input.charAt(index + 1) == SYMBOL_HASH_CHAR) {
+        if (input.charAt(index) == SYMBOL_AND_CHAR && index < seqEnd - NUM_2 && input.charAt(index + 1) == SYMBOL_HASH_CHAR) {
             int start = index + 2;
             boolean isHex = false;
 
             final char firstChar = input.charAt(start);
-            if (firstChar == 'x' || firstChar == 'X') {
+            if (firstChar == LETTER_LOWERCASE_X || firstChar == LETTER_UPPERCASE_X) {
                 start++;
                 isHex = true;
 
@@ -108,7 +109,7 @@ public class NumericEntityUnescaper extends AbstractCharSequenceTranslator {
 
             int end = start;
             // Note that this supports character codes without a ; on the end
-            while (end < seqEnd && (input.charAt(end) >= '0' && input.charAt(end) <= '9'
+            while (end < seqEnd && (input.charAt(end) >= LETTER_ZERO && input.charAt(end) <= LETTER_NIGHT
                     || input.charAt(end) >= 'a' && input.charAt(end) <= 'f'
                     || input.charAt(end) >= 'A' && input.charAt(end) <= 'F')) {
                 end++;
@@ -136,10 +137,10 @@ public class NumericEntityUnescaper extends AbstractCharSequenceTranslator {
                 return 0;
             }
 
-            if (entityValue > 0xFFFF) {
-                final char[] chrs = Character.toChars(entityValue);
-                writer.write(chrs[0]);
-                writer.write(chrs[1]);
+            if (entityValue > XFFFF) {
+                final char[] chars = Character.toChars(entityValue);
+                writer.write(chars[0]);
+                writer.write(chars[1]);
             } else {
                 writer.write(entityValue);
             }

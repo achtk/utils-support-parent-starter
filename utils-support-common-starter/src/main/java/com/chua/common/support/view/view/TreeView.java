@@ -6,7 +6,8 @@ import com.chua.common.support.utils.StringUtils;
 
 /**
  * 树形控件
- * @author  vlinux on 15/5/26.
+ *
+ * @author vlinux on 15/5/26.
  */
 public class TreeView implements View {
 
@@ -170,12 +171,18 @@ public class TreeView implements View {
     }
 
 
-
     /**
      * 遍历回调接口
      */
     private interface Callback {
-
+        /**
+         * 回调
+         *
+         * @param deep         深度
+         * @param isLast       是否末尾
+         * @param prefix       前缀
+         * @param treeViewNode 节点
+         */
         void callback(int deep, boolean isLast, String prefix, TreeViewNode treeViewNode);
 
     }

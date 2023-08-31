@@ -4,8 +4,7 @@ import com.alibaba.fastjson2.JSONException;
 
 import java.io.Reader;
 
-import static com.chua.common.support.constant.CommonConstant.SYMBOL_HASH;
-import static com.chua.common.support.constant.CommonConstant.SYMBOL_HASH_CHAR;
+import static com.chua.common.support.constant.CommonConstant.*;
 import static com.chua.common.support.file.xml.Xml.*;
 
 /**
@@ -94,7 +93,7 @@ public class XmlTokenizer extends XmlJsonTokener {
         if (c == 0) {
             return null;
         }
-        if (c == '<') {
+        if (c == LESS_THAN) {
             return LT;
         }
         sb = new StringBuilder();
@@ -154,7 +153,7 @@ public class XmlTokenizer extends XmlJsonTokener {
                 }
         if (e.charAt(0) == SYMBOL_HASH_CHAR) {
             int cp;
-            if (e.charAt(1) == 'x' || e.charAt(1) == 'X') {
+            if (e.charAt(1) == LETTER_LOWERCASE_X || e.charAt(1) == LETTER_UPPERCASE_X) {
                 cp = Integer.parseInt(e.substring(2), 16);
             } else {
                 cp = Integer.parseInt(e.substring(1));

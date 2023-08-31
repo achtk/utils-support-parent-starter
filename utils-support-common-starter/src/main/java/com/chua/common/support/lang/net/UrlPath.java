@@ -170,7 +170,7 @@ public class UrlPath {
      */
     private static String fixPath(CharSequence path) {
         Preconditions.checkNotNull(path, "Path segment must be not null!");
-        if ("/".contentEquals(path)) {
+        if (SYMBOL_LEFT_SLASH.contentEquals(path)) {
             return EMPTY;
         }
 

@@ -1,6 +1,5 @@
 package com.chua.common.support.function;
 
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 /**
@@ -14,6 +13,7 @@ public interface SafePredicate<T> extends Predicate<T> {
      * 获取数据
      *
      * @param t 参数
+     * @return bool
      */
     @Override
     default boolean test(T t) {
@@ -28,6 +28,7 @@ public interface SafePredicate<T> extends Predicate<T> {
      * 获取结果
      *
      * @param t 参数
+     * @return bool
      * @throws Throwable Throwable
      */
     boolean safeTest(T t) throws Throwable;

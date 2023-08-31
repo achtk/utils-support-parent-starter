@@ -22,6 +22,7 @@ public interface ServerProvider {
      * 创建服务端
      *
      * @param name 名称
+     * @param args 参数
      * @return 服务端
      */
     static Server create(String name, String[] args) {
@@ -35,6 +36,7 @@ public interface ServerProvider {
     /**
      * 创建服务端
      *
+     * @param args   参数
      * @param name   名称
      * @param option 配置
      * @return 服务端

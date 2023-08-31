@@ -9,7 +9,7 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.util.BitSet;
 
-import static com.chua.common.support.constant.CommonConstant.SYMBOL_SPACE_CHAR;
+import static com.chua.common.support.constant.CommonConstant.*;
 
 /**
  * UrlEncoder
@@ -354,10 +354,10 @@ public class UrlEncoder {
      * 增加安全字符[a-z][A-Z]
      */
     private void addAlpha() {
-        for (char i = 'a'; i <= 'z'; i++) {
+        for (char i = LETTER_LOWERCASE_A; i <= LETTER_LOWERCASE_Z; i++) {
             addSafeCharacter(i);
         }
-        for (char i = 'A'; i <= 'Z'; i++) {
+        for (char i = LETTER_UPPERCASE_A; i <= LETTER_UPPERCASE_Z; i++) {
             addSafeCharacter(i);
         }
     }
@@ -366,7 +366,7 @@ public class UrlEncoder {
      * 增加数字1-9
      */
     private void addDigit() {
-        for (char i = '0'; i <= '9'; i++) {
+        for (char i = CHARACTER_0; i <= CHARACTER_9; i++) {
             addSafeCharacter(i);
         }
     }

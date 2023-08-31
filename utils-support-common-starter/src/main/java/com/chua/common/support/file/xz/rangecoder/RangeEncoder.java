@@ -23,12 +23,15 @@ public abstract class RangeEncoder extends RangeCoder {
 
     private static final int[] PRICES
             = new int[BIT_MODEL_TOTAL >>> MOVE_REDUCING_BITS];
+    private static final long XFF000000L = 0xFF000000L;
 
     private long low;
     private int range;
 
     long cacheSize;
     private byte cache;
+
+    private static final int X4F = 0xFFFF0000;
 
     static {
         for (int i = (1 << MOVE_REDUCING_BITS) / NUM_2; i < BIT_MODEL_TOTAL;
@@ -40,7 +43,7 @@ public abstract class RangeEncoder extends RangeCoder {
                 w *= w;
                 bitCount <<= 1;
 
-                while ((w & 0xFFFF0000) != 0) {
+                while ((w & X4F) != 0) {
                     w >>>= 1;
                     ++bitCount;
                 }
@@ -72,12 +75,18 @@ public abstract class RangeEncoder extends RangeCoder {
         return -1;
     }
 
+    /**
+     * 写入
+     *
+     * @param b b
+     * @throws IOException ex
+     */
     abstract void writeByte(int b) throws IOException;
 
     private void shiftLow() throws IOException {
-        int lowHi = (int)(low >>> 32);
+        int lowHi = (int) (low >>> 32);
 
-        if (lowHi != 0 || low < 0xFF000000L) {
+        if (lowHi != 0 || low < XFF000000L) {
             int temp = cache;
 
             do {
@@ -85,7 +94,7 @@ public abstract class RangeEncoder extends RangeCoder {
                 temp = 0xFF;
             } while (--cacheSize != 0);
 
-            cache = (byte)(low >>> 24);
+            cache = (byte) (low >>> 24);
         }
 
         ++cacheSize;

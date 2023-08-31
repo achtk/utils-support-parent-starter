@@ -7,14 +7,19 @@ import com.chua.common.support.extra.el.expression.token.Operator;
 import com.chua.common.support.utils.CharUtils;
 
 import java.util.Deque;
+
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_DOT_CHAR;
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_MINUS_CHAR;
+
 /**
  * 基础类
+ *
  * @author CH
  */
 public class NumberParser extends NodeParser {
 
     private boolean match(String el, int offset, Deque<CalculateNode> nodes, int function) {
-        if ('-' == getChar(offset, el)) {
+        if (SYMBOL_MINUS_CHAR == getChar(offset, el)) {
             // 这种情况下，-是一个操作符
             if (nodes.peek() != null && !Operator.isOperator(nodes.peek().token())) {
                 return false;
@@ -37,17 +42,17 @@ public class NumberParser extends NodeParser {
         }
         int index = offset;
         char c = getChar(offset, el);
-        if (c == '-') {
+        if (c == SYMBOL_MINUS_CHAR) {
             offset += 1;
         }
         boolean hasDot = false;
-        while (CharUtils.isDigital(c = getChar(offset, el)) || (!hasDot && c == '.')) {
+        while (CharUtils.isDigital(c = getChar(offset, el)) || (!hasDot && c == SYMBOL_DOT_CHAR)) {
             offset++;
-            if (c == '.') {
+            if (c == SYMBOL_DOT_CHAR) {
                 hasDot = true;
             }
         }
-        if (c == '.') {
+        if (c == SYMBOL_DOT_CHAR) {
             throw new IllegalArgumentException("非法的负数格式,问题区间:" + el.substring(index, offset));
         }
         String literals = el.substring(index, offset);

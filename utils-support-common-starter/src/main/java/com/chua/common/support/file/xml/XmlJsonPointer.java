@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.chua.common.support.constant.CommonConstant.SYMBOL_HASH;
+import static com.chua.common.support.constant.CommonConstant.*;
 import static java.lang.String.format;
 
 /*
@@ -128,14 +128,14 @@ public class XmlJsonPointer {
             return;
         }
         String refs;
-        if (pointer.startsWith("#/")) {
+        if (pointer.startsWith(SYMBOL_LEFT_HASH_SLASH)) {
             refs = pointer.substring(2);
             try {
                 refs = URLDecoder.decode(refs, ENCODING);
             } catch (UnsupportedEncodingException e) {
                 throw new RuntimeException(e);
             }
-        } else if (pointer.startsWith("/")) {
+        } else if (pointer.startsWith(SYMBOL_LEFT_SLASH)) {
             refs = pointer.substring(1);
         } else {
             throw new IllegalArgumentException("a JSON pointer should start with '/' or '#/'");

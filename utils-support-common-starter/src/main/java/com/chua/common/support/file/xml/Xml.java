@@ -13,6 +13,7 @@ import java.math.BigInteger;
 import java.util.Iterator;
 
 import static com.chua.common.support.constant.CommonConstant.*;
+import static com.chua.common.support.constant.NumberConstant.*;
 
 
 /**
@@ -28,12 +29,12 @@ public class Xml {
     /**
      * The Character '&amp;'.
      */
-    public static final Character AMP = '&';
+    public static final Character AMP = SYMBOL_AND_CHAR;
 
     /**
      * The Character '''.
      */
-    public static final Character APOS = '\'';
+    public static final Character APOS = SYMBOL_RIGHT_ONE_SLASH_CHAR;
 
     /**
      * The Character '!'.
@@ -43,32 +44,32 @@ public class Xml {
     /**
      * The Character '='.
      */
-    public static final Character EQ = '=';
+    public static final Character EQ = SYMBOL_EQUALS_CHAR;
 
     /**
      * The Character <pre>{@code '>'. }</pre>
      */
-    public static final Character GT = '>';
+    public static final Character GT = GREATER_THAN;
 
     /**
      * The Character '&lt;'.
      */
-    public static final Character LT = '<';
+    public static final Character LT = LESS_THAN;
 
     /**
      * The Character '?'.
      */
-    public static final Character QUEST = '?';
+    public static final Character QUEST = SYMBOL_QUESTION_CHAR;
 
     /**
      * The Character '"'.
      */
-    public static final Character QUOT = '"';
+    public static final Character QUOT = SYMBOL_QUOTE_CHAR;
 
     /**
      * The Character '/'.
      */
-    public static final Character SLASH = '/';
+    public static final Character SLASH = SYMBOL_LEFT_SLASH_CHAR;
 
     /**
      * Null attribute name
@@ -261,16 +262,16 @@ public class Xml {
 
         if (token == BANG) {
             c = x.next();
-            if (c == '-') {
-                if (x.next() == '-') {
+            if (c == SYMBOL_MINUS_CHAR) {
+                if (x.next() == SYMBOL_MINUS_CHAR) {
                     x.skipPast("-->");
                     return false;
                 }
                 x.back();
-            } else if (c == '[') {
+            } else if (c == SYMBOL_LEFT_SQUARE_BRACKET_CHAR) {
                 token = x.nextToken();
-                if ("CDATA".equals(token)) {
-                    if (x.next() == '[') {
+                if (CDATA.equals(token)) {
+                    if (x.next() == SYMBOL_LEFT_SQUARE_BRACKET_CHAR) {
                         string = x.nextCDATA();
                         if (string.length() > 0) {
                             context.accumulate(config.getcDataTagName(), string);
@@ -456,13 +457,13 @@ public class Xml {
             return string;
         }
 
-        if ("true".equalsIgnoreCase(string)) {
+        if (TRUE.equalsIgnoreCase(string)) {
             return Boolean.TRUE;
         }
-        if ("false".equalsIgnoreCase(string)) {
+        if (FALSE.equalsIgnoreCase(string)) {
             return Boolean.FALSE;
         }
-        if ("null".equalsIgnoreCase(string)) {
+        if (NULL.equalsIgnoreCase(string)) {
             return XmlToJsonObject.NULL;
         }
 
@@ -493,7 +494,7 @@ public class Xml {
                 // representation. BigDecimal doesn't support -0.0, ensure we
                 try {
                     BigDecimal bd = new BigDecimal(val);
-                    if (initial == '-' && BigDecimal.ZERO.compareTo(bd) == 0) {
+                    if (initial == SYMBOL_MINUS_CHAR && BigDecimal.ZERO.compareTo(bd) == 0) {
                         return Double.valueOf(-0.0);
                     }
                     return bd;
@@ -515,7 +516,7 @@ public class Xml {
                 if (at1 >= LETTER_ZERO && at1 <= LETTER_NIGHT) {
                     throw new NumberFormatException("val [" + val + "] is not a valid number.");
                 }
-            } else if (initial == SYMBOL_MINUS_CHAR && val.length() > 2) {
+            } else if (initial == SYMBOL_MINUS_CHAR && val.length() > NUM_2) {
                 char at1 = val.charAt(1);
                 char at2 = val.charAt(2);
                 if (at1 == LETTER_ZERO && at2 >= LETTER_ZERO && at2 <= LETTER_NIGHT) {
@@ -525,10 +526,10 @@ public class Xml {
 
             // only what they need. i.e. Less runtime overhead if the value is
             BigInteger bi = new BigInteger(val);
-            if (bi.bitLength() <= 31) {
+            if (bi.bitLength() <= NUM_31) {
                 return bi.intValue();
             }
-            if (bi.bitLength() <= 63) {
+            if (bi.bitLength() <= NUM_63) {
                 return bi.longValue();
             }
             return bi;

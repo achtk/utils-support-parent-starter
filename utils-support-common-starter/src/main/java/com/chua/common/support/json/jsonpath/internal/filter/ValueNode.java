@@ -10,6 +10,8 @@ import com.chua.common.support.json.jsonpath.internal.path.PathCompiler;
 import java.time.OffsetDateTime;
 import java.util.regex.Pattern;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_AT_CHAR;
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_DOLLAR_CHAR;
 import static com.chua.common.support.json.jsonpath.internal.filter.ValueNodes.*;
 
 /**
@@ -17,68 +19,154 @@ import static com.chua.common.support.json.jsonpath.internal.filter.ValueNodes.*
  */
 public abstract class ValueNode {
 
+    /**
+     * 类型
+     *
+     * @param ctx ctx
+     * @return {@link Class}<{@link ?}>
+     */
     public abstract Class<?> type(Predicate.PredicateContext ctx);
 
+    /**
+     * 模式节点
+     *
+     * @return boolean
+     */
     public boolean isPatternNode() {
         return false;
     }
 
+    /**
+     * 作为模式节点
+     *
+     * @return {@link PatternNode}
+     */
     public PatternNode asPatternNode() {
         throw new InvalidPathException("Expected regexp node");
     }
 
+    /**
+     * 路径节点
+     *
+     * @return boolean
+     */
     public boolean isPathNode() {
         return false;
     }
 
+    /**
+     * 作为路径节点
+     *
+     * @return {@link PathNode}
+     */
     public PathNode asPathNode() {
         throw new InvalidPathException("Expected path node");
     }
 
+    /**
+     * 是节点号
+     *
+     * @return boolean
+     */
     public boolean isNumberNode() {
         return false;
     }
 
+    /**
+     * 随着节点数量
+     *
+     * @return {@link NumberNode}
+     */
     public NumberNode asNumberNode() {
         throw new InvalidPathException("Expected number node");
     }
 
+    /**
+     * 是字符串节点
+     *
+     * @return boolean
+     */
     public boolean isStringNode() {
         return false;
     }
 
+    /**
+     * 作为字符串节点
+     *
+     * @return {@link StringNode}
+     */
     public StringNode asStringNode() {
         throw new InvalidPathException("Expected string node");
     }
 
+    /**
+     * 布尔节点
+     *
+     * @return boolean
+     */
     public boolean isBooleanNode() {
         return false;
     }
 
+    /**
+     * 作为布尔节点
+     *
+     * @return {@link BooleanNode}
+     */
     public BooleanNode asBooleanNode() {
         throw new InvalidPathException("Expected boolean node");
     }
 
+    /**
+     * json节点
+     *
+     * @return boolean
+     */
     public boolean isJsonNode() {
         return false;
     }
 
+    /**
+     * 为json节点
+     *
+     * @return {@link JsonNode}
+     */
     public JsonNode asJsonNode() {
         throw new InvalidPathException("Expected json node");
     }
 
+    /**
+     * 谓词节点
+     *
+     * @return boolean
+     */
     public boolean isPredicateNode() {
         return false;
     }
 
+    /**
+     * 作为谓词节点
+     *
+     * @return {@link PredicateNode}
+     */
     public PredicateNode asPredicateNode() {
         throw new InvalidPathException("Expected predicate node");
     }
 
+    /**
+     * 是值列表节点
+     *
+     * @return boolean
+     */
     public boolean isValueListNode() {
         return false;
     }
 
+    /**
+     * 作为值列表节点
+     *
+     * @return {@link ValueListNode}
+     */
     public ValueListNode asValueListNode() {
         throw new InvalidPathException("Expected value list node");
     }
@@ -153,7 +241,7 @@ public abstract class ValueNode {
             return false;
         }
         char c0 = str.charAt(0);
-        if (c0 == '@' || c0 == '$') {
+        if (c0 == SYMBOL_AT_CHAR || c0 == SYMBOL_DOLLAR_CHAR) {
             try {
                 PathCompiler.compile(str);
                 return true;

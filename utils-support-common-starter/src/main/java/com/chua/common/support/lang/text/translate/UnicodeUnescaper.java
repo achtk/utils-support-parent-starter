@@ -4,6 +4,7 @@ package com.chua.common.support.lang.text.translate;
 import java.io.IOException;
 import java.io.Writer;
 
+import static com.chua.common.support.constant.CommonConstant.*;
 import static com.chua.common.support.constant.NumberConstant.NUM_4;
 
 /**
@@ -20,14 +21,14 @@ public class UnicodeUnescaper extends AbstractCharSequenceTranslator {
      */
     @Override
     public int translate(final CharSequence input, final int index, final Writer writer) throws IOException {
-        if (input.charAt(index) == '\\' && index + 1 < input.length() && input.charAt(index + 1) == 'u') {
+        if (input.charAt(index) == SYMBOL_RIGHT_SLASH_CHAR && index + 1 < input.length() && input.charAt(index + 1) == LETTER_LOWERCASE_U) {
             // consume optional additional 'u' chars
             int i = 2;
-            while (index + i < input.length() && input.charAt(index + i) == 'u') {
+            while (index + i < input.length() && input.charAt(index + i) == LETTER_LOWERCASE_U) {
                 i++;
             }
 
-            if (index + i < input.length() && input.charAt(index + i) == '+') {
+            if (index + i < input.length() && input.charAt(index + i) == SYMBOL_PLUS_CHAR) {
                 i++;
             }
 

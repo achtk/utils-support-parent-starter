@@ -10,12 +10,14 @@ import java.util.concurrent.atomic.AtomicReference;
  *
  * @author CH
  */
-public class SchemaSchemaChain implements SchemaChain{
+public class SchemaSchemaChain implements SchemaChain {
+
+    private static final String SCHEMA = "schema";
 
     @Override
     public void chain(AtomicReference<String> reference, Class<?> type, AnnotationAttributes annotationAttributes) {
-        if(!annotationAttributes.isEmpty("schema")) {
-            reference.set(annotationAttributes.getString("schema"));
+        if (!annotationAttributes.isEmpty(SCHEMA)) {
+            reference.set(annotationAttributes.getString(SCHEMA));
         }
     }
 

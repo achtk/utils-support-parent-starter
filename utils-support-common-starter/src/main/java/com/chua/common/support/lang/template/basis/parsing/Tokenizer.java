@@ -8,18 +8,21 @@ import java.util.ArrayList;
 import java.util.List;
 /**
  * 基础类
+ *
  * @author CH
  */
 public class Tokenizer {
 
+	private static final String SYNBOL = "}}";
+
 	/** Tokenizes the source into tokens with a {@link TokenType}. Text blocks not enclosed in {{ }} are returned as a single token
 	 * of type {{ and }} are not returned as individual tokens. See {@link TokenType} for the list of
 	 * tokens this tokenizer understands. */
-	public List<Token> tokenize (Source source) {
+	public List<Token> tokenize(Source source) {
 		List<Token> tokens = new ArrayList<Token>();
 		if (source.getContent().length() == 0) {
-            return tokens;
-        }
+			return tokens;
+		}
 		CharacterStream stream = new CharacterStream(source);
 		stream.startSpan();
 
@@ -32,10 +35,10 @@ public class Tokenizer {
                     tokens.add(new Token(TokenType.TextBlock, stream.endSpan()));
                 }
 				stream.startSpan();
-				while (!stream.match("}}", true)) {
+				while (!stream.match(SYNBOL, true)) {
 					if (!stream.hasMore()) {
-                        Error.error("Did not find closing }}.", stream.endSpan());
-                    }
+						Error.error("Did not find closing }}.", stream.endSpan());
+					}
 					stream.consume();
 				}
 				tokens.addAll(tokenizeCodeSpan(stream.endSpan()));

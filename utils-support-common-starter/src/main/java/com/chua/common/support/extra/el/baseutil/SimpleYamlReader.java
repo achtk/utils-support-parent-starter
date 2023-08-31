@@ -2,9 +2,14 @@ package com.chua.common.support.extra.el.baseutil;
 
 import com.chua.common.support.utils.IoUtils;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.chua.common.support.constant.CommonConstant.*;
 
 /**
  * 基础类
@@ -37,7 +42,7 @@ public class SimpleYamlReader {
                 continue;
             }
             int level = 0;
-            while (currentLine.charAt(level) == ' ') {
+            while (currentLine.charAt(level) == SYMBOL_BLANK_CHAR) {
                 level++;
             }
             Element element = new Element();
@@ -190,10 +195,10 @@ public class SimpleYamlReader {
             }
             end = currentLine(index);
             String result;
-            if (src[end] == '\n') {
+            if (src[end] == SYMBOL_N_CHAR) {
                 result = new String(src, index, end - index);
                 index = end + 1;
-            } else if (src[end] == '\r') {
+            } else if (src[end] == SYMBOL_R_CHAR) {
                 result = new String(src, index, end - index);
                 index = end + 2;
             } else//结尾，直接没有换行符

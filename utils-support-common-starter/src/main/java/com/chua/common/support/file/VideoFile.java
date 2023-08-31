@@ -27,9 +27,11 @@ public interface VideoFile {
     }
 
     /**
+     * 创建
      * 初始化
      *
      * @param inputStream 流
+     * @param name        名字
      * @return VideoFile
      */
     static VideoFile create(String name, InputStream inputStream) {
@@ -47,9 +49,11 @@ public interface VideoFile {
     }
 
     /**
+     * 创建
      * 初始化
      *
      * @param file 文件名
+     * @param name 名字
      * @return VideoFile
      */
     static VideoFile create(String name, File file) {
@@ -76,9 +80,11 @@ public interface VideoFile {
     }
 
     /**
+     * 记录
      * 录制视频
      *
      * @param folder 文件夹
+     * @return {@link OutputStream}
      */
     default OutputStream record(File folder) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -87,10 +93,12 @@ public interface VideoFile {
     }
 
     /**
+     * 记录
      * 录制视频
      *
      * @param folder      文件夹
      * @param videoConfig 配置
+     * @return {@link OutputStream}
      */
     default OutputStream record(File folder, VideoConfig videoConfig) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();

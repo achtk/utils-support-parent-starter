@@ -25,6 +25,11 @@ abstract class TreeBuilder {
     private Token.StartTag start = new Token.StartTag();
     private Token.EndTag end = new Token.EndTag();
 
+    /**
+     * 默认设置
+     *
+     * @return 默认设置
+     */
     abstract ParseSettings defaultSettings();
 
     private boolean trackSourceRange;
@@ -62,11 +67,21 @@ abstract class TreeBuilder {
     }
 
     /**
-     Create a new copy of this TreeBuilder
-     @return copy, ready for a new parse
+     * Create a new copy of this TreeBuilder
+     *
+     * @return copy, ready for a new parse
      */
     abstract TreeBuilder newInstance();
 
+    /**
+     * 解析一个HTML片段并返回一个DOM元素。
+     *
+     * @param inputFragment 片段
+     * @param context       内容
+     * @param baseUri       地址
+     * @param parser        解析器
+     * @return 结果
+     */
     abstract List<Node> parseFragment(String inputFragment, Element context, String baseUri, Parser parser);
 
     protected void runParser() {
@@ -84,6 +99,12 @@ abstract class TreeBuilder {
         }
     }
 
+    /**
+     * 处理进度
+     *
+     * @param token token
+     * @return 进度
+     */
     protected abstract boolean process(Token token);
 
     protected boolean processStartTag(String name) {
@@ -113,19 +134,21 @@ abstract class TreeBuilder {
 
 
     /**
-     Get the current element (last on the stack). If all items have been removed, returns the document instead
-     (which might not actually be on the stack; use stack.size() == 0 to test if required.
-     @return the last element on the stack, if any; or the root document
+     * Get the current element (last on the stack). If all items have been removed, returns the document instead
+     * (which might not actually be on the stack; use stack.size() == 0 to test if required.
+     *
+     * @return the last element on the stack, if any; or the root document
      */
     protected Element currentElement() {
         int size = stack.size();
-        return size > 0 ? stack.get(size-1) : doc;
+        return size > 0 ? stack.get(size - 1) : doc;
     }
 
     /**
-     Checks if the Current Element's normal name equals the supplied name.
-     @param normalName name to check
-     @return true if there is a current element on the stack, and its name equals the supplied
+     * Checks if the Current Element's normal name equals the supplied name.
+     *
+     * @param normalName name to check
+     * @return true if there is a current element on the stack, and its name equals the supplied
      */
     protected boolean currentElementIs(String normalName) {
         if (stack.size() == 0) {
@@ -137,6 +160,7 @@ abstract class TreeBuilder {
 
     /**
      * If the parser is tracking errors, add an error at the current position.
+     *
      * @param msg error message
      */
     protected void error(String msg) {
@@ -145,7 +169,8 @@ abstract class TreeBuilder {
 
     /**
      * If the parser is tracking errors, add an error at the current position.
-     * @param msg error message template
+     *
+     * @param msg  error message template
      * @param args template arguments
      */
     protected void error(String msg, Object... args) {
@@ -156,8 +181,8 @@ abstract class TreeBuilder {
     }
 
     /**
-     (An internal method, visible for Element. For HTML parse, signals that script and style text should be treated as
-     Data Nodes).
+     * (An internal method, visible for Element. For HTML parse, signals that script and style text should be treated as
+     * Data Nodes).
      */
     protected boolean isContentForTagData(String normalName) {
         return false;
@@ -173,26 +198,28 @@ abstract class TreeBuilder {
     }
 
     /**
-     Called by implementing TreeBuilders when a node has been inserted. This implementation includes optionally tracking
-     the source range of the node.
-     * @param node the node that was just inserted
+     * Called by implementing TreeBuilders when a node has been inserted. This implementation includes optionally tracking
+     * the source range of the node.
+     *
+     * @param node  the node that was just inserted
      * @param token the (optional) token that created this node
      */
-    protected void onNodeInserted(Node node,  Token token) {
+    protected void onNodeInserted(Node node, Token token) {
         trackNodePosition(node, token, true);
     }
 
     /**
-     Called by implementing TreeBuilders when a node is explicitly closed. This implementation includes optionally
-     tracking the closing source range of the node.
-     * @param node the node being closed
+     * Called by implementing TreeBuilders when a node is explicitly closed. This implementation includes optionally
+     * tracking the closing source range of the node.
+     *
+     * @param node  the node being closed
      * @param token the end-tag token that closed this node
      */
     protected void onNodeClosed(Node node, Token token) {
         trackNodePosition(node, token, false);
     }
 
-    private void trackNodePosition(Node node,  Token token, boolean start) {
+    private void trackNodePosition(Node node, Token token, boolean start) {
         if (trackSourceRange && token != null) {
             int startPos = token.startPos();
             if (startPos == Token.UNSET) {

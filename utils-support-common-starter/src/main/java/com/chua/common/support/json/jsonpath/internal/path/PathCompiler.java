@@ -14,6 +14,8 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_ASTERISK;
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_DOT_CHAR;
 import static java.lang.Character.isDigit;
 import static java.util.Arrays.asList;
 
@@ -71,7 +73,7 @@ public class PathCompiler {
                 ci = new CharacterIndex("$." + path);
                 ci.trim();
             }
-            if (ci.lastCharIs('.')) {
+            if (ci.lastCharIs(SYMBOL_DOT_CHAR)) {
                 fail("Path must not end with a '.' or '..'");
             }
             LinkedList<Predicate> filterStack = new LinkedList<Predicate>(asList(filters));
@@ -514,7 +516,7 @@ public class PathCompiler {
 
         String expression = path.subSequence(expressionBeginIndex, expressionEndIndex).toString().trim();
 
-        if ("*".equals(expression)) {
+        if (SYMBOL_ASTERISK.equals(expression)) {
             return false;
         }
 

@@ -10,6 +10,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.chua.common.support.constant.CommonConstant.*;
 import static com.chua.common.support.constant.NumberConstant.NUM_2;
 import static com.chua.common.support.constant.NumberConstant.NUM_3;
 
@@ -30,6 +31,14 @@ public class PathParser {
 
     private static final Map<String, FunctionEvaluator> FUNCTION_MAPPING = new HashMap<String, FunctionEvaluator>();
     private static final String OR_COMBINATOR = "|";
+    private static final String REGEX = "\\w+\\(.*\\).*";
+    private static final String REGEX1 = "\\[\\d+\\]";
+    private static final String TEXT = "text(";
+    private static final String REGEX_TEXT = "regex(";
+    private static final String ALL_TEXT = "allText()";
+    private static final String TIDY_TEXT = "tidyText()";
+    private static final String HTML = "html()";
+    private static final String OUT_HTML = "outerHtml()";
 
     static {
         FUNCTION_MAPPING.put("contains", new FunctionEvaluator() {
@@ -127,10 +136,10 @@ public class PathParser {
         }
         // attribute expr does not return Evaluator
         if (newEval.getEvaluator() != null) {
-            if ("//".equals(combinator)) {
+            if (SYMBOL_DOUBLE_LEFT_SLASH.equals(combinator)) {
                 currentEval =
                         new AbstractCombiningEvaluator.And(newEval.getEvaluator(), new StructuralEvaluator.Parent(currentEval));
-            } else if ("/".equals(combinator)) {
+            } else if (SYMBOL_LEFT_SLASH.equals(combinator)) {
                 currentEval =
                         new AbstractCombiningEvaluator.And(newEval.getEvaluator(), new StructuralEvaluator.ImmediateParent(currentEval));
             }
@@ -160,18 +169,18 @@ public class PathParser {
     }
 
     private void findElements() {
-        if (tq.matches("@")) {
+        if (tq.matches(SYMBOL_AT)) {
             consumeAttribute();
-        } else if (tq.matches("*")) {
+        } else if (tq.matches(SYMBOL_ASTERISK)) {
             allElements();
-        } else if (tq.matchesRegex("\\w+\\(.*\\).*")) {
+        } else if (tq.matchesRegex(REGEX)) {
             consumeOperatorFunction();
         } else if (tq.matchesWord()) {
             byTag();
-        } else if (tq.matchesRegex("\\[\\d+\\]")) {
+        } else if (tq.matchesRegex(REGEX1)) {
             byNth();
-        } else if (tq.matches("[")) {
-            evals.add(consumePredicates(tq.chompBalanced('[', ']')));
+        } else if (tq.matches(SYMBOL_LEFT_SQUARE_BRACKET)) {
+            evals.add(consumePredicates(tq.chompBalanced(SYMBOL_LEFT_SQUARE_BRACKET_CHAR, SYMBOL_RIGHT_SQUARE_BRACKET_CHAR)));
         } else {
             // unhandled
             throw new Selector.SelectorParseException("Could not parse query '%s': unexpected token at '%s'", query, tq.remainder());
@@ -248,17 +257,17 @@ public class PathParser {
 
     private void consumeOperatorFunction() {
         String remainder = consumeSubQuery();
-        if (remainder.startsWith("text(")) {
+        if (remainder.startsWith(TEXT)) {
             functionText(remainder);
-        } else if (remainder.startsWith("regex(")) {
+        } else if (remainder.startsWith(REGEX_TEXT)) {
             functionRegex(remainder);
-        } else if ("allText()".equals(remainder)) {
+        } else if (ALL_TEXT.equals(remainder)) {
             elementOperator = new ElementOperator.AllText();
-        } else if ("tidyText()".equals(remainder)) {
+        } else if (TIDY_TEXT.equals(remainder)) {
             elementOperator = new ElementOperator.TidyText();
-        } else if ("html()".equals(remainder)) {
+        } else if (HTML.equals(remainder)) {
             elementOperator = new ElementOperator.Html();
-        } else if ("outerHtml()".equals(remainder)) {
+        } else if (OUT_HTML.equals(remainder)) {
             elementOperator = new ElementOperator.OuterHtml();
         } else {
             throw new IllegalArgumentException("Unsupported function " + remainder);
@@ -276,7 +285,7 @@ public class PathParser {
         if (params.size() == 1) {
             elementOperator = new ElementOperator.Regex(params.get(0));
         } else if (params.size() == NUM_2) {
-            if (params.get(0).startsWith("@")) {
+            if (params.get(0).startsWith(SYMBOL_AT)) {
                 elementOperator = new ElementOperator.Regex(params.get(1), params.get(0).substring(1));
             } else {
                 elementOperator = new ElementOperator.Regex(params.get(0), null, Integer.parseInt(params.get(1)));
@@ -308,8 +317,8 @@ public class PathParser {
         Preconditions.notEmpty(tagName);
 
         // namespaces: if element name is "abc:def", selector must be "abc|def", so flip:
-        if (tagName.contains("|")) {
-            tagName = tagName.replace("|", ":");
+        if (tagName.contains(SYMBOL_PIPE)) {
+            tagName = tagName.replace(SYMBOL_PIPE, SYMBOL_COLON);
         }
 
         evals.add(new AbstractEvaluator.Tag(tagName.trim().toLowerCase()));
@@ -323,18 +332,18 @@ public class PathParser {
         cq.consumeWhitespace();
         AbstractEvaluator evaluator;
         if (cq.isEmpty()) {
-            if ("*".equals(key)) {
+            if (SYMBOL_ASTERISK.equals(key)) {
                 evaluator = new XEvaluators.HasAnyAttribute();
             } else {
                 evaluator = new AbstractEvaluator.Attribute(key);
             }
         } else {
-            if (cq.matchChomp("=")) {
+            if (cq.matchChomp(SYMBOL_EQUALS)) {
                 String value = chompEqualValue(cq);
                 //to support select one class out of all
-                if ("class".equals(key)) {
+                if (CLASS.equals(key)) {
                     String className = SoupTokenQueue.trimQuotes(value);
-                    if (!className.contains(" ")) {
+                    if (!className.contains(SYMBOL_BLANK)) {
                         evaluator = new AbstractEvaluator.Class(className);
                     } else {
                         evaluator = new AbstractEvaluator.AttributeWithValue(key, className);
@@ -342,16 +351,16 @@ public class PathParser {
                 } else {
                     evaluator = new AbstractEvaluator.AttributeWithValue(key, SoupTokenQueue.trimQuotes(value));
                 }
-            } else if (cq.matchChomp("!=")) {
+            } else if (cq.matchChomp(NO_EQUALS)) {
                 evaluator = new AbstractEvaluator.AttributeWithValueNot(key, SoupTokenQueue.trimQuotes(chompEqualValue(cq)));
-            } else if (cq.matchChomp("^=")) {
+            } else if (cq.matchChomp(XOR)) {
                 evaluator = new AbstractEvaluator.AttributeWithValueStarting(key, SoupTokenQueue.trimQuotes(chompEqualValue(cq)));
-            } else if (cq.matchChomp("$=")) {
+            } else if (cq.matchChomp(SYMBOL_DOLLAR_EQUALS)) {
                 evaluator = new AbstractEvaluator.AttributeWithValueEnding(key, SoupTokenQueue.trimQuotes(chompEqualValue(cq)));
-            } else if (cq.matchChomp("*=")) {
+            } else if (cq.matchChomp(SYMBOL_ASTERISK_EQUALS)) {
                 evaluator =
                         new AbstractEvaluator.AttributeWithValueContaining(key, SoupTokenQueue.trimQuotes(chompEqualValue(cq)));
-            } else if (cq.matchChomp("~=")) {
+            } else if (cq.matchChomp(SYMBOL_TILDE_EQUALS)) {
                 evaluator =
                         new AbstractEvaluator.AttributeWithValueMatching(key, Pattern.compile(SoupTokenQueue.trimQuotes(chompEqualValue(cq))));
             } else {
@@ -363,12 +372,12 @@ public class PathParser {
 
     private String chompEqualValue(SoupTokenQueue cq) {
         String value;
-        if (cq.matchChomp("'")) {
-            value = cq.chompTo("'");
-        } else if (cq.matchChomp("\"")) {
-            value = cq.chompTo("\"");
-        } else if (cq.containsAny(" ")) {
-            value = cq.chompTo(" ");
+        if (cq.matchChomp(SYMBOL_SINGLE_QUOTATION_MARK)) {
+            value = cq.chompTo(SYMBOL_SINGLE_QUOTATION_MARK);
+        } else if (cq.matchChomp(SYMBOL_QUOTE)) {
+            value = cq.chompTo(SYMBOL_QUOTE);
+        } else if (cq.containsAny(SYMBOL_BLANK)) {
+            value = cq.chompTo(SYMBOL_BLANK);
         } else {
             value = cq.remainder();
         }

@@ -121,6 +121,9 @@ public interface QueryFunction<C, T> extends Function<C, Set<T>>, NameHelper {
 
     /**
      * concat elements from function <pre>{@code Annotations.of(method).add(Annotations.of(type))}</pre>
+     *
+     * @param function 回調
+     * @return QueryFunction
      */
     default <R> QueryFunction<C, T> add(QueryFunction<C, T> function) {
         return ctx -> Stream.of(apply(ctx), function.apply(ctx))
@@ -130,6 +133,9 @@ public interface QueryFunction<C, T> extends Function<C, Set<T>>, NameHelper {
     /**
      * convert to given {@code type}, uses {@link NameHelper#forName(String, Class, ClassLoader...)}
      * <pre>{@code Methods.of(type).as(Method.class)}</pre>
+     * @param type 类型
+     * @param loaders 加载器
+     * @return QueryFunction
      */
     default <R> QueryFunction<C, R> as(Class<? extends R> type, ClassLoader... loaders) {
         return ctx -> {
@@ -147,6 +153,8 @@ public interface QueryFunction<C, T> extends Function<C, Set<T>>, NameHelper {
     /**
      * convert elements to {@code Class} using {@link NameHelper#forName(String, Class, ClassLoader...)}
      * <pre>{@code SubTypes.of(type).asClass()}</pre>
+     * @param loaders 加载器
+     * @return QueryFunction
      */
     default <R> QueryFunction<C, Class<?>> asClass(ClassLoader... loaders) {
         // noinspection unchecked
@@ -155,6 +163,7 @@ public interface QueryFunction<C, T> extends Function<C, Set<T>>, NameHelper {
 
     /**
      * convert elements to String using {@link NameHelper#toName(AnnotatedElement)}
+     * @return QueryFunction
      */
     default QueryFunction<C, String> asString() {
         return ctx -> new LinkedHashSet<>(toNames((AnnotatedElement) apply(ctx)));
@@ -162,6 +171,7 @@ public interface QueryFunction<C, T> extends Function<C, Set<T>>, NameHelper {
 
     /**
      * cast elements as {@code <R>} unsafe
+     * @return QueryFunction
      */
     default <R> QueryFunction<C, Class<? extends R>> as() {
         return ctx -> new LinkedHashSet<>((Set<? extends Class<R>>) apply(ctx));

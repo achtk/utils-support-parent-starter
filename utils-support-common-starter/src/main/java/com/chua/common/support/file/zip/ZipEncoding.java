@@ -59,6 +59,8 @@ public interface ZipEncoding {
     ByteBuffer encode(String name) throws IOException;
 
     /**
+     * 解码
+     *
      * @param data The byte values to decode.
      * @return The decoded string.
      * @throws IOException if something goes wrong

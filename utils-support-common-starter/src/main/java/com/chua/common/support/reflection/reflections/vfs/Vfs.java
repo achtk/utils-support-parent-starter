@@ -7,6 +7,7 @@ import com.chua.common.support.reflection.reflections.util.ClasspathHelper;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +17,8 @@ import java.util.function.Predicate;
 import java.util.jar.JarFile;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+
+import static com.chua.common.support.constant.CommonConstant.*;
 
 /**
  * a simple virtual file system bridge
@@ -57,10 +60,23 @@ public abstract class Vfs {
      * an abstract vfs dir
      */
     public interface Dir {
+        /**
+         * 获取路径
+         *
+         * @return {@link String}
+         */
         String getPath();
 
+        /**
+         * 得到文件
+         *
+         * @return {@link Iterable}<{@link VfsFile}>
+         */
         Iterable<VfsFile> getFiles();
 
+        /**
+         * 关闭
+         */
         default void close() {
         }
     }
@@ -69,10 +85,26 @@ public abstract class Vfs {
      * an abstract vfs file
      */
     public interface VfsFile {
+        /**
+         * 得到名字
+         *
+         * @return {@link String}
+         */
         String getName();
 
+        /**
+         * 得到相对路径
+         *
+         * @return {@link String}
+         */
         String getRelativePath();
 
+        /**
+         * 打开输入流
+         *
+         * @return {@link InputStream}
+         * @throws IOException ioexception
+         */
         InputStream openInputStream() throws IOException;
     }
 
@@ -80,8 +112,22 @@ public abstract class Vfs {
      * a matcher and factory for a url
      */
     public interface UrlType {
+        /**
+         * 匹配
+         *
+         * @param url url
+         * @return boolean
+         * @throws Exception 异常
+         */
         boolean matches(URL url) throws Exception;
 
+        /**
+         * 创建dir
+         *
+         * @param url url
+         * @return {@link Dir}
+         * @throws Exception 异常
+         */
         Dir createDir(URL url) throws Exception;
     }
 
@@ -195,8 +241,8 @@ public abstract class Vfs {
 
         try {
             path = URLDecoder.decode(url.getPath(), "UTF-8");
-            if (path.contains(".jar!")) {
-                path = path.substring(0, path.lastIndexOf(".jar!") + ".jar".length());
+            if (path.contains(JAR_FILE_EXTENSION_IN)) {
+                path = path.substring(0, path.lastIndexOf(JAR_FILE_EXTENSION_IN) + ".jar".length());
             }
             if ((file = new java.io.File(path)).exists()) {
                 return file;
@@ -207,19 +253,19 @@ public abstract class Vfs {
 
         try {
             path = url.toExternalForm();
-            if (path.startsWith("jar:")) {
+            if (path.startsWith(JAR_URL_PREFIX)) {
                 path = path.substring("jar:".length());
             }
-            if (path.startsWith("wsjar:")) {
+            if (path.startsWith(WS_JAR_URL_PREFIX)) {
                 path = path.substring("wsjar:".length());
             }
-            if (path.startsWith("file:")) {
+            if (path.startsWith(FILE_URL_PREFIX)) {
                 path = path.substring("file:".length());
             }
-            if (path.contains(".jar!")) {
+            if (path.contains(JAR_FILE_EXTENSION_IN)) {
                 path = path.substring(0, path.indexOf(".jar!") + ".jar".length());
             }
-            if (path.contains(".war!")) {
+            if (path.contains(WAR_FILE_EXTENSION_IN)) {
                 path = path.substring(0, path.indexOf(".war!") + ".war".length());
             }
             if ((file = new java.io.File(path)).exists()) {
@@ -302,7 +348,7 @@ public abstract class Vfs {
         directory {
             @Override
             public boolean matches(URL url) {
-                if ("file".equals(url.getProtocol()) && !hasJarFileInPath(url)) {
+                if (URL_PROTOCOL_FILE.equals(url.getProtocol()) && !hasJarFileInPath(url)) {
                     java.io.File file = getFile(url);
                     return file != null && file.isDirectory();
                 } else {

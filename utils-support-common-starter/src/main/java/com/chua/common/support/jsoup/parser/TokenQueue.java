@@ -2,6 +2,8 @@ package com.chua.common.support.jsoup.parser;
 
 import com.chua.common.support.jsoup.helper.Validate;
 
+import static com.chua.common.support.constant.CommonConstant.*;
+import static com.chua.common.support.constant.NumberConstant.NUM_14;
 import static com.chua.common.support.utils.StringUtils.borrowBuilder;
 import static com.chua.common.support.utils.StringUtils.isWhitespace;
 
@@ -11,6 +13,7 @@ import static com.chua.common.support.utils.StringUtils.isWhitespace;
  * @author Jonathan Hedley
  */
 public class TokenQueue {
+    private static final String[] TOKEN_SYMBOL = new String[]{"*|", "|", "_", "-"};
     private String queue;
     private int pos = 0;
 
@@ -251,9 +254,9 @@ public class TokenQueue {
             }
             char c = consume();
             if (last != ESC) {
-                if (c == '\'' && c != open && !inDoubleQuote) {
+                if (c == SYMBOL_RIGHT_ONE_SLASH_CHAR && c != open && !inDoubleQuote) {
                     inSingleQuote = !inSingleQuote;
-                } else if (c == '"' && c != open && !inSingleQuote) {
+                } else if (c == SYMBOL_QUOTE_CHAR && c != open && !inSingleQuote) {
                     inDoubleQuote = !inDoubleQuote;
                 }
                 if (inSingleQuote || inDoubleQuote || inRegex) {
@@ -266,13 +269,12 @@ public class TokenQueue {
                     if (start == -1) {
                         start = pos;
                     }
-                }
-                else if (c == close) {
+                } else if (c == close) {
                     depth--;
                 }
-            } else if (c == 'Q') {
+            } else if (c == LETTER_UPPERCASE_Q) {
                 inRegex = true;
-            } else if (c == 'E') {
+            } else if (c == DIGITS_UPPER[NUM_14]) {
                 inRegex = false;
             }
 
@@ -343,7 +345,7 @@ public class TokenQueue {
      */
     public String consumeElementSelector() {
         int start = pos;
-        while (!isEmpty() && (matchesWord() || matchesAny("*|","|", "_", "-"))) {
+        while (!isEmpty() && (matchesWord() || matchesAny(TOKEN_SYMBOL))) {
             pos++;
         }
         
@@ -357,7 +359,7 @@ public class TokenQueue {
      */
     public String consumeCssIdentifier() {
         int start = pos;
-        while (!isEmpty() && (matchesWord() || matchesAny('-', '_'))) {
+        while (!isEmpty() && (matchesWord() || matchesAny(SYMBOL_MINUS_CHAR, SYMBOL_DASH_CHAR))) {
             pos++;
         }
 

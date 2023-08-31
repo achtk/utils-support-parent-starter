@@ -12,8 +12,8 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.function.Predicate;
 
+import static com.chua.common.support.constant.CommonConstant.URL_PROTOCOL_FILE;
 import static com.chua.common.support.reflection.reflections.scanners.Scanners.SubTypes;
 
 
@@ -54,15 +54,10 @@ public class SubtypeResourceFinder extends AbstractResourceFinder {
                 .setExpandSuperTypes(false)
                 .setScanners(subTypes)
                 .setClassLoaders(new ClassLoader[]{classLoader});
-        if("file".equals(resource.getProtocol())) {
+        if (URL_PROTOCOL_FILE.equals(resource.getProtocol())) {
             configurationBuilder.setUrls(resource);
         } else {
-            configurationBuilder.filterInputsBy(new Predicate<String>() {
-                @Override
-                public boolean test(String s) {
-                    return s.startsWith(name);
-                }
-            }).setUrls(ClasspathHelper.forPackage(name, classLoader));
+            configurationBuilder.filterInputsBy(s -> s.startsWith(name)).setUrls(ClasspathHelper.forPackage(name, classLoader));
         }
         return new Reflections(configurationBuilder);
     }

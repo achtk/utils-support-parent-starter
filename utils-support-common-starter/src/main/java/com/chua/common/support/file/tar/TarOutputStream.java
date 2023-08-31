@@ -487,7 +487,7 @@ public class TarOutputStream extends FilterOutputStream {
         if (name.length() >= TarConstants.NAMELEN) {
             name = name.substring(0, TarConstants.NAMELEN - 1);
         }
-        while (name.endsWith("/")) {
+        while (name.endsWith(SYMBOL_LEFT_SLASH)) {
             // TarEntry's constructor would think this is a directory
             // and not allow any data to be written
             name = name.substring(0, name.length() - 1);

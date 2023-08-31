@@ -67,14 +67,21 @@ public interface Value<T> extends Serializable {
     }
 
     /**
+     * 动态
      * 回调
+     *
+     * @param function 函数
      * @return 回调
      */
     static <R, T>Value<T> ofDynamic(Function<R, T> function) {
         return new DynamicValue<>(function);
     }
+
     /**
+     * 地图动态
      * 回调
+     *
+     * @param function 函数
      * @return 回调
      */
     static <T>Value<T> ofMapDynamic(Function<Map<String, Object>, T> function) {

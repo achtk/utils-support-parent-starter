@@ -23,9 +23,21 @@ public final class CommonConstant extends NameConstant{
      */
     public static final String SYMBOL_EOF = "-1";
     /**
+     * |
+     */
+    public static final String SYMBOL_PIPE = "|";
+    /**
+     * |
+     */
+    public static final char SYMBOL_PIPE_CHAR = '|';
+    /**
      * @
      */
     public static final String SYMBOL_AT = "@";
+    /**
+     * !
+     */
+    public static final String SYMBOL_EXCLAMATION_MARK = "!";
     /**
      * @
      */
@@ -104,6 +116,14 @@ public final class CommonConstant extends NameConstant{
      */
     public static final String SYMBOL_RIGHT_SQUARE_BRACKET = "]";
     /**
+     * ]:
+     */
+    public static final String SYMBOL_RIGHT_SQUARE_BRACKET_COLON = "]:";
+    /**
+     * $=
+     */
+    public static final String SYMBOL_DOLLAR_EQUALS = "$=";
+    /**
      * $
      */
     public static final String SYMBOL_DOLLAR = "$";
@@ -119,6 +139,10 @@ public final class CommonConstant extends NameConstant{
      * " "
      */
     public static final String SYMBOL_BLANK = " ";
+    /**
+     * '
+     */
+    public static final String SYMBOL_SINGLE_QUOTATION_MARK = "'";
     /**
      * " "
      */
@@ -139,6 +163,10 @@ public final class CommonConstant extends NameConstant{
      * .*
      */
     public static final String SYMBOL_DOT_ASTERISK = ".*";
+    /**
+     * //
+     */
+    public static final String SYMBOL_DOUBLE_LEFT_SLASH = "//";
     /**
      * /
      */
@@ -215,6 +243,10 @@ public final class CommonConstant extends NameConstant{
      * :
      */
     public static final String SYMBOL_COLON = ":";
+    /**
+     * ^
+     */
+    public static final String SYMBOL_EXPONENT = "^";
     /**
      * -
      */
@@ -396,6 +428,10 @@ public final class CommonConstant extends NameConstant{
      */
     public static final char SYMBOL_WAVY_LINE_CHAR = '~';
     /**
+     * ~
+     */
+    public static final char SYMBOL_DASH_CHAR = '_';
+    /**
      * *
      */
     public static final char SYMBOL_ASTERISK_CHAR = '*';
@@ -411,6 +447,10 @@ public final class CommonConstant extends NameConstant{
      * 'A'
      */
     public static final char LETTER_UPPERCASE_A = 'A';
+    /**
+     * 'X'
+     */
+    public static final char LETTER_UPPERCASE_X = 'X';
     /**
      * 'C'
      */
@@ -496,9 +536,17 @@ public final class CommonConstant extends NameConstant{
      */
     public static final char LETTER_LOWERCASE_O = 'o';
     /**
+     * 'u'
+     */
+    public static final char LETTER_LOWERCASE_U = 'u';
+    /**
      * 'a'
      */
     public static final char LETTER_LOWERCASE_A = 'a';
+    /**
+     * 'x'
+     */
+    public static final char LETTER_LOWERCASE_X = 'x';
     /**
      * 'f'
      */
@@ -654,6 +702,22 @@ public final class CommonConstant extends NameConstant{
      */
     public static final String CLASS = "class";
     /**
+     * !=
+     */
+    public static final String NO_EQUALS = "!=";
+    /**
+     * *=
+     */
+    public static final String SYMBOL_ASTERISK_EQUALS = "*=";
+    /**
+     * ~=
+     */
+    public static final String SYMBOL_TILDE_EQUALS = "~=";
+    /**
+     * ^=
+     */
+    public static final String XOR = "^=";
+    /**
      * duplicate
      */
     public static final CharSequence DUPLICATE = "duplicate";
@@ -783,8 +847,8 @@ public final class CommonConstant extends NameConstant{
 
     public static final String SYMBOL_EMPTY_ARRAY = "[]";
     public static final String SYMBOL_EMPTY_MAP = "{}";
-    public static final char LETTER_NIGHT = '9';
-    public static final char LETTER_ZERO = '0';
+    public static final char LETTER_NIGHT = CHARACTER_9;
+    public static final char LETTER_ZERO = CHARACTER_0;
     public static final String UNKNOWN = "unknown";
     /**
      * "already exists"

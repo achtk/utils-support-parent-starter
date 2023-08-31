@@ -89,6 +89,8 @@ public interface Tokenizer {
 
     /**
      * 获取分词器
+     *
+     * @param type 类型
      * @return 分词器
      */
     static Tokenizer of(String type) {
@@ -98,6 +100,7 @@ public interface Tokenizer {
 
     /**
      * 获取分词器
+     *
      * @return 分词器
      */
     static Tokenizer newDefault() {

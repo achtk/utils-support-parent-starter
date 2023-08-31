@@ -15,6 +15,7 @@ import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.chua.common.support.constant.CommonConstant.*;
 import static com.chua.common.support.constant.NumberConstant.NUM_2;
 
 /**
@@ -22,6 +23,9 @@ import static com.chua.common.support.constant.NumberConstant.NUM_2;
  * @since 14-3-12
  */
 public class XpathEvaluator {
+
+    private static final String IN = "()";
+    private static final String REGEX = "[^/]+\\(\\)";
 
     /**
      * xpath解析器的总入口，同时预处理，如‘|’
@@ -31,8 +35,8 @@ public class XpathEvaluator {
      * @return
      */
     public List<Object> xpathParser(String xpath, Elements root) throws NoSuchAxisException, NoSuchFunctionException {
-        if (xpath.contains("|")) {
-            List<Object> rs = new LinkedList<Object>();
+        if (xpath.contains(SYMBOL_PIPE)) {
+            List<Object> rs = new LinkedList<>();
             String[] chiXpaths = xpath.split("\\|");
             for (String chiXp : chiXpaths) {
                 if (chiXp.length() > 0) {
@@ -158,25 +162,25 @@ public class XpathEvaluator {
      * @return
      */
     public Element filter(Element e, Node node) throws NoSuchFunctionException, NoSuchAxisException {
-        if ("*".equals(node.getTagName()) || node.getTagName().equals(e.nodeName())) {
+        if (SYMBOL_ASTERISK.equals(node.getTagName()) || node.getTagName().equals(e.nodeName())) {
             if (node.getPredicate() != null) {
                 Predicate p = node.getPredicate();
                 if (p.getOpEm() == null) {
-                    if (p.getValue().matches("\\d+") && getElIndex(e) == Integer.parseInt(p.getValue())) {
+                    if (p.getValue().matches(NUMBERS) && getElIndex(e) == Integer.parseInt(p.getValue())) {
                         return e;
-                    } else if (p.getValue().endsWith("()") && (Boolean) callFilterFunc(p.getValue().substring(0, p.getValue().length() - NUM_2), e)) {
+                    } else if (p.getValue().endsWith(IN) && (Boolean) callFilterFunc(p.getValue().substring(0, p.getValue().length() - NUM_2), e)) {
                         return e;
                     }
                     //todo p.value ~= contains(./@href,'renren.com')
                 } else {
-                    if (p.getLeft().matches("[^/]+\\(\\)")) {
+                    if (p.getLeft().matches(REGEX)) {
                         Object filterRes = p.getOpEm().excute(callFilterFunc(p.getLeft().substring(0, p.getLeft().length() - 2), e).toString(), p.getRight());
                         if (filterRes instanceof Boolean && (Boolean) filterRes) {
                             return e;
                         } else if (filterRes instanceof Integer && e.siblingIndex() == Integer.parseInt(filterRes.toString())) {
                             return e;
                         }
-                    } else if (p.getLeft().startsWith("@")) {
+                    } else if (p.getLeft().startsWith(SYMBOL_AT)) {
                         String lValue = e.attr(p.getLeft().substring(1));
                         Object filterRes = p.getOpEm().excute(lValue, p.getRight());
                         if ((Boolean) filterRes) {

@@ -8,8 +8,8 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.Map;
 
-import static com.chua.common.support.constant.NumberConstant.NUM_16;
-import static com.chua.common.support.constant.NumberConstant.NUM_2;
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_ASTERISK;
+import static com.chua.common.support.constant.NumberConstant.*;
 
 /**
  * 基础类
@@ -61,7 +61,7 @@ public class StringUtil {
      * @return
      */
     public static byte[] hexCharsToBytes(char[] hexChars) {
-        if ((hexChars.length & 0x01) == 1) {
+        if ((hexChars.length & X01) == 1) {
             throw new UnSupportException("用于解析的十六进制字符数组的长度不对，不是2的整数倍");
         }
         int length = hexChars.length / 2;
@@ -92,7 +92,7 @@ public class StringUtil {
      * @return
      */
     public static boolean match(String src, String rule) {
-        if (rule.contains("*")) {
+        if (rule.contains(SYMBOL_ASTERISK)) {
             String[] tmps = rule.split("\\*");
             int index = 0;
             for (int i = 0; i < tmps.length; i++) {

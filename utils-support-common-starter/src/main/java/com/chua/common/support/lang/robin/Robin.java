@@ -100,6 +100,11 @@ public interface Robin extends AutoCloseable {
         return this;
     }
 
+    /**
+     * 关闭
+     *
+     * @throws Exception ex
+     */
     @Override
     default void close() throws Exception {
 

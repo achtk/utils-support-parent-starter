@@ -26,6 +26,14 @@ public class ObjectView implements View {
     public static final int MAX_DEEP = 4;
     private static final Logger logger = LoggerFactory.getLogger(ObjectView.class);
     private final static int MAX_OBJECT_LENGTH = MAX_HTTP_CONTENT_LENGTH;
+    private static final String INTS = "int[]";
+    private static final String LONGS = "long[]";
+    private static final String SHORTS = "short[]";
+    private static final String FLOATS = "float[]";
+    private static final String DOUBLES = "double[]";
+    private static final String BOOLEANS = "boolean[]";
+    private static final String CHARS = "char[]";
+    private static final String BYTES = "byte[]";
 
     private final Object object;
     private final int deep;
@@ -256,7 +264,7 @@ public class ObjectView implements View {
                 final String typeName = obj.getClass().getSimpleName();
 
                 // int[]
-                if ("int[]".equals(typeName)) {
+                if (INTS.equals(typeName)) {
 
                     final int[] arrays = (int[]) obj;
                     // 非根节点或空集合只展示摘要信息
@@ -291,7 +299,7 @@ public class ObjectView implements View {
                 }
 
                 // long[]
-                else if ("long[]".equals(typeName)) {
+                else if (LONGS.equals(typeName)) {
 
                     final long[] arrays = (long[]) obj;
                     // 非根节点或空集合只展示摘要信息
@@ -326,7 +334,7 @@ public class ObjectView implements View {
                 }
 
                 // short[]
-                else if ("short[]".equals(typeName)) {
+                else if (SHORTS.equals(typeName)) {
 
                     final short[] arrays = (short[]) obj;
                     // 非根节点或空集合只展示摘要信息
@@ -361,7 +369,7 @@ public class ObjectView implements View {
                 }
 
                 // float[]
-                else if ("float[]".equals(typeName)) {
+                else if (FLOATS.equals(typeName)) {
 
                     final float[] arrays = (float[]) obj;
                     // 非根节点或空集合只展示摘要信息
@@ -396,7 +404,7 @@ public class ObjectView implements View {
                 }
 
                 // double[]
-                else if ("double[]".equals(typeName)) {
+                else if (DOUBLES.equals(typeName)) {
 
                     final double[] arrays = (double[]) obj;
                     // 非根节点或空集合只展示摘要信息
@@ -431,7 +439,7 @@ public class ObjectView implements View {
                 }
 
                 // boolean[]
-                else if ("boolean[]".equals(typeName)) {
+                else if (BOOLEANS.equals(typeName)) {
 
                     final boolean[] arrays = (boolean[]) obj;
                     // 非根节点或空集合只展示摘要信息
@@ -466,7 +474,7 @@ public class ObjectView implements View {
                 }
 
                 // char[]
-                else if ("char[]".equals(typeName)) {
+                else if (CHARS.equals(typeName)) {
 
                     final char[] arrays = (char[]) obj;
                     // 非根节点或空集合只展示摘要信息
@@ -501,7 +509,7 @@ public class ObjectView implements View {
                 }
 
                 // byte[]
-                else if ("byte[]".equals(typeName)) {
+                else if (BYTES.equals(typeName)) {
 
                     final byte[] arrays = (byte[]) obj;
                     // 非根节点或空集合只展示摘要信息

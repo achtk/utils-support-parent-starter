@@ -26,6 +26,7 @@ import java.util.*;
 public enum Platform {
     ;
 
+    public static final String LIB_PATH = "java.library.path";
     private static final String PRE = "library";
     static final String PRE_PREFIX = "library_openpnp";
 

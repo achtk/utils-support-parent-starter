@@ -14,8 +14,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.chua.common.support.constant.CommonConstant.SYMBOL_HASH;
-import static com.chua.common.support.constant.CommonConstant.WILDCARD;
+import static com.chua.common.support.constant.CommonConstant.*;
 import static com.chua.common.support.utils.Preconditions.checkArgument;
 import static com.chua.common.support.utils.Preconditions.checkNotNull;
 import static com.chua.common.support.utils.StringUtils.normalizeToken;
@@ -139,7 +138,7 @@ public class MediaType implements Serializable {
         String s1 = split[0];
         String[] split1 = s1.split("/");
         Map<String, String> integerMap = new LinkedHashMap<>();
-        for (String s : Splitter.on("\\s+").splitToList(split[1])) {
+        for (String s : Splitter.on(PATTERN_EMPTY).splitToList(split[1])) {
             integerMap.put(s, s);
         }
         return MediaType.create(split1[0], split1[1], new MultiLinkedValueMap<>(integerMap));

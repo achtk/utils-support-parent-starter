@@ -1,7 +1,6 @@
 
 package com.chua.common.support.lang.template.basis.parsing;
 
-import com.chua.common.support.constant.NameConstant;
 import com.chua.common.support.lang.template.basis.BasisTemplate;
 import com.chua.common.support.lang.template.basis.Error;
 import com.chua.common.support.lang.template.basis.TemplateLoader.Source;
@@ -12,16 +11,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.chua.common.support.constant.NameConstant.AS;
-import static com.chua.common.support.constant.NameConstant.WITH;
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_SEMICOLON;
+import static com.chua.common.support.constant.NameConstant.*;
 
-/** Parses a {@link Source} into a {@link BasisTemplate}. The implementation is a simple recursive descent parser with a lookahead of
+/**
+ * Parses a {@link Source} into a {@link BasisTemplate}. The implementation is a simple recursive descent parser with a lookahead of
+ *
  * @author Administrator
- * **/
+ **/
 public class Parser {
 
+	private static final String IFS = "if";
+	private static final String FOR = "for";
+	private static final String WHILE = "while";
+	private static final String CONTINUE = "continue";
+	private static final String BREAK = "break";
+	private static final String MACRO = "macro";
+	private static final String INCLUDE = "include";
+	private static final String RETURN = "return";
+
 	/** Parses a {@link Source} into a {@link BasisTemplate}. **/
-	public ParserResult parse (Source source) {
+	public ParserResult parse(Source source) {
 		List<AbstractNode> nodes = new ArrayList<>();
 		Macros macros = new Macros();
 		List<Include> includes = new ArrayList<Include>();
@@ -41,35 +51,35 @@ public class Parser {
 
 		if (tokens.match(TokenType.TextBlock, false)) {
 			result = new Text(tokens.consume().getSpan());
-		} else if (tokens.match("if", false)) {
+		} else if (tokens.match(IFS, false)) {
 			result = parseIfStatement(tokens, includes, rawIncludes);
-		} else if (tokens.match("for", false)) {
+		} else if (tokens.match(FOR, false)) {
 			result = parseForStatement(tokens, includes, rawIncludes);
-		} else if (tokens.match("while", false)) {
+		} else if (tokens.match(WHILE, false)) {
 			result = parseWhileStatement(tokens, includes, rawIncludes);
-		} else if (tokens.match("continue", false)) {
+		} else if (tokens.match(CONTINUE, false)) {
 			result = new Continue(tokens.consume().getSpan());
-		} else if (tokens.match("break", false)) {
+		} else if (tokens.match(BREAK, false)) {
 			result = new Break(tokens.consume().getSpan());
-		} else if (tokens.match("macro", false)) {
+		} else if (tokens.match(MACRO, false)) {
 			if (!allowMacros) {
 				Error.error("Macros can only be defined at the top level of a template.", tokens.consume().getSpan());
-				result = null; 
+				result = null;
 			} else {
 				Macro macro = parseMacro(tokens, includes, rawIncludes);
 				macros.put(macro.getName().getText(), macro);
-				result = macro; 
+				result = macro;
 			}
-		} else if (tokens.match("include", false)) {
+		} else if (tokens.match(INCLUDE, false)) {
 			result = parseInclude(tokens, includes, rawIncludes);
-		} else if (tokens.match("return", false)) {
+		} else if (tokens.match(RETURN, false)) {
 			result = parseReturn(tokens);
 		} else {
 			result = parseExpression(tokens);
 		}
 
-		
-		while (tokens.match(";", true)) {
+
+		while (tokens.match(SYMBOL_SEMICOLON, true)) {
 			;
 		}
 
@@ -82,18 +92,18 @@ public class Parser {
 		AbstractExpression condition = parseExpression(stream);
 
 		List<AbstractNode> trueBlock = new ArrayList<>();
-		while (stream.hasMore() && !stream.match(false, "elseif", "else", "end")) {
+		while (stream.hasMore() && !stream.match(false, ELSEIF, ELSE, END)) {
 			trueBlock.add(parseStatement(stream, false, null, includes, rawIncludes));
 		}
 
 		List<IfStatement> elseIfs = new ArrayList<IfStatement>();
-		while (stream.hasMore() && stream.match(false, "elseif")) {
-			Span elseIfOpening = stream.expect("elseif").getSpan();
+		while (stream.hasMore() && stream.match(false, ELSEIF)) {
+			Span elseIfOpening = stream.expect(ELSEIF).getSpan();
 
 			AbstractExpression elseIfCondition = parseExpression(stream);
 
 			List<AbstractNode> elseIfBlock = new ArrayList<>();
-			while (stream.hasMore() && !stream.match(false, "elseif", "else", "end")) {
+			while (stream.hasMore() && !stream.match(false, ELSEIF, ELSE, END)) {
 				elseIfBlock.add(parseStatement(stream, false, null, includes, rawIncludes));
 			}
 
@@ -102,13 +112,13 @@ public class Parser {
 		}
 
 		List<AbstractNode> falseBlock = new ArrayList<>();
-		if (stream.match("else", true)) {
-			while (stream.hasMore() && !stream.match(false, "end")) {
+		if (stream.match(ELSE, true)) {
+			while (stream.hasMore() && !stream.match(false, END)) {
 				falseBlock.add(parseStatement(stream, false, null, includes, rawIncludes));
 			}
 		}
 
-		Span closingEnd = stream.expect("end").getSpan();
+		Span closingEnd = stream.expect(END).getSpan();
 
 		return new IfStatement(new Span(openingIf, closingEnd), condition, trueBlock, elseIfs, falseBlock);
 	}
@@ -129,32 +139,32 @@ public class Parser {
 		AbstractExpression mapOrArray = parseExpression(stream);
 
 		List<AbstractNode> body = new ArrayList<>();
-		while (stream.hasMore() && !stream.match(false, "end")) {
+		while (stream.hasMore() && !stream.match(false, END)) {
 			body.add(parseStatement(stream, false, null, includes, rawIncludes));
 		}
 
-		Span closingEnd = stream.expect("end").getSpan();
+		Span closingEnd = stream.expect(END).getSpan();
 
 		return new ForStatement(new Span(openingFor, closingEnd), index != null ? index : null, value, mapOrArray, body);
 	}
 
 	private WhileStatement parseWhileStatement (TokenStream stream, List<Include> includes, List<IncludeRaw> rawIncludes) {
-		Span openingWhile = stream.expect("while").getSpan();
+		Span openingWhile = stream.expect(WHILE).getSpan();
 
 		AbstractExpression condition = parseExpression(stream);
 
 		List<AbstractNode> body = new ArrayList<>();
-		while (stream.hasMore() && !stream.match(false, "end")) {
+		while (stream.hasMore() && !stream.match(false, END)) {
 			body.add(parseStatement(stream, false, null, includes, rawIncludes));
 		}
 
-		Span closingEnd = stream.expect("end").getSpan();
+		Span closingEnd = stream.expect(END).getSpan();
 
 		return new WhileStatement(new Span(openingWhile, closingEnd), condition, body);
 	}
 
 	private Macro parseMacro (TokenStream stream, List<Include> includes, List<IncludeRaw> rawIncludes) {
-		Span openingWhile = stream.expect("macro").getSpan();
+		Span openingWhile = stream.expect(MACRO).getSpan();
 
 		Span name = stream.expect(TokenType.Identifier).getSpan();
 
@@ -163,11 +173,11 @@ public class Parser {
 		stream.expect(TokenType.RightParantheses);
 
 		List<AbstractNode> body = new ArrayList<>();
-		while (stream.hasMore() && !stream.match(false, "end")) {
+		while (stream.hasMore() && !stream.match(false, END)) {
 			body.add(parseStatement(stream, false, null, includes, rawIncludes));
 		}
 
-		Span closingEnd = stream.expect("end").getSpan();
+		Span closingEnd = stream.expect(END).getSpan();
 
 		return new Macro(new Span(openingWhile, closingEnd), name, argumentNames, body);
 	}
@@ -186,8 +196,8 @@ public class Parser {
 	}
 
 	private AbstractNode parseInclude (TokenStream stream, List<Include> includes, List<IncludeRaw> rawIncludes) {
-		Span openingInclude = stream.expect("include").getSpan();
-		if (stream.match("raw", true)) {
+		Span openingInclude = stream.expect(INCLUDE).getSpan();
+		if (stream.match(RAW, true)) {
 			Span path = stream.expect(TokenType.StringLiteral).getSpan();
 			IncludeRaw rawInclude = new IncludeRaw(new Span(openingInclude, path), path);
 			rawIncludes.add(rawInclude);
@@ -398,7 +408,7 @@ public class Parser {
 
 	private AbstractNode parseReturn (TokenStream tokens) {
 		Span returnSpan = tokens.expect("return").getSpan();
-		if (tokens.match(";", false)) {
+		if (tokens.match(SYMBOL_SEMICOLON, false)) {
 			return new Return(returnSpan, null);
 		}
 		AbstractExpression returnValue = parseExpression(tokens);

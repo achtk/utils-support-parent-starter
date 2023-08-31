@@ -68,66 +68,18 @@ public class ImageFindEdgeFilter extends AbstractImageFilter {
             offset = row * width;
             for (int col = 1; col < width - 1; col++) {
                 // red
-                yr = k0 * (rArr[offset - width + col - 1] & 0xff)
-                        + k1 * (rArr[offset - width + col] & 0xff)
-                        + k2 * (rArr[offset - width + col + 1] & 0xff)
-                        + k3 * (rArr[offset + col - 1] & 0xff)
-                        + k4 * (rArr[offset + col] & 0xff)
-                        + k5 * (rArr[offset + col + 1] & 0xff)
-                        + k6 * (rArr[offset + width + col - 1] & 0xff)
-                        + k7 * (rArr[offset + width + col] & 0xff)
-                        + k8 * (rArr[offset + width + col + 1] & 0xff);
+                yr = k0 * (rArr[offset - width + col - 1] & 0xff) + k1 * (rArr[offset - width + col] & 0xff) + k2 * (rArr[offset - width + col + 1] & 0xff) + k3 * (rArr[offset + col - 1] & 0xff) + k4 * (rArr[offset + col] & 0xff) + k5 * (rArr[offset + col + 1] & 0xff) + k6 * (rArr[offset + width + col - 1] & 0xff) + k7 * (rArr[offset + width + col] & 0xff) + k8 * (rArr[offset + width + col + 1] & 0xff);
 
-                xr = x0 * (rArr[offset - width + col - 1] & 0xff)
-                        + x1 * (rArr[offset - width + col] & 0xff)
-                        + x2 * (rArr[offset - width + col + 1] & 0xff)
-                        + x3 * (rArr[offset + col - 1] & 0xff)
-                        + x4 * (rArr[offset + col] & 0xff)
-                        + x5 * (rArr[offset + col + 1] & 0xff)
-                        + x6 * (rArr[offset + width + col - 1] & 0xff)
-                        + x7 * (rArr[offset + width + col] & 0xff)
-                        + x8 * (rArr[offset + width + col + 1] & 0xff);
+                xr = x0 * (rArr[offset - width + col - 1] & 0xff) + x1 * (rArr[offset - width + col] & 0xff) + x2 * (rArr[offset - width + col + 1] & 0xff) + x3 * (rArr[offset + col - 1] & 0xff) + x4 * (rArr[offset + col] & 0xff) + x5 * (rArr[offset + col + 1] & 0xff) + x6 * (rArr[offset + width + col - 1] & 0xff) + x7 * (rArr[offset + width + col] & 0xff) + x8 * (rArr[offset + width + col + 1] & 0xff);
 
-                // green
-                yg = k0 * (gArr[offset - width + col - 1] & 0xff)
-                        + k1 * (gArr[offset - width + col] & 0xff)
-                        + k2 * (gArr[offset - width + col + 1] & 0xff)
-                        + k3 * (gArr[offset + col - 1] & 0xff)
-                        + k4 * (gArr[offset + col] & 0xff)
-                        + k5 * (gArr[offset + col + 1] & 0xff)
-                        + k6 * (gArr[offset + width + col - 1] & 0xff)
-                        + k7 * (gArr[offset + width + col] & 0xff)
-                        + k8 * (gArr[offset + width + col + 1] & 0xff);
+                /* green */
+                yg = k0 * (gArr[offset - width + col - 1] & 0xff) + k1 * (gArr[offset - width + col] & 0xff) + k2 * (gArr[offset - width + col + 1] & 0xff) + k3 * (gArr[offset + col - 1] & 0xff) + k4 * (gArr[offset + col] & 0xff) + k5 * (gArr[offset + col + 1] & 0xff) + k6 * (gArr[offset + width + col - 1] & 0xff) + k7 * (gArr[offset + width + col] & 0xff) + k8 * (gArr[offset + width + col + 1] & 0xff);
 
-                xg = x0 * (gArr[offset - width + col - 1] & 0xff)
-                        + x1 * (gArr[offset - width + col] & 0xff)
-                        + x2 * (gArr[offset - width + col + 1] & 0xff)
-                        + x3 * (gArr[offset + col - 1] & 0xff)
-                        + x4 * (gArr[offset + col] & 0xff)
-                        + x5 * (gArr[offset + col + 1] & 0xff)
-                        + x6 * (gArr[offset + width + col - 1] & 0xff)
-                        + x7 * (gArr[offset + width + col] & 0xff)
-                        + x8 * (gArr[offset + width + col + 1] & 0xff);
+                xg = x0 * (gArr[offset - width + col - 1] & 0xff) + x1 * (gArr[offset - width + col] & 0xff) + x2 * (gArr[offset - width + col + 1] & 0xff) + x3 * (gArr[offset + col - 1] & 0xff) + x4 * (gArr[offset + col] & 0xff) + x5 * (gArr[offset + col + 1] & 0xff) + x6 * (gArr[offset + width + col - 1] & 0xff) + x7 * (gArr[offset + width + col] & 0xff) + x8 * (gArr[offset + width + col + 1] & 0xff);
                 // blue
-                yb = k0 * (bArr[offset - width + col - 1] & 0xff)
-                        + k1 * (bArr[offset - width + col] & 0xff)
-                        + k2 * (bArr[offset - width + col + 1] & 0xff)
-                        + k3 * (bArr[offset + col - 1] & 0xff)
-                        + k4 * (bArr[offset + col] & 0xff)
-                        + k5 * (bArr[offset + col + 1] & 0xff)
-                        + k6 * (bArr[offset + width + col - 1] & 0xff)
-                        + k7 * (bArr[offset + width + col] & 0xff)
-                        + k8 * (bArr[offset + width + col + 1] & 0xff);
+                yb = k0 * (bArr[offset - width + col - 1] & 0xff) + k1 * (bArr[offset - width + col] & 0xff) + k2 * (bArr[offset - width + col + 1] & 0xff) + k3 * (bArr[offset + col - 1] & 0xff) + k4 * (bArr[offset + col] & 0xff) + k5 * (bArr[offset + col + 1] & 0xff) + k6 * (bArr[offset + width + col - 1] & 0xff) + k7 * (bArr[offset + width + col] & 0xff) + k8 * (bArr[offset + width + col + 1] & 0xff);
 
-                xb = x0 * (bArr[offset - width + col - 1] & 0xff)
-                        + x1 * (bArr[offset - width + col] & 0xff)
-                        + x2 * (bArr[offset - width + col + 1] & 0xff)
-                        + x3 * (bArr[offset + col - 1] & 0xff)
-                        + x4 * (bArr[offset + col] & 0xff)
-                        + x5 * (bArr[offset + col + 1] & 0xff)
-                        + x6 * (bArr[offset + width + col - 1] & 0xff)
-                        + x7 * (bArr[offset + width + col] & 0xff)
-                        + x8 * (bArr[offset + width + col + 1] & 0xff);
+                xb = x0 * (bArr[offset - width + col - 1] & 0xff) + x1 * (bArr[offset - width + col] & 0xff) + x2 * (bArr[offset - width + col + 1] & 0xff) + x3 * (bArr[offset + col - 1] & 0xff) + x4 * (bArr[offset + col] & 0xff) + x5 * (bArr[offset + col + 1] & 0xff) + x6 * (bArr[offset + width + col - 1] & 0xff) + x7 * (bArr[offset + width + col] & 0xff) + x8 * (bArr[offset + width + col + 1] & 0xff);
 
                 // magnitude
                 r = (int) Math.sqrt(yr * yr + xr * xr);

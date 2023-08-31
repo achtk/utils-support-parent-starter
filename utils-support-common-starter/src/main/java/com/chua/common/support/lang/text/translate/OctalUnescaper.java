@@ -4,6 +4,7 @@ package com.chua.common.support.lang.text.translate;
 import java.io.IOException;
 import java.io.Writer;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_RIGHT_SLASH_CHAR;
 import static com.chua.common.support.constant.NumberConstant.NUM_2;
 
 /**
@@ -45,12 +46,12 @@ public class OctalUnescaper extends AbstractCharSequenceTranslator {
     public int translate(final CharSequence input, final int index, final Writer writer) throws IOException {
         final int remaining = input.length() - index - 1; 
         final StringBuilder builder = new StringBuilder();
-        if (input.charAt(index) == '\\' && remaining > 0 && isOctalDigit(input.charAt(index + 1))) {
+        if (input.charAt(index) == SYMBOL_RIGHT_SLASH_CHAR && remaining > 0 && isOctalDigit(input.charAt(index + 1))) {
             final int next = index + 1;
             final int next2 = index + 2;
             final int next3 = index + 3;
 
-            
+
             builder.append(input.charAt(next));
 
             if (remaining > 1 && isOctalDigit(input.charAt(next2))) {

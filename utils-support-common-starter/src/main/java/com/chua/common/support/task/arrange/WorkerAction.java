@@ -10,10 +10,12 @@ import java.util.Map;
 @FunctionalInterface
 public interface WorkerAction<T, V> {
     /**
+     * 行动
      * 在这里做耗时操作，如rpc请求、IO等
      *
      * @param object      object
      * @param allWrappers 任务包装
+     * @return {@link V}
      */
     V action(T object, Map<String, Worker> allWrappers);
 

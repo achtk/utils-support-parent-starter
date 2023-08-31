@@ -7,8 +7,13 @@ import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_BLANK_CHAR;
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_T_CHAR;
+
 /**
  * 基础类
+ *
  * @author CH
  */
 public class Util {
@@ -24,7 +29,7 @@ public class Util {
   public static String trimSpacesEnd(String s) {
     int endIndex = s.length();
     char[] chars = s.toCharArray();
-    while (endIndex > 0 && (chars[endIndex - 1] == ' ' || chars[endIndex - 1] == '\t')) {
+    while (endIndex > 0 && (chars[endIndex - 1] == SYMBOL_BLANK_CHAR || chars[endIndex - 1] == SYMBOL_T_CHAR)) {
       endIndex--;
     }
     return new String(chars, 0, endIndex);

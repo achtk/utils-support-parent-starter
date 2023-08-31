@@ -5,6 +5,7 @@ import com.chua.common.support.tree.BinaryTreeNodePrinter;
 import com.chua.common.support.tree.BinaryTreePrinter;
 import com.chua.common.support.tree.TextSprite;
 
+import static com.chua.common.support.constant.NumberConstant.NUM_2;
 import static com.chua.common.support.constant.NumberConstant.SECOND;
 
 /**
@@ -88,137 +89,63 @@ public final class DefaultBinaryTreePrinter<T> implements BinaryTreePrinter<T> {
         return printWithRightChildImpl(node, nodePrinter);
     }
 
-    private SubtreeDescriptor printWithTwoChildrenImpl(
-            BinaryTreeNode<T> node,
-            BinaryTreeNodePrinter<T> nodePrinter) {
+    private SubtreeDescriptor printWithTwoChildrenImpl(BinaryTreeNode<T> node, BinaryTreeNodePrinter<T> nodePrinter) {
         SubtreeDescriptor subtreeDescriptor = new SubtreeDescriptor();
-        SubtreeDescriptor leftChildDescriptor = printImpl(node.getLeftChild(),
-                nodePrinter);
-
-        SubtreeDescriptor rightChildDescriptor = printImpl(node.getRightChild(),
-                nodePrinter);
-
+        SubtreeDescriptor leftChildDescriptor = printImpl(node.getLeftChild(), nodePrinter);
+        SubtreeDescriptor rightChildDescriptor = printImpl(node.getRightChild(), nodePrinter);
         TextSprite nodeTextSprite = nodePrinter.print(node);
         TextSprite leftChildTextSprite = leftChildDescriptor.textSprite;
         TextSprite rightChildTextSprite = rightChildDescriptor.textSprite;
-
         // The height of the resulting text sprite.
-        int subtreeTextSpriteHeight = 1 + nodeTextSprite.getHeight() +
-                Math.max(leftChildTextSprite.getHeight(),
-                        rightChildTextSprite.getHeight());
+        int subtreeTextSpriteHeight = 1 + nodeTextSprite.getHeight() + Math.max(leftChildTextSprite.getHeight(), rightChildTextSprite.getHeight());
 
         int aLeft = (nodeTextSprite.getWidth() - siblingSpace) / 2;
         int aRight = nodeTextSprite.getWidth() - siblingSpace - aLeft;
-
-        int bLeft = leftChildTextSprite.getWidth() -
-                leftChildDescriptor.rootNodeOffset -
-                leftChildDescriptor.rootNodeWidth;
-
+        int bLeft = leftChildTextSprite.getWidth() - leftChildDescriptor.rootNodeOffset - leftChildDescriptor.rootNodeWidth;
         int leftPartOffset = 0;
-
         if (aLeft + SECOND > bLeft + leftChildDescriptor.rootNodeWidth) {
-            leftPartOffset = aLeft + 2
-                    - bLeft
-                    - leftChildDescriptor.rootNodeWidth;
+            leftPartOffset = aLeft + 2 - bLeft - leftChildDescriptor.rootNodeWidth;
         }
 
         int rightPartOffset = 0;
 
-        if (rightChildDescriptor.rootNodeOffset +
-                rightChildDescriptor.rootNodeWidth < aRight + 2) {
-            rightPartOffset = aRight + 2 - rightChildDescriptor.rootNodeOffset
-                    - rightChildDescriptor.rootNodeWidth;
+        if (rightChildDescriptor.rootNodeOffset + rightChildDescriptor.rootNodeWidth < aRight + NUM_2) {
+            rightPartOffset = aRight + 2 - rightChildDescriptor.rootNodeOffset - rightChildDescriptor.rootNodeWidth;
         }
 
-        // The width of the resulting text sprite.
-        int subtreeTextSpriteWidth =
-                leftChildTextSprite.getWidth() +
-                        leftPartOffset +
-                        siblingSpace +
-                        rightPartOffset +
-                        rightChildTextSprite.getWidth();
-
-        TextSprite subtreeTextSprite = new TextSprite(subtreeTextSpriteWidth,
-                subtreeTextSpriteHeight);
-
-        subtreeTextSprite.apply(leftChildTextSprite,
-                0,
-                nodeTextSprite.getHeight() + 1);
-
-        subtreeTextSprite.apply(rightChildTextSprite,
-                leftChildTextSprite.getWidth() +
-                        leftPartOffset +
-                        siblingSpace +
-                        rightPartOffset,
-                nodeTextSprite.getHeight() + 1);
-
-        int leftArrowLength = Math.max(1,
-                leftChildTextSprite.getWidth() +
-                        leftPartOffset
-                        - aLeft + 1
-                        - leftChildDescriptor.rootNodeOffset
-                        - leftChildDescriptor.rootNodeWidth / 2);
-        int rightArrowLength = Math.max(1,
-                rightPartOffset +
-                        rightChildDescriptor.rootNodeOffset +
-                        rightChildDescriptor.rootNodeWidth / 2 -
-                        aRight);
+        int subtreeTextSpriteWidth = leftChildTextSprite.getWidth() + leftPartOffset + siblingSpace + rightPartOffset + rightChildTextSprite.getWidth();
+        TextSprite subtreeTextSprite = new TextSprite(subtreeTextSpriteWidth, subtreeTextSpriteHeight);
+        subtreeTextSprite.apply(leftChildTextSprite, 0, nodeTextSprite.getHeight() + 1);
+        subtreeTextSprite.apply(rightChildTextSprite, leftChildTextSprite.getWidth() + leftPartOffset + siblingSpace + rightPartOffset, nodeTextSprite.getHeight() + 1);
+        int leftArrowLength = Math.max(1, leftChildTextSprite.getWidth() + leftPartOffset - aLeft + 1 - leftChildDescriptor.rootNodeOffset - leftChildDescriptor.rootNodeWidth / 2);
+        int rightArrowLength = Math.max(1, rightPartOffset + rightChildDescriptor.rootNodeOffset + rightChildDescriptor.rootNodeWidth / 2 - aRight);
 
         int totalArrowLength = leftArrowLength + rightArrowLength;
         int nodeSpriteShift = totalArrowLength / 2 - leftArrowLength;
 
-        subtreeTextSprite.apply(nodeTextSprite,
-                nodeSpriteShift +
-                        leftChildTextSprite.getWidth() +
-                        leftPartOffset - aLeft,
-                0);
+        subtreeTextSprite.apply(nodeTextSprite, nodeSpriteShift + leftChildTextSprite.getWidth() + leftPartOffset - aLeft, 0);
 
         rightArrowLength = totalArrowLength / 2;
         leftArrowLength = totalArrowLength - rightArrowLength;
 
-        int arrowStartX = leftChildTextSprite.getWidth() + leftPartOffset
-                - aLeft
-                + nodeSpriteShift;
+        int arrowStartX = leftChildTextSprite.getWidth() + leftPartOffset - aLeft + nodeSpriteShift;
         int arrowY = nodeTextSprite.getHeight() - 2;
 
         for (int x = 0; x < leftArrowLength; ++x) {
             subtreeTextSprite.setChar(arrowStartX - x - 1, arrowY, '-');
         }
-
-        subtreeTextSprite.setChar(arrowStartX - leftArrowLength,
-                arrowY,
-                '+');
-
-        subtreeTextSprite.setChar(arrowStartX - leftArrowLength,
-                arrowY + 1,
-                '|');
-
-        subtreeTextSprite.setChar(arrowStartX - leftArrowLength,
-                arrowY + 2,
-                arrowTipCharacter);
-
-        arrowStartX = leftChildTextSprite.getWidth()
-                + leftPartOffset
-                - aLeft
-                + nodeTextSprite.getWidth()
-                + nodeSpriteShift;
+        subtreeTextSprite.setChar(arrowStartX - leftArrowLength, arrowY, '+');
+        subtreeTextSprite.setChar(arrowStartX - leftArrowLength, arrowY + 1, '|');
+        subtreeTextSprite.setChar(arrowStartX - leftArrowLength, arrowY + 2, arrowTipCharacter);
+        arrowStartX = leftChildTextSprite.getWidth() + leftPartOffset - aLeft + nodeTextSprite.getWidth() + nodeSpriteShift;
 
         for (int x = 0; x < rightArrowLength; ++x) {
             subtreeTextSprite.setChar(arrowStartX + x, arrowY, '-');
         }
-
         subtreeTextSprite.setChar(arrowStartX + rightArrowLength, arrowY, '+');
-        subtreeTextSprite.setChar(arrowStartX + rightArrowLength,
-                arrowY + 1,
-                '|');
-
-        subtreeTextSprite.setChar(arrowStartX + rightArrowLength,
-                arrowY + 2,
-                arrowTipCharacter);
-
-        subtreeDescriptor.rootNodeOffset = leftChildTextSprite.getWidth()
-                + leftPartOffset
-                - aLeft;
+        subtreeTextSprite.setChar(arrowStartX + rightArrowLength, arrowY + 1, '|');
+        subtreeTextSprite.setChar(arrowStartX + rightArrowLength, arrowY + 2, arrowTipCharacter);
+        subtreeDescriptor.rootNodeOffset = leftChildTextSprite.getWidth() + leftPartOffset - aLeft;
 
         subtreeDescriptor.rootNodeWidth = nodeTextSprite.getWidth();
         subtreeDescriptor.textSprite = subtreeTextSprite;

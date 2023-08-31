@@ -2800,8 +2800,8 @@ public class ClassReader {
         Object[] locals = context.currentFrameLocalTypes;
         int numLocal = 0;
         if ((context.currentMethodAccessFlags & Opcodes.ACC_STATIC) == 0) {
-            String INIT = "<init>";
-            if (INIT.equals(context.currentMethodName)) {
+            String init = "<init>";
+            if (init.equals(context.currentMethodName)) {
                 locals[numLocal++] = Opcodes.UNINITIALIZED_THIS;
             } else {
                 locals[numLocal++] = readClass(header + 2, context.charBuffer);

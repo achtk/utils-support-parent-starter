@@ -24,8 +24,13 @@ import com.chua.common.support.file.yaml.scalar.ScalarSerializer;
 import java.lang.reflect.Constructor;
 import java.util.*;
 
-/** Stores configuration for reading and writing YAML.
- * @author Nathan Sweet */
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_EXCLAMATION_MARK;
+
+/**
+ * Stores configuration for reading and writing YAML.
+ *
+ * @author Nathan Sweet
+ */
 public class YamlConfig {
 	/** Configuration for writing YAML. */
 	public final WriteConfig writeConfig = new WriteConfig();
@@ -62,14 +67,14 @@ public class YamlConfig {
 	/** Allows the specified tag to be used in YAML instead of the full class name. */
 	public void setClassTag (String tag, Class type) {
 		if (tag == null) {
-            throw new IllegalArgumentException("tag cannot be null.");
-        }
+			throw new IllegalArgumentException("tag cannot be null.");
+		}
 		if (type == null) {
-            throw new IllegalArgumentException("type cannot be null.");
-        }
-		if (!tag.startsWith("!")) {
-            tag = "!" + tag;
-        }
+			throw new IllegalArgumentException("type cannot be null.");
+		}
+		if (!tag.startsWith(SYMBOL_EXCLAMATION_MARK)) {
+			tag = SYMBOL_EXCLAMATION_MARK + tag;
+		}
 		classNameToTag.put(type.getName(), tag);
 		tagToClass.put(tag, type);
 	}

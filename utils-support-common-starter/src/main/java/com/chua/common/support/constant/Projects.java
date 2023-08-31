@@ -37,14 +37,36 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_SEMICOLON;
+import static com.chua.common.support.os.Platform.LIB_PATH;
+
 /**
  * 项目信息
+ *
  * @author CH
  */
 public final class Projects {
     private static final String OPERATING_SYSTEM_NAME;
     private static final String OPERATING_SYSTEM_ARCH;
     private static final String UNKNOWN = "unknown";
+    private static final String PPC64LE = "ppc64le";
+    private static final String ARMHF = "armhf";
+    private static final String X86_64 = "^(x8664|amd64|ia32e|em64t|x64)$";
+    private static final String X86_32 = "^(x8632|x86|i[3-6]86|ia32|x32)$";
+    private static final String ITANIUM_64 = "^(ia64w?|itanium64)$";
+    private static final String SPARC_32 = "^(sparc|sparc32)$";
+    private static final String SPARC_64 = "^(sparcv9|sparc64)$";
+    private static final String ARM_32 = "^(arm|arm32)$";
+    private static final String MIPS_32 = "^(mips|mips32)$";
+    private static final String MIPSEL_32 = "^(mipsel|mips32el)$";
+    private static final String PPC_32 = "^(ppc|ppc32)$";
+    private static final String PPCLE_32 = "^(ppcle|ppc32le)$";
+    private static final String IA64N = "ia64n";
+    private static final String AARCH_64 = "aarch64";
+    private static final String MIP64 = "mips64";
+    private static final String MIP64EL = "mips64el";
+    private static final String PPC64 = "ppc64";
+    private static final String S390 = "s390";
     static PlatformEnum platform;
     static String arch;
     private static final Log log = Log.getLogger(Projects.class);
@@ -56,6 +78,14 @@ public final class Projects {
      * Linux
      */
     public static final String LINUX = "linux";
+    /**
+     * mac
+     */
+    public static final String MAC = "mac";
+    /**
+     * darwin
+     */
+    public static final String DARWIN = "darwin";
     /**
      * Unix
      */
@@ -1117,7 +1147,7 @@ public final class Projects {
 
     private static void registerSign(String name, Dependency dependency) {
         name = name + dependency.getSuffix() + ".link";
-        for (String s : System.getProperty("java.library.path").split(";")) {
+        for (String s : System.getProperty(LIB_PATH).split(SYMBOL_SEMICOLON)) {
             if (!new File(s, name).exists()) {
                 try {
                     FileUtils.write("", new File(s, name));
@@ -1131,7 +1161,7 @@ public final class Projects {
 
     private static boolean checkDependency(String name, Dependency dependency) {
         name = name + dependency.getSuffix();
-        for (String s : System.getProperty("java.library.path").split(";")) {
+        for (String s : System.getProperty(LIB_PATH).split(SYMBOL_SEMICOLON)) {
             if (new File(s, name).exists()) {
                 return true;
             }
@@ -1146,12 +1176,12 @@ public final class Projects {
         }
 
         if (isLinux()) {
-            if (arch.contains("ppc64le")) {
-                return "ppc64le";
+            if (arch.contains(PPC64LE)) {
+                return PPC64LE;
 
             }
-            if (arch.contains("armhf")) {
-                return "armhf";
+            if (arch.contains(ARMHF)) {
+                return ARMHF;
             }
             return arch.endsWith("64") ? "x86_64" : "x86";
         }
@@ -1236,45 +1266,45 @@ public final class Projects {
         return "aarch_64".equals(arch);
     }
 
-    public static boolean isX86() {
+    public static boolean getX8664() {
         return "x86_32".equals(arch);
     }
 
     private static String normalizeArch(String value) {
         value = normalize(value);
-        if (value.matches("^(x8664|amd64|ia32e|em64t|x64)$")) {
+        if (value.matches(X86_64)) {
             return "x86_64";
-        } else if (value.matches("^(x8632|x86|i[3-6]86|ia32|x32)$")) {
+        } else if (value.matches(X86_32)) {
             return "x86_32";
-        } else if (value.matches("^(ia64w?|itanium64)$")) {
+        } else if (value.matches(ITANIUM_64)) {
             return "itanium_64";
-        } else if ("ia64n".equals(value)) {
+        } else if (IA64N.equals(value)) {
             return "itanium_32";
-        } else if (value.matches("^(sparc|sparc32)$")) {
+        } else if (value.matches(SPARC_32)) {
             return "sparc_32";
-        } else if (value.matches("^(sparcv9|sparc64)$")) {
+        } else if (value.matches(SPARC_64)) {
             return "sparc_64";
-        } else if (value.matches("^(arm|arm32)$")) {
+        } else if (value.matches(ARM_32)) {
             return "arm_32";
-        } else if ("aarch64".equals(value)) {
+        } else if (AARCH_64.equals(value)) {
             return "aarch_64";
-        } else if (value.matches("^(mips|mips32)$")) {
+        } else if (value.matches(MIPS_32)) {
             return "mips_32";
-        } else if (value.matches("^(mipsel|mips32el)$")) {
+        } else if (value.matches(MIPSEL_32)) {
             return "mipsel_32";
-        } else if ("mips64".equals(value)) {
+        } else if (MIP64.equals(value)) {
             return "mips_64";
-        } else if ("mips64el".equals(value)) {
+        } else if (MIP64EL.equals(value)) {
             return "mipsel_64";
-        } else if (value.matches("^(ppc|ppc32)$")) {
+        } else if (value.matches(PPC_32)) {
             return "ppc_32";
-        } else if (value.matches("^(ppcle|ppc32le)$")) {
+        } else if (value.matches(PPCLE_32)) {
             return "ppcle_32";
-        } else if ("ppc64".equals(value)) {
+        } else if (PPC64.equals(value)) {
             return "ppc_64";
-        } else if ("ppc64le".equals(value)) {
+        } else if (PPC64LE.equals(value)) {
             return "ppcle_64";
-        } else if ("s390".equals(value)) {
+        } else if (S390.equals(value)) {
             return "s390_32";
         } else {
             return "s390x".equals(value) ? "s390_64" : "unknown";
@@ -1288,10 +1318,10 @@ public final class Projects {
     static {
         OPERATING_SYSTEM_NAME = System.getProperty("os.name").toLowerCase(Locale.ENGLISH);
         OPERATING_SYSTEM_ARCH = System.getProperty("os.arch").toLowerCase(Locale.ENGLISH);
-        if (OPERATING_SYSTEM_NAME.startsWith("linux")) {
+        if (OPERATING_SYSTEM_NAME.startsWith(LINUX)) {
             platform = PlatformEnum.LINUX;
-        } else if (!OPERATING_SYSTEM_NAME.startsWith("mac") && !OPERATING_SYSTEM_NAME.startsWith("darwin")) {
-            if (OPERATING_SYSTEM_NAME.startsWith("windows")) {
+        } else if (!OPERATING_SYSTEM_NAME.startsWith(MAC) && !OPERATING_SYSTEM_NAME.startsWith(DARWIN)) {
+            if (OPERATING_SYSTEM_NAME.startsWith(WINDOWS)) {
                 platform = PlatformEnum.WINDOWS;
             } else {
                 platform = PlatformEnum.UNKNOWN;

@@ -64,6 +64,7 @@ public interface Repository<T> {
      * 根据ID更新
      *
      * @param entity 实体
+     * @return 数量
      */
     int updateById(T entity);
 
@@ -71,6 +72,7 @@ public interface Repository<T> {
      * 根据ID獲取數據
      *
      * @param key key
+     * @return s
      */
     <S extends T> S getById(Serializable key);
 
@@ -78,6 +80,7 @@ public interface Repository<T> {
      * 根据ID删除
      *
      * @param key key
+     * @return 数量
      */
     int deleteById(Serializable key);
 

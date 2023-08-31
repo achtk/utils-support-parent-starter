@@ -12,6 +12,9 @@ import com.chua.common.support.utils.StringUtils;
  */
 @Spi("sqlserver2005")
 public class SQLServer2005Dialect extends OracleDialect {
+    private static final String SELECT = "select";
+    private static final String SD = "select distinct";
+
     @Override
     public SqlModel formatPageSql(String originalSql, int offset, int limit) {
         StringBuilder pagingBuilder = new StringBuilder();
@@ -20,9 +23,9 @@ public class SQLServer2005Dialect extends OracleDialect {
 
         String loweredString = originalSql.toLowerCase();
         String sqlPartString = originalSql;
-        if (loweredString.trim().startsWith("select")) {
+        if (loweredString.trim().startsWith(SELECT)) {
             int index = 6;
-            if (loweredString.startsWith("select distinct")) {
+            if (loweredString.startsWith(SD)) {
                 distinctStr = "DISTINCT ";
                 index = 15;
             }

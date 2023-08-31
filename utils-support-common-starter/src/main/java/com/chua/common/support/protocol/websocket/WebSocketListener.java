@@ -162,17 +162,21 @@ public interface WebSocketListener {
   void onWriteDemand(com.chua.common.support.protocol.websocket.WebSocket conn);
 
   /**
+   * 获取本地套接字地址
+   *
    * @param conn The <tt>WebSocket</tt> instance this event is occurring on.
    * @return Returns the address of the endpoint this socket is bound to.
-   * @see com.chua.common.support.protocol.websocket.WebSocket#getLocalSocketAddress()
+   * @see WebSocket#getLocalSocketAddress()
    */
   InetSocketAddress getLocalSocketAddress(com.chua.common.support.protocol.websocket.WebSocket conn);
 
   /**
+   * 获取远程套接字地址
+   *
    * @param conn The <tt>WebSocket</tt> instance this event is occurring on.
    * @return Returns the address of the endpoint this socket is connected to, or{@code null} if it
    * is unconnected.
-   * @see com.chua.common.support.protocol.websocket.WebSocket#getRemoteSocketAddress()
+   * @see WebSocket#getRemoteSocketAddress()
    */
   InetSocketAddress getRemoteSocketAddress(com.chua.common.support.protocol.websocket.WebSocket conn);
 }

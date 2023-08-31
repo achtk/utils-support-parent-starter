@@ -2,6 +2,8 @@ package com.chua.common.support.database.orm;
 
 import java.util.Locale;
 
+import static com.chua.common.support.constant.NameConstant.*;
+
 /**
  * @author Clinton Begin
  */
@@ -12,9 +14,9 @@ public final class PropertyNames {
     }
 
     public static String methodToProperty(String name) {
-        if (name.startsWith("is")) {
+        if (name.startsWith(IS)) {
             name = name.substring(2);
-        } else if (name.startsWith("get") || name.startsWith("set")) {
+        } else if (name.startsWith(METHOD_GETTER) || name.startsWith(METHOD_SETTER)) {
             name = name.substring(3);
         } else {
             throw new RuntimeException("Error parsing property name '" + name + "'.  Didn't start with 'is', 'get' or 'set'.");

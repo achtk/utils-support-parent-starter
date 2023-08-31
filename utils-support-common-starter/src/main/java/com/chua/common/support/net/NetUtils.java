@@ -637,8 +637,8 @@ public class NetUtils {
         if (address != null) {
             if (address instanceof Inet6Address) {
                 String ipv6AddressString = address.getHostAddress();
-                if (ipv6AddressString.contains("%")) {
-                    ipv6AddressString = ipv6AddressString.substring(0, ipv6AddressString.indexOf("%"));
+                if (ipv6AddressString.contains(SYMBOL_PERCENT)) {
+                    ipv6AddressString = ipv6AddressString.substring(0, ipv6AddressString.indexOf(SYMBOL_PERCENT));
                 }
                 HOST_ADDRESS = ipv6AddressString;
                 return HOST_ADDRESS;
@@ -663,8 +663,8 @@ public class NetUtils {
         Inet6Address address = getLocalAddressV6();
         if (address != null) {
             String ipv6AddressString = address.getHostAddress();
-            if (ipv6AddressString.contains("%")) {
-                ipv6AddressString = ipv6AddressString.substring(0, ipv6AddressString.indexOf("%"));
+            if (ipv6AddressString.contains(SYMBOL_PERCENT)) {
+                ipv6AddressString = ipv6AddressString.substring(0, ipv6AddressString.indexOf(SYMBOL_PERCENT));
             }
 
             HOST_ADDRESS_V6 = ipv6AddressString;
@@ -906,8 +906,8 @@ public class NetUtils {
         StringBuilder sb = new StringBuilder();
         sb.append(protocol).append("://");
         sb.append(host).append(':').append(port);
-        if (path.charAt(0) != '/') {
-            sb.append('/');
+        if (path.charAt(0) != SYMBOL_LEFT_SLASH_CHAR) {
+            sb.append(SYMBOL_LEFT_SLASH_CHAR);
         }
         sb.append(path);
         return sb.toString();
@@ -986,7 +986,7 @@ public class NetUtils {
             if (mask.length != NUM_8 && ipPatternContainExpression(pattern)) {
                 throw new IllegalArgumentException("If you config ip expression that contains '*' or '-', please fill qualified ip pattern like 234e:0:4567:0:0:0:3d:*. ");
             }
-            if (mask.length != NUM_8 && !pattern.contains("::")) {
+            if (mask.length != NUM_8 && !pattern.contains(SYMBOL_DOUBLE_COLON)) {
                 throw new IllegalArgumentException("The host is ipv6, but the pattern is not ipv6 pattern : " + pattern);
             }
         } else {
@@ -998,17 +998,17 @@ public class NetUtils {
 
     private static String[] getPatternHostAndPort(String pattern, boolean isIpv4) {
         String[] result = new String[2];
-        if (pattern.startsWith("[") && pattern.contains("]:")) {
+        if (pattern.startsWith(SYMBOL_LEFT_SQUARE_BRACKET) && pattern.contains(SYMBOL_RIGHT_SQUARE_BRACKET_COLON)) {
             int end = pattern.indexOf("]:");
             result[0] = pattern.substring(1, end);
             result[1] = pattern.substring(end + 2);
             return result;
-        } else if (pattern.startsWith("[") && pattern.endsWith("]")) {
+        } else if (pattern.startsWith(SYMBOL_LEFT_SQUARE_BRACKET) && pattern.endsWith(SYMBOL_RIGHT_SQUARE_BRACKET)) {
             result[0] = pattern.substring(1, pattern.length() - 1);
             result[1] = null;
             return result;
-        } else if (isIpv4 && pattern.contains(":")) {
-            int end = pattern.indexOf(":");
+        } else if (isIpv4 && pattern.contains(SYMBOL_COLON)) {
+            int end = pattern.indexOf(SYMBOL_COLON);
             result[0] = pattern.substring(0, end);
             result[1] = pattern.substring(end + 1);
             return result;
@@ -1027,7 +1027,7 @@ public class NetUtils {
 
 
     public static boolean isIpV6URLStdFormat(String ip) {
-        if ((ip.charAt(0) == '[' && ip.indexOf(']') > NUM_2)) {
+        if ((ip.charAt(0) == SYMBOL_LEFT_SQUARE_BRACKET_CHAR && ip.indexOf(SYMBOL_RIGHT_SQUARE_BRACKET_CHAR) > NUM_2)) {
             return true;
         } else if (ip.indexOf(SYMBOL_COLON) != ip.lastIndexOf(SYMBOL_COLON)) {
             return true;

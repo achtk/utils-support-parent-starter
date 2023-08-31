@@ -12,6 +12,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static com.chua.common.support.constant.CommonConstant.*;
+
 /**
  * source code serialization for {@link Reflections} <pre>{@code reflections.save(file, new JavaCodeSerializer())}</pre>
  * <p></p>an example of produced java source:
@@ -65,7 +67,7 @@ public class JavaCodeSerializer implements Serializer {
      */
     @Override
     public File save(Reflections reflections, String name) {
-        if (name.endsWith("/")) {
+        if (name.endsWith(SYMBOL_LEFT_SLASH)) {
             name = name.substring(0, name.length() - 1);
         }
 
@@ -116,10 +118,10 @@ public class JavaCodeSerializer implements Serializer {
             List<String> methods = new ArrayList<>();
             List<String> annotations = new ArrayList<>();
             map.get(fqn).stream().sorted().forEach(element -> {
-                if (element.startsWith("@")) {
+                if (element.startsWith(SYMBOL_AT)) {
                     annotations.add(element.substring(1));
-                } else if (element.contains("(")) {
-                    if (!element.startsWith("<")) {
+                } else if (element.contains(SYMBOL_LEFT_BRACKETS)) {
+                    if (!element.startsWith(SYMBOL_LEFT_TRIANGLE_BRACKET)) {
                         int i = element.indexOf('(');
                         String name = element.substring(0, i);
                         String params = element.substring(i + 1, element.indexOf(")"));

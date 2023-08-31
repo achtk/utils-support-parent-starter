@@ -4,7 +4,7 @@ import com.chua.common.support.jsoup.xpath.model.Node;
 import com.chua.common.support.jsoup.xpath.model.Predicate;
 import com.chua.common.support.jsoup.xpath.util.EmMap;
 
-import static com.chua.common.support.constant.CommonConstant.SYMBOL_LEFT_SQUARE_BRACKET_CHAR;
+import static com.chua.common.support.constant.CommonConstant.*;
 
 /**
  * 用于生成xpath语法树的有限状态机
@@ -50,7 +50,7 @@ public class NodeTreeBuilderStateMachine {
             public void parser(NodeTreeBuilderStateMachine stateMachine, char[] xpath) {
                 int curtmp = stateMachine.cur;
                 StringBuilder accumTmp = new StringBuilder();
-                while (curtmp < xpath.length && xpath[curtmp] != SYMBOL_LEFT_SQUARE_BRACKET_CHAR && xpath[curtmp] != '/') {
+                while (curtmp < xpath.length && xpath[curtmp] != SYMBOL_LEFT_SQUARE_BRACKET_CHAR && xpath[curtmp] != SYMBOL_LEFT_SLASH_CHAR) {
                     if (xpath[curtmp] == ':') {
                         stateMachine.context.xpathTr.getLast().setAxis(accumTmp.toString());
                         stateMachine.cur = curtmp + 2;
@@ -69,7 +69,7 @@ public class NodeTreeBuilderStateMachine {
         TAG {
             @Override
             public void parser(NodeTreeBuilderStateMachine stateMachine, char[] xpath) {
-                while (stateMachine.cur < xpath.length && xpath[stateMachine.cur] != SYMBOL_LEFT_SQUARE_BRACKET_CHAR && xpath[stateMachine.cur] != '/') {
+                while (stateMachine.cur < xpath.length && xpath[stateMachine.cur] != SYMBOL_LEFT_SQUARE_BRACKET_CHAR && xpath[stateMachine.cur] != SYMBOL_LEFT_SLASH_CHAR) {
                     stateMachine.accum.append(xpath[stateMachine.cur]);
                     stateMachine.cur += 1;
                 }
@@ -77,7 +77,7 @@ public class NodeTreeBuilderStateMachine {
                 stateMachine.accum = new StringBuilder();
                 if (stateMachine.cur == xpath.length) {
                     stateMachine.state = END;
-                } else if (xpath[stateMachine.cur] == '/') {
+                } else if (xpath[stateMachine.cur] == SYMBOL_LEFT_SLASH_CHAR) {
                     stateMachine.state = SCOPE;
                 } else if (xpath[stateMachine.cur] == SYMBOL_LEFT_SQUARE_BRACKET_CHAR) {
                     stateMachine.state = PREDICATE;
@@ -92,11 +92,11 @@ public class NodeTreeBuilderStateMachine {
             public void parser(NodeTreeBuilderStateMachine stateMachine, char[] xpath) {
                 int deep = 0;
                 stateMachine.cur += 1;
-                while (!(xpath[stateMachine.cur] == ']' && deep == 0)) {
-                    if (xpath[stateMachine.cur] == '[') {
+                while (!(xpath[stateMachine.cur] == SYMBOL_RIGHT_SQUARE_BRACKET_CHAR && deep == 0)) {
+                    if (xpath[stateMachine.cur] == SYMBOL_LEFT_SQUARE_BRACKET_CHAR) {
                         deep += 1;
                     }
-                    if (xpath[stateMachine.cur] == ']') {
+                    if (xpath[stateMachine.cur] == SYMBOL_RIGHT_SQUARE_BRACKET_CHAR) {
                         deep -= 1;
                     }
                     stateMachine.accum.append(xpath[stateMachine.cur]);

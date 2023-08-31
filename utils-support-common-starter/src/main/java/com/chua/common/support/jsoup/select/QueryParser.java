@@ -21,6 +21,36 @@ import static com.chua.common.support.jsoup.internal.Normalizer.normalize;
 public class QueryParser {
     private final static String[] COMBINATORS = {",", ">", "+", "~", " "};
     private static final String[] ATTRIBUTE_EVAL = new String[]{"=", "!=", "^=", "$=", "*=", "~="};
+    private static final String REGEX = "*|";
+    private static final String REG_LT = ":lt(";
+    private static final String REG_GT = ":gt(";
+    private static final String REG_EQ = ":eq(";
+    private static final String REG_HAS = ":has(";
+    private static final String REG_CONTAINS = ":contains(";
+    private static final String REG_CONTAINS_OWN = ":containsOwn(";
+    private static final String REG_CT = ":containsWholeText(";
+    private static final String CWOT = ":containsWholeOwnText(";
+    private static final String CD = ":containsData(";
+    private static final String MAT = ":matches(";
+    private static final String MO = ":matchesOwn(";
+    private static final String MWT = ":matchesWholeText(";
+    private static final String MWOT = ":matchesWholeOwnText(";
+    private static final String N = ":not(";
+    private static final String NC = ":nth-child(";
+    private static final String NLC = ":nth-last-child(";
+    private static final String NOT = ":nth-of-type(";
+    private static final String NLOT = ":nth-last-of-type(";
+    private static final String FC = ":first-child";
+    private static final String LC = ":last-child";
+    private static final String FOT = ":first-of-type";
+    private static final String LOT = ":last-of-type";
+    private static final String OC = ":only-child";
+    private static final String OOT = ":only-of-type";
+    private static final String E = ":empty";
+    private static final String R = ":root";
+    private static final String MT = ":matchText";
+    private static final String ODD = "odd";
+    private static final String EVEN = "even";
 
     private final TokenQueue tq;
     private final String query;
@@ -28,6 +58,7 @@ public class QueryParser {
 
     /**
      * Create a new QueryParser.
+     *
      * @param query CSS query
      */
     private QueryParser(String query) {
@@ -164,67 +195,67 @@ public class QueryParser {
     private void findElements() {
         if (tq.matchChomp(SYMBOL_HASH)) {
             byId();
-        } else if (tq.matchChomp(".")) {
+        } else if (tq.matchChomp(SYMBOL_DOT)) {
             byClass();
-        } else if (tq.matchesWord() || tq.matches("*|")) {
+        } else if (tq.matchesWord() || tq.matches(REGEX)) {
             byTag();
         } else if (tq.matches(SYMBOL_LEFT_SQUARE_BRACKET)) {
             byAttribute();
-        } else if (tq.matchChomp("*")) {
+        } else if (tq.matchChomp(SYMBOL_ASTERISK)) {
             allElements();
-        } else if (tq.matchChomp(":lt(")) {
+        } else if (tq.matchChomp(REG_LT)) {
             indexLessThan();
-        } else if (tq.matchChomp(":gt(")) {
+        } else if (tq.matchChomp(REG_GT)) {
             indexGreaterThan();
-        } else if (tq.matchChomp(":eq(")) {
+        } else if (tq.matchChomp(REG_EQ)) {
             indexEquals();
-        } else if (tq.matches(":has(")) {
+        } else if (tq.matches(REG_HAS)) {
             has();
-        } else if (tq.matches(":contains(")) {
+        } else if (tq.matches(REG_CONTAINS)) {
             contains(false);
-        } else if (tq.matches(":containsOwn(")) {
+        } else if (tq.matches(REG_CONTAINS_OWN)) {
             contains(true);
-        } else if (tq.matches(":containsWholeText(")) {
+        } else if (tq.matches(REG_CT)) {
             containsWholeText(false);
-        } else if (tq.matches(":containsWholeOwnText(")) {
+        } else if (tq.matches(CWOT)) {
             containsWholeText(true);
-        } else if (tq.matches(":containsData(")) {
+        } else if (tq.matches(CD)) {
             containsData();
-        } else if (tq.matches(":matches(")) {
+        } else if (tq.matches(MAT)) {
             matches(false);
-        } else if (tq.matches(":matchesOwn(")) {
+        } else if (tq.matches(MO)) {
             matches(true);
-        } else if (tq.matches(":matchesWholeText(")) {
+        } else if (tq.matches(MWT)) {
             matchesWholeText(false);
-        } else if (tq.matches(":matchesWholeOwnText(")) {
+        } else if (tq.matches(MWOT)) {
             matchesWholeText(true);
-        } else if (tq.matches(":not(")) {
+        } else if (tq.matches(N)) {
             not();
-        } else if (tq.matchChomp(":nth-child(")) {
+        } else if (tq.matchChomp(NC)) {
             cssNthChild(false, false);
-        } else if (tq.matchChomp(":nth-last-child(")) {
+        } else if (tq.matchChomp(NLC)) {
             cssNthChild(true, false);
-        } else if (tq.matchChomp(":nth-of-type(")) {
+        } else if (tq.matchChomp(NOT)) {
             cssNthChild(false, true);
-        } else if (tq.matchChomp(":nth-last-of-type(")) {
+        } else if (tq.matchChomp(NLOT)) {
             cssNthChild(true, true);
-        } else if (tq.matchChomp(":first-child")) {
+        } else if (tq.matchChomp(FC)) {
             evaluators.add(new AbstractEvaluator.IsFirstChild());
-        } else if (tq.matchChomp(":last-child")) {
+        } else if (tq.matchChomp(LC)) {
             evaluators.add(new AbstractEvaluator.IsLastChild());
-        } else if (tq.matchChomp(":first-of-type")) {
+        } else if (tq.matchChomp(FOT)) {
             evaluators.add(new AbstractEvaluator.IsFirstOfType());
-        } else if (tq.matchChomp(":last-of-type")) {
+        } else if (tq.matchChomp(LOT)) {
             evaluators.add(new AbstractEvaluator.IsLastOfType());
-        } else if (tq.matchChomp(":only-child")) {
+        } else if (tq.matchChomp(OC)) {
             evaluators.add(new AbstractEvaluator.IsOnlyChild());
-        } else if (tq.matchChomp(":only-of-type")) {
+        } else if (tq.matchChomp(OOT)) {
             evaluators.add(new AbstractEvaluator.IsOnlyOfType());
-        } else if (tq.matchChomp(":empty")) {
+        } else if (tq.matchChomp(E)) {
             evaluators.add(new AbstractEvaluator.IsEmpty());
-        } else if (tq.matchChomp(":root")) {
+        } else if (tq.matchChomp(R)) {
             evaluators.add(new AbstractEvaluator.IsRoot());
-        } else if (tq.matchChomp(":matchText")) {
+        } else if (tq.matchChomp(MT)) {
             evaluators.add(new AbstractEvaluator.MatchText());
         } else {
             throw new Selector.SelectorParseException("Could not parse query '%s': unexpected token at '%s'", query, tq.remainder());
@@ -248,15 +279,15 @@ public class QueryParser {
         String tagName = normalize(tq.consumeElementSelector());
         Validate.notEmpty(tagName);
 
-        if (tagName.startsWith("*|")) {
+        if (tagName.startsWith(REGEX)) {
             String plainTag = tagName.substring(2);
             evaluators.add(new AbstractCombiningEvaluator.Or(
                     new AbstractEvaluator.Tag(plainTag),
-                    new AbstractEvaluator.TagEndsWith(tagName.replace("*|", ":")))
+                    new AbstractEvaluator.TagEndsWith(tagName.replace(REGEX, SYMBOL_COLON)))
             );
         } else {
-            if (tagName.contains("|")) {
-                tagName = tagName.replace("|", ":");
+            if (tagName.contains(SYMBOL_PIPE)) {
+                tagName = tagName.replace(SYMBOL_PIPE, SYMBOL_COLON);
             }
 
             evaluators.add(new AbstractEvaluator.Tag(tagName));
@@ -270,23 +301,23 @@ public class QueryParser {
         cq.consumeWhitespace();
 
         if (cq.isEmpty()) {
-            if (key.startsWith("^")) {
+            if (key.startsWith(SYMBOL_EXPONENT)) {
                 evaluators.add(new AbstractEvaluator.AttributeStarting(key.substring(1)));
             } else {
                 evaluators.add(new AbstractEvaluator.Attribute(key));
             }
         } else {
-            if (cq.matchChomp("=")) {
+            if (cq.matchChomp(SYMBOL_EQUALS)) {
                 evaluators.add(new AbstractEvaluator.AttributeWithValue(key, cq.remainder()));
-            } else if (cq.matchChomp("!=")) {
+            } else if (cq.matchChomp(NO_EQUALS)) {
                 evaluators.add(new AbstractEvaluator.AttributeWithValueNot(key, cq.remainder()));
-            } else if (cq.matchChomp("^=")) {
+            } else if (cq.matchChomp(XOR)) {
                 evaluators.add(new AbstractEvaluator.AttributeWithValueStarting(key, cq.remainder()));
-            } else if (cq.matchChomp("$=")) {
+            } else if (cq.matchChomp(SYMBOL_DOLLAR_EQUALS)) {
                 evaluators.add(new AbstractEvaluator.AttributeWithValueEnding(key, cq.remainder()));
-            } else if (cq.matchChomp("*=")) {
+            } else if (cq.matchChomp(SYMBOL_ASTERISK_EQUALS)) {
                 evaluators.add(new AbstractEvaluator.AttributeWithValueContaining(key, cq.remainder()));
-            } else if (cq.matchChomp("~=")) {
+            } else if (cq.matchChomp(SYMBOL_TILDE_EQUALS)) {
                 evaluators.add(new AbstractEvaluator.AttributeWithValueMatching(key, Pattern.compile(cq.remainder())));
             } else {
                 throw new Selector.SelectorParseException("Could not parse attribute query '%s': unexpected token at '%s'", query, cq.remainder());
@@ -318,10 +349,10 @@ public class QueryParser {
         Matcher matcher = NTH_AB.matcher(argS);
         Matcher mB = NTH_B.matcher(argS);
 		final int a, b;
-		if ("odd".equals(argS)) {
-			a = 2;
-			b = 1;
-		} else if ("even".equals(argS)) {
+        if (ODD.equals(argS)) {
+            a = 2;
+            b = 1;
+        } else if (EVEN.equals(argS)) {
             a = 2;
             b = 0;
         } else if (matcher.matches()) {

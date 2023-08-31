@@ -14,6 +14,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
 
+import static com.chua.common.support.constant.CommonConstant.*;
+
 
 /**
  * A XmlJsonArray is an ordered sequence of values. Its external text form is a
@@ -81,7 +83,7 @@ public class XmlJsonArray implements Iterable<Object> {
      */
     public XmlJsonArray(XmlJsonTokener x) throws XmlJsonException {
         this();
-        if (x.nextClean() != '[') {
+        if (x.nextClean() != SYMBOL_LEFT_SQUARE_BRACKET_CHAR) {
             throw x.syntaxError("A XmlJsonArray text must start with '['");
         }
 
@@ -90,10 +92,10 @@ public class XmlJsonArray implements Iterable<Object> {
             // array is unclosed. No ']' found, instead EOF
             throw x.syntaxError("Expected a ',' or ']'");
         }
-        if (nextChar != ']') {
+        if (nextChar != SYMBOL_RIGHT_SQUARE_BRACKET_CHAR) {
             x.back();
             for (; ; ) {
-                if (x.nextClean() == ',') {
+                if (x.nextClean() == SYMBOL_COMMA_CHAR) {
                     x.back();
                     this.myArrayList.add(XmlToJsonObject.NULL);
                 } else {
@@ -104,7 +106,7 @@ public class XmlJsonArray implements Iterable<Object> {
                     case 0:
                         // array is unclosed. No ']' found, instead EOF
                         throw x.syntaxError("Expected a ',' or ']'");
-                    case ',':
+                    case SYMBOL_COMMA_CHAR:
                         nextChar = x.nextClean();
                         if (nextChar == 0) {
                             // array is unclosed. No ']' found, instead EOF
@@ -115,7 +117,7 @@ public class XmlJsonArray implements Iterable<Object> {
                         }
                         x.back();
                         break;
-                    case ']':
+                    case SYMBOL_RIGHT_SQUARE_BRACKET_CHAR:
                         return;
                     default:
                         throw x.syntaxError("Expected a ',' or ']'");

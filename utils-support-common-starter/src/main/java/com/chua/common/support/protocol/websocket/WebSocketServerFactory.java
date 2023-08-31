@@ -40,11 +40,25 @@ import java.util.List;
  */
 public interface WebSocketServerFactory extends WebSocketFactory {
 
+  /**
+   * 创建网络套接字
+   *
+   * @param a 一个
+   * @param d d
+   * @return {@link com.chua.common.support.protocol.websocket.WebSocketImpl}
+   */
   @Override
   com.chua.common.support.protocol.websocket.WebSocketImpl createWebSocket(com.chua.common.support.protocol.websocket.WebSocketAdapter a, Draft d);
 
+  /**
+   * 创建网络套接字
+   *
+   * @param webSocketAdapter 一个
+   * @param drafts           草稿
+   * @return {@link WebSocketImpl}
+   */
   @Override
-  WebSocketImpl createWebSocket(WebSocketAdapter a, List<Draft> drafts);
+  WebSocketImpl createWebSocket(WebSocketAdapter webSocketAdapter, List<Draft> drafts);
 
   /**
    * Allows to wrap the SocketChannel( key.channel() ) to insert a protocol layer( like ssl or proxy

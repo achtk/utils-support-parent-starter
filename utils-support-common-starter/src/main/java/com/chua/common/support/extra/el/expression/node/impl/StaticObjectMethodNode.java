@@ -8,8 +8,12 @@ import com.chua.common.support.extra.el.expression.token.ValueResult;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Map;
+
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_COMMA_CHAR;
+
 /**
  * 基础类
+ *
  * @author CH
  */
 public class StaticObjectMethodNode extends AbstractMethodNode {
@@ -78,9 +82,9 @@ public class StaticObjectMethodNode extends AbstractMethodNode {
         cache.append(beanType.getName()).append('.').append(methodName).append('(');
         if (argsNodes != null) {
             for (CalculateNode each : argsNodes) {
-                cache.append(each.literals()).append(',');
+                cache.append(each.literals()).append(SYMBOL_COMMA_CHAR);
             }
-            if (cache.charAt(cache.length() - 1) == ',') {
+            if (cache.charAt(cache.length() - 1) == SYMBOL_COMMA_CHAR) {
                 cache.setLength(cache.length() - 1);
             }
         }

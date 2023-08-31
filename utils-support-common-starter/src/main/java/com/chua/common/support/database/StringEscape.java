@@ -9,6 +9,8 @@ package com.chua.common.support.database;
  */
 public class StringEscape {
 
+    private static final String REGEX = "\'(.+)\'";
+
     /**
      * 字符串是否需要转义
      *
@@ -133,7 +135,7 @@ public class StringEscape {
      * @return 转义后的字符串
      */
     public static String escapeString(String escapeStr) {
-        if (escapeStr.matches("\'(.+)\'")) {
+        if (escapeStr.matches(REGEX)) {
             escapeStr = escapeStr.substring(1, escapeStr.length() - 1);
         }
         return "\'" + escapeRawString(escapeStr) + "\'";

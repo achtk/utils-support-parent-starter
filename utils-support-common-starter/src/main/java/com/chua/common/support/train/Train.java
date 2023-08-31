@@ -138,6 +138,13 @@ public interface Train<Chain> extends InitializingAware {
         doAnalysis(files, trainingDatasetRoot, validateDatasetRoot);
     }
 
+    /**
+     * 分析
+     *
+     * @param files    文件
+     * @param train    训练文件
+     * @param validate 校验文件
+     */
     default void doAnalysis(File[] files, File train, File validate) {
         if (null == files || files.length == 0) {
             return;
@@ -152,6 +159,13 @@ public interface Train<Chain> extends InitializingAware {
         validateDirector(files, train, validate);
     }
 
+    /**
+     * 校验目录
+     *
+     * @param files    文件
+     * @param train    训练文件
+     * @param validate 校验文件
+     */
     default void validateDirector(File[] files, File train, File validate) {
         for (File file : files) {
             File train1 = new File(train, file.getName());
@@ -170,6 +184,13 @@ public interface Train<Chain> extends InitializingAware {
         }
     }
 
+    /**
+     * 检验子目录
+     *
+     * @param files    文件
+     * @param train    训练文件
+     * @param validate 校验文件
+     */
     default void validateSubFile(File[] files, File train, File validate) {
         int validateNum = files.length / 3;
         for (int i = 0; i < validateNum; i++) {
@@ -192,6 +213,12 @@ public interface Train<Chain> extends InitializingAware {
         }
     }
 
+    /**
+     * 是否子目录
+     *
+     * @param files 文件
+     * @return 是否子目录
+     */
     default boolean isSubFiles(File[] files) {
         return files[0].isFile();
     }

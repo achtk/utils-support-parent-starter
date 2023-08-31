@@ -250,9 +250,7 @@ public class DbfWriter extends DbfBase implements AutoCloseable {
         this.write(null);
     }
 
-    private void writeRecord(DataOutput dataOutput, Object[] objectArray)
-            throws IOException {
-
+    private void writeRecord(DataOutput dataOutput, Object[] objectArray) throws IOException {
         dataOutput.write((byte) ' ');
         for (int j = 0; j < this.header.fieldArray.length; j++) {
 
@@ -260,19 +258,14 @@ public class DbfWriter extends DbfBase implements AutoCloseable {
 
                 case 'C':
                     if (objectArray[j] != null) {
-
                         String strValue = objectArray[j].toString();
                         dataOutput.write(Utils.textPadding(strValue, characterSetName, this.header.fieldArray[j].getFieldLength()));
                     } else {
-
                         dataOutput.write(Utils.textPadding("", this.characterSetName, this.header.fieldArray[j].getFieldLength()));
                     }
-
                     break;
-
                 case 'D':
                     if (objectArray[j] != null) {
-
                         GregorianCalendar calendar = new GregorianCalendar();
                         calendar.setTime((Date) objectArray[j]);
 //						StringBuffer t_sb = new StringBuffer();
@@ -280,24 +273,16 @@ public class DbfWriter extends DbfBase implements AutoCloseable {
                         dataOutput.write(Utils.textPadding(String.valueOf(calendar.get(Calendar.MONTH) + 1), this.characterSetName, 2, Utils.ALIGN_RIGHT, (byte) '0'));
                         dataOutput.write(Utils.textPadding(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)), this.characterSetName, 2, Utils.ALIGN_RIGHT, (byte) '0'));
                     } else {
-
                         dataOutput.write("        ".getBytes());
                     }
-
                     break;
-
                 case 'F':
-
                     if (objectArray[j] != null) {
-
                         dataOutput.write(Utils.doubleFormating((Double) objectArray[j], this.characterSetName, this.header.fieldArray[j].getFieldLength(), this.header.fieldArray[j].getDecimalCount()));
                     } else {
-
                         dataOutput.write(Utils.textPadding("?", this.characterSetName, this.header.fieldArray[j].getFieldLength(), Utils.ALIGN_RIGHT));
                     }
-
                     break;
-
                 case 'N':
                     if (objectArray[j] != null) {
                         dataOutput.write(
@@ -306,30 +291,20 @@ public class DbfWriter extends DbfBase implements AutoCloseable {
                         dataOutput.write(
                                 Utils.textPadding("?", this.characterSetName, this.header.fieldArray[j].getFieldLength(), Utils.ALIGN_RIGHT));
                     }
-
                     break;
                 case 'L':
-
                     if (objectArray[j] != null) {
-
                         if (Objects.equals((Boolean) objectArray[j], Boolean.TRUE)) {
-
                             dataOutput.write((byte) 'T');
                         } else {
-
                             dataOutput.write((byte) 'F');
                         }
                     } else {
-
                         dataOutput.write((byte) '?');
                     }
-
                     break;
-
                 case 'M':
-
                     break;
-
                 default:
                     throw new DbfException("Unknown field type " + this.header.fieldArray[j].getDataType());
             }

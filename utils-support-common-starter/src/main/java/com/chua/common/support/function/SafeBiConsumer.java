@@ -12,6 +12,7 @@ public interface SafeBiConsumer<T, U> extends BiConsumer<T, U> {
     /**
      * 获取数据
      *
+     * @param u u
      * @param t 参数
      */
     @Override
@@ -25,6 +26,7 @@ public interface SafeBiConsumer<T, U> extends BiConsumer<T, U> {
     /**
      * 获取结果
      *
+     * @param u u
      * @param t 参数
      * @throws Throwable Throwable
      */

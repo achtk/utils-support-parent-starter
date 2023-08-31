@@ -4,6 +4,8 @@ import com.alibaba.fastjson2.JSONArray;
 
 import java.io.*;
 
+import static com.chua.common.support.constant.CommonConstant.*;
+
 /*
 Public Domain.
  */
@@ -112,7 +114,7 @@ public class XmlJsonTokener {
      */
     private void decrementIndexes() {
         this.index--;
-        if (this.previous == '\r' || this.previous == '\n') {
+        if (this.previous == SYMBOL_R_CHAR || this.previous == SYMBOL_N_CHAR) {
             this.line--;
             this.character = this.characterPreviousLine;
         } else if (this.character > 0) {
@@ -128,13 +130,13 @@ public class XmlJsonTokener {
      * @return An int between 0 and 15, or -1 if c was not a hex digit.
      */
     public static int dehexchar(char c) {
-        if (c >= '0' && c <= '9') {
+        if (c >= CHARACTER_0 && c <= CHARACTER_9) {
             return c - '0';
         }
-        if (c >= 'A' && c <= 'F') {
+        if (c >= LETTER_UPPERCASE_A && c <= LETTER_UPPERCASE_F) {
             return c - ('A' - 10);
         }
-        if (c >= 'a' && c <= 'f') {
+        if (c >= LETTER_LOWERCASE_A && c <= LETTER_LOWERCASE_F) {
             return c - ('a' - 10);
         }
         return -1;
@@ -226,12 +228,12 @@ public class XmlJsonTokener {
     private void incrementIndexes(int c) {
         if (c > 0) {
             this.index++;
-            if (c == '\r') {
+            if (c == SYMBOL_R_CHAR) {
                 this.line++;
                 this.characterPreviousLine = this.character;
                 this.character = 0;
-            } else if (c == '\n') {
-                if (this.previous != '\r') {
+            } else if (c == SYMBOL_N_CHAR) {
+                if (this.previous != SYMBOL_R_CHAR) {
                     this.line++;
                     this.characterPreviousLine = this.character;
                 }
@@ -465,7 +467,8 @@ public class XmlJsonTokener {
          */
 
         StringBuilder sb = new StringBuilder();
-        while (c >= ' ' && ",:]}/\\\"[{;=#".indexOf(c) < 0) {
+        String reg = ",:]}/\\\"[{;=#";
+        while (c >= SYMBOL_BLANK_CHAR && reg.indexOf(c) < 0) {
             sb.append(c);
             c = this.next();
         }

@@ -9,8 +9,12 @@ import com.chua.common.support.extra.el.expression.util.Functions;
 import com.chua.common.support.utils.CharUtils;
 
 import java.util.Deque;
+
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_LEFT_BRACKETS_CHAR;
+
 /**
  * 基础类
+ *
  * @author CH
  */
 public class PropertyParser extends NodeParser {
@@ -29,8 +33,8 @@ public class PropertyParser extends NodeParser {
         while (CharUtils.isAlphabet(c = getChar(offset, el)) || CharUtils.isDigital(c)) {
             offset++;
         }
-        
-        if (c == '(') {
+
+        if (c == SYMBOL_LEFT_BRACKETS_CHAR) {
             return next.parse(el, origin, nodes, function);
         }
         String literals = el.substring(origin + 1, offset);

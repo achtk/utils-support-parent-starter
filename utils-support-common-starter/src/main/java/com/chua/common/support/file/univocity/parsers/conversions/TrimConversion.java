@@ -1,5 +1,7 @@
 package com.chua.common.support.file.univocity.parsers.conversions;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_SPACE_CHAR;
+
 /**
  * Removes leading and trailing white spaces from an input String
  * <p>
@@ -48,7 +50,7 @@ public class TrimConversion implements Conversion<String, String> {
         }
         if (length != -1) {
             int begin = 0;
-            while (begin < input.length() && input.charAt(begin) <= ' ') {
+            while (begin < input.length() && input.charAt(begin) <= SYMBOL_SPACE_CHAR) {
                 begin++;
             }
             if (begin == input.length()) {
@@ -60,7 +62,7 @@ public class TrimConversion implements Conversion<String, String> {
                 end = input.length() - 1;
             }
 
-            while (input.charAt(end) <= ' ') {
+            while (input.charAt(end) <= SYMBOL_SPACE_CHAR) {
                 end--;
             }
 

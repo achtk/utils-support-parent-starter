@@ -6,6 +6,8 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_LEFT_SQUARE_BRACKET;
+
 /**
  * Helper methods for converting between annotated elements and their names
  *
@@ -126,8 +128,8 @@ public interface NameHelper {
             return PRIMITIVE_TYPES.get(STRING_LIST.indexOf(typeName));
         } else {
             String type;
-            if (typeName.contains("[")) {
-                int i = typeName.indexOf("[");
+            if (typeName.contains(SYMBOL_LEFT_SQUARE_BRACKET)) {
+                int i = typeName.indexOf(SYMBOL_LEFT_SQUARE_BRACKET);
                 type = typeName.substring(0, i);
                 String array = typeName.substring(i).replace("]", "");
                 if (STRING_LIST.contains(type)) {

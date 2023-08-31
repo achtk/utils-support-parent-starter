@@ -17,7 +17,7 @@ public class RightBracketParser extends NodeParser {
 
     @Override
     public int parse(String el, int offset, Deque<CalculateNode> nodes, int function, Invoker next) {
-        if (']' != getChar(offset, el)) {
+        if (SYMBOL_RIGHT_SQUARE_BRACKET_CHAR != getChar(offset, el)) {
             return next.parse(el, offset, nodes, function);
         }
         List<CalculateNode> list = new LinkedList<CalculateNode>();

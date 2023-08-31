@@ -11,12 +11,14 @@ import java.util.concurrent.atomic.AtomicReference;
  * @author Administrator
  * @see com.chua.common.support.database.annotation.Column
  */
-public class TableTableChain implements TableChain{
+public class TableTableChain implements TableChain {
+
+    private static final String VALUES = "value";
 
     @Override
     public void chain(AtomicReference<String> reference, Class<?> type, AnnotationAttributes annotationAttributes) {
-        if(!annotationAttributes.isEmpty("value")) {
-            reference.set(annotationAttributes.getString("value"));
+        if (!annotationAttributes.isEmpty(VALUES)) {
+            reference.set(annotationAttributes.getString(VALUES));
         }
     }
 

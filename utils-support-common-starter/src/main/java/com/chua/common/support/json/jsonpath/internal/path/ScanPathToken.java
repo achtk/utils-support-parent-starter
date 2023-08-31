@@ -113,6 +113,12 @@ public class ScanPathToken extends PathToken {
     }
 
     private interface Predicate {
+        /**
+         * 匹配
+         *
+         * @param model input
+         * @return 匹配
+         */
         boolean matches(Object model);
     }
 

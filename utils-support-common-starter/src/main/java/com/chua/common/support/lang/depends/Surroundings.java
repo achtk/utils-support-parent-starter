@@ -14,8 +14,10 @@ public interface Surroundings{
 
     /**
      * 记载
+     *
      * @param name 名称
      * @return 类
+     * @throws ClassNotFoundException cnf
      */
     Class<?> loadClass(String name) throws ClassNotFoundException;
 

@@ -19,7 +19,8 @@ public class ZhihuPageProcessor implements PageProcessor {
         page.putField("title", page.getHtml().xpath("//h1[@class='QuestionHeader-title']/text()").toString());
         page.putField("question", page.getHtml().xpath("//div[@class='QuestionRichText']//tidyText()").toString());
         page.putField("answer", page.getHtml().xpath("//div[@class='QuestionAnswer-content']/tidyText()").toString());
-        if (page.getResultItems().get("title") == null) {
+        String title = "title";
+        if (page.getResultItems().get(title) == null) {
             //skip this page
             page.setSkip(true);
         }

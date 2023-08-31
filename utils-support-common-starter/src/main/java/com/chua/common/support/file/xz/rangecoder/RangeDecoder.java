@@ -16,6 +16,7 @@ import java.io.IOException;
  * @author Administrator
  */
 public abstract class RangeDecoder extends RangeCoder {
+    private static final int X80000000 = 0x80000000;
     int range = 0;
     int code = 0;
 
@@ -34,15 +35,15 @@ public abstract class RangeDecoder extends RangeCoder {
         int bit;
 
         // Compare code and bound as if they were unsigned 32-bit integers.
-        if ((code ^ 0x80000000) < (bound ^ 0x80000000)) {
+        if ((code ^ X80000000) < (bound ^ X80000000)) {
             range = bound;
-            probs[index] = (short)(
+            probs[index] = (short) (
                     prob + ((BIT_MODEL_TOTAL - prob) >>> MOVE_BITS));
             bit = 0;
         } else {
             range -= bound;
             code -= bound;
-            probs[index] = (short)(prob - (prob >>> MOVE_BITS));
+            probs[index] = (short) (prob - (prob >>> MOVE_BITS));
             bit = 1;
         }
 

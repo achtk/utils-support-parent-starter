@@ -14,13 +14,17 @@ import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_COLON;
+
 /**
  * 包扫描类，可以扫描某个路径下所有的class
  *
  * @author admin
  */
-public class PackageScan
-{
+public class PackageScan {
+    private static final String IN = "in~";
+    private static final String OUT = "out~";
+
     /**
      * 根据给定的包名，返回包下面所有的类的全限定名 支持过滤语法，过滤语法以：开始。 规则有：
      * （1）以“in~”开头，代表必须包含后面的包名.返回的字符串数组中的字符串均包含后面的包名
@@ -32,13 +36,12 @@ public class PackageScan
     public static String[] scan(String packageName)
     {
         String filterNames = null;
-        if (packageName.contains(":"))
-        {
-            filterNames = packageName.split(":")[1];
-            packageName = packageName.split(":")[0];
+        if (packageName.contains(SYMBOL_COLON)) {
+            filterNames = packageName.split(SYMBOL_COLON)[1];
+            packageName = packageName.split(SYMBOL_COLON)[0];
         }
-        List<String> classNames   = new LinkedList<String>();
-        ClassLoader  loader       = Thread.currentThread().getContextClassLoader();
+        List<String> classNames = new LinkedList<>();
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
         String       resourceName = packageName.replaceAll("\\.", "/");
         try
         {
@@ -142,23 +145,17 @@ public class PackageScan
      */
     private static void doFilter(String filterNames, List<String> classNames)
     {
-        if (filterNames == null)
-        {
+        if (filterNames == null) {
             return;
         }
-        if (filterNames.startsWith("in~"))
-        {
+        if (filterNames.startsWith(IN)) {
             String[] filters = filterNames.substring(3).split(",");
-            for (String filter : filters)
-            {
+            for (String filter : filters) {
                 inFilter(filter, classNames);
             }
-        }
-        else if (filterNames.startsWith("out~"))
-        {
+        } else if (filterNames.startsWith(OUT)) {
             String[] filters = filterNames.substring(4).split(",");
-            for (String filter : filters)
-            {
+            for (String filter : filters) {
                 outFilter(filter, classNames);
             }
         }

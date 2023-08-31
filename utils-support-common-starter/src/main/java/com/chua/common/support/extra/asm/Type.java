@@ -30,6 +30,9 @@ package com.chua.common.support.extra.asm;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
+import static com.chua.common.support.constant.CommonConstant.LETTER_UPPERCASE_V;
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_RIGHT_BRACKETS_CHAR;
+
 /**
  * A Java field or method type. This class can be used to make it easier to manipulate type and
  * method descriptors.
@@ -299,8 +302,8 @@ public final class Type {
     // Skip the first character, which is always a '('.
     int currentOffset = 1;
     // Parse the argument types, one at a each loop iteration.
-    while (methodDescriptor.charAt(currentOffset) != ')') {
-      while (methodDescriptor.charAt(currentOffset) == '[') {
+    while (methodDescriptor.charAt(currentOffset) != SYMBOL_RIGHT_BRACKETS_CHAR) {
+      while (methodDescriptor.charAt(currentOffset) == SYMBOL_LEFT_SQUARE_BRACKET_CHAR) {
         currentOffset++;
       }
       if (methodDescriptor.charAt(currentOffset++) == 'L') {
@@ -317,9 +320,9 @@ public final class Type {
     currentOffset = 1;
     // Parse and create the argument types, one at each loop iteration.
     int currentArgumentTypeIndex = 0;
-    while (methodDescriptor.charAt(currentOffset) != ')') {
+    while (methodDescriptor.charAt(currentOffset) != SYMBOL_RIGHT_BRACKETS_CHAR) {
       final int currentArgumentTypeOffset = currentOffset;
-      while (methodDescriptor.charAt(currentOffset) == '[') {
+      while (methodDescriptor.charAt(currentOffset) == SYMBOL_LEFT_SQUARE_BRACKET_CHAR) {
         currentOffset++;
       }
       if (methodDescriptor.charAt(currentOffset++) == 'L') {
@@ -389,8 +392,8 @@ public final class Type {
     // Skip the first character, which is always a '('.
     int currentOffset = 1;
     // Skip the argument types, one at a each loop iteration.
-    while (methodDescriptor.charAt(currentOffset) != ')') {
-      while (methodDescriptor.charAt(currentOffset) == '[') {
+    while (methodDescriptor.charAt(currentOffset) != SYMBOL_RIGHT_BRACKETS_CHAR) {
+      while (methodDescriptor.charAt(currentOffset) == SYMBOL_LEFT_SQUARE_BRACKET_CHAR) {
         currentOffset++;
       }
       if (methodDescriptor.charAt(currentOffset++) == 'L') {
@@ -668,7 +671,7 @@ public final class Type {
    */
   public int getDimensions() {
     int numDimensions = 1;
-    while (valueBuffer.charAt(valueBegin + numDimensions) == '[') {
+    while (valueBuffer.charAt(valueBegin + numDimensions) == SYMBOL_LEFT_SQUARE_BRACKET_CHAR) {
       numDimensions++;
     }
     return numDimensions;
@@ -730,12 +733,12 @@ public final class Type {
     int currentOffset = 1;
     int currentChar = methodDescriptor.charAt(currentOffset);
     // Parse the argument types and compute their size, one at a each loop iteration.
-    while (currentChar != ')') {
+    while (currentChar != SYMBOL_RIGHT_BRACKETS_CHAR) {
       if (currentChar == 'J' || currentChar == 'D') {
         currentOffset++;
         argumentsSize += 2;
       } else {
-        while (methodDescriptor.charAt(currentOffset) == '[') {
+        while (methodDescriptor.charAt(currentOffset) == SYMBOL_LEFT_SQUARE_BRACKET_CHAR) {
           currentOffset++;
         }
         if (methodDescriptor.charAt(currentOffset++) == 'L') {
@@ -748,7 +751,7 @@ public final class Type {
       currentChar = methodDescriptor.charAt(currentOffset);
     }
     currentChar = methodDescriptor.charAt(currentOffset + 1);
-    if (currentChar == 'V') {
+    if (currentChar == LETTER_UPPERCASE_V) {
       return argumentsSize << 2;
     } else {
       int returnSize = (currentChar == 'J' || currentChar == 'D') ? 2 : 1;

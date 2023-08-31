@@ -13,6 +13,7 @@ public interface RejectStrategy {
      * 拒绝
      *
      * @param ossSystem ossSystem
+     * @return byte array
      */
     byte[] reject(OssSystem ossSystem);
 }

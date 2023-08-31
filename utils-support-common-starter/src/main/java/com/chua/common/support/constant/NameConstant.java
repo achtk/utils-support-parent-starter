@@ -11,6 +11,10 @@ import static com.chua.common.support.constant.CommonConstant.SYMBOL_DOT;
  */
 public class NameConstant implements Constant {
     /**
+     * CDATA
+     */
+    public static final String CDATA = "CDATA";
+    /**
      * with
      */
     public static final String WITH = "with";
@@ -303,4 +307,24 @@ public class NameConstant implements Constant {
      * aes
      */
     public static final String AES = "aes";
+    /**
+     * "elseif"
+     */
+    public static final String ELSEIF = "elseif";
+    /**
+     * "else"
+     */
+    public static final String ELSE = "else";
+    /**
+     * raw
+     */
+    public static final String END = "end";
+    /**
+     * raw
+     */
+    public static final String RAW = "raw";
+    /**
+     * "is"
+     */
+    public static final String IS = "is";
 }

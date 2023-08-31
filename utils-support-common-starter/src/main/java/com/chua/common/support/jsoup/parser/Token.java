@@ -289,6 +289,11 @@ abstract class Token {
             }
         }
 
+        /**
+         * toString
+         *
+         * @return str
+         */
         @Override
         abstract public String toString();
     }

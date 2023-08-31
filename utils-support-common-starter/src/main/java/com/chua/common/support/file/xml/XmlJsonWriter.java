@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 
+import static com.chua.common.support.constant.CommonConstant.*;
+
 /*
 Public Domain.
 */
@@ -96,9 +98,9 @@ public class XmlJsonWriter {
         if (string == null) {
             throw new XmlJsonException("Null pointer");
         }
-        if (this.mode == 'o' || this.mode == 'a') {
+        if (this.mode == LETTER_LOWERCASE_O || this.mode == LETTER_LOWERCASE_A) {
             try {
-                if (this.comma && this.mode == 'a') {
+                if (this.comma && this.mode == LETTER_LOWERCASE_A) {
                     this.writer.append(',');
                 }
                 this.writer.append(string);
@@ -108,7 +110,7 @@ public class XmlJsonWriter {
                 // it will just throw a "Method not found" exception instead.
                 throw new XmlJsonException(e);
             }
-            if (this.mode == 'o') {
+            if (this.mode == LETTER_LOWERCASE_O) {
                 this.mode = 'k';
             }
             this.comma = true;
@@ -128,7 +130,7 @@ public class XmlJsonWriter {
      *                       outermost array or object).
      */
     public XmlJsonWriter array() throws XmlJsonException {
-        if (this.mode == 'i' || this.mode == 'o' || this.mode == 'a') {
+        if (this.mode == LETTER_LOWERCASE_I || this.mode == LETTER_LOWERCASE_O || this.mode == LETTER_LOWERCASE_A) {
             this.push(null);
             this.append("[");
             this.comma = false;
@@ -199,7 +201,7 @@ public class XmlJsonWriter {
         if (string == null) {
             throw new XmlJsonException("Null key.");
         }
-        if (this.mode == 'k') {
+        if (this.mode == LETTER_LOWERCASE_K) {
             try {
                 XmlToJsonObject topObject = this.stack[this.top - 1];
                 // don't use the built in putOnce method to maintain Android support
@@ -237,10 +239,10 @@ public class XmlJsonWriter {
      *                       outermost array or object).
      */
     public XmlJsonWriter object() throws XmlJsonException {
-        if (this.mode == 'i') {
+        if (this.mode == LETTER_LOWERCASE_I) {
             this.mode = 'o';
         }
-        if (this.mode == 'o' || this.mode == 'a') {
+        if (this.mode == LETTER_LOWERCASE_O || this.mode == LETTER_LOWERCASE_A) {
             this.append("{");
             this.push(new XmlToJsonObject());
             this.comma = false;

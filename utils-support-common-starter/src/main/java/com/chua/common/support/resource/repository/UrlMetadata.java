@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
+import static com.chua.common.support.constant.CommonConstant.URL_PROTOCOL_FILE;
+
 /**
  * 元数据
  *
@@ -47,7 +49,7 @@ public final class UrlMetadata implements Metadata {
 
     @Override
     public String getName() {
-        if("file".equals(url.getProtocol())) {
+        if (URL_PROTOCOL_FILE.equals(url.getProtocol())) {
             return new File(url.getFile()).getName();
         }
 
@@ -56,7 +58,7 @@ public final class UrlMetadata implements Metadata {
 
     @Override
     public boolean isCompressFile() {
-        if("file".equals(url.getProtocol())) {
+        if (URL_PROTOCOL_FILE.equals(url.getProtocol())) {
             return FileUtils.isCompressFile(url.getFile());
         }
 

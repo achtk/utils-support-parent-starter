@@ -407,9 +407,13 @@ public class NumberConstant {
      */
     public static final double ZERO_DOUBLE = 0.0D;
     /**
+     * .9f
+     */
+    public static final float ZERO_NIGHT_FLOAT = .9f;
+    /**
      * 1.0f
      */
-    public static final float ONE_FLOAT = 1.0f;
+    public static final float ONE_FLOAT = 1.f;
     /**
      * -1.0f
      */
@@ -544,6 +548,10 @@ public class NumberConstant {
      */
     public static final int NUM_13 = 13;
     /**
+     * 14
+     */
+    public static final int NUM_14 = 14;
+    /**
      * 16
      */
     public static final int NUM_16 = 16;
@@ -599,6 +607,10 @@ public class NumberConstant {
      * 46
      */
     public static final int NUM_46 = 46;
+    /**
+     * 63
+     */
+    public static final int NUM_63 = 63;
     /**
      * 66
      */

@@ -60,6 +60,7 @@ import static com.chua.common.support.jsoup.internal.Normalizer.lowerCase;
  @author Administrator
  */
 public class Safelist {
+    private static final String ALL = ":all";
     private final Set<TagName> tagNames;
     private final Map<TagName, Set<AttributeKey>> attributes;
     private final Map<TagName, Map<AttributeKey, AttributeValue>> enforcedAttributes;
@@ -338,7 +339,7 @@ public class Safelist {
                 this.attributes.remove(tagName);
             }
         }
-        if (":all".equals(tag)) {
+        if (ALL.equals(tag)) {
             for (TagName name : this.attributes.keySet()) {
                 Set<AttributeKey> currentSet = this.attributes.get(name);
                 currentSet.removeAll(attributeSet);

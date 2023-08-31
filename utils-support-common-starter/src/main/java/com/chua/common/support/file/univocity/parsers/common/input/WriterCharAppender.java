@@ -21,6 +21,7 @@ import com.chua.common.support.file.univocity.parsers.common.Format;
 import java.io.IOException;
 import java.io.Writer;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_NULL_CHAR;
 import static com.chua.common.support.constant.NumberConstant.NUM_2;
 
 /**
@@ -78,7 +79,7 @@ public class WriterCharAppender extends ExpandingCharAppender {
 	public final void appendIgnoringWhitespace(char ch) {
 		if (ch == newLine && denormalizeLineEndings) {
 			super.appendIgnoringWhitespace(lineSeparator1);
-			if (lineSeparator2 != '\0') {
+			if (lineSeparator2 != SYMBOL_NULL_CHAR) {
 				super.appendIgnoringWhitespace(lineSeparator2);
 			}
 		} else {
@@ -98,7 +99,7 @@ public class WriterCharAppender extends ExpandingCharAppender {
 	public final void appendIgnoringPadding(char ch, char padding) {
 		if (ch == newLine && denormalizeLineEndings) {
 			super.appendIgnoringPadding(lineSeparator1, padding);
-			if (lineSeparator2 != '\0') {
+			if (lineSeparator2 != SYMBOL_NULL_CHAR) {
 				super.appendIgnoringPadding(lineSeparator2, padding);
 			}
 		} else {
@@ -118,7 +119,7 @@ public class WriterCharAppender extends ExpandingCharAppender {
 	public final void appendIgnoringWhitespaceAndPadding(char ch, char padding) {
 		if (ch == newLine && denormalizeLineEndings) {
 			super.appendIgnoringWhitespaceAndPadding(lineSeparator1, padding);
-			if (lineSeparator2 != '\0') {
+			if (lineSeparator2 != SYMBOL_NULL_CHAR) {
 				super.appendIgnoringWhitespaceAndPadding(lineSeparator2, padding);
 			}
 		} else {
@@ -169,7 +170,7 @@ public class WriterCharAppender extends ExpandingCharAppender {
 			expand();
 		}
 		chars[index++] = lineSeparator1;
-		if (lineSeparator2 != '\0') {
+		if (lineSeparator2 != SYMBOL_NULL_CHAR) {
 			chars[index++] = lineSeparator2;
 		}
 	}

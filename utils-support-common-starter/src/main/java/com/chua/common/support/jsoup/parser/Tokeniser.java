@@ -7,6 +7,7 @@ import com.chua.common.support.utils.StringUtils;
 import java.util.Arrays;
 
 import static com.chua.common.support.constant.CommonConstant.SYMBOL_HASH;
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_SEMICOLON;
 import static com.chua.common.support.constant.NumberConstant.NUM_2;
 
 
@@ -201,7 +202,7 @@ final class Tokeniser {
             }
 
             reader.unmark();
-            if (!reader.matchConsume(";")) {
+            if (!reader.matchConsume(SYMBOL_SEMICOLON)) {
                 characterReferenceError("missing semicolon on [&#%s]", numRef);
             }
             int charval = -1;
@@ -244,7 +245,7 @@ final class Tokeniser {
             }
 
             reader.unmark();
-            if (!reader.matchConsume(";")) {
+            if (!reader.matchConsume(SYMBOL_SEMICOLON)) {
                 characterReferenceError("missing semicolon on [&%s]", nameRef);
             }
             int numChars = Entities.codepointsForName(nameRef, multipointHolder);

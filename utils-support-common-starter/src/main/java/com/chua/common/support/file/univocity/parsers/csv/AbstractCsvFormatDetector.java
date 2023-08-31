@@ -15,7 +15,6 @@
  ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.csv;
 
-import com.chua.common.support.constant.CommonConstant;
 import com.chua.common.support.file.univocity.parsers.common.ArgumentUtils;
 import com.chua.common.support.file.univocity.parsers.common.input.InputAnalysisProcess;
 
@@ -97,17 +96,12 @@ public abstract class AbstractCsvFormatDetector implements InputAnalysisProcess 
         Map<Character, Integer> symbols = new LinkedHashMap<>();
         Map<Character, Integer> escape = new LinkedHashMap<>();
         List<Map<Character, Integer>> symbolsPerRow = new ArrayList<>();
-
-        int doubleQuoteCount = 0;
-        int singleQuoteCount = 0;
-
+        int doubleQuoteCount = 0, singleQuoteCount = 0;
         int i;
         char inQuote = '\0';
         boolean afterNewLine = true;
         for (i = 0; i < length; i++) {
-
             char ch = characters[i];
-
             if (afterNewLine && ch == comment) {
                 while (++i < length) {
                     ch = characters[i];
@@ -120,7 +114,6 @@ public abstract class AbstractCsvFormatDetector implements InputAnalysisProcess 
                 }
                 continue;
             }
-
             if (ch == '"' || ch == '\'') {
                 if (inQuote == ch) {
                     if (ch == '"') {
@@ -139,7 +132,6 @@ public abstract class AbstractCsvFormatDetector implements InputAnalysisProcess 
                             }
                         }
                     }
-
                     inQuote = '\0';
                 } else if (inQuote == '\0') {
                     char prev = '\0';

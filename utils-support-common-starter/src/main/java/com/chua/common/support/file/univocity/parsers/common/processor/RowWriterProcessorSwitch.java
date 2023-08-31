@@ -102,6 +102,11 @@ public abstract class RowWriterProcessorSwitch implements RowWriterProcessor<Obj
 	 */
 	public abstract NormalizedString[] getHeaders(Object input);
 
+	/**
+	 * 描述切换
+	 *
+	 * @return 描述
+	 */
 	protected abstract String describeSwitch();
 
 	/**

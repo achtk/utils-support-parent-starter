@@ -20,6 +20,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_QUESTION;
 import static com.chua.common.support.constant.NumberConstant.DEFAULT_INITIAL_CAPACITY;
 import static com.chua.common.support.http.HttpConstant.*;
 import static com.chua.common.support.http.HttpMethod.*;
@@ -137,7 +138,7 @@ public class UrlHttpClientInvoker extends AbstractHttpClientInvoker {
      * 处理地址
      */
     private void doAnalysisUrl(HttpMethod method) {
-        if (Objects.equals(GET, method) && !url.contains("?")) {
+        if (Objects.equals(GET, method) && !url.contains(SYMBOL_QUESTION)) {
             this.url = HttpClientUtils.createUrlWithParameters(url, request.getBody());
         }
     }

@@ -155,6 +155,11 @@ public interface TimeScheduler {
 
     }
 
+    /**
+     * 设置缓存
+     *
+     * @param timeSchedulerBuilder 构建
+     */
     void setCache(TimeSchedulerBuilder timeSchedulerBuilder);
 
 }

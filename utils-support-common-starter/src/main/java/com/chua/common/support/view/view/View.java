@@ -8,6 +8,8 @@ public interface View {
 
     /**
      * 输出外观
+     *
+     * @return {@link String}
      */
     String draw();
 

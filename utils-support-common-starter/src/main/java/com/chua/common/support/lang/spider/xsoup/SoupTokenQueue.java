@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import static com.chua.common.support.constant.CommonConstant.*;
+
 /**
  * A character queue with parsing helpers.
  * <br>
@@ -58,7 +60,7 @@ public class SoupTokenQueue {
     public static String trimQuotes(String str) {
         Preconditions.isTrue(str != null && str.length() > 0);
         String quote = str.substring(0, 1);
-        if (in(quote, "\"", "'")) {
+        if (in(quote, SYMBOL_QUOTE, SYMBOL_SINGLE_QUOTATION_MARK)) {
             Preconditions.isTrue(str.endsWith(quote), "Quote" + " for " + str + " is incomplete!");
             str = str.substring(1, str.length() - 1);
         }
@@ -463,7 +465,7 @@ public class SoupTokenQueue {
      */
     public String consumeTagName() {
         int start = pos;
-        while (!isEmpty() && (matchesWord() || matchesAny(':', '_', '-'))) {
+        while (!isEmpty() && (matchesWord() || matchesAny(SYMBOL_COLON_CHAR, SYMBOL_DASH_CHAR, SYMBOL_MINUS_CHAR))) {
             pos++;
         }
 
@@ -477,7 +479,7 @@ public class SoupTokenQueue {
      */
     public String consumeElementSelector() {
         int start = pos;
-        while (!isEmpty() && (matchesWord() || matchesAny('|', '_', '-'))) {
+        while (!isEmpty() && (matchesWord() || matchesAny(SYMBOL_PIPE_CHAR, SYMBOL_DASH_CHAR, SYMBOL_MINUS_CHAR))) {
             pos++;
         }
 
@@ -501,7 +503,7 @@ public class SoupTokenQueue {
      */
     public String consumeCssIdentifier() {
         int start = pos;
-        while (!isEmpty() && (matchesWord() || matchesAny('-', '_'))) {
+        while (!isEmpty() && (matchesWord() || matchesAny(SYMBOL_MINUS_CHAR, SYMBOL_DASH_CHAR))) {
             pos++;
         }
 
@@ -515,7 +517,7 @@ public class SoupTokenQueue {
      */
     public String consumeAttributeKey() {
         int start = pos;
-        while (!isEmpty() && (matchesWord() || matchesAny('-', '_', ':'))) {
+        while (!isEmpty() && (matchesWord() || matchesAny(SYMBOL_MINUS_CHAR, SYMBOL_DASH_CHAR, SYMBOL_COLON_CHAR))) {
             pos++;
         }
 
@@ -551,7 +553,7 @@ public class SoupTokenQueue {
 
     public String consumeToUnescaped(String str) {
         String s = consumeToAny(str);
-        if (s.length() > 0 && s.charAt(s.length() - 1) == '\\') {
+        if (s.length() > 0 && s.charAt(s.length() - 1) == SYMBOL_RIGHT_SLASH_CHAR) {
             s += consume();
             s += consumeToUnescaped(str);
         }
