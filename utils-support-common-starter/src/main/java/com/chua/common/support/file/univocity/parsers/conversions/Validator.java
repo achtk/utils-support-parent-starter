@@ -10,6 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.chua.common.support.constant.CommonConstant.GENERAL;
+import static com.chua.common.support.constant.CommonConstant.HEX;
 import static com.chua.common.support.constant.NumberConstant.*;
 import static com.chua.common.support.constant.RegexConstant.*;
 
@@ -999,7 +1000,7 @@ public interface Validator<T> {
      * @return 是否为Hex（16进制）字符串
      * @since 4.3.3
      */
-    public static boolean isHex(CharSequence value) {
+    static boolean isHex(CharSequence value) {
         return isMatchRegex(HEX, value);
     }
 

@@ -3,10 +3,7 @@ package com.chua.common.support.file.univocity.parsers.csv;
 import com.chua.common.support.file.univocity.parsers.common.AbstractCommonParserSettings;
 import com.chua.common.support.file.univocity.parsers.common.AbstractParser;
 import com.chua.common.support.file.univocity.parsers.common.TextParsingException;
-import com.chua.common.support.file.univocity.parsers.common.input.DefaultCharAppender;
-import com.chua.common.support.file.univocity.parsers.common.input.ExpandingCharAppender;
-import com.chua.common.support.file.univocity.parsers.common.input.InputAnalysisProcess;
-import com.chua.common.support.file.univocity.parsers.common.input.NoopCharAppender;
+import com.chua.common.support.file.univocity.parsers.common.input.*;
 
 import java.io.Reader;
 

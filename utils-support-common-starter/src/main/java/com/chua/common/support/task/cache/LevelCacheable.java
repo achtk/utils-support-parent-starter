@@ -1,10 +1,10 @@
 package com.chua.common.support.task.cache;
 
-import com.chua.common.support.utils.IoUtils;
+import com.chua.common.support.extra.quickio.api.Kv;
+import com.chua.common.support.extra.quickio.core.Quick;
 import com.chua.common.support.utils.ObjectUtils;
 import com.chua.common.support.value.TimeValue;
 import com.chua.common.support.value.Value;
-import org.iq80.leveldb.DB;
 
 import java.time.Duration;
 import java.util.Map;
@@ -18,8 +18,6 @@ import java.util.Map;
 public class LevelCacheable extends AbstractCacheable {
 
 
-    private HTreeMap marker;
-
     public LevelCacheable() {
     }
 
@@ -31,36 +29,30 @@ public class LevelCacheable extends AbstractCacheable {
         super(config);
     }
 
-    private DB db;
+    private Kv using;
 
 
     @Override
     public void afterPropertiesSet() {
-        db = DBMaker.fileDB("data/" + dir).closeOnJvmShutdown()
-                .executorEnable()
-                .fileMmapEnableIfSupported()
-                .fileMmapEnable()
-                .transactionEnable()
-                .make();
-        this.marker = db.hashMap(dir).createOrOpen();
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> IoUtils.closeQuietly(db)));
+        using = Quick.usingKv("data/" + dir);
     }
 
     @Override
     public void clear() {
-        marker.clear();
+        using.destroy();
+        afterPropertiesSet();
     }
 
     @Override
     public boolean exist(Object key) {
-        return marker.containsKey(key);
+        return using.contains(key);
     }
 
     @Override
     public Value<Object> get(Object key) {
-        Value<Object> objectValue = (Value<Object>) marker.get(key);
+        Value<Object> objectValue = (Value<Object>) using.read(key, Value.class);
         if (hotColdBackup) {
-            marker.put(key, objectValue);
+            using.write(key, objectValue);
         }
         return objectValue;
     }
@@ -68,12 +60,14 @@ public class LevelCacheable extends AbstractCacheable {
     @Override
     public Value<Object> put(Object key, Object value) {
         TimeValue<Object> value1 = ObjectUtils.isPresent(TimeValue.class, value, () -> TimeValue.of(value, Duration.ofMillis(expireAfterWrite)));
-        marker.put(key, value1);
+        using.write(key, value1);
         return value1;
     }
 
     @Override
     public Value<Object> remove(Object key) {
-        return (Value<Object>) marker.remove(key);
+        Value<Object> objectValue = (Value<Object>) using.read(key, Value.class);
+         using.erase(key);
+         return objectValue;
     }
 }

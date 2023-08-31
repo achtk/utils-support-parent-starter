@@ -1,5 +1,6 @@
 package com.chua.common.support.extra.quickio.core;
 
+import com.chua.common.support.extra.quickio.annotations.Index;
 import com.chua.common.support.extra.quickio.exception.QuException;
 import org.iq80.leveldb.WriteBatch;
 

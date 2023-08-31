@@ -40,7 +40,7 @@ public class ArcDetector implements Detector {
             PredictResult item = new PredictResult();
             Rect rect = faceInfo.getRect();
             item.setScore(faceInfo.getFaceId());
-            item.setNdArray(BoundingBox.builder()
+            item.setBoundingBox(BoundingBox.builder()
                     .height(Math.abs(rect.top - rect.bottom))
                     .width(Math.abs(rect.right - rect.left))
                     .corners(Lists.newArrayList(
