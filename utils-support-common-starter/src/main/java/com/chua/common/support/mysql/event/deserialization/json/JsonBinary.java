@@ -187,19 +187,19 @@ public class JsonBinary {
                 parseInt16(formatter);
                 break;
             case UINT16:
-                parseUInt16(formatter);
+                parseUnsignedInt16(formatter);
                 break;
             case INT32:
                 parseInt32(formatter);
                 break;
             case UINT32:
-                parseUInt32(formatter);
+                parseUnsignedInt32(formatter);
                 break;
             case INT64:
                 parseInt64(formatter);
                 break;
             case UINT64:
-                parseUInt64(formatter);
+                parseUnsignedInt64(formatter);
                 break;
             case DOUBLE:
                 parseDouble(formatter);
@@ -262,7 +262,7 @@ public class JsonBinary {
         int[] keyLengths = new int[numElements];
         for (int i = 0; i != numElements; ++i) {
             readUnsignedIndex(numBytes, small, "key offset in");
-            keyLengths[i] = readUInt16();
+            keyLengths[i] = readUnsignedInt16();
         }
 
         ValueEntry[] entries = new ValueEntry[numElements];
@@ -279,7 +279,7 @@ public class JsonBinary {
                     reader.skip(valueSize - 2);
                     break;
                 case UINT16:
-                    entries[i] = new ValueEntry(type).setValue(readUInt16());
+                    entries[i] = new ValueEntry(type).setValue(readUnsignedInt16());
                     reader.skip(valueSize - 2);
                     break;
                 case INT32:
@@ -289,7 +289,7 @@ public class JsonBinary {
                     }
                 case UINT32:
                     if (!small) {
-                        entries[i] = new ValueEntry(type).setValue(readUInt32());
+                        entries[i] = new ValueEntry(type).setValue(readUnsignedInt32());
                         break;
                     }
                 default:
@@ -389,7 +389,7 @@ public class JsonBinary {
                     reader.skip(valueSize - 2);
                     break;
                 case UINT16:
-                    entries[i] = new ValueEntry(type).setValue(readUInt16());
+                    entries[i] = new ValueEntry(type).setValue(readUnsignedInt16());
                     reader.skip(valueSize - 2);
                     break;
                 case INT32:
@@ -399,7 +399,7 @@ public class JsonBinary {
                     }
                 case UINT32:
                     if (!small) {
-                        entries[i] = new ValueEntry(type).setValue(readUInt32());
+                        entries[i] = new ValueEntry(type).setValue(readUnsignedInt32());
                         break;
                     }
                 default:
@@ -471,8 +471,8 @@ public class JsonBinary {
      * @param formatter the formatter to be notified of the parsed value; may not be null
      * @throws IOException if there is a problem reading the JSON value
      */
-    protected void parseUInt16(JsonFormatter formatter) throws IOException {
-        int value = readUInt16();
+    protected void parseUnsignedInt16(JsonFormatter formatter) throws IOException {
+        int value = readUnsignedInt16();
         formatter.value(value);
     }
 
@@ -493,8 +493,8 @@ public class JsonBinary {
      * @param formatter the formatter to be notified of the parsed value; may not be null
      * @throws IOException if there is a problem reading the JSON value
      */
-    protected void parseUInt32(JsonFormatter formatter) throws IOException {
-        long value = readUInt32();
+    protected void parseUnsignedInt32(JsonFormatter formatter) throws IOException {
+        long value = readUnsignedInt32();
         formatter.value(value);
     }
 
@@ -515,8 +515,8 @@ public class JsonBinary {
      * @param formatter the formatter to be notified of the parsed value; may not be null
      * @throws IOException if there is a problem reading the JSON value
      */
-    protected void parseUInt64(JsonFormatter formatter) throws IOException {
-        BigInteger value = readUInt64();
+    protected void parseUnsignedInt64(JsonFormatter formatter) throws IOException {
+        BigInteger value = readUnsignedInt64();
         formatter.value(value);
     }
 
@@ -758,7 +758,7 @@ public class JsonBinary {
     }
 
     protected int readUnsignedIndex(int maxValue, boolean isSmall, String desc) throws IOException {
-        long result = isSmall ? readUInt16() : readUInt32();
+        long result = isSmall ? readUnsignedInt16() : readUnsignedInt32();
         if (result > maxValue) {
             throw new IOException("The " + desc + " the JSON document is " + result +
                     " and is too big for the binary form of the document (" + maxValue + ")");
@@ -775,7 +775,7 @@ public class JsonBinary {
         return (short) (b2 << 8 | b1);
     }
 
-    protected int readUInt16() throws IOException {
+    protected int readUnsignedInt16() throws IOException {
         int b1 = reader.read() & 0xFF;
         int b2 = reader.read() & 0xFF;
         return (b2 << 8 | b1) & 0xFFFF;
@@ -796,7 +796,7 @@ public class JsonBinary {
         return b4 << 24 | b3 << 16 | b2 << 8 | b1;
     }
 
-    protected long readUInt32() throws IOException {
+    protected long readUnsignedInt32() throws IOException {
         int b1 = reader.read() & 0xFF;
         int b2 = reader.read() & 0xFF;
         int b3 = reader.read() & 0xFF;
@@ -817,7 +817,7 @@ public class JsonBinary {
                 (b4 << 24) | (b3 << 16) | (b2 << 8) | b1;
     }
 
-    protected BigInteger readUInt64() throws IOException {
+    protected BigInteger readUnsignedInt64() throws IOException {
         byte[] bigEndian = new byte[8];
         for (int i = NUM_8; i != 0; --i) {
             bigEndian[i - 1] = (byte) (reader.read() & 0xFF);

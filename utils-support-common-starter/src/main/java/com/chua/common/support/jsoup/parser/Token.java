@@ -488,7 +488,7 @@ abstract class Token {
         return type == TokenType.CHARACTER;
     }
 
-    final boolean isCData() {
+    final boolean isCharData() {
         return this instanceof CharData;
     }
 

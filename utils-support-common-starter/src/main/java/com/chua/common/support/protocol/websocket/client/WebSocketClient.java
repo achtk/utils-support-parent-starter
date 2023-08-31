@@ -945,13 +945,13 @@ public abstract class WebSocketClient extends AbstractWebSocket implements Runna
   }
 
   @Override
-  public boolean hasSSLSupport() {
+  public boolean hasSslSupport() {
     return socket instanceof SSLSocket;
   }
 
   @Override
-  public SSLSession getSSLSession() {
-    if (!hasSSLSupport()) {
+  public SSLSession getSslSession() {
+    if (!hasSslSupport()) {
       throw new IllegalArgumentException(
           "This websocket uses ws instead of wss. No SSLSession available.");
     }

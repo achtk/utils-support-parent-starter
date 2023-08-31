@@ -84,7 +84,7 @@ public class XmlJson {
                             token = x.nextToken();
                             if ("CDATA".equals(token) && x.next() == '[') {
                                 if (ja != null) {
-                                    ja.put(x.nextCDATA());
+                                    ja.put(x.nextCharDATA());
                                 }
                             } else {
                                 throw x.syntaxError("Expected 'CDATA['");
@@ -309,7 +309,7 @@ public class XmlJson {
      * @return A JSONObject containing the structured data from the XML string.
      * @throws XmlJsonException Thrown on error converting to a JSONObject
      */
-    public static XmlJsonException toJSONObject(String string) throws XmlJsonException {
+    public static XmlJsonException toJsonObject(String string) throws XmlJsonException {
         return (XmlJsonException) parse(new XmlTokenizer(string), false, null, false);
     }
 
@@ -330,7 +330,7 @@ public class XmlJson {
      * @return A JSONObject containing the structured data from the XML string.
      * @throws XmlJsonException Thrown on error converting to a JSONObject
      */
-    public static XmlJsonException toJSONObject(String string, boolean keepStrings) throws XmlJsonException {
+    public static XmlJsonException toJsonObject(String string, boolean keepStrings) throws XmlJsonException {
         return (XmlJsonException) parse(new XmlTokenizer(string), false, null, keepStrings);
     }
 
@@ -349,7 +349,7 @@ public class XmlJson {
      * @return A JSONObject containing the structured data from the XML string.
      * @throws XmlJsonException Thrown on error converting to a JSONObject
      */
-    public static XmlJsonException toJSONObject(XmlTokenizer x) throws XmlJsonException {
+    public static XmlJsonException toJsonObject(XmlTokenizer x) throws XmlJsonException {
         return (XmlJsonException) parse(x, false, null, false);
     }
 
@@ -370,7 +370,7 @@ public class XmlJson {
      * @return A JSONObject containing the structured data from the XML string.
      * @throws XmlJsonException Thrown on error converting to a JSONObject
      */
-    public static XmlJsonException toJSONObject(XmlTokenizer x, boolean keepStrings) throws XmlJsonException {
+    public static XmlJsonException toJsonObject(XmlTokenizer x, boolean keepStrings) throws XmlJsonException {
         return (XmlJsonException) parse(x, false, null, keepStrings);
     }
 

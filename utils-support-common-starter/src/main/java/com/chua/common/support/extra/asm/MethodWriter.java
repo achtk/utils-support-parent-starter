@@ -1364,7 +1364,7 @@ final class MethodWriter extends MethodVisitor {
   }
 
   @Override
-  public void visitMultiANewArrayInsn(final String descriptor, final int numDimensions) {
+  public void visitMultiNewArrayInsn(final String descriptor, final int numDimensions) {
     lastBytecodeOffset = code.length;
     
     Symbol descSymbol = symbolTable.addConstantClass(descriptor);

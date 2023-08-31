@@ -823,13 +823,13 @@ public class WebSocketImpl implements WebSocket {
     }
 
     @Override
-    public boolean hasSSLSupport() {
+    public boolean hasSslSupport() {
         return channel instanceof SslChannel;
     }
 
     @Override
-    public SSLSession getSSLSession() {
-        if (!hasSSLSupport()) {
+    public SSLSession getSslSession() {
+        if (!hasSslSupport()) {
             throw new IllegalArgumentException(
                     "This websocket uses ws instead of wss. No SSLSession available.");
         }

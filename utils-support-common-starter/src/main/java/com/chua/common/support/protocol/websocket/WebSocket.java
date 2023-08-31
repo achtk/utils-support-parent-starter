@@ -232,7 +232,7 @@ public interface WebSocket {
    * @return true, if the websocket does use wss and therefore has a SSLSession
    * @since 1.4.1
    */
-  boolean hasSSLSupport();
+  boolean hasSslSupport();
 
   /**
    * Returns the ssl session of websocket, if ssl/wss is used for this instance.
@@ -242,7 +242,7 @@ public interface WebSocket {
    *                                  to check)
    * @since 1.4.1
    */
-  SSLSession getSSLSession() throws IllegalArgumentException;
+  SSLSession getSslSession() throws IllegalArgumentException;
 
   /**
    * Returns the used Sec-WebSocket-Protocol for this websocket connection

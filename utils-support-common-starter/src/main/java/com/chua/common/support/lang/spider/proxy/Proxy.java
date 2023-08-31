@@ -79,7 +79,7 @@ public class Proxy {
         return password;
     }
 
-    public URI toURI() {
+    public URI toUri() {
         final StringBuilder userInfoBuffer = new StringBuilder();
         if (username != null) {
             userInfoBuffer.append(urlencode(username));
@@ -144,7 +144,7 @@ public class Proxy {
 
     @Override
     public String toString() {
-        return this.toURI().toString();
+        return this.toUri().toString();
     }
 
 }

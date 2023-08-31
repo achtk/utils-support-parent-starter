@@ -2,7 +2,6 @@ package com.chua.common.support.discovery;
 
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.bean.BeanMap;
-import com.chua.common.support.constant.CommonConstant;
 import com.chua.common.support.converter.Converter;
 import com.chua.common.support.lang.net.UrlQuery;
 import com.chua.common.support.lang.robin.Node;
@@ -362,7 +361,7 @@ public class MulticastServiceDiscovery implements ServiceDiscovery, Runnable {
     }
 
     protected void unregistered(NetAddress url) {
-        URL key = url.toURL();
+        URL key = url.toUrl();
         Set<NetAddress> urls = received.get(key);
         if (urls != null) {
             urls.remove(url);

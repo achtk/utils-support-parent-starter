@@ -108,8 +108,8 @@ public class StringEscapeUtils {
                 /**
                  * Escaped backslash constant.
                  */
-                char BACKSLASH = '\\';
-                final int pos = s.indexOf(BACKSLASH, searchOffset);
+                char backslash = '\\';
+                final int pos = s.indexOf(backslash, searchOffset);
                 if (pos == -1) {
                     if (segmentStart < s.length()) {
                         writer.write(s.substring(segmentStart));
@@ -442,7 +442,7 @@ public class StringEscapeUtils {
     /**
      * Translator object for unescaping escaped XSI Value entries.
      * <p>
-     * While {@link #unescapeXSI(String)}  is the expected method of use, this
+     * While {@link #unescapeXsi(String)}  is the expected method of use, this
      * object allows the XSI unescaping functionality to be used
      * as the foundation for a custom translator.
      */
@@ -687,7 +687,7 @@ public class StringEscapeUtils {
      * @return String with escaped values, {@code null} if null string input
      * @see <a href="http:
      */
-    public static String escapeXSI(final String input) {
+    public static String escapeXsi(final String input) {
         return ESCAPE_XSI.translate(input);
     }
 
@@ -814,9 +814,9 @@ public class StringEscapeUtils {
      *
      * @param input the {@code String} to unescape, may be null
      * @return a new unescaped {@code String}, {@code null} if null string input
-     * @see StringEscapeUtils#escapeXSI(String)
+     * @see StringEscapeUtils#escapeXsi(String)
      */
-    public static String unescapeXSI(final String input) {
+    public static String unescapeXsi(final String input) {
         return UNESCAPE_XSI.translate(input);
     }
 

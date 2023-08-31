@@ -599,9 +599,9 @@ public abstract class MethodVisitor {
    * @param descriptor an array type descriptor (see {@link Type}).
    * @param numDimensions the number of dimensions of the array to allocate.
    */
-  public void visitMultiANewArrayInsn(final String descriptor, final int numDimensions) {
+  public void visitMultiNewArrayInsn(final String descriptor, final int numDimensions) {
     if (mv != null) {
-      mv.visitMultiANewArrayInsn(descriptor, numDimensions);
+      mv.visitMultiNewArrayInsn(descriptor, numDimensions);
     }
   }
 

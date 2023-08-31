@@ -23,7 +23,7 @@ public class XmlProperty {
      * @return JSONObject
      * @throws JSONException if a called function has an error
      */
-    public static XmlToJsonObject toJSONObject(Properties properties) throws JSONException {
+    public static XmlToJsonObject toJsonObject(Properties properties) throws JSONException {
         // can't use the new constructor for Android support
         XmlToJsonObject jo = new XmlToJsonObject();
         if (properties != null && !properties.isEmpty()) {

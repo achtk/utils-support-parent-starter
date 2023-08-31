@@ -153,7 +153,7 @@ public class Reflections implements NameHelper {
         (configuration.isParallel() ? urls.stream().parallel() : urls.stream()).forEach(url -> {
             Vfs.Dir dir = null;
             try {
-                dir = Vfs.fromURL(url);
+                dir = Vfs.fromUrl(url);
                 for (Vfs.VfsFile file : dir.getFiles()) {
                     if (doFilter(file, configuration.getInputsFilter())) {
                         ClassFile classFile = null;

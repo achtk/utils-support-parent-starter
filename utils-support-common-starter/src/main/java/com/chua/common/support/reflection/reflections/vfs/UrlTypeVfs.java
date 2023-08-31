@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  * UrlType to be used by Reflections library.
  * This class handles the vfszip and vfsfile protocol of JBOSS files.
  * <p>
- * <p>to use it, registerBean it in Vfs via {@link Vfs#addDefaultURLTypes(UrlType)} or {@link Vfs#setDefaultURLTypes(java.util.List)}.
+ * <p>to use it, registerBean it in Vfs via {@link Vfs#addDefaultUrlTypes(UrlType)} or {@link Vfs#setDefaultUrlTypes(java.util.List)}.
  *
  * @author Sergio Pola
  */
@@ -36,7 +36,7 @@ public class UrlTypeVfs implements UrlType {
     @Override
     public Dir createDir(final URL url) {
         try {
-            URL adaptedUrl = adaptURL(url);
+            URL adaptedUrl = adaptUrl(url);
             return new ZipDir(new JarFile(adaptedUrl.getFile()));
         } catch (Exception e) {
             try {
@@ -50,7 +50,7 @@ public class UrlTypeVfs implements UrlType {
         return null;
     }
 
-    public URL adaptURL(URL url) throws MalformedURLException {
+    public URL adaptUrl(URL url) throws MalformedURLException {
         if (VFSZIP.equals(url.getProtocol())) {
             return replaceZipSeparators(url.getPath(), file -> file.exists() && file.isFile());
         } else if (VFSFILE.equals(url.getProtocol())) {

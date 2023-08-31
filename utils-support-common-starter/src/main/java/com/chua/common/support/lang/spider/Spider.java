@@ -164,7 +164,7 @@ public class Spider implements Runnable, Task {
      * @param uuid uuid
      * @return this
      */
-    public Spider setUUID(String uuid) {
+    public Spider setUuid(String uuid) {
         this.uuid = uuid;
         return this;
     }

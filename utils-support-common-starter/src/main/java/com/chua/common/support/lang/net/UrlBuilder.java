@@ -468,7 +468,7 @@ public final class UrlBuilder implements Serializable {
      * @return URL字符串
      */
     public String build() {
-        return toURL().toString();
+        return toUrl().toString();
     }
 
     /**
@@ -476,8 +476,8 @@ public final class UrlBuilder implements Serializable {
      *
      * @return {@link URL}
      */
-    public URL toURL() {
-        return toURL(null);
+    public URL toUrl() {
+        return toUrl(null);
     }
 
     /**
@@ -486,7 +486,7 @@ public final class UrlBuilder implements Serializable {
      * @param handler {@link URLStreamHandler}，null表示默认
      * @return {@link URL}
      */
-    public URL toURL(URLStreamHandler handler) {
+    public URL toUrl(URLStreamHandler handler) {
         final StringBuilder fileBuilder = new StringBuilder();
 
         // path
@@ -515,7 +515,7 @@ public final class UrlBuilder implements Serializable {
      *
      * @return URI
      */
-    public URI toURI() {
+    public URI toUri() {
         try {
             return new URI(
                     getSchemeWithDefault(),

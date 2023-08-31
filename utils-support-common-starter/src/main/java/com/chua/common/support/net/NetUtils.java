@@ -902,7 +902,7 @@ public class NetUtils {
         return new InetSocketAddress(host, port);
     }
 
-    public static String toURL(String protocol, String host, int port, String path) {
+    public static String toUrl(String protocol, String host, int port, String path) {
         StringBuilder sb = new StringBuilder();
         sb.append(protocol).append("://");
         sb.append(host).append(':').append(port);
@@ -1026,7 +1026,7 @@ public class NetUtils {
     }
 
 
-    public static boolean isIpV6URLStdFormat(String ip) {
+    public static boolean isIpV6UrlStdFormat(String ip) {
         if ((ip.charAt(0) == SYMBOL_LEFT_SQUARE_BRACKET_CHAR && ip.indexOf(SYMBOL_RIGHT_SQUARE_BRACKET_CHAR) > NUM_2)) {
             return true;
         } else if (ip.indexOf(SYMBOL_COLON) != ip.lastIndexOf(SYMBOL_COLON)) {

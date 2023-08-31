@@ -22,7 +22,7 @@ import static com.chua.common.support.constant.CommonConstant.*;
 
 /**
  * a simple virtual file system bridge
- * <p>use the {@link Vfs#fromURL(URL)} to get a {@link Dir},
+ * <p>use the {@link Vfs#fromUrl(URL)} to get a {@link Dir},
  * then use {@link Dir#getFiles()} to iterate over the {@link VfsFile}
  * <p>for example:
  * <pre>
@@ -32,9 +32,9 @@ import static com.chua.common.support.constant.CommonConstant.*;
  *          InputStream is = file.openInputStream();
  *      }
  * </pre>
- * <p>{@link Vfs#fromURL(URL)} uses static {@link DefaultUrlTypes} to resolve URLs.
+ * <p>{@link Vfs#fromUrl(URL)} uses static {@link DefaultUrlTypes} to resolve URLs.
  * It contains VfsTypes for handling for common resources such as local jar file, local directory, jar url, jar input stream and more.
- * <p>It can be plugged in with other {@link UrlType} using {@link Vfs#addDefaultURLTypes(UrlType)} or {@link Vfs#setDefaultURLTypes(List)}.
+ * <p>It can be plugged in with other {@link UrlType} using {@link Vfs#addDefaultUrlTypes(UrlType)} or {@link Vfs#setDefaultUrlTypes(List)}.
  * <p>for example:
  * <pre>
  *      Vfs.addDefaultURLTypes(new Vfs.UrlType() {
@@ -132,7 +132,7 @@ public abstract class Vfs {
     }
 
     /**
-     * the default url types that will be used when issuing {@link Vfs#fromURL(URL)}
+     * the default url types that will be used when issuing {@link Vfs#fromUrl(URL)}
      */
     public static List<UrlType> getDefaultUrlTypes() {
         return defaultUrlTypes;
@@ -141,28 +141,28 @@ public abstract class Vfs {
     /**
      * sets the static default url types. can be used to statically plug in urlTypes
      */
-    public static void setDefaultURLTypes(final List<UrlType> urlTypes) {
+    public static void setDefaultUrlTypes(final List<UrlType> urlTypes) {
         defaultUrlTypes = urlTypes;
     }
 
     /**
      * add a static default url types to the beginning of the default url types list. can be used to statically plug in urlTypes
      */
-    public static void addDefaultURLTypes(UrlType urlType) {
+    public static void addDefaultUrlTypes(UrlType urlType) {
         defaultUrlTypes.add(0, urlType);
     }
 
     /**
      * tries to create a Dir from the given url, using the defaultUrlTypes
      */
-    public static Dir fromURL(final URL url) {
-        return fromURL(url, defaultUrlTypes);
+    public static Dir fromUrl(final URL url) {
+        return fromUrl(url, defaultUrlTypes);
     }
 
     /**
      * tries to create a Dir from the given url, using the given urlTypes
      */
-    public static Dir fromURL(final URL url, final List<UrlType> urlTypes) {
+    public static Dir fromUrl(final URL url, final List<UrlType> urlTypes) {
         for (UrlType type : urlTypes) {
             try {
                 if (type.matches(url)) {
@@ -187,8 +187,8 @@ public abstract class Vfs {
     /**
      * tries to create a Dir from the given url, using the given urlTypes
      */
-    public static Dir fromURL(final URL url, final UrlType... urlTypes) {
-        return fromURL(url, Arrays.asList(urlTypes));
+    public static Dir fromUrl(final URL url, final UrlType... urlTypes) {
+        return fromUrl(url, Arrays.asList(urlTypes));
     }
 
     /**
@@ -214,7 +214,7 @@ public abstract class Vfs {
         return () -> urls.stream()
                 .flatMap(url -> {
                     try {
-                        return StreamSupport.stream(fromURL(url).getFiles().spliterator(), false);
+                        return StreamSupport.stream(fromUrl(url).getFiles().spliterator(), false);
                     } catch (Throwable e) {
                         if (Reflections.log != null) {
                             Reflections.log.error("could not findFiles for url. continuing. [" + url + "]", e);
@@ -292,7 +292,7 @@ public abstract class Vfs {
     }
 
     /**
-     * default url types used by {@link Vfs#fromURL(URL)}
+     * default url types used by {@link Vfs#fromUrl(URL)}
      * <p>
      * <p>jarFile - creates a {@link ZipDir} over jar file
      * <p>jarUrl - creates a {@link ZipDir} over a jar url, using Java's {@link JarURLConnection}
@@ -387,7 +387,7 @@ public abstract class Vfs {
 
             @Override
             public Dir createDir(URL url) throws Exception {
-                return fromURL((URL) AbstractClasspathHelper.contextClassLoader().
+                return fromUrl((URL) AbstractClasspathHelper.contextClassLoader().
                         loadClass("org.eclipse.core.runtime.FileLocator").getMethod("resolve", URL.class).invoke(null, url));
             }
         },

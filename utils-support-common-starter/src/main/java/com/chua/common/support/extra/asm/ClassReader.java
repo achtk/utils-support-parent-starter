@@ -2141,7 +2141,7 @@ public class ClassReader {
                     currentOffset += 3;
                     break;
                 case Opcodes.MULTIANEWARRAY:
-                    methodVisitor.visitMultiANewArrayInsn(
+                    methodVisitor.visitMultiNewArrayInsn(
                             readClass(currentOffset + 1, charBuffer), classBuffer[currentOffset + 3] & 0xFF);
                     currentOffset += 4;
                     break;

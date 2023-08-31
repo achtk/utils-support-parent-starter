@@ -397,14 +397,14 @@ public class JsonPath {
     /**
      * Applies this JsonPath to the provided json URL
      *
-     * @param jsonURL url to read from
+     * @param url url to read from
      * @param <T>     expected return type
      * @return list of objects matched by the given path
      * @throws IOException
      */
     @SuppressWarnings({"unchecked"})
-    public <T> T read(URL jsonURL) throws IOException {
-        return read(jsonURL, JsonConfiguration.defaultConfiguration());
+    public <T> T read(URL url) throws IOException {
+        return read(url, JsonConfiguration.defaultConfiguration());
     }
 
     /**
@@ -555,15 +555,15 @@ public class JsonPath {
     /**
      * Creates a new JsonPath and applies it to the provided Json object
      *
-     * @param jsonURL  url pointing to json doc
+     * @param url  url pointing to json doc
      * @param jsonPath the json path
      * @param filters  filters to be applied to the filter place holders  [?] in the path
      * @param <T>      expected return type
      * @return list of objects matched by the given path
      */
     @SuppressWarnings({"unchecked"})
-    public static <T> T read(URL jsonURL, String jsonPath, Predicate... filters) throws IOException {
-        return new ParseContextImpl().parse(jsonURL).read(jsonPath, filters);
+    public static <T> T read(URL url, String jsonPath, Predicate... filters) throws IOException {
+        return new ParseContextImpl().parse(url).read(jsonPath, filters);
     }
 
     /**

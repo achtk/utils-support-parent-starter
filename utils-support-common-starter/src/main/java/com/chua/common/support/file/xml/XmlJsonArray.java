@@ -729,7 +729,7 @@ public class XmlJsonArray implements Iterable<Object> {
      * @return A XmlJsonArray value, or null if the index has no value, or if the
      * value is not a XmlJsonArray.
      */
-    public XmlJsonArray optJSONArray(int index) {
+    public XmlJsonArray optJsonArray(int index) {
         Object o = this.opt(index);
         return o instanceof XmlJsonArray ? (XmlJsonArray) o : null;
     }
@@ -742,7 +742,7 @@ public class XmlJsonArray implements Iterable<Object> {
      * @param index The index must be between 0 and length() - 1.
      * @return A JSONObject value.
      */
-    public XmlToJsonObject optJSONObject(int index) {
+    public XmlToJsonObject optJsonObject(int index) {
         Object o = this.opt(index);
         return o instanceof XmlToJsonObject ? (XmlToJsonObject) o : null;
     }
@@ -1264,7 +1264,7 @@ public class XmlJsonArray implements Iterable<Object> {
      * has no values.
      * @throws JSONException If any of the names are null.
      */
-    public XmlToJsonObject toJSONObject(XmlJsonArray names) throws JSONException {
+    public XmlToJsonObject toJsonObject(XmlJsonArray names) throws JSONException {
         if (names == null || names.isEmpty() || this.isEmpty()) {
             return null;
         }

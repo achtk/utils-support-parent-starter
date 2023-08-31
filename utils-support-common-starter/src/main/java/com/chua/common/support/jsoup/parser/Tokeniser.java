@@ -342,7 +342,7 @@ final class Tokeniser {
         }
     }
 
-    boolean currentNodeInHtmlNS() {
+    boolean currentNodeInHtmlNs() {
         return true;
         // return currentNode != null && currentNode.namespace().equals("HTML");
     }

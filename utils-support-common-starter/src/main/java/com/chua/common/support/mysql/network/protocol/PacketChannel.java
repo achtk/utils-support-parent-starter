@@ -83,7 +83,7 @@ public class PacketChannel implements Channel {
         write(command, 0);
     }
 
-    public void upgradeToSSL(SslSocketFactory sslSocketFactory, HostnameVerifier hostnameVerifier) throws IOException {
+    public void upgradeToSsl(SslSocketFactory sslSocketFactory, HostnameVerifier hostnameVerifier) throws IOException {
         SSLSocket sslSocket = sslSocketFactory.createSocket(this.socket);
         sslSocket.startHandshake();
         socket = sslSocket;

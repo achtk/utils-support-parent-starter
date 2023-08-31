@@ -56,7 +56,7 @@ public class XmlTokenizer extends XmlJsonTokener {
      * @return The string up to the <code>]]&gt;</code>.
      * @throws JSONException If the <code>]]&gt;</code> is not found.
      */
-    public String nextCDATA() throws JSONException {
+    public String nextCharDATA() throws JSONException {
         char c;
         int i;
         StringBuilder sb = new StringBuilder();

@@ -73,10 +73,10 @@ public class HistogramView implements View {
      */
     private static Comparable[] getArrayYzAxis(Comparable[] array) {
         //获取最大值和最小值
-        Map<String, Comparable> MaxAndMin = getMaxAndMin(array);
+        Map<String, Comparable> maxAndMin = getMaxAndMin(array);
         Double[] back = new Double[LINE_NUMBER];
-        String max = MaxAndMin.get("max").toString();
-        String min = MaxAndMin.get("min").toString();
+        String max = maxAndMin.get("max").toString();
+        String min = maxAndMin.get("min").toString();
         //判断最小值是否小于零,小于零区间会更大
         Boolean negative = Double.valueOf(min).compareTo(Double.valueOf(1)) < 0;
         Double all = negative ? (Double.valueOf(max) - Double.valueOf(min)) : Double.valueOf(max);

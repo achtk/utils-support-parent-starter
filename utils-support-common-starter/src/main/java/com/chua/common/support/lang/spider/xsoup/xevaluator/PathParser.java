@@ -87,7 +87,7 @@ public class PathParser {
             Preconditions.isFalse(noEvalAllow, "XPath error! No operator allowed after attribute or function!" + tq);
             if (tq.matchChomp(OR_COMBINATOR)) {
                 tq.consumeWhitespace();
-                return combineXPathEvaluator(tq.remainder());
+                return combinePathEvaluator(tq.remainder());
             } else if (tq.matchesAny(HIERARCHY_COMBINATORS)) {
                 combinator(tq.consumeAny(HIERARCHY_COMBINATORS));
             } else {
@@ -95,15 +95,15 @@ public class PathParser {
             }
             tq.consumeWhitespace();
         }
-        return collectXPathEvaluator();
+        return collectPathEvaluator();
     }
 
-    private PathEvaluator combineXPathEvaluator(String subQuery) {
-        PathEvaluator xPathEvaluator = collectXPathEvaluator();
+    private PathEvaluator combinePathEvaluator(String subQuery) {
+        PathEvaluator xPathEvaluator = collectPathEvaluator();
         return new CombingPathEvaluator(xPathEvaluator, parse(subQuery));
     }
 
-    private PathEvaluator collectXPathEvaluator() {
+    private PathEvaluator collectPathEvaluator() {
         if (noEvalAllow) {
             return new DefaultPathEvaluator(null, elementOperator);
         }

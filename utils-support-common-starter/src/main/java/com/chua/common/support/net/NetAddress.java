@@ -1037,7 +1037,7 @@ public class NetAddress implements Serializable {
      *
      * @return 地址
      */
-    public java.net.URL toURL() {
+    public java.net.URL toUrl() {
         try {
             return new URL(toFullString());
         } catch (MalformedURLException e) {

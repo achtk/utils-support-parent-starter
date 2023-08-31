@@ -7,7 +7,7 @@ import java.util.*;
 
 import static com.chua.common.support.constant.NumberConstant.NUM_2;
 import static com.chua.common.support.utils.Preconditions.checkArgument;
-import static com.chua.common.support.utils.Preconditions.uncheckedCastNullableTToT;
+import static com.chua.common.support.utils.Preconditions.uncheckedCastNullableToT;
 import static lombok.Lombok.checkNotNull;
 
 /**
@@ -101,11 +101,11 @@ public class TopSelector<T extends Object> {
         } else if (bufferSize < k) {
             buffer[bufferSize++] = elem;
             // uncheckedCastNullableTToT is safe because bufferSize > 0.
-            if (comparator.compare(elem, uncheckedCastNullableTToT(threshold)) > 0) {
+            if (comparator.compare(elem, uncheckedCastNullableToT(threshold)) > 0) {
                 threshold = elem;
             }
             // uncheckedCastNullableTToT is safe because bufferSize > 0.
-        } else if (comparator.compare(elem, uncheckedCastNullableTToT(threshold)) < 0) {
+        } else if (comparator.compare(elem, uncheckedCastNullableToT(threshold)) < 0) {
             // Otherwise, we can ignore elem; we've seen k better elements.
             buffer[bufferSize++] = elem;
             if (bufferSize == NUM_2 * k) {
@@ -152,10 +152,10 @@ public class TopSelector<T extends Object> {
         }
         bufferSize = k;
 
-        threshold = uncheckedCastNullableTToT(buffer[minThresholdPosition]);
+        threshold = uncheckedCastNullableToT(buffer[minThresholdPosition]);
         for (int i = minThresholdPosition + 1; i < k; i++) {
             if (comparator.compare(
-                    uncheckedCastNullableTToT(buffer[i]), uncheckedCastNullableTToT(threshold))
+                    uncheckedCastNullableToT(buffer[i]), uncheckedCastNullableToT(threshold))
                     > 0) {
                 threshold = buffer[i];
             }
@@ -169,12 +169,12 @@ public class TopSelector<T extends Object> {
      * (pivotNewIndex, right] is greater than pivotValue.
      */
     private int partition(int left, int right, int pivotIndex) {
-        T pivotValue = uncheckedCastNullableTToT(buffer[pivotIndex]);
+        T pivotValue = uncheckedCastNullableToT(buffer[pivotIndex]);
         buffer[pivotIndex] = buffer[right];
 
         int pivotNewIndex = left;
         for (int i = left; i < right; i++) {
-            if (comparator.compare(uncheckedCastNullableTToT(buffer[i]), pivotValue) < 0) {
+            if (comparator.compare(uncheckedCastNullableToT(buffer[i]), pivotValue) < 0) {
                 swap(pivotNewIndex, i);
                 pivotNewIndex++;
             }
@@ -192,7 +192,7 @@ public class TopSelector<T extends Object> {
 
     TopSelector<T> combine(TopSelector<T> other) {
         for (int i = 0; i < other.bufferSize; i++) {
-            this.offer(uncheckedCastNullableTToT(other.buffer[i]));
+            this.offer(uncheckedCastNullableToT(other.buffer[i]));
         }
         return this;
     }

@@ -190,7 +190,7 @@ public final class Preconditions {
      * @param <T> 类型
      * @return 对象
      */
-    public static <T extends Object> T uncheckedCastNullableTToT(T t) {
+    public static <T extends Object> T uncheckedCastNullableToT(T t) {
         return t;
     }
 
