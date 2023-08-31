@@ -15,7 +15,7 @@
  ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.annotations.helpers;
 
-import com.chua.common.support.file.univocity.parsers.annotations.HeaderTransformer;
+import com.chua.common.support.file.univocity.parsers.annotations.BaseHeaderTransformer;
 import com.chua.common.support.file.univocity.parsers.annotations.Nested;
 import com.chua.common.support.file.univocity.parsers.annotations.Parsed;
 
@@ -27,7 +27,7 @@ import static com.chua.common.support.constant.NumberConstant.NUM_2;
 import static com.chua.common.support.file.univocity.parsers.annotations.helpers.AnnotationHelper.findAnnotation;
 
 /**
- * A pair associating a Field of an annotated class to an optional {@link HeaderTransformer} obtained from
+ * A pair associating a Field of an annotated class to an optional {@link BaseHeaderTransformer} obtained from
  * {@link Nested#headerTransformer()} when nested classes are used to process beans.
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:dev@univocity.com">dev@univocity.com</a>
@@ -37,10 +37,10 @@ public class TransformedHeader {
 	private final AnnotatedElement target;
 	private final Field field;
 	private final Method method;
-	private final HeaderTransformer transformer;
+	private final BaseHeaderTransformer transformer;
 	private int index = -2;
 
-	public TransformedHeader(AnnotatedElement target, HeaderTransformer transformer) {
+	public TransformedHeader(AnnotatedElement target, BaseHeaderTransformer transformer) {
 		if (target instanceof Field) {
 			field = (Field) target;
 			method = null;

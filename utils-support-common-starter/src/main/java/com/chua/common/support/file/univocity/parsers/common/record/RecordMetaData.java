@@ -16,8 +16,8 @@
 
 package com.chua.common.support.file.univocity.parsers.common.record;
 
-import com.chua.common.support.file.univocity.parsers.common.AbstractCommonParserSettings;
-import com.chua.common.support.file.univocity.parsers.common.AbstractCommonSettings;
+import com.chua.common.support.file.univocity.parsers.common.BaseCommonParserSettings;
+import com.chua.common.support.file.univocity.parsers.common.BaseCommonSettings;
 import com.chua.common.support.file.univocity.parsers.common.fields.FieldSet;
 import com.chua.common.support.file.univocity.parsers.conversions.Conversion;
 
@@ -185,8 +185,8 @@ public interface RecordMetaData {
 	/**
 	 * Returns the column names of the {@link Record}s parsed from the input.
 	 *
-	 * <p> If the headers are extracted from the input (i.e. {@link AbstractCommonParserSettings#isHeaderExtractionEnabled()} == true), then these values will be returned.
-	 * <p> If no headers are extracted from the input, then the configured headers in {@link AbstractCommonSettings#getHeaders()} will be returned.
+	 * <p> If the headers are extracted from the input (i.e. {@link BaseCommonParserSettings#isHeaderExtractionEnabled()} == true), then these values will be returned.
+	 * <p> If no headers are extracted from the input, then the configured headers in {@link BaseCommonSettings#getHeaders()} will be returned.
 	 *
 	 * @return the headers associated with the {@link Record}s parsed from the input
 	 */

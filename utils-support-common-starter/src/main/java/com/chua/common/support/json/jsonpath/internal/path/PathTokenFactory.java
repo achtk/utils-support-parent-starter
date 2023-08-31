@@ -17,39 +17,39 @@ public class PathTokenFactory {
         return new RootPathToken(token);
     }
 
-    public static PathToken createSinglePropertyPathToken(String property, char stringDelimiter) {
+    public static BasePathToken createSinglePropertyPathToken(String property, char stringDelimiter) {
         return new PropertyPathToken(singletonList(property), stringDelimiter);
     }
 
-    public static PathToken createPropertyPathToken(List<String> properties, char stringDelimiter) {
+    public static BasePathToken createPropertyPathToken(List<String> properties, char stringDelimiter) {
         return new PropertyPathToken(properties, stringDelimiter);
     }
 
-    public static PathToken createSliceArrayPathToken(final ArraySliceOperation arraySliceOperation) {
+    public static BasePathToken createSliceArrayPathToken(final ArraySliceOperation arraySliceOperation) {
         return new ArraySliceToken(arraySliceOperation);
     }
 
-    public static PathToken createIndexArrayPathToken(final ArrayIndexOperation arrayIndexOperation) {
+    public static BasePathToken createIndexArrayPathToken(final ArrayIndexOperation arrayIndexOperation) {
         return new ArrayIndexToken(arrayIndexOperation);
     }
 
-    public static PathToken createWildCardPathToken() {
+    public static BasePathToken createWildCardPathToken() {
         return new WildcardPathToken();
     }
 
-    public static PathToken crateScanToken() {
+    public static BasePathToken crateScanToken() {
         return new ScanPathToken();
     }
 
-    public static PathToken createPredicatePathToken(Collection<Predicate> predicates) {
+    public static BasePathToken createPredicatePathToken(Collection<Predicate> predicates) {
         return new PredicatePathToken(predicates);
     }
 
-    public static PathToken createPredicatePathToken(Predicate predicate) {
+    public static BasePathToken createPredicatePathToken(Predicate predicate) {
         return new PredicatePathToken(predicate);
     }
 
-    public static PathToken createFunctionPathToken(String function, List<Parameter> parameters) {
+    public static BasePathToken createFunctionPathToken(String function, List<Parameter> parameters) {
         return new FunctionPathToken(function, parameters);
     }
 }

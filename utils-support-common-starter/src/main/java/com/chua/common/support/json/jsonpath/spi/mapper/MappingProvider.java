@@ -15,7 +15,7 @@
 package com.chua.common.support.json.jsonpath.spi.mapper;
 
 import com.chua.common.support.json.jsonpath.JsonConfiguration;
-import com.chua.common.support.json.jsonpath.TypeRef;
+import com.chua.common.support.json.jsonpath.BaseTypeRef;
 
 /**
  * Maps object between different Types
@@ -43,5 +43,5 @@ public interface MappingProvider {
      * @param <T>           the mapped result type
      * @return return the mapped object
      */
-    <T> T map(Object source, TypeRef<T> targetType, JsonConfiguration configuration);
+    <T> T map(Object source, BaseTypeRef<T> targetType, JsonConfiguration configuration);
 }

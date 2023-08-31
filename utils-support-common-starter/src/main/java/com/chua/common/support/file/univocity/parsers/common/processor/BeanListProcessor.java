@@ -1,10 +1,10 @@
 package com.chua.common.support.file.univocity.parsers.common.processor;
 
 import com.chua.common.support.file.univocity.parsers.common.AbstractContext;
-import com.chua.common.support.file.univocity.parsers.common.AbstractParser;
+import com.chua.common.support.file.univocity.parsers.common.BaseParser;
 import com.chua.common.support.file.univocity.parsers.common.AbstractWriter;
 import com.chua.common.support.file.univocity.parsers.common.ParsingContext;
-import com.chua.common.support.file.univocity.parsers.common.processor.core.AbstractBeanListProcessor;
+import com.chua.common.support.file.univocity.parsers.common.processor.core.AbstractBeanListProcessorAbstract;
 
 import java.util.List;
 
@@ -24,15 +24,15 @@ import java.util.List;
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
  * @see AbstractBeanProcessor
  * @see RowProcessor
- * @see AbstractParser
- * @see AbstractBeanListProcessor
+ * @see BaseParser
+ * @see AbstractBeanListProcessorAbstract
  */
-public class BeanListProcessor<T> extends AbstractBeanListProcessor<T, ParsingContext> implements RowProcessor {
+public class BeanListProcessor<T> extends AbstractBeanListProcessorAbstract<T, ParsingContext> implements RowProcessor {
 
 	/**
 	 * Creates a processor that stores java beans of a given type into a list
 	 *
-	 * @param beanType the class with its attributes mapped to fields of records parsed by an {@link AbstractParser} or written by an {@link AbstractWriter}.
+	 * @param beanType the class with its attributes mapped to fields of records parsed by an {@link BaseParser} or written by an {@link AbstractWriter}.
 	 */
 	public BeanListProcessor(Class<T> beanType) {
 		super(beanType);
@@ -41,7 +41,7 @@ public class BeanListProcessor<T> extends AbstractBeanListProcessor<T, ParsingCo
 	/**
 	 * Creates a processor that stores java beans of a given type into a list
 	 *
-	 * @param beanType          the class with its attributes mapped to fields of records parsed by an {@link AbstractParser} or written by an {@link AbstractWriter}.
+	 * @param beanType          the class with its attributes mapped to fields of records parsed by an {@link BaseParser} or written by an {@link AbstractWriter}.
 	 * @param expectedBeanCount expected number of rows to be parsed from the input which will be converted into java beans.
 	 *                          Used to pre-allocate the size of the output {@link List}
 	 *                          returned by {@link #getBeans()}

@@ -20,21 +20,21 @@ import com.chua.common.support.file.univocity.parsers.common.input.CharInputRead
 import java.util.Map;
 
 /**
- * The default {@link ParsingContext} implementation used internally by {@link AbstractParser} to expose information about a parsing process in execution.
+ * The default {@link ParsingContext} implementation used internally by {@link BaseParser} to expose information about a parsing process in execution.
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
  * @see com.chua.common.support.file.univocity.parsers.common.ParsingContext
- * @see com.chua.common.support.file.univocity.parsers.common.AbstractParser
+ * @see BaseParser
  * @see com.chua.common.support.file.univocity.parsers.common.processor.RowProcessor
  */
 public class DefaultParsingContext extends DefaultContext implements ParsingContext {
 
 	private final CharInputReader input;
 
-	private final AbstractParser<?> parser;
+	private final BaseParser<?> parser;
 
 
-	public DefaultParsingContext(AbstractParser<?> parser, int errorContentLength) {
+	public DefaultParsingContext(BaseParser<?> parser, int errorContentLength) {
 		super(parser == null ? null : parser.output, errorContentLength);
 		this.parser = parser;
 		this.input = parser == null ? null : parser.input;

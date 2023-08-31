@@ -139,7 +139,7 @@ public abstract class AbstractClassVisitor {
    * @return a visitor to visit the module values, or {@literal null} if this visitor is not
    *     interested in visiting this module.
    */
-  public ModuleVisitor visitModule(final String name, final int access, final String version) {
+  public BaseModuleVisitor visitModule(final String name, final int access, final String version) {
     if (api < Opcodes.ASM6) {
       throw new UnsupportedOperationException("Module requires ASM6");
     }
@@ -298,7 +298,7 @@ public abstract class AbstractClassVisitor {
    * @return a visitor to visit this record component annotations and attributes, or {@literal null}
    *     if this class visitor is not interested in visiting these annotations and attributes.
    */
-  public RecordComponentVisitor visitRecordComponent(
+  public BaseRecordComponentVisitor visitRecordComponent(
       final String name, final String descriptor, final String signature) {
     if (api < Opcodes.ASM8) {
       throw new UnsupportedOperationException("Record requires ASM8");
@@ -327,7 +327,7 @@ public abstract class AbstractClassVisitor {
    * @return a visitor to visit field annotations and attributes, or {@literal null} if this class
    *     visitor is not interested in visiting these annotations and attributes.
    */
-  public FieldVisitor visitField(
+  public AbstractFieldVisitor visitField(
       final int access,
       final String name,
       final String descriptor,
@@ -340,7 +340,7 @@ public abstract class AbstractClassVisitor {
   }
 
   /**
-   * Visits a method of the class. This method <i>must</i> return a new {@link MethodVisitor}
+   * Visits a method of the class. This method <i>must</i> return a new {@link BaseMethodVisitor}
    * instance (or {@literal null}) each time it is called, i.e., it should not return a previously
    * returned visitor.
    *
@@ -355,7 +355,7 @@ public abstract class AbstractClassVisitor {
    * @return an object to visit the byte code of the method, or {@literal null} if this class
    *     visitor is not interested in visiting the code of this method.
    */
-  public MethodVisitor visitMethod(
+  public BaseMethodVisitor visitMethod(
       final int access,
       final String name,
       final String descriptor,

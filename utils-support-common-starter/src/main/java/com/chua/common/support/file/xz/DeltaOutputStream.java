@@ -9,15 +9,15 @@
 
 package com.chua.common.support.file.xz;
 
-import com.chua.common.support.file.xz.delta.DeltaEncoder;
+import com.chua.common.support.file.xz.delta.AbstractDeltaEncoder;
 
 import java.io.IOException;
 
-class DeltaOutputStream extends FinishableOutputStream {
+class DeltaOutputStream extends AbstractFinishableOutputStream {
     private static final int FILTER_BUF_SIZE = 4096;
 
-    private FinishableOutputStream out;
-    private final DeltaEncoder delta;
+    private AbstractFinishableOutputStream out;
+    private final AbstractDeltaEncoder delta;
     private final byte[] filterBuf = new byte[FILTER_BUF_SIZE];
 
     private boolean finished = false;
@@ -29,9 +29,9 @@ class DeltaOutputStream extends FinishableOutputStream {
         return 1 + FILTER_BUF_SIZE / 1024;
     }
 
-    DeltaOutputStream(FinishableOutputStream out, DeltaOptions options) {
+    DeltaOutputStream(AbstractFinishableOutputStream out, DeltaOptions options) {
         this.out = out;
-        delta = new DeltaEncoder(options.getDistance());
+        delta = new AbstractDeltaEncoder(options.getDistance());
     }
 
     public void write(int b) throws IOException {

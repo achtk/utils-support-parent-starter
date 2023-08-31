@@ -3,7 +3,7 @@ package com.chua.common.support.lang.spider;
 import com.chua.common.support.lang.spider.selector.Html;
 import com.chua.common.support.lang.spider.selector.Selectable;
 import com.chua.common.support.lang.spider.selector.SpiderJson;
-import com.chua.common.support.lang.spider.utils.HttpConstant;
+import com.chua.common.support.lang.spider.utils.BaseHttpConstant;
 import com.chua.common.support.utils.StringUtils;
 import com.chua.common.support.utils.UrlUtils;
 
@@ -45,7 +45,7 @@ public class Page {
 
     private Map<String, List<String>> headers;
 
-    private int statusCode = HttpConstant.StatusCode.CODE_200;
+    private int statusCode = BaseHttpConstant.BaseStatusCode.CODE_200;
 
     private boolean downloadSuccess = true;
 

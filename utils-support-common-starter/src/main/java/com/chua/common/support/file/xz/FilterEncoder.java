@@ -38,6 +38,6 @@ interface FilterEncoder extends FilterCoder {
      * @param arrayCache cache
      * @return stream
      */
-    FinishableOutputStream getOutputStream(FinishableOutputStream out,
-                                           ArrayCache arrayCache);
+    AbstractFinishableOutputStream getOutputStream(AbstractFinishableOutputStream out,
+                                                   ArrayCache arrayCache);
 }

@@ -11,11 +11,11 @@ import static com.chua.common.support.utils.Preconditions.checkNotNull;
  * ByFunctionOrdering
  * @author CH
  */
-final class ByFunctionOrdering<F extends Object, T extends Object> extends Ordering<F> implements Serializable {
+final class ByFunctionOrdering<F extends Object, T extends Object> extends BaseOrdering<F> implements Serializable {
     final Function<F, ? extends T> function;
-    final Ordering<T> ordering;
+    final BaseOrdering<T> ordering;
 
-    ByFunctionOrdering(Function<F, ? extends T> function, Ordering<T> ordering) {
+    ByFunctionOrdering(Function<F, ? extends T> function, BaseOrdering<T> ordering) {
         this.function = checkNotNull(function);
         this.ordering = checkNotNull(ordering);
     }

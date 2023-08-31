@@ -53,9 +53,9 @@ import static com.chua.common.support.constant.CommonConstant.*;
  *             #ITEM_INTEGER}, {@link #ITEM_FLOAT}, {@link #ITEM_LONG}, {@link #ITEM_DOUBLE}, {@link
  *             #ITEM_NULL} or {@link #ITEM_UNINITIALIZED_THIS}, if KIND is equal to {@link
  *             #CONSTANT_KIND}.
- *         <li>the index of a {@link Symbol#TYPE_TAG} {@link Symbol} in the type table of a {@link
+ *         <li>the index of a {@link BaseSymbol#TYPE_TAG} {@link BaseSymbol} in the type table of a {@link
  *             SymbolTable}, if KIND is equal to {@link #REFERENCE_KIND}.
- *         <li>the index of an {@link Symbol#UNINITIALIZED_TYPE_TAG} {@link Symbol} in the type
+ *         <li>the index of an {@link BaseSymbol#UNINITIALIZED_TYPE_TAG} {@link BaseSymbol} in the type
  *             table of a SymbolTable, if KIND is equal to {@link #UNINITIALIZED_KIND}.
  *         <li>the index of a local variable in the input stack frame, if KIND is equal to {@link
  *             #LOCAL_KIND}.
@@ -247,9 +247,9 @@ class Frame {
   /**
    * Returns the abstract type corresponding to the given public API frame element type.
    *
-   * @param symbolTable the type table to use to lookup and store type {@link Symbol}.
+   * @param symbolTable the type table to use to lookup and store type {@link BaseSymbol}.
    * @param type a frame element type described using the same format as in {@link
-   *     MethodVisitor#visitFrame}, i.e. either {@link Opcodes#TOP}, {@link Opcodes#INTEGER}, {@link
+   *     BaseMethodVisitor#visitFrame}, i.e. either {@link Opcodes#TOP}, {@link Opcodes#INTEGER}, {@link
    *     Opcodes#FLOAT}, {@link Opcodes#LONG}, {@link Opcodes#DOUBLE}, {@link Opcodes#NULL}, or
    *     {@link Opcodes#UNINITIALIZED_THIS}, or the internal name of a class, or a Label designating
    *     a NEW instruction (for uninitialized types).
@@ -270,7 +270,7 @@ class Frame {
   /**
    * Returns the abstract type corresponding to the internal name of a class.
    *
-   * @param symbolTable the type table to use to lookup and store type {@link Symbol}.
+   * @param symbolTable the type table to use to lookup and store type {@link BaseSymbol}.
    * @param internalName the internal name of a class. This must <i>not</i> be an array type
    *     descriptor.
    * @return the abstract type value corresponding to the given internal name.
@@ -283,7 +283,7 @@ class Frame {
   /**
    * Returns the abstract type corresponding to the given type descriptor.
    *
-   * @param symbolTable the type table to use to lookup and store type {@link Symbol}.
+   * @param symbolTable the type table to use to lookup and store type {@link BaseSymbol}.
    * @param buffer a string ending with a type descriptor.
    * @param offset the start offset of the type descriptor in buffer.
    * @return the abstract type corresponding to the given type descriptor.
@@ -362,7 +362,7 @@ class Frame {
    * first frame of a method, which is implicit (i.e. not stored explicitly in the StackMapTable
    * attribute).
    *
-   * @param symbolTable the type table to use to lookup and store type {@link Symbol}.
+   * @param symbolTable the type table to use to lookup and store type {@link BaseSymbol}.
    * @param access the method's access flags.
    * @param descriptor the method descriptor.
    * @param maxLocals the maximum number of local variables of the method.
@@ -399,13 +399,13 @@ class Frame {
   /**
    * Sets the input frame from the given public API frame description.
    *
-   * @param symbolTable the type table to use to lookup and store type {@link Symbol}.
+   * @param symbolTable the type table to use to lookup and store type {@link BaseSymbol}.
    * @param numLocal the number of local variables.
    * @param local the local variable types, described using the same format as in {@link
-   *     MethodVisitor#visitFrame}.
+   *     BaseMethodVisitor#visitFrame}.
    * @param numStack the number of operand stack elements.
    * @param stack the operand stack types, described using the same format as in {@link
-   *     MethodVisitor#visitFrame}.
+   *     BaseMethodVisitor#visitFrame}.
    */
   final void setInputFrameFromApiFormat(
       final SymbolTable symbolTable,
@@ -521,7 +521,7 @@ class Frame {
   /**
    * Pushes the abstract type corresponding to the given descriptor on the output frame stack.
    *
-   * @param symbolTable the type table to use to lookup and store type {@link Symbol}.
+   * @param symbolTable the type table to use to lookup and store type {@link BaseSymbol}.
    * @param descriptor a type or method descriptor (in which case its return type is pushed).
    */
   private void push(final SymbolTable symbolTable, final String descriptor) {
@@ -611,7 +611,7 @@ class Frame {
   /**
    * Returns the "initialized" abstract type corresponding to the given abstract type.
    *
-   * @param symbolTable the type table to use to lookup and store type {@link Symbol}.
+   * @param symbolTable the type table to use to lookup and store type {@link BaseSymbol}.
    * @param abstractType an abstract type.
    * @return the REFERENCE_KIND abstract type corresponding to abstractType if it is
    *     UNINITIALIZED_THIS or an UNINITIALIZED_KIND abstract type for one of the types on which a
@@ -653,10 +653,10 @@ class Frame {
    * @param opcode the opcode of the instruction.
    * @param arg the numeric operand of the instruction, if any.
    * @param argSymbol the Symbol operand of the instruction, if any.
-   * @param symbolTable the type table to use to lookup and store type {@link Symbol}.
+   * @param symbolTable the type table to use to lookup and store type {@link BaseSymbol}.
    */
   void execute(
-      final int opcode, final int arg, final Symbol argSymbol, final SymbolTable symbolTable) {
+          final int opcode, final int arg, final BaseSymbol argSymbol, final SymbolTable symbolTable) {
     
     int abstractType1;
     int abstractType2;
@@ -709,33 +709,33 @@ class Frame {
         break;
       case Opcodes.LDC:
         switch (argSymbol.tag) {
-          case Symbol.CONSTANT_INTEGER_TAG:
+          case BaseSymbol.CONSTANT_INTEGER_TAG:
             push(INTEGER);
             break;
-          case Symbol.CONSTANT_LONG_TAG:
+          case BaseSymbol.CONSTANT_LONG_TAG:
             push(LONG);
             push(TOP);
             break;
-          case Symbol.CONSTANT_FLOAT_TAG:
+          case BaseSymbol.CONSTANT_FLOAT_TAG:
             push(FLOAT);
             break;
-          case Symbol.CONSTANT_DOUBLE_TAG:
+          case BaseSymbol.CONSTANT_DOUBLE_TAG:
             push(DOUBLE);
             push(TOP);
             break;
-          case Symbol.CONSTANT_CLASS_TAG:
+          case BaseSymbol.CONSTANT_CLASS_TAG:
             push(REFERENCE_KIND | symbolTable.addType("java/lang/Class"));
             break;
-          case Symbol.CONSTANT_STRING_TAG:
+          case BaseSymbol.CONSTANT_STRING_TAG:
             push(REFERENCE_KIND | symbolTable.addType("java/lang/String"));
             break;
-          case Symbol.CONSTANT_METHOD_TYPE_TAG:
+          case BaseSymbol.CONSTANT_METHOD_TYPE_TAG:
             push(REFERENCE_KIND | symbolTable.addType("java/lang/invoke/MethodType"));
             break;
-          case Symbol.CONSTANT_METHOD_HANDLE_TAG:
+          case BaseSymbol.CONSTANT_METHOD_HANDLE_TAG:
             push(REFERENCE_KIND | symbolTable.addType("java/lang/invoke/MethodHandle"));
             break;
-          case Symbol.CONSTANT_DYNAMIC_TAG:
+          case BaseSymbol.CONSTANT_DYNAMIC_TAG:
             push(symbolTable, argSymbol.value);
             break;
           default:
@@ -1132,7 +1132,7 @@ class Frame {
    * {@link Frame}. Returns {@literal true} if the given frame has been changed by this operation
    * (the input and output frames of this {@link Frame} are never changed).
    *
-   * @param symbolTable the type table to use to lookup and store type {@link Symbol}.
+   * @param symbolTable the type table to use to lookup and store type {@link BaseSymbol}.
    * @param dstFrame the {@link Frame} whose input frame must be updated. This should be the frame
    *     of a successor, in the control flow graph, of the basic block corresponding to this frame.
    * @param catchTypeIndex if 'frame' corresponds to an exception handler basic block, the type
@@ -1230,7 +1230,7 @@ class Frame {
    * Merges the type at the given index in the given abstract type array with the given type.
    * Returns {@literal true} if the type array has been modified by this operation.
    *
-   * @param symbolTable the type table to use to lookup and store type {@link Symbol}.
+   * @param symbolTable the type table to use to lookup and store type {@link BaseSymbol}.
    * @param sourceType the abstract type with which the abstract type array element must be merged.
    *     This type should be of {@link #CONSTANT_KIND}, {@link #REFERENCE_KIND} or {@link
    *     #UNINITIALIZED_KIND} kind, with positive or {@literal null} array dimensions.
@@ -1377,7 +1377,7 @@ class Frame {
    * Put the given abstract type in the given ByteVector, using the JVMS verification_type_info
    * format used in StackMapTable attributes.
    *
-   * @param symbolTable the type table to use to lookup and store type {@link Symbol}.
+   * @param symbolTable the type table to use to lookup and store type {@link BaseSymbol}.
    * @param abstractType an abstract type, restricted to {@link Frame#CONSTANT_KIND}, {@link
    *     Frame#REFERENCE_KIND} or {@link Frame#UNINITIALIZED_KIND} types.
    * @param output where the abstract type must be put.

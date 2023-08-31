@@ -15,28 +15,28 @@
  ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.common.processor.core;
 
-import com.chua.common.support.file.univocity.parsers.common.AbstractCommonSettings;
+import com.chua.common.support.file.univocity.parsers.common.BaseCommonSettings;
 
 import java.util.List;
 import java.util.Map;
 
 /**
  * A common interface for {@link Processor}s that collect the values parsed from each column in a row.
- * Namely: {@link AbstractColumnProcessor}, {@link AbstractObjectColumnProcessor}, {@link AbstractBatchedColumnProcessor} and {@link AbstractBatchedObjectColumnProcessor}.
+ * Namely: {@link AbstractColumnProcessor}, {@link AbstractObjectColumnProcessorAbstract}, {@link AbstractBatchedColumnProcessor} and {@link AbstractBatchedObjectColumnProcessorAbstract}.
  *
  * @param <T> the type of the data stored by the columns.
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
  * @see AbstractColumnProcessor
- * @see AbstractObjectColumnProcessor
+ * @see AbstractObjectColumnProcessorAbstract
  * @see AbstractBatchedColumnProcessor
- * @see AbstractBatchedObjectColumnProcessor
+ * @see AbstractBatchedObjectColumnProcessorAbstract
  * @see Processor
  */
 interface ColumnReader<T> {
 
 	/**
-	 * Returns the column headers. This can be either the headers defined in {@link AbstractCommonSettings#getHeaders()} or the headers parsed in
-	 * the input when {@link AbstractCommonSettings#getHeaders()}  equals to {@code true}
+	 * Returns the column headers. This can be either the headers defined in {@link BaseCommonSettings#getHeaders()} or the headers parsed in
+	 * the input when {@link BaseCommonSettings#getHeaders()}  equals to {@code true}
 	 *
 	 * @return the headers of all column parsed.
 	 */

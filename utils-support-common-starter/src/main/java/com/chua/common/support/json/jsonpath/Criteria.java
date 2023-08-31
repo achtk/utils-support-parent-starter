@@ -18,7 +18,7 @@ import com.chua.common.support.json.jsonpath.internal.Path;
 import com.chua.common.support.json.jsonpath.internal.Utils;
 import com.chua.common.support.json.jsonpath.internal.filter.RelationalExpressionNode;
 import com.chua.common.support.json.jsonpath.internal.filter.RelationalOperator;
-import com.chua.common.support.json.jsonpath.internal.filter.ValueNode;
+import com.chua.common.support.json.jsonpath.internal.filter.BaseValueNode;
 import com.chua.common.support.json.jsonpath.internal.filter.ValueNodes;
 
 import java.util.*;
@@ -38,17 +38,17 @@ import static com.chua.common.support.json.jsonpath.internal.filter.ValueNodes.V
 public class Criteria implements Predicate {
 
     private final List<Criteria> criteriaChain;
-    private ValueNode left;
+    private BaseValueNode left;
     private RelationalOperator criteriaType;
-    private ValueNode right;
+    private BaseValueNode right;
 
-    private Criteria(List<Criteria> criteriaChain, ValueNode left) {
+    private Criteria(List<Criteria> criteriaChain, BaseValueNode left) {
         this.left = left;
         this.criteriaChain = criteriaChain;
         this.criteriaChain.add(this);
     }
 
-    private Criteria(ValueNode left) {
+    private Criteria(BaseValueNode left) {
         this(new LinkedList<Criteria>(), left);
     }
 
@@ -83,7 +83,7 @@ public class Criteria implements Predicate {
      */
     @Deprecated
     public static Criteria where(Path key) {
-        return new Criteria(ValueNode.createPathNode(key));
+        return new Criteria(BaseValueNode.createPathNode(key));
     }
 
 
@@ -95,7 +95,7 @@ public class Criteria implements Predicate {
      */
 
     public static Criteria where(String key) {
-        return new Criteria(ValueNode.toValueNode(prefixPath(key)));
+        return new Criteria(BaseValueNode.toValueNode(prefixPath(key)));
     }
 
     /**
@@ -106,7 +106,7 @@ public class Criteria implements Predicate {
      */
     public Criteria and(String key) {
         checkComplete();
-        return new Criteria(this.criteriaChain, ValueNode.toValueNode(prefixPath(key)));
+        return new Criteria(this.criteriaChain, BaseValueNode.toValueNode(prefixPath(key)));
     }
 
     /**
@@ -117,7 +117,7 @@ public class Criteria implements Predicate {
      */
     public Criteria is(Object o) {
         this.criteriaType = RelationalOperator.EQ;
-        this.right = ValueNode.toValueNode(o);
+        this.right = BaseValueNode.toValueNode(o);
         return this;
     }
 
@@ -139,7 +139,7 @@ public class Criteria implements Predicate {
      */
     public Criteria ne(Object o) {
         this.criteriaType = RelationalOperator.NE;
-        this.right = ValueNode.toValueNode(o);
+        this.right = BaseValueNode.toValueNode(o);
         return this;
     }
 
@@ -151,7 +151,7 @@ public class Criteria implements Predicate {
      */
     public Criteria lt(Object o) {
         this.criteriaType = RelationalOperator.LT;
-        this.right = ValueNode.toValueNode(o);
+        this.right = BaseValueNode.toValueNode(o);
         return this;
     }
 
@@ -163,7 +163,7 @@ public class Criteria implements Predicate {
      */
     public Criteria lte(Object o) {
         this.criteriaType = RelationalOperator.LTE;
-        this.right = ValueNode.toValueNode(o);
+        this.right = BaseValueNode.toValueNode(o);
         return this;
     }
 
@@ -175,7 +175,7 @@ public class Criteria implements Predicate {
      */
     public Criteria gt(Object o) {
         this.criteriaType = RelationalOperator.GT;
-        this.right = ValueNode.toValueNode(o);
+        this.right = BaseValueNode.toValueNode(o);
         return this;
     }
 
@@ -187,7 +187,7 @@ public class Criteria implements Predicate {
      */
     public Criteria gte(Object o) {
         this.criteriaType = RelationalOperator.GTE;
-        this.right = ValueNode.toValueNode(o);
+        this.right = BaseValueNode.toValueNode(o);
         return this;
     }
 
@@ -200,7 +200,7 @@ public class Criteria implements Predicate {
     public Criteria regex(Pattern pattern) {
         notNull(pattern, "pattern can not be null");
         this.criteriaType = RelationalOperator.REGEX;
-        this.right = ValueNode.toValueNode(pattern);
+        this.right = BaseValueNode.toValueNode(pattern);
         return this;
     }
 
@@ -238,7 +238,7 @@ public class Criteria implements Predicate {
      */
     public Criteria contains(Object o) {
         this.criteriaType = RelationalOperator.CONTAINS;
-        this.right = ValueNode.toValueNode(o);
+        this.right = BaseValueNode.toValueNode(o);
         return this;
     }
 
@@ -382,7 +382,7 @@ public class Criteria implements Predicate {
      */
     public Criteria size(int size) {
         this.criteriaType = RelationalOperator.SIZE;
-        this.right = ValueNode.toValueNode(size);
+        this.right = BaseValueNode.toValueNode(size);
         return this;
     }
 
@@ -404,7 +404,7 @@ public class Criteria implements Predicate {
      */
     public Criteria type(Class<?> clazz) {
         this.criteriaType = RelationalOperator.TYPE;
-        this.right = ValueNode.createClassNode(clazz);
+        this.right = BaseValueNode.createClassNode(clazz);
         return this;
     }
 
@@ -416,7 +416,7 @@ public class Criteria implements Predicate {
      */
     public Criteria exists(boolean shouldExist) {
         this.criteriaType = RelationalOperator.EXISTS;
-        this.right = ValueNode.toValueNode(shouldExist);
+        this.right = BaseValueNode.toValueNode(shouldExist);
         this.left = left.asPathNode().asExistsCheck(shouldExist);
         return this;
     }
@@ -488,9 +488,9 @@ public class Criteria implements Predicate {
      */
     @Deprecated
     public static Criteria create(String left, String operator, String right) {
-        Criteria criteria = new Criteria(ValueNode.toValueNode(left));
+        Criteria criteria = new Criteria(BaseValueNode.toValueNode(left));
         criteria.criteriaType = RelationalOperator.fromString(operator);
-        criteria.right = ValueNode.toValueNode(right);
+        criteria.right = BaseValueNode.toValueNode(right);
         return criteria;
     }
 

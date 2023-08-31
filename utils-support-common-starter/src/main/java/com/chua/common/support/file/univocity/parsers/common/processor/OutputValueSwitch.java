@@ -23,12 +23,12 @@ import com.chua.common.support.file.univocity.parsers.common.NormalizedString;
 import java.util.*;
 
 /**
- * A concrete implementation of {@link RowWriterProcessorSwitch} that allows switching among different implementations of
+ * A concrete implementation of {@link BaseRowWriterProcessorSwitch} that allows switching among different implementations of
  * {@link RowWriterProcessor} based on values found on rows to be written to an output
  *
  * @author Administrator
  */
-public class OutputValueSwitch extends RowWriterProcessorSwitch {
+public class OutputValueSwitch extends BaseRowWriterProcessorSwitch {
 
 	private Switch defaultSwitch;
 	private Switch[] switches = new Switch[0];

@@ -24,23 +24,23 @@ abstract class AbstractCut<C extends Comparable> implements Comparable<AbstractC
 
     abstract BoundType typeAsUpperBound();
 
-    abstract AbstractCut<C> withLowerBoundType(BoundType boundType, DiscreteDomain<C> domain);
+    abstract AbstractCut<C> withLowerBoundType(BoundType boundType, AbstractDiscreteDomain<C> domain);
 
-    abstract AbstractCut<C> withUpperBoundType(BoundType boundType, DiscreteDomain<C> domain);
+    abstract AbstractCut<C> withUpperBoundType(BoundType boundType, AbstractDiscreteDomain<C> domain);
 
     abstract void describeAsLowerBound(StringBuilder sb);
 
     abstract void describeAsUpperBound(StringBuilder sb);
 
-    abstract C leastValueAbove(DiscreteDomain<C> domain);
+    abstract C leastValueAbove(AbstractDiscreteDomain<C> domain);
 
-    abstract C greatestValueBelow(DiscreteDomain<C> domain);
+    abstract C greatestValueBelow(AbstractDiscreteDomain<C> domain);
 
     /*
      * The canonical form is a BelowValue cut whenever possible, otherwise ABOVE_ALL, or
      * (only in the case of types that are unbounded below) BELOW_ALL.
      */
-    AbstractCut<C> canonical(DiscreteDomain<C> domain) {
+    AbstractCut<C> canonical(AbstractDiscreteDomain<C> domain) {
         return this;
     }
 
@@ -128,13 +128,13 @@ abstract class AbstractCut<C extends Comparable> implements Comparable<AbstractC
 
         @Override
         AbstractCut<Comparable<?>> withLowerBoundType(
-                BoundType boundType, DiscreteDomain<Comparable<?>> domain) {
+                BoundType boundType, AbstractDiscreteDomain<Comparable<?>> domain) {
             throw new IllegalStateException();
         }
 
         @Override
         AbstractCut<Comparable<?>> withUpperBoundType(
-                BoundType boundType, DiscreteDomain<Comparable<?>> domain) {
+                BoundType boundType, AbstractDiscreteDomain<Comparable<?>> domain) {
             throw new AssertionError("this statement should be unreachable");
         }
 
@@ -149,17 +149,17 @@ abstract class AbstractCut<C extends Comparable> implements Comparable<AbstractC
         }
 
         @Override
-        Comparable<?> leastValueAbove(DiscreteDomain<Comparable<?>> domain) {
+        Comparable<?> leastValueAbove(AbstractDiscreteDomain<Comparable<?>> domain) {
             return domain.minValue();
         }
 
         @Override
-        Comparable<?> greatestValueBelow(DiscreteDomain<Comparable<?>> domain) {
+        Comparable<?> greatestValueBelow(AbstractDiscreteDomain<Comparable<?>> domain) {
             throw new AssertionError();
         }
 
         @Override
-        AbstractCut<Comparable<?>> canonical(DiscreteDomain<Comparable<?>> domain) {
+        AbstractCut<Comparable<?>> canonical(AbstractDiscreteDomain<Comparable<?>> domain) {
             try {
                 return AbstractCut.<Comparable<?>>belowValue(domain.minValue());
             } catch (NoSuchElementException e) {
@@ -228,13 +228,13 @@ abstract class AbstractCut<C extends Comparable> implements Comparable<AbstractC
 
         @Override
         AbstractCut<Comparable<?>> withLowerBoundType(
-                BoundType boundType, DiscreteDomain<Comparable<?>> domain) {
+                BoundType boundType, AbstractDiscreteDomain<Comparable<?>> domain) {
             throw new AssertionError("this statement should be unreachable");
         }
 
         @Override
         AbstractCut<Comparable<?>> withUpperBoundType(
-                BoundType boundType, DiscreteDomain<Comparable<?>> domain) {
+                BoundType boundType, AbstractDiscreteDomain<Comparable<?>> domain) {
             throw new IllegalStateException();
         }
 
@@ -249,12 +249,12 @@ abstract class AbstractCut<C extends Comparable> implements Comparable<AbstractC
         }
 
         @Override
-        Comparable<?> leastValueAbove(DiscreteDomain<Comparable<?>> domain) {
+        Comparable<?> leastValueAbove(AbstractDiscreteDomain<Comparable<?>> domain) {
             throw new AssertionError();
         }
 
         @Override
-        Comparable<?> greatestValueBelow(DiscreteDomain<Comparable<?>> domain) {
+        Comparable<?> greatestValueBelow(AbstractDiscreteDomain<Comparable<?>> domain) {
             return domain.maxValue();
         }
 
@@ -305,7 +305,7 @@ abstract class AbstractCut<C extends Comparable> implements Comparable<AbstractC
         }
 
         @Override
-        AbstractCut<C> withLowerBoundType(BoundType boundType, DiscreteDomain<C> domain) {
+        AbstractCut<C> withLowerBoundType(BoundType boundType, AbstractDiscreteDomain<C> domain) {
             switch (boundType) {
                 case CLOSED:
                     return this;
@@ -318,7 +318,7 @@ abstract class AbstractCut<C extends Comparable> implements Comparable<AbstractC
         }
 
         @Override
-        AbstractCut<C> withUpperBoundType(BoundType boundType, DiscreteDomain<C> domain) {
+        AbstractCut<C> withUpperBoundType(BoundType boundType, AbstractDiscreteDomain<C> domain) {
             switch (boundType) {
                 case CLOSED:
                     C previous = domain.previous(endpoint);
@@ -341,12 +341,12 @@ abstract class AbstractCut<C extends Comparable> implements Comparable<AbstractC
         }
 
         @Override
-        C leastValueAbove(DiscreteDomain<C> domain) {
+        C leastValueAbove(AbstractDiscreteDomain<C> domain) {
             return endpoint;
         }
 
         @Override
-        C greatestValueBelow(DiscreteDomain<C> domain) {
+        C greatestValueBelow(AbstractDiscreteDomain<C> domain) {
             return domain.previous(endpoint);
         }
 
@@ -388,7 +388,7 @@ abstract class AbstractCut<C extends Comparable> implements Comparable<AbstractC
         }
 
         @Override
-        AbstractCut<C> withLowerBoundType(BoundType boundType, DiscreteDomain<C> domain) {
+        AbstractCut<C> withLowerBoundType(BoundType boundType, AbstractDiscreteDomain<C> domain) {
             switch (boundType) {
                 case OPEN:
                     return this;
@@ -401,7 +401,7 @@ abstract class AbstractCut<C extends Comparable> implements Comparable<AbstractC
         }
 
         @Override
-        AbstractCut<C> withUpperBoundType(BoundType boundType, DiscreteDomain<C> domain) {
+        AbstractCut<C> withUpperBoundType(BoundType boundType, AbstractDiscreteDomain<C> domain) {
             switch (boundType) {
                 case OPEN:
                     C next = domain.next(endpoint);
@@ -424,17 +424,17 @@ abstract class AbstractCut<C extends Comparable> implements Comparable<AbstractC
         }
 
         @Override
-        C leastValueAbove(DiscreteDomain<C> domain) {
+        C leastValueAbove(AbstractDiscreteDomain<C> domain) {
             return domain.next(endpoint);
         }
 
         @Override
-        C greatestValueBelow(DiscreteDomain<C> domain) {
+        C greatestValueBelow(AbstractDiscreteDomain<C> domain) {
             return endpoint;
         }
 
         @Override
-        AbstractCut<C> canonical(DiscreteDomain<C> domain) {
+        AbstractCut<C> canonical(AbstractDiscreteDomain<C> domain) {
             C next = leastValueAbove(domain);
             return (next != null) ? belowValue(next) : AbstractCut.<C>aboveAll();
         }

@@ -29,6 +29,17 @@ public class NumberUtils {
     private static final int Z = 'Z';
 
     /**
+     * 比较长度
+     *
+     * @param o1 o1
+     * @param o2 o2
+     * @return int
+     */
+    public static int compareLong(long o1, long o2) {
+        return Long.compare(o1, o2);
+    }
+
+    /**
      * 获取随机数据
      *
      * @param start 开始

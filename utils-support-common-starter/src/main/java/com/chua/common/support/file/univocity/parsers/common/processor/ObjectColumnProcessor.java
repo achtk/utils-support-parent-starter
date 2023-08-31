@@ -15,13 +15,13 @@
  ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.common.processor;
 
-import com.chua.common.support.file.univocity.parsers.common.AbstractParser;
+import com.chua.common.support.file.univocity.parsers.common.BaseParser;
 import com.chua.common.support.file.univocity.parsers.common.ParsingContext;
-import com.chua.common.support.file.univocity.parsers.common.processor.core.AbstractObjectColumnProcessor;
+import com.chua.common.support.file.univocity.parsers.common.processor.core.AbstractObjectColumnProcessorAbstract;
 import com.chua.common.support.file.univocity.parsers.conversions.Conversion;
 
 /**
- * A {@link RowProcessor} implementation for converting rows extracted from any implementation of {@link AbstractParser} into columns of objects.
+ * A {@link RowProcessor} implementation for converting rows extracted from any implementation of {@link BaseParser} into columns of objects.
  * <p>This uses the value conversions provided by {@link Conversion} instances.</p>
  *
  * <p> For each row processed, a sequence of conversions will be executed to generate the appropriate object. Each resulting object will then be stored in
@@ -33,12 +33,12 @@ import com.chua.common.support.file.univocity.parsers.conversions.Conversion;
  * <p><b>Note:</b> Storing the values of all columns may be memory intensive. For large inputs, use a {@link AbstractBatchedObjectColumnProcessor} instead</p>
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
- * @see AbstractParser
+ * @see BaseParser
  * @see RowProcessor
  * @see ColumnProcessor
  * @see Conversion
  */
-public class ObjectColumnProcessor extends AbstractObjectColumnProcessor<ParsingContext> implements RowProcessor {
+public class ObjectColumnProcessor extends AbstractObjectColumnProcessorAbstract<ParsingContext> implements RowProcessor {
 
 	/**
 	 * Constructs a column processor, pre-allocating room for 1000 rows.

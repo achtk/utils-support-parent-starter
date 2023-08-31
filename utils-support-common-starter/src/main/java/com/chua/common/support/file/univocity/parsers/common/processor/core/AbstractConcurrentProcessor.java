@@ -1,7 +1,7 @@
 package com.chua.common.support.file.univocity.parsers.common.processor.core;
 
 import com.chua.common.support.file.univocity.parsers.common.AbstractContext;
-import com.chua.common.support.file.univocity.parsers.common.AbstractParser;
+import com.chua.common.support.file.univocity.parsers.common.BaseParser;
 import com.chua.common.support.file.univocity.parsers.common.DataProcessingException;
 
 import java.util.concurrent.*;
@@ -16,7 +16,7 @@ import java.util.concurrent.*;
  * {@link #contextCopyingEnabled} flag to generate copies of the {@link AbstractContext} at the time each row was generated.
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
- * @see AbstractParser
+ * @see BaseParser
  * @see Processor
  */
 public abstract class AbstractConcurrentProcessor<T extends AbstractContext> implements Processor<T> {

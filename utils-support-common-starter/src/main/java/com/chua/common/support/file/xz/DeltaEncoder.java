@@ -30,8 +30,8 @@ class DeltaEncoder extends DeltaCoder implements FilterEncoder {
         return true;
     }
 
-    public FinishableOutputStream getOutputStream(FinishableOutputStream out,
-                                                  ArrayCache arrayCache) {
+    public AbstractFinishableOutputStream getOutputStream(AbstractFinishableOutputStream out,
+                                                          ArrayCache arrayCache) {
         return options.getOutputStream(out, arrayCache);
     }
 }

@@ -16,7 +16,7 @@ public class Expression {
     private static final Invoker DEFAULT_HEAD;
 
     static {
-        NodeParser[] parsers = new NodeParser[]{ 
+        BaseNodeParser[] parsers = new BaseNodeParser[]{
                 new SkipIgnoredToken(), 
                 new LeftParenParser(), 
                 new RightParenParser(), 
@@ -34,7 +34,7 @@ public class Expression {
         };
         Invoker pred = (el, offset, nodes, function) -> offset;
         for (int i = parsers.length - 1; i > -1; i--) {
-            final NodeParser parser = parsers[i];
+            final BaseNodeParser parser = parsers[i];
             final Invoker next = pred;
             Invoker invoker = (el, offset, nodes, function) -> parser.parse(el, offset, nodes, function, next);
             pred = invoker;

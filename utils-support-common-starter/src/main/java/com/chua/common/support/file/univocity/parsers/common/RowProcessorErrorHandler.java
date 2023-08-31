@@ -37,7 +37,7 @@ import com.chua.common.support.file.univocity.parsers.common.processor.RowWriter
  * @see RowWriterProcessor
  * @see DataProcessingException
  * @see TextParsingException
- * @see AbstractParser
+ * @see BaseParser
  * @see AbstractWriter
  * @see CommonSettings
  */

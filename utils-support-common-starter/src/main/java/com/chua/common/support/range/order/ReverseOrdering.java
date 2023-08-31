@@ -10,10 +10,10 @@ import static com.chua.common.support.utils.Preconditions.checkNotNull;
  *
  * @author CH
  */
-final class ReverseOrdering<T extends Object> extends Ordering<T> implements Serializable {
-    final Ordering<? super T> forwardOrder;
+final class ReverseOrdering<T extends Object> extends BaseOrdering<T> implements Serializable {
+    final BaseOrdering<? super T> forwardOrder;
 
-    ReverseOrdering(Ordering<? super T> forwardOrder) {
+    ReverseOrdering(BaseOrdering<? super T> forwardOrder) {
         this.forwardOrder = checkNotNull(forwardOrder);
     }
 
@@ -24,8 +24,8 @@ final class ReverseOrdering<T extends Object> extends Ordering<T> implements Ser
 
     @SuppressWarnings("unchecked")
     @Override
-    public <S extends T> Ordering<S> reverse() {
-        return (Ordering<S>) forwardOrder;
+    public <S extends T> BaseOrdering<S> reverse() {
+        return (BaseOrdering<S>) forwardOrder;
     }
 
     // Override the min/max methods to "hoist" delegation outside loops

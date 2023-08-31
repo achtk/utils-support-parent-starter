@@ -24,7 +24,7 @@ public class TopSelector<T extends Object> {
      * @throws IllegalArgumentException if {@code k < 0} or {@code k > Integer.MAX_VALUE / 2}
      */
     public static <T extends Comparable<? super T>> TopSelector<T> least(int k) {
-        return least(k, Ordering.natural());
+        return least(k, BaseOrdering.natural());
     }
 
     /**
@@ -46,7 +46,7 @@ public class TopSelector<T extends Object> {
      * @throws IllegalArgumentException if {@code k < 0} or {@code k > Integer.MAX_VALUE / 2}
      */
     public static <T extends Comparable<? super T>> TopSelector<T> greatest(int k) {
-        return greatest(k, Ordering.natural());
+        return greatest(k, BaseOrdering.natural());
     }
 
     /**
@@ -57,7 +57,7 @@ public class TopSelector<T extends Object> {
      */
     public static <T extends Object> TopSelector<T> greatest(
             int k, Comparator<? super T> comparator) {
-        return new TopSelector<T>(Ordering.from(comparator).reverse(), k);
+        return new TopSelector<T>(BaseOrdering.from(comparator).reverse(), k);
     }
 
     private final int k;
@@ -202,7 +202,7 @@ public class TopSelector<T extends Object> {
      * operation takes amortized linear time in the length of {@code elements}.
      *
      * <p>If all input data to this {@code TopSelector} is in a single {@code Iterable}, prefer
-     * {@link Ordering#leastOf(Iterable, int)}, which provides a simpler API for that use case.
+     * {@link BaseOrdering#leastOf(Iterable, int)}, which provides a simpler API for that use case.
      */
     public void offerAll(Iterable<? extends T> elements) {
         offerAll(elements.iterator());
@@ -214,7 +214,7 @@ public class TopSelector<T extends Object> {
      * consumed after this operation completes.
      *
      * <p>If all input data to this {@code TopSelector} is in a single {@code Iterator}, prefer
-     * {@link Ordering#leastOf(Iterator, int)}, which provides a simpler API for that use case.
+     * {@link BaseOrdering#leastOf(Iterator, int)}, which provides a simpler API for that use case.
      */
     public void offerAll(Iterator<? extends T> elements) {
         while (elements.hasNext()) {

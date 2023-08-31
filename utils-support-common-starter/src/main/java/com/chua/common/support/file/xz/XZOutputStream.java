@@ -52,7 +52,7 @@ import java.io.OutputStream;
  * XZOutputStream outxz = new XZOutputStream(outfile, options);
  * </pre></blockquote>
  */
-public class XZOutputStream extends FinishableOutputStream {
+public class XZOutputStream extends AbstractFinishableOutputStream {
     private final ArrayCache arrayCache;
 
     private OutputStream out;
@@ -92,7 +92,7 @@ public class XZOutputStream extends FinishableOutputStream {
      *
      * @throws      IOException may be thrown from <code>out</code>
      */
-    public XZOutputStream(OutputStream out, FilterOptions filterOptions)
+    public XZOutputStream(OutputStream out, AbstractFilterOptions filterOptions)
             throws IOException {
         this(out, filterOptions, Xz.CHECK_CRC64);
     }
@@ -118,7 +118,7 @@ public class XZOutputStream extends FinishableOutputStream {
      *
      * @since 1.7
      */
-    public XZOutputStream(OutputStream out, FilterOptions filterOptions,
+    public XZOutputStream(OutputStream out, AbstractFilterOptions filterOptions,
                           ArrayCache arrayCache)
             throws IOException {
         this(out, filterOptions, Xz.CHECK_CRC64, arrayCache);
@@ -144,9 +144,9 @@ public class XZOutputStream extends FinishableOutputStream {
      *
      * @throws      IOException may be thrown from <code>out</code>
      */
-    public XZOutputStream(OutputStream out, FilterOptions filterOptions,
+    public XZOutputStream(OutputStream out, AbstractFilterOptions filterOptions,
                           int checkType) throws IOException {
-        this(out, new FilterOptions[] { filterOptions }, checkType);
+        this(out, new AbstractFilterOptions[] { filterOptions }, checkType);
     }
 
     /**
@@ -174,10 +174,10 @@ public class XZOutputStream extends FinishableOutputStream {
      *
      * @since 1.7
      */
-    public XZOutputStream(OutputStream out, FilterOptions filterOptions,
+    public XZOutputStream(OutputStream out, AbstractFilterOptions filterOptions,
                           int checkType, ArrayCache arrayCache)
             throws IOException {
-        this(out, new FilterOptions[] { filterOptions }, checkType,
+        this(out, new AbstractFilterOptions[] { filterOptions }, checkType,
              arrayCache);
     }
 
@@ -197,7 +197,7 @@ public class XZOutputStream extends FinishableOutputStream {
      *
      * @throws      IOException may be thrown from <code>out</code>
      */
-    public XZOutputStream(OutputStream out, FilterOptions[] filterOptions)
+    public XZOutputStream(OutputStream out, AbstractFilterOptions[] filterOptions)
             throws IOException {
         this(out, filterOptions, Xz.CHECK_CRC64);
     }
@@ -223,7 +223,7 @@ public class XZOutputStream extends FinishableOutputStream {
      *
      * @since 1.7
      */
-    public XZOutputStream(OutputStream out, FilterOptions[] filterOptions,
+    public XZOutputStream(OutputStream out, AbstractFilterOptions[] filterOptions,
                           ArrayCache arrayCache)
             throws IOException {
         this(out, filterOptions, Xz.CHECK_CRC64, arrayCache);
@@ -247,7 +247,7 @@ public class XZOutputStream extends FinishableOutputStream {
      *
      * @throws      IOException may be thrown from <code>out</code>
      */
-    public XZOutputStream(OutputStream out, FilterOptions[] filterOptions,
+    public XZOutputStream(OutputStream out, AbstractFilterOptions[] filterOptions,
                           int checkType) throws IOException {
         this(out, filterOptions, checkType, ArrayCache.getDefaultCache());
     }
@@ -274,7 +274,7 @@ public class XZOutputStream extends FinishableOutputStream {
      *
      * @since 1.7
      */
-    public XZOutputStream(OutputStream out, FilterOptions[] filterOptions,
+    public XZOutputStream(OutputStream out, AbstractFilterOptions[] filterOptions,
                           int checkType, ArrayCache arrayCache)
             throws IOException {
         this.arrayCache = arrayCache;
@@ -299,9 +299,9 @@ public class XZOutputStream extends FinishableOutputStream {
      *                          unsupported filter chain, or trying to change
      *                          the filter chain in the middle of a Block
      */
-    public void updateFilters(FilterOptions filterOptions)
+    public void updateFilters(AbstractFilterOptions filterOptions)
             throws XzException {
-        FilterOptions[] opts = new FilterOptions[1];
+        AbstractFilterOptions[] opts = new AbstractFilterOptions[1];
         opts[0] = filterOptions;
         updateFilters(opts);
     }
@@ -321,7 +321,7 @@ public class XZOutputStream extends FinishableOutputStream {
      *                          unsupported filter chain, or trying to change
      *                          the filter chain in the middle of a Block
      */
-    public void updateFilters(FilterOptions[] filterOptions)
+    public void updateFilters(AbstractFilterOptions[] filterOptions)
             throws XzException {
         if (blockEncoder != null)
             throw new UnsupportedOptionsException("Changing filter options "

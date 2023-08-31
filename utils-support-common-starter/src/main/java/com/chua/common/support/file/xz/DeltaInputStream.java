@@ -9,7 +9,7 @@
 
 package com.chua.common.support.file.xz;
 
-import com.chua.common.support.file.xz.delta.DeltaDecoder;
+import com.chua.common.support.file.xz.delta.AbstractDeltaDecoder;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,7 +33,7 @@ public class DeltaInputStream extends InputStream {
     public static final int DISTANCE_MAX = 256;
 
     private InputStream in;
-    private final DeltaDecoder delta;
+    private final AbstractDeltaDecoder delta;
 
     private IOException exception = null;
 
@@ -56,7 +56,7 @@ public class DeltaInputStream extends InputStream {
             throw new NullPointerException();
 
         this.in = in;
-        this.delta = new DeltaDecoder(distance);
+        this.delta = new AbstractDeltaDecoder(distance);
     }
 
     /**

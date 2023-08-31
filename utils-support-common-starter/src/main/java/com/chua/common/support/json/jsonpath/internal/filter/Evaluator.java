@@ -13,5 +13,5 @@ public interface Evaluator {
      * @param ctx context
      * @return true | false
      */
-    boolean evaluate(ValueNode left, ValueNode right, Predicate.PredicateContext ctx);
+    boolean evaluate(BaseValueNode left, BaseValueNode right, Predicate.PredicateContext ctx);
 }

@@ -8,11 +8,11 @@ import java.nio.file.Files;
 import java.util.Collections;
 
 /**
- * An implementation of {@link Vfs.Dir} for directory {@link File}.
+ * An implementation of {@link BaseVfs.Dir} for directory {@link File}.
  *
  * @author Administrator
  */
-public class SystemDir implements Vfs.Dir {
+public class SystemDir implements BaseVfs.Dir {
     private final File file;
 
     public SystemDir(File file) {
@@ -29,7 +29,7 @@ public class SystemDir implements Vfs.Dir {
     }
 
     @Override
-    public Iterable<Vfs.VfsFile> getFiles() {
+    public Iterable<BaseVfs.VfsFile> getFiles() {
         if (file == null || !file.exists()) {
             return Collections.emptyList();
         }
@@ -37,7 +37,7 @@ public class SystemDir implements Vfs.Dir {
             try {
                 return Files.walk(file.toPath())
                         .filter(Files::isRegularFile)
-                        .map(path -> (Vfs.VfsFile) new SystemFile(SystemDir.this, path.toFile()))
+                        .map(path -> (BaseVfs.VfsFile) new SystemFile(SystemDir.this, path.toFile()))
                         .iterator();
             } catch (IOException e) {
                 throw new ReflectionsException("could not get files for " + file, e);

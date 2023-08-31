@@ -27,7 +27,7 @@ import static java.lang.String.format;
 /**
  * @author Administrator
  */
-public class PredicatePathToken extends PathToken {
+public class PredicatePathToken extends BasePathToken {
 
 
     private final Collection<Predicate> predicates;

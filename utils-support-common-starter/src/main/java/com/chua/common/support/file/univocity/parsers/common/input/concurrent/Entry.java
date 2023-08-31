@@ -16,21 +16,21 @@
 package com.chua.common.support.file.univocity.parsers.common.input.concurrent;
 
 /**
- * An entry used by the {@link FixedInstancePool}
+ * An entry used by the {@link AbstractFixedInstancePool}
  *
  * @param <T> the type of this entry.
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
- * @see FixedInstancePool
+ * @see AbstractFixedInstancePool
  */
 class Entry<T> {
 	final T entry;
 	final int index;
 
 	/**
-	 * Creates a new entry with an object and its position in the {@link FixedInstancePool}
+	 * Creates a new entry with an object and its position in the {@link AbstractFixedInstancePool}
 	 *
 	 * @param entry the value in this entry
-	 * @param index the position of this entry in the {@link FixedInstancePool}
+	 * @param index the position of this entry in the {@link AbstractFixedInstancePool}
 	 */
 	Entry(T entry, int index) {
 		this.entry = entry;
@@ -38,9 +38,9 @@ class Entry<T> {
 	}
 
 	/**
-	 * Returns the object stored in this  {@link FixedInstancePool} entry.
+	 * Returns the object stored in this  {@link AbstractFixedInstancePool} entry.
 	 *
-	 * @return the object stored in this  {@link FixedInstancePool} entry.
+	 * @return the object stored in this  {@link AbstractFixedInstancePool} entry.
 	 */
 	public T get() {
 		return this.entry;

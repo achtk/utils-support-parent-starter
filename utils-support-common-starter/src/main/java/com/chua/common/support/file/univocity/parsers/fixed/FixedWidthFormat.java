@@ -15,12 +15,12 @@
  ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.fixed;
 
-import com.chua.common.support.file.univocity.parsers.common.Format;
+import com.chua.common.support.file.univocity.parsers.common.BaseFormat;
 
 import java.util.TreeMap;
 
 /**
- * The Fixed-Width format configuration. In addition to the default configuration in {@link Format}, the fixed-width format defines:
+ * The Fixed-Width format configuration. In addition to the default configuration in {@link BaseFormat}, the fixed-width format defines:
  *
  * <ul>
  * <li><b>padding <i>(defaults to ' ')</i>: </b> the character used for filling unwritten spaces in a fixed-width record.
@@ -29,9 +29,9 @@ import java.util.TreeMap;
  * </ul>
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
- * @see Format
+ * @see BaseFormat
  */
-public class FixedWidthFormat extends Format {
+public class FixedWidthFormat extends BaseFormat {
 
 	private char padding = ' ';
 	private char lookupWildcard = '?';

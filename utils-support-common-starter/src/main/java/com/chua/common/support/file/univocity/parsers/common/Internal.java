@@ -31,8 +31,8 @@ class Internal {
 		} catch (DataProcessingException ex) {
 			ex.setContext(context);
 
-			if (!ex.isFatal() && !ex.isHandled() && ex.getColumnIndex() > -1 && errorHandler instanceof RetryableErrorHandler) {
-				RetryableErrorHandler retry = ((RetryableErrorHandler) errorHandler);
+			if (!ex.isFatal() && !ex.isHandled() && ex.getColumnIndex() > -1 && errorHandler instanceof BaseRetryableErrorHandler) {
+				BaseRetryableErrorHandler retry = ((BaseRetryableErrorHandler) errorHandler);
 				ex.markAsHandled(errorHandler);
 				retry.handleError(ex, row, context);
 				if (!retry.isRecordSkipped()) {

@@ -18,14 +18,14 @@ package com.chua.common.support.file.univocity.parsers.common.processor.core;
 import com.chua.common.support.file.univocity.parsers.common.*;
 import com.chua.common.support.file.univocity.parsers.common.processor.MasterDetailRecord;
 import com.chua.common.support.file.univocity.parsers.common.processor.ObjectRowListProcessor;
-import com.chua.common.support.file.univocity.parsers.common.processor.ObjectRowProcessor;
+import com.chua.common.support.file.univocity.parsers.common.processor.BaseObjectRowProcessor;
 import com.chua.common.support.file.univocity.parsers.common.processor.RowListProcessor;
 import com.chua.common.support.file.univocity.parsers.conversions.Conversion;
 
 /**
- * The essential callback interface to handle records parsed by any parser that extends {@link AbstractParser}.
+ * The essential callback interface to handle records parsed by any parser that extends {@link BaseParser}.
  *
- * <p>When parsing an input, univocity-parsers will obtain the RowProcessor from {@link AbstractCommonParserSettings#getRowProcessor()}, and
+ * <p>When parsing an input, univocity-parsers will obtain the RowProcessor from {@link BaseCommonParserSettings#getRowProcessor()}, and
  * delegate each parsed row to {@link Processor#rowProcessed(String[], AbstractContext)}.
  *
  * <p>Before parsing the first row, the parser will invoke the {@link Processor#processStarted(AbstractContext)} method.
@@ -40,17 +40,17 @@ import com.chua.common.support.file.univocity.parsers.conversions.Conversion;
  *
  * <ul>
  * <li>{@link RowListProcessor}: convenience class for storing the processed rows into a list.</li>
- * <li>{@link ObjectRowProcessor}: used for processing rows and executing conversions of parsed values to objects using instances of {@link Conversion}</li>
- * <li>{@link ObjectRowListProcessor}: convenience class for rows of converted objects using {@link ObjectRowProcessor} into a list.</li>
- * <li>{@link AbstractMasterDetailProcessor}: used for reading inputs where records are organized in a master-detail fashion (with a master element that contains a list of associated elements) </li>
- * <li>{@link AbstractMasterDetailListProcessor}: convenience class for storing {@link MasterDetailRecord} created by instances created by {@link AbstractMasterDetailProcessor} into a list </li>
- * <li>{@link AbstractBeanProcessor}: used for automatically create and populate javabeans annotated with the annotations provided in package {@link com.chua.common.support.file.univocity.parsers.annotations}</li>
- * <li>{@link AbstractBeanListProcessor}: convenience class for storing all javabeans created by {@link AbstractBeanProcessor} into a list</li>
+ * <li>{@link BaseObjectRowProcessor}: used for processing rows and executing conversions of parsed values to objects using instances of {@link Conversion}</li>
+ * <li>{@link ObjectRowListProcessor}: convenience class for rows of converted objects using {@link BaseObjectRowProcessor} into a list.</li>
+ * <li>{@link AbstractMasterDetailProcessorAbstract}: used for reading inputs where records are organized in a master-detail fashion (with a master element that contains a list of associated elements) </li>
+ * <li>{@link AbstractMasterDetailListProcessorAbstract}: convenience class for storing {@link MasterDetailRecord} created by instances created by {@link AbstractMasterDetailProcessorAbstract} into a list </li>
+ * <li>{@link AbstractBeanProcessorAbstract}: used for automatically create and populate javabeans annotated with the annotations provided in package {@link com.chua.common.support.file.univocity.parsers.annotations}</li>
+ * <li>{@link AbstractBeanListProcessorAbstract}: convenience class for storing all javabeans created by {@link AbstractBeanProcessorAbstract} into a list</li>
  * </ul>
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
- * @see AbstractParser
- * @see AbstractCommonParserSettings
+ * @see BaseParser
+ * @see BaseCommonParserSettings
  * @see ParsingContext
  * @see AbstractContext
  */
@@ -69,8 +69,8 @@ public interface Processor<T extends AbstractContext> {
 	 * @param row     the data extracted by the parser for an individual record. Note that:
 	 *                <ul>
 	 *                <li>it will never by null. </li>
-	 *                <li>it will never be empty unless explicitly configured using {@link AbstractCommonSettings#setSkipEmptyLines(boolean)}</li>
-	 *                <li>it won't contain lines identified by the parser as comments. To disable comment processing set {@link Format#setComment(char)} to '\0'</li>
+	 *                <li>it will never be empty unless explicitly configured using {@link BaseCommonSettings#setSkipEmptyLines(boolean)}</li>
+	 *                <li>it won't contain lines identified by the parser as comments. To disable comment processing set {@link BaseFormat#setComment(char)} to '\0'</li>
 	 *                </ul>
 	 * @param context A contextual object with information and controls over the current state of the parsing process
 	 */

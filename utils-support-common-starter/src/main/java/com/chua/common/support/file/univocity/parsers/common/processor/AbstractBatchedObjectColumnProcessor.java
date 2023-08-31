@@ -15,13 +15,13 @@
  ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.common.processor;
 
-import com.chua.common.support.file.univocity.parsers.common.AbstractParser;
+import com.chua.common.support.file.univocity.parsers.common.BaseParser;
 import com.chua.common.support.file.univocity.parsers.common.ParsingContext;
 import com.chua.common.support.file.univocity.parsers.common.processor.core.AbstractBatchedColumnProcessor;
 import com.chua.common.support.file.univocity.parsers.conversions.Conversion;
 
 /**
- * A {@link RowProcessor} implementation for converting batches of rows extracted from any implementation of {@link AbstractParser} into columns of objects.
+ * A {@link RowProcessor} implementation for converting batches of rows extracted from any implementation of {@link BaseParser} into columns of objects.
  * <p>This uses the value conversions provided by {@link Conversion} instances.</p>
  *
  * <p> For each row processed, a sequence of conversions will be executed to generate the appropriate object. Each resulting object will then be stored in
@@ -34,12 +34,12 @@ import com.chua.common.support.file.univocity.parsers.conversions.Conversion;
  * This process will repeat until there's no more rows in the input.
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
- * @see AbstractParser
+ * @see BaseParser
  * @see RowProcessor
  * @see AbstractBatchedColumnProcessor
  * @see Conversion
  */
-public abstract class AbstractBatchedObjectColumnProcessor extends com.chua.common.support.file.univocity.parsers.common.processor.core.AbstractBatchedObjectColumnProcessor<ParsingContext> implements RowProcessor {
+public abstract class AbstractBatchedObjectColumnProcessor extends com.chua.common.support.file.univocity.parsers.common.processor.core.AbstractBatchedObjectColumnProcessorAbstract<ParsingContext> implements RowProcessor {
 
 
 	/**

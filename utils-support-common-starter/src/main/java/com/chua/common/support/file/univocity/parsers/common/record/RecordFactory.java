@@ -16,13 +16,13 @@
 
 package com.chua.common.support.file.univocity.parsers.common.record;
 
-import com.chua.common.support.file.univocity.parsers.common.AbstractParser;
+import com.chua.common.support.file.univocity.parsers.common.BaseParser;
 import com.chua.common.support.file.univocity.parsers.common.AbstractContext;
 import com.chua.common.support.file.univocity.parsers.common.ParsingContext;
 
 /**
  * A factory class that provides implementations of {@link Record} based on the current state
- * of an {@link AbstractParser}(via its {@link ParsingContext}), and raw input records.
+ * of an {@link BaseParser}(via its {@link ParsingContext}), and raw input records.
  *
  * @author Administrator
  */

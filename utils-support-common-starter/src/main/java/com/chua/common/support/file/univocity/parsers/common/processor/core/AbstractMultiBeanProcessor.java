@@ -3,6 +3,7 @@ package com.chua.common.support.file.univocity.parsers.common.processor.core;
 import com.chua.common.support.file.univocity.parsers.annotations.helpers.MethodFilter;
 import com.chua.common.support.file.univocity.parsers.common.*;
 import com.chua.common.support.file.univocity.parsers.common.fields.FieldSet;
+import com.chua.common.support.file.univocity.parsers.common.processor.AbstractBeanProcessor;
 import com.chua.common.support.file.univocity.parsers.conversions.Conversion;
 
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * A {@link Processor} implementation for converting rows extracted from any implementation of {@link AbstractParser} into java objects.
+ * A {@link Processor} implementation for converting rows extracted from any implementation of {@link BaseParser} into java objects.
  *
  * <p>The class types passed to the constructor of this class must contain the annotations provided in {@link com.chua.common.support.file.univocity.parsers.annotations}.
  *
@@ -20,28 +21,28 @@ import java.util.Map;
  * beans parsed for each row.
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
- * @see AbstractParser
+ * @see BaseParser
  * @see Processor
- * @see com.chua.common.support.file.univocity.parsers.common.processor.AbstractBeanProcessor
+ * @see AbstractBeanProcessor
  */
 @SuppressWarnings("ALL")
 public abstract class AbstractMultiBeanProcessor<C extends AbstractContext> implements Processor<C>, ConversionProcessor {
 
-	private final AbstractBeanProcessor<?, C>[] beanProcessors;
-	private final Map<Class, AbstractBeanProcessor> processorMap = new HashMap<Class, AbstractBeanProcessor>();
+	private final AbstractBeanProcessorAbstract<?, C>[] beanProcessors;
+	private final Map<Class, AbstractBeanProcessorAbstract> processorMap = new HashMap<Class, AbstractBeanProcessorAbstract>();
 
 	/**
 	 * Creates a processor for java beans of multiple types
 	 *
-	 * @param beanTypes the classes with their attributes mapped to fields of records parsed by an {@link AbstractParser} or written by an {@link AbstractWriter}.
+	 * @param beanTypes the classes with their attributes mapped to fields of records parsed by an {@link BaseParser} or written by an {@link AbstractWriter}.
 	 */
 	public AbstractMultiBeanProcessor(Class... beanTypes) {
 		ArgumentUtils.noNulls("Bean types", beanTypes);
-		this.beanProcessors = new AbstractBeanProcessor[beanTypes.length];
+		this.beanProcessors = new AbstractBeanProcessorAbstract[beanTypes.length];
 
 		for (int i = 0; i < beanTypes.length; i++) {
 			final Class type = beanTypes[i];
-			beanProcessors[i] = new AbstractBeanProcessor<Object, C>(type, MethodFilter.ONLY_SETTERS) {
+			beanProcessors[i] = new AbstractBeanProcessorAbstract<Object, C>(type, MethodFilter.ONLY_SETTERS) {
 				@Override
 				public void beanProcessed(Object bean, C context) {
 					AbstractMultiBeanProcessor.this.beanProcessed(type, bean, context);
@@ -61,14 +62,14 @@ public abstract class AbstractMultiBeanProcessor<C extends AbstractContext> impl
 	}
 
 	/**
-	 * Returns the {@link com.chua.common.support.file.univocity.parsers.common.processor.AbstractBeanProcessor} responsible for processing a given class
+	 * Returns the {@link AbstractBeanProcessor} responsible for processing a given class
 	 *
 	 * @param type the type of java bean being processed
 	 * @param <T>  the type of java bean being processed
-	 * @return the {@link com.chua.common.support.file.univocity.parsers.common.processor.AbstractBeanProcessor} that handles java beans of the given class.
+	 * @return the {@link AbstractBeanProcessor} that handles java beans of the given class.
 	 */
-	public <T> AbstractBeanProcessor<T, C> getProcessorOfType(Class<T> type) {
-		AbstractBeanProcessor<T, C> processor = processorMap.get(type);
+	public <T> AbstractBeanProcessorAbstract<T, C> getProcessorOfType(Class<T> type) {
+		AbstractBeanProcessorAbstract<T, C> processor = processorMap.get(type);
 		if (processor == null) {
 			throw new IllegalArgumentException("No processor of type '" + type.getName() + "' is available. Supported types are: " + processorMap.keySet());
 		}

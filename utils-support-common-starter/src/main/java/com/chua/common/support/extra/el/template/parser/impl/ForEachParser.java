@@ -7,7 +7,7 @@ import com.chua.common.support.extra.el.template.Template;
 import com.chua.common.support.extra.el.template.execution.Execution;
 import com.chua.common.support.extra.el.template.execution.impl.ForEachExecution;
 import com.chua.common.support.extra.el.template.parser.Invoker;
-import com.chua.common.support.extra.el.template.parser.Parser;
+import com.chua.common.support.extra.el.template.parser.BaseParser;
 import com.chua.common.support.utils.CharUtils;
 
 import java.util.Deque;
@@ -19,7 +19,7 @@ import static com.chua.common.support.constant.CommonConstant.*;
  *
  * @author CH
  */
-public class ForEachParser extends Parser {
+public class ForEachParser extends BaseParser {
 
     @Override
     public int parse(String sentence, int offset, Deque<Execution> executions, Template template, StringBuilder cache, Invoker next) {

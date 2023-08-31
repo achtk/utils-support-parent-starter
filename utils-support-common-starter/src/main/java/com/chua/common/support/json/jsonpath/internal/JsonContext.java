@@ -82,12 +82,12 @@ public class JsonContext implements DocumentContext {
     }
 
     @Override
-    public <T> T read(JsonPath path, TypeRef<T> type) {
+    public <T> T read(JsonPath path, BaseTypeRef<T> type) {
         return convert(read(path), type, configuration);
     }
 
     @Override
-    public <T> T read(String path, TypeRef<T> type) {
+    public <T> T read(String path, BaseTypeRef<T> type) {
         return convert(read(path), type, configuration);
     }
 
@@ -105,7 +105,7 @@ public class JsonContext implements DocumentContext {
         return configuration.mappingProvider().map(obj, targetType, configuration);
     }
 
-    private <T> T convert(Object obj, TypeRef<T> targetType, JsonConfiguration configuration) {
+    private <T> T convert(Object obj, BaseTypeRef<T> targetType, JsonConfiguration configuration) {
         return configuration.mappingProvider().map(obj, targetType, configuration);
     }
 

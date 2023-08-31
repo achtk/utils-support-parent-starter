@@ -14,7 +14,7 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.zip.CheckedInputStream;
 
-public class IndexHash extends IndexBase {
+public class IndexHash extends BaseIndexBase {
     private Check hash;
 
     public IndexHash() {

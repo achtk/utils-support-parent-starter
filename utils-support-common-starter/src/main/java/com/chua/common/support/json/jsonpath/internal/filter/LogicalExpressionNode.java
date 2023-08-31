@@ -9,37 +9,37 @@ import java.util.List;
 /**
  * @author Administrator
  */
-public class LogicalExpressionNode extends ExpressionNode {
-    protected List<ExpressionNode> chain = new ArrayList<ExpressionNode>();
+public class LogicalExpressionNode extends AbstractExpressionNode {
+    protected List<AbstractExpressionNode> chain = new ArrayList<AbstractExpressionNode>();
     private final LogicalOperator operator;
 
-    public static ExpressionNode createLogicalNot(ExpressionNode op) {
+    public static AbstractExpressionNode createLogicalNot(AbstractExpressionNode op) {
         return new LogicalExpressionNode(op, LogicalOperator.NOT, null);
     }
 
-    public static LogicalExpressionNode createLogicalOr(ExpressionNode left, ExpressionNode right) {
+    public static LogicalExpressionNode createLogicalOr(AbstractExpressionNode left, AbstractExpressionNode right) {
         return new LogicalExpressionNode(left, LogicalOperator.OR, right);
     }
 
-    public static LogicalExpressionNode createLogicalOr(Collection<ExpressionNode> operands) {
+    public static LogicalExpressionNode createLogicalOr(Collection<AbstractExpressionNode> operands) {
         return new LogicalExpressionNode(LogicalOperator.OR, operands);
     }
 
-    public static LogicalExpressionNode createLogicalAnd(ExpressionNode left, ExpressionNode right) {
+    public static LogicalExpressionNode createLogicalAnd(AbstractExpressionNode left, AbstractExpressionNode right) {
         return new LogicalExpressionNode(left, LogicalOperator.AND, right);
     }
 
-    public static LogicalExpressionNode createLogicalAnd(Collection<ExpressionNode> operands) {
+    public static LogicalExpressionNode createLogicalAnd(Collection<AbstractExpressionNode> operands) {
         return new LogicalExpressionNode(LogicalOperator.AND, operands);
     }
 
-    private LogicalExpressionNode(ExpressionNode left, LogicalOperator operator, ExpressionNode right) {
+    private LogicalExpressionNode(AbstractExpressionNode left, LogicalOperator operator, AbstractExpressionNode right) {
         chain.add(left);
         chain.add(right);
         this.operator = operator;
     }
 
-    private LogicalExpressionNode(LogicalOperator operator, Collection<ExpressionNode> operands) {
+    private LogicalExpressionNode(LogicalOperator operator, Collection<AbstractExpressionNode> operands) {
         chain.addAll(operands);
         this.operator = operator;
     }
@@ -56,7 +56,7 @@ public class LogicalExpressionNode extends ExpressionNode {
         return operator;
     }
 
-    public LogicalExpressionNode append(ExpressionNode expressionNode) {
+    public LogicalExpressionNode append(AbstractExpressionNode expressionNode) {
         chain.add(0, expressionNode);
         return this;
     }
@@ -69,21 +69,21 @@ public class LogicalExpressionNode extends ExpressionNode {
     @Override
     public boolean apply(PredicateContext ctx) {
         if (operator == LogicalOperator.OR) {
-            for (ExpressionNode expression : chain) {
+            for (AbstractExpressionNode expression : chain) {
                 if (expression.apply(ctx)) {
                     return true;
                 }
             }
             return false;
         } else if (operator == LogicalOperator.AND) {
-            for (ExpressionNode expression : chain) {
+            for (AbstractExpressionNode expression : chain) {
                 if (!expression.apply(ctx)) {
                     return false;
                 }
             }
             return true;
         } else {
-            ExpressionNode expression = chain.get(0);
+            AbstractExpressionNode expression = chain.get(0);
             return !expression.apply(ctx);
         }
     }

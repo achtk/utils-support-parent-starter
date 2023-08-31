@@ -6,7 +6,7 @@ import java.io.Serializable;
  * string order
  * @author CH
  */
-final class UsingToStringOrdering extends Ordering<Object> implements Serializable {
+final class UsingToStringOrdering extends BaseOrdering<Object> implements Serializable {
     static final UsingToStringOrdering INSTANCE = new UsingToStringOrdering();
 
     @Override

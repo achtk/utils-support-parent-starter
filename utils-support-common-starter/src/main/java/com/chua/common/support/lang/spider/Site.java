@@ -1,6 +1,6 @@
 package com.chua.common.support.lang.spider;
 
-import com.chua.common.support.lang.spider.utils.HttpConstant;
+import com.chua.common.support.lang.spider.utils.BaseHttpConstant;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -55,7 +55,7 @@ public class Site {
     private String proxyScheme;
 
     static {
-        DEFAULT_STATUS_CODE_SET.add(HttpConstant.StatusCode.CODE_200);
+        DEFAULT_STATUS_CODE_SET.add(BaseHttpConstant.BaseStatusCode.CODE_200);
     }
 
     /**
@@ -118,7 +118,7 @@ public class Site {
      * Put an Http header for downloader. <br>
      * Use {@link #addCookie(String, String)} for cookie and {@link #setUserAgent(String)} for user-agent. <br>
      *
-     * @param key   key of http header, there are some keys constant in {@link HttpConstant.Header}
+     * @param key   key of http header, there are some keys constant in {@link BaseHttpConstant.BaseHeader}
      * @param value value of header
      * @return this
      */

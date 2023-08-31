@@ -16,7 +16,7 @@
 package com.chua.common.support.file.univocity.parsers.common.input;
 
 import com.chua.common.support.file.univocity.parsers.common.AbstractWriter;
-import com.chua.common.support.file.univocity.parsers.common.Format;
+import com.chua.common.support.file.univocity.parsers.common.BaseFormat;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -27,11 +27,11 @@ import static com.chua.common.support.constant.NumberConstant.NUM_2;
 /**
  * Extension of the {@link DefaultCharAppender} class to include facilities for writing to an output. Used by writers extending  {@link AbstractWriter}.
  *
- * <p> This class introduces the handling of the normalized newline character defined in {@link Format#getNormalizedNewline()} and converts it to the newline sequence in {@link Format#getLineSeparator()}
+ * <p> This class introduces the handling of the normalized newline character defined in {@link BaseFormat#getNormalizedNewline()} and converts it to the newline sequence in {@link BaseFormat#getLineSeparator()}
  * <p> It also introduces methods to write to an instance of  {@link Writer} directly to avoid unnecessary String instantiations.
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
- * @see Format
+ * @see BaseFormat
  * @see AbstractWriter
  */
 public class WriterCharAppender extends ExpandingCharAppender {
@@ -46,7 +46,7 @@ public class WriterCharAppender extends ExpandingCharAppender {
 	 * <ul>
 	 * <li>a maximum limit of characters to append</li>
 	 * <li>the default value to return when no characters have been accumulated.</li>
-	 * <li>the basic {@link Format} specification for handling newlines</li>
+	 * <li>the basic {@link BaseFormat} specification for handling newlines</li>
 	 * </ul>
 	 * <p>
 	 * The padding character is defaulted to a whitespace character ' '.
@@ -56,7 +56,7 @@ public class WriterCharAppender extends ExpandingCharAppender {
 	 * @param whitespaceRangeStart starting range of characters considered to be whitespace.
 	 * @param format               output format specification used for newline handling
 	 */
-	public WriterCharAppender(int maxLength, String emptyValue, int whitespaceRangeStart, Format format) {
+	public WriterCharAppender(int maxLength, String emptyValue, int whitespaceRangeStart, BaseFormat format) {
 		super(maxLength == -1 ? 8192 : maxLength, emptyValue, whitespaceRangeStart);
 
 		char[] lineSeparator = format.getLineSeparator();
@@ -71,7 +71,7 @@ public class WriterCharAppender extends ExpandingCharAppender {
 	/**
 	 * Appends the given character and marks it as ignored if it is a whitespace ({@code ch <= ' '})
 	 *
-	 * <p>If the given character is equal to {@link Format#getNormalizedNewline()}, then the character sequence returned by {@link Format#getLineSeparator()} is going to be appended.
+	 * <p>If the given character is equal to {@link BaseFormat#getNormalizedNewline()}, then the character sequence returned by {@link BaseFormat#getLineSeparator()} is going to be appended.
 	 *
 	 * @param ch character to append
 	 */
@@ -90,7 +90,7 @@ public class WriterCharAppender extends ExpandingCharAppender {
 	/**
 	 * Appends the given character and marks it as ignored if it is a padding character
 	 *
-	 * <p>If the given character is equal to {@link Format#getNormalizedNewline()}, then the character sequence returned by {@link Format#getLineSeparator()} is going to be appended.
+	 * <p>If the given character is equal to {@link BaseFormat#getNormalizedNewline()}, then the character sequence returned by {@link BaseFormat#getLineSeparator()} is going to be appended.
 	 *
 	 * @param ch      character to append
 	 * @param padding the padding character
@@ -110,7 +110,7 @@ public class WriterCharAppender extends ExpandingCharAppender {
 	/**
 	 * Appends the given character and marks it as ignored if it is a whitespace ({@code ch <= ' '}) or a padding character
 	 *
-	 * <p>If the given character is equal to {@link Format#getNormalizedNewline()}, then the character sequence returned by {@link Format#getLineSeparator()} is going to be appended.
+	 * <p>If the given character is equal to {@link BaseFormat#getNormalizedNewline()}, then the character sequence returned by {@link BaseFormat#getLineSeparator()} is going to be appended.
 	 *
 	 * @param ch      character to append
 	 * @param padding the padding character
@@ -130,7 +130,7 @@ public class WriterCharAppender extends ExpandingCharAppender {
 	/**
 	 * Appends the given character.
 	 *
-	 * <p>If the given character is equal to {@link Format#getNormalizedNewline()}, then the character sequence returned by {@link Format#getLineSeparator()} is going to be appended.
+	 * <p>If the given character is equal to {@link BaseFormat#getNormalizedNewline()}, then the character sequence returned by {@link BaseFormat#getLineSeparator()} is going to be appended.
 	 *
 	 * @param ch the character to append
 	 */
@@ -163,7 +163,7 @@ public class WriterCharAppender extends ExpandingCharAppender {
 	}
 
 	/**
-	 * Appends the newline character sequence specified in {@link Format#getLineSeparator()}
+	 * Appends the newline character sequence specified in {@link BaseFormat#getLineSeparator()}
 	 */
 	public final void appendNewLine() {
 		if (index + NUM_2 >= chars.length) {

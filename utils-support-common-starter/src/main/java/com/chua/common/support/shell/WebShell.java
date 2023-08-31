@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author CH
  */
 @Slf4j
-public class WebShell extends Shell {
+public class WebShell extends BaseShell {
     public WebShell(Object... beans) {
         super(beans);
     }

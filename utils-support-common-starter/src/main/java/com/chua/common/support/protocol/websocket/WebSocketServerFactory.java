@@ -48,7 +48,7 @@ public interface WebSocketServerFactory extends WebSocketFactory {
    * @return {@link com.chua.common.support.protocol.websocket.WebSocketImpl}
    */
   @Override
-  com.chua.common.support.protocol.websocket.WebSocketImpl createWebSocket(com.chua.common.support.protocol.websocket.WebSocketAdapter a, Draft d);
+  com.chua.common.support.protocol.websocket.WebSocketImpl createWebSocket(BaseWebSocketAdapter a, Draft d);
 
   /**
    * 创建网络套接字
@@ -58,7 +58,7 @@ public interface WebSocketServerFactory extends WebSocketFactory {
    * @return {@link WebSocketImpl}
    */
   @Override
-  WebSocketImpl createWebSocket(WebSocketAdapter webSocketAdapter, List<Draft> drafts);
+  WebSocketImpl createWebSocket(BaseWebSocketAdapter webSocketAdapter, List<Draft> drafts);
 
   /**
    * Allows to wrap the SocketChannel( key.channel() ) to insert a protocol layer( like ssl or proxy

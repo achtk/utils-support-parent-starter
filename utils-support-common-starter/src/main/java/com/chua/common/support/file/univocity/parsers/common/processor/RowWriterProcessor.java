@@ -16,7 +16,7 @@
 package com.chua.common.support.file.univocity.parsers.common.processor;
 
 import com.chua.common.support.file.univocity.parsers.common.AbstractWriter;
-import com.chua.common.support.file.univocity.parsers.common.AbstractCommonSettings;
+import com.chua.common.support.file.univocity.parsers.common.BaseCommonSettings;
 import com.chua.common.support.file.univocity.parsers.common.AbstractCommonWriterSettings;
 import com.chua.common.support.file.univocity.parsers.common.NormalizedString;
 import com.chua.common.support.file.univocity.parsers.conversions.Conversion;
@@ -47,12 +47,12 @@ public interface RowWriterProcessor<T> {
 	 * Converts the given input into an Object array that is suitable for writing. Used by format-specific writers that extend {@link AbstractWriter}.
 	 *
 	 * @param input          The original input record that must be converted into an Object array before writing to an output.
-	 * @param headers        All field names used to produce records in a given destination. May be null if no headers have been defined in {@link AbstractCommonSettings#getHeaders()}
-	 * @param indexesToWrite The indexes of the headers that are actually being written. May be null if no fields have been selected using {@link AbstractCommonSettings#selectFields(String...)} or {@link AbstractCommonSettings#selectIndexes(Integer...)}
-	 * @return an Object array that is suitable for writing. If null or an empty array is returned then the writer might either skip this value or write an empty record (if {@link AbstractCommonSettings#getSkipEmptyLines()} is false)
+	 * @param headers        All field names used to produce records in a given destination. May be null if no headers have been defined in {@link BaseCommonSettings#getHeaders()}
+	 * @param indexesToWrite The indexes of the headers that are actually being written. May be null if no fields have been selected using {@link BaseCommonSettings#selectFields(String...)} or {@link BaseCommonSettings#selectIndexes(Integer...)}
+	 * @return an Object array that is suitable for writing. If null or an empty array is returned then the writer might either skip this value or write an empty record (if {@link BaseCommonSettings#getSkipEmptyLines()} is false)
 	 * @see CsvWriter
 	 * @see FixedWidthWriter
-	 * @see AbstractCommonSettings
+	 * @see BaseCommonSettings
 	 * @see AbstractWriter
 	 */
 	Object[] write(T input, NormalizedString[] headers, int[] indexesToWrite);

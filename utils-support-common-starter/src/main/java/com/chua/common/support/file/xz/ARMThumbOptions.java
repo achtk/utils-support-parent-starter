@@ -14,8 +14,8 @@ public class ARMThumbOptions extends BCJOptions {
         super(ALIGNMENT);
     }
 
-    public FinishableOutputStream getOutputStream(FinishableOutputStream out,
-                                                  ArrayCache arrayCache) {
+    public AbstractFinishableOutputStream getOutputStream(AbstractFinishableOutputStream out,
+                                                          ArrayCache arrayCache) {
         return new SimpleOutputStream(out, new ARMThumb(true, startOffset));
     }
 

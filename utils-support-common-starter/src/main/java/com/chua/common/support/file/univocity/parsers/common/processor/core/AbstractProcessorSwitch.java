@@ -15,7 +15,7 @@
  */
 package com.chua.common.support.file.univocity.parsers.common.processor.core;
 
-import com.chua.common.support.file.univocity.parsers.common.AbstractCommonParserSettings;
+import com.chua.common.support.file.univocity.parsers.common.BaseCommonParserSettings;
 import com.chua.common.support.file.univocity.parsers.common.AbstractContext;
 import com.chua.common.support.file.univocity.parsers.common.processor.RowProcessor;
 
@@ -52,7 +52,7 @@ public abstract class AbstractProcessorSwitch<T extends AbstractContext> impleme
 
     /**
      * Returns the headers in use by the current row processor implementation, which can vary among row processors.
-     * If {@code null}, the headers parsed by the input, or defined in {@link AbstractCommonParserSettings#getHeaders()} will be returned.
+     * If {@code null}, the headers parsed by the input, or defined in {@link BaseCommonParserSettings#getHeaders()} will be returned.
      *
      * @return the current sequence of headers to use.
      */

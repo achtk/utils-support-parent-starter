@@ -19,7 +19,7 @@ public class AbstractClassWriter extends AbstractClassVisitor {
   /**
    * A flag to automatically compute the maximum stack size and the maximum number of local
    * variables of methods. If this flag is set, then the arguments of the {@link
-   * MethodVisitor#visitMaxs} method of the {@link MethodVisitor} returned by the {@link
+   * BaseMethodVisitor#visitMaxs} method of the {@link BaseMethodVisitor} returned by the {@link
    * #visitMethod} method will be ignored, and computed automatically from the signature and the
    * bytecode of each method.
    *
@@ -34,9 +34,9 @@ public class AbstractClassWriter extends AbstractClassVisitor {
 
   /**
    * A flag to automatically compute the stack map frames of methods from scratch. If this flag is
-   * set, then the calls to the {@link MethodVisitor#visitFrame} method are ignored, and the stack
+   * set, then the calls to the {@link BaseMethodVisitor#visitFrame} method are ignored, and the stack
    * map frames are recomputed from the methods bytecode. The arguments of the {@link
-   * MethodVisitor#visitMaxs} method are also ignored and recomputed from the bytecode. In other
+   * BaseMethodVisitor#visitMaxs} method are also ignored and recomputed from the bytecode. In other
    * words, {@link #COMPUTE_FRAMES} implies {@link #COMPUTE_MAXS}.
    *
    * @see #AbstractClassWriter(int)
@@ -222,7 +222,7 @@ public class AbstractClassWriter extends AbstractClassVisitor {
    *   <li>Methods that are not transformed are copied as is in the new class, directly from the
    *       original class bytecode (i.e. without emitting visit events for all the method
    *       instructions), which saves a <i>lot</i> of time. Untransformed methods are detected by
-   *       the fact that the {@link ClassReader} receives {@link MethodVisitor} objects that come
+   *       the fact that the {@link ClassReader} receives {@link BaseMethodVisitor} objects that come
    *       from a {@link AbstractClassWriter} (and not from any other {@link AbstractClassVisitor} instance).
    * </ul>
    *
@@ -304,7 +304,7 @@ public class AbstractClassWriter extends AbstractClassVisitor {
   }
 
   @Override
-  public final ModuleVisitor visitModule(
+  public final BaseModuleVisitor visitModule(
       final String name, final int access, final String version) {
     return moduleWriter =
         new ModuleWriter(
@@ -390,7 +390,7 @@ public class AbstractClassWriter extends AbstractClassVisitor {
     
     
     
-    Symbol nameSymbol = symbolTable.addConstantClass(name);
+    BaseSymbol nameSymbol = symbolTable.addConstantClass(name);
     if (nameSymbol.info == 0) {
       ++numberOfInnerClasses;
       innerClasses.putShort(nameSymbol.index);
@@ -404,7 +404,7 @@ public class AbstractClassWriter extends AbstractClassVisitor {
   }
 
   @Override
-  public final RecordComponentVisitor visitRecordComponent(
+  public final BaseRecordComponentVisitor visitRecordComponent(
       final String name, final String descriptor, final String signature) {
     RecordComponentWriter recordComponentWriter =
         new RecordComponentWriter(symbolTable, name, descriptor, signature);
@@ -417,7 +417,7 @@ public class AbstractClassWriter extends AbstractClassVisitor {
   }
 
   @Override
-  public final FieldVisitor visitField(
+  public final AbstractFieldVisitor visitField(
       final int access,
       final String name,
       final String descriptor,
@@ -434,7 +434,7 @@ public class AbstractClassWriter extends AbstractClassVisitor {
   }
 
   @Override
-  public final MethodVisitor visitMethod(
+  public final BaseMethodVisitor visitMethod(
       final int access,
       final String name,
       final String descriptor,

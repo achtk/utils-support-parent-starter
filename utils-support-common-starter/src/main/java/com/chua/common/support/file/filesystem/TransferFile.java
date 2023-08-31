@@ -1,6 +1,6 @@
 package com.chua.common.support.file.filesystem;
 
-import com.chua.common.support.file.transfer.MediaConverter;
+import com.chua.common.support.file.transfer.BaseMediaConverter;
 import com.chua.common.support.utils.FileUtils;
 
 import java.io.ByteArrayOutputStream;
@@ -40,7 +40,7 @@ public interface TransferFile {
      * @return 结果
      * @throws IOException ex
      */
-    OsFileSystem transferFileSystem(String suffix) throws IOException;
+    BaseOsFileSystem transferFileSystem(String suffix) throws IOException;
 
     /**
      * 对象转化
@@ -53,9 +53,9 @@ public interface TransferFile {
 
     class FileTransferFile implements TransferFile {
 
-        private final OsFileSystem fileSystem;
+        private final BaseOsFileSystem fileSystem;
 
-        public FileTransferFile(OsFileSystem fileSystem) {
+        public FileTransferFile(BaseOsFileSystem fileSystem) {
             this.fileSystem = fileSystem;
         }
 
@@ -86,10 +86,10 @@ public interface TransferFile {
         }
 
         @Override
-        public OsFileSystem transferFileSystem(String suffix) throws IOException {
+        public BaseOsFileSystem transferFileSystem(String suffix) throws IOException {
             try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-                MediaConverter.of(fileSystem.openStream()).convert(suffix, outputStream);
-                return OsFileSystem.open(outputStream.toByteArray());
+                BaseMediaConverter.of(fileSystem.openStream()).convert(suffix, outputStream);
+                return BaseOsFileSystem.open(outputStream.toByteArray());
             }
         }
 
@@ -97,7 +97,7 @@ public interface TransferFile {
         public File transferFile(String outFile) throws IOException {
             File file = new File(outFile);
             try (FileOutputStream outputStream = new FileOutputStream(file)) {
-                MediaConverter.of(fileSystem).convert(FileUtils.getExtension(outFile), outputStream);
+                BaseMediaConverter.of(fileSystem).convert(FileUtils.getExtension(outFile), outputStream);
             }
             return file;
         }

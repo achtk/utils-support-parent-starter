@@ -37,18 +37,18 @@ final class Tokeniser {
     private final ParseErrorList errors;
 
     private TokeniserState state = TokeniserState.Data;
-     private Token emitPending = null;
+     private BaseToken emitPending = null;
     private boolean isEmitPending = false;
      private String charsString = null;
     private final StringBuilder charsBuilder = new StringBuilder(1024);
     StringBuilder dataBuffer = new StringBuilder(1024);
 
-    Token.StartTag startPending = new Token.StartTag();
-    Token.EndTag endPending = new Token.EndTag();
-    Token.Tag tagPending;
-    Token.Character charPending = new Token.Character();
-    Token.Doctype doctypePending = new Token.Doctype();
-    Token.Comment commentPending = new Token.Comment();
+    BaseToken.StartTag startPending = new BaseToken.StartTag();
+    BaseToken.EndTag endPending = new BaseToken.EndTag();
+    BaseToken.BaseTag tagPending;
+    BaseToken.Character charPending = new BaseToken.Character();
+    BaseToken.Doctype doctypePending = new BaseToken.Doctype();
+    BaseToken.Comment commentPending = new BaseToken.Comment();
      private String lastStartTag;
      private String lastStartCloseSeq;
 
@@ -61,7 +61,7 @@ final class Tokeniser {
         tagPending = startPending;
     }
 
-    Token read() {
+    BaseToken read() {
         while (!isEmitPending) {
             state.read(this, reader);
         }
@@ -70,11 +70,11 @@ final class Tokeniser {
         if (cb.length() != 0) {
             String str = cb.toString();
             cb.delete(0, cb.length());
-            Token token = charPending.data(str);
+            BaseToken token = charPending.data(str);
             charsString = null;
             return token;
         } else if (charsString != null) {
-            Token token = charPending.data(charsString);
+            BaseToken token = charPending.data(charsString);
             charsString = null;
             return token;
         } else {
@@ -84,7 +84,7 @@ final class Tokeniser {
         }
     }
 
-    void emit(Token token) {
+    void emit(BaseToken token) {
         Validate.isFalse(isEmitPending);
 
         emitPending = token;
@@ -93,12 +93,12 @@ final class Tokeniser {
         token.endPos(reader.pos());
         charStartPos = UNSET;
 
-        if (token.type == Token.TokenType.START_TAG) {
-            Token.StartTag startTag = (Token.StartTag) token;
+        if (token.type == BaseToken.TokenType.START_TAG) {
+            BaseToken.StartTag startTag = (BaseToken.StartTag) token;
             lastStartTag = startTag.tagName;
             lastStartCloseSeq = null;
-        } else if (token.type == Token.TokenType.END_TAG) {
-            Token.EndTag endTag = (Token.EndTag) token;
+        } else if (token.type == BaseToken.TokenType.END_TAG) {
+            BaseToken.EndTag endTag = (BaseToken.EndTag) token;
             if (endTag.hasAttributes()) {
                 error("Attributes incorrectly present on end tag [/%s]", endTag.normalName());
             }
@@ -261,7 +261,7 @@ final class Tokeniser {
         }
     }
 
-    Token.Tag createTagPending(boolean start) {
+    BaseToken.BaseTag createTagPending(boolean start) {
         tagPending = start ? startPending.reset() : endPending.reset();
         return tagPending;
     }
@@ -293,7 +293,7 @@ final class Tokeniser {
     }
 
     void createTempBuffer() {
-        Token.reset(dataBuffer);
+        BaseToken.reset(dataBuffer);
     }
 
     boolean isAppropriateEndTagToken() {

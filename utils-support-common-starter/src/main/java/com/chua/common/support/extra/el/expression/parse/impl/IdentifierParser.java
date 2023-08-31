@@ -12,7 +12,7 @@ import java.util.Deque;
  * 基础类
  * @author CH
  */
-public class IdentifierParser extends NodeParser {
+public class IdentifierParser extends BaseNodeParser {
 
     @Override
     public int parse(String el, int offset, Deque<CalculateNode> nodes, int function, Invoker next) {

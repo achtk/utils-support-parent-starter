@@ -29,14 +29,14 @@ public class ClassReader {
      * A flag to skip the SourceFile, SourceDebugExtension, LocalVariableTable,
      * LocalVariableTypeTable, LineNumberTable and MethodParameters attributes. If this flag is set
      * these attributes are neither parsed nor visited (i.e. {@link AbstractClassVisitor#visitSource}, {@link
-     * MethodVisitor#visitLocalVariable}, {@link MethodVisitor#visitLineNumber} and {@link
-     * MethodVisitor#visitParameter} are not called).
+     * BaseMethodVisitor#visitLocalVariable}, {@link BaseMethodVisitor#visitLineNumber} and {@link
+     * BaseMethodVisitor#visitParameter} are not called).
      */
     public static final int SKIP_DEBUG = 2;
 
     /**
      * A flag to skip the StackMap and StackMapTable attributes. If this flag is set these attributes
-     * are neither parsed nor visited (i.e. {@link MethodVisitor#visitFrame} is not called). This flag
+     * are neither parsed nor visited (i.e. {@link BaseMethodVisitor#visitFrame} is not called). This flag
      * is useful when the {@link AbstractClassWriter#COMPUTE_FRAMES} option is used: it avoids visiting frames
      * that will be ignored and recomputed from scratch.
      */
@@ -185,42 +185,42 @@ public class ClassReader {
             cpInfoOffsets[currentCpInfoIndex++] = currentCpInfoOffset + 1;
             int cpInfoSize;
             switch (classFileBuffer[currentCpInfoOffset]) {
-                case Symbol.CONSTANT_FIELDREF_TAG:
-                case Symbol.CONSTANT_METHODREF_TAG:
-                case Symbol.CONSTANT_INTERFACE_METHODREF_TAG:
-                case Symbol.CONSTANT_INTEGER_TAG:
-                case Symbol.CONSTANT_FLOAT_TAG:
-                case Symbol.CONSTANT_NAME_AND_TYPE_TAG:
+                case BaseSymbol.CONSTANT_FIELDREF_TAG:
+                case BaseSymbol.CONSTANT_METHODREF_TAG:
+                case BaseSymbol.CONSTANT_INTERFACE_METHODREF_TAG:
+                case BaseSymbol.CONSTANT_INTEGER_TAG:
+                case BaseSymbol.CONSTANT_FLOAT_TAG:
+                case BaseSymbol.CONSTANT_NAME_AND_TYPE_TAG:
                     cpInfoSize = 5;
                     break;
-                case Symbol.CONSTANT_DYNAMIC_TAG:
+                case BaseSymbol.CONSTANT_DYNAMIC_TAG:
                     cpInfoSize = 5;
                     hasBootstrapMethods = true;
                     hasConstantDynamic = true;
                     break;
-                case Symbol.CONSTANT_INVOKE_DYNAMIC_TAG:
+                case BaseSymbol.CONSTANT_INVOKE_DYNAMIC_TAG:
                     cpInfoSize = 5;
                     hasBootstrapMethods = true;
                     break;
-                case Symbol.CONSTANT_LONG_TAG:
-                case Symbol.CONSTANT_DOUBLE_TAG:
+                case BaseSymbol.CONSTANT_LONG_TAG:
+                case BaseSymbol.CONSTANT_DOUBLE_TAG:
                     cpInfoSize = 9;
                     currentCpInfoIndex++;
                     break;
-                case Symbol.CONSTANT_UTF8_TAG:
+                case BaseSymbol.CONSTANT_UTF8_TAG:
                     cpInfoSize = 3 + readUnsignedShort(currentCpInfoOffset + 1);
                     if (cpInfoSize > currentMaxStringLength) {
                         currentMaxStringLength = cpInfoSize;
                     }
                     break;
-                case Symbol.CONSTANT_METHOD_HANDLE_TAG:
+                case BaseSymbol.CONSTANT_METHOD_HANDLE_TAG:
                     cpInfoSize = 4;
                     break;
-                case Symbol.CONSTANT_CLASS_TAG:
-                case Symbol.CONSTANT_STRING_TAG:
-                case Symbol.CONSTANT_METHOD_TYPE_TAG:
-                case Symbol.CONSTANT_PACKAGE_TAG:
-                case Symbol.CONSTANT_MODULE_TAG:
+                case BaseSymbol.CONSTANT_CLASS_TAG:
+                case BaseSymbol.CONSTANT_STRING_TAG:
+                case BaseSymbol.CONSTANT_METHOD_TYPE_TAG:
+                case BaseSymbol.CONSTANT_PACKAGE_TAG:
+                case BaseSymbol.CONSTANT_MODULE_TAG:
                     cpInfoSize = 3;
                     break;
                 default:
@@ -673,7 +673,7 @@ public class ClassReader {
         int moduleFlags = readUnsignedShort(currentOffset + 2);
         String moduleVersion = readUtf8(currentOffset + 4, buffer);
         currentOffset += 6;
-        ModuleVisitor moduleVisitor = abstractClassVisitor.visitModule(moduleName, moduleFlags, moduleVersion);
+        BaseModuleVisitor moduleVisitor = abstractClassVisitor.visitModule(moduleName, moduleFlags, moduleVersion);
         if (moduleVisitor == null) {
             return;
         }
@@ -818,7 +818,7 @@ public class ClassReader {
             currentOffset += attributeLength;
         }
 
-        RecordComponentVisitor recordComponentVisitor =
+        BaseRecordComponentVisitor recordComponentVisitor =
                 abstractClassVisitor.visitRecordComponent(name, descriptor, signature);
         if (recordComponentVisitor == null) {
             return currentOffset;
@@ -970,7 +970,7 @@ public class ClassReader {
             currentOffset += attributeLength;
         }
 
-        FieldVisitor fieldVisitor =
+        AbstractFieldVisitor fieldVisitor =
                 abstractClassVisitor.visitField(accessFlags, name, descriptor, signature, constantValue);
         if (fieldVisitor == null) {
             return currentOffset;
@@ -1147,7 +1147,7 @@ public class ClassReader {
             currentOffset += attributeLength;
         }
 
-        MethodVisitor methodVisitor =
+        BaseMethodVisitor methodVisitor =
                 abstractClassVisitor.visitMethod(
                         context.currentMethodAccessFlags,
                         context.currentMethodName,
@@ -1300,7 +1300,7 @@ public class ClassReader {
      *                      its attribute_name_index and attribute_length fields.
      */
     private void readCode(
-            final MethodVisitor methodVisitor, final Context context, final int codeOffset) {
+            final BaseMethodVisitor methodVisitor, final Context context, final int codeOffset) {
         int currentOffset = codeOffset;
 
         final byte[] classBuffer = classFileBuffer;
@@ -2097,7 +2097,7 @@ public class ClassReader {
                         methodVisitor.visitFieldInsn(opcode, owner, name, descriptor);
                     } else {
                         boolean isInterface =
-                                classBuffer[cpInfoOffset - 1] == Symbol.CONSTANT_INTERFACE_METHODREF_TAG;
+                                classBuffer[cpInfoOffset - 1] == BaseSymbol.CONSTANT_INTERFACE_METHODREF_TAG;
                         methodVisitor.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
                     }
                     if (opcode == Opcodes.INVOKEINTERFACE) {
@@ -2360,7 +2360,7 @@ public class ClassReader {
      * 'annotations' array field.
      */
     private int[] readTypeAnnotations(
-            final MethodVisitor methodVisitor,
+            final BaseMethodVisitor methodVisitor,
             final Context context,
             final int runtimeTypeAnnotationsOffset,
             final boolean visible) {
@@ -2545,7 +2545,7 @@ public class ClassReader {
      *                                          attribute, false it is a RuntimeInvisibleParameterAnnotations attribute.
      */
     private void readParameterAnnotations(
-            final MethodVisitor methodVisitor,
+            final BaseMethodVisitor methodVisitor,
             final Context context,
             final int runtimeParameterAnnotationsOffset,
             final boolean visible) {
@@ -3390,21 +3390,21 @@ public class ClassReader {
     public Object readConst(final int constantPoolEntryIndex, final char[] charBuffer) {
         int cpInfoOffset = cpInfoOffsets[constantPoolEntryIndex];
         switch (classFileBuffer[cpInfoOffset - 1]) {
-            case Symbol.CONSTANT_INTEGER_TAG:
+            case BaseSymbol.CONSTANT_INTEGER_TAG:
                 return readInt(cpInfoOffset);
-            case Symbol.CONSTANT_FLOAT_TAG:
+            case BaseSymbol.CONSTANT_FLOAT_TAG:
                 return Float.intBitsToFloat(readInt(cpInfoOffset));
-            case Symbol.CONSTANT_LONG_TAG:
+            case BaseSymbol.CONSTANT_LONG_TAG:
                 return readLong(cpInfoOffset);
-            case Symbol.CONSTANT_DOUBLE_TAG:
+            case BaseSymbol.CONSTANT_DOUBLE_TAG:
                 return Double.longBitsToDouble(readLong(cpInfoOffset));
-            case Symbol.CONSTANT_CLASS_TAG:
+            case BaseSymbol.CONSTANT_CLASS_TAG:
                 return Type.getObjectType(readUtf8(cpInfoOffset, charBuffer));
-            case Symbol.CONSTANT_STRING_TAG:
+            case BaseSymbol.CONSTANT_STRING_TAG:
                 return readUtf8(cpInfoOffset, charBuffer);
-            case Symbol.CONSTANT_METHOD_TYPE_TAG:
+            case BaseSymbol.CONSTANT_METHOD_TYPE_TAG:
                 return Type.getMethodType(readUtf8(cpInfoOffset, charBuffer));
-            case Symbol.CONSTANT_METHOD_HANDLE_TAG:
+            case BaseSymbol.CONSTANT_METHOD_HANDLE_TAG:
                 int referenceKind = readByte(cpInfoOffset);
                 int referenceCpInfoOffset = cpInfoOffsets[readUnsignedShort(cpInfoOffset + 1)];
                 int nameAndTypeCpInfoOffset = cpInfoOffsets[readUnsignedShort(referenceCpInfoOffset + 2)];
@@ -3412,9 +3412,9 @@ public class ClassReader {
                 String name = readUtf8(nameAndTypeCpInfoOffset, charBuffer);
                 String descriptor = readUtf8(nameAndTypeCpInfoOffset + 2, charBuffer);
                 boolean isInterface =
-                        classFileBuffer[referenceCpInfoOffset - 1] == Symbol.CONSTANT_INTERFACE_METHODREF_TAG;
+                        classFileBuffer[referenceCpInfoOffset - 1] == BaseSymbol.CONSTANT_INTERFACE_METHODREF_TAG;
                 return new Handle(referenceKind, owner, name, descriptor, isInterface);
-            case Symbol.CONSTANT_DYNAMIC_TAG:
+            case BaseSymbol.CONSTANT_DYNAMIC_TAG:
                 return readConstantDynamic(constantPoolEntryIndex, charBuffer);
             default:
                 throw new IllegalArgumentException();

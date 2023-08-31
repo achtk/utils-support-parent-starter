@@ -16,7 +16,7 @@
 
 package com.chua.common.support.file.univocity.parsers.common.record;
 
-import com.chua.common.support.file.univocity.parsers.common.AbstractParser;
+import com.chua.common.support.file.univocity.parsers.common.BaseParser;
 import com.chua.common.support.file.univocity.parsers.conversions.*;
 
 import java.math.BigDecimal;
@@ -27,11 +27,11 @@ import java.util.Map;
 
 /**
  * A record parsed from the input, with convenience methods for easier data manipulation.
- * Records are obtained from {@link AbstractParser} methods such as
+ * Records are obtained from {@link BaseParser} methods such as
  * <ul>
- * <li>{@link AbstractParser#parseAllRecords(java.io.Reader)}</li>
- * <li>{@link AbstractParser#parseNextRecord()} </li>
- * <li>{@link AbstractParser#parseRecord(String)}</li>
+ * <li>{@link BaseParser#parseAllRecords(java.io.Reader)}</li>
+ * <li>{@link BaseParser#parseNextRecord()} </li>
+ * <li>{@link BaseParser#parseRecord(String)}</li>
  * </ul>
  *
  * @author Administrator

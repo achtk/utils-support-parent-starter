@@ -59,7 +59,7 @@ import static java.util.stream.Collectors.toList;
  *  @author Administrator
  */
 @SuppressWarnings({"unchecked", "rawtypes"})
-public abstract class ReflectionUtils extends ReflectionUtilsPredicates {
+public class ReflectionUtils extends ReflectionUtilsPredicates {
 
     private static final Map<Class<?>, Class<?>> PRIMITIVE_WRAPPER_TYPE_MAP = new IdentityHashMap<>(8);
 

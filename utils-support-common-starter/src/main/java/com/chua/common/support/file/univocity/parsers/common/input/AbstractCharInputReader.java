@@ -15,9 +15,8 @@
  ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.common.input;
 
-import com.chua.common.support.file.univocity.parsers.common.Format;
+import com.chua.common.support.file.univocity.parsers.common.BaseFormat;
 
-import java.io.EOFException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -28,12 +27,12 @@ import java.util.List;
 /**
  * The base class for implementing different flavours of {@link CharInputReader}.
  *
- * <p> It provides the essential conversion of sequences of newline characters defined by {@link Format#getLineSeparator()} into the normalized newline character provided in {@link Format#getNormalizedNewline()}.
+ * <p> It provides the essential conversion of sequences of newline characters defined by {@link BaseFormat#getLineSeparator()} into the normalized newline character provided in {@link BaseFormat#getNormalizedNewline()}.
  * <p> It also provides a default implementation for most of the methods specified by the {@link CharInputReader} interface.
  * <p> Extending classes must essentially read characters from a given {@link Reader} and assign it to the public {@link AbstractCharInputReader#buffer} when requested (in the {@link AbstractCharInputReader#reloadBuffer()} method).
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
- * @see Format
+ * @see BaseFormat
  * @see com.chua.common.support.file.univocity.parsers.common.input.DefaultCharInputReader
  * @see com.chua.common.support.file.univocity.parsers.common.input.concurrent.ConcurrentCharInputReader
  */
@@ -78,7 +77,7 @@ public abstract class AbstractCharInputReader implements CharInputReader {
 	/**
 	 * Creates a new instance that attempts to detect the newlines used in the input automatically.
 	 *
-	 * @param normalizedLineSeparator the normalized newline character (as defined in {@link Format#getNormalizedNewline()}) that is used to replace any lineSeparator sequence found in the input.
+	 * @param normalizedLineSeparator the normalized newline character (as defined in {@link BaseFormat#getNormalizedNewline()}) that is used to replace any lineSeparator sequence found in the input.
 	 * @param whitespaceRangeStart    starting range of characters considered to be whitespace.
 	 * @param closeOnStop             indicates whether to automatically close the input when {@link #stop()} is called
 	 */
@@ -89,8 +88,8 @@ public abstract class AbstractCharInputReader implements CharInputReader {
 	/**
 	 * Creates a new instance with the mandatory characters for handling newlines transparently.
 	 *
-	 * @param lineSeparator           the sequence of characters that represent a newline, as defined in {@link Format#getLineSeparator()}
-	 * @param normalizedLineSeparator the normalized newline character (as defined in {@link Format#getNormalizedNewline()}) that is used to replace any lineSeparator sequence found in the input.
+	 * @param lineSeparator           the sequence of characters that represent a newline, as defined in {@link BaseFormat#getLineSeparator()}
+	 * @param normalizedLineSeparator the normalized newline character (as defined in {@link BaseFormat#getNormalizedNewline()}) that is used to replace any lineSeparator sequence found in the input.
 	 * @param whitespaceRangeStart    starting range of characters considered to be whitespace.
 	 * @param closeOnStop             indicates whether to automatically close the input when {@link #stop()} is called
 	 */
@@ -114,7 +113,7 @@ public abstract class AbstractCharInputReader implements CharInputReader {
 
 	private void submitLineSeparatorDetector() {
 		if (detectLineSeparator && !lineSeparatorDetected) {
-			addInputAnalysisProcess(new LineSeparatorDetector() {
+			addInputAnalysisProcess(new BaseLineSeparatorDetector() {
 				@Override
 				protected void apply(char separator1, char separator2) {
 					if (separator1 != '\0') {
@@ -122,7 +121,7 @@ public abstract class AbstractCharInputReader implements CharInputReader {
 						lineSeparator1 = separator1;
 						lineSeparator2 = separator2;
 					} else {
-						setLineSeparator(Format.getSystemLineSeparator());
+						setLineSeparator(BaseFormat.getSystemLineSeparator());
 					}
 				}
 			});

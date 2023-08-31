@@ -15,12 +15,12 @@
  ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.csv;
 
-import com.chua.common.support.file.univocity.parsers.common.Format;
+import com.chua.common.support.file.univocity.parsers.common.BaseFormat;
 
 import java.util.TreeMap;
 
 /**
- * The CSV format configuration. In addition to the default configuration in {@link Format}, the CSV format defines:
+ * The CSV format configuration. In addition to the default configuration in {@link BaseFormat}, the CSV format defines:
  *
  * <ul>
  * <li><b>delimiter <i>(defaults to ',')</i>: </b> the field delimiter character. Used to separate individual fields in a CSV record (where the record is usually a line of text with multiple fields).
@@ -34,9 +34,9 @@ import java.util.TreeMap;
  * </ul>
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
- * @see Format
+ * @see BaseFormat
  */
-public class CsvFormat extends Format {
+public class CsvFormat extends BaseFormat {
 	private char quote = '"';
 	private char quoteEscape = '"';
 	private String delimiter = ",";

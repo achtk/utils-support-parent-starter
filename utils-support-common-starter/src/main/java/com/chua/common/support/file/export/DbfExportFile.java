@@ -2,7 +2,7 @@ package com.chua.common.support.file.export;
 
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.file.javadbf.DbfField;
-import com.chua.common.support.file.javadbf.DbfWriter;
+import com.chua.common.support.file.javadbf.AbstractDbfWriter;
 import com.chua.common.support.value.Pair;
 
 import java.io.IOException;
@@ -16,7 +16,7 @@ import java.util.List;
  */
 @Spi("dbf")
 public class DbfExportFile extends AbstractExportFile {
-    private DbfWriter dbfWriter;
+    private AbstractDbfWriter dbfWriter;
     private OutputStream outputStream;
 
     public DbfExportFile(ExportConfiguration configuration) {
@@ -48,7 +48,7 @@ public class DbfExportFile extends AbstractExportFile {
         }
 
         try {
-            this.dbfWriter = new DbfWriter();
+            this.dbfWriter = new AbstractDbfWriter();
             dbfWriter.setCharacterSetName(configuration.charset());
             dbfWriter.setFields(headerFields);
             for (T datum : data) {

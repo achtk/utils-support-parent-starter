@@ -10,7 +10,7 @@ package com.chua.common.support.file.univocity.parsers.conversions;
  * @param <T> The object type resulting from conversions of String values.
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
  */
-public abstract class ObjectConversion<T> extends NullConversion<String, T> {
+public abstract class ObjectConversion<T> extends BaseNullConversion<String, T> {
 
     /**
      * Creates a Conversion from String to an Object with default values to return when the input is null.

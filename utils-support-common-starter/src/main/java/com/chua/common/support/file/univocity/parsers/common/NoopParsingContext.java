@@ -96,7 +96,7 @@ class NoopParsingContext implements ParsingContext {
 
 	@Override
 	public char[] lineSeparator() {
-		return Format.getSystemLineSeparator();
+		return BaseFormat.getSystemLineSeparator();
 	}
 
 	@Override

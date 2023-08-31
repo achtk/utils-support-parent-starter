@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * A template loader loads a {@link BasisTemplate} from a path, and recursively loads other templates the template may reference. See
- * {@link CachingTemplateLoader}, {@link ClasspathTemplateLoader}, {@link FileTemplateLoader} and {@link MapTemplateLoader} for
+ * {@link BaseCachingTemplateLoader}, {@link ClasspathTemplateLoader}, {@link FileTemplateLoader} and {@link MapTemplateLoader} for
  * specific implementations.
  *
  * @author Administrator
@@ -102,7 +102,7 @@ public interface TemplateLoader {
      * Base class for other {@link TemplateLoader} implementations that caches templates and recursively loads other templates
      * referenced by a template via an include statement.
      */
-    public abstract class CachingTemplateLoader implements TemplateLoader {
+    public abstract class BaseCachingTemplateLoader implements TemplateLoader {
         Map<String, BasisTemplate> templates = new ConcurrentHashMap<String, BasisTemplate>();
 
         @Override
@@ -165,7 +165,7 @@ public interface TemplateLoader {
     /**
      * A TemplateLoader to load templates from the classpath.
      **/
-    public static class ClasspathTemplateLoader extends CachingTemplateLoader {
+    public static class ClasspathTemplateLoader extends BaseCachingTemplateLoader {
         @Override
         protected Source loadSource(String path) {
             try {
@@ -180,7 +180,7 @@ public interface TemplateLoader {
     /**
      * A TemplateLoader to load templates from a directory.
      **/
-    public static class FileTemplateLoader extends CachingTemplateLoader {
+    public static class FileTemplateLoader extends BaseCachingTemplateLoader {
 
         /**
          * Construct the loader with the base directory. All paths passed to {@link #load(String)} are assumed to be relative to
@@ -203,7 +203,7 @@ public interface TemplateLoader {
     /**
      * A TemplateLoader to load templates from a String.
      **/
-    public static class SourceTemplateLoader extends CachingTemplateLoader {
+    public static class SourceTemplateLoader extends BaseCachingTemplateLoader {
 
         /**
          * Construct the loader with the base directory. All paths passed to {@link #load(String)} are assumed to be relative to
@@ -222,7 +222,7 @@ public interface TemplateLoader {
      * A TemplateLoader to load templates from memory. Call {@link #set(String, String)} to specify a templates source and
      * path.
      **/
-    public static class MapTemplateLoader extends CachingTemplateLoader {
+    public static class MapTemplateLoader extends BaseCachingTemplateLoader {
         private final Map<String, Source> templates = new HashMap<String, Source>();
 
         /**

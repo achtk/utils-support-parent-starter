@@ -4,7 +4,7 @@ import com.chua.common.support.extra.el.template.ScanMode;
 import com.chua.common.support.extra.el.template.Template;
 import com.chua.common.support.extra.el.template.execution.Execution;
 import com.chua.common.support.extra.el.template.parser.Invoker;
-import com.chua.common.support.extra.el.template.parser.Parser;
+import com.chua.common.support.extra.el.template.parser.BaseParser;
 
 import java.util.Deque;
 
@@ -13,7 +13,7 @@ import java.util.Deque;
  *
  * @author CH
  */
-public class LiteralsParser extends Parser {
+public class LiteralsParser extends BaseParser {
 
     @Override
     public int parse(String sentence, int offset, Deque<Execution> executions, Template template, StringBuilder cache, Invoker next) {

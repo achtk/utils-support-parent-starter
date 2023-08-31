@@ -12,7 +12,7 @@ import java.io.InputStream;
  * @author CH
  */
 @Spi("temp")
-public class TempFileSystem extends OsFileSystem {
+public class TempFileSystem extends BaseOsFileSystem {
 
     public TempFileSystem(ResourceFile resourceFile) {
         super(resourceFile);

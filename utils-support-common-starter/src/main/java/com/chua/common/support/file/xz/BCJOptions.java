@@ -1,6 +1,6 @@
 package com.chua.common.support.file.xz;
 
-abstract class BCJOptions extends FilterOptions {
+abstract class BCJOptions extends AbstractFilterOptions {
     private final int alignment;
     int startOffset = 0;
 

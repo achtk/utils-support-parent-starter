@@ -9,7 +9,7 @@ import java.util.Iterator;
  * 自然倒敘
  * @author CH
  */
-final class ReverseNaturalOrdering extends Ordering<Comparable<?>> implements Serializable {
+final class ReverseNaturalOrdering extends BaseOrdering<Comparable<?>> implements Serializable {
     static final ReverseNaturalOrdering INSTANCE = new ReverseNaturalOrdering();
 
     @Override
@@ -23,8 +23,8 @@ final class ReverseNaturalOrdering extends Ordering<Comparable<?>> implements Se
     }
 
     @Override
-    public <S extends Comparable<?>> Ordering<S> reverse() {
-        return Ordering.natural();
+    public <S extends Comparable<?>> BaseOrdering<S> reverse() {
+        return BaseOrdering.natural();
     }
 
     // Override the min/max methods to "hoist" delegation outside loops

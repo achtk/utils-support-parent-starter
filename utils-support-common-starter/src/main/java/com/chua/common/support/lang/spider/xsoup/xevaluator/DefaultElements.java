@@ -15,9 +15,9 @@ public class DefaultElements extends ArrayList<Element> implements Elements {
 
     private com.chua.common.support.jsoup.select.Elements elements;
 
-    private ElementOperator elementOperator;
+    private AbstractElementOperator elementOperator;
 
-    public DefaultElements(com.chua.common.support.jsoup.select.Elements elements, ElementOperator elementOperator) {
+    public DefaultElements(com.chua.common.support.jsoup.select.Elements elements, AbstractElementOperator elementOperator) {
         this.elements = elements;
         this.elementOperator = elementOperator;
         initList();

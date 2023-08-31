@@ -38,9 +38,9 @@ import com.chua.common.support.file.univocity.parsers.common.processor.core.Proc
  * @see RowWriterProcessor
  * @see DataProcessingException
  * @see TextParsingException
- * @see AbstractParser
+ * @see BaseParser
  * @see AbstractWriter
- * @see AbstractCommonSettings
+ * @see BaseCommonSettings
  * @see AbstractContext
  */
 public interface ProcessorErrorHandler<T extends AbstractContext> {

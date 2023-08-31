@@ -28,14 +28,14 @@
 package com.chua.common.support.extra.asm;
 
 /**
- * A {@link FieldVisitor} that generates a corresponding 'field_info' structure, as defined in the
+ * A {@link AbstractFieldVisitor} that generates a corresponding 'field_info' structure, as defined in the
  * Java Virtual Machine Specification (JVMS).
  *
  * @see <a href="https://docs.oracle.com/javase/specs/jvms/se9/html/jvms-4.html#jvms-4.5">JVMS
  *     4.5</a>
  * @author Eric Bruneton
  */
-final class FieldWriter extends FieldVisitor {
+final class FieldWriter extends AbstractFieldVisitor {
 
   /** Where the constants used in this FieldWriter must be stored. */
   private final SymbolTable symbolTable;

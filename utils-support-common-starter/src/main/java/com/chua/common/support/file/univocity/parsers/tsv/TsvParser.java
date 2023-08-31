@@ -15,7 +15,7 @@
  ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.tsv;
 
-import com.chua.common.support.file.univocity.parsers.common.AbstractParser;
+import com.chua.common.support.file.univocity.parsers.common.BaseParser;
 
 import static com.chua.common.support.constant.CommonConstant.SYMBOL_SPACE_CHAR;
 import static com.chua.common.support.constant.CommonConstant.SYMBOL_T_CHAR;
@@ -27,9 +27,9 @@ import static com.chua.common.support.constant.CommonConstant.SYMBOL_T_CHAR;
  * @see TsvFormat
  * @see TsvParserSettings
  * @see TsvWriter
- * @see AbstractParser
+ * @see BaseParser
  */
-public class TsvParser extends AbstractParser<TsvParserSettings> {
+public class TsvParser extends BaseParser<TsvParserSettings> {
 
 	private final boolean joinLines;
 

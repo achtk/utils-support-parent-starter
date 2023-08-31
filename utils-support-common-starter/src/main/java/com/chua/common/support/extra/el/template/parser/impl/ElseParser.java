@@ -9,7 +9,7 @@ import com.chua.common.support.extra.el.template.execution.Execution;
 import com.chua.common.support.extra.el.template.execution.impl.ElseExecution;
 import com.chua.common.support.extra.el.template.execution.impl.ElseIfExecution;
 import com.chua.common.support.extra.el.template.parser.Invoker;
-import com.chua.common.support.extra.el.template.parser.Parser;
+import com.chua.common.support.extra.el.template.parser.BaseParser;
 
 import java.util.Deque;
 
@@ -18,7 +18,7 @@ import java.util.Deque;
  *
  * @author CH
  */
-public class ElseParser extends Parser {
+public class ElseParser extends BaseParser {
 
     @Override
     public int parse(String sentence, int offset, Deque<Execution> executions, Template template, StringBuilder cache, Invoker next) {

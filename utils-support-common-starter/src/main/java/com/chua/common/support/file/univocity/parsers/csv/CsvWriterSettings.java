@@ -16,7 +16,7 @@
 package com.chua.common.support.file.univocity.parsers.csv;
 
 import com.chua.common.support.file.univocity.parsers.common.AbstractCommonWriterSettings;
-import com.chua.common.support.file.univocity.parsers.common.Format;
+import com.chua.common.support.file.univocity.parsers.common.BaseFormat;
 import com.chua.common.support.file.univocity.parsers.common.fields.*;
 
 import java.util.Arrays;
@@ -122,8 +122,8 @@ public class CsvWriterSettings extends AbstractCommonWriterSettings<CsvFormat> {
 	}
 
 	/**
-	 * Flag indicating whether the writer should replace the the normalized line separator character specified in {@link Format#getNormalizedNewline()}
-	 * by the sequence specified in {@link Format#getLineSeparator()}, when the value is enclosed within quotes.
+	 * Flag indicating whether the writer should replace the the normalized line separator character specified in {@link BaseFormat#getNormalizedNewline()}
+	 * by the sequence specified in {@link BaseFormat#getLineSeparator()}, when the value is enclosed within quotes.
 	 * <p>
 	 * This is enabled by default and is used to ensure data be read on any platform without introducing unwanted blank lines.
 	 * <p>
@@ -138,15 +138,15 @@ public class CsvWriterSettings extends AbstractCommonWriterSettings<CsvFormat> {
 	 * {@code [Line1 \n Line2]}
 	 *
 	 * @return {@code true} if line separator characters in quoted values should be considered 'normalized' and replaced by the
-	 * sequence specified in {@link Format#getLineSeparator()}, {@code false} otherwise
+	 * sequence specified in {@link BaseFormat#getLineSeparator()}, {@code false} otherwise
 	 */
 	public boolean isNormalizeLineEndingsWithinQuotes() {
 		return normalizeLineEndingsWithinQuotes;
 	}
 
 	/**
-	 * Flag indicating whether the writer should replace the the normalized line separator character specified in {@link Format#getNormalizedNewline()}
-	 * by the sequence specified in {@link Format#getLineSeparator()}, when the value is enclosed within quotes.
+	 * Flag indicating whether the writer should replace the the normalized line separator character specified in {@link BaseFormat#getNormalizedNewline()}
+	 * by the sequence specified in {@link BaseFormat#getLineSeparator()}, when the value is enclosed within quotes.
 	 * <p>
 	 * This is enabled by default and is used to ensure data can be used on any platform without producing unrecognized line endings.
 	 * <p>
@@ -161,8 +161,8 @@ public class CsvWriterSettings extends AbstractCommonWriterSettings<CsvFormat> {
 	 * {@code [Line1 \n Line2]}
 	 *
 	 * @param normalizeLineEndingsWithinQuotes flag indicating that line separator characters in quoted values should be
-	 *                                         considered 'normalized' and occurrences of {@link Format#getNormalizedNewline()}
-	 *                                         should be replaced by the sequence specified in {@link Format#getLineSeparator()}
+	 *                                         considered 'normalized' and occurrences of {@link BaseFormat#getNormalizedNewline()}
+	 *                                         should be replaced by the sequence specified in {@link BaseFormat#getLineSeparator()}
 	 */
 	public void setNormalizeLineEndingsWithinQuotes(boolean normalizeLineEndingsWithinQuotes) {
 		this.normalizeLineEndingsWithinQuotes = normalizeLineEndingsWithinQuotes;

@@ -10,7 +10,7 @@ import java.util.Comparator;
  * CompoundOrdering
  * @author CH
  */
-final class CompoundOrdering<T extends Object> extends Ordering<T> implements Serializable {
+final class CompoundOrdering<T extends Object> extends BaseOrdering<T> implements Serializable {
     final Comparator<? super T>[] comparators;
 
     CompoundOrdering(Comparator<? super T> primary, Comparator<? super T> secondary) {

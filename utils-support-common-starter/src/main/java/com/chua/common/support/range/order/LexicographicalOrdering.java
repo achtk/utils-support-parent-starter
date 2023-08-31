@@ -7,7 +7,7 @@ import java.util.Iterator;
 /**LexicographicalOrdering
  * @author CH
  */
-final class LexicographicalOrdering<T extends Object> extends Ordering<Iterable<T>> implements Serializable {
+final class LexicographicalOrdering<T extends Object> extends BaseOrdering<Iterable<T>> implements Serializable {
     final Comparator<? super T> elementOrder;
 
     LexicographicalOrdering(Comparator<? super T> elementOrder) {

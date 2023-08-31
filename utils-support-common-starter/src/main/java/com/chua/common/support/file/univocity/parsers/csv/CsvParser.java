@@ -1,7 +1,7 @@
 package com.chua.common.support.file.univocity.parsers.csv;
 
-import com.chua.common.support.file.univocity.parsers.common.AbstractCommonParserSettings;
-import com.chua.common.support.file.univocity.parsers.common.AbstractParser;
+import com.chua.common.support.file.univocity.parsers.common.BaseCommonParserSettings;
+import com.chua.common.support.file.univocity.parsers.common.BaseParser;
 import com.chua.common.support.file.univocity.parsers.common.TextParsingException;
 import com.chua.common.support.file.univocity.parsers.common.input.*;
 
@@ -18,9 +18,9 @@ import static com.chua.common.support.file.univocity.parsers.csv.UnescapedQuoteH
  * @see CsvFormat
  * @see CsvParserSettings
  * @see CsvWriter
- * @see AbstractParser
+ * @see BaseParser
  */
-public final class CsvParser extends AbstractParser<CsvParserSettings> {
+public final class CsvParser extends BaseParser<CsvParserSettings> {
 
     private boolean parseUnescapedQuotes;
     private boolean parseUnescapedQuotesUntilDelimiter;
@@ -473,12 +473,12 @@ public final class CsvParser extends AbstractParser<CsvParserSettings> {
     /**
      * Returns the CSV format detected when one of the following settings is enabled:
      * <ul>
-     * <li>{@link AbstractCommonParserSettings#isLineSeparatorDetectionEnabled()}</li>
+     * <li>{@link BaseCommonParserSettings#isLineSeparatorDetectionEnabled()}</li>
      * <li>{@link CsvParserSettings#isDelimiterDetectionEnabled()}</li>
      * <li>{@link CsvParserSettings#isQuoteDetectionEnabled()}</li>
      * </ul>
      * <p>
-     * The detected format will be available once the parsing process is initialized (i.e. when {@link AbstractParser#beginParsing(Reader) runs}.
+     * The detected format will be available once the parsing process is initialized (i.e. when {@link BaseParser#beginParsing(Reader) runs}.
      *
      * @return the detected CSV format, or {@code null} if no detection has been enabled or if the parsing process has not been started yet.
      */

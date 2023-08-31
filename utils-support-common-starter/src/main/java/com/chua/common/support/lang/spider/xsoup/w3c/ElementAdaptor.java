@@ -6,9 +6,9 @@ import org.w3c.dom.*;
 /**
  * @author code4crafer@gmail.com
  */
-public class ElementAdaptor extends NodeAdaptor implements Element {
+public class ElementAdaptor extends BaseNodeAdaptor implements Element {
 
-    private com.chua.common.support.jsoup.nodes.Element element;
+    private final com.chua.common.support.jsoup.nodes.Element element;
 
     public ElementAdaptor(com.chua.common.support.jsoup.nodes.Element element) {
         this.element = element;

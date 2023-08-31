@@ -7,7 +7,7 @@ import com.chua.common.support.reflection.reflections.scanners.Scanners;
 import com.chua.common.support.reflection.reflections.serializers.Serializer;
 import com.chua.common.support.reflection.reflections.serializers.XmlSerializer;
 import com.chua.common.support.reflection.reflections.util.*;
-import com.chua.common.support.reflection.reflections.vfs.Vfs;
+import com.chua.common.support.reflection.reflections.vfs.BaseVfs;
 import javassist.bytecode.ClassFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -151,10 +151,10 @@ public class Reflections implements NameHelper {
         Set<URL> urls = configuration.getUrls();
 
         (configuration.isParallel() ? urls.stream().parallel() : urls.stream()).forEach(url -> {
-            Vfs.Dir dir = null;
+            BaseVfs.Dir dir = null;
             try {
-                dir = Vfs.fromUrl(url);
-                for (Vfs.VfsFile file : dir.getFiles()) {
+                dir = BaseVfs.fromUrl(url);
+                for (BaseVfs.VfsFile file : dir.getFiles()) {
                     if (doFilter(file, configuration.getInputsFilter())) {
                         ClassFile classFile = null;
                         for (ResourceScanner resourceScanner : configuration.getScanners()) {
@@ -210,13 +210,13 @@ public class Reflections implements NameHelper {
         return storeMap;
     }
 
-    private boolean doFilter(Vfs.VfsFile file, Predicate<String> predicate) {
+    private boolean doFilter(BaseVfs.VfsFile file, Predicate<String> predicate) {
         String path = file.getRelativePath();
         String fqn = path.replace('/', '.');
         return predicate == null || predicate.test(path) || predicate.test(fqn);
     }
 
-    private ClassFile getClassFile(Vfs.VfsFile file) {
+    private ClassFile getClassFile(BaseVfs.VfsFile file) {
         try (DataInputStream dis = new DataInputStream(new BufferedInputStream(file.openInputStream()))) {
             return new ClassFile(dis);
         } catch (Exception e) {
@@ -255,7 +255,7 @@ public class Reflections implements NameHelper {
      */
     public static Reflections collect(String packagePrefix, Predicate<String> resourceNameFilter, Serializer serializer) {
         Collection<URL> urls = AbstractClasspathHelper.forPackage(packagePrefix);
-        Iterable<Vfs.VfsFile> files = Vfs.findFiles(urls, packagePrefix, resourceNameFilter);
+        Iterable<BaseVfs.VfsFile> files = BaseVfs.findFiles(urls, packagePrefix, resourceNameFilter);
         Reflections reflections = new Reflections();
         StreamSupport.stream(files.spliterator(), false)
                 .forEach(file -> {

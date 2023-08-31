@@ -24,7 +24,7 @@ public final class CsvTranslators {
     /**
      * Translator for escaping Comma Separated Values.
      */
-    public static class CsvEscaper extends SinglePassTranslator {
+    public static class CsvEscaper extends BaseSinglePassTranslator {
 
         @Override
         void translateWhole(final CharSequence input, final Writer writer) throws IOException {
@@ -43,7 +43,7 @@ public final class CsvTranslators {
     /**
      * Translator for unescaping escaped Comma Separated Value entries.
      */
-    public static class CsvUnescaper extends SinglePassTranslator {
+    public static class CsvUnescaper extends BaseSinglePassTranslator {
 
         @Override
         void translateWhole(final CharSequence input, final Writer writer) throws IOException {

@@ -6,7 +6,7 @@ import com.chua.common.support.file.univocity.parsers.common.fields.FieldNameSel
 import com.chua.common.support.file.univocity.parsers.common.fields.FieldSelector;
 import com.chua.common.support.file.univocity.parsers.common.input.WriterCharAppender;
 import com.chua.common.support.file.univocity.parsers.common.processor.RowWriterProcessor;
-import com.chua.common.support.file.univocity.parsers.common.processor.RowWriterProcessorSwitch;
+import com.chua.common.support.file.univocity.parsers.common.processor.BaseRowWriterProcessorSwitch;
 import com.chua.common.support.file.univocity.parsers.common.record.Record;
 import com.chua.common.support.file.univocity.parsers.fixed.FixedWidthWriterSettings;
 
@@ -78,7 +78,7 @@ public abstract class AbstractWriter<S extends AbstractCommonWriterSettings<?>> 
     protected boolean ignoreLeading;
     protected boolean ignoreTrailing;
 
-    private final AbstractCommonSettings<DummyFormat> internalSettings = new AbstractCommonSettings<DummyFormat>() {
+    private final BaseCommonSettings<DummyFormat> internalSettings = new BaseCommonSettings<DummyFormat>() {
         @Override
         protected DummyFormat createDefaultFormat() {
             return DummyFormat.INSTANCE;
@@ -188,7 +188,7 @@ public abstract class AbstractWriter<S extends AbstractCommonWriterSettings<?>> 
         this.comment = settings.getFormat().getComment();
         this.skipEmptyLines = settings.getSkipEmptyLines();
         this.writerProcessor = settings.getRowWriterProcessor();
-        this.usingSwitch = writerProcessor instanceof RowWriterProcessorSwitch;
+        this.usingSwitch = writerProcessor instanceof BaseRowWriterProcessorSwitch;
         this.expandRows = settings.getExpandIncompleteRows();
         this.columnReorderingEnabled = settings.isColumnReorderingEnabled();
         this.whitespaceRangeStart = settings.getWhitespaceRangeStart();
@@ -205,8 +205,8 @@ public abstract class AbstractWriter<S extends AbstractCommonWriterSettings<?>> 
         this.partialLine = new Object[settings.getMaxColumns()];
         this.isHeaderWritingEnabled = settings.isHeaderWritingEnabled();
 
-        if (writerProcessor instanceof DefaultConversionProcessor) {
-            DefaultConversionProcessor conversionProcessor = (DefaultConversionProcessor) writerProcessor;
+        if (writerProcessor instanceof AbstractDefaultConversionProcessor) {
+            AbstractDefaultConversionProcessor conversionProcessor = (AbstractDefaultConversionProcessor) writerProcessor;
             conversionProcessor.context = null;
             conversionProcessor.errorHandler = settings.getProcessorErrorHandler();
         }
@@ -228,7 +228,7 @@ public abstract class AbstractWriter<S extends AbstractCommonWriterSettings<?>> 
     /**
      * Update indexes to write based on the field selection provided by the user.
      */
-    private void updateIndexesToWrite(AbstractCommonSettings<?> settings) {
+    private void updateIndexesToWrite(BaseCommonSettings<?> settings) {
         FieldSelector selector = settings.getFieldSelector();
         if (selector != null) {
             if (headers != null && headers.length > 0) {
@@ -359,7 +359,7 @@ public abstract class AbstractWriter<S extends AbstractCommonWriterSettings<?>> 
      * <li>Format specific separators and other characters must be introduced to the output row using {@link AbstractWriter#appendToRow(char)}</li>
      * </ul>
      * Once the {@link #processRow(Object[])} method returns, a row will be written to the output with the processed information, and a newline will be automatically written after the given contents, unless this is a
-     * {@link com.chua.common.support.file.univocity.parsers.fixed.FixedWidthWriter} whose {@link FixedWidthWriterSettings#getWriteLineSeparatorAfterRecord()} evaluates to {@code false}. The newline character sequence will conform to what is specified in {@link Format#getLineSeparator()}
+     * {@link com.chua.common.support.file.univocity.parsers.fixed.FixedWidthWriter} whose {@link FixedWidthWriterSettings#getWriteLineSeparatorAfterRecord()} evaluates to {@code false}. The newline character sequence will conform to what is specified in {@link BaseFormat#getLineSeparator()}
      * This cycle repeats until the writing process is stopped by the user or an error happens.
      * In case of errors, the unchecked exception {@link TextWritingException} will be thrown and all resources in use will be closed automatically. The exception should contain the cause and more information about the output state when the error happened.
      *
@@ -395,7 +395,7 @@ public abstract class AbstractWriter<S extends AbstractCommonWriterSettings<?>> 
     }
 
     /**
-     * Writes the headers defined in {@link AbstractCommonSettings#getHeaders()}
+     * Writes the headers defined in {@link BaseCommonSettings#getHeaders()}
      * A {@link TextWritingException} will be thrown if no headers were defined or if records were already written to the output.
      */
     public final void writeHeaders() {
@@ -556,7 +556,7 @@ public abstract class AbstractWriter<S extends AbstractCommonWriterSettings<?>> 
         Object[] row;
         try {
             if (usingSwitch) {
-                dummyHeaderRow = ((RowWriterProcessorSwitch) writerProcessor).getHeaders(record);
+                dummyHeaderRow = ((BaseRowWriterProcessorSwitch) writerProcessor).getHeaders(record);
                 if (dummyHeaderRow == null) {
                     dummyHeaderRow = this.headers;
                 }
@@ -750,8 +750,8 @@ public abstract class AbstractWriter<S extends AbstractCommonWriterSettings<?>> 
     /**
      * Writes the data given for an individual record.
      * The output will remain open for further writing.
-     * If the given data is null or empty, and {@link AbstractCommonSettings#getSkipEmptyLines()} is true, the input will be just ignored.
-     * If {@link AbstractCommonSettings#getSkipEmptyLines()} is false, then an empty row will be written to the output (as specified by {@link
+     * If the given data is null or empty, and {@link BaseCommonSettings#getSkipEmptyLines()} is true, the input will be just ignored.
+     * If {@link BaseCommonSettings#getSkipEmptyLines()} is false, then an empty row will be written to the output (as specified by {@link
      * AbstractWriter#writeEmptyRow()}).
      * In case of any errors, a {@link TextWritingException} will be thrown and the {@link Writer} given in the constructor will be closed.
      * <b>Note</b> this method will not use the {@link RowWriterProcessor}. Use {@link AbstractWriter#processRecord(Object)} for that.
@@ -765,8 +765,8 @@ public abstract class AbstractWriter<S extends AbstractCommonWriterSettings<?>> 
     /**
      * Writes the data given for an individual record.
      * The output will remain open for further writing.
-     * If the given data is null or empty, and {@link AbstractCommonSettings#getSkipEmptyLines()} is true, the input will be just ignored.
-     * If {@link AbstractCommonSettings#getSkipEmptyLines()} is false, then an empty row will be written to the output (as specified by {@link
+     * If the given data is null or empty, and {@link BaseCommonSettings#getSkipEmptyLines()} is true, the input will be just ignored.
+     * If {@link BaseCommonSettings#getSkipEmptyLines()} is false, then an empty row will be written to the output (as specified by {@link
      * AbstractWriter#writeEmptyRow()}).
      * In case of any errors, a {@link TextWritingException} will be thrown and the {@link Writer} given in the constructor will be closed.
      * <b>Note</b> this method will not use the {@link RowWriterProcessor}. Use {@link AbstractWriter#processRecord(Object)} for that.
@@ -796,8 +796,8 @@ public abstract class AbstractWriter<S extends AbstractCommonWriterSettings<?>> 
     /**
      * Writes the data given for an individual record.
      * The output will remain open for further writing.
-     * If the given data is null or empty, and {@link AbstractCommonSettings#getSkipEmptyLines()} is true, the input will be just ignored.
-     * If {@link AbstractCommonSettings#getSkipEmptyLines()} is false, then an empty row will be written to the output (as specified by {@link
+     * If the given data is null or empty, and {@link BaseCommonSettings#getSkipEmptyLines()} is true, the input will be just ignored.
+     * If {@link BaseCommonSettings#getSkipEmptyLines()} is false, then an empty row will be written to the output (as specified by {@link
      * AbstractWriter#writeEmptyRow()}).
      * In case of any errors, a {@link TextWritingException} will be thrown and the {@link Writer} given in the constructor will be closed.
      * <b>Note</b> this method will not use the {@link RowWriterProcessor}. Use {@link AbstractWriter#processRecord(Object)} for that.
@@ -847,7 +847,7 @@ public abstract class AbstractWriter<S extends AbstractCommonWriterSettings<?>> 
      * A newline will automatically written after the given contents, unless this is a
      * {@link com.chua.common.support.file.univocity.parsers.fixed.FixedWidthWriter} whose
      * {@link FixedWidthWriterSettings#getWriteLineSeparatorAfterRecord()} evaluates to {@code false}.
-     * The newline character sequence will conform to what is specified in {@link Format#getLineSeparator()}
+     * The newline character sequence will conform to what is specified in {@link BaseFormat#getLineSeparator()}
      * The writer implementation has no control over the format of this content.
      * The output will remain open for further writing.
      *
@@ -867,7 +867,7 @@ public abstract class AbstractWriter<S extends AbstractCommonWriterSettings<?>> 
     /**
      * Writes an empty line to the output, unless this is a {@link com.chua.common.support.file.univocity.parsers.fixed.FixedWidthWriter} whose
      * {@link FixedWidthWriterSettings#getWriteLineSeparatorAfterRecord()} evaluates to {@code false}.
-     * The newline character sequence will conform to what is specified in {@link Format#getLineSeparator()}
+     * The newline character sequence will conform to what is specified in {@link BaseFormat#getLineSeparator()}
      * The output will remain open for further writing.
      */
     public final void writeEmptyRow() {
@@ -885,7 +885,7 @@ public abstract class AbstractWriter<S extends AbstractCommonWriterSettings<?>> 
      * A newline will automatically written after the given contents, unless this is a
      * {@link com.chua.common.support.file.univocity.parsers.fixed.FixedWidthWriter} whose
      * {@link FixedWidthWriterSettings#getWriteLineSeparatorAfterRecord()} evaluates to {@code false}.
-     * The newline character sequence will conform to what is specified in {@link Format#getLineSeparator()}
+     * The newline character sequence will conform to what is specified in {@link BaseFormat#getLineSeparator()}
      * The output will remain open for further writing.
      *
      * @param comment the contents to be written as a comment to the output
@@ -926,7 +926,7 @@ public abstract class AbstractWriter<S extends AbstractCommonWriterSettings<?>> 
 
     /**
      * Writes the accumulated value of a record to the output, followed by a newline, and increases the record count.
-     * The newline character sequence will conform to what is specified in {@link Format#getLineSeparator()}
+     * The newline character sequence will conform to what is specified in {@link BaseFormat#getLineSeparator()}
      * The contents of {@link AbstractWriter#rowAppender} depend on the concrete implementation of {@link AbstractWriter#processRow(Object[])}
      */
     private void internalWriteRow() {
@@ -1254,9 +1254,9 @@ public abstract class AbstractWriter<S extends AbstractCommonWriterSettings<?>> 
     }
 
     /**
-     * Writes the headers defined in {@link AbstractCommonSettings#getHeaders()} to a {@code String}
+     * Writes the headers defined in {@link BaseCommonSettings#getHeaders()} to a {@code String}
      *
-     * @return a formatted {@code String} containing the headers defined in {@link AbstractCommonSettings#getHeaders()}
+     * @return a formatted {@code String} containing the headers defined in {@link BaseCommonSettings#getHeaders()}
      */
     public final String writeHeadersToString() {
         return writeHeadersToString(NormalizedString.toArray(this.headers));
@@ -1529,7 +1529,7 @@ public abstract class AbstractWriter<S extends AbstractCommonWriterSettings<?>> 
 
     /**
      * Writes the data given for an individual record to a {@code String}.
-     * If the given data is null or empty, and {@link AbstractCommonSettings#getSkipEmptyLines()} is true, {@code null} will be returned
+     * If the given data is null or empty, and {@link BaseCommonSettings#getSkipEmptyLines()} is true, {@code null} will be returned
      * In case of any errors, a {@link TextWritingException} will be thrown.
      * <b>Note</b> this method will not use the {@link RowWriterProcessor}. Use {@link AbstractWriter#processRecord(Object)} for that.
      *
@@ -1542,7 +1542,7 @@ public abstract class AbstractWriter<S extends AbstractCommonWriterSettings<?>> 
 
     /**
      * Writes the data given for an individual record to a {@code String}.
-     * If the given data is null or empty, and {@link AbstractCommonSettings#getSkipEmptyLines()} is true, {@code null} will be returned
+     * If the given data is null or empty, and {@link BaseCommonSettings#getSkipEmptyLines()} is true, {@code null} will be returned
      * In case of any errors, a {@link TextWritingException} will be thrown.
      * <b>Note</b> this method will not use the {@link RowWriterProcessor}. Use {@link AbstractWriter#processRecord(Object)} for that.
      *
@@ -1555,7 +1555,7 @@ public abstract class AbstractWriter<S extends AbstractCommonWriterSettings<?>> 
 
     /**
      * Writes the data given for an individual record to a {@code String}.
-     * If the given data is null or empty, and {@link AbstractCommonSettings#getSkipEmptyLines()} is true, {@code null} will be returned
+     * If the given data is null or empty, and {@link BaseCommonSettings#getSkipEmptyLines()} is true, {@code null} will be returned
      * In case of any errors, a {@link TextWritingException} will be thrown.
      * <b>Note</b> this method will not use the {@link RowWriterProcessor}. Use {@link AbstractWriter#processRecord(Object)} for that.
      *
@@ -1607,7 +1607,7 @@ public abstract class AbstractWriter<S extends AbstractCommonWriterSettings<?>> 
 
     /**
      * Writes the accumulated value of a record to the output, followed by a newline, and increases the record count.
-     * The newline character sequence will conform to what is specified in {@link Format#getLineSeparator()}
+     * The newline character sequence will conform to what is specified in {@link BaseFormat#getLineSeparator()}
      * The contents of {@link AbstractWriter#rowAppender} depend on the concrete implementation of {@link AbstractWriter#processRow(Object[])}
      *
      * @return a formatted {@code String} containing the comment.
@@ -1688,7 +1688,7 @@ public abstract class AbstractWriter<S extends AbstractCommonWriterSettings<?>> 
             if (rowData != null && !rowData.isEmpty()) {
                 dummyHeaderRow = this.headers;
                 if (usingSwitch) {
-                    dummyHeaderRow = ((RowWriterProcessorSwitch) writerProcessor).getHeaders(headerMapping, rowData);
+                    dummyHeaderRow = ((BaseRowWriterProcessorSwitch) writerProcessor).getHeaders(headerMapping, rowData);
                     if (dummyHeaderRow == null) {
                         dummyHeaderRow = this.headers;
                     }

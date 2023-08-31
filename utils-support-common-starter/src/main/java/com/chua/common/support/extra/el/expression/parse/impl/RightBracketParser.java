@@ -13,7 +13,7 @@ import java.util.List;
  * 基础类
  * @author CH
  */
-public class RightBracketParser extends NodeParser {
+public class RightBracketParser extends BaseNodeParser {
 
     @Override
     public int parse(String el, int offset, Deque<CalculateNode> nodes, int function, Invoker next) {

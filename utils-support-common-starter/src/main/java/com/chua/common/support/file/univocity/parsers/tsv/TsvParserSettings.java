@@ -15,21 +15,21 @@
  ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.tsv;
 
-import com.chua.common.support.file.univocity.parsers.common.AbstractCommonParserSettings;
+import com.chua.common.support.file.univocity.parsers.common.BaseCommonParserSettings;
 
 import java.util.Map;
 
 /**
  * This is the configuration class used by the TSV parser ({@link TsvParser})
  *
- * <p>It supports the configuration options provided by {@link AbstractCommonParserSettings} only
+ * <p>It supports the configuration options provided by {@link BaseCommonParserSettings} only
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
  * @see com.chua.common.support.file.univocity.parsers.tsv.TsvParser
  * @see com.chua.common.support.file.univocity.parsers.tsv.TsvFormat
- * @see AbstractCommonParserSettings
+ * @see BaseCommonParserSettings
  */
-public class TsvParserSettings extends AbstractCommonParserSettings<TsvFormat> {
+public class TsvParserSettings extends BaseCommonParserSettings<TsvFormat> {
 
 	private boolean lineJoiningEnabled = false;
 

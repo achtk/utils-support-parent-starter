@@ -16,9 +16,9 @@
 package com.chua.common.support.file.univocity.parsers.common.processor;
 
 import com.chua.common.support.file.univocity.parsers.common.AbstractContext;
-import com.chua.common.support.file.univocity.parsers.common.AbstractParser;
+import com.chua.common.support.file.univocity.parsers.common.BaseParser;
 import com.chua.common.support.file.univocity.parsers.common.ParsingContext;
-import com.chua.common.support.file.univocity.parsers.common.processor.core.AbstractObjectListProcessor;
+import com.chua.common.support.file.univocity.parsers.common.processor.core.AbstractObjectListProcessorAbstract;
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ import java.util.List;
  * ObjectRowListProcessor processor = new ObjectRowListProcessor();
  * processor.convertIndexes(Conversions.toBigDecimal()).set(4, 6);
  * parserSettings.setRowProcessor(new ObjectRowListProcessor());
- * parser.parse(reader); // will invoke the {@link AbstractObjectListProcessor#rowProcessed(Object[], AbstractContext)} method for each parsed record.
+ * parser.parse(reader); // will invoke the {@link AbstractObjectListProcessorAbstract#rowProcessed(Object[], AbstractContext)} method for each parsed record.
  *
  * String[] headers = rowProcessor.getHeaders();
  * List&lt;Object[]&gt; rows = rowProcessor.getRows();
@@ -41,10 +41,10 @@ import java.util.List;
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
  * @see RowProcessor
- * @see ObjectRowProcessor
- * @see AbstractParser
+ * @see BaseObjectRowProcessor
+ * @see BaseParser
  */
-public class ObjectRowListProcessor extends AbstractObjectListProcessor<ParsingContext> implements RowProcessor {
+public class ObjectRowListProcessor extends AbstractObjectListProcessorAbstract<ParsingContext> implements RowProcessor {
 
 	/**
 	 * Creates a new processor of {@code Object[]} rows with varying types.

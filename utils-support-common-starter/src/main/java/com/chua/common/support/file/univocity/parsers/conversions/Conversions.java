@@ -344,13 +344,13 @@ public class Conversions {
 	}
 
 	/**
-	 * Returns a new instance of {@link NumericConversion}
+	 * Returns a new instance of {@link BaseNumericConversion}
 	 *
-	 * @param numberFormats list of acceptable numeric patterns. The first pattern in this sequence will be used to convert a Number into a String in {@link NumericConversion#revert(Number)}.
-	 * @return a new instance of {@link NumericConversion} that supports the given number formats
+	 * @param numberFormats list of acceptable numeric patterns. The first pattern in this sequence will be used to convert a Number into a String in {@link BaseNumericConversion#revert(Number)}.
+	 * @return a new instance of {@link BaseNumericConversion} that supports the given number formats
 	 */
-	public static NumericConversion<Number> formatToNumber(String... numberFormats) {
-		return new NumericConversion<Number>(numberFormats) {
+	public static BaseNumericConversion<Number> formatToNumber(String... numberFormats) {
+		return new BaseNumericConversion<Number>(numberFormats) {
 			@Override
 			protected void configureFormatter(DecimalFormat formatter) {
 			}
@@ -358,15 +358,15 @@ public class Conversions {
 	}
 
 	/**
-	 * Returns a new instance of {@link NumericConversion}
+	 * Returns a new instance of {@link BaseNumericConversion}
 	 *
 	 * @param numberType    type of number to be returned. The resulting instance of {@code Number} will be cast to the expected type.
-	 * @param numberFormats list of acceptable numeric patterns. The first pattern in this sequence will be used to convert a Number into a String in {@link NumericConversion#revert(Number)}.
+	 * @param numberFormats list of acceptable numeric patterns. The first pattern in this sequence will be used to convert a Number into a String in {@link BaseNumericConversion#revert(Number)}.
 	 * @param <T>           type of number
-	 * @return a new instance of {@link NumericConversion} that supports the given number formats
+	 * @return a new instance of {@link BaseNumericConversion} that supports the given number formats
 	 */
-	public static <T extends Number> NumericConversion<T> formatToNumber(Class<T> numberType, String... numberFormats) {
-		return new NumericConversion<T>(numberFormats) {
+	public static <T extends Number> BaseNumericConversion<T> formatToNumber(Class<T> numberType, String... numberFormats) {
+		return new BaseNumericConversion<T>(numberFormats) {
 			@Override
 			protected void configureFormatter(DecimalFormat formatter) {
 			}
@@ -376,7 +376,7 @@ public class Conversions {
 	/**
 	 * Returns a new instance of {@link FormattedBigDecimalConversion}
 	 *
-	 * @param numberFormats list of acceptable numeric patterns. The first pattern in this sequence will be used to convert a BigDecimal into a String in {@link NumericConversion#revert(Number)}.
+	 * @param numberFormats list of acceptable numeric patterns. The first pattern in this sequence will be used to convert a BigDecimal into a String in {@link BaseNumericConversion#revert(Number)}.
 	 * @return a new instance of {@link FormattedBigDecimalConversion} that supports the given number formats
 	 */
 	public static FormattedBigDecimalConversion formatToBigDecimal(String... numberFormats) {
@@ -387,7 +387,7 @@ public class Conversions {
 	 * Returns a new instance of {@link FormattedBigDecimalConversion}
 	 *
 	 * @param defaultValueForNullString default BigDecimal to be returned when the input String is null. Used when {@link FormattedBigDecimalConversion#execute(String)} is invoked.
-	 * @param numberFormats             list of acceptable numeric patterns. The first pattern in this sequence will be used to convert a BigDecimal into a String in {@link NumericConversion#revert(Number)}.
+	 * @param numberFormats             list of acceptable numeric patterns. The first pattern in this sequence will be used to convert a BigDecimal into a String in {@link BaseNumericConversion#revert(Number)}.
 	 * @return a new instance of {@link FormattedBigDecimalConversion} that supports the given number formats
 	 */
 	public static FormattedBigDecimalConversion formatToBigDecimal(BigDecimal defaultValueForNullString, String... numberFormats) {
@@ -399,7 +399,7 @@ public class Conversions {
 	 *
 	 * @param defaultValueForNullString default BigDecimal to be returned when the input String is null. Used when {@link FormattedBigDecimalConversion#execute(String)} is invoked.
 	 * @param stringIfNull              default String value to be returned when a BigDecimal input is null. Used when {@code FormattedBigDecimalConversion#revert(BigDecimal)} is invoked.
-	 * @param numberFormats             list of acceptable numeric patterns. The first pattern in this sequence will be used to convert a BigDecimal into a String in {@link NumericConversion#revert(Number)}.
+	 * @param numberFormats             list of acceptable numeric patterns. The first pattern in this sequence will be used to convert a BigDecimal into a String in {@link BaseNumericConversion#revert(Number)}.
 	 * @return a new instance of {@link FormattedBigDecimalConversion} that supports the given number formats
 	 */
 	public static FormattedBigDecimalConversion formatToBigDecimal(BigDecimal defaultValueForNullString, String stringIfNull, String... numberFormats) {

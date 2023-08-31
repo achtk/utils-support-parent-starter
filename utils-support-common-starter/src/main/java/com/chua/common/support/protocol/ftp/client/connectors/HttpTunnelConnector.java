@@ -1,7 +1,7 @@
 package com.chua.common.support.protocol.ftp.client.connectors;
 
 
-import com.chua.common.support.protocol.ftp.client.FtpConnector;
+import com.chua.common.support.protocol.ftp.client.BaseFtpConnector;
 
 import java.io.*;
 import java.net.Socket;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
  *
  * @author Carlo Pelliccia
  */
-public class HttpTunnelConnector extends FtpConnector {
+public class HttpTunnelConnector extends BaseFtpConnector {
 
     /**
      * The proxy host name.

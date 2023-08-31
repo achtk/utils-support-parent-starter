@@ -35,7 +35,7 @@ import java.util.Collection;
  * @author Administrator
  * @since 3.2
  */
-public class RecursiveToStringStyle extends ToStringStyle {
+public class RecursiveToStringStyle extends BaseToStringStyle {
 
     /**
      * Required for serialization support.

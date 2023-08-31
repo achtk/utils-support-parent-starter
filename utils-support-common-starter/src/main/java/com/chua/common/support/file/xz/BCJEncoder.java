@@ -33,8 +33,8 @@ class BCJEncoder extends BCJCoder implements FilterEncoder {
         return false;
     }
 
-    public FinishableOutputStream getOutputStream(FinishableOutputStream out,
-                                                  ArrayCache arrayCache) {
+    public AbstractFinishableOutputStream getOutputStream(AbstractFinishableOutputStream out,
+                                                          ArrayCache arrayCache) {
         return options.getOutputStream(out, arrayCache);
     }
 }

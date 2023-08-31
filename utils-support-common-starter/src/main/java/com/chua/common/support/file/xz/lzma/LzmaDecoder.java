@@ -11,18 +11,18 @@
 package com.chua.common.support.file.xz.lzma;
 
 import com.chua.common.support.file.xz.lz.LzDecoder;
-import com.chua.common.support.file.xz.rangecoder.RangeDecoder;
+import com.chua.common.support.file.xz.rangecoder.BaseRangeDecoder;
 
 import java.io.IOException;
 
-public final class LzmaDecoder extends LzmaCoder {
+public final class LzmaDecoder extends BaseLzmaCoder {
     private final LzDecoder lz;
-    private final RangeDecoder rc;
+    private final BaseRangeDecoder rc;
     private final LiteralDecoder literalDecoder;
     private final LengthDecoder matchLenDecoder = new LengthDecoder();
     private final LengthDecoder repLenDecoder = new LengthDecoder();
 
-    public LzmaDecoder(LzDecoder lz, RangeDecoder rc, int lc, int lp, int pb) {
+    public LzmaDecoder(LzDecoder lz, BaseRangeDecoder rc, int lc, int lp, int pb) {
         super(pb);
         this.lz = lz;
         this.rc = rc;
@@ -131,7 +131,7 @@ public final class LzmaDecoder extends LzmaCoder {
     }
 
 
-    private class LiteralDecoder extends LiteralCoder {
+    private class LiteralDecoder extends BaseLiteralCoder {
         private final LiteralSubdecoder[] subdecoders;
 
         LiteralDecoder(int lc, int lp) {
@@ -153,7 +153,7 @@ public final class LzmaDecoder extends LzmaCoder {
         }
 
 
-        private class LiteralSubdecoder extends LiteralSubcoder {
+        private class LiteralSubdecoder extends BaseLiteralSubcoder {
             void decode() throws IOException {
                 int symbol = 1;
 
@@ -184,7 +184,7 @@ public final class LzmaDecoder extends LzmaCoder {
     }
 
 
-    private class LengthDecoder extends LengthCoder {
+    private class LengthDecoder extends BaseLengthCoder {
         int decode(int posState) throws IOException {
             if (rc.decodeBit(choice, 0) == 0)
                 return rc.decodeBitTree(low[posState]) + MATCH_LEN_MIN;

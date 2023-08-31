@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author code4crafter@gmail.com <br>
  * @since 0.2.0
  */
-public class FileCacheQueueScheduler extends DuplicateRemovedScheduler implements MonitorableScheduler, Closeable {
+public class FileCacheQueueScheduler extends AbstractDuplicateRemovedScheduler implements MonitorableScheduler, Closeable {
 
     private String filePath = System.getProperty("java.io.tmpdir");
 

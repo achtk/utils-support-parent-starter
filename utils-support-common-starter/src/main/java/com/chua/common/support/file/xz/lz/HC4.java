@@ -12,7 +12,7 @@ package com.chua.common.support.file.xz.lz;
 
 import com.chua.common.support.file.xz.ArrayCache;
 
-final class HC4 extends LzEncoder {
+final class HC4 extends BaseLzEncoder {
     private final Hash234 hash;
     private final int[] chain;
     private final Matches matches;

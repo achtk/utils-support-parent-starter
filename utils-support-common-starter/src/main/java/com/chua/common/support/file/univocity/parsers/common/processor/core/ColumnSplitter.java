@@ -16,7 +16,6 @@
 package com.chua.common.support.file.univocity.parsers.common.processor.core;
 
 import com.chua.common.support.file.univocity.parsers.common.ArgumentUtils;
-import com.chua.common.support.file.univocity.parsers.common.AbstractCommonSettings;
 import com.chua.common.support.file.univocity.parsers.common.AbstractContext;
 import com.chua.common.support.file.univocity.parsers.common.DataProcessingException;
 
@@ -25,15 +24,15 @@ import java.util.*;
 /**
  * A utility class used split and store values columns parsed from each row in a {@link Processor}. Used to centralize common code used by implementations
  * of {@link ColumnReader}, namely:
- * {@link AbstractColumnProcessor}, {@link AbstractObjectColumnProcessor}, {@link AbstractBatchedColumnProcessor} and {@link AbstractBatchedObjectColumnProcessor}.
+ * {@link AbstractColumnProcessor}, {@link AbstractObjectColumnProcessorAbstract}, {@link AbstractBatchedColumnProcessor} and {@link AbstractBatchedObjectColumnProcessorAbstract}.
  *
  * @param <T> the type of values stored in the columns.
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
  * @see ColumnReader
  * @see AbstractColumnProcessor
- * @see AbstractObjectColumnProcessor
+ * @see AbstractObjectColumnProcessorAbstract
  * @see AbstractBatchedColumnProcessor
- * @see AbstractBatchedObjectColumnProcessor
+ * @see AbstractBatchedObjectColumnProcessorAbstract
  * @see Processor
  */
 class ColumnSplitter<T> {

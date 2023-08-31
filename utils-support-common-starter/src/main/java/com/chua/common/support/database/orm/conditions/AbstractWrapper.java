@@ -5,7 +5,7 @@ import com.chua.common.support.constant.CommonConstant;
 import com.chua.common.support.database.SerializationUtils;
 import com.chua.common.support.database.SqlUtils;
 import com.chua.common.support.database.StringEscape;
-import com.chua.common.support.database.orm.SqlScriptUtils;
+import com.chua.common.support.database.orm.BaseSqlScriptUtils;
 import com.chua.common.support.database.orm.conditions.interfaces.Compare;
 import com.chua.common.support.database.orm.conditions.interfaces.Func;
 import com.chua.common.support.database.orm.conditions.interfaces.Join;
@@ -490,7 +490,7 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
         final String genParamName = SYMBOL_WRAPPER_PARAM + paramNameSeq.incrementAndGet();
         final String paramStr = getParamAlias() + SYMBOL_WRAPPER_PARAM_MIDDLE + genParamName;
         paramNameValuePairs.put(genParamName, param);
-        return SqlScriptUtils.safeParam(paramStr, mapping);
+        return BaseSqlScriptUtils.safeParam(paramStr, mapping);
     }
 
     /**

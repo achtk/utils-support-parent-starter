@@ -18,7 +18,7 @@ package com.chua.common.support.file.univocity.parsers.common;
 import java.io.Reader;
 
 /**
- * A simple Reader implementation to enable parsers to process lines on demand, via {@link AbstractParser#parseLine(String)}
+ * A simple Reader implementation to enable parsers to process lines on demand, via {@link BaseParser#parseLine(String)}
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
  */

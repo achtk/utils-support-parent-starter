@@ -34,7 +34,7 @@ import com.chua.common.support.protocol.websocket.exceptions.InvalidFrameExcepti
  *
  * @author Administrator
  */
-public abstract class AbstractControlFrame extends FramedataImpl1 {
+public abstract class AbstractControlFrame extends BaseFramedataImpl1 {
 
   /**
    * Class to represent a control frame

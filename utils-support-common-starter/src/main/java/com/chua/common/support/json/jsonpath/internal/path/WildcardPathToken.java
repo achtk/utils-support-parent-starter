@@ -23,7 +23,7 @@ import java.util.Collections;
 /**
  * @author Administrator
  */
-public class WildcardPathToken extends PathToken {
+public class WildcardPathToken extends BasePathToken {
 
     public WildcardPathToken() {
     }

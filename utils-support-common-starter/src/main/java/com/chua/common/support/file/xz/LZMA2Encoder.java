@@ -44,8 +44,8 @@ class LZMA2Encoder extends LZMA2Coder implements FilterEncoder {
         return true;
     }
 
-    public FinishableOutputStream getOutputStream(FinishableOutputStream out,
-                                                  ArrayCache arrayCache) {
+    public AbstractFinishableOutputStream getOutputStream(AbstractFinishableOutputStream out,
+                                                          ArrayCache arrayCache) {
         return options.getOutputStream(out, arrayCache);
     }
 }

@@ -83,7 +83,7 @@ public class FilterCompiler {
 
     public Predicate compile() {
         try {
-            final ExpressionNode result = readLogicalOr();
+            final AbstractExpressionNode result = readLogicalOr();
             filter.skipBlanks();
             if (filter.inBounds()) {
                 throw new InvalidPathException(String.format("Expected end of filter expression instead of: %s",
@@ -98,7 +98,7 @@ public class FilterCompiler {
         }
     }
 
-    private ValueNode readValueNode() {
+    private BaseValueNode readValueNode() {
         switch (filter.skipBlanks().currentChar()) {
             case DOC_CONTEXT:
                 return readPath();
@@ -119,7 +119,7 @@ public class FilterCompiler {
         }
     }
 
-    private ValueNode readLiteral() {
+    private BaseValueNode readLiteral() {
         switch (filter.skipBlanks().currentChar()) {
             case SINGLE_QUOTE:
                 return readStringLiteral(SINGLE_QUOTE);
@@ -151,8 +151,8 @@ public class FilterCompiler {
      *  RelationalExpression    = Value [ RelationalOperator Value ]
      */
 
-    private ExpressionNode readLogicalOr() {
-        final List<ExpressionNode> ops = new ArrayList<ExpressionNode>();
+    private AbstractExpressionNode readLogicalOr() {
+        final List<AbstractExpressionNode> ops = new ArrayList<AbstractExpressionNode>();
         ops.add(readLogicalAnd());
 
         while (true) {
@@ -168,9 +168,9 @@ public class FilterCompiler {
         return 1 == ops.size() ? ops.get(0) : LogicalExpressionNode.createLogicalOr(ops);
     }
 
-    private ExpressionNode readLogicalAnd() {
+    private AbstractExpressionNode readLogicalAnd() {
         /// @fixme copy-pasted
-        final List<ExpressionNode> ops = new ArrayList<ExpressionNode>();
+        final List<AbstractExpressionNode> ops = new ArrayList<AbstractExpressionNode>();
         ops.add(readLogicalAndOperand());
 
         while (true) {
@@ -186,7 +186,7 @@ public class FilterCompiler {
         return 1 == ops.size() ? ops.get(0) : LogicalExpressionNode.createLogicalAnd(ops);
     }
 
-    private ExpressionNode readLogicalAndOperand() {
+    private AbstractExpressionNode readLogicalAndOperand() {
         int savepoint = filter.skipBlanks().position();
         if (filter.skipBlanks().currentCharIs(NOT)) {
             filter.readSignificantChar(NOT);
@@ -196,13 +196,13 @@ public class FilterCompiler {
                     filter.setPosition(savepoint);
                     break;
                 default:
-                    final ExpressionNode op = readLogicalAndOperand();
+                    final AbstractExpressionNode op = readLogicalAndOperand();
                     return LogicalExpressionNode.createLogicalNot(op);
             }
         }
         if (filter.skipBlanks().currentCharIs(OPEN_PARENTHESIS)) {
             filter.readSignificantChar(OPEN_PARENTHESIS);
-            final ExpressionNode op = readLogicalOr();
+            final AbstractExpressionNode op = readLogicalOr();
             filter.readSignificantChar(CLOSE_PARENTHESIS);
             return op;
         }
@@ -211,11 +211,11 @@ public class FilterCompiler {
     }
 
     private RelationalExpressionNode readExpression() {
-        ValueNode left = readValueNode();
+        BaseValueNode left = readValueNode();
         int savepoint = filter.position();
         try {
             RelationalOperator operator = readRelationalOperator();
-            ValueNode right = readValueNode();
+            BaseValueNode right = readValueNode();
             return new RelationalExpressionNode(left, operator, right);
         } catch (InvalidPathException exc) {
             filter.setPosition(savepoint);
@@ -224,7 +224,7 @@ public class FilterCompiler {
         PathNode pathNode = left.asPathNode();
         left = pathNode.asExistsCheck(pathNode.shouldExists());
         RelationalOperator operator = RelationalOperator.EXISTS;
-        ValueNode right = left.asPathNode().shouldExists() ? ValueNodes.TRUE : ValueNodes.FALSE;
+        BaseValueNode right = left.asPathNode().shouldExists() ? ValueNodes.TRUE : ValueNodes.FALSE;
         return new RelationalExpressionNode(left, operator, right);
     }
 
@@ -270,7 +270,7 @@ public class FilterCompiler {
             if (NameConstant.NULL.equals(nullValue.toString())) {
                 logger.trace("NullLiteral from {} to {} -> [{}]", begin, filter.position() + 3, nullValue);
                 filter.incrementPosition(nullValue.length());
-                return ValueNode.createNullNode();
+                return BaseValueNode.createNullNode();
             }
         }
         throw new InvalidPathException("Expected <null> value");
@@ -293,7 +293,7 @@ public class FilterCompiler {
         }
         CharSequence json = filter.subSequence(begin, filter.position());
         logger.trace("JsonLiteral from {} to {} -> [{}]", begin, filter.position(), json);
-        return ValueNode.createJsonNode(json);
+        return BaseValueNode.createJsonNode(json);
 
     }
 
@@ -328,7 +328,7 @@ public class FilterCompiler {
         }
         CharSequence pattern = filter.subSequence(begin, filter.position());
         logger.trace("PatternNode from {} to {} -> [{}]", begin, filter.position(), pattern);
-        return ValueNode.createPatternNode(pattern);
+        return BaseValueNode.createPatternNode(pattern);
     }
 
     private StringNode readStringLiteral(char endChar) {
@@ -342,7 +342,7 @@ public class FilterCompiler {
         }
         CharSequence stringLiteral = filter.subSequence(begin, filter.position());
         logger.trace("StringLiteral from {} to {} -> [{}]", begin, filter.position(), stringLiteral);
-        return ValueNode.createStringNode(stringLiteral, true);
+        return BaseValueNode.createStringNode(stringLiteral, true);
     }
 
     private NumberNode readNumberLiteral() {
@@ -353,7 +353,7 @@ public class FilterCompiler {
         }
         CharSequence numberLiteral = filter.subSequence(begin, filter.position());
         logger.trace("NumberLiteral from {} to {} -> [{}]", begin, filter.position(), numberLiteral);
-        return ValueNode.createNumberNode(numberLiteral);
+        return BaseValueNode.createNumberNode(numberLiteral);
     }
 
     private BooleanNode readBooleanLiteral() {
@@ -370,7 +370,7 @@ public class FilterCompiler {
         filter.incrementPosition(boolValue.length());
         logger.trace("BooleanLiteral from {} to {} -> [{}]", begin, end, boolValue);
 
-        return ValueNode.createBooleanNode(boolValue);
+        return BaseValueNode.createBooleanNode(boolValue);
     }
 
     private PathNode readPath() {
@@ -399,7 +399,7 @@ public class FilterCompiler {
 
         boolean shouldExists = previousSignificantChar != NOT;
         CharSequence path = filter.subSequence(begin, filter.position());
-        return ValueNode.createPathNode(path, false, shouldExists);
+        return BaseValueNode.createPathNode(path, false, shouldExists);
     }
 
     private boolean expressionIsTerminated() {

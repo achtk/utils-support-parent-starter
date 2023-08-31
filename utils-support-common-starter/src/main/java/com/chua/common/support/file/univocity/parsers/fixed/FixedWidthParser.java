@@ -20,8 +20,6 @@ import com.chua.common.support.file.univocity.parsers.common.input.EofException;
 import com.chua.common.support.file.univocity.parsers.common.input.LookaheadCharInputReader;
 import com.chua.common.support.file.univocity.parsers.common.record.Record;
 
-import java.io.EOFException;
-
 /**
  * A fast and flexible fixed-with parser implementation.
  *
@@ -30,9 +28,9 @@ import java.io.EOFException;
  * @see FixedWidthFields
  * @see FixedWidthParserSettings
  * @see FixedWidthWriter
- * @see AbstractParser
+ * @see BaseParser
  */
-public class FixedWidthParser extends AbstractParser<FixedWidthParserSettings> {
+public class FixedWidthParser extends BaseParser<FixedWidthParserSettings> {
 
 	private int[] lengths;
 	private int[] rootLengths;

@@ -16,10 +16,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-class BlockOutputStream extends FinishableOutputStream {
+class BlockOutputStream extends AbstractFinishableOutputStream {
     private final OutputStream out;
     private final CountingOutputStream outCounted;
-    private FinishableOutputStream filterChain;
+    private AbstractFinishableOutputStream filterChain;
     private final Check check;
 
     private final int headerSize;

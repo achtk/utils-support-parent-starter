@@ -8,13 +8,12 @@ import com.chua.common.support.extra.el.expression.token.Symbol;
 import java.util.Deque;
 
 import static com.chua.common.support.constant.CommonConstant.SYMBOL_COMMA_CHAR;
-import static com.chua.common.support.constant.CommonConstant.SYMBOL_LEFT_SLASH;
 
 /**
  * 基础类
  * @author CH
  */
-public class CommaParser extends NodeParser {
+public class CommaParser extends BaseNodeParser {
 
     @Override
     public int parse(String el, int offset, Deque<CalculateNode> nodes, int function, Invoker next) {

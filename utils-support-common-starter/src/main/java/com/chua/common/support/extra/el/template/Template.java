@@ -4,7 +4,7 @@ import com.chua.common.support.extra.el.exception.IllegalFormatException;
 import com.chua.common.support.extra.el.template.execution.Execution;
 import com.chua.common.support.extra.el.template.execution.impl.StringExecution;
 import com.chua.common.support.extra.el.template.parser.Invoker;
-import com.chua.common.support.extra.el.template.parser.Parser;
+import com.chua.common.support.extra.el.template.parser.BaseParser;
 import com.chua.common.support.extra.el.template.parser.impl.*;
 
 import java.util.Deque;
@@ -28,7 +28,7 @@ public class Template
 
     static
     {
-        Parser[] parsers = new Parser[]{ 
+        BaseParser[] parsers = new BaseParser[]{
                 new ExecutionBeginParser(), 
                 new ExecutionEndParser(), 
                 new IfParser(), 
@@ -49,7 +49,7 @@ public class Template
         };
         for (int i = parsers.length - 1; i > -1; i--)
         {
-            final Parser  parser = parsers[i];
+            final BaseParser parser = parsers[i];
             final Invoker next   = pred;
             Invoker invoker = new Invoker()
             {

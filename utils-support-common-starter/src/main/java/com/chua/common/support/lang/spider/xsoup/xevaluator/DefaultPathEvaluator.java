@@ -17,9 +17,9 @@ public class DefaultPathEvaluator implements PathEvaluator {
 
     private AbstractEvaluator evaluator;
 
-    private ElementOperator elementOperator;
+    private AbstractElementOperator elementOperator;
 
-    public DefaultPathEvaluator(AbstractEvaluator evaluator, ElementOperator elementOperator) {
+    public DefaultPathEvaluator(AbstractEvaluator evaluator, AbstractElementOperator elementOperator) {
         this.evaluator = evaluator;
         this.elementOperator = elementOperator;
     }
@@ -52,7 +52,7 @@ public class DefaultPathEvaluator implements PathEvaluator {
         return elementOperator.toString();
     }
 
-    public ElementOperator getElementOperator() {
+    public AbstractElementOperator getElementOperator() {
         return elementOperator;
     }
 }

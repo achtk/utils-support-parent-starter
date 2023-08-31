@@ -16,7 +16,7 @@
 
 package com.chua.common.support.file.univocity.parsers.common.processor;
 
-import com.chua.common.support.file.univocity.parsers.common.AbstractParser;
+import com.chua.common.support.file.univocity.parsers.common.BaseParser;
 import com.chua.common.support.file.univocity.parsers.common.AbstractWriter;
 import com.chua.common.support.file.univocity.parsers.common.ParsingContext;
 import com.chua.common.support.file.univocity.parsers.common.processor.core.AbstractMultiBeanListProcessor;
@@ -24,7 +24,7 @@ import com.chua.common.support.file.univocity.parsers.common.processor.core.Abst
 import java.util.List;
 
 /**
- * A {@link RowProcessor} implementation for converting rows extracted from any implementation of {@link AbstractParser} into java objects, storing
+ * A {@link RowProcessor} implementation for converting rows extracted from any implementation of {@link BaseParser} into java objects, storing
  * them into lists. This processor stores beans in separate lists, one for each type of bean processed.
  * All lists of all types will have the same number of entries as the number of records in the input.
  * When an object of a particular type can't be generated from a row, {@code null} will be added to the list. This ensures all lists are the same size,
@@ -33,10 +33,10 @@ import java.util.List;
  * <p>The class types passed to the constructor of this class must contain the annotations provided in {@link com.chua.common.support.file.univocity.parsers.annotations}.
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
- * @see AbstractParser
+ * @see BaseParser
  * @see RowProcessor
  * @see AbstractBeanProcessor
- * @see MultiBeanProcessor
+ * @see BaseMultiBeanProcessor
  */
 public class MultiBeanListProcessor extends AbstractMultiBeanListProcessor<ParsingContext> implements RowProcessor {
 
@@ -45,7 +45,7 @@ public class MultiBeanListProcessor extends AbstractMultiBeanListProcessor<Parsi
 	 *
 	 * @param expectedBeanCount expected number of rows to be parsed from the input which will be converted into java beans.
 	 *                          Used to pre-allocate the size of the output {@link List} returned by {@link #getBeans()}
-	 * @param beanTypes         the classes with their attributes mapped to fields of records parsed by an {@link AbstractParser} or written by an {@link AbstractWriter}.
+	 * @param beanTypes         the classes with their attributes mapped to fields of records parsed by an {@link BaseParser} or written by an {@link AbstractWriter}.
 	 */
 	public MultiBeanListProcessor(int expectedBeanCount, Class... beanTypes) {
 		super(expectedBeanCount, beanTypes);
@@ -54,7 +54,7 @@ public class MultiBeanListProcessor extends AbstractMultiBeanListProcessor<Parsi
 	/**
 	 * Creates a processor for java beans of multiple types
 	 *
-	 * @param beanTypes the classes with their attributes mapped to fields of records parsed by an {@link AbstractParser} or written by an {@link AbstractWriter}.
+	 * @param beanTypes the classes with their attributes mapped to fields of records parsed by an {@link BaseParser} or written by an {@link AbstractWriter}.
 	 */
 	public MultiBeanListProcessor(Class... beanTypes) {
 		super(beanTypes);

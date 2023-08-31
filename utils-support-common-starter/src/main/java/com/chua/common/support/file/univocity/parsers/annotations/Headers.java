@@ -15,7 +15,7 @@
  ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.annotations;
 
-import com.chua.common.support.file.univocity.parsers.common.AbstractCommonSettings;
+import com.chua.common.support.file.univocity.parsers.common.BaseCommonSettings;
 import com.chua.common.support.file.univocity.parsers.common.processor.AbstractBeanProcessor;
 import com.chua.common.support.file.univocity.parsers.common.processor.BeanWriterProcessor;
 
@@ -28,17 +28,17 @@ import java.lang.annotation.*;
  *
  * <ul>
  *  <li>when reading, the given {@link #sequence()} of header names will be used to refer to each column, irrespective of whether or not the input contains a header row.
- *  	If empty, and no headers have been defined in {@link AbstractCommonSettings#getHeaders()}, the parser will automatically use the first row in the input as the header row,
+ *  	If empty, and no headers have been defined in {@link BaseCommonSettings#getHeaders()}, the parser will automatically use the first row in the input as the header row,
  *  	unless the fields in the bean have been annotated using {@link Parsed#index()} only.
  *  </li>
  *  <li>when writing, the given {@link #sequence()} of names will be used to refer to each column and will be used for writing the header row if {@link #write()} is enabled.
- *  	If empty, and no headers have been defined in {@link AbstractCommonSettings#getHeaders()}, the names given by attributes annotated with {@link Parsed#field()} will be used.
+ *  	If empty, and no headers have been defined in {@link BaseCommonSettings#getHeaders()}, the names given by attributes annotated with {@link Parsed#field()} will be used.
  *  </li>
  * </ul>
  *
  *
  * <p>
- * 	This annotation has no effect if {@link AbstractCommonSettings#isAutoConfigurationEnabled()} evaluates to {@code false}.
+ * 	This annotation has no effect if {@link BaseCommonSettings#isAutoConfigurationEnabled()} evaluates to {@code false}.
  * </p>
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>

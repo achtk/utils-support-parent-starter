@@ -6,11 +6,11 @@ import java.io.IOException;
 import java.util.jar.JarFile;
 
 /**
- * an implementation of {@link Vfs.Dir} for {@link java.util.zip.ZipFile}
+ * an implementation of {@link BaseVfs.Dir} for {@link java.util.zip.ZipFile}
  *
  * @author Administrator
  */
-public class ZipDir implements Vfs.Dir {
+public class ZipDir implements BaseVfs.Dir {
     final java.util.zip.ZipFile jarFile;
 
     public ZipDir(JarFile jarFile) {
@@ -23,10 +23,10 @@ public class ZipDir implements Vfs.Dir {
     }
 
     @Override
-    public Iterable<Vfs.VfsFile> getFiles() {
+    public Iterable<BaseVfs.VfsFile> getFiles() {
         return () -> jarFile.stream()
                 .filter(entry -> !entry.isDirectory())
-                .map(entry -> (Vfs.VfsFile) new ZipFile(ZipDir.this, entry))
+                .map(entry -> (BaseVfs.VfsFile) new ZipFile(ZipDir.this, entry))
                 .iterator();
     }
 

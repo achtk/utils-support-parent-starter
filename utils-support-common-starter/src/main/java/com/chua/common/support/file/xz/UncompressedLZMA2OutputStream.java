@@ -12,10 +12,10 @@ package com.chua.common.support.file.xz;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-class UncompressedLZMA2OutputStream extends FinishableOutputStream {
+class UncompressedLZMA2OutputStream extends AbstractFinishableOutputStream {
     private final ArrayCache arrayCache;
 
-    private FinishableOutputStream out;
+    private AbstractFinishableOutputStream out;
     private final DataOutputStream outData;
 
     private final byte[] uncompBuf;
@@ -32,7 +32,7 @@ class UncompressedLZMA2OutputStream extends FinishableOutputStream {
         return 70;
     }
 
-    UncompressedLZMA2OutputStream(FinishableOutputStream out,
+    UncompressedLZMA2OutputStream(AbstractFinishableOutputStream out,
                                   ArrayCache arrayCache) {
         if (out == null)
             throw new NullPointerException();

@@ -9,7 +9,7 @@
 
 package com.chua.common.support.file.xz;
 
-import com.chua.common.support.file.xz.lz.LzEncoder;
+import com.chua.common.support.file.xz.lz.BaseLzEncoder;
 import com.chua.common.support.file.xz.lzma.LZMAEncoder;
 
 import java.io.IOException;
@@ -22,7 +22,7 @@ import java.io.InputStream;
  * often you only need <code>LZMA2Options()</code> or
  * <code>LZMA2Options(int)</code>.
  */
-public class LZMA2Options extends FilterOptions {
+public class LZMA2Options extends AbstractFilterOptions {
     /**
      * Minimum valid compression preset level is 0.
      */
@@ -117,12 +117,12 @@ public class LZMA2Options extends FilterOptions {
     /**
      * Match finder: Hash Chain 2-3-4
      */
-    public static final int MF_HC4 = LzEncoder.MF_HC4;
+    public static final int MF_HC4 = BaseLzEncoder.MF_HC4;
 
     /**
      * Match finder: Binary tree 2-3-4
      */
-    public static final int MF_BT4 = LzEncoder.MF_BT4;
+    public static final int MF_BT4 = BaseLzEncoder.MF_BT4;
 
     private static final int[] presetToDictSize = {
             1 << 18, 1 << 20, 1 << 21, 1 << 22, 1 << 22,
@@ -530,8 +530,8 @@ public class LZMA2Options extends FilterOptions {
                : LZMA2OutputStream.getMemoryUsage(this);
     }
 
-    public FinishableOutputStream getOutputStream(FinishableOutputStream out,
-                                                  ArrayCache arrayCache) {
+    public AbstractFinishableOutputStream getOutputStream(AbstractFinishableOutputStream out,
+                                                          ArrayCache arrayCache) {
         if (mode == MODE_UNCOMPRESSED)
             return new UncompressedLZMA2OutputStream(out, arrayCache);
 

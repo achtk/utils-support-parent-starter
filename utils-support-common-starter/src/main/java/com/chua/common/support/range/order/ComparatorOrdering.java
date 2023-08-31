@@ -10,7 +10,7 @@ import java.util.Comparator;
  * ComparatorOrdering
  * @author CH
  */
-final class ComparatorOrdering<T extends Object> extends Ordering<T> implements Serializable {
+final class ComparatorOrdering<T extends Object> extends BaseOrdering<T> implements Serializable {
     final Comparator<T> comparator;
 
     ComparatorOrdering(Comparator<T> comparator) {

@@ -503,7 +503,7 @@ public class DraftV1 extends com.chua.common.support.protocol.websocket.drafts.D
       buffer.position(buffer.position() + payload.limit());
     }
 
-    FramedataImpl1 frame = FramedataImpl1.get(optcode);
+    BaseFramedataImpl1 frame = BaseFramedataImpl1.get(optcode);
     frame.setFin(fin);
     frame.setRsv1(rsv1);
     frame.setRsv2(rsv2);
@@ -915,8 +915,8 @@ public class DraftV1 extends com.chua.common.support.protocol.websocket.drafts.D
     addToBufferList(frame.getPayloadData());
     checkBufferLimit();
     if (currentContinuousFrame.getOpcode() == Opcode.TEXT) {
-      ((FramedataImpl1) currentContinuousFrame).setPayload(getPayloadFromByteBufferList());
-      ((FramedataImpl1) currentContinuousFrame).isValid();
+      ((BaseFramedataImpl1) currentContinuousFrame).setPayload(getPayloadFromByteBufferList());
+      ((BaseFramedataImpl1) currentContinuousFrame).isValid();
       try {
         webSocketImpl.getWebSocketListener().onWebsocketMessage(webSocketImpl,
             Charsetfunctions.stringUtf8(currentContinuousFrame.getPayloadData()));
@@ -924,8 +924,8 @@ public class DraftV1 extends com.chua.common.support.protocol.websocket.drafts.D
         logRuntimeException(webSocketImpl, e);
       }
     } else if (currentContinuousFrame.getOpcode() == Opcode.BINARY) {
-      ((FramedataImpl1) currentContinuousFrame).setPayload(getPayloadFromByteBufferList());
-      ((FramedataImpl1) currentContinuousFrame).isValid();
+      ((BaseFramedataImpl1) currentContinuousFrame).setPayload(getPayloadFromByteBufferList());
+      ((BaseFramedataImpl1) currentContinuousFrame).isValid();
       try {
         webSocketImpl.getWebSocketListener()
             .onWebsocketMessage(webSocketImpl, currentContinuousFrame.getPayloadData());

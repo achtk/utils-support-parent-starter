@@ -184,7 +184,7 @@ public class PerMessageDeflateExtension extends BaseCompressionExtension {
     }
 
     // Set frames payload to the new decompressed data.
-    ((FramedataImpl1) inputFrame)
+    ((BaseFramedataImpl1) inputFrame)
         .setPayload(ByteBuffer.wrap(output.toByteArray(), 0, output.size()));
   }
 
@@ -252,7 +252,7 @@ public class PerMessageDeflateExtension extends BaseCompressionExtension {
     }
 
     // Set frames payload to the new compressed data.
-    ((FramedataImpl1) inputFrame).setPayload(ByteBuffer.wrap(outputBytes, 0, outputLength));
+    ((BaseFramedataImpl1) inputFrame).setPayload(ByteBuffer.wrap(outputBytes, 0, outputLength));
   }
 
   /**

@@ -7,7 +7,7 @@ import com.chua.common.support.lang.template.basis.Error.TemplateException;
 import com.chua.common.support.lang.template.basis.TemplateContext;
 import com.chua.common.support.lang.template.basis.TemplateLoader.Source;
 import com.chua.common.support.lang.template.basis.interpreter.AstInterpreter;
-import com.chua.common.support.lang.template.basis.interpreter.Reflection;
+import com.chua.common.support.lang.template.basis.interpreter.BaseReflection;
 import com.chua.common.support.lang.template.basis.parsing.Parser.Macros;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -974,16 +974,16 @@ public class Ast {
         }
 
         /**
-         * Returns the cached member descriptor as returned by {@link Reflection#getField(Object, String)} or
-         * {@link Reflection#getMethod(Object, String, Object...)}. See {@link #setCachedMember(Object)}.
+         * Returns the cached member descriptor as returned by {@link BaseReflection#getField(Object, String)} or
+         * {@link BaseReflection#getMethod(Object, String, Object...)}. See {@link #setCachedMember(Object)}.
          **/
         public Object getCachedMember() {
             return cachedMember;
         }
 
         /**
-         * Sets the member descriptor as returned by {@link Reflection#getField(Object, String)} or
-         * {@link Reflection#getMethod(Object, String, Object...)} for faster member lookups. Called by {@link AstInterpreter} the
+         * Sets the member descriptor as returned by {@link BaseReflection#getField(Object, String)} or
+         * {@link BaseReflection#getMethod(Object, String, Object...)} for faster member lookups. Called by {@link AstInterpreter} the
          * first time this node is evaluated. Subsequent evaluations can use the cached descriptor, avoiding a costly reflective
          * lookup.
          **/
@@ -1013,18 +1013,18 @@ public class Ast {
             Object field = getCachedMember();
             if (field != null) {
                 try {
-                    return Reflection.getInstance().getFieldValue(object, field);
+                    return BaseReflection.getInstance().getFieldValue(object, field);
                 } catch (Throwable t) {
                     // fall through
                 }
             }
 
-            field = Reflection.getInstance().getField(object, getName().getText());
+            field = BaseReflection.getInstance().getField(object, getName().getText());
             if (field == null) {
                 Error.error("Couldn't find field '" + getName().getText() + "' for object of type '" + object.getClass().getSimpleName() + "'.", getSpan());
             }
             setCachedMember(field);
-            return Reflection.getInstance().getFieldValue(object, field);
+            return BaseReflection.getInstance().getFieldValue(object, field);
         }
     }
 
@@ -1060,7 +1060,7 @@ public class Ast {
         }
 
         /**
-         * Returns the cached "function" descriptor as returned by {@link Reflection#getMethod(Object, String, Object...)} or the
+         * Returns the cached "function" descriptor as returned by {@link BaseReflection#getMethod(Object, String, Object...)} or the
          * {@link Macro}. See {@link #setCachedFunction(Object)}.
          **/
         public Object getCachedFunction() {
@@ -1068,7 +1068,7 @@ public class Ast {
         }
 
         /**
-         * Sets the "function" descriptor as returned by {@link Reflection#getMethod(Object, String, Object...)} for faster
+         * Sets the "function" descriptor as returned by {@link BaseReflection#getMethod(Object, String, Object...)} for faster
          * lookups, or the {@link Macro} to be called. Called by {@link AstInterpreter} the first time this node is evaluated.
          * Subsequent evaluations can use the cached descriptor, avoiding a costly reflective lookup.
          **/
@@ -1126,18 +1126,18 @@ public class Ast {
                     Object method = getCachedFunction();
                     if (method != null) {
                         try {
-                            return Reflection.getInstance().callMethod(function, method, argumentValues);
+                            return BaseReflection.getInstance().callMethod(function, method, argumentValues);
                         } catch (Throwable t) {
                             // fall through
                         }
                     }
-                    method = Reflection.getInstance().getMethod(function, null, argumentValues);
+                    method = BaseReflection.getInstance().getMethod(function, null, argumentValues);
                     if (method == null) {
                         Error.error("Couldn't find function.", getSpan());
                     }
                     setCachedFunction(method);
                     try {
-                        return Reflection.getInstance().callMethod(function, method, argumentValues);
+                        return BaseReflection.getInstance().callMethod(function, method, argumentValues);
                     } catch (Throwable t) {
                         Error.error(t.getMessage(), getSpan(), t);
                         return null; // never reached
@@ -1224,7 +1224,7 @@ public class Ast {
         }
 
         /**
-         * Returns the cached member descriptor as returned by {@link Reflection#getMethod(Object, String, Object...)}. See
+         * Returns the cached member descriptor as returned by {@link BaseReflection#getMethod(Object, String, Object...)}. See
          * {@link #setCachedMethod(Object)}.
          **/
         public Object getCachedMethod() {
@@ -1232,7 +1232,7 @@ public class Ast {
         }
 
         /**
-         * Sets the method descriptor as returned by {@link Reflection#getMethod(Object, String, Object...)} for faster lookups.
+         * Sets the method descriptor as returned by {@link BaseReflection#getMethod(Object, String, Object...)} for faster lookups.
          * Called by {@link AstInterpreter} the first time this node is evaluated. Subsequent evaluations can use the cached
          * descriptor, avoiding a costly reflective lookup.
          **/
@@ -1316,38 +1316,38 @@ public class Ast {
                 Object method = getCachedMethod();
                 if (method != null) {
                     try {
-                        return Reflection.getInstance().callMethod(object, method, argumentValues);
+                        return BaseReflection.getInstance().callMethod(object, method, argumentValues);
                     } catch (Throwable t) {
                         // fall through
                     }
                 }
 
-                method = Reflection.getInstance().getMethod(object, getMethod().getName().getText(), argumentValues);
+                method = BaseReflection.getInstance().getMethod(object, getMethod().getName().getText(), argumentValues);
                 if (method != null) {
                     // found the method on the object, call it
                     setCachedMethod(method);
                     try {
-                        return Reflection.getInstance().callMethod(object, method, argumentValues);
+                        return BaseReflection.getInstance().callMethod(object, method, argumentValues);
                     } catch (Throwable t) {
                         Error.error(t.getMessage(), getSpan(), t);
                         return null; // never reached
                     }
                 } else {
                     // didn't find the method on the object, try to find a field pointing to a lambda
-                    Object field = Reflection.getInstance().getField(object, getMethod().getName().getText());
+                    Object field = BaseReflection.getInstance().getField(object, getMethod().getName().getText());
                     if (field == null) {
                         Error.error("Couldn't find method '" + getMethod().getName().getText() + "' for object of type '" + object.getClass().getSimpleName() + "'.",
                                 getSpan());
                     }
-                    Object function = Reflection.getInstance().getFieldValue(object, field);
-                    method = Reflection.getInstance().getMethod(function, null, argumentValues);
+                    Object function = BaseReflection.getInstance().getFieldValue(object, field);
+                    method = BaseReflection.getInstance().getMethod(function, null, argumentValues);
                     if (method == null) {
                         Error.error(
                                 "Couldn't find function in field '" + getMethod().getName().getText() + "' for object of type '" + object.getClass().getSimpleName() + "'.",
                                 getSpan());
                     }
                     try {
-                        return Reflection.getInstance().callMethod(function, method, argumentValues);
+                        return BaseReflection.getInstance().callMethod(function, method, argumentValues);
                     } catch (Throwable t) {
                         Error.error(t.getMessage(), getSpan(), t);
                         return null; // never reached

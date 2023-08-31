@@ -5,11 +5,11 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 /**
- * an implementation of {@link Vfs.VfsFile} for a directory {@link java.io.File}
+ * an implementation of {@link BaseVfs.VfsFile} for a directory {@link java.io.File}
  *
  * @author Administrator
  */
-public class SystemFile implements Vfs.VfsFile {
+public class SystemFile implements BaseVfs.VfsFile {
     private final SystemDir root;
     private final java.io.File file;
 

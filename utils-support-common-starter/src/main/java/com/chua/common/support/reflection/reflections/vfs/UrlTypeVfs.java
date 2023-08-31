@@ -2,8 +2,8 @@ package com.chua.common.support.reflection.reflections.vfs;
 
 import com.chua.common.support.reflection.reflections.Reflections;
 import com.chua.common.support.reflection.reflections.ReflectionsException;
-import com.chua.common.support.reflection.reflections.vfs.Vfs.Dir;
-import com.chua.common.support.reflection.reflections.vfs.Vfs.UrlType;
+import com.chua.common.support.reflection.reflections.vfs.BaseVfs.Dir;
+import com.chua.common.support.reflection.reflections.vfs.BaseVfs.UrlType;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  * UrlType to be used by Reflections library.
  * This class handles the vfszip and vfsfile protocol of JBOSS files.
  * <p>
- * <p>to use it, registerBean it in Vfs via {@link Vfs#addDefaultUrlTypes(UrlType)} or {@link Vfs#setDefaultUrlTypes(java.util.List)}.
+ * <p>to use it, registerBean it in Vfs via {@link BaseVfs#addDefaultUrlTypes(UrlType)} or {@link BaseVfs#setDefaultUrlTypes(java.util.List)}.
  *
  * @author Sergio Pola
  */

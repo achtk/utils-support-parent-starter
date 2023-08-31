@@ -6,7 +6,7 @@ import org.w3c.dom.*;
 /**
  * @author code4crafer@gmail.com
  */
-public class AttributeAdaptor extends NodeAdaptor implements Attr {
+public class AttributeAdaptor extends BaseNodeAdaptor implements Attr {
 
     private Attribute attribute;
 

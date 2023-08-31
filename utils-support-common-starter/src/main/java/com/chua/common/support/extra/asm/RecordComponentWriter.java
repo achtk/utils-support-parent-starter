@@ -27,7 +27,7 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 package com.chua.common.support.extra.asm;
 
-final class RecordComponentWriter extends RecordComponentVisitor {
+final class RecordComponentWriter extends BaseRecordComponentVisitor {
   /** Where the constants used in this RecordComponentWriter must be stored. */
   private final SymbolTable symbolTable;
 

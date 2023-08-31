@@ -173,7 +173,7 @@ public class AnnotationHelper {
                     conversion = Conversions.formatToBigDecimal(defaultForNull, nullWrite, formats);
                 } else if (express) {
                     conversion = Conversions.formatToNumber(formats);
-                    ((NumericConversion) conversion).setNumberType(fieldType);
+                    ((BaseNumericConversion) conversion).setNumberType(fieldType);
                 } else {
                     Date dateIfNull = null;
                     if (nullRead != null) {
@@ -683,7 +683,7 @@ public class AnnotationHelper {
         return description + " of class " + getDeclaringClass(element).getName();
     }
 
-    private static void processAnnotations(AnnotatedElement element, boolean processNested, List<Integer> indexes, List<TransformedHeader> tmp, Map<AnnotatedElement, List<TransformedHeader>> nestedReplacements, HeaderTransformer transformer, MethodFilter filter) {
+    private static void processAnnotations(AnnotatedElement element, boolean processNested, List<Integer> indexes, List<TransformedHeader> tmp, Map<AnnotatedElement, List<TransformedHeader>> nestedReplacements, BaseHeaderTransformer transformer, MethodFilter filter) {
         Parsed annotation = findAnnotation(element, Parsed.class);
         if (annotation != null) {
             TransformedHeader header = new TransformedHeader(element, transformer);
@@ -705,10 +705,10 @@ public class AnnotationHelper {
                     nestedBeanType = getType(element);
                 }
 
-                Class<? extends HeaderTransformer> transformerType = AnnotationRegistry.getValue(element, nested, "headerTransformer", nested.headerTransformer());
-                if (transformerType != HeaderTransformer.class) {
+                Class<? extends BaseHeaderTransformer> transformerType = AnnotationRegistry.getValue(element, nested, "headerTransformer", nested.headerTransformer());
+                if (transformerType != BaseHeaderTransformer.class) {
                     String[] args = AnnotationRegistry.getValue(element, nested, "args", nested.args());
-                    HeaderTransformer innerTransformer = AnnotationHelper.newInstance(HeaderTransformer.class, transformerType, args);
+                    BaseHeaderTransformer innerTransformer = AnnotationHelper.newInstance(BaseHeaderTransformer.class, transformerType, args);
                     nestedReplacements.put(element, getFieldSequence(nestedBeanType, true, indexes, innerTransformer, filter));
                 } else {
                     nestedReplacements.put(element, getFieldSequence(nestedBeanType, true, indexes, transformer, filter));
@@ -724,13 +724,13 @@ public class AnnotationHelper {
      *
      * @param beanClass     the class whose field sequence will be returned.
      * @param processNested flag indicating whether {@link Nested} annotations should be processed
-     * @param transformer   a {@link HeaderTransformer} instance to be used for transforming headers of a given {@link Nested} attribute.
+     * @param transformer   a {@link BaseHeaderTransformer} instance to be used for transforming headers of a given {@link Nested} attribute.
      * @param filter        filter to apply over annotated methods when the class is being used for reading data from beans (to write values to an output)
      *                      or when writing values into beans (while parsing). It is used to choose either a "get" or a "set"
      *                      method annotated with {@link Parsed}, when both methods target the same field.
      * @return a list of fields ordered by their processing sequence
      */
-    public static List<TransformedHeader> getFieldSequence(Class beanClass, boolean processNested, HeaderTransformer transformer, MethodFilter filter) {
+    public static List<TransformedHeader> getFieldSequence(Class beanClass, boolean processNested, BaseHeaderTransformer transformer, MethodFilter filter) {
         List<Integer> indexes = new ArrayList<Integer>();
         List<TransformedHeader> tmp = getFieldSequence(beanClass, processNested, indexes, transformer, filter);
 
@@ -761,7 +761,7 @@ public class AnnotationHelper {
         return tmp;
     }
 
-    private static List<TransformedHeader> getFieldSequence(Class beanClass, boolean processNested, List<Integer> indexes, HeaderTransformer transformer, MethodFilter filter) {
+    private static List<TransformedHeader> getFieldSequence(Class beanClass, boolean processNested, List<Integer> indexes, BaseHeaderTransformer transformer, MethodFilter filter) {
         List<TransformedHeader> tmp = new ArrayList<TransformedHeader>();
 
         Map<AnnotatedElement, List<TransformedHeader>> nestedReplacements = new LinkedHashMap<AnnotatedElement, List<TransformedHeader>>();

@@ -17,7 +17,7 @@ import static com.chua.common.support.constant.CommonConstant.SYMBOL_LEFT_BRACKE
  *
  * @author CH
  */
-public class PropertyParser extends NodeParser {
+public class PropertyParser extends BaseNodeParser {
 
     @Override
     public int parse(String el, int offset, Deque<CalculateNode> nodes, int function, Invoker next) {

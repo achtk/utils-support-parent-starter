@@ -15,7 +15,7 @@
  ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.common.input.concurrent;
 
-import com.chua.common.support.file.univocity.parsers.common.Format;
+import com.chua.common.support.file.univocity.parsers.common.BaseFormat;
 import com.chua.common.support.file.univocity.parsers.common.input.AbstractCharInputReader;
 import com.chua.common.support.file.univocity.parsers.common.input.BomInput;
 import com.chua.common.support.file.univocity.parsers.common.input.CharInputReader;
@@ -48,7 +48,7 @@ public class ConcurrentCharInputReader extends AbstractCharInputReader {
 	/**
 	 * Creates a new instance with the mandatory characters for handling newlines transparently. Line separators will be detected automatically.
 	 *
-	 * @param normalizedLineSeparator the normalized newline character (as defined in {@link Format#getNormalizedNewline()})
+	 * @param normalizedLineSeparator the normalized newline character (as defined in {@link BaseFormat#getNormalizedNewline()})
 	 *                                that is used to replace any lineSeparator sequence found in the input.
 	 * @param bucketSize              the size of an each individual "bucket" used to store characters read from the input.
 	 * @param bucketQuantity          the number of "buckets" to load in memory. Note the reader will stop if all buckets are full.
@@ -64,8 +64,8 @@ public class ConcurrentCharInputReader extends AbstractCharInputReader {
 	/**
 	 * Creates a new instance with the mandatory characters for handling newlines transparently.
 	 *
-	 * @param lineSeparator           the sequence of characters that represent a newline, as defined in {@link Format#getLineSeparator()}
-	 * @param normalizedLineSeparator the normalized newline character (as defined in {@link Format#getNormalizedNewline()})
+	 * @param lineSeparator           the sequence of characters that represent a newline, as defined in {@link BaseFormat#getLineSeparator()}
+	 * @param normalizedLineSeparator the normalized newline character (as defined in {@link BaseFormat#getNormalizedNewline()})
 	 *                                that is used to replace any lineSeparator sequence found in the input.
 	 * @param bucketSize              the size of an each individual "bucket" used to store characters read from the input.
 	 * @param bucketQuantity          the number of "buckets" to load in memory. Note the reader will stop if all buckets are full.

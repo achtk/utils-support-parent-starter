@@ -15,20 +15,20 @@
  ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.common.input;
 
-import com.chua.common.support.file.univocity.parsers.common.AbstractParser;
-import com.chua.common.support.file.univocity.parsers.common.AbstractCommonParserSettings;
-import com.chua.common.support.file.univocity.parsers.common.Format;
+import com.chua.common.support.file.univocity.parsers.common.BaseParser;
+import com.chua.common.support.file.univocity.parsers.common.BaseCommonParserSettings;
+import com.chua.common.support.file.univocity.parsers.common.BaseFormat;
 
 import java.io.Reader;
 
 /**
- * The definition of a character input reader used by all univocity-parsers that extend {@link AbstractParser}.
+ * The definition of a character input reader used by all univocity-parsers that extend {@link BaseParser}.
  *
  * <p> This interface declares basic functionalities to provide a common input manipulation structure for all parser classes.
- * <p> Implementations of this interface <b>MUST</b> convert the sequence of newline characters defined by {@link Format#getLineSeparator()} into the normalized newline character provided in {@link Format#getNormalizedNewline()}.
+ * <p> Implementations of this interface <b>MUST</b> convert the sequence of newline characters defined by {@link BaseFormat#getLineSeparator()} into the normalized newline character provided in {@link BaseFormat#getNormalizedNewline()}.
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
- * @see Format
+ * @see BaseFormat
  */
 public interface CharInputReader extends CharInput {
 
@@ -46,7 +46,7 @@ public interface CharInputReader extends CharInput {
 
     /**
      * Returns the next character in the input provided by the active {@link Reader}.
-     * <p> If the input contains a sequence of newline characters (defined by {@link Format#getLineSeparator()}), this method will automatically converted them to the newline character specified in {@link Format#getNormalizedNewline()}.
+     * <p> If the input contains a sequence of newline characters (defined by {@link BaseFormat#getLineSeparator()}), this method will automatically converted them to the newline character specified in {@link BaseFormat#getNormalizedNewline()}.
      * <p> A subsequent call to this method will return the character after the newline sequence.
      *
      * @return the next character in the input. '\0' if there are no more characters in the input or if the CharInputReader was stopped.
@@ -98,8 +98,8 @@ public interface CharInputReader extends CharInput {
 
     /**
      * Returns the line separator by this character input reader. This could be the line separator defined
-     * in the {@link Format#getLineSeparator()} configuration, or the line separator sequence identified automatically
-     * when {@link AbstractCommonParserSettings#isLineSeparatorDetectionEnabled()} evaluates to {@code true}.
+     * in the {@link BaseFormat#getLineSeparator()} configuration, or the line separator sequence identified automatically
+     * when {@link BaseCommonParserSettings#isLineSeparatorDetectionEnabled()} evaluates to {@code true}.
      *
      * @return the line separator in use.
      */

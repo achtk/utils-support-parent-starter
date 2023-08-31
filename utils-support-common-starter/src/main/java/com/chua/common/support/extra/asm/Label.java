@@ -251,7 +251,7 @@ public class Label {
   Frame frame;
 
   /**
-   * The successor of this label, in the order they are visited in {@link MethodVisitor#visitLabel}.
+   * The successor of this label, in the order they are visited in {@link BaseMethodVisitor#visitLabel}.
    * This linked list does not include labels used for debug info only. If the {@link
    * MethodWriter#COMPUTE_ALL_FRAMES} or {@link MethodWriter#COMPUTE_INSERTED_FRAMES} option is used
    * then it does not contain either successive labels that denote the same bytecode offset (in this
@@ -310,7 +310,7 @@ public class Label {
   /**
    * Returns the "canonical" {@link Label} instance corresponding to this label's bytecode offset,
    * if known, otherwise the label itself. The canonical instance is the first label (in the order
-   * of their visit by {@link MethodVisitor#visitLabel}) corresponding to this bytecode offset. It
+   * of their visit by {@link BaseMethodVisitor#visitLabel}) corresponding to this bytecode offset. It
    * cannot be known for labels which have not been visited yet.
    *
    * <p><i>This method should only be used when the {@link MethodWriter#COMPUTE_ALL_FRAMES} option
@@ -356,7 +356,7 @@ public class Label {
    * @param methodVisitor a method visitor.
    * @param visitLineNumbers whether to visit of the label's source line numbers, if any.
    */
-  final void accept(final MethodVisitor methodVisitor, final boolean visitLineNumbers) {
+  final void accept(final BaseMethodVisitor methodVisitor, final boolean visitLineNumbers) {
     methodVisitor.visitLabel(this);
     if (visitLineNumbers && lineNumber != 0) {
       methodVisitor.visitLineNumber(lineNumber & 0xFFFF, this);

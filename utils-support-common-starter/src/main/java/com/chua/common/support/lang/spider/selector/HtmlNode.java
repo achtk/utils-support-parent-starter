@@ -28,7 +28,7 @@ public class HtmlNode extends AbstractSelectable {
 
     @Override
     public Selectable smartContent() {
-        SmartContentSelector smartContentSelector = Selectors.smartContent();
+        SmartContentSelector smartContentSelector = BaseSelectors.smartContent();
         return select(smartContentSelector, getSourceTexts());
     }
 
@@ -39,7 +39,7 @@ public class HtmlNode extends AbstractSelectable {
 
     @Override
     public Selectable xpath(String xpath) {
-        XpathSelector xpathSelector = Selectors.xpath(xpath);
+        XpathSelector xpathSelector = BaseSelectors.xpath(xpath);
         return selectElements(xpathSelector);
     }
 
@@ -106,13 +106,13 @@ public class HtmlNode extends AbstractSelectable {
 
     @Override
     public Selectable css(String selector) {
-        CssSelector cssSelector = Selectors.css(selector);
+        CssSelector cssSelector = BaseSelectors.css(selector);
         return selectElements(cssSelector);
     }
 
     @Override
     public Selectable css(String selector, String attrName) {
-        CssSelector cssSelector = Selectors.css(selector, attrName);
+        CssSelector cssSelector = BaseSelectors.css(selector, attrName);
         return selectElements(cssSelector);
     }
 

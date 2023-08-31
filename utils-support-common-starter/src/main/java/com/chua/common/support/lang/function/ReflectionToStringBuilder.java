@@ -71,11 +71,11 @@ import static com.chua.common.support.constant.CommonConstant.EMPTY_STRING_ARRAY
  * detailed information of a field.
  * </p>
  * <p>
- * The exact format of the {@code toString} is determined by the {@link ToStringStyle} passed into the constructor.
+ * The exact format of the {@code toString} is determined by the {@link BaseToStringStyle} passed into the constructor.
  * </p>
  *
  * <p>
- * <b>Note:</b> the default {@link ToStringStyle} will only do a "shallow" formatting, i.e. composed objects are not
+ * <b>Note:</b> the default {@link BaseToStringStyle} will only do a "shallow" formatting, i.e. composed objects are not
  * further traversed. To get "deep" formatting, use an instance of {@link RecursiveToStringStyle}.
  * </p>
  * @author Administrator
@@ -136,7 +136,7 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
      * @see ToStringExclude
      * @see ToStringSummary
      */
-    public static String toString(final Object object, final ToStringStyle style) {
+    public static String toString(final Object object, final BaseToStringStyle style) {
         return toString(object, style, false, false, null);
     }
 
@@ -172,7 +172,7 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
      * @see ToStringExclude
      * @see ToStringSummary
      */
-    public static String toString(final Object object, final ToStringStyle style, final boolean outputTransients) {
+    public static String toString(final Object object, final BaseToStringStyle style, final boolean outputTransients) {
         return toString(object, style, outputTransients, false, null);
     }
 
@@ -215,7 +215,7 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
      * @see ToStringSummary
      * @since 2.1
      */
-    public static String toString(final Object object, final ToStringStyle style, final boolean outputTransients, final boolean outputStatics) {
+    public static String toString(final Object object, final BaseToStringStyle style, final boolean outputTransients, final boolean outputStatics) {
         return toString(object, style, outputTransients, outputStatics, null);
     }
 
@@ -261,7 +261,7 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
      * @since 2.1
      */
     public static <T> String toString(
-            final T object, final ToStringStyle style, final boolean outputTransients,
+            final T object, final BaseToStringStyle style, final boolean outputTransients,
             final boolean outputStatics, final Class<? super T> reflectUpToClass) {
         return new ReflectionToStringBuilder(object, style, null, reflectUpToClass, outputTransients, outputStatics)
                 .toString();
@@ -310,7 +310,7 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
      * @since 3.6
      */
     public static <T> String toString(
-            final T object, final ToStringStyle style, final boolean outputTransients,
+            final T object, final BaseToStringStyle style, final boolean outputTransients,
             final boolean outputStatics, final boolean excludeNullValues, final Class<? super T> reflectUpToClass) {
         return new ReflectionToStringBuilder(object, style, null, reflectUpToClass, outputTransients, outputStatics, excludeNullValues)
                 .toString();
@@ -432,7 +432,7 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
      * @param style  the style of the {@code toString} to create, may be {@code null}
      * @throws IllegalArgumentException if the Object passed in is {@code null}
      */
-    public ReflectionToStringBuilder(final Object object, final ToStringStyle style) {
+    public ReflectionToStringBuilder(final Object object, final BaseToStringStyle style) {
         super(checkNotNull(object), style);
     }
 
@@ -454,7 +454,7 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
      * @param buffer the {@code StringBuffer} to populate, may be {@code null}
      * @throws IllegalArgumentException if the Object passed in is {@code null}
      */
-    public ReflectionToStringBuilder(final Object object, final ToStringStyle style, final StringBuffer buffer) {
+    public ReflectionToStringBuilder(final Object object, final BaseToStringStyle style, final StringBuffer buffer) {
         super(checkNotNull(object), style, buffer);
     }
 
@@ -471,7 +471,7 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
      * @since 2.1
      */
     public <T> ReflectionToStringBuilder(
-            final T object, final ToStringStyle style, final StringBuffer buffer,
+            final T object, final BaseToStringStyle style, final StringBuffer buffer,
             final Class<? super T> reflectUpToClass, final boolean outputTransients, final boolean outputStatics) {
         super(checkNotNull(object), style, buffer);
         this.setUpToClass(reflectUpToClass);
@@ -493,7 +493,7 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
      * @since 3.6
      */
     public <T> ReflectionToStringBuilder(
-            final T object, final ToStringStyle style, final StringBuffer buffer,
+            final T object, final BaseToStringStyle style, final StringBuffer buffer,
             final Class<? super T> reflectUpToClass, final boolean outputTransients, final boolean outputStatics,
             final boolean excludeNullValues) {
         super(checkNotNull(object), style, buffer);

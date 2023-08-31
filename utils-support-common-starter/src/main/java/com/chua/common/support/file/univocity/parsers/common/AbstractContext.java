@@ -52,7 +52,7 @@ public interface AbstractContext {
 	 * <p>If no fields were selected, then this method will return null. This means all fields are being parsed.
 	 *
 	 * @return The indexes of each selected field; null if no fields were selected.
-	 * @see com.chua.common.support.file.univocity.parsers.common.AbstractCommonSettings
+	 * @see BaseCommonSettings
 	 */
 	int[] extractedFieldIndexes();
 
@@ -62,8 +62,8 @@ public interface AbstractContext {
 	 * <p>If columns are reordered, each parsed record will contain values only for the selected fields, as specified by {@link #extractedFieldIndexes()}
 	 *
 	 * @return true if the parsed records are being reordered by the parser, false otherwise
-	 * @see com.chua.common.support.file.univocity.parsers.common.AbstractCommonParserSettings
-	 * @see com.chua.common.support.file.univocity.parsers.common.AbstractCommonSettings
+	 * @see BaseCommonParserSettings
+	 * @see BaseCommonSettings
 	 */
 	boolean columnsReordered();
 
@@ -100,7 +100,7 @@ public interface AbstractContext {
 
 	/**
 	 * Stops the parsing process. Any open resources in use by the parser are closed
-	 * automatically unless {@link AbstractCommonParserSettings#isAutoClosingEnabled()} evaluates to {@code false}.
+	 * automatically unless {@link BaseCommonParserSettings#isAutoClosingEnabled()} evaluates to {@code false}.
 	 */
 	void stop();
 

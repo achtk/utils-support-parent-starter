@@ -14,7 +14,7 @@ import java.util.List;
  * 基础类
  * @author CH
  */
-public class RightParenParser extends NodeParser {
+public class RightParenParser extends BaseNodeParser {
 
     @Override
     public int parse(String el, int offset, Deque<CalculateNode> nodes, int function, Invoker next) {

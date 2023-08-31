@@ -10,5 +10,5 @@ public interface PathTokenAppender {
      * @param next nex
      * @return this
      */
-    PathTokenAppender appendPathToken(PathToken next);
+    PathTokenAppender appendPathToken(BasePathToken next);
 }

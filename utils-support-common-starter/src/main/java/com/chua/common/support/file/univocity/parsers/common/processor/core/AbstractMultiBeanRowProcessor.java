@@ -17,7 +17,7 @@
 package com.chua.common.support.file.univocity.parsers.common.processor.core;
 
 import com.chua.common.support.file.univocity.parsers.common.AbstractContext;
-import com.chua.common.support.file.univocity.parsers.common.AbstractParser;
+import com.chua.common.support.file.univocity.parsers.common.BaseParser;
 import com.chua.common.support.file.univocity.parsers.common.AbstractWriter;
 
 import java.util.HashMap;
@@ -25,7 +25,7 @@ import java.util.Map;
 
 
 /**
- * A {@link Processor} implementation for converting rows extracted from any implementation of {@link AbstractParser} into java objects.
+ * A {@link Processor} implementation for converting rows extracted from any implementation of {@link BaseParser} into java objects.
  *
  * <p>The class types passed to the constructor of this class must contain the annotations provided in {@link com.chua.common.support.file.univocity.parsers.annotations}.
  *
@@ -34,9 +34,9 @@ import java.util.Map;
  * where the user can access all beans parsed for that row.
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
- * @see AbstractParser
+ * @see BaseParser
  * @see Processor
- * @see AbstractBeanProcessor
+ * @see AbstractBeanProcessorAbstract
  * @see AbstractMultiBeanProcessor
  */
 public abstract class AbstractMultiBeanRowProcessor<C extends AbstractContext> extends AbstractMultiBeanProcessor<C> {
@@ -47,7 +47,7 @@ public abstract class AbstractMultiBeanRowProcessor<C extends AbstractContext> e
     /**
      * Creates a processor for java beans of multiple types
      *
-     * @param beanTypes the classes with their attributes mapped to fields of records parsed by an {@link AbstractParser} or written by an {@link AbstractWriter}.
+     * @param beanTypes the classes with their attributes mapped to fields of records parsed by an {@link BaseParser} or written by an {@link AbstractWriter}.
      */
     public AbstractMultiBeanRowProcessor(Class... beanTypes) {
         super(beanTypes);

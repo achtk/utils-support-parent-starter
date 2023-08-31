@@ -15,7 +15,7 @@
  ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.common.processor;
 
-import com.chua.common.support.file.univocity.parsers.common.AbstractParser;
+import com.chua.common.support.file.univocity.parsers.common.BaseParser;
 import com.chua.common.support.file.univocity.parsers.common.ParsingContext;
 import com.chua.common.support.file.univocity.parsers.common.ParsingContextSnapshot;
 import com.chua.common.support.file.univocity.parsers.common.ParsingContextWrapper;
@@ -26,7 +26,7 @@ import com.chua.common.support.file.univocity.parsers.common.processor.core.Abst
  * The actual row processing is performed in by wrapped {@link RowProcessor} in a separate thread.
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
- * @see AbstractParser
+ * @see BaseParser
  * @see RowProcessor
  */
 public class ConcurrentRowProcessor extends AbstractConcurrentProcessor<ParsingContext> implements RowProcessor {

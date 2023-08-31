@@ -15,14 +15,14 @@
  ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.common.processor;
 
-import com.chua.common.support.file.univocity.parsers.common.AbstractParser;
-import com.chua.common.support.file.univocity.parsers.common.Format;
+import com.chua.common.support.file.univocity.parsers.common.BaseParser;
+import com.chua.common.support.file.univocity.parsers.common.BaseFormat;
 import com.chua.common.support.file.univocity.parsers.common.ParsingContext;
 import com.chua.common.support.file.univocity.parsers.common.processor.core.Processor;
 import com.chua.common.support.file.univocity.parsers.conversions.Conversion;
 
 /**
- * The essential callback interface to handle records parsed by any parser that extends {@link AbstractParser}.
+ * The essential callback interface to handle records parsed by any parser that extends {@link BaseParser}.
  *
  * <p>When parsing an input, univocity-parsers will obtain the RowProcessor from {@link CommonParserSettings#getRowProcessor()}, and
  * delegate each parsed row to {@link RowProcessor#rowProcessed(String[], ParsingContext)}.
@@ -39,16 +39,16 @@ import com.chua.common.support.file.univocity.parsers.conversions.Conversion;
  *
  * <ul>
  * <li>{@link RowListProcessor}: convenience class for storing the processed rows into a list.</li>
- * <li>{@link ObjectRowProcessor}: used for processing rows and executing conversions of parsed values to objects using instances of {@link Conversion}</li>
- * <li>{@link ObjectRowListProcessor}: convenience class for rows of converted objects using {@link ObjectRowProcessor} into a list.</li>
- * <li>{@link MasterDetailProcessor}: used for reading inputs where records are organized in a master-detail fashion (with a master element that contains a list of associated elements) </li>
- * <li>{@link MasterDetailListProcessor}: convenience class for storing {@link MasterDetailRecord} created by instances created by {@link MasterDetailProcessor} into a list </li>
+ * <li>{@link BaseObjectRowProcessor}: used for processing rows and executing conversions of parsed values to objects using instances of {@link Conversion}</li>
+ * <li>{@link ObjectRowListProcessor}: convenience class for rows of converted objects using {@link BaseObjectRowProcessor} into a list.</li>
+ * <li>{@link BaseMasterDetailProcessor}: used for reading inputs where records are organized in a master-detail fashion (with a master element that contains a list of associated elements) </li>
+ * <li>{@link BaseMasterDetailListProcessor}: convenience class for storing {@link MasterDetailRecord} created by instances created by {@link BaseMasterDetailProcessor} into a list </li>
  * <li>{@link AbstractBeanProcessor}: used for automatically create and populate javabeans annotated with the annotations provided in package {@link com.chua.common.support.file.univocity.parsers.annotations}</li>
  * <li>{@link BeanListProcessor}: convenience class for storing all javabeans created by {@link AbstractBeanProcessor} into a list</li>
  * </ul>
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
- * @see AbstractParser
+ * @see BaseParser
  * @see CommonParserSettings
  * @see ParsingContext
  */
@@ -68,7 +68,7 @@ public interface RowProcessor extends Processor<ParsingContext> {
 	 *                <ul>
 	 *                <li>it will never by null. </li>
 	 *                <li>it will never be empty unless explicitly configured using {@link CommonSettings#setSkipEmptyLines(boolean)}</li>
-	 *                <li>it won't contain lines identified by the parser as comments. To disable comment processing set {@link Format#setComment(char)} to '\0'</li>
+	 *                <li>it won't contain lines identified by the parser as comments. To disable comment processing set {@link BaseFormat#setComment(char)} to '\0'</li>
 	 *                </ul>
 	 * @param context A contextual object with information and controls over the current state of the parsing process
 	 */

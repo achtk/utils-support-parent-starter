@@ -5,7 +5,7 @@ import org.w3c.dom.*;
 /**
  * @author code4crafer@gmail.com
  */
-public class HtmlDocumentType extends NodeAdaptor implements DocumentType {
+public class HtmlDocumentType extends BaseNodeAdaptor implements DocumentType {
 
     private com.chua.common.support.jsoup.nodes.Document document;
 

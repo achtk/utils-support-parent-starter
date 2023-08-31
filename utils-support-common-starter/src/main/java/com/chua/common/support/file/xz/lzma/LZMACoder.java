@@ -1,24 +1,20 @@
-/*
- * LZMACoder
- *
- * Authors: Lasse Collin <lasse.collin@tukaani.org>
- *          Igor Pavlov <http://7-zip.org/>
- *
- * This file has been put into the public domain.
- * You can do whatever you want with this file.
- */
-
 package com.chua.common.support.file.xz.lzma;
 
-import com.chua.common.support.file.xz.rangecoder.RangeCoder;
+import com.chua.common.support.file.xz.rangecoder.BaseRangeCoder;
 
-abstract class LzmaCoder {
+/**
+ * 基地lzma编码器
+ *
+ * @author Administrator
+ * @date 2023/08/31
+ */
+abstract class BaseLzmaCoder {
     static final int POS_STATES_MAX = 1 << 4;
 
     static final int MATCH_LEN_MIN = 2;
-    static final int MATCH_LEN_MAX = MATCH_LEN_MIN + LengthCoder.LOW_SYMBOLS
-                                     + LengthCoder.MID_SYMBOLS
-                                     + LengthCoder.HIGH_SYMBOLS - 1;
+    static final int MATCH_LEN_MAX = MATCH_LEN_MIN + BaseLengthCoder.LOW_SYMBOLS
+                                     + BaseLengthCoder.MID_SYMBOLS
+                                     + BaseLengthCoder.HIGH_SYMBOLS - 1;
 
     static final int DIST_STATES = 4;
     static final int DIST_SLOTS = 1 << 6;
@@ -57,7 +53,7 @@ abstract class LzmaCoder {
                : DIST_STATES - 1;
     }
 
-    LzmaCoder(int pb) {
+    BaseLzmaCoder(int pb) {
         posMask = (1 << pb) - 1;
     }
 
@@ -69,35 +65,41 @@ abstract class LzmaCoder {
         state.reset();
 
         for (int i = 0; i < isMatch.length; ++i) {
-            RangeCoder.initProbs(isMatch[i]);
+            BaseRangeCoder.initProbs(isMatch[i]);
         }
 
-        RangeCoder.initProbs(isRep);
-        RangeCoder.initProbs(isRep0);
-        RangeCoder.initProbs(isRep1);
-        RangeCoder.initProbs(isRep2);
+        BaseRangeCoder.initProbs(isRep);
+        BaseRangeCoder.initProbs(isRep0);
+        BaseRangeCoder.initProbs(isRep1);
+        BaseRangeCoder.initProbs(isRep2);
 
         for (int i = 0; i < isRep0Long.length; ++i) {
-            RangeCoder.initProbs(isRep0Long[i]);
+            BaseRangeCoder.initProbs(isRep0Long[i]);
         }
 
         for (int i = 0; i < distSlots.length; ++i) {
-            RangeCoder.initProbs(distSlots[i]);
+            BaseRangeCoder.initProbs(distSlots[i]);
         }
 
         for (int i = 0; i < distSpecial.length; ++i) {
-            RangeCoder.initProbs(distSpecial[i]);
+            BaseRangeCoder.initProbs(distSpecial[i]);
         }
 
-        RangeCoder.initProbs(distAlign);
+        BaseRangeCoder.initProbs(distAlign);
     }
 
 
-    abstract class LiteralCoder {
+    /**
+     * 文字编码
+     *
+     * @author Administrator
+     * @date 2023/08/31
+     */
+    abstract class BaseLiteralCoder {
         private final int lc;
         private final int literalPosMask;
 
-        LiteralCoder(int lc, int lp) {
+        BaseLiteralCoder(int lc, int lp) {
             this.lc = lc;
             this.literalPosMask = (1 << lp) - 1;
         }
@@ -109,17 +111,29 @@ abstract class LzmaCoder {
         }
 
 
-        abstract class LiteralSubcoder {
+        /**
+         * 基础文字子代码
+         *
+         * @author Administrator
+         * @date 2023/08/31
+         */
+        abstract class BaseLiteralSubcoder {
             final short[] probs = new short[0x300];
 
             void reset() {
-                RangeCoder.initProbs(probs);
+                BaseRangeCoder.initProbs(probs);
             }
         }
     }
 
 
-    abstract class LengthCoder {
+    /**
+     * 长度编码器
+     *
+     * @author Administrator
+     * @date 2023/08/31
+     */
+    abstract class BaseLengthCoder {
         static final int LOW_SYMBOLS = 1 << 3;
         static final int MID_SYMBOLS = 1 << 3;
         static final int HIGH_SYMBOLS = 1 << 8;
@@ -130,17 +144,17 @@ abstract class LzmaCoder {
         final short[] high = new short[HIGH_SYMBOLS];
 
         void reset() {
-            RangeCoder.initProbs(choice);
+            BaseRangeCoder.initProbs(choice);
 
             for (int i = 0; i < low.length; ++i) {
-                RangeCoder.initProbs(low[i]);
+                BaseRangeCoder.initProbs(low[i]);
             }
 
             for (int i = 0; i < low.length; ++i) {
-                RangeCoder.initProbs(mid[i]);
+                BaseRangeCoder.initProbs(mid[i]);
             }
 
-            RangeCoder.initProbs(high);
+            BaseRangeCoder.initProbs(high);
         }
     }
 }

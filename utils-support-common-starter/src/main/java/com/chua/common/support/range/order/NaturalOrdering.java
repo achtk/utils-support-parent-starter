@@ -8,11 +8,11 @@ import java.io.Serializable;
  * 自然排序
  * @author CH
  */
-final class NaturalOrdering extends Ordering<Comparable<?>> implements Serializable {
+final class NaturalOrdering extends BaseOrdering<Comparable<?>> implements Serializable {
     static final NaturalOrdering INSTANCE = new NaturalOrdering();
 
-    private transient Ordering<Comparable<?>> nullsFirst;
-    private transient Ordering<Comparable<?>> nullsLast;
+    private transient BaseOrdering<Comparable<?>> nullsFirst;
+    private transient BaseOrdering<Comparable<?>> nullsLast;
 
     @Override
     public int compare(Comparable<?> left, Comparable<?> right) {
@@ -23,8 +23,8 @@ final class NaturalOrdering extends Ordering<Comparable<?>> implements Serializa
 
 
     @Override
-    public <S extends Comparable<?>> Ordering<S> reverse() {
-        return (Ordering<S>) ReverseNaturalOrdering.INSTANCE;
+    public <S extends Comparable<?>> BaseOrdering<S> reverse() {
+        return (BaseOrdering<S>) ReverseNaturalOrdering.INSTANCE;
     }
 
     /**

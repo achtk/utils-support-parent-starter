@@ -18,7 +18,7 @@ import static com.chua.common.support.constant.CommonConstant.*;
  * @since 2016-11-13
  */
 @SuppressWarnings("serial")
-public abstract class SqlUtils {
+public class SqlUtils {
 
     private static final Pattern PATTERN = Pattern.compile("\\{@((\\w+?)|(\\w+?:\\w+?)|(\\w+?:\\w+?:\\w+?))}");
 

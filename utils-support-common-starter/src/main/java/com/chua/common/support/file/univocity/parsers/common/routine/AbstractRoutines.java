@@ -36,7 +36,7 @@ import java.util.List;
  * @param <W> writer configuration class
  * @author Administrator
  */
-public abstract class AbstractRoutines<P extends AbstractCommonParserSettings<?>, W extends AbstractCommonWriterSettings<?>> {
+public abstract class AbstractRoutines<P extends BaseCommonParserSettings<?>, W extends AbstractCommonWriterSettings<?>> {
 
 	private boolean keepResourcesOpen = false;
 	private Writer previousOutput;
@@ -48,7 +48,7 @@ public abstract class AbstractRoutines<P extends AbstractCommonParserSettings<?>
 	 * @param parserSettings the configuration for new parser
 	 * @return a parser implementation configured according to the given settings object.
 	 */
-	protected abstract AbstractParser<P> createParser(P parserSettings);
+	protected abstract BaseParser<P> createParser(P parserSettings);
 
 	/**
 	 * Creates a new writer implementation using the given writer configuration
@@ -346,7 +346,7 @@ public abstract class AbstractRoutines<P extends AbstractCommonParserSettings<?>
 		setRowWriterProcessor(null);
 		setRowProcessor(createWritingRowProcessor(output));
 		try {
-			AbstractParser<P> parser = createParser(parserSettings);
+			BaseParser<P> parser = createParser(parserSettings);
 			parser.parse(input);
 		} finally {
 			parserSettings.setRowProcessor(null);
@@ -828,7 +828,7 @@ public abstract class AbstractRoutines<P extends AbstractCommonParserSettings<?>
 
 			@Override
 			public ResultIterator<T, ParsingContext> iterator() {
-				final AbstractParser<P> parser = createParser(parserSettings);
+				final BaseParser<P> parser = createParser(parserSettings);
 				parser.beginParsing(input);
 				context = parser.getContext();
 

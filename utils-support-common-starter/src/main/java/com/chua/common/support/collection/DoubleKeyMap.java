@@ -5,7 +5,7 @@ import java.util.Map;
 /**
  * @author code4crafter@gmail.com
  */
-public class DoubleKeyMap<K1, K2, V> extends MultiKeyMapBase {
+public class DoubleKeyMap<K1, K2, V> extends BaseMultiKeyMapBase {
     private Map<K1, Map<K2, V>> map;
 
     public DoubleKeyMap() {

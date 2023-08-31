@@ -15,7 +15,7 @@
  ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.common.input;
 
-import com.chua.common.support.file.univocity.parsers.common.Format;
+import com.chua.common.support.file.univocity.parsers.common.BaseFormat;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -33,7 +33,7 @@ public class DefaultCharInputReader extends AbstractCharInputReader {
 	/**
 	 * Creates a new instance with the mandatory characters for handling newlines transparently. Line separators will be detected automatically.
 	 *
-	 * @param normalizedLineSeparator the normalized newline character (as defined in {@link Format#getNormalizedNewline()}) that is used to replace any lineSeparator sequence found in the input.
+	 * @param normalizedLineSeparator the normalized newline character (as defined in {@link BaseFormat#getNormalizedNewline()}) that is used to replace any lineSeparator sequence found in the input.
 	 * @param bufferSize              the buffer size used to store characters read from the input.
 	 * @param whitespaceRangeStart    starting range of characters considered to be whitespace.
 	 * @param closeOnStop             indicates whether to automatically close the input when {@link #stop()} is called
@@ -46,8 +46,8 @@ public class DefaultCharInputReader extends AbstractCharInputReader {
 	/**
 	 * Creates a new instance with the mandatory characters for handling newlines transparently.
 	 *
-	 * @param lineSeparator           the sequence of characters that represent a newline, as defined in {@link Format#getLineSeparator()}
-	 * @param normalizedLineSeparator the normalized newline character (as defined in {@link Format#getNormalizedNewline()}) that is used to replace any lineSeparator sequence found in the input.
+	 * @param lineSeparator           the sequence of characters that represent a newline, as defined in {@link BaseFormat#getLineSeparator()}
+	 * @param normalizedLineSeparator the normalized newline character (as defined in {@link BaseFormat#getNormalizedNewline()}) that is used to replace any lineSeparator sequence found in the input.
 	 * @param bufferSize              the buffer size used to store characters read from the input.
 	 * @param whitespaceRangeStart    starting range of characters considered to be whitespace.
 	 * @param closeOnStop             indicates whether to automatically close the input when {@link #stop()} is called

@@ -11,9 +11,9 @@
 package com.chua.common.support.file.xz.lzma;
 
 import com.chua.common.support.file.xz.ArrayCache;
-import com.chua.common.support.file.xz.lz.LzEncoder;
+import com.chua.common.support.file.xz.lz.BaseLzEncoder;
 import com.chua.common.support.file.xz.lz.Matches;
-import com.chua.common.support.file.xz.rangecoder.RangeEncoder;
+import com.chua.common.support.file.xz.rangecoder.AbstractRangeEncoder;
 
 final class LZMAEncoderFast extends LZMAEncoder {
     private static final int EXTRA_SIZE_BEFORE = 1;
@@ -22,16 +22,16 @@ final class LZMAEncoderFast extends LZMAEncoder {
     private Matches matches = null;
 
     static int getMemoryUsage(int dictSize, int extraSizeBefore, int mf) {
-        return LzEncoder.getMemoryUsage(
+        return BaseLzEncoder.getMemoryUsage(
                 dictSize, Math.max(extraSizeBefore, EXTRA_SIZE_BEFORE),
                 EXTRA_SIZE_AFTER, MATCH_LEN_MAX, mf);
     }
 
-    LZMAEncoderFast(RangeEncoder rc, int lc, int lp, int pb,
-                           int dictSize, int extraSizeBefore,
-                           int niceLen, int mf, int depthLimit,
-                           ArrayCache arrayCache) {
-        super(rc, LzEncoder.getInstance(dictSize,
+    LZMAEncoderFast(AbstractRangeEncoder rc, int lc, int lp, int pb,
+                    int dictSize, int extraSizeBefore,
+                    int niceLen, int mf, int depthLimit,
+                    ArrayCache arrayCache) {
+        super(rc, BaseLzEncoder.getInstance(dictSize,
                         Math.max(extraSizeBefore,
                                 EXTRA_SIZE_BEFORE),
                         EXTRA_SIZE_AFTER,

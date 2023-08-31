@@ -41,7 +41,7 @@ public interface WebSocketFactory {
    * @param d The draft which should be used
    * @return A WebsocketImpl
    */
-  com.chua.common.support.protocol.websocket.WebSocket createWebSocket(com.chua.common.support.protocol.websocket.WebSocketAdapter a, Draft d);
+  com.chua.common.support.protocol.websocket.WebSocket createWebSocket(BaseWebSocketAdapter a, Draft d);
 
   /**
    * Create a new Websocket with the provided listener, drafts and socket
@@ -50,6 +50,6 @@ public interface WebSocketFactory {
    * @param drafts The drafts which should be used
    * @return A WebsocketImpl
    */
-  WebSocket createWebSocket(WebSocketAdapter a, List<Draft> drafts);
+  WebSocket createWebSocket(BaseWebSocketAdapter a, List<Draft> drafts);
 
 }

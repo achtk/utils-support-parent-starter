@@ -122,7 +122,7 @@ public class CommandAttribute {
      * @return 结果
      * @[param pipeData 数据
      */
-    public ShellResult execute(String command, ShellResult pipeData, Shell shell, Object obj) {
+    public ShellResult execute(String command, ShellResult pipeData, BaseShell shell, Object obj) {
         List<String> options = Splitter.onPattern("\\s+").splitToList(command);
         if (isHelp(options)) {
             return ShellResult.text(helpInfo(shell));
@@ -166,7 +166,7 @@ public class CommandAttribute {
      * @param shell   shell
      * @return 环境
      */
-    private Map<String, Object> analysisEnv(List<String> options, Shell shell) {
+    private Map<String, Object> analysisEnv(List<String> options, BaseShell shell) {
         Map<String, Object> env = new LinkedHashMap<>();
         env.put("shell", shell);
         env.putAll(System.getenv());
@@ -174,7 +174,7 @@ public class CommandAttribute {
         return env;
     }
 
-    private String helpInfo(Shell shell) {
+    private String helpInfo(BaseShell shell) {
         return commandAttributeAdaptor.help(this, shell);
     }
 
@@ -195,7 +195,7 @@ public class CommandAttribute {
      * @param shell   shell
      * @return 结果
      */
-    public String execute(List<String> options, Shell shell) {
+    public String execute(List<String> options, BaseShell shell) {
         return commandAttributeAdaptor.execute(this, options, shell);
     }
 

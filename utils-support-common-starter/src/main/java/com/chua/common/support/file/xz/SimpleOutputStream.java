@@ -13,10 +13,10 @@ import com.chua.common.support.file.xz.simple.SimpleFilter;
 
 import java.io.IOException;
 
-class SimpleOutputStream extends FinishableOutputStream {
+class SimpleOutputStream extends AbstractFinishableOutputStream {
     private static final int FILTER_BUF_SIZE = 4096;
 
-    private FinishableOutputStream out;
+    private AbstractFinishableOutputStream out;
     private final SimpleFilter simpleFilter;
 
     private final byte[] filterBuf = new byte[FILTER_BUF_SIZE];
@@ -32,7 +32,7 @@ class SimpleOutputStream extends FinishableOutputStream {
         return 1 + FILTER_BUF_SIZE / 1024;
     }
 
-    SimpleOutputStream(FinishableOutputStream out,
+    SimpleOutputStream(AbstractFinishableOutputStream out,
                        SimpleFilter simpleFilter) {
         if (out == null)
             throw new NullPointerException();

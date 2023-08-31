@@ -28,7 +28,7 @@
 package com.chua.common.support.extra.asm;
 
 /**
- * A {@link ModuleVisitor} that generates the corresponding Module, ModulePackages and
+ * A {@link BaseModuleVisitor} that generates the corresponding Module, ModulePackages and
  * ModuleMainClass attributes, as defined in the Java Virtual Machine Specification (JVMS).
  *
  * @see <a href="https://docs.oracle.com/javase/specs/jvms/se9/html/jvms-4.html#jvms-4.7.25">JVMS
@@ -40,7 +40,7 @@ package com.chua.common.support.extra.asm;
  * @author Remi Forax
  * @author Eric Bruneton
  */
-final class ModuleWriter extends ModuleVisitor {
+final class ModuleWriter extends BaseModuleVisitor {
 
   /** Where the constants used in this AnnotationWriter must be stored. */
   private final SymbolTable symbolTable;

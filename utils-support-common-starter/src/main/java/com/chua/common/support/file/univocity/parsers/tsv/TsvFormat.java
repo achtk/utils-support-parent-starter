@@ -15,20 +15,20 @@
  ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.tsv;
 
-import com.chua.common.support.file.univocity.parsers.common.Format;
+import com.chua.common.support.file.univocity.parsers.common.BaseFormat;
 
 import java.util.TreeMap;
 
 /**
- * The TSV format configuration, for tab-separated inputs. It offers the options in the default configuration in {@link Format}, as well as
+ * The TSV format configuration, for tab-separated inputs. It offers the options in the default configuration in {@link BaseFormat}, as well as
  * the {@link #escapeChar} character for escaping \t, \n, \r and \ in TSV values.
  * <p>
  * Delimiters are defined as tab characters '\t'
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
- * @see Format
+ * @see BaseFormat
  */
-public class TsvFormat extends Format {
+public class TsvFormat extends BaseFormat {
 
     private char escapeChar = '\\';
     private char escapedTabChar = 't';

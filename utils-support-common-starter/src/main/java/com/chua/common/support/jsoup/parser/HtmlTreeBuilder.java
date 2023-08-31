@@ -15,7 +15,7 @@ import static com.chua.common.support.utils.StringUtils.inSorted;
 /**
  * HTML Tree Builder; creates a DOM from Tokens.
  */
-public class HtmlTreeBuilder extends TreeBuilder {
+public class HtmlTreeBuilder extends BaseTreeBuilder {
     // tag searches. must be sorted, used in inSorted. HtmlTreeBuilderTest validates they're sorted.
     static final String[] TagsSearchInScope = new String[]{"applet", "caption", "html", "marquee", "object", "table", "td", "th"};
     static final String[] TagSearchList = new String[]{"ol", "ul"};
@@ -45,7 +45,7 @@ public class HtmlTreeBuilder extends TreeBuilder {
     private ArrayList<Element> formattingElements; // active (open) formatting elements
     private ArrayList<HtmlTreeBuilderState> tmplInsertMode; // stack of Template Insertion modes
     private List<String> pendingTableCharacters; // chars in table to be shifted out
-    private Token.EndTag emptyEnd; // reused empty end tag
+    private BaseToken.EndTag emptyEnd; // reused empty end tag
 
     private boolean framesetOk; // if ok to go into frameset
     private boolean fosterInserts; // if next inserts should be fostered
@@ -74,7 +74,7 @@ public class HtmlTreeBuilder extends TreeBuilder {
         formattingElements = new ArrayList<>();
         tmplInsertMode = new ArrayList<>();
         pendingTableCharacters = new ArrayList<>();
-        emptyEnd = new Token.EndTag();
+        emptyEnd = new BaseToken.EndTag();
         framesetOk = true;
         fosterInserts = false;
         fragmentParsing = false;
@@ -153,12 +153,12 @@ public class HtmlTreeBuilder extends TreeBuilder {
     }
 
     @Override
-    protected boolean process(Token token) {
+    protected boolean process(BaseToken token) {
         currentToken = token;
         return this.state.process(token, this);
     }
 
-    boolean process(Token token, HtmlTreeBuilderState state) {
+    boolean process(BaseToken token, HtmlTreeBuilderState state) {
         currentToken = token;
         return state.process(token, this);
     }
@@ -217,7 +217,7 @@ public class HtmlTreeBuilder extends TreeBuilder {
                 currentToken.tokenType(), currentToken, state));
     }
 
-    Element insert(final Token.StartTag startTag) {
+    Element insert(final BaseToken.StartTag startTag) {
         // cleanup duplicate attributes:
         if (startTag.hasAttributes() && !startTag.attributes.isEmpty()) {
             int dupes = startTag.attributes.deduplicate(settings);
@@ -252,12 +252,12 @@ public class HtmlTreeBuilder extends TreeBuilder {
         stack.add(el);
     }
 
-    private void insert(Element el,  Token token) {
+    private void insert(Element el,  BaseToken token) {
         insertNode(el, token);
         stack.add(el);
     }
 
-    Element insertEmpty(Token.StartTag startTag) {
+    Element insertEmpty(BaseToken.StartTag startTag) {
         Tag tag = tagFor(startTag.name(), settings);
         Element el = new Element(tag, null, settings.normalizeAttributes(startTag.attributes));
         insertNode(el, startTag);
@@ -272,7 +272,7 @@ public class HtmlTreeBuilder extends TreeBuilder {
         return el;
     }
 
-    FormElement insertForm(Token.StartTag startTag, boolean onStack, boolean checkTemplateStack) {
+    FormElement insertForm(BaseToken.StartTag startTag, boolean onStack, boolean checkTemplateStack) {
         Tag tag = tagFor(startTag.name(), settings);
         FormElement el = new FormElement(tag, null, settings.normalizeAttributes(startTag.attributes));
         if (checkTemplateStack) {
@@ -287,12 +287,12 @@ public class HtmlTreeBuilder extends TreeBuilder {
         return el;
     }
 
-    void insert(Token.Comment commentToken) {
+    void insert(BaseToken.Comment commentToken) {
         Comment comment = new Comment(commentToken.getData());
         insertNode(comment, commentToken);
     }
 
-    void insert(Token.Character characterToken) {
+    void insert(BaseToken.Character characterToken) {
         final Node node;
         Element el = currentElement();
         final String tagName = el.normalName();
@@ -309,7 +309,7 @@ public class HtmlTreeBuilder extends TreeBuilder {
         onNodeInserted(node, characterToken);
     }
 
-    private void insertNode(Node node,  Token token) {
+    private void insertNode(Node node,  BaseToken token) {
         // if the stack hasn't been set up yet, elements (doctype, comments) go into the doc
         if (stack.isEmpty()) {
             doc.appendChild(node);
@@ -391,7 +391,7 @@ public class HtmlTreeBuilder extends TreeBuilder {
             Element el = stack.get(pos);
             stack.remove(pos);
             if (el.normalName().equals(elName)) {
-                if (currentToken instanceof Token.EndTag)
+                if (currentToken instanceof BaseToken.EndTag)
                     onNodeClosed(el, currentToken);
                 return el;
             }

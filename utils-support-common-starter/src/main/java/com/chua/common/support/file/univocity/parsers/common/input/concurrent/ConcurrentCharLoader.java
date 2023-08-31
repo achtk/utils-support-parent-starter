@@ -36,7 +36,7 @@ import static com.chua.common.support.constant.NumberConstant.FOUR;
 class ConcurrentCharLoader implements Runnable {
 	private final ArrayBlockingQueue<Object> buckets;
 	private final CharBucket end;
-	private final FixedInstancePool<CharBucket> instances;
+	private final AbstractFixedInstancePool<CharBucket> instances;
 
 	private Entry<CharBucket> currentBucket;
 
@@ -48,7 +48,7 @@ class ConcurrentCharLoader implements Runnable {
 	private final boolean closeOnStop;
 
 	/**
-	 * Creates a {@link FixedInstancePool} with a given amount of {@link CharBucket} instances and starts a thread to fill each one.
+	 * Creates a {@link AbstractFixedInstancePool} with a given amount of {@link CharBucket} instances and starts a thread to fill each one.
 	 *
 	 * @param reader         The source of characters to extract and fill {@link CharBucket} instances
 	 * @param bucketSize     The size of each individual {@link CharBucket}
@@ -62,7 +62,7 @@ class ConcurrentCharLoader implements Runnable {
 
 		this.reader = reader;
 
-		this.instances = new FixedInstancePool<CharBucket>(bucketQuantity) {
+		this.instances = new AbstractFixedInstancePool<CharBucket>(bucketQuantity) {
 			@Override
 			protected CharBucket newInstance() {
 				return new CharBucket(bucketSize);

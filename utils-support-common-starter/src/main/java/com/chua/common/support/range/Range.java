@@ -1,6 +1,6 @@
 package com.chua.common.support.range;
 
-import com.chua.common.support.range.order.Ordering;
+import com.chua.common.support.range.order.BaseOrdering;
 import com.chua.common.support.utils.CollectionUtils;
 import com.chua.common.support.utils.NumberUtils;
 import com.chua.common.support.utils.StringUtils;
@@ -159,8 +159,8 @@ public final class Range<C extends Comparable> implements Predicate<C>, Serializ
         return (Function) UpperBoundFn.INSTANCE;
     }
 
-    static <C extends Comparable<?>> Ordering<Range<C>> rangeLexOrdering() {
-        return (Ordering) RangeLexOrdering.INSTANCE;
+    static <C extends Comparable<?>> BaseOrdering<Range<C>> rangeLexOrdering() {
+        return (BaseOrdering) RangeLexOrdering.INSTANCE;
     }
 
     static <C extends Comparable<?>> Range<C> create(AbstractCut<C> lowerBound, AbstractCut<C> upperBound) {
@@ -342,7 +342,7 @@ public final class Range<C extends Comparable> implements Predicate<C>, Serializ
         if (values instanceof SortedSet) {
             SortedSet<C> set = (SortedSet<C>) values;
             Comparator<?> comparator = set.comparator();
-            if (Ordering.natural().equals(comparator) || comparator == null) {
+            if (BaseOrdering.natural().equals(comparator) || comparator == null) {
                 return closed(set.first(), set.last());
             }
         }
@@ -351,8 +351,8 @@ public final class Range<C extends Comparable> implements Predicate<C>, Serializ
         C max = min;
         while (valueIterator.hasNext()) {
             C value = checkNotNull(valueIterator.next());
-            min = Ordering.natural().min(min, value);
-            max = Ordering.natural().max(max, value);
+            min = BaseOrdering.natural().min(min, value);
+            max = BaseOrdering.natural().max(max, value);
         }
         return closed(min, max);
     }
@@ -429,7 +429,7 @@ public final class Range<C extends Comparable> implements Predicate<C>, Serializ
      *
      * <p>Note that certain discrete ranges such as the integer range {@code (3..4)} are <b>not</b>
      * considered empty, even though they contain no actual values. In these cases, it may be helpful
-     * to preprocess ranges with {@link #canonical(DiscreteDomain)}.
+     * to preprocess ranges with {@link #canonical(AbstractDiscreteDomain)}.
      */
     public boolean isEmpty() {
         return lowerBound.equals(upperBound);
@@ -469,7 +469,7 @@ public final class Range<C extends Comparable> implements Predicate<C>, Serializ
         if (values instanceof SortedSet) {
             SortedSet<? extends C> set = (SortedSet<? extends C>) values;
             Comparator<?> comparator = set.comparator();
-            if (Ordering.natural().equals(comparator) || comparator == null) {
+            if (BaseOrdering.natural().equals(comparator) || comparator == null) {
                 return contains(set.first()) && contains(set.last());
             }
         }
@@ -530,7 +530,7 @@ public final class Range<C extends Comparable> implements Predicate<C>, Serializ
      * <p>Note that certain discrete ranges are not considered connected, even though there are no
      * elements "between them." For example, {@code [3, 5]} is not considered connected to {@code [6,
      * 10]}. In these cases, it may be desirable for both input ranges to be preprocessed with {@link
-     * #canonical(DiscreteDomain)} before testing for connectedness.
+     * #canonical(AbstractDiscreteDomain)} before testing for connectedness.
      */
     public boolean isConnected(Range<C> other) {
         return lowerBound.compareTo(other.upperBound) <= 0
@@ -665,7 +665,7 @@ public final class Range<C extends Comparable> implements Predicate<C>, Serializ
      *   <li>(-∞..+∞) (only if type {@code C} is unbounded below)
      * </ul>
      */
-    public Range<C> canonical(DiscreteDomain<C> domain) {
+    public Range<C> canonical(AbstractDiscreteDomain<C> domain) {
         checkNotNull(domain);
         AbstractCut<C> lower = lowerBound.canonical(domain);
         AbstractCut<C> upper = upperBound.canonical(domain);
@@ -725,8 +725,8 @@ public final class Range<C extends Comparable> implements Predicate<C>, Serializ
     }
 
     /** Needed to serialize sorted collections of Ranges. */
-    private static class RangeLexOrdering extends Ordering<Range<?>> implements Serializable {
-        static final Ordering<Range<?>> INSTANCE = new RangeLexOrdering();
+    private static class RangeLexOrdering extends BaseOrdering<Range<?>> implements Serializable {
+        static final BaseOrdering<Range<?>> INSTANCE = new RangeLexOrdering();
 
         @Override
         public int compare(Range<?> left, Range<?> right) {

@@ -6,15 +6,15 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Administrator
  */
-public class RelationalExpressionNode extends ExpressionNode {
+public class RelationalExpressionNode extends AbstractExpressionNode {
 
     private static final Logger logger = LoggerFactory.getLogger(RelationalExpressionNode.class);
 
-    private final ValueNode left;
+    private final BaseValueNode left;
     private final RelationalOperator relationalOperator;
-    private final ValueNode right;
+    private final BaseValueNode right;
 
-    public RelationalExpressionNode(ValueNode left, RelationalOperator relationalOperator, ValueNode right) {
+    public RelationalExpressionNode(BaseValueNode left, RelationalOperator relationalOperator, BaseValueNode right) {
         this.left = left;
         this.relationalOperator = relationalOperator;
         this.right = right;
@@ -33,8 +33,8 @@ public class RelationalExpressionNode extends ExpressionNode {
 
     @Override
     public boolean apply(PredicateContext ctx) {
-        ValueNode l = left;
-        ValueNode r = right;
+        BaseValueNode l = left;
+        BaseValueNode r = right;
 
         if (left.isPathNode()) {
             l = left.asPathNode().evaluate(ctx);

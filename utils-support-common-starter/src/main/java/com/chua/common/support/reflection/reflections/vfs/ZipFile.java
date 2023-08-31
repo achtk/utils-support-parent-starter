@@ -5,11 +5,11 @@ import java.io.InputStream;
 import java.util.zip.ZipEntry;
 
 /**
- * an implementation of {@link Vfs.VfsFile} for {@link ZipEntry}
+ * an implementation of {@link BaseVfs.VfsFile} for {@link ZipEntry}
  *
  * @author Administrator
  */
-public class ZipFile implements Vfs.VfsFile {
+public class ZipFile implements BaseVfs.VfsFile {
     private final ZipDir root;
     private final ZipEntry entry;
 

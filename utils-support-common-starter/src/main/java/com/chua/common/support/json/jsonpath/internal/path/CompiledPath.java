@@ -60,8 +60,8 @@ public class CompiledPath implements Path {
      */
     private RootPathToken invertScannerFunctionRelationship(final RootPathToken path) {
         if (path.isFunctionPath() && path.next() instanceof ScanPathToken) {
-            PathToken token = path;
-            PathToken prior = null;
+            BasePathToken token = path;
+            BasePathToken prior = null;
             while (null != (token = token.next()) && !(token instanceof FunctionPathToken)) {
                 prior = token;
             }

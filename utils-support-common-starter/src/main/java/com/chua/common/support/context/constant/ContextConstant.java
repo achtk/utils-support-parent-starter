@@ -2,7 +2,7 @@ package com.chua.common.support.context.constant;
 
 import com.chua.common.support.context.annotation.AutoService;
 import com.chua.common.support.context.definition.TypeDefinition;
-import com.chua.common.support.range.order.Ordering;
+import com.chua.common.support.range.order.BaseOrdering;
 import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.CollectionUtils;
 
@@ -49,7 +49,7 @@ public class ContextConstant {
     public static final Class<? extends Annotation> PROPERTY_SOURCE = (Class<? extends Annotation>) ClassUtils.forName("org.springframework.context.annotation.PropertySource");
     public static final Class<?> INITIALIZING_BEAN = ClassUtils.forName("org.springframework.beans.factory.InitializingBean");
     public static final Class<? extends Annotation> SERVICE = (Class<? extends Annotation>) ClassUtils.forName("org.springframework.stereotype.Service");
-    public static final Comparator<TypeDefinition> COMPARATOR = (o1, o2) -> Ordering.natural().compare(o2.order(), o1.order());
+    public static final Comparator<TypeDefinition> COMPARATOR = (o1, o2) -> BaseOrdering.natural().compare(o2.order(), o1.order());
 
     public static final List<Class<? extends Annotation>> SCANN = CollectionUtils.<Class<? extends Annotation>>newArrayList(INJECT, COMPONENT, REPOSITORY, SERVICE, CONTROLLER);
 

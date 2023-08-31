@@ -6,7 +6,7 @@ package com.chua.common.support.file.univocity.parsers.conversions;
  *
  * @author Administrator
  */
-public class ToStringConversion extends NullConversion<Object, Object> {
+public class ToStringConversion extends BaseNullConversion<Object, Object> {
 
     public ToStringConversion() {
     }

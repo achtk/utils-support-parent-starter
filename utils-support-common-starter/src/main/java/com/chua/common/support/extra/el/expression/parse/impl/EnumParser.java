@@ -15,7 +15,7 @@ import static com.chua.common.support.constant.CommonConstant.*;
  *
  * @author CH
  */
-public class EnumParser extends NodeParser {
+public class EnumParser extends BaseNodeParser {
 
     @Override
     public int parse(String el, int offset, Deque<CalculateNode> nodes, int function, Invoker next) {

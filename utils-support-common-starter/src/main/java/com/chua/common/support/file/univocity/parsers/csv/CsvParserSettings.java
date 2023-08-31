@@ -15,8 +15,8 @@
  ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.csv;
 
-import com.chua.common.support.file.univocity.parsers.common.AbstractCommonParserSettings;
-import com.chua.common.support.file.univocity.parsers.common.Format;
+import com.chua.common.support.file.univocity.parsers.common.BaseCommonParserSettings;
+import com.chua.common.support.file.univocity.parsers.common.BaseFormat;
 import com.chua.common.support.file.univocity.parsers.common.TextParsingException;
 import com.chua.common.support.file.univocity.parsers.common.input.CharAppender;
 import com.chua.common.support.file.univocity.parsers.common.input.DefaultCharAppender;
@@ -28,7 +28,7 @@ import java.util.Map;
 /**
  * This is the configuration class used by the CSV parser ({@link CsvParser})
  *
- * <p>In addition to the configuration options provided by {@link AbstractCommonParserSettings}, the CSVParserSettings include:
+ * <p>In addition to the configuration options provided by {@link BaseCommonParserSettings}, the CSVParserSettings include:
  *
  * <ul>
  * <li><b>emptyValue <i>(defaults to null)</i>:</b> Defines a replacement string to signify an empty value (which is not a null value)
@@ -38,9 +38,9 @@ import java.util.Map;
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
  * @see com.chua.common.support.file.univocity.parsers.csv.CsvParser
  * @see com.chua.common.support.file.univocity.parsers.csv.CsvFormat
- * @see AbstractCommonParserSettings
+ * @see BaseCommonParserSettings
  */
-public class CsvParserSettings extends AbstractCommonParserSettings<CsvFormat> {
+public class CsvParserSettings extends BaseCommonParserSettings<CsvFormat> {
 
     private String emptyValue = null;
     private boolean parseUnescapedQuotes = true;
@@ -304,8 +304,8 @@ public class CsvParserSettings extends AbstractCommonParserSettings<CsvFormat> {
     }
 
     /**
-     * Flag indicating whether the parser should replace line separators, specified in {@link Format#getLineSeparator()}
-     * by the normalized line separator character specified in {@link Format#getNormalizedNewline()}, even on quoted values.
+     * Flag indicating whether the parser should replace line separators, specified in {@link BaseFormat#getLineSeparator()}
+     * by the normalized line separator character specified in {@link BaseFormat#getNormalizedNewline()}, even on quoted values.
      * <p>
      * This is enabled by default and is used to ensure data be read on any platform without introducing unwanted blank lines.
      * <p>
@@ -326,8 +326,8 @@ public class CsvParserSettings extends AbstractCommonParserSettings<CsvFormat> {
     }
 
     /**
-     * Configures the parser to replace line separators, specified in {@link Format#getLineSeparator()}
-     * by the normalized line separator character specified in {@link Format#getNormalizedNewline()}, even on quoted values.
+     * Configures the parser to replace line separators, specified in {@link BaseFormat#getLineSeparator()}
+     * by the normalized line separator character specified in {@link BaseFormat#getNormalizedNewline()}, even on quoted values.
      * <p>
      * This is enabled by default and is used to ensure data be read on any platform without introducing unwanted blank lines.
      * <p>
@@ -342,7 +342,7 @@ public class CsvParserSettings extends AbstractCommonParserSettings<CsvFormat> {
      * {@code [Line1 \r\n Line2]}
      *
      * @param normalizeLineEndingsWithinQuotes flag indicating whether line separators in quoted values should be replaced by
-     *                                         the the character specified in {@link Format#getNormalizedNewline()} .
+     *                                         the the character specified in {@link BaseFormat#getNormalizedNewline()} .
      */
     public void setNormalizeLineEndingsWithinQuotes(boolean normalizeLineEndingsWithinQuotes) {
         this.normalizeLineEndingsWithinQuotes = normalizeLineEndingsWithinQuotes;

@@ -12,9 +12,9 @@ public class DefaultXElement implements Element {
 
     private com.chua.common.support.jsoup.nodes.Element element;
 
-    private ElementOperator elementOperator;
+    private AbstractElementOperator elementOperator;
 
-    public DefaultXElement(com.chua.common.support.jsoup.nodes.Element element, ElementOperator elementOperator) {
+    public DefaultXElement(com.chua.common.support.jsoup.nodes.Element element, AbstractElementOperator elementOperator) {
         this.element = element;
         this.elementOperator = elementOperator;
     }
@@ -24,7 +24,7 @@ public class DefaultXElement implements Element {
         return get(elementOperator);
     }
 
-    protected String get(ElementOperator elementOperator) {
+    protected String get(AbstractElementOperator elementOperator) {
         if (elementOperator == null) {
             return element.toString();
         } else {

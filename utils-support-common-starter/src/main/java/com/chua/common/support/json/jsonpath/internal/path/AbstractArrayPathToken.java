@@ -23,7 +23,7 @@ import static java.lang.String.format;
 /**
  * @author Administrator
  */
-public abstract class AbstractArrayPathToken extends PathToken {
+public abstract class AbstractArrayPathToken extends BasePathToken {
 
     /**
      * Check if model is non-null and array.

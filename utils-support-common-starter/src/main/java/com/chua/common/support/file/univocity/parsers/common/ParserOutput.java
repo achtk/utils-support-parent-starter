@@ -25,20 +25,20 @@ import java.util.Deque;
 import java.util.LinkedList;
 
 /**
- * The ParserOutput is the component that manages records parsed by {@link AbstractParser} and their values.
+ * The ParserOutput is the component that manages records parsed by {@link BaseParser} and their values.
  * <p>
  * It is solely responsible for deciding when:
  * <ul>
- * <li>parsed records should be reordered according to the fields selected in {@link AbstractCommonSettings}</li>
- * <li>characters and values parsed in {@link AbstractParser#parseRecord()} should be retained or discarded</li>
- * <li>input headers should be loaded from the records parsed in {@link AbstractParser#parseRecord()} or from {@link AbstractCommonSettings#getHeaders()}</li>
+ * <li>parsed records should be reordered according to the fields selected in {@link BaseCommonSettings}</li>
+ * <li>characters and values parsed in {@link BaseParser#parseRecord()} should be retained or discarded</li>
+ * <li>input headers should be loaded from the records parsed in {@link BaseParser#parseRecord()} or from {@link BaseCommonSettings#getHeaders()}</li>
  * </ul>
  * <p>
- * Implementations of this class are made available to concrete parser implementations of {@link AbstractParser}.
+ * Implementations of this class are made available to concrete parser implementations of {@link BaseParser}.
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
- * @see AbstractParser
- * @see AbstractCommonSettings
+ * @see BaseParser
+ * @see BaseCommonSettings
  */
 public class ParserOutput {
 
@@ -55,13 +55,13 @@ public class ParserOutput {
 	protected final String[] parsedValues;
 
 	/**
-	 * <p>Stores (shared) references to {@link CharAppender} for each potential column (as given by {@link AbstractCommonSettings#getMaxColumns()}).
-	 * <p>Fields that are not selected will receive an instance of {@link NoopCharAppender} so all parser calls in {@link AbstractParser#parseRecord()} to {@link ParserOutput#appender} will do nothing.
-	 * <p>Selected fields (given by {@link AbstractCommonParserSettings}) will receive a functional {@link CharAppender}.
+	 * <p>Stores (shared) references to {@link CharAppender} for each potential column (as given by {@link BaseCommonSettings#getMaxColumns()}).
+	 * <p>Fields that are not selected will receive an instance of {@link NoopCharAppender} so all parser calls in {@link BaseParser#parseRecord()} to {@link ParserOutput#appender} will do nothing.
+	 * <p>Selected fields (given by {@link BaseCommonParserSettings}) will receive a functional {@link CharAppender}.
 	 */
 	private final CharAppender[] appenders;
 
-	protected final AbstractCommonParserSettings<?> settings;
+	protected final BaseCommonParserSettings<?> settings;
 	private final boolean skipEmptyLines;
 	private final String nullValue;
 
@@ -88,29 +88,29 @@ public class ParserOutput {
 	public final Deque<String[]> pendingRecords = new LinkedList<String[]>();
 
 	/**
-	 * Headers parsed from the input when {@link AbstractCommonParserSettings#headerExtractionEnabled} is {@code true},
-	 * irrespective of any user-provided headers in {@link AbstractCommonParserSettings#getHeaders()}
+	 * Headers parsed from the input when {@link BaseCommonParserSettings#headerExtractionEnabled} is {@code true},
+	 * irrespective of any user-provided headers in {@link BaseCommonParserSettings#getHeaders()}
 	 */
 	String[] parsedHeaders;
 
-	private final AbstractParser<?> parser;
+	private final BaseParser<?> parser;
 
 	/**
-	 * Initializes the ParserOutput with the configuration specified in {@link AbstractCommonParserSettings}
+	 * Initializes the ParserOutput with the configuration specified in {@link BaseCommonParserSettings}
 	 *
 	 * @param settings the parser configuration
 	 */
-	public ParserOutput(AbstractCommonParserSettings<?> settings) {
+	public ParserOutput(BaseCommonParserSettings<?> settings) {
 		this(null, settings);
 	}
 
 	/**
-	 * Initializes the ParserOutput with the configuration specified in {@link AbstractCommonParserSettings}
+	 * Initializes the ParserOutput with the configuration specified in {@link BaseCommonParserSettings}
 	 *
 	 * @param parser   the parser whose output will be managed by this class.
 	 * @param settings the parser configuration
 	 */
-	public ParserOutput(AbstractParser<?> parser, AbstractCommonParserSettings<?> settings) {
+	public ParserOutput(BaseParser<?> parser, BaseCommonParserSettings<?> settings) {
 		this.parser = parser;
 		this.appenderInstance = settings.newCharAppender();
 		this.appender = appenderInstance;
@@ -267,7 +267,7 @@ public class ParserOutput {
 	/**
 	 * Initializes the sequence of selected fields, if any.
 	 *
-	 * @param values a sequence of values that represent the headers of the input. This can be either a parsed record or the headers as defined in {@link AbstractCommonSettings#getHeaders()}
+	 * @param values a sequence of values that represent the headers of the input. This can be either a parsed record or the headers as defined in {@link BaseCommonSettings#getHeaders()}
 	 */
 	private void initializeColumnsToExtract(NormalizedString[] values) {
 		FieldSelector selector = settings.getFieldSelector();
@@ -304,7 +304,7 @@ public class ParserOutput {
 	}
 
 	/**
-	 * Returns the sequence of values that represent the headers each field in the input. This can be either a parsed record or the headers as defined in {@link AbstractCommonSettings#getHeaders()}
+	 * Returns the sequence of values that represent the headers each field in the input. This can be either a parsed record or the headers as defined in {@link BaseCommonSettings#getHeaders()}
 	 *
 	 * @return the headers each field in the input
 	 */
@@ -319,19 +319,19 @@ public class ParserOutput {
 	}
 
 	/**
-	 * Returns the selected indexes of all fields as defined in {@link AbstractCommonSettings}. Null if no fields were selected.
+	 * Returns the selected indexes of all fields as defined in {@link BaseCommonSettings}. Null if no fields were selected.
 	 *
-	 * @return the selected indexes of all fields as defined in {@link AbstractCommonSettings}. Null if no fields were selected.
+	 * @return the selected indexes of all fields as defined in {@link BaseCommonSettings}. Null if no fields were selected.
 	 */
 	public int[] getSelectedIndexes() {
 		return this.selectedIndexes;
 	}
 
 	/**
-	 * Indicates whether fields selected using the field selection methods (in {@link AbstractCommonSettings}) are being reordered.
+	 * Indicates whether fields selected using the field selection methods (in {@link BaseCommonSettings}) are being reordered.
 	 *
-	 * @return <p> false if no fields were selected or column reordering has been disabled in {@link AbstractCommonParserSettings#isColumnReorderingEnabled()}
-	 * <p> true if fields were selected and column reordering has been enabled in {@link AbstractCommonParserSettings#isColumnReorderingEnabled()}
+	 * @return <p> false if no fields were selected or column reordering has been disabled in {@link BaseCommonParserSettings#isColumnReorderingEnabled()}
+	 * <p> true if fields were selected and column reordering has been enabled in {@link BaseCommonParserSettings#isColumnReorderingEnabled()}
 	 */
 	public boolean isColumnReorderingEnabled() {
 		return columnsReordered;
@@ -347,7 +347,7 @@ public class ParserOutput {
 	}
 
 	/**
-	 * Adds a nullValue (as specified in {@link AbstractCommonSettings#getNullValue()}) to the output and prepares the next position in the record to receive more values.
+	 * Adds a nullValue (as specified in {@link BaseCommonSettings#getNullValue()}) to the output and prepares the next position in the record to receive more values.
 	 */
 	public void emptyParsed() {
 		this.parsedValues[column++] = nullValue;

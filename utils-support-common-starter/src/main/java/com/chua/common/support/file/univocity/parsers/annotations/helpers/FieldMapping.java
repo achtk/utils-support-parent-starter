@@ -15,10 +15,10 @@
  ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.annotations.helpers;
 
-import com.chua.common.support.file.univocity.parsers.annotations.HeaderTransformer;
+import com.chua.common.support.file.univocity.parsers.annotations.BaseHeaderTransformer;
 import com.chua.common.support.file.univocity.parsers.annotations.Nested;
 import com.chua.common.support.file.univocity.parsers.annotations.Parsed;
-import com.chua.common.support.file.univocity.parsers.common.AbstractCommonSettings;
+import com.chua.common.support.file.univocity.parsers.common.BaseCommonSettings;
 import com.chua.common.support.file.univocity.parsers.common.DataProcessingException;
 import com.chua.common.support.file.univocity.parsers.common.NormalizedString;
 import com.chua.common.support.file.univocity.parsers.common.beans.PropertyWrapper;
@@ -56,10 +56,10 @@ public class FieldMapping {
 	 * @param beanClass   the class that contains a the given field.
 	 * @param target      a {@link Field} or {@link Method} annotated with {@link Parsed}
 	 * @param property    the property descriptor of this field, if any. If this bean does not have getters/setters, it will be accessed directly.
-	 * @param transformer an optional {@link HeaderTransformer} to modify header names/positions in attributes of {@link Nested} classes.
-	 * @param headers     list of headers parsed from the input or manually set with {@link AbstractCommonSettings#setHeaders(String...)}
+	 * @param transformer an optional {@link BaseHeaderTransformer} to modify header names/positions in attributes of {@link Nested} classes.
+	 * @param headers     list of headers parsed from the input or manually set with {@link BaseCommonSettings#setHeaders(String...)}
 	 */
-	public FieldMapping(Class<?> beanClass, AnnotatedElement target, PropertyWrapper property, HeaderTransformer transformer, NormalizedString[] headers) {
+	public FieldMapping(Class<?> beanClass, AnnotatedElement target, PropertyWrapper property, BaseHeaderTransformer transformer, NormalizedString[] headers) {
 		this.beanClass = beanClass;
 		this.target = target;
 		if (target instanceof Field) {
@@ -95,7 +95,7 @@ public class FieldMapping {
 		determineFieldMapping(transformer, headers);
 	}
 
-	private void determineFieldMapping(HeaderTransformer transformer, NormalizedString[] headers) {
+	private void determineFieldMapping(BaseHeaderTransformer transformer, NormalizedString[] headers) {
 		Parsed parsed = findAnnotation(target, Parsed.class);
 		String name = "";
 

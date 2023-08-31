@@ -24,7 +24,7 @@ import java.util.TreeMap;
  * @see AbstractWriter
  * @see CommonSettings
  */
-final class DummyFormat extends Format {
+final class DummyFormat extends BaseFormat {
 
 	static final DummyFormat INSTANCE = new DummyFormat();
 

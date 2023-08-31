@@ -2,7 +2,7 @@ package com.chua.common.support.lang.spider.scheduler;
 
 import com.chua.common.support.lang.spider.Request;
 import com.chua.common.support.lang.spider.Task;
-import com.chua.common.support.lang.spider.utils.NumberUtils;
+import com.chua.common.support.utils.NumberUtils;
 
 import java.util.Comparator;
 import java.util.concurrent.BlockingQueue;
@@ -15,7 +15,7 @@ import java.util.concurrent.PriorityBlockingQueue;
  * @author code4crafter@gmail.com <br>
  * @since 0.2.1
  */
-public class PriorityScheduler extends DuplicateRemovedScheduler implements MonitorableScheduler {
+public class PriorityScheduler extends AbstractDuplicateRemovedScheduler implements MonitorableScheduler {
 
     public static final int INITIAL_CAPACITY = 5;
 

@@ -10,7 +10,7 @@ import java.util.Deque;
  *
  * @author CH
  */
-public class SkipIgnoredToken extends NodeParser {
+public class SkipIgnoredToken extends BaseNodeParser {
 
     @Override
     public int parse(String el, int offset, Deque<CalculateNode> nodes, int function, Invoker next) {

@@ -19,9 +19,9 @@ import com.chua.common.support.json.jsonpath.internal.PathRef;
 /**
  * @author Administrator
  */
-public class RootPathToken extends PathToken {
+public class RootPathToken extends BasePathToken {
 
-    private PathToken tail;
+    private BasePathToken tail;
     private int tokenCount;
     private final String rootToken;
 
@@ -32,7 +32,7 @@ public class RootPathToken extends PathToken {
         this.tokenCount = 1;
     }
 
-    public PathToken getTail() {
+    public BasePathToken getTail() {
         return this.tail;
     }
 
@@ -41,7 +41,7 @@ public class RootPathToken extends PathToken {
         return tokenCount;
     }
 
-    public RootPathToken append(PathToken next) {
+    public RootPathToken append(BasePathToken next) {
         this.tail = tail.appendTailToken(next);
         this.tokenCount++;
         return this;
@@ -50,7 +50,7 @@ public class RootPathToken extends PathToken {
     public PathTokenAppender getPathTokenAppender() {
         return new PathTokenAppender() {
             @Override
-            public PathTokenAppender appendPathToken(PathToken next) {
+            public PathTokenAppender appendPathToken(BasePathToken next) {
                 append(next);
                 return this;
             }
@@ -81,7 +81,7 @@ public class RootPathToken extends PathToken {
         return (tail instanceof FunctionPathToken);
     }
 
-    public void setTail(PathToken token) {
+    public void setTail(BasePathToken token) {
         this.tail = token;
     }
 }

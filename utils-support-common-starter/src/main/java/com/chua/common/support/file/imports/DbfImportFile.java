@@ -4,7 +4,7 @@ import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.file.export.ExportConfiguration;
 import com.chua.common.support.file.export.resolver.NamedResolver;
 import com.chua.common.support.file.javadbf.DbfHeader;
-import com.chua.common.support.file.javadbf.DbfReader;
+import com.chua.common.support.file.javadbf.AbstractDbfReader;
 import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.value.Pair;
 
@@ -26,7 +26,7 @@ public class DbfImportFile extends AbstractImportFile {
     @Override
     public <T> void imports(InputStream inputStream, Class<T> type, ImportListener<T> listener) {
         try (InputStream read = inputStream) {
-            DbfReader dbfReader = new DbfReader(read);
+            AbstractDbfReader dbfReader = new AbstractDbfReader(read);
             dbfReader.setCharacterSetName(configuration.charset());
 
             int i = 0;

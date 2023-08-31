@@ -16,7 +16,7 @@
 package com.chua.common.support.file.univocity.parsers.common.processor;
 
 /**
- * An indicator of where the input a row is placed in relation to others. Currently used by {@link MasterDetailProcessor}.
+ * An indicator of where the input a row is placed in relation to others. Currently used by {@link BaseMasterDetailProcessor}.
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
  */

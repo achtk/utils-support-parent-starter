@@ -2,10 +2,10 @@ package com.chua.common.support.file.univocity.parsers.common.processor;
 
 import com.chua.common.support.file.univocity.parsers.annotations.helpers.MethodFilter;
 import com.chua.common.support.file.univocity.parsers.common.AbstractWriter;
-import com.chua.common.support.file.univocity.parsers.common.AbstractCommonSettings;
+import com.chua.common.support.file.univocity.parsers.common.BaseCommonSettings;
 import com.chua.common.support.file.univocity.parsers.common.NormalizedString;
 import com.chua.common.support.file.univocity.parsers.common.fields.FieldConversionMapping;
-import com.chua.common.support.file.univocity.parsers.common.processor.core.BeanConversionProcessor;
+import com.chua.common.support.file.univocity.parsers.common.processor.core.BeanConversionProcessorAbstract;
 
 /**
  * A {@link RowWriterProcessor} implementation for converting annotated java objects into object arrays suitable for writing in any implementation of {@link AbstractWriter}.
@@ -17,9 +17,9 @@ import com.chua.common.support.file.univocity.parsers.common.processor.core.Bean
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
  * @see AbstractWriter
  * @see RowWriterProcessor
- * @see BeanConversionProcessor
+ * @see BeanConversionProcessorAbstract
  */
-public class BeanWriterProcessor<T> extends BeanConversionProcessor<T> implements RowWriterProcessor<T> {
+public class BeanWriterProcessor<T> extends BeanConversionProcessorAbstract<T> implements RowWriterProcessor<T> {
 
 	private NormalizedString[] normalizedHeaders;
 	private String[] previousHeaders;
@@ -39,8 +39,8 @@ public class BeanWriterProcessor<T> extends BeanConversionProcessor<T> implement
 	 * Converts the java bean instance into a sequence of values for writing.
 	 *
 	 * @param input          an instance of the type defined in this class constructor.
-	 * @param headers        All field names used to produce records in a given destination. May be null if no headers have been defined in {@link AbstractCommonSettings#getHeaders()}
-	 * @param indexesToWrite The indexes of the headers that are actually being written. May be null if no fields have been selected using {@link AbstractCommonSettings#selectFields(String...)} or {@link CommonSettings#selectIndexes(Integer...)}
+	 * @param headers        All field names used to produce records in a given destination. May be null if no headers have been defined in {@link BaseCommonSettings#getHeaders()}
+	 * @param indexesToWrite The indexes of the headers that are actually being written. May be null if no fields have been selected using {@link BaseCommonSettings#selectFields(String...)} or {@link CommonSettings#selectIndexes(Integer...)}
 	 * @return a row of objects containing the values extracted from the java bean
 	 */
 	public Object[] write(T input, String[] headers, int[] indexesToWrite) {
@@ -55,8 +55,8 @@ public class BeanWriterProcessor<T> extends BeanConversionProcessor<T> implement
 	 * Converts the java bean instance into a sequence of values for writing.
 	 *
 	 * @param input          an instance of the type defined in this class constructor.
-	 * @param headers        All field names used to produce records in a given destination. May be null if no headers have been defined in {@link AbstractCommonSettings#getHeaders()}
-	 * @param indexesToWrite The indexes of the headers that are actually being written. May be null if no fields have been selected using {@link AbstractCommonSettings#selectFields(String...)} or {@link CommonSettings#selectIndexes(Integer...)}
+	 * @param headers        All field names used to produce records in a given destination. May be null if no headers have been defined in {@link BaseCommonSettings#getHeaders()}
+	 * @param indexesToWrite The indexes of the headers that are actually being written. May be null if no fields have been selected using {@link BaseCommonSettings#selectFields(String...)} or {@link CommonSettings#selectIndexes(Integer...)}
 	 * @return a row of objects containing the values extracted from the java bean
 	 */
 	@Override

@@ -2,7 +2,7 @@ package com.chua.common.support.protocol.ftp.client.connectors;
 
 
 import com.chua.common.support.protocol.ftp.client.FtpCommunicationChannel;
-import com.chua.common.support.protocol.ftp.client.FtpConnector;
+import com.chua.common.support.protocol.ftp.client.BaseFtpConnector;
 import com.chua.common.support.protocol.ftp.client.FtpIllegalReplyException;
 import com.chua.common.support.protocol.ftp.client.FtpReply;
 
@@ -18,7 +18,7 @@ import java.net.Socket;
  *
  * @author Carlo Pelliccia
  */
-public class FtpProxyConnector extends FtpConnector {
+public class FtpProxyConnector extends BaseFtpConnector {
 
     /**
      * Requires the connection to the remote host through a SITE command after

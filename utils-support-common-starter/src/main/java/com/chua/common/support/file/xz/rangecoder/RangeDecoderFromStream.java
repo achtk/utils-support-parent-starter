@@ -16,7 +16,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public final class RangeDecoderFromStream extends RangeDecoder {
+public final class RangeDecoderFromStream extends BaseRangeDecoder {
     private final DataInputStream inData;
 
     public RangeDecoderFromStream(InputStream in) throws IOException {

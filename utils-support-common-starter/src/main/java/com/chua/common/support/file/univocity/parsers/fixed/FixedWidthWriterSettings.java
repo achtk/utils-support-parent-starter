@@ -18,7 +18,7 @@ package com.chua.common.support.file.univocity.parsers.fixed;
 import com.chua.common.support.file.univocity.parsers.annotations.Headers;
 import com.chua.common.support.file.univocity.parsers.annotations.helpers.AnnotationHelper;
 import com.chua.common.support.file.univocity.parsers.common.AbstractCommonWriterSettings;
-import com.chua.common.support.file.univocity.parsers.common.Format;
+import com.chua.common.support.file.univocity.parsers.common.BaseFormat;
 import com.chua.common.support.file.univocity.parsers.common.NormalizedString;
 
 import java.util.HashMap;
@@ -231,7 +231,7 @@ public class FixedWidthWriterSettings extends AbstractCommonWriterSettings<Fixed
 	}
 
 	/**
-	 * Returns a flag indicating whether each record, when written, should be followed by a line separator (as specified in {@link Format#getLineSeparator()}.
+	 * Returns a flag indicating whether each record, when written, should be followed by a line separator (as specified in {@link BaseFormat#getLineSeparator()}.
 	 * <p>
 	 * Consider the records {@code [a,b]} and {@code [c,d]}, with field lengths {@code [2, 2]}, and line separator = {@code \n}:
 	 * <ul>
@@ -248,7 +248,7 @@ public class FixedWidthWriterSettings extends AbstractCommonWriterSettings<Fixed
 	}
 
 	/**
-	 * Defines whether each record, when written, should be followed by a line separator (as specified in {@link Format#getLineSeparator()}.
+	 * Defines whether each record, when written, should be followed by a line separator (as specified in {@link BaseFormat#getLineSeparator()}.
 	 * <p>
 	 * Consider the records {@code [a,b]} and {@code [c,d]}, with field lengths {@code [2, 2]}, and line separator = {@code \n}:
 	 * <ul>

@@ -12,7 +12,7 @@ package com.chua.common.support.file.xz.lz;
 
 import com.chua.common.support.file.xz.ArrayCache;
 
-final class BT4 extends LzEncoder {
+final class BT4 extends BaseLzEncoder {
     private final Hash234 hash;
     private final int[] tree;
     private final Matches matches;

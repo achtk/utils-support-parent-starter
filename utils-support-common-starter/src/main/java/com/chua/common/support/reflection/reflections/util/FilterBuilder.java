@@ -166,10 +166,10 @@ public class FilterBuilder implements Predicate<String> {
         return fqn.replace(".", "\\.").replace("$", "\\$") + ".*";
     }
 
-    abstract static class Matcher implements Predicate<String> {
+    abstract static class AbstractMatcher implements Predicate<String> {
         final Pattern pattern;
 
-        Matcher(String regex) {
+        AbstractMatcher(String regex) {
             pattern = Pattern.compile(regex);
         }
 
@@ -180,7 +180,7 @@ public class FilterBuilder implements Predicate<String> {
 
         @Override
         public boolean equals(Object o) {
-            return this == o || o != null && getClass() == o.getClass() && Objects.equals(pattern.pattern(), ((Matcher) o).pattern.pattern());
+            return this == o || o != null && getClass() == o.getClass() && Objects.equals(pattern.pattern(), ((AbstractMatcher) o).pattern.pattern());
         }
 
         @Override
@@ -189,7 +189,7 @@ public class FilterBuilder implements Predicate<String> {
         }
     }
 
-    static class Include extends Matcher {
+    static class Include extends AbstractMatcher {
         Include(String regex) {
             super(regex);
         }
@@ -205,7 +205,7 @@ public class FilterBuilder implements Predicate<String> {
         }
     }
 
-    static class Exclude extends Matcher {
+    static class Exclude extends AbstractMatcher {
         Exclude(String regex) {
             super(regex);
         }

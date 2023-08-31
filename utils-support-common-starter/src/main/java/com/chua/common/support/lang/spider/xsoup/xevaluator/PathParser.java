@@ -67,7 +67,7 @@ public class PathParser {
     private SoupTokenQueue tq;
     private String query;
     private List<AbstractEvaluator> evals = new ArrayList<>();
-    private ElementOperator elementOperator;
+    private AbstractElementOperator elementOperator;
     private boolean noEvalAllow = false;
     private final Pattern patternForText = Pattern.compile("text\\((\\d*)\\)");
 
@@ -251,7 +251,7 @@ public class PathParser {
 
     private void consumeAttribute() {
         tq.consume("@");
-        elementOperator = new ElementOperator.AttributeGetter(tq.remainder());
+        elementOperator = new AbstractElementOperator.AttributeGetter(tq.remainder());
         noEvalAllow = true;
     }
 
@@ -262,13 +262,13 @@ public class PathParser {
         } else if (remainder.startsWith(REGEX_TEXT)) {
             functionRegex(remainder);
         } else if (ALL_TEXT.equals(remainder)) {
-            elementOperator = new ElementOperator.AllText();
+            elementOperator = new AbstractElementOperator.AllText();
         } else if (TIDY_TEXT.equals(remainder)) {
-            elementOperator = new ElementOperator.TidyText();
+            elementOperator = new AbstractElementOperator.TidyText();
         } else if (HTML.equals(remainder)) {
-            elementOperator = new ElementOperator.Html();
+            elementOperator = new AbstractElementOperator.Html();
         } else if (OUT_HTML.equals(remainder)) {
-            elementOperator = new ElementOperator.OuterHtml();
+            elementOperator = new AbstractElementOperator.OuterHtml();
         } else {
             throw new IllegalArgumentException("Unsupported function " + remainder);
         }
@@ -283,16 +283,16 @@ public class PathParser {
                 SoupTokenQueue.trimQuotes(SoupTokenQueue.parseFuncionParams(remainder.substring("regex(".length(), remainder.length()
                         - 1)));
         if (params.size() == 1) {
-            elementOperator = new ElementOperator.Regex(params.get(0));
+            elementOperator = new AbstractElementOperator.Regex(params.get(0));
         } else if (params.size() == NUM_2) {
             if (params.get(0).startsWith(SYMBOL_AT)) {
-                elementOperator = new ElementOperator.Regex(params.get(1), params.get(0).substring(1));
+                elementOperator = new AbstractElementOperator.Regex(params.get(1), params.get(0).substring(1));
             } else {
-                elementOperator = new ElementOperator.Regex(params.get(0), null, Integer.parseInt(params.get(1)));
+                elementOperator = new AbstractElementOperator.Regex(params.get(0), null, Integer.parseInt(params.get(1)));
             }
         } else if (params.size() == NUM_3) {
             elementOperator =
-                    new ElementOperator.Regex(params.get(1), params.get(0).substring(1), Integer.parseInt(params.get(2)));
+                    new AbstractElementOperator.Regex(params.get(1), params.get(0).substring(1), Integer.parseInt(params.get(2)));
         } else {
             throw new Selector.SelectorParseException("Unknown usage for regex()" + remainder);
         }
@@ -308,7 +308,7 @@ public class PathParser {
             } else {
                 attributeGroup = Integer.parseInt(group);
             }
-            elementOperator = new ElementOperator.GroupedText(attributeGroup);
+            elementOperator = new AbstractElementOperator.GroupedText(attributeGroup);
         }
     }
 

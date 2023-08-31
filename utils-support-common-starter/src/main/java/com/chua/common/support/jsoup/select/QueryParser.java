@@ -91,7 +91,7 @@ public class QueryParser {
         tq.consumeWhitespace();
 
         if (tq.matchesAny(COMBINATORS)) {
-            evaluators.add(new StructuralEvaluator.Root());
+            evaluators.add(new BaseStructuralEvaluator.Root());
             combinator(tq.consume());
         } else {
             findElements();
@@ -138,16 +138,16 @@ public class QueryParser {
 
         switch (combinator) {
             case '>':
-                currentEval = new AbstractCombiningEvaluator.And(new StructuralEvaluator.ImmediateParent(currentEval), newEval);
+                currentEval = new AbstractCombiningEvaluator.And(new BaseStructuralEvaluator.ImmediateParent(currentEval), newEval);
                 break;
             case ' ':
-                currentEval = new AbstractCombiningEvaluator.And(new StructuralEvaluator.Parent(currentEval), newEval);
+                currentEval = new AbstractCombiningEvaluator.And(new BaseStructuralEvaluator.Parent(currentEval), newEval);
                 break;
             case '+':
-                currentEval = new AbstractCombiningEvaluator.And(new StructuralEvaluator.ImmediatePreviousSibling(currentEval), newEval);
+                currentEval = new AbstractCombiningEvaluator.And(new BaseStructuralEvaluator.ImmediatePreviousSibling(currentEval), newEval);
                 break;
             case '~':
-                currentEval = new AbstractCombiningEvaluator.And(new StructuralEvaluator.PreviousSibling(currentEval), newEval);
+                currentEval = new AbstractCombiningEvaluator.And(new BaseStructuralEvaluator.PreviousSibling(currentEval), newEval);
                 break;
             case ',':
                 AbstractCombiningEvaluator.Or or;
@@ -389,7 +389,7 @@ public class QueryParser {
         tq.consume(":has");
         String subQuery = tq.chompBalanced('(', ')');
         Validate.notEmpty(subQuery, ":has(selector) sub-select must not be empty");
-        evaluators.add(new StructuralEvaluator.Has(parse(subQuery)));
+        evaluators.add(new BaseStructuralEvaluator.Has(parse(subQuery)));
     }
 
     private void contains(boolean own) {
@@ -446,7 +446,7 @@ public class QueryParser {
         String subQuery = tq.chompBalanced('(', ')');
         Validate.notEmpty(subQuery, ":not(selector) subselect must not be empty");
 
-        evaluators.add(new StructuralEvaluator.Not(parse(subQuery)));
+        evaluators.add(new BaseStructuralEvaluator.Not(parse(subQuery)));
     }
 
     @Override

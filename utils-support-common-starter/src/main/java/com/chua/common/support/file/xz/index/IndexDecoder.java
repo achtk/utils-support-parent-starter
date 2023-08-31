@@ -25,7 +25,7 @@ import static com.chua.common.support.constant.NumberConstant.*;
 /**
  * @author Administrator
  */
-public class IndexDecoder extends IndexBase {
+public class IndexDecoder extends BaseIndexBase {
     private final StreamFlags streamFlags;
     private final long streamPadding;
     private final int memoryUsage;

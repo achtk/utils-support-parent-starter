@@ -23,8 +23,8 @@ public class IA64Options extends BCJOptions {
         super(ALIGNMENT);
     }
 
-    public FinishableOutputStream getOutputStream(FinishableOutputStream out,
-                                                  ArrayCache arrayCache) {
+    public AbstractFinishableOutputStream getOutputStream(AbstractFinishableOutputStream out,
+                                                          ArrayCache arrayCache) {
         return new SimpleOutputStream(out, new IA64(true, startOffset));
     }
 

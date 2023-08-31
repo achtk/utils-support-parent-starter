@@ -35,7 +35,7 @@ public interface ValueNodes {
     // ValueNode Implementations
     //
     //----------------------------------------------------
-    class PatternNode extends ValueNode {
+    class PatternNode extends BaseValueNode {
         private final String pattern;
         private final Pattern compiledPattern;
         private final String flags;
@@ -96,7 +96,7 @@ public interface ValueNodes {
         }
     }
 
-    class JsonNode extends ValueNode {
+    class JsonNode extends BaseValueNode {
         private final Object json;
         private final boolean parsed;
 
@@ -128,7 +128,7 @@ public interface ValueNodes {
             return this;
         }
 
-        public ValueNode asValueListNode(Predicate.PredicateContext ctx) {
+        public BaseValueNode asValueListNode(Predicate.PredicateContext ctx) {
             if (!isArray(ctx)) {
                 return UNDEFINED;
             } else {
@@ -190,7 +190,7 @@ public interface ValueNodes {
         }
     }
 
-    class StringNode extends ValueNode {
+    class StringNode extends BaseValueNode {
         private final String string;
         private boolean useSingleQuote = true;
 
@@ -261,14 +261,14 @@ public interface ValueNodes {
             if (this == o) return true;
             if (!(o instanceof StringNode) && !(o instanceof NumberNode)) return false;
 
-            StringNode that = ((ValueNode) o).asStringNode();
+            StringNode that = ((BaseValueNode) o).asStringNode();
 
             return !(string != null ? !string.equals(that.getString()) : that.getString() != null);
 
         }
     }
 
-    class NumberNode extends ValueNode {
+    class NumberNode extends BaseValueNode {
 
         public static NumberNode NAN = new NumberNode((BigDecimal) null);
 
@@ -314,7 +314,7 @@ public interface ValueNodes {
             if (this == o) return true;
             if (!(o instanceof NumberNode) && !(o instanceof StringNode)) return false;
 
-            NumberNode that = ((ValueNode) o).asNumberNode();
+            NumberNode that = ((BaseValueNode) o).asNumberNode();
 
             if (that == NumberNode.NAN) {
                 return false;
@@ -325,7 +325,7 @@ public interface ValueNodes {
     }
 
     //workaround for issue: https://github.com/json-path/JsonPath/issues/613
-    class OffsetDateTimeNode extends ValueNode {
+    class OffsetDateTimeNode extends BaseValueNode {
 
         private final OffsetDateTime dateTime;
 
@@ -369,13 +369,13 @@ public interface ValueNodes {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (!(o instanceof OffsetDateTimeNode) && !(o instanceof StringNode)) return false;
-            OffsetDateTimeNode that = ((ValueNode) o).asOffsetDateTimeNode();
+            OffsetDateTimeNode that = ((BaseValueNode) o).asOffsetDateTimeNode();
             return dateTime.compareTo(that.dateTime) == 0;
         }
     }
 
 
-    class BooleanNode extends ValueNode {
+    class BooleanNode extends BaseValueNode {
         private final Boolean value;
 
         private BooleanNode(CharSequence boolValue) {
@@ -416,7 +416,7 @@ public interface ValueNodes {
     }
 
 
-    class ClassNode extends ValueNode {
+    class ClassNode extends BaseValueNode {
         private final Class clazz;
 
         ClassNode(Class clazz) {
@@ -456,7 +456,7 @@ public interface ValueNodes {
         }
     }
 
-    class NullNode extends ValueNode {
+    class NullNode extends BaseValueNode {
 
         private NullNode() {
         }
@@ -490,7 +490,7 @@ public interface ValueNodes {
         }
     }
 
-    class UndefinedNode extends ValueNode {
+    class UndefinedNode extends BaseValueNode {
 
         @Override
         public Class<?> type(Predicate.PredicateContext ctx) {
@@ -511,7 +511,7 @@ public interface ValueNodes {
         }
     }
 
-    class PredicateNode extends ValueNode {
+    class PredicateNode extends BaseValueNode {
 
         private final Predicate predicate;
 
@@ -547,9 +547,9 @@ public interface ValueNodes {
         }
     }
 
-    class ValueListNode extends ValueNode implements Iterable<ValueNode> {
+    class ValueListNode extends BaseValueNode implements Iterable<BaseValueNode> {
 
-        private List<ValueNode> nodes = new ArrayList<ValueNode>();
+        private List<BaseValueNode> nodes = new ArrayList<BaseValueNode>();
 
         public ValueListNode(Collection<?> values) {
             for (Object value : values) {
@@ -557,12 +557,12 @@ public interface ValueNodes {
             }
         }
 
-        public boolean contains(ValueNode node) {
+        public boolean contains(BaseValueNode node) {
             return nodes.contains(node);
         }
 
         public boolean subsetof(ValueListNode right) {
-            for (ValueNode leftNode : nodes) {
+            for (BaseValueNode leftNode : nodes) {
                 if (!right.nodes.contains(leftNode)) {
                     return false;
                 }
@@ -570,7 +570,7 @@ public interface ValueNodes {
             return true;
         }
 
-        public List<ValueNode> getNodes() {
+        public List<BaseValueNode> getNodes() {
             return Collections.unmodifiableList(nodes);
         }
 
@@ -603,12 +603,12 @@ public interface ValueNodes {
         }
 
         @Override
-        public Iterator<ValueNode> iterator() {
+        public Iterator<BaseValueNode> iterator() {
             return nodes.iterator();
         }
     }
 
-    class PathNode extends ValueNode {
+    class PathNode extends BaseValueNode {
 
         private static final Logger logger = LoggerFactory.getLogger(PathNode.class);
 
@@ -665,7 +665,7 @@ public interface ValueNodes {
             return existsCheck && !shouldExist ? Utils.concat("!", path.toString()) : path.toString();
         }
 
-        public ValueNode evaluate(Predicate.PredicateContext ctx) {
+        public BaseValueNode evaluate(Predicate.PredicateContext ctx) {
             if (isExistsCheck()) {
                 try {
                     JsonConfiguration c = JsonConfiguration.builder().jsonProvider(ctx.configuration().jsonProvider()).options(Option.REQUIRE_PROPERTIES).build();
@@ -688,19 +688,19 @@ public interface ValueNodes {
                     res = ctx.configuration().jsonProvider().unwrap(res);
 
                     if (res instanceof Number) {
-                        return ValueNode.createNumberNode(res.toString());
+                        return BaseValueNode.createNumberNode(res.toString());
                     } else if (res instanceof String) {
-                        return ValueNode.createStringNode(res.toString(), false);
+                        return BaseValueNode.createStringNode(res.toString(), false);
                     } else if (res instanceof Boolean) {
-                        return ValueNode.createBooleanNode(res.toString());
+                        return BaseValueNode.createBooleanNode(res.toString());
                     } else if (res instanceof OffsetDateTime) {
-                        return ValueNode.createOffsetDateTimeNode(res.toString()); //workaround for issue: https://github.com/json-path/JsonPath/issues/613
+                        return BaseValueNode.createOffsetDateTimeNode(res.toString()); //workaround for issue: https://github.com/json-path/JsonPath/issues/613
                     } else if (res == null) {
                         return NULL_NODE;
                     } else if (ctx.configuration().jsonProvider().isArray(res)) {
-                        return ValueNode.createJsonNode(ctx.configuration().mappingProvider().map(res, List.class, ctx.configuration()));
+                        return BaseValueNode.createJsonNode(ctx.configuration().mappingProvider().map(res, List.class, ctx.configuration()));
                     } else if (ctx.configuration().jsonProvider().isMap(res)) {
-                        return ValueNode.createJsonNode(ctx.configuration().mappingProvider().map(res, Map.class, ctx.configuration()));
+                        return BaseValueNode.createJsonNode(ctx.configuration().mappingProvider().map(res, Map.class, ctx.configuration()));
                     } else {
                         throw new JsonPathException("Could not convert " + res.getClass().toString() + ":" + res.toString() + " to a ValueNode");
                     }

@@ -1,6 +1,5 @@
 package com.chua.common.support.extra.el.template.parser.impl;
 
-import com.chua.common.support.constant.CommonConstant;
 import com.chua.common.support.extra.el.exception.IllegalFormatException;
 import com.chua.common.support.extra.el.template.ScanMode;
 import com.chua.common.support.extra.el.template.Template;
@@ -10,7 +9,7 @@ import com.chua.common.support.extra.el.template.execution.impl.ElseExecution;
 import com.chua.common.support.extra.el.template.execution.impl.ElseIfExecution;
 import com.chua.common.support.extra.el.template.execution.impl.IfExecution;
 import com.chua.common.support.extra.el.template.parser.Invoker;
-import com.chua.common.support.extra.el.template.parser.Parser;
+import com.chua.common.support.extra.el.template.parser.BaseParser;
 
 import java.util.Deque;
 import java.util.LinkedList;
@@ -22,7 +21,7 @@ import static com.chua.common.support.constant.CommonConstant.SYMBOL_RIGHT_BIG_P
  *
  * @author CH
  */
-public class EndBraceParser extends Parser {
+public class EndBraceParser extends BaseParser {
 
     @Override
     public int parse(String sentence, int offset, Deque<Execution> executions, Template template, StringBuilder cache, Invoker next) {

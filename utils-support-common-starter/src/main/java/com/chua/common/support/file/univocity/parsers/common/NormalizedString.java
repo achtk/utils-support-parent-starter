@@ -42,7 +42,7 @@ public final class NormalizedString implements Serializable, Comparable<Normaliz
 
 	private static final long serialVersionUID = -3904288692735859811L;
 
-	private static final StringCache<NormalizedString> STRING_STRING_CACHE = new StringCache<NormalizedString>() {
+	private static final BaseStringCache<NormalizedString> STRING_STRING_CACHE = new BaseStringCache<NormalizedString>() {
 		@Override
 		protected NormalizedString process(String input) {
 			if (input == null) {
@@ -622,7 +622,7 @@ public final class NormalizedString implements Serializable, Comparable<Normaliz
 	 *
 	 * @return the string cache used to store {@code NormalizedString} instances associated with their original {@code String}.
 	 */
-	public static StringCache<NormalizedString> getCache() {
+	public static BaseStringCache<NormalizedString> getCache() {
 		return STRING_STRING_CACHE;
 	}
 }

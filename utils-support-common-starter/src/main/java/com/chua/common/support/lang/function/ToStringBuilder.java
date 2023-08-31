@@ -67,7 +67,7 @@ import com.chua.common.support.utils.Preconditions;
  * </pre>
  *
  * <p>The exact format of the {@code toString} is determined by
- * the {@link ToStringStyle} passed into the constructor.</p>
+ * the {@link BaseToStringStyle} passed into the constructor.</p>
  * @author Administrator
  * @since 1.0
  */
@@ -76,7 +76,7 @@ public class ToStringBuilder implements Builder<String> {
     /**
      * The default style of output to use, not null.
      */
-    private static volatile ToStringStyle defaultStyle = ToStringStyle.DEFAULT_STYLE;
+    private static volatile BaseToStringStyle defaultStyle = BaseToStringStyle.DEFAULT_STYLE;
 
     //----------------------------------------------------------------------------
 
@@ -98,7 +98,7 @@ public class ToStringBuilder implements Builder<String> {
      *
      * @return the default {@code ToStringStyle}, never null
      */
-    public static ToStringStyle getDefaultStyle() {
+    public static BaseToStringStyle getDefaultStyle() {
         return defaultStyle;
     }
 
@@ -117,7 +117,7 @@ public class ToStringBuilder implements Builder<String> {
      * @param style the default {@code ToStringStyle}
      * @throws IllegalArgumentException if the style is {@code null}
      */
-    public static void setDefaultStyle(final ToStringStyle style) {
+    public static void setDefaultStyle(final BaseToStringStyle style) {
         defaultStyle = Preconditions.checkNotNull(style, "style");
     }
 
@@ -142,9 +142,9 @@ public class ToStringBuilder implements Builder<String> {
      * @param object the Object to be output
      * @param style  the style of the {@code toString} to create, may be {@code null}
      * @return the String result
-     * @see ReflectionToStringBuilder#toString(Object, ToStringStyle)
+     * @see ReflectionToStringBuilder#toString(Object, BaseToStringStyle)
      */
-    public static String reflectionToString(final Object object, final ToStringStyle style) {
+    public static String reflectionToString(final Object object, final BaseToStringStyle style) {
         return ReflectionToStringBuilder.toString(object, style);
     }
 
@@ -156,9 +156,9 @@ public class ToStringBuilder implements Builder<String> {
      * @param style            the style of the {@code toString} to create, may be {@code null}
      * @param outputTransients whether to include transient fields
      * @return the String result
-     * @see ReflectionToStringBuilder#toString(Object, ToStringStyle, boolean)
+     * @see ReflectionToStringBuilder#toString(Object, BaseToStringStyle, boolean)
      */
-    public static String reflectionToString(final Object object, final ToStringStyle style, final boolean outputTransients) {
+    public static String reflectionToString(final Object object, final BaseToStringStyle style, final boolean outputTransients) {
         return ReflectionToStringBuilder.toString(object, style, outputTransients, false, null);
     }
 
@@ -172,12 +172,12 @@ public class ToStringBuilder implements Builder<String> {
      * @param outputTransients whether to include transient fields
      * @param reflectUpToClass the superclass to reflect up to (inclusive), may be {@code null}
      * @return the String result
-     * @see ReflectionToStringBuilder#toString(Object, ToStringStyle, boolean, boolean, Class)
+     * @see ReflectionToStringBuilder#toString(Object, BaseToStringStyle, boolean, boolean, Class)
      * @since 2.0
      */
     public static <T> String reflectionToString(
             final T object,
-            final ToStringStyle style,
+            final BaseToStringStyle style,
             final boolean outputTransients,
             final Class<? super T> reflectUpToClass) {
         return ReflectionToStringBuilder.toString(object, style, outputTransients, false, reflectUpToClass);
@@ -196,7 +196,7 @@ public class ToStringBuilder implements Builder<String> {
     /**
      * The style of output to use, not null.
      */
-    private final ToStringStyle style;
+    private final BaseToStringStyle style;
 
     /**
      * <p>Constructs a builder for the specified object using the default output style.</p>
@@ -217,7 +217,7 @@ public class ToStringBuilder implements Builder<String> {
      * @param object the Object to build a {@code toString} for, not recommended to be null
      * @param style  the style of the {@code toString} to create, null uses the default style
      */
-    public ToStringBuilder(final Object object, final ToStringStyle style) {
+    public ToStringBuilder(final Object object, final BaseToStringStyle style) {
         this(object, style, null);
     }
 
@@ -232,7 +232,7 @@ public class ToStringBuilder implements Builder<String> {
      * @param style  the style of the {@code toString} to create, null uses the default style
      * @param buffer the {@code StringBuffer} to populate, may be null
      */
-    public ToStringBuilder(final Object object, ToStringStyle style, StringBuffer buffer) {
+    public ToStringBuilder(final Object object, BaseToStringStyle style, StringBuffer buffer) {
         if (style == null) {
             style = getDefaultStyle();
         }
@@ -1022,7 +1022,7 @@ public class ToStringBuilder implements Builder<String> {
      * @return the {@code ToStringStyle} being used
      * @since 2.0
      */
-    public ToStringStyle getStyle() {
+    public BaseToStringStyle getStyle() {
         return style;
     }
 

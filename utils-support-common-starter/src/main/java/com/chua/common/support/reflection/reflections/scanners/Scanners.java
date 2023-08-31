@@ -6,7 +6,7 @@ import com.chua.common.support.reflection.reflections.util.FilterBuilder;
 import com.chua.common.support.reflection.reflections.util.NameHelper;
 import com.chua.common.support.reflection.reflections.util.QueryBuilder;
 import com.chua.common.support.reflection.reflections.util.QueryFunction;
-import com.chua.common.support.reflection.reflections.vfs.Vfs;
+import com.chua.common.support.reflection.reflections.vfs.BaseVfs;
 import javassist.bytecode.ClassFile;
 
 import java.lang.annotation.Inherited;
@@ -113,7 +113,7 @@ public enum Scanners implements ResourceScanner, QueryBuilder, NameHelper {
         }
 
         @Override
-        public List<Map.Entry<String, String>> scan(Vfs.VfsFile file) {
+        public List<Map.Entry<String, String>> scan(BaseVfs.VfsFile file) {
             return Collections.singletonList(entry(file.getName(), file.getRelativePath()));
         }
 

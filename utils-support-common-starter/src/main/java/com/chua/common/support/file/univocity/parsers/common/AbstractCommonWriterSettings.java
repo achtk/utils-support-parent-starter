@@ -19,6 +19,7 @@ import com.chua.common.support.file.univocity.parsers.annotations.Headers;
 import com.chua.common.support.file.univocity.parsers.annotations.helpers.AnnotationHelper;
 import com.chua.common.support.file.univocity.parsers.annotations.helpers.MethodFilter;
 import com.chua.common.support.file.univocity.parsers.common.processor.BeanWriterProcessor;
+import com.chua.common.support.file.univocity.parsers.common.processor.ObjectRowWriterProcessor;
 import com.chua.common.support.file.univocity.parsers.common.processor.RowWriterProcessor;
 
 import java.util.Map;
@@ -26,7 +27,7 @@ import java.util.Map;
 /**
  * This is the parent class for all configuration classes used by writers ({@link AbstractWriter})
  *
- * <p>By default, all writers work with, at least, the following configuration options in addition to the ones provided by {@link AbstractCommonSettings}:
+ * <p>By default, all writers work with, at least, the following configuration options in addition to the ones provided by {@link BaseCommonSettings}:
  *
  * <ul>
  * <li><b>rowWriterProcessor:</b> a implementation of the interface {@link RowWriterProcessor} which processes input objects into a manageable format for writing.</li>
@@ -38,7 +39,7 @@ import java.util.Map;
  * @see com.chua.common.support.file.univocity.parsers.csv.CsvWriterSettings
  * @see com.chua.common.support.file.univocity.parsers.fixed.FixedWidthWriterSettings
  */
-public abstract class AbstractCommonWriterSettings<F extends Format> extends AbstractCommonSettings<F> {
+public abstract class AbstractCommonWriterSettings<F extends BaseFormat> extends BaseCommonSettings<F> {
 
     private RowWriterProcessor<?> rowWriterProcessor;
 
@@ -76,8 +77,8 @@ public abstract class AbstractCommonWriterSettings<F extends Format> extends Abs
      * Returns the implementation of the interface {@link RowWriterProcessor} which processes input objects into a manageable format for writing.
      *
      * @return the implementation of the interface {@link RowWriterProcessor} which processes input objects into a manageable format for writing.
-     * @see com.chua.common.support.file.univocity.parsers.common.processor.ObjectRowWriterProcessor
-     * @see com.chua.common.support.file.univocity.parsers.common.processor.BeanWriterProcessor
+     * @see ObjectRowWriterProcessor
+     * @see BeanWriterProcessor
      */
     public RowWriterProcessor<?> getRowWriterProcessor() {
         return rowWriterProcessor;
@@ -87,8 +88,8 @@ public abstract class AbstractCommonWriterSettings<F extends Format> extends Abs
      * Defines a processor for input objects that converts them into a manageable format for writing.
      *
      * @param rowWriterProcessor the implementation of the interface {@link RowWriterProcessor} which processes input objects into a manageable format for writing.
-     * @see com.chua.common.support.file.univocity.parsers.common.processor.ObjectRowWriterProcessor
-     * @see com.chua.common.support.file.univocity.parsers.common.processor.BeanWriterProcessor
+     * @see ObjectRowWriterProcessor
+     * @see BeanWriterProcessor
      */
     public void setRowWriterProcessor(RowWriterProcessor<?> rowWriterProcessor) {
         this.rowWriterProcessor = rowWriterProcessor;
@@ -207,7 +208,7 @@ public abstract class AbstractCommonWriterSettings<F extends Format> extends Abs
     }
 
     /**
-     * Indicates whether fields selected using the field selection methods (defined by the parent class {@link AbstractCommonSettings}) should be reordered (defaults to false).
+     * Indicates whether fields selected using the field selection methods (defined by the parent class {@link BaseCommonSettings}) should be reordered (defaults to false).
      * <p>When disabled, each written record will contain values for all columns, in the order they are sent to the writer. Fields which were not selected will not be written but and the record will contain empty values.
      * <p>When enabled, each written record will contain values only for the selected columns. The values will be ordered according to the selection.
      *
@@ -218,7 +219,7 @@ public abstract class AbstractCommonWriterSettings<F extends Format> extends Abs
     }
 
     /**
-     * Defines whether fields selected using the field selection methods (defined by the parent class {@link AbstractCommonSettings}) should be reordered (defaults to false).
+     * Defines whether fields selected using the field selection methods (defined by the parent class {@link BaseCommonSettings}) should be reordered (defaults to false).
      * <p>When disabled, each written record will contain values for all columns, in the order they are sent to the writer. Fields which were not selected will not be written but and the record will contain empty values.
      * <p>When enabled, each written record will contain values only for the selected columns. The values will be ordered according to the selection.
      *

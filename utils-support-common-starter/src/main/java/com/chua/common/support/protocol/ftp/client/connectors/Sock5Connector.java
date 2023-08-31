@@ -1,7 +1,7 @@
 package com.chua.common.support.protocol.ftp.client.connectors;
 
 
-import com.chua.common.support.protocol.ftp.client.FtpConnector;
+import com.chua.common.support.protocol.ftp.client.BaseFtpConnector;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,7 +16,7 @@ import java.net.Socket;
  *
  * @author Carlo Pelliccia
  */
-public class Sock5Connector extends FtpConnector {
+public class Sock5Connector extends BaseFtpConnector {
 
     /**
      * The socks5 proxy host name.

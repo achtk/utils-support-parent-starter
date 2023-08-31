@@ -6,7 +6,7 @@ package com.chua.common.support.extra.asm;
 import static com.chua.common.support.constant.NumberConstant.*;
 
 /**
- * A {@link MethodVisitor} that generates a corresponding 'method_info' structure, as defined in the
+ * A {@link BaseMethodVisitor} that generates a corresponding 'method_info' structure, as defined in the
  * Java Virtual Machine Specification (JVMS).
  *
  * @author Eric Bruneton
@@ -14,7 +14,7 @@ import static com.chua.common.support.constant.NumberConstant.*;
  * @see <a href="https:
  * 4.6</a>
  */
-final class MethodWriter extends MethodVisitor {
+final class MethodWriter extends BaseMethodVisitor {
 
   /** Indicates that nothing must be computed. */
   static final int COMPUTE_NOTHING = 0;
@@ -948,7 +948,7 @@ final class MethodWriter extends MethodVisitor {
   public void visitTypeInsn(final int opcode, final String type) {
     lastBytecodeOffset = code.length;
     
-    Symbol typeSymbol = symbolTable.addConstantClass(type);
+    BaseSymbol typeSymbol = symbolTable.addConstantClass(type);
     code.put12(opcode, typeSymbol.index);
     
     if (currentBasicBlock != null) {
@@ -970,7 +970,7 @@ final class MethodWriter extends MethodVisitor {
       final int opcode, final String owner, final String name, final String descriptor) {
     lastBytecodeOffset = code.length;
     
-    Symbol fieldrefSymbol = symbolTable.addConstantFieldref(owner, name, descriptor);
+    BaseSymbol fieldrefSymbol = symbolTable.addConstantFieldref(owner, name, descriptor);
     code.put12(opcode, fieldrefSymbol.index);
     
     if (currentBasicBlock != null) {
@@ -1011,7 +1011,7 @@ final class MethodWriter extends MethodVisitor {
       final boolean isInterface) {
     lastBytecodeOffset = code.length;
     
-    Symbol methodrefSymbol = symbolTable.addConstantMethodref(owner, name, descriptor, isInterface);
+    BaseSymbol methodrefSymbol = symbolTable.addConstantMethodref(owner, name, descriptor, isInterface);
     if (opcode == Opcodes.INVOKEINTERFACE) {
       code.put12(Opcodes.INVOKEINTERFACE, methodrefSymbol.index)
           .put11(methodrefSymbol.getArgumentsAndReturnSizes() >> 2, 0);
@@ -1047,7 +1047,7 @@ final class MethodWriter extends MethodVisitor {
       final Object... bootstrapMethodArguments) {
     lastBytecodeOffset = code.length;
     
-    Symbol invokeDynamicSymbol =
+    BaseSymbol invokeDynamicSymbol =
         symbolTable.addConstantInvokeDynamic(
             name, descriptor, bootstrapMethodHandle, bootstrapMethodArguments);
     code.put12(Opcodes.INVOKEDYNAMIC, invokeDynamicSymbol.index);
@@ -1255,13 +1255,13 @@ final class MethodWriter extends MethodVisitor {
   public void visitLdcInsn(final Object value) {
     lastBytecodeOffset = code.length;
     
-    Symbol constantSymbol = symbolTable.addConstant(value);
+    BaseSymbol constantSymbol = symbolTable.addConstant(value);
     int constantIndex = constantSymbol.index;
     char firstDescriptorChar;
     boolean isLongOrDouble =
-        constantSymbol.tag == Symbol.CONSTANT_LONG_TAG
-            || constantSymbol.tag == Symbol.CONSTANT_DOUBLE_TAG
-            || (constantSymbol.tag == Symbol.CONSTANT_DYNAMIC_TAG
+        constantSymbol.tag == BaseSymbol.CONSTANT_LONG_TAG
+            || constantSymbol.tag == BaseSymbol.CONSTANT_DOUBLE_TAG
+            || (constantSymbol.tag == BaseSymbol.CONSTANT_DYNAMIC_TAG
                 && ((firstDescriptorChar = constantSymbol.value.charAt(0)) == 'J'
                     || firstDescriptorChar == 'D'));
     if (isLongOrDouble) {
@@ -1367,7 +1367,7 @@ final class MethodWriter extends MethodVisitor {
   public void visitMultiNewArrayInsn(final String descriptor, final int numDimensions) {
     lastBytecodeOffset = code.length;
     
-    Symbol descSymbol = symbolTable.addConstantClass(descriptor);
+    BaseSymbol descSymbol = symbolTable.addConstantClass(descriptor);
     code.put12(Opcodes.MULTIANEWARRAY, descSymbol.index).putByte(numDimensions);
     
     if (currentBasicBlock != null) {
@@ -1945,7 +1945,7 @@ final class MethodWriter extends MethodVisitor {
    * verification_type_info format used in StackMapTable attributes.
    *
    * @param type a frame element type described using the same format as in {@link
-   *     MethodVisitor#visitFrame}, i.e. either {@link Opcodes#TOP}, {@link Opcodes#INTEGER}, {@link
+   *     BaseMethodVisitor#visitFrame}, i.e. either {@link Opcodes#TOP}, {@link Opcodes#INTEGER}, {@link
    *     Opcodes#FLOAT}, {@link Opcodes#LONG}, {@link Opcodes#DOUBLE}, {@link Opcodes#NULL}, or
    *     {@link Opcodes#UNINITIALIZED_THIS}, or the internal name of a class, or a Label designating
    *     a NEW instruction (for uninitialized types).

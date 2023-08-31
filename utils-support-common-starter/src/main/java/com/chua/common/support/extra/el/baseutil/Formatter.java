@@ -15,7 +15,7 @@ public class Formatter {
     public static String format(String pattern, Object... params) {
         StringBuilder builder = threadLocal.get();
         map.computeIfAbsent(pattern, v -> {
-            List<Segment> segments = new LinkedList<>();
+            List<BaseSegment> segments = new LinkedList<>();
             char[] value = v.toCharArray();
             int start = 0;
             int pre = 0;
@@ -32,7 +32,7 @@ public class Formatter {
                     pre = start + 2;
                 }
             }
-            return new Template(segments.toArray(new Segment[0]));
+            return new Template(segments.toArray(new BaseSegment[0]));
         }).output(builder, params);
         String result = builder.toString();
         builder.setLength(0);
@@ -40,20 +40,20 @@ public class Formatter {
     }
 
     static class Template {
-        Segment[] segments;
+        BaseSegment[] segments;
 
-        public Template(Segment[] segments) {
+        public Template(BaseSegment[] segments) {
             this.segments = segments;
         }
 
         void output(StringBuilder builder, Object... params) {
-            for (Segment segment : segments) {
+            for (BaseSegment segment : segments) {
                 segment.output(builder, params);
             }
         }
     }
 
-    static abstract class Segment {
+    static abstract class BaseSegment {
         /**
          * 输出
          * @param builder 数据
@@ -62,7 +62,7 @@ public class Formatter {
         abstract void output(StringBuilder builder, Object... params);
     }
 
-    static class StringSegment extends Segment {
+    static class StringSegment extends BaseSegment {
         final String value;
 
         StringSegment(String value) {
@@ -75,7 +75,7 @@ public class Formatter {
         }
     }
 
-    static class ParamSegment extends Segment {
+    static class ParamSegment extends BaseSegment {
         final int index;
 
         ParamSegment(int index) {

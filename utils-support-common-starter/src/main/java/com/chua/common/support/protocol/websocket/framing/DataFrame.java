@@ -33,7 +33,7 @@ import com.chua.common.support.protocol.websocket.exceptions.InvalidDataExceptio
  *
  * @author Administrator
  */
-public abstract class DataFrame extends FramedataImpl1 {
+public abstract class DataFrame extends BaseFramedataImpl1 {
 
   /**
    * Class to represent a data frame

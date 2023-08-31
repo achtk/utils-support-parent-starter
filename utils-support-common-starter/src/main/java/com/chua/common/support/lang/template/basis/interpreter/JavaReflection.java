@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * 基础类
  * @author CH
  */
-public class JavaReflection extends Reflection {
+public class JavaReflection extends BaseReflection {
 	@SuppressWarnings("rawtypes") private final Map<Class, Map<String, Field>> fieldCache = new ConcurrentHashMap<Class, Map<String, Field>>();
 	@SuppressWarnings("rawtypes") private final Map<Class, Map<MethodSignature, Method>> methodCache = new ConcurrentHashMap<Class, Map<MethodSignature, Method>>();
 

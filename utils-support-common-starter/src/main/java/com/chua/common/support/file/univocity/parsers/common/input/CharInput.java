@@ -15,13 +15,13 @@
  ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.common.input;
 
-import com.chua.common.support.file.univocity.parsers.common.Format;
+import com.chua.common.support.file.univocity.parsers.common.BaseFormat;
 
 /**
  * A (very) basic character input definition.
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
- * @see Format
+ * @see BaseFormat
  */
 public interface CharInput {
 

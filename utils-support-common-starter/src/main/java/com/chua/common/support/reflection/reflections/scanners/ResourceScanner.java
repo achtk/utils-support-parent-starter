@@ -1,6 +1,6 @@
 package com.chua.common.support.reflection.reflections.scanners;
 
-import com.chua.common.support.reflection.reflections.vfs.Vfs;
+import com.chua.common.support.reflection.reflections.vfs.BaseVfs;
 import javassist.bytecode.ClassFile;
 
 import java.util.*;
@@ -29,7 +29,7 @@ public interface ResourceScanner {
      * @param file file
      * @return 文件
      */
-    default List<Map.Entry<String, String>> scan(Vfs.VfsFile file) {
+    default List<Map.Entry<String, String>> scan(BaseVfs.VfsFile file) {
         return null;
     }
 

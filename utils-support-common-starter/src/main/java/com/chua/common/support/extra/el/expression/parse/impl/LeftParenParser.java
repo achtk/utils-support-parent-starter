@@ -13,7 +13,7 @@ import static com.chua.common.support.constant.CommonConstant.SYMBOL_LEFT_BRACKE
  * 基础类
  * @author CH
  */
-public class LeftParenParser extends NodeParser {
+public class LeftParenParser extends BaseNodeParser {
 
     @Override
     public int parse(String el, int offset, Deque<CalculateNode> nodes, int function, Invoker next) {

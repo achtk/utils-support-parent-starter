@@ -6,7 +6,7 @@ import com.chua.common.support.json.jsonpath.internal.PathRef;
 import com.chua.common.support.json.jsonpath.internal.function.Parameter;
 import com.chua.common.support.json.jsonpath.internal.function.PathFunction;
 import com.chua.common.support.json.jsonpath.internal.path.CompiledPath;
-import com.chua.common.support.json.jsonpath.internal.path.PathToken;
+import com.chua.common.support.json.jsonpath.internal.path.BasePathToken;
 import com.chua.common.support.json.jsonpath.internal.path.RootPathToken;
 import com.chua.common.support.json.jsonpath.internal.path.WildcardPathToken;
 
@@ -46,7 +46,7 @@ public class Length implements PathFunction {
                 Path path = lengthOfParameter.getPath();
                 if (path instanceof CompiledPath) {
                     RootPathToken root = ((CompiledPath) path).getRoot();
-                    PathToken tail = root.getNext();
+                    BasePathToken tail = root.getNext();
                     while (null != tail && null != tail.getNext()) {
                         tail = tail.getNext();
                     }

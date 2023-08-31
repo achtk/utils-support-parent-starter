@@ -10,9 +10,9 @@
 
 package com.chua.common.support.file.xz;
 
-import com.chua.common.support.file.xz.lz.LzEncoder;
+import com.chua.common.support.file.xz.lz.BaseLzEncoder;
 import com.chua.common.support.file.xz.lzma.LZMAEncoder;
-import com.chua.common.support.file.xz.rangecoder.RangeEncoderToStream;
+import com.chua.common.support.file.xz.rangecoder.AbstractRangeEncoderToStream;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -22,13 +22,13 @@ import java.io.OutputStream;
  *
  * @since 1.6
  */
-public class LZMAOutputStream extends FinishableOutputStream {
+public class LZMAOutputStream extends AbstractFinishableOutputStream {
     private OutputStream out;
 
     private final ArrayCache arrayCache;
 
-    private LzEncoder lz;
-    private final RangeEncoderToStream rc;
+    private BaseLzEncoder lz;
+    private final AbstractRangeEncoderToStream rc;
     private LZMAEncoder lzma;
 
     private final int props;
@@ -60,7 +60,7 @@ public class LZMAOutputStream extends FinishableOutputStream {
         this.arrayCache = arrayCache;
 
         this.out = out;
-        rc = new RangeEncoderToStream(out);
+        rc = new AbstractRangeEncoderToStream(out);
 
         int dictSize = options.getDictSize();
         lzma = LZMAEncoder.getInstance(rc,

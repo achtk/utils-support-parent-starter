@@ -137,7 +137,7 @@ public class FtpClient {
 	/**
 	 * The connector used to connect the remote host.
 	 */
-	private FtpConnector connector = new DirectConnector();
+	private BaseFtpConnector connector = new DirectConnector();
 
 	/**
 	 * The SSL socket factory used to negotiate SSL connections.
@@ -354,7 +354,7 @@ public class FtpClient {
 	 *
 	 * @return The connector used to connect the remote host.
 	 */
-	public FtpConnector getConnector() {
+	public BaseFtpConnector getConnector() {
 		synchronized (lock) {
 			return connector;
 		}
@@ -369,7 +369,7 @@ public class FtpClient {
 	 * @param connector The connector used to connect the remote host.
 	 * @see DirectConnector
 	 */
-	public void setConnector(FtpConnector connector) {
+	public void setConnector(BaseFtpConnector connector) {
 		synchronized (lock) {
 			this.connector = connector;
 		}

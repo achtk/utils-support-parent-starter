@@ -12,7 +12,7 @@ import java.io.UnsupportedEncodingException;
 @Data
 public class HttpRequestBody  implements Serializable {
 
-    public static abstract class ContentType {
+    public static abstract class BaseContentType {
 
         public static final String JSON = "application/json";
 
@@ -41,7 +41,7 @@ public class HttpRequestBody  implements Serializable {
 
     public static HttpRequestBody json(String json, String encoding) {
         try {
-            return new HttpRequestBody(json.getBytes(encoding), ContentType.JSON, encoding);
+            return new HttpRequestBody(json.getBytes(encoding), BaseContentType.JSON, encoding);
         } catch (UnsupportedEncodingException e) {
             throw new IllegalArgumentException("illegal encoding " + encoding, e);
         }
@@ -49,7 +49,7 @@ public class HttpRequestBody  implements Serializable {
 
     public static HttpRequestBody xml(String xml, String encoding) {
         try {
-            return new HttpRequestBody(xml.getBytes(encoding), ContentType.XML, encoding);
+            return new HttpRequestBody(xml.getBytes(encoding), BaseContentType.XML, encoding);
         } catch (UnsupportedEncodingException e) {
             throw new IllegalArgumentException("illegal encoding " + encoding, e);
         }

@@ -16,7 +16,7 @@ import static com.chua.common.support.constant.CommonConstant.SYMBOL_MINUS_CHAR;
  *
  * @author CH
  */
-public class NumberParser extends NodeParser {
+public class NumberParser extends BaseNodeParser {
 
     private boolean match(String el, int offset, Deque<CalculateNode> nodes, int function) {
         if (SYMBOL_MINUS_CHAR == getChar(offset, el)) {

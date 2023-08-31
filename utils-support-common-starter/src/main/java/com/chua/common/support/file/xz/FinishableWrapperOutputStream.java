@@ -17,7 +17,7 @@ import java.io.OutputStream;
  * raw encoders. This is not needed for XZ compression and thus most
  * people will never need this.
  */
-public class FinishableWrapperOutputStream extends FinishableOutputStream {
+public class FinishableWrapperOutputStream extends AbstractFinishableOutputStream {
     /**
      * The {@link OutputStream OutputStream} that has been
      * wrapped into a FinishableWrapperOutputStream.

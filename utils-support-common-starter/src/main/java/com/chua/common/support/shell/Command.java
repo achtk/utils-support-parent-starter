@@ -28,7 +28,7 @@ public class Command {
      */
     private CommandAttribute attribute;
 
-    public ShellResult execute(Shell shell, Object obj) {
+    public ShellResult execute(BaseShell shell, Object obj) {
         return attribute.execute(command, pipeData, shell, obj);
     }
 }

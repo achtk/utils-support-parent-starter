@@ -28,7 +28,7 @@ import static com.chua.common.support.json.jsonpath.internal.Utils.onlyOneIsTrue
 /**
  *
  */
-class PropertyPathToken extends PathToken {
+class PropertyPathToken extends BasePathToken {
 
     private final List<String> properties;
     private final String stringDelimiter;

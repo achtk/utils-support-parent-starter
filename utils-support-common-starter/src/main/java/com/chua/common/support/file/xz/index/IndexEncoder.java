@@ -17,7 +17,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.zip.CheckedOutputStream;
 
-public class IndexEncoder extends IndexBase {
+public class IndexEncoder extends BaseIndexBase {
     private final ArrayList<IndexRecord> records
             = new ArrayList<IndexRecord>();
 

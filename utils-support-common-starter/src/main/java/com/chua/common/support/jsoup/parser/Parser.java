@@ -15,7 +15,7 @@ import java.util.List;
  * @author Administrator
  */
 public class Parser {
-    private TreeBuilder treeBuilder;
+    private BaseTreeBuilder treeBuilder;
     private ParseErrorList errors;
     private ParseSettings settings;
     private boolean trackPosition = false;
@@ -24,7 +24,7 @@ public class Parser {
      * Create a new Parser, using the specified TreeBuilder
      * @param treeBuilder TreeBuilder to use to parse input into Documents.
      */
-    public Parser(TreeBuilder treeBuilder) {
+    public Parser(BaseTreeBuilder treeBuilder) {
         this.treeBuilder = treeBuilder;
         settings = treeBuilder.defaultSettings();
         errors = ParseErrorList.noTracking();
@@ -61,7 +61,7 @@ public class Parser {
      * Get the TreeBuilder currently in use.
      * @return current TreeBuilder.
      */
-    public TreeBuilder getTreeBuilder() {
+    public BaseTreeBuilder getTreeBuilder() {
         return treeBuilder;
     }
 
@@ -70,7 +70,7 @@ public class Parser {
      * @param treeBuilder new TreeBuilder
      * @return this, for chaining
      */
-    public Parser setTreeBuilder(TreeBuilder treeBuilder) {
+    public Parser setTreeBuilder(BaseTreeBuilder treeBuilder) {
         this.treeBuilder = treeBuilder;
         treeBuilder.parser = this;
         return this;
@@ -158,7 +158,7 @@ public class Parser {
      * @return parsed Document
      */
     public static Document parse(String html, String baseUri) {
-        TreeBuilder treeBuilder = new HtmlTreeBuilder();
+        BaseTreeBuilder treeBuilder = new HtmlTreeBuilder();
         return treeBuilder.parse(new StringReader(html), baseUri, new Parser(treeBuilder));
     }
 

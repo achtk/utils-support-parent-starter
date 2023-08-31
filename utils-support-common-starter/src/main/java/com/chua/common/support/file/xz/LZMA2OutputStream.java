@@ -10,21 +10,21 @@
 
 package com.chua.common.support.file.xz;
 
-import com.chua.common.support.file.xz.lz.LzEncoder;
+import com.chua.common.support.file.xz.lz.BaseLzEncoder;
 import com.chua.common.support.file.xz.lzma.LZMAEncoder;
-import com.chua.common.support.file.xz.rangecoder.RangeEncoderToBuffer;
+import com.chua.common.support.file.xz.rangecoder.AbstractRangeEncoderToBuffer;
 
 import java.io.IOException;
 
-class LZMA2OutputStream extends FinishableOutputStream {
+class LZMA2OutputStream extends AbstractFinishableOutputStream {
     static final int COMPRESSED_SIZE_MAX = 64 << 10;
 
     private final ArrayCache arrayCache;
 
-    private FinishableOutputStream out;
+    private AbstractFinishableOutputStream out;
 
-    private LzEncoder lz;
-    private RangeEncoderToBuffer rc;
+    private BaseLzEncoder lz;
+    private AbstractRangeEncoderToBuffer rc;
     private LZMAEncoder lzma;
 
     private final int props; // Cannot change props on the fly for now.
@@ -54,14 +54,14 @@ class LZMA2OutputStream extends FinishableOutputStream {
                                                options.getMatchFinder());
     }
 
-    LZMA2OutputStream(FinishableOutputStream out, LZMA2Options options,
+    LZMA2OutputStream(AbstractFinishableOutputStream out, LZMA2Options options,
                       ArrayCache arrayCache) {
         if (out == null)
             throw new NullPointerException();
 
         this.arrayCache = arrayCache;
         this.out = out;
-        rc = new RangeEncoderToBuffer(COMPRESSED_SIZE_MAX, arrayCache);
+        rc = new AbstractRangeEncoderToBuffer(COMPRESSED_SIZE_MAX, arrayCache);
 
         int dictSize = options.getDictSize();
         int extraSizeBefore = getExtraSizeBefore(dictSize);

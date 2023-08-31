@@ -117,7 +117,7 @@ final class Context {
   /**
    * The types of the local variables in the current stack map frame. Each type is represented with
    * a single array element (even long and double), using the format described in {@link
-   * MethodVisitor#visitFrame}. Depending on {@link #currentFrameType}, this contains the types of
+   * BaseMethodVisitor#visitFrame}. Depending on {@link #currentFrameType}, this contains the types of
    * all the local variables, or only those of the additional ones (compared to the previous frame).
    */
   Object[] currentFrameLocalTypes;
@@ -131,7 +131,7 @@ final class Context {
   /**
    * The types of the stack elements in the current stack map frame. Each type is represented with a
    * single array element (even long and double), using the format described in {@link
-   * MethodVisitor#visitFrame}.
+   * BaseMethodVisitor#visitFrame}.
    */
   Object[] currentFrameStackTypes;
 }

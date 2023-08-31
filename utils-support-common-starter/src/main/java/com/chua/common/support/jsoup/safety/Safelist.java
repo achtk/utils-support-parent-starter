@@ -601,7 +601,7 @@ public class Safelist {
      * named types for config. All just hold strings, but here for my sanity.
      */
     @EqualsAndHashCode(callSuper = false)
-    static class TagName extends TypedValue {
+    static class TagName extends BaseTypedValue {
         TagName(String value) {
             super(value);
         }
@@ -611,7 +611,7 @@ public class Safelist {
         }
     }
     @EqualsAndHashCode(callSuper = false)
-    static class AttributeKey extends TypedValue {
+    static class AttributeKey extends BaseTypedValue {
         AttributeKey(String value) {
             super(value);
         }
@@ -621,7 +621,7 @@ public class Safelist {
         }
     }
     @EqualsAndHashCode(callSuper = false)
-    static class AttributeValue extends TypedValue {
+    static class AttributeValue extends BaseTypedValue {
         AttributeValue(String value) {
             super(value);
         }
@@ -631,7 +631,7 @@ public class Safelist {
         }
     }
     @EqualsAndHashCode(callSuper = false)
-    static class Protocol extends TypedValue {
+    static class Protocol extends BaseTypedValue {
         Protocol(String value) {
             super(value);
         }
@@ -640,10 +640,10 @@ public class Safelist {
             return new Protocol(value);
         }
     }
-    abstract static class TypedValue {
+    abstract static class BaseTypedValue {
         private final String value;
 
-        TypedValue(String value) {
+        BaseTypedValue(String value) {
             Validate.notNull(value);
             this.value = value;
         }
@@ -667,7 +667,7 @@ public class Safelist {
             if (getClass() != obj.getClass()) {
                 return false;
             }
-            TypedValue other = (TypedValue) obj;
+            BaseTypedValue other = (BaseTypedValue) obj;
             if (value == null) {
                 return other.value == null;
             } else {

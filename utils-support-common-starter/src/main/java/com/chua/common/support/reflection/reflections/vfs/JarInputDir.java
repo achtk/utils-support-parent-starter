@@ -13,7 +13,7 @@ import java.util.zip.ZipEntry;
 /**
  * @author Administrator
  */
-public class JarInputDir implements Vfs.Dir {
+public class JarInputDir implements BaseVfs.Dir {
     private final URL url;
     JarInputStream jarInputStream;
     long cursor = 0;
@@ -29,8 +29,8 @@ public class JarInputDir implements Vfs.Dir {
     }
 
     @Override
-    public Iterable<Vfs.VfsFile> getFiles() {
-        return () -> new Iterator<Vfs.VfsFile>() {
+    public Iterable<BaseVfs.VfsFile> getFiles() {
+        return () -> new Iterator<BaseVfs.VfsFile>() {
             {
                 try {
                     jarInputStream = new JarInputStream(url.openConnection().getInputStream());
@@ -39,7 +39,7 @@ public class JarInputDir implements Vfs.Dir {
                 }
             }
 
-            Vfs.VfsFile entry = null;
+            BaseVfs.VfsFile entry = null;
 
             @Override
             public boolean hasNext() {
@@ -47,13 +47,13 @@ public class JarInputDir implements Vfs.Dir {
             }
 
             @Override
-            public Vfs.VfsFile next() {
-                Vfs.VfsFile next = entry;
+            public BaseVfs.VfsFile next() {
+                BaseVfs.VfsFile next = entry;
                 entry = null;
                 return next;
             }
 
-            private Vfs.VfsFile computeNext() {
+            private BaseVfs.VfsFile computeNext() {
                 while (true) {
                     try {
                         ZipEntry entry = jarInputStream.getNextJarEntry();

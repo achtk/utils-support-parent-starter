@@ -20,7 +20,7 @@ import java.io.OutputStream;
  * of <code>OutputStream</code> solely because it allows
  * using this as the output stream for a chain of raw filters.
  */
-class CountingOutputStream extends FinishableOutputStream {
+class CountingOutputStream extends AbstractFinishableOutputStream {
     private final OutputStream out;
     private long size = 0;
 

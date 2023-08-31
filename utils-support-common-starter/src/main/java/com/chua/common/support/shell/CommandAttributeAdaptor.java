@@ -49,7 +49,7 @@ public interface CommandAttributeAdaptor {
      * @param shell              shell
      * @return 結果
      */
-    String execute(CommandAttribute commandAttribute, List<String> options, Shell shell);
+    String execute(CommandAttribute commandAttribute, List<String> options, BaseShell shell);
 
     /**
      * help
@@ -58,7 +58,7 @@ public interface CommandAttributeAdaptor {
      * @param shell            shell
      * @return help
      */
-    String help(CommandAttribute commandAttribute, Shell shell);
+    String help(CommandAttribute commandAttribute, BaseShell shell);
 
     /**
      * usage

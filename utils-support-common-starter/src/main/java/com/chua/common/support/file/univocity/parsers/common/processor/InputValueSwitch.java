@@ -20,7 +20,7 @@ import com.chua.common.support.file.univocity.parsers.common.ParsingContextWrapp
 import com.chua.common.support.file.univocity.parsers.common.processor.core.AbstractInputValueSwitch;
 
 /**
- * A concrete implementation of {@link RowProcessorSwitch} that allows switching among different implementations of
+ * A concrete implementation of {@link BaseRowProcessorSwitch} that allows switching among different implementations of
  * {@link RowProcessor} based on values found on the rows parsed from the input.
  *
  * @author Administrator

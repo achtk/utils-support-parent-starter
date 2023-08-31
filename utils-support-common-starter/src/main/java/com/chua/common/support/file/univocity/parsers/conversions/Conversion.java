@@ -15,14 +15,14 @@
  ******************************************************************************/
 package com.chua.common.support.file.univocity.parsers.conversions;
 
-import com.chua.common.support.file.univocity.parsers.common.processor.ObjectRowProcessor;
+import com.chua.common.support.file.univocity.parsers.common.processor.BaseObjectRowProcessor;
 import com.chua.common.support.file.univocity.parsers.common.processor.ObjectRowWriterProcessor;
 
 /**
  * The interface that defines the conversion from one type of value to another, and vice versa.
  * <p>
  * univocity-parsers provides a set of default conversions for usage with
- * {@link ObjectRowProcessor} and {@link ObjectRowWriterProcessor}.
+ * {@link BaseObjectRowProcessor} and {@link ObjectRowWriterProcessor}.
  * <p>
  * Annotations in package {@link com.chua.common.support.file.univocity.parsers.annotations} are associated with different Conversion
  * implementations in {@link com.chua.common.support.file.univocity.parsers.conversions}.
@@ -33,8 +33,8 @@ import com.chua.common.support.file.univocity.parsers.common.processor.ObjectRow
  *            When used in conjunction with the {@link com.chua.common.support.file.univocity.parsers.annotations.Convert} annotation,
  *            <b>O</b> should be compatible with the type of the annotated field.
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
- * @see com.chua.common.support.file.univocity.parsers.common.processor.ObjectRowProcessor
- * @see com.chua.common.support.file.univocity.parsers.common.processor.ObjectRowWriterProcessor
+ * @see BaseObjectRowProcessor
+ * @see ObjectRowWriterProcessor
  */
 public interface Conversion<I, O> {
 

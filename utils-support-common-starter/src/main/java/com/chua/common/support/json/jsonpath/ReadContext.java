@@ -93,7 +93,7 @@ public interface ReadContext {
      * @param <T>
      * @return result
      */
-    <T> T read(JsonPath path, TypeRef<T> typeRef);
+    <T> T read(JsonPath path, BaseTypeRef<T> typeRef);
 
     /**
      * Reads the given path from this context
@@ -108,7 +108,7 @@ public interface ReadContext {
      * @param <T>
      * @return result
      */
-    <T> T read(String path, TypeRef<T> typeRef);
+    <T> T read(String path, BaseTypeRef<T> typeRef);
 
     /**
      * Stops evaluation when maxResults limit has been reached

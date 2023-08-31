@@ -17,7 +17,7 @@ package com.chua.common.support.file.univocity.parsers.fixed;
 
 import com.chua.common.support.file.univocity.parsers.annotations.Headers;
 import com.chua.common.support.file.univocity.parsers.annotations.helpers.AnnotationHelper;
-import com.chua.common.support.file.univocity.parsers.common.AbstractCommonParserSettings;
+import com.chua.common.support.file.univocity.parsers.common.BaseCommonParserSettings;
 import com.chua.common.support.file.univocity.parsers.common.NormalizedString;
 import com.chua.common.support.file.univocity.parsers.common.input.CharAppender;
 import com.chua.common.support.file.univocity.parsers.common.input.DefaultCharAppender;
@@ -29,7 +29,7 @@ import java.util.Map;
 /**
  * This is the configuration class used by the Fixed-Width parser ({@link FixedWidthParser})
  *
- * <p>In addition to the configuration options provided by {@link AbstractCommonParserSettings}, the FixedWidthParserSettings include:
+ * <p>In addition to the configuration options provided by {@link BaseCommonParserSettings}, the FixedWidthParserSettings include:
  *
  * <ul>
  * <li><b>skipTrailingCharsUntilNewline <i>(defaults to {@code false})</i>:</b> Indicates whether or not any trailing characters beyond the record's length should be skipped until the newline is reached
@@ -45,9 +45,9 @@ import java.util.Map;
  * @see com.chua.common.support.file.univocity.parsers.fixed.FixedWidthParser
  * @see com.chua.common.support.file.univocity.parsers.fixed.FixedWidthFormat
  * @see FixedWidthFields
- * @see AbstractCommonParserSettings
+ * @see BaseCommonParserSettings
  */
-public class FixedWidthParserSettings extends AbstractCommonParserSettings<FixedWidthFormat> {
+public class FixedWidthParserSettings extends BaseCommonParserSettings<FixedWidthFormat> {
 
 	protected boolean skipTrailingCharsUntilNewline = false;
 	protected boolean recordEndsOnNewline = false;

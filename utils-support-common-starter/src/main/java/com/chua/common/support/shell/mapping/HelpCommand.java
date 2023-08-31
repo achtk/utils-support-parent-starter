@@ -22,7 +22,7 @@ public class HelpCommand {
      * @return help
      */
     @ShellMapping(value = {"help"}, describe = "帮助")
-    public ShellResult help(Shell shell) {
+    public ShellResult help(BaseShell shell) {
         StringBuilder stringBuilder = new StringBuilder("\r\n");
         Collection<CommandAttribute> command = shell.getCommand();
         for (CommandAttribute commandAttribute : command) {

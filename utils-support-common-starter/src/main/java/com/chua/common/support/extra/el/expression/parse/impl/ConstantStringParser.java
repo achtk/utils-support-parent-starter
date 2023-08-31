@@ -14,7 +14,7 @@ import static com.chua.common.support.constant.CommonConstant.SYMBOL_RIGHT_ONE_S
  *
  * @author CH
  */
-public class ConstantStringParser extends NodeParser {
+public class ConstantStringParser extends BaseNodeParser {
 
     @Override
     public int parse(String el, int offset, Deque<CalculateNode> nodes, int function, Invoker next) {

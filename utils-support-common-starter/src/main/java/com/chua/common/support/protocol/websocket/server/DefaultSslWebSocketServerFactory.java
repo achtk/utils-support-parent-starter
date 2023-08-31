@@ -26,7 +26,7 @@
 package com.chua.common.support.protocol.websocket.server;
 
 import com.chua.common.support.protocol.websocket.SSLSocketChannel2;
-import com.chua.common.support.protocol.websocket.WebSocketAdapter;
+import com.chua.common.support.protocol.websocket.BaseWebSocketAdapter;
 import com.chua.common.support.protocol.websocket.WebSocketImpl;
 import com.chua.common.support.protocol.websocket.WebSocketServerFactory;
 import com.chua.common.support.protocol.websocket.drafts.Draft;
@@ -80,12 +80,12 @@ public class DefaultSslWebSocketServerFactory implements WebSocketServerFactory 
     }
 
     @Override
-    public WebSocketImpl createWebSocket(WebSocketAdapter a, Draft d) {
+    public WebSocketImpl createWebSocket(BaseWebSocketAdapter a, Draft d) {
         return new WebSocketImpl(a, d);
     }
 
     @Override
-    public WebSocketImpl createWebSocket(WebSocketAdapter webSocketAdapter, List<Draft> d) {
+    public WebSocketImpl createWebSocket(BaseWebSocketAdapter webSocketAdapter, List<Draft> d) {
         return new WebSocketImpl(webSocketAdapter, d);
     }
 

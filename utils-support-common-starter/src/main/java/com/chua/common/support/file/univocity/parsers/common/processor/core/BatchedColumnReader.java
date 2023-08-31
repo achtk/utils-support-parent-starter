@@ -29,7 +29,7 @@ package com.chua.common.support.file.univocity.parsers.common.processor.core;
  * @param <T> the type of the data stored by the columns.
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
  * @see AbstractBatchedColumnProcessor
- * @see AbstractBatchedObjectColumnProcessor
+ * @see AbstractBatchedObjectColumnProcessorAbstract
  * @see Processor
  */
 interface BatchedColumnReader<T> extends ColumnReader<T> {

@@ -18,7 +18,7 @@ import java.util.List;
  * <p>
  * Created by mattg on 6/27/15.
  */
-public class FunctionPathToken extends PathToken {
+public class FunctionPathToken extends BasePathToken {
 
     private final String functionName;
     private final String pathFragment;
@@ -52,7 +52,7 @@ public class FunctionPathToken extends PathToken {
             Path path = functionParams.get(0).getPath();
             if (null != path && !path.isFunctionPath() && path instanceof CompiledPath) {
                 RootPathToken root = ((CompiledPath) path).getRoot();
-                PathToken tail = root.getNext();
+                BasePathToken tail = root.getNext();
                 while (null != tail && null != tail.getNext()) {
                     if (tail.getNext() instanceof WildcardPathToken) {
                         tail.setNext(tail.getNext().getNext());

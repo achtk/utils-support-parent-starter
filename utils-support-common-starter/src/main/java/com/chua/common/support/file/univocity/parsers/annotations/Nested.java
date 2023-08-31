@@ -38,17 +38,17 @@ public @interface Nested {
 	Class type() default Object.class;
 
 	/**
-	 * Provides a {@link HeaderTransformer} for reassigning header names/positions of the nested class.
+	 * Provides a {@link BaseHeaderTransformer} for reassigning header names/positions of the nested class.
 	 *
 	 * @return a transformation to be applied over headers/positions of the nested class.
 	 * Used for reassigning specific input columns so the correct values end up in the correct nested attributes.
 	 */
-	Class<? extends HeaderTransformer> headerTransformer() default HeaderTransformer.class;
+	Class<? extends BaseHeaderTransformer> headerTransformer() default BaseHeaderTransformer.class;
 
 	/**
 	 * An optional sequence of arguments for creating an instance of the given {@link #headerTransformer()}.
 	 *
-	 * @return the initialization arguments passed into the constructore of the {@link HeaderTransformer}
+	 * @return the initialization arguments passed into the constructore of the {@link BaseHeaderTransformer}
 	 */
 	String[] args() default {};
 }

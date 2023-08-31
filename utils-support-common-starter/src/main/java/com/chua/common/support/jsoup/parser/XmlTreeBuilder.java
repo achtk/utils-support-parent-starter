@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author Jonathan Hedley
  */
-public class XmlTreeBuilder extends TreeBuilder {
+public class XmlTreeBuilder extends BaseTreeBuilder {
     ParseSettings defaultSettings() {
         return ParseSettings.PRESERVE_CASE;
     }
@@ -43,7 +43,7 @@ public class XmlTreeBuilder extends TreeBuilder {
     }
 
     @Override
-    protected boolean process(Token token) {
+    protected boolean process(BaseToken token) {
         // start tag, end tag, doctype, comment, character, eof
         switch (token.type) {
             case START_TAG:
@@ -74,12 +74,12 @@ public class XmlTreeBuilder extends TreeBuilder {
         onNodeInserted(node, null);
     }
 
-    protected void insertNode(Node node, Token token) {
+    protected void insertNode(Node node, BaseToken token) {
         currentElement().appendChild(node);
         onNodeInserted(node, token);
     }
 
-    Element insert(Token.StartTag startTag) {
+    Element insert(BaseToken.StartTag startTag) {
         Tag tag = tagFor(startTag.name(), settings);
         // todo: wonder if for xml parsing, should treat all tags as unknown? because it's not html.
         if (startTag.hasAttributes())
@@ -96,7 +96,7 @@ public class XmlTreeBuilder extends TreeBuilder {
         return el;
     }
 
-    void insert(Token.Comment commentToken) {
+    void insert(BaseToken.Comment commentToken) {
         Comment comment = new Comment(commentToken.getData());
         Node insert = comment;
         if (commentToken.bogus && comment.isXmlDeclaration()) {
@@ -109,12 +109,12 @@ public class XmlTreeBuilder extends TreeBuilder {
         insertNode(insert, commentToken);
     }
 
-    void insert(Token.Character token) {
+    void insert(BaseToken.Character token) {
         final String data = token.getData();
         insertNode(token.isCharData() ? new CharDataNode(data) : new TextNode(data), token);
     }
 
-    void insert(Token.Doctype d) {
+    void insert(BaseToken.Doctype d) {
         DocumentType doctypeNode = new DocumentType(settings.normalizeTag(d.getName()), d.getPublicIdentifier(), d.getSystemIdentifier());
         doctypeNode.setPubSysKey(d.getPubSysKey());
         insertNode(doctypeNode, d);
@@ -126,7 +126,7 @@ public class XmlTreeBuilder extends TreeBuilder {
      *
      * @param endTag tag to close
      */
-    protected void popStackToClose(Token.EndTag endTag) {
+    protected void popStackToClose(BaseToken.EndTag endTag) {
         // like in HtmlTreeBuilder - don't scan up forever for very (artificially) deeply nested stacks
         String elName = settings.normalizeTag(endTag.tagName);
         Element firstFound = null;

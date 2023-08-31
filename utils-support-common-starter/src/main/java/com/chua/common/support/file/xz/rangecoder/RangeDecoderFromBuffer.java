@@ -16,7 +16,7 @@ import com.chua.common.support.file.xz.CorruptedInputException;
 import java.io.DataInputStream;
 import java.io.IOException;
 
-public final class RangeDecoderFromBuffer extends RangeDecoder {
+public final class RangeDecoderFromBuffer extends BaseRangeDecoder {
     private static final int INIT_SIZE = 5;
 
     private final byte[] buf;

@@ -1,7 +1,7 @@
 package com.chua.common.support.protocol.ftp.client.connectors;
 
 
-import com.chua.common.support.protocol.ftp.client.FtpConnector;
+import com.chua.common.support.protocol.ftp.client.BaseFtpConnector;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -15,7 +15,7 @@ import java.net.Socket;
  *
  * @author Carlo Pelliccia
  */
-public class DirectConnector extends FtpConnector {
+public class DirectConnector extends BaseFtpConnector {
 
     public Socket connectForCommunicationChannel(String host, int port)
             throws IOException {

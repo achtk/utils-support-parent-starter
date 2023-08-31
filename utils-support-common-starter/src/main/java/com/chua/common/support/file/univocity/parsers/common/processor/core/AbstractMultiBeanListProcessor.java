@@ -21,7 +21,7 @@ import com.chua.common.support.file.univocity.parsers.common.*;
 import java.util.*;
 
 /**
- * A {@link Processor} implementation for converting rows extracted from any implementation of {@link AbstractParser} into java objects, storing
+ * A {@link Processor} implementation for converting rows extracted from any implementation of {@link BaseParser} into java objects, storing
  * them into lists. This processor stores beans in separate lists, one for each type of bean processed.
  * All lists of all types will have the same number of entries as the number of records in the input.
  * When an object of a particular type can't be generated from a row, {@code null} will be added to the list. This ensures all lists are the same size,
@@ -30,9 +30,9 @@ import java.util.*;
  * <p>The class types passed to the constructor of this class must contain the annotations provided in {@link com.chua.common.support.file.univocity.parsers.annotations}.
  *
  * @author Univocity Software Pty Ltd - <a href="mailto:parsers@univocity.com">parsers@univocity.com</a>
- * @see AbstractParser
+ * @see BaseParser
  * @see Processor
- * @see AbstractBeanProcessor
+ * @see AbstractBeanProcessorAbstract
  * @see AbstractMultiBeanProcessor
  */
 public class AbstractMultiBeanListProcessor<C extends AbstractContext> extends AbstractMultiBeanRowProcessor<C> {
@@ -47,7 +47,7 @@ public class AbstractMultiBeanListProcessor<C extends AbstractContext> extends A
 	 *
 	 * @param expectedBeanCount expected number of rows to be parsed from the input which will be converted into java beans.
 	 *                          Used to pre-allocate the size of the output {@link List} returned by {@link #getBeans()}
-	 * @param beanTypes         the classes with their attributes mapped to fields of records parsed by an {@link AbstractParser} or written by an {@link AbstractWriter}.
+	 * @param beanTypes         the classes with their attributes mapped to fields of records parsed by an {@link BaseParser} or written by an {@link AbstractWriter}.
 	 */
 	public AbstractMultiBeanListProcessor(int expectedBeanCount, Class... beanTypes) {
 		super(beanTypes);
@@ -59,7 +59,7 @@ public class AbstractMultiBeanListProcessor<C extends AbstractContext> extends A
 	/**
 	 * Creates a processor for java beans of multiple types
 	 *
-	 * @param beanTypes the classes with their attributes mapped to fields of records parsed by an {@link AbstractParser} or written by an {@link AbstractWriter}.
+	 * @param beanTypes the classes with their attributes mapped to fields of records parsed by an {@link BaseParser} or written by an {@link AbstractWriter}.
 	 */
 	public AbstractMultiBeanListProcessor(Class... beanTypes) {
 		this(0, beanTypes);
@@ -88,7 +88,7 @@ public class AbstractMultiBeanListProcessor<C extends AbstractContext> extends A
 	}
 
 	/**
-	 * Returns the record headers. This can be either the headers defined in {@link AbstractCommonSettings#getHeaders()} or the headers parsed in the file when {@link CommonSettings#getHeaders()}  equals true
+	 * Returns the record headers. This can be either the headers defined in {@link BaseCommonSettings#getHeaders()} or the headers parsed in the file when {@link CommonSettings#getHeaders()}  equals true
 	 *
 	 * @return the headers of all records parsed.
 	 */

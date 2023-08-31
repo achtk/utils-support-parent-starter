@@ -11,9 +11,9 @@
 package com.chua.common.support.file.xz.lzma;
 
 import com.chua.common.support.file.xz.ArrayCache;
-import com.chua.common.support.file.xz.lz.LzEncoder;
+import com.chua.common.support.file.xz.lz.BaseLzEncoder;
 import com.chua.common.support.file.xz.lz.Matches;
-import com.chua.common.support.file.xz.rangecoder.RangeEncoder;
+import com.chua.common.support.file.xz.rangecoder.AbstractRangeEncoder;
 
 final class LZMAEncoderNormal extends LZMAEncoder {
     private static final int OPTS = 4096;
@@ -33,17 +33,17 @@ final class LZMAEncoderNormal extends LZMAEncoder {
     private final State nextState = new State();
 
     static int getMemoryUsage(int dictSize, int extraSizeBefore, int mf) {
-        return LzEncoder.getMemoryUsage(dictSize,
+        return BaseLzEncoder.getMemoryUsage(dictSize,
                 Math.max(extraSizeBefore, EXTRA_SIZE_BEFORE),
                 EXTRA_SIZE_AFTER, MATCH_LEN_MAX, mf)
                 + OPTS * 64 / 1024;
     }
 
-    LZMAEncoderNormal(RangeEncoder rc, int lc, int lp, int pb,
-                             int dictSize, int extraSizeBefore,
-                             int niceLen, int mf, int depthLimit,
-                             ArrayCache arrayCache) {
-        super(rc, LzEncoder.getInstance(dictSize,
+    LZMAEncoderNormal(AbstractRangeEncoder rc, int lc, int lp, int pb,
+                      int dictSize, int extraSizeBefore,
+                      int niceLen, int mf, int depthLimit,
+                      ArrayCache arrayCache) {
+        super(rc, BaseLzEncoder.getInstance(dictSize,
                         Math.max(extraSizeBefore,
                                 EXTRA_SIZE_BEFORE),
                         EXTRA_SIZE_AFTER,

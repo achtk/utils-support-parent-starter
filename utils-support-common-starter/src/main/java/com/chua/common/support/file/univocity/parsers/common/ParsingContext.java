@@ -33,20 +33,20 @@ public interface ParsingContext extends AbstractContext {
 	/**
 	 * Returns the file headers that identify each parsed record.
 	 *
-	 * <p> If the headers are extracted from the input (i.e. {@link AbstractCommonParserSettings#isHeaderExtractionEnabled()} == true), then these values will be returned.
-	 * <p> If no headers are extracted from the input, then the configured headers in {@link AbstractCommonSettings#getHeaders()} will be returned.
+	 * <p> If the headers are extracted from the input (i.e. {@link BaseCommonParserSettings#isHeaderExtractionEnabled()} == true), then these values will be returned.
+	 * <p> If no headers are extracted from the input, then the configured headers in {@link BaseCommonSettings#getHeaders()} will be returned.
 	 * Note that the user-provided headers will override the header list parsed from the input, if any. To obtain the
 	 * original list of headers found in the input use {@link ParsingContext#parsedHeaders()}
 	 *
 	 * @return the headers used to identify each record parsed from the input.
-	 * @see AbstractCommonParserSettings
-	 * @see com.chua.common.support.file.univocity.parsers.common.AbstractCommonSettings
+	 * @see BaseCommonParserSettings
+	 * @see BaseCommonSettings
 	 */
 	String[] headers();
 
 
 	/**
-	 * Returns the indexes of each field extracted from the input when fields are selected in the parser settings (i.e. using {@link AbstractCommonSettings#selectFields} and friends).
+	 * Returns the indexes of each field extracted from the input when fields are selected in the parser settings (i.e. using {@link BaseCommonSettings#selectFields} and friends).
 	 *
 	 * <p> The indexes are relative to their original position in the input.
 	 * <p> For example, if the input has the fields "A, B, C, D", and the selected fields are "A, D", then the extracted field indexes will return [0, 3]
@@ -54,18 +54,18 @@ public interface ParsingContext extends AbstractContext {
 	 * <p>If no fields were selected, then this method will return null. This means all fields are being parsed.
 	 *
 	 * @return The indexes of each selected field; null if no fields were selected.
-	 * @see com.chua.common.support.file.univocity.parsers.common.AbstractCommonSettings
+	 * @see BaseCommonSettings
 	 */
 	int[] extractedFieldIndexes();
 
 	/**
-	 * Indicates whether selected fields (using {@link AbstractCommonSettings#selectFields} and friends) are being reordered.
+	 * Indicates whether selected fields (using {@link BaseCommonSettings#selectFields} and friends) are being reordered.
 	 *
-	 * <p>If columns are reordered, each parsed record will contain values only for the selected fields, as specified by {@link AbstractCommonParserSettings#isColumnReorderingEnabled}
+	 * <p>If columns are reordered, each parsed record will contain values only for the selected fields, as specified by {@link BaseCommonParserSettings#isColumnReorderingEnabled}
 	 *
 	 * @return true if the parsed records are being reordered by the parser, false otherwise
-	 * @see AbstractCommonParserSettings
-	 * @see com.chua.common.support.file.univocity.parsers.common.AbstractCommonSettings
+	 * @see BaseCommonParserSettings
+	 * @see BaseCommonSettings
 	 */
 	boolean columnsReordered();
 
@@ -91,11 +91,11 @@ public interface ParsingContext extends AbstractContext {
 	void skipLines(long lines);
 
 	/**
-	 * Returns the headers <b>parsed</b> from the input, if and only if {@link AbstractCommonParserSettings#headerExtractionEnabled} is {@code true}.
-	 * The result of this method won't return the list of headers manually set by the user in {@link AbstractCommonParserSettings#getHeaders()}.
+	 * Returns the headers <b>parsed</b> from the input, if and only if {@link BaseCommonParserSettings#headerExtractionEnabled} is {@code true}.
+	 * The result of this method won't return the list of headers manually set by the user in {@link BaseCommonParserSettings#getHeaders()}.
 	 * Use the {@link #headers()} method instead to obtain the headers actually used by the parser.
 	 *
-	 * @return the headers parsed from the input, when {@link AbstractCommonParserSettings#headerExtractionEnabled} is {@code true}.
+	 * @return the headers parsed from the input, when {@link BaseCommonParserSettings#headerExtractionEnabled} is {@code true}.
 	 */
 	String[] parsedHeaders();
 
@@ -123,7 +123,7 @@ public interface ParsingContext extends AbstractContext {
 
 	/**
 	 * Returns all comments collected by the parser so far.
-	 * An empty map will be returned if {@link AbstractCommonParserSettings#isCommentCollectionEnabled()} evaluates to {@code false}.
+	 * An empty map will be returned if {@link BaseCommonParserSettings#isCommentCollectionEnabled()} evaluates to {@code false}.
 	 *
 	 * @return a map containing the line numbers and comments found in each.
 	 */
@@ -131,7 +131,7 @@ public interface ParsingContext extends AbstractContext {
 
 	/**
 	 * Returns the last comment found in the input.
-	 * {@code null} will be returned if {@link AbstractCommonParserSettings#isCommentCollectionEnabled()} is evaluated to {@code false}.
+	 * {@code null} will be returned if {@link BaseCommonParserSettings#isCommentCollectionEnabled()} is evaluated to {@code false}.
 	 *
 	 * @return the last comment found in the input.
 	 */
@@ -139,8 +139,8 @@ public interface ParsingContext extends AbstractContext {
 
 	/**
 	 * Returns the line separator characters used to separate individual records when parsing. This could be the line
-	 * separator defined in the {@link Format#getLineSeparator()} configuration, or the line separator sequence
-	 * identified automatically when {@link AbstractCommonParserSettings#isLineSeparatorDetectionEnabled()} evaluates to {@code true}.
+	 * separator defined in the {@link BaseFormat#getLineSeparator()} configuration, or the line separator sequence
+	 * identified automatically when {@link BaseCommonParserSettings#isLineSeparatorDetectionEnabled()} evaluates to {@code true}.
 	 *
 	 * @return the line separator sequence. Might contain one or two characters.
 	 */

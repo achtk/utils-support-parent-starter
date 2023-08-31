@@ -256,7 +256,7 @@ final class AnnotationWriter extends AbstractAnnotationVisitor {
         annotation.put12('D', symbolTable.addConstantDouble(doubleValue).index);
       }
     } else {
-      Symbol symbol = symbolTable.addConstant(value);
+      BaseSymbol symbol = symbolTable.addConstant(value);
       annotation.put12(".s.IFJDCS".charAt(symbol.tag), symbol.index);
     }
   }
