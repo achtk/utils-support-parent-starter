@@ -1,6 +1,6 @@
 package com.chua.pytorch.support;
 
-import com.chua.common.support.engine.EngineBase;
+import com.chua.common.support.engine.AbstractEngineBase;
 import com.chua.common.support.feature.DetectionConfiguration;
 
 import java.util.Map;
@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author CH
  */
-public class PytorchEngine extends EngineBase {
+public class PytorchEngine extends AbstractEngineBase {
 
     private final Map<String, Object> tmp = new ConcurrentHashMap<>();
 
