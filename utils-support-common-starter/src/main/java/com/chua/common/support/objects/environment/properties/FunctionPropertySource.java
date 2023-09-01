@@ -24,7 +24,7 @@ public class FunctionPropertySource implements PropertySource {
     }
 
     @Override
-    public String getProperty(String name) {
+    public Object getProperty(String name) {
         return function.apply(name) + "";
     }
 }

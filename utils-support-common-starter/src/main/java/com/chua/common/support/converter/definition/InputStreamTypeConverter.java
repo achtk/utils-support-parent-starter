@@ -1,6 +1,7 @@
 package com.chua.common.support.converter.definition;
 
 import com.chua.common.support.converter.Converter;
+import com.chua.common.support.utils.FileUtils;
 import com.chua.common.support.utils.IoUtils;
 
 import javax.imageio.ImageIO;
@@ -11,8 +12,6 @@ import java.net.URI;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * InputStream
@@ -81,6 +80,13 @@ public class InputStreamTypeConverter implements TypeConverter<InputStream> {
         }
 
         if (value instanceof String) {
+            String s = value.toString();
+            if(FileUtils.exist(s)) {
+                try {
+                    return new FileInputStream(new File(s));
+                } catch (FileNotFoundException ignored) {
+                }
+            }
             try {
                 return Files.newInputStream(Converter.convertIfNecessary(value, File.class).toPath());
             } catch (IOException ignored) {

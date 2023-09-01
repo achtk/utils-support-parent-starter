@@ -28,7 +28,7 @@ public class PropertiesPropertySource implements MultiPropertySource {
     }
 
     @Override
-    public String getProperty(String name) {
+    public Object getProperty(String name) {
         return null;
     }
 

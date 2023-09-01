@@ -17,11 +17,17 @@ import com.chua.common.support.spi.ServiceFactory;
 import com.chua.common.support.utils.FileUtils;
 import com.chua.common.support.utils.MapUtils;
 import com.chua.common.support.utils.StringUtils;
+import com.chua.common.support.utils.UrlUtils;
+import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.chua.common.support.constant.CommonConstant.SYSTEM;
+import static com.chua.common.support.constant.NameConstant.FILE;
 
 
 /**
@@ -29,6 +35,7 @@ import static com.chua.common.support.constant.CommonConstant.SYSTEM;
  *
  * @author CH
  */
+@Slf4j
 public class DelegateProfile implements  Profile, ServiceFactory<ProfileResolver> {
 
     private final Set<ProfileValue> profiles = new LinkedHashSet<>();
@@ -46,8 +53,43 @@ public class DelegateProfile implements  Profile, ServiceFactory<ProfileResolver
     }
 
     @Override
+    public Profile addProfile(URL url) {
+        String fileName = null;
+        String s = url.toExternalForm();
+        if(FILE.equals(url.getProtocol())) {
+            fileName = FileUtils.getName(s);
+        } else {
+            try {
+                fileName = UrlUtils.getFileName(url.openConnection());
+            } catch (IOException e) {
+                log.error(e.getMessage());
+                return this;
+            }
+        }
+        ProfileResolver profileResolver = getResolver(fileName);
+        if(null == profileResolver) {
+            return this;
+        }
+        List<ProfileValue> resolve;
+        try (InputStream inputStream = url.openStream()) {
+            resolve = profileResolver.resolve(s, inputStream);
+        } catch (IOException e) {
+            log.error(e.getMessage());
+            return this;
+        }
+        for (ProfileValue profileValue : resolve) {
+            profiles.add(profileValue);
+            addProfileValue(profileValue.getName(), profileValue);
+        }
+        return this;
+    }
+
+    @Override
     public Profile addProfile(String resourceUrl) {
         ProfileResolver profileResolver = getResolver(resourceUrl);
+        if(null == profileResolver) {
+            return this;
+        }
         List<ProfileValue> resolve = profileResolver.resolve(resourceUrl);
         for (ProfileValue profileValue : resolve) {
             profiles.add(profileValue);
@@ -77,6 +119,9 @@ public class DelegateProfile implements  Profile, ServiceFactory<ProfileResolver
     @Override
     public Profile addProfile(int index, String resourceUrl) {
         ProfileResolver profileResolver = getResolver(resourceUrl);
+        if(null == profileResolver) {
+            return this;
+        }
         List<ProfileValue> resolve = profileResolver.resolve(resourceUrl);
         List<ProfileValue> tpl = new LinkedList<>(profiles);
         for (ProfileValue profileValue : resolve) {

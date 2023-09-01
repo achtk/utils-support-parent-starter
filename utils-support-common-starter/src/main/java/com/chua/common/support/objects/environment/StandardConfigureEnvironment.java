@@ -1,18 +1,16 @@
 package com.chua.common.support.objects.environment;
 
 import com.chua.common.support.function.InitializingAware;
+import com.chua.common.support.lang.profile.Profile;
+import com.chua.common.support.objects.environment.properties.ProfilePropertySource;
 import com.chua.common.support.objects.environment.properties.PropertySource;
-import com.chua.common.support.objects.environment.resolver.PropertySourceResolver;
+import com.chua.common.support.objects.environment.properties.SystemEnvPropertySource;
+import com.chua.common.support.objects.environment.properties.SystemPropertySource;
 import com.chua.common.support.resource.repository.Metadata;
 import com.chua.common.support.resource.repository.Repository;
-import com.chua.common.support.spi.ServiceProvider;
-import com.chua.common.support.utils.FileUtils;
 import com.chua.common.support.utils.StringUtils;
-import com.chua.common.support.utils.UrlUtils;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
@@ -35,6 +33,12 @@ public class StandardConfigureEnvironment implements ConfigureEnvironment, Initi
 
     @Override
     public Object get(String name) {
+        for (PropertySource profileValue : profileValues) {
+            Object property = profileValue.getProperty(name);
+            if(null != property) {
+                return property;
+            }
+        }
         return null;
     }
 
@@ -46,6 +50,9 @@ public class StandardConfigureEnvironment implements ConfigureEnvironment, Initi
     @Override
     public void afterPropertiesSet() {
         String componentScan = configuration.componentScan();
+        profileValues.add(new SystemEnvPropertySource());
+        profileValues.add(new SystemPropertySource());
+
         if(StringUtils.isEmpty(componentScan)) {
             return;
         }
@@ -53,20 +60,13 @@ public class StandardConfigureEnvironment implements ConfigureEnvironment, Initi
                 Repository.of("classpath:" + componentScan)
                 .add(Repository.of(new File(componentScan)))
                 .getMetadata("*.*");
+
+        Profile profile = Profile.newDefault();
+
         for (Metadata metadatum : metadata) {
             URL url = metadatum.toUrl();
-            try {
-                String fileName = UrlUtils.getFileName(url.openConnection());
-                try(InputStream inputStream = url.openStream()) {
-                    PropertySourceResolver profileResolver = ServiceProvider.of(PropertySourceResolver.class).getNewExtension(FileUtils.getExtension(fileName), url.toExternalForm(), inputStream);
-                    PropertySource propertySource = profileResolver.get();
-                    if(null == propertySource) {
-                        continue;
-                    }
-                    profileValues.add(propertySource);
-                }
-            } catch (IOException ignored) {
-            }
+            profile.addProfile(url);
         }
+        profileValues.add(new ProfilePropertySource(profile));
     }
 }

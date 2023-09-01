@@ -26,7 +26,7 @@ public class MapPropertySource implements PropertySource {
     }
 
     @Override
-    public String getProperty(String name) {
+    public Object getProperty(String name) {
         return MapUtils.getString(map, name);
     }
 }

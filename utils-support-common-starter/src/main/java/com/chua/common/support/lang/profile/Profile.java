@@ -13,6 +13,7 @@ import com.chua.common.support.placeholder.PlaceholderResolver;
 
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
+import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -37,6 +38,14 @@ public interface Profile extends Environment, PlaceholderResolver {
      * @return this
      */
     Profile addProfile(Profile profile);
+
+    /**
+     * 添加配置
+     *
+     * @param url 配置目录
+     * @return this
+     */
+    Profile addProfile(URL url);
 
     /**
      * 添加配置

@@ -19,5 +19,5 @@ public interface PropertySource {
      * @param name 名称
      * @return 值
      */
-    String getProperty(String name);
+    Object getProperty(String name);
 }

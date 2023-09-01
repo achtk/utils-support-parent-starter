@@ -22,7 +22,7 @@ import java.util.Set;
  */
 public class MapProfileValue implements ProfileValue {
     private final String resourceUrl;
-    private final Map<String, Object> map;
+    private final Map<String, Object> value;
     private DocumentContext documentContext;
 
     private ExpressionParser spelExpressionParser = ServiceProvider.of(ExpressionParser.class).getNewExtension("el");
@@ -33,8 +33,8 @@ public class MapProfileValue implements ProfileValue {
 
     public MapProfileValue(String resourceUrl, Map<String, Object> map) {
         this.resourceUrl = resourceUrl;
-        this.map = new LinkedHashMap<>();
-        map.forEach(this::add);
+        this.value = new LinkedHashMap<>();
+        this.value.forEach(this::add);
         this.documentContext = JsonPath.parse(map);
     }
     public MapProfileValue(String resourceUrl, Properties properties) {
@@ -43,15 +43,15 @@ public class MapProfileValue implements ProfileValue {
 
     @Override
     public ProfileValue add(String s, Object o) {
-        map.put(s, o);
-        map.put(NamingCase.toKebabCase(s), o);
-        map.put(NamingCase.toCamelCase(s), o);
+        value.put(s, o);
+        value.put(NamingCase.toKebabCase(s), o);
+        value.put(NamingCase.toCamelCase(s), o);
         if(null != spelExpressionParser) {
             spelExpressionParser.setVariable(s, o);
             spelExpressionParser.setVariable(NamingCase.toKebabCase(s), o);
             spelExpressionParser.setVariable(NamingCase.toPascalCase(s), o);
         }
-        this.documentContext = JsonPath.parse(map);
+        this.documentContext = JsonPath.parse(value);
         return this;
     }
 
@@ -67,7 +67,7 @@ public class MapProfileValue implements ProfileValue {
             return null;
         }
 
-        Object o = map.get(key);
+        Object o = value.get(key);
         if(null != o || valueMode == ValueMode.NONE) {
             return o;
         }
@@ -90,7 +90,7 @@ public class MapProfileValue implements ProfileValue {
 
     @Override
     public boolean contains(String name, ValueMode valueMode) {
-        if(map.containsKey(name)) {
+        if(value.containsKey(name)) {
             return true;
         }
 
@@ -122,7 +122,7 @@ public class MapProfileValue implements ProfileValue {
 
     @Override
     public Set<String> keys() {
-        return map.keySet();
+        return value.keySet();
     }
 
 }
