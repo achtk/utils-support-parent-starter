@@ -12,6 +12,10 @@ public class ObjectTypeDefinition extends ClassTypeDefinition{
 
     private final Object bean;
 
+    public ObjectTypeDefinition(Object bean) {
+        super(ClassUtils.toType(bean));
+        this.bean = bean;
+    }
     public ObjectTypeDefinition(Object bean, ObjectContext context) {
         super(ClassUtils.toType(bean), context);
         this.bean = bean;
@@ -21,5 +25,11 @@ public class ObjectTypeDefinition extends ClassTypeDefinition{
     @Override
     public Object getObject() {
         return bean;
+    }
+
+
+    @Override
+    public boolean isSingle() {
+        return true;
     }
 }

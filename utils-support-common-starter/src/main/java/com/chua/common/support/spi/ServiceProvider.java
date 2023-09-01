@@ -4,6 +4,7 @@ package com.chua.common.support.spi;
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.collection.SortedArrayList;
 import com.chua.common.support.collection.SortedList;
+import com.chua.common.support.constant.NameConstant;
 import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.function.NameAware;
 import com.chua.common.support.function.SafeFunction;
@@ -662,9 +663,10 @@ public class ServiceProvider<T> implements InitializingAware {
 
             String[] value = spi.value();
             if (value.length == 0) {
-                return null;
+                s = NameConstant.DEFAULT;
+            } else {
+                s = value[0];
             }
-            s = value[0];
             SPI_NAME.putIfAbsent(this.value.getValue(), s);
         }
         return getExtension(s);

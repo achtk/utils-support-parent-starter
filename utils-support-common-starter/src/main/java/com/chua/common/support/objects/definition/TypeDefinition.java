@@ -19,5 +19,35 @@ public interface TypeDefinition {
     Object getObject();
 
 
+    /**
+     * 是否单例
+     * @return boolean
+     */
+    boolean isSingle();
 
+    /**
+     * 是否代理
+     * @return boolean
+     */
+    boolean isProxy();
+
+    /**
+     * 优先级
+     *
+     * @return boolean
+     */
+    int order();
+
+    /**
+     * 目标类是否是当前类的子类
+     * @param target 目标类
+     * @return 目标类是否是当前类的子类
+     */
+    boolean isAssignableFrom(Class<?> target);
+
+    /**
+     * 类加载器
+     * @return 类加载器
+     */
+    ClassLoader getClassLoader();
 }
