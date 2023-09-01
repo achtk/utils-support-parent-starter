@@ -47,7 +47,16 @@ public interface TypeDefinition {
 
     /**
      * 类加载器
+     *
      * @return 类加载器
      */
     ClassLoader getClassLoader();
+
+
+    /**
+     * 名称
+     *
+     * @return {@link String}
+     */
+    String getName();
 }

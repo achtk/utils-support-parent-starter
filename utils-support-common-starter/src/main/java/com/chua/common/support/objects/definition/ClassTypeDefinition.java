@@ -2,10 +2,19 @@ package com.chua.common.support.objects.definition;
 
 import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.objects.ObjectContext;
-import com.chua.common.support.objects.definition.resolver.OrderResolver;
-import com.chua.common.support.objects.definition.resolver.ProxyResolver;
-import com.chua.common.support.objects.definition.resolver.SingleResolver;
+import com.chua.common.support.objects.definition.element.AnnotationDefinition;
+import com.chua.common.support.objects.definition.element.FieldDefinition;
+import com.chua.common.support.objects.definition.element.MethodDefinition;
+import com.chua.common.support.objects.definition.element.SuperTypeDefinition;
+import com.chua.common.support.objects.definition.resolver.*;
 import com.chua.common.support.spi.ServiceProvider;
+import com.chua.common.support.utils.ClassUtils;
+
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 定义
@@ -19,11 +28,24 @@ public class ClassTypeDefinition implements TypeDefinition, InitializingAware {
     private boolean isSingle;
     private boolean isProxy;
     private int order;
+    private String name;
+
+    private Map<String, FieldDefinition> fieldDefinitions;
+
+    private Map<String, List<MethodDefinition>> methodDefinitions;
+
+    private Map<String, AnnotationDefinition> annotationDefinitions;
+
+    private Map<String, SuperTypeDefinition> superTypeDefinitions;
+
+    private Set<String> interfaces = new LinkedHashSet<>();
+
 
     public ClassTypeDefinition(Class<?> type) {
         this.type = type;
         this.afterPropertiesSet();
     }
+
     public ClassTypeDefinition(Class<?> type, ObjectContext context) {
         this.type = type;
         this.context = context;
@@ -66,9 +88,20 @@ public class ClassTypeDefinition implements TypeDefinition, InitializingAware {
     }
 
     @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
     public void afterPropertiesSet() {
         this.isSingle = ServiceProvider.of(SingleResolver.class).getSpiService().isSingle();
         this.isProxy = ServiceProvider.of(ProxyResolver.class).getSpiService().isProxy();
         this.order = ServiceProvider.of(OrderResolver.class).getSpiService().order();
+        this.name = ServiceProvider.of(NameResolver.class).getSpiService().name();
+        this.annotationDefinitions = ServiceProvider.of(AnnotationResolver.class).getSpiService().get(type);
+        this.fieldDefinitions = ServiceProvider.of(FieldResolver.class).getSpiService().get(type);
+        this.methodDefinitions = ServiceProvider.of(MethodResolver.class).getSpiService().get(type);
+        this.superTypeDefinitions = ServiceProvider.of(SuperTypeResolver.class).getSpiService().get(type);
+        this.interfaces.addAll(ClassUtils.getAllInterfaces(type).stream().map(Class::getTypeName).collect(Collectors.toSet()));
     }
 }

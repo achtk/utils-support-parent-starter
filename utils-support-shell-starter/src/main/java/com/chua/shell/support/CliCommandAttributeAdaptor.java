@@ -58,7 +58,7 @@ public class CliCommandAttributeAdaptor implements CommandAttributeAdaptor {
     }
 
     @Override
-    public String execute(CommandAttribute commandAttribute, List<String> options, Shell shell) {
+    public String execute(CommandAttribute commandAttribute, List<String> options, BaseShell shell) {
         Object[] args = create(commandAttribute, options, shell);
         commandAttribute.getMethod().setAccessible(true);
         try {
@@ -76,7 +76,7 @@ public class CliCommandAttributeAdaptor implements CommandAttributeAdaptor {
      * @param shell            shell
      * @return 参数
      */
-    private Object[] create(CommandAttribute commandAttribute, List<String> options, Shell shell) {
+    private Object[] create(CommandAttribute commandAttribute, List<String> options, BaseShell shell) {
         Object[] args = new Object[commandAttribute.getParameters().length];
         if (args.length == 0) {
             return args;
@@ -161,8 +161,8 @@ public class CliCommandAttributeAdaptor implements CommandAttributeAdaptor {
      * @param shell            shell
      * @return 结果
      */
-    private Object createArg(CommandAttribute commandAttribute, Parameter parameter, CommandLine commandLine, Shell shell) {
-        if (Shell.class == parameter.getType()) {
+    private Object createArg(CommandAttribute commandAttribute, Parameter parameter, CommandLine commandLine, BaseShell shell) {
+        if (BaseShell.class == parameter.getType()) {
             return shell;
         }
         ShellParam shellParam = commandAttribute.getPShell().get(parameter);
@@ -177,7 +177,7 @@ public class CliCommandAttributeAdaptor implements CommandAttributeAdaptor {
     }
 
     @Override
-    public String help(CommandAttribute commandAttribute, Shell shell) {
+    public String help(CommandAttribute commandAttribute, BaseShell shell) {
         HelpFormatter hf = new HelpFormatter();
         try (StringWriter stringWriter = new StringWriter();
              PrintWriter printWriter = new PrintWriter(stringWriter)) {

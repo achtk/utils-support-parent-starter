@@ -4,7 +4,7 @@ import com.chua.common.support.ansi.AnsiColor;
 import com.chua.common.support.ansi.AnsiOutput;
 import com.chua.common.support.function.Joiner;
 import com.chua.common.support.function.NamedThreadFactory;
-import com.chua.common.support.shell.Shell;
+import com.chua.common.support.shell.BaseShell;
 import com.chua.common.support.shell.mapping.HelpCommand;
 import com.chua.common.support.shell.mapping.SystemCommand;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +34,7 @@ import java.util.concurrent.TimeUnit;
  * @author CH
  */
 @Slf4j
-public class LineShell extends Shell implements Runnable {
+public class LineShell extends BaseShell implements Runnable {
 
     /**
      *

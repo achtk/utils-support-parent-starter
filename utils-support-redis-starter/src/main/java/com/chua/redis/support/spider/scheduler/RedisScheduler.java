@@ -4,7 +4,7 @@ package com.chua.redis.support.spider.scheduler;
 import com.alibaba.fastjson2.JSON;
 import com.chua.common.support.lang.spider.Request;
 import com.chua.common.support.lang.spider.Task;
-import com.chua.common.support.lang.spider.scheduler.DuplicateRemovedScheduler;
+import com.chua.common.support.lang.spider.scheduler.AbstractDuplicateRemovedScheduler;
 import com.chua.common.support.lang.spider.scheduler.MonitorableScheduler;
 import com.chua.common.support.lang.spider.scheduler.component.DuplicateRemover;
 import com.chua.common.support.utils.DigestUtils;
@@ -19,7 +19,7 @@ import redis.clients.jedis.JedisPoolConfig;
  * @author code4crafter@gmail.com <br>
  * @since 0.2.0
  */
-public class RedisScheduler extends DuplicateRemovedScheduler implements MonitorableScheduler, DuplicateRemover {
+public class RedisScheduler extends AbstractDuplicateRemovedScheduler implements MonitorableScheduler, DuplicateRemover {
 
     protected JedisPool pool;
 

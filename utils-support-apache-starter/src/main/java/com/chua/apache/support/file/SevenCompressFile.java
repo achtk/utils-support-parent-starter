@@ -1,7 +1,7 @@
 package com.chua.apache.support.file;
 
 import com.chua.common.support.annotations.Spi;
-import com.chua.common.support.binary.ByteSource;
+import com.chua.common.support.binary.BaseByteSource;
 import com.chua.common.support.binary.ByteSourceArray;
 import com.chua.common.support.binary.ByteSourceInputStream;
 import com.chua.common.support.file.AbstractResourceFile;
@@ -9,7 +9,6 @@ import com.chua.common.support.file.CompressFile;
 import com.chua.common.support.file.ResourceFileConfiguration;
 import com.chua.common.support.io.CompressInputStream;
 import com.chua.common.support.matcher.AntPathMatcher;
-import com.chua.common.support.resource.ResourceConfiguration;
 import com.chua.common.support.resource.resource.ByteSourceResource;
 import com.chua.common.support.resource.resource.Resource;
 import com.chua.common.support.utils.FileUtils;
@@ -109,7 +108,7 @@ public class SevenCompressFile extends AbstractResourceFile implements CompressF
 
 
     @Override
-    public ByteSource openInputStream(String name) throws IOException {
+    public BaseByteSource openInputStream(String name) throws IOException {
         File file = toFile();
         try {
             return new ByteSourceInputStream(new CompressInputStream(file, name));
