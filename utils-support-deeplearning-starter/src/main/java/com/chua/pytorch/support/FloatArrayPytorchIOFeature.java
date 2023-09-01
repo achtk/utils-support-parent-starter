@@ -7,7 +7,7 @@ import ai.djl.repository.zoo.ModelZoo;
 import ai.djl.repository.zoo.ZooModel;
 import ai.djl.training.util.ProgressBar;
 import ai.djl.translate.Translator;
-import com.chua.common.support.feature.FloatArrayFeature;
+import com.chua.common.support.feature.BaseFloatArrayFeature;
 import com.chua.common.support.feature.DetectionConfiguration;
 import com.chua.pytorch.support.utils.LocationUtils;
 import com.google.common.base.Joiner;
@@ -21,7 +21,7 @@ import java.util.List;
  *
  * @author CH
  */
-public abstract class FloatArrayPytorchIOFeature<I, O> extends FloatArrayFeature {
+public abstract class FloatArrayPytorchIOFeature<I, O> extends BaseFloatArrayFeature {
 
     protected final ZooModel<I, O> model;
 

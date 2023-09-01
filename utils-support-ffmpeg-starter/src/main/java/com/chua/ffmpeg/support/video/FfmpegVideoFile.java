@@ -1,7 +1,7 @@
 package com.chua.ffmpeg.support.video;
 
 import com.chua.common.support.annotations.Spi;
-import com.chua.common.support.binary.ByteSource;
+import com.chua.common.support.binary.BaseByteSource;
 import com.chua.common.support.binary.ByteSourceArray;
 import com.chua.common.support.binary.ByteSourceFile;
 import com.chua.common.support.lang.process.ProgressBar;
@@ -30,9 +30,9 @@ import static org.bytedeco.ffmpeg.global.avutil.AV_LOG_ERROR;
 @Spi("ffmpeg")
 public class FfmpegVideoFile implements VideoFile {
 
-    private ByteSource byteSource;
+    private final BaseByteSource byteSource;
 
-    public FfmpegVideoFile(ByteSource byteSource) {
+    public FfmpegVideoFile(BaseByteSource byteSource) {
         this.byteSource = byteSource;
     }
 
