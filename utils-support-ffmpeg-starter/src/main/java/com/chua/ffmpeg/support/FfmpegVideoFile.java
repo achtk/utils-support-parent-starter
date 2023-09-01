@@ -1,9 +1,8 @@
 package com.chua.ffmpeg.support;
 
-import com.chua.common.support.binary.ByteSource;
+import com.chua.common.support.binary.BaseByteSource;
 import com.chua.common.support.binary.ByteSourceArray;
 import com.chua.common.support.file.*;
-import com.chua.common.support.resource.ResourceConfiguration;
 import com.chua.common.support.utils.NumberUtils;
 import lombok.SneakyThrows;
 import org.bytedeco.ffmpeg.global.avcodec;
@@ -30,7 +29,7 @@ import java.util.function.BiFunction;
 public class FfmpegVideoFile extends AbstractResourceFile implements VideoFile, StreamFile {
     protected final ResourceFileConfiguration resourceConfiguration;
 
-    private final ByteSource byteSource;
+    private final BaseByteSource byteSource;
     final Java2DFrameConverter converter = new Java2DFrameConverter();
 
     public FfmpegVideoFile(ResourceFileConfiguration resourceConfiguration) {
