@@ -10,7 +10,7 @@ public class ClassTypeDefinition implements TypeDefinition{
 
 
     private final Class<?> type;
-    private final ObjectContext context;
+    protected final ObjectContext context;
 
     public ClassTypeDefinition(Class<?> type, ObjectContext context) {
         this.type = type;

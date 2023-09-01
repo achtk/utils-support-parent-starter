@@ -11,12 +11,10 @@ public class ObjectTypeDefinition extends ClassTypeDefinition{
 
 
     private final Object bean;
-    private final ObjectContext context;
 
     public ObjectTypeDefinition(Object bean, ObjectContext context) {
         super(ClassUtils.toType(bean), context);
         this.bean = bean;
-        this.context = context;
     }
 
 
