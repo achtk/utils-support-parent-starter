@@ -49,20 +49,22 @@ public class StandardConfigureEnvironment implements ConfigureEnvironment, Initi
         if(StringUtils.isEmpty(componentScan)) {
             return;
         }
-        List<Metadata> metadata = Repository.current().add(
-                Repository.of("classpath:" + componentScan))
+        List<Metadata> metadata =
+                Repository.of("classpath:" + componentScan)
                 .add(Repository.of(new File(componentScan)))
                 .getMetadata("*.*");
         for (Metadata metadatum : metadata) {
             URL url = metadatum.toUrl();
-            try (InputStream inputStream = url.openStream()){
+            try {
                 String fileName = UrlUtils.getFileName(url.openConnection());
-                PropertySourceResolver profileResolver = ServiceProvider.of(PropertySourceResolver.class).getNewExtension(FileUtils.getExtension(fileName), url.toExternalForm(), inputStream);
-                PropertySource propertySource = profileResolver.get();
-                if(null == propertySource) {
-                    continue;
+                try(InputStream inputStream = url.openStream()) {
+                    PropertySourceResolver profileResolver = ServiceProvider.of(PropertySourceResolver.class).getNewExtension(FileUtils.getExtension(fileName), url.toExternalForm(), inputStream);
+                    PropertySource propertySource = profileResolver.get();
+                    if(null == propertySource) {
+                        continue;
+                    }
+                    profileValues.add(propertySource);
                 }
-                profileValues.add(propertySource);
             } catch (IOException ignored) {
             }
         }

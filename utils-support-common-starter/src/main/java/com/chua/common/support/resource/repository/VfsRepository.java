@@ -1,11 +1,6 @@
 package com.chua.common.support.resource.repository;
 
-import com.chua.common.support.context.environment.StandardEnvironment;
-import com.chua.common.support.context.factory.ApplicationContextBuilder;
-import com.chua.common.support.context.factory.ConfigurableBeanFactory;
-import com.chua.common.support.lang.download.DownloadHandler;
 import com.chua.common.support.lang.download.Downloader;
-import com.chua.common.support.matcher.PathMatcher;
 import com.chua.common.support.resource.repository.resolver.Resolver;
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.ArrayUtils;
@@ -15,7 +10,6 @@ import com.chua.common.support.utils.UrlUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -23,7 +17,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.chua.common.support.constant.CommonConstant.FILE;
-import static com.chua.common.support.constant.CommonConstant.URI;
 
 /**
  * 资源仓库
@@ -32,18 +25,11 @@ import static com.chua.common.support.constant.CommonConstant.URI;
  */
 public class VfsRepository implements Repository {
 
-    private final ConfigurableBeanFactory beanFactory = ApplicationContextBuilder.newBuilder()
-            .environment(new StandardEnvironment())
-            .openScanner(false)
-            .build();
-
     protected URL[] url;
     private String removeUrl;
 
     protected VfsRepository(URL... url) {
         this.url = url;
-        beanFactory.registerBean(this);
-        beanFactory.registerBean(PathMatcher.INSTANCE);
     }
 
     @Override
@@ -83,8 +69,6 @@ public class VfsRepository implements Repository {
             if (null == resolver) {
                 continue;
             }
-
-            beanFactory.autowire(resolver);
 
             metadata.addAll(resolver.resolve(url1, path));
         }

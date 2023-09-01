@@ -1,24 +1,18 @@
 package com.chua.common.support.resource.repository.resolver;
 
 import com.chua.common.support.annotations.Spi;
-import com.chua.common.support.constant.Projects;
-import com.chua.common.support.context.annotation.AutoInject;
 import com.chua.common.support.file.Decompress;
 import com.chua.common.support.file.FileMedia;
 import com.chua.common.support.matcher.PathMatcher;
 import com.chua.common.support.resource.repository.FileSystemMetadata;
 import com.chua.common.support.resource.repository.Metadata;
 import com.chua.common.support.resource.repository.StreamMetadata;
-import com.chua.common.support.resource.repository.UrlMetadata;
-import com.chua.common.support.resource.resource.FileSystemResource;
-import com.chua.common.support.resource.resource.Resource;
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.FileUtils;
 import com.chua.common.support.utils.StringUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.FileVisitResult;
@@ -38,8 +32,7 @@ import java.util.List;
 @Spi("file")
 public final class FileSystemResolver implements Resolver {
 
-    @AutoInject
-    private PathMatcher pathMatcher;
+    private final PathMatcher pathMatcher = PathMatcher.INSTANCE;
 
     @Override
     public List<Metadata> resolve(URL root, String name) {
@@ -83,7 +76,7 @@ public final class FileSystemResolver implements Resolver {
 
         String rootPath = file.getPath();
         try {
-            Files.walkFileTree(file.toPath(), new SimpleFileVisitor<Path>() {
+            Files.walkFileTree(file.toPath(), Collections.emptySet(), 1, new SimpleFileVisitor<Path>() {
                 @Override
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                     String path = StringUtils.startWithMove(file.toString().replace(rootPath, "").replace("\\", "/"), "/");
