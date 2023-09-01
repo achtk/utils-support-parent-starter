@@ -8,13 +8,13 @@ import java.util.Map;
  */
 public class EnvironmentSource {
 
-    private final ObjectEnvironment environment;
+    private final ConfigureEnvironment environment;
 
     private final String name;
 
     private final Map<String, Object> definition;
 
-    public EnvironmentSource(ObjectEnvironment environment, String name, Map<String, Object> definition) {
+    public EnvironmentSource(ConfigureEnvironment environment, String name, Map<String, Object> definition) {
         this.environment = environment;
         this.name = name;
         this.definition = definition;
