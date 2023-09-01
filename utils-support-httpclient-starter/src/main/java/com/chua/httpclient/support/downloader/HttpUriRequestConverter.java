@@ -3,7 +3,6 @@ package com.chua.httpclient.support.downloader;
 import com.chua.common.support.lang.spider.Request;
 import com.chua.common.support.lang.spider.Site;
 import com.chua.common.support.lang.spider.proxy.Proxy;
-import com.chua.common.support.lang.spider.utils.HttpConstant;
 import com.chua.common.support.utils.UrlUtils;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthState;
@@ -21,6 +20,8 @@ import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.cookie.BasicClientCookie;
 
 import java.util.Map;
+
+import static com.chua.common.support.lang.spider.utils.BaseHttpConstant.BaseMethod.*;
 
 /**
  * @author code4crafter@gmail.com
@@ -87,18 +88,18 @@ public class HttpUriRequestConverter {
 
     private RequestBuilder selectRequestMethod(Request request) {
         String method = request.getMethod();
-        if (method == null || method.equalsIgnoreCase(HttpConstant.Method.GET)) {
+        if (method == null || method.equalsIgnoreCase(GET)) {
             //default get
             return RequestBuilder.get();
-        } else if (method.equalsIgnoreCase(HttpConstant.Method.POST)) {
+        } else if (method.equalsIgnoreCase(POST)) {
             return addFormParams(RequestBuilder.post(), request);
-        } else if (method.equalsIgnoreCase(HttpConstant.Method.HEAD)) {
+        } else if (method.equalsIgnoreCase(HEAD)) {
             return RequestBuilder.head();
-        } else if (method.equalsIgnoreCase(HttpConstant.Method.PUT)) {
+        } else if (method.equalsIgnoreCase(PUT)) {
             return addFormParams(RequestBuilder.put(), request);
-        } else if (method.equalsIgnoreCase(HttpConstant.Method.DELETE)) {
+        } else if (method.equalsIgnoreCase(DELETE)) {
             return RequestBuilder.delete();
-        } else if (method.equalsIgnoreCase(HttpConstant.Method.TRACE)) {
+        } else if (method.equalsIgnoreCase(TRACE)) {
             return RequestBuilder.trace();
         }
         throw new IllegalArgumentException("Illegal HTTP Method " + method);
