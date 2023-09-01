@@ -5,4 +5,6 @@ package com.chua.common.support.objects;
  * @author CH
  */
 public interface ObjectContext {
+
+
 }

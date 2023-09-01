@@ -7,9 +7,9 @@ import java.io.InputStream;
  */
 public abstract class AbstractPropertySourceResolver implements PropertySourceResolver{
 
-    private final String name;
+    protected final String name;
 
-    private final InputStream inputStream;
+    protected final InputStream inputStream;
 
     public AbstractPropertySourceResolver(String name, InputStream inputStream) {
         this.name = name;
