@@ -1,8 +1,8 @@
 package com.chua.datasource.support.file;
 
 import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.file.javadbf.BaseDbfReader;
 import com.chua.common.support.file.javadbf.DbfField;
-import com.chua.common.support.file.javadbf.DbfReader;
 import com.chua.common.support.lang.profile.Profile;
 import com.chua.datasource.support.rule.TableEnumerator;
 import org.apache.calcite.linq4j.AbstractEnumerable;
@@ -45,7 +45,7 @@ public class DbfSupport extends AbstractFileSupport {
     public List<Object[]> getDataList() {
         List<Object[]> rs = new LinkedList<>();
         try (InputStream read = getStream()) {
-            DbfReader dbfReader = new DbfReader(read);
+            BaseDbfReader dbfReader = new BaseDbfReader(read);
             dbfReader.setCharacterSetName("UTF-8");
 
             int i = 0;
@@ -72,7 +72,7 @@ public class DbfSupport extends AbstractFileSupport {
 
         List<DbfField> fields = new LinkedList<>();
         try (InputStream read = getStream()) {
-            DbfReader dbfReader = new DbfReader(read);
+            BaseDbfReader dbfReader = new BaseDbfReader(read);
             dbfReader.setCharacterSetName("UTF-8");
             int fieldCount = dbfReader.getFieldCount();
             for (int i = 0; i < fieldCount; i++) {

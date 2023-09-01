@@ -63,7 +63,7 @@ import java.util.GregorianCalendar;
  * </table>
  * @author Administrator
  */
-public class AbstractDbfReader extends AbstractDbfBase implements AutoCloseable {
+public class BaseDbfReader extends AbstractDbfBase implements AutoCloseable {
 
     DataInputStream dataInputStream;
     @Getter
@@ -84,7 +84,7 @@ public class AbstractDbfReader extends AbstractDbfBase implements AutoCloseable 
      *
      * @param in where the data is read from.
      */
-    public AbstractDbfReader(InputStream in) throws DbfException {
+    public BaseDbfReader(InputStream in) throws DbfException {
 
         try {
 

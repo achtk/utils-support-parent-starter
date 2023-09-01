@@ -15,5 +15,5 @@ import lombok.experimental.Accessors;
 public class ConfigureContextConfiguration {
 
     @Builder.Default
-    private EnvironmentConfiguration configuration = EnvironmentConfiguration.builder().build();
+    private EnvironmentConfiguration environmentConfiguration = EnvironmentConfiguration.builder().build();
 }

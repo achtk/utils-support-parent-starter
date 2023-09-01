@@ -1,6 +1,6 @@
 package com.chua.paddlepaddle.support;
 
-import com.chua.common.support.engine.EngineBase;
+import com.chua.common.support.engine.AbstractEngineBase;
 import com.chua.common.support.feature.DetectionConfiguration;
 
 import java.util.Map;
@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author CH
  */
-public class PaddlePaddleEngine extends EngineBase {
+public class PaddlePaddleEngine extends AbstractEngineBase {
 
     private final Map<String, Object> tmp = new ConcurrentHashMap<>();
 

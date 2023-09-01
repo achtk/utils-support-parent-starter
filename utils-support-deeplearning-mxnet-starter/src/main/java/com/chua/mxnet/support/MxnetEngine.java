@@ -1,13 +1,13 @@
 package com.chua.mxnet.support;
 
-import com.chua.common.support.engine.EngineBase;
+import com.chua.common.support.engine.AbstractEngineBase;
 import com.chua.common.support.feature.DetectionConfiguration;
 
 /**
  * pt引擎
  * @author CH
  */
-public class MxnetEngine extends EngineBase {
+public class MxnetEngine extends AbstractEngineBase {
 
     public MxnetEngine(DetectionConfiguration configuration) {
         super(configuration);

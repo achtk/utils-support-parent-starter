@@ -28,6 +28,7 @@ public class EnvironmentConfiguration {
     /**
      * 扫描路径
      */
-    private String componentScan;
+    @Builder.Default
+    private String componentScan = "/";
 
 }

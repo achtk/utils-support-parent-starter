@@ -10,6 +10,7 @@ import com.chua.common.support.utils.FileUtils;
 import com.chua.common.support.utils.StringUtils;
 import com.chua.common.support.utils.UrlUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -48,7 +49,10 @@ public class StandardConfigureEnvironment implements ConfigureEnvironment, Initi
         if(StringUtils.isEmpty(componentScan)) {
             return;
         }
-        List<Metadata> metadata = Repository.current().add(Repository.classpath()).getMetadata("*.*");
+        List<Metadata> metadata = Repository.current().add(
+                Repository.of("classpath:" + componentScan))
+                .add(Repository.of(new File(componentScan)))
+                .getMetadata("*.*");
         for (Metadata metadatum : metadata) {
             URL url = metadatum.toUrl();
             try (InputStream inputStream = url.openStream()){
