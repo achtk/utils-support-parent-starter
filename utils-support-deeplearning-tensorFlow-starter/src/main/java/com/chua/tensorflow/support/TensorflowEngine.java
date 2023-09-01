@@ -1,13 +1,13 @@
 package com.chua.tensorflow.support;
 
-import com.chua.common.support.engine.EngineBase;
+import com.chua.common.support.engine.AbstractEngineBase;
 import com.chua.common.support.feature.DetectionConfiguration;
 
 /**
  * tensorflow
  * @author CH
  */
-public class TensorflowEngine extends EngineBase {
+public class TensorflowEngine extends AbstractEngineBase {
     public TensorflowEngine(DetectionConfiguration configuration) {
         super(configuration);
     }
