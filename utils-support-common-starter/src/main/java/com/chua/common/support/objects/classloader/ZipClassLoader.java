@@ -39,6 +39,7 @@ public class ZipClassLoader extends ClassLoader {
             } catch (Exception ignored) {
             }
             if (null != aClass) {
+                nameAndType.put(name, aClass);
                 return aClass;
             }
         }
