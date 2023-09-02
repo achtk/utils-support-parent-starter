@@ -9,6 +9,7 @@ import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.StringUtils;
 
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -26,13 +27,18 @@ public abstract class AbstractTypeDefinitionSource implements TypeDefinitionSour
     protected Map<String, SortedList<TypeDefinition>> typeDefinitions = new ConcurrentHashMap<>();
 
     private static final Comparator<TypeDefinition> COMPARABLE = Comparator.comparingInt(TypeDefinition::order);
+    private Set<Class<?>> cache = new HashSet<>();
 
     public AbstractTypeDefinitionSource(ConfigureContextConfiguration configuration) {
         this.configuration = configuration;
     }
 
     protected void register(Object o) {
-        TypeDefinition typeDefinition = new ClassTypeDefinition(ClassUtils.toType(o));
+        Class<?> aClass = ClassUtils.toType(o);
+        if (cache.contains(aClass)) {
+            return;
+        }
+        TypeDefinition typeDefinition = new ClassTypeDefinition(aClass);
         String name = typeDefinition.getName();
         if (StringUtils.isNotEmpty(name)) {
             nameDefinitions.computeIfAbsent(name, it -> new SortedArrayList<>(COMPARABLE)).add(typeDefinition);
