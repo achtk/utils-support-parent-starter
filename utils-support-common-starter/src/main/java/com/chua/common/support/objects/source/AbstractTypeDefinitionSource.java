@@ -27,7 +27,7 @@ public abstract class AbstractTypeDefinitionSource implements TypeDefinitionSour
     protected Map<String, SortedList<TypeDefinition>> typeDefinitions = new ConcurrentHashMap<>();
 
     private static final Comparator<TypeDefinition> COMPARABLE = Comparator.comparingInt(TypeDefinition::order);
-    private Set<Class<?>> cache = new HashSet<>();
+    private static final Set<Class<?>> CACHE = new HashSet<>();
 
     public AbstractTypeDefinitionSource(ConfigureContextConfiguration configuration) {
         this.configuration = configuration;
@@ -35,9 +35,10 @@ public abstract class AbstractTypeDefinitionSource implements TypeDefinitionSour
 
     protected void register(Object o) {
         Class<?> aClass = ClassUtils.toType(o);
-        if (cache.contains(aClass)) {
+        if (CACHE.contains(aClass)) {
             return;
         }
+        CACHE.add(aClass);
         TypeDefinition typeDefinition = new ClassTypeDefinition(aClass);
         String name = typeDefinition.getName();
         if (StringUtils.isNotEmpty(name)) {
