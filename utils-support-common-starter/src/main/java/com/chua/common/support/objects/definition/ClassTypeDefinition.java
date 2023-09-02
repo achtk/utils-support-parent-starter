@@ -39,6 +39,7 @@ public class ClassTypeDefinition implements TypeDefinition, InitializingAware {
     private Map<String, SuperTypeDefinition> superTypeDefinitions;
 
     private Set<String> interfaces = new LinkedHashSet<>();
+    private Set<String> superType = new LinkedHashSet<>();
 
 
     public ClassTypeDefinition(Class<?> type) {
@@ -88,6 +89,14 @@ public class ClassTypeDefinition implements TypeDefinition, InitializingAware {
     }
 
     @Override
+    public Set<String> superTypeAndInterface() {
+        Set<String> rs = new LinkedHashSet<>();
+        rs.addAll(interfaces);
+        rs.addAll(superType);
+        return rs;
+    }
+
+    @Override
     public String getName() {
         return name;
     }
@@ -103,5 +112,6 @@ public class ClassTypeDefinition implements TypeDefinition, InitializingAware {
         this.methodDefinitions = ServiceProvider.of(MethodResolver.class).getSpiService().get(type);
         this.superTypeDefinitions = ServiceProvider.of(SuperTypeResolver.class).getSpiService().get(type);
         this.interfaces.addAll(ClassUtils.getAllInterfaces(type).stream().map(Class::getTypeName).collect(Collectors.toSet()));
+        this.superType.addAll(ClassUtils.getSuperType(type).stream().map(Class::getTypeName).collect(Collectors.toSet()));
     }
 }

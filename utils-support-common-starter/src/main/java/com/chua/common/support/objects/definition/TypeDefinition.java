@@ -1,7 +1,10 @@
 package com.chua.common.support.objects.definition;
 
+import java.util.Set;
+
 /**
  * 定义
+ *
  * @author CH
  */
 public interface TypeDefinition {
@@ -52,6 +55,13 @@ public interface TypeDefinition {
      */
     ClassLoader getClassLoader();
 
+
+    /**
+     * 超类型和接口
+     *
+     * @return {@link Set}<{@link String}>
+     */
+    Set<String> superTypeAndInterface();
 
     /**
      * 名称

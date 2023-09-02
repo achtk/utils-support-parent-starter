@@ -1,7 +1,6 @@
 package com.chua.common.support.reflection;
 
 import com.chua.common.support.constant.CommonConstant;
-import com.chua.common.support.converter.Converter;
 import com.chua.common.support.reflection.craft.MethodCraftTable;
 import com.chua.common.support.unit.name.NamingCase;
 import com.chua.common.support.utils.ArrayUtils;
@@ -380,7 +379,7 @@ public class MethodStation extends MethodCraftTable {
      * @param method 方法
      * @return 是否是基础方法
      */
-    public boolean isBaseMethod(Method method) {
+    public static boolean isBaseMethod(Method method) {
         if (null == method) {
             return false;
         }

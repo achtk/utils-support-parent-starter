@@ -16,4 +16,7 @@ public class ConfigureContextConfiguration {
 
     @Builder.Default
     private EnvironmentConfiguration environmentConfiguration = EnvironmentConfiguration.builder().build();
+
+
+    private String[] packages;
 }

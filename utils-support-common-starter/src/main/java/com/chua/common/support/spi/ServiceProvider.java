@@ -26,6 +26,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -400,6 +401,25 @@ public class ServiceProvider<T> implements InitializingAware {
     public List<T> collect() {
         return Collections.unmodifiableList(new ArrayList<>(list().values()));
     }
+
+    /**
+     * 获取实现
+     *
+     * @param args 參數
+     * @return 实现
+     */
+    public List<T> collect(Object... args) {
+        List<T> rs = new CopyOnWriteArrayList<>();
+        for (SortedList<ServiceDefinition> value : this.definitions.values()) {
+            ServiceDefinition noneObject = value.first();
+            if (null == noneObject) {
+                continue;
+            }
+            rs.add(noneObject.newInstance(new AutoServiceAutowire(), args));
+        }
+        return rs;
+    }
+
     /**
      * 获取实现定义
      *

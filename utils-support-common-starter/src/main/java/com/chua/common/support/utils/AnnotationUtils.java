@@ -3,8 +3,6 @@ package com.chua.common.support.utils;
 import com.chua.common.support.collection.AnnotationAttributes;
 import com.chua.common.support.placeholder.PropertyResolver;
 import com.chua.common.support.reflection.FieldStation;
-import com.chua.common.support.reflection.MethodStation;
-import com.chua.common.support.reflection.describe.TypeDescribe;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -68,7 +66,7 @@ public class AnnotationUtils {
         }
 
         InvocationHandler invocationHandler = Proxy.getInvocationHandler(annotation);
-        Field field = TypeDescribe.create(invocationHandler).getFieldDescribe(MEMBER_VALUES).field();
+        Field field = ClassUtils.findField(invocationHandler.getClass(), MEMBER_VALUES);
         if (null == field) {
             return Collections.emptyMap();
         }
@@ -289,34 +287,23 @@ public class AnnotationUtils {
             return Collections.emptyMap();
         }
         Map<String, Object> result = new HashMap<>(AnnotationUtils.asMap(annotation));
-        MethodStation methodStation = TypeDescribe.create(annotation).getMethodStation();
         Class aClass = ClassUtils.forName(ALIAS_FOR);
-
-        methodStation.doLocalWith(method -> {
-            String name = method.getName();
-            Method realMethod = MethodStation.of(annotation.annotationType()).getMethods(name, method.getParameterTypes());
-            if (methodStation.isBaseMethod(method)) {
-                return;
-            }
-            try {
-                if (null != aClass) {
-                    Annotation annotation1 = realMethod.getDeclaredAnnotation(aClass);
-                    if(null != annotation1) {
-                        Map<String, Object> annotationValue = getAnnotationValue(annotation1);
-                        String value = MapUtils.getStringForEmpty(annotationValue, "value", "attribute", "");
-                        Object invoke = MethodStation.invoke(annotation, CollectionUtils.findFirst(methodStation.getMethods(value)), new Object[0]);
-                        if ("".equals(invoke) || null == invoke) {
-                            if (!result.containsKey(name)) {
-                                result.put(name, invoke);
-                            }
-                        } else {
-                            result.put(name, invoke);
+        if (null != aClass) {
+            List<Method> methods = ClassUtils.getMethods(annotation);
+            methods.forEach(method -> {
+                String name = method.getName();
+                Annotation annotation2 = method.getDeclaredAnnotation(aClass);
+                if (null != annotation2) {
+                    Map<String, Object> annotationValue = getAnnotationValue(annotation2);
+                    for (Map.Entry<String, Object> entry : annotationValue.entrySet()) {
+                        String name1 = entry.getKey();
+                        if (!result.containsKey(name1)) {
+                            result.put(name1, entry.getValue());
                         }
                     }
                 }
-            } catch (Exception ignored) {
-            }
-        });
+            });
+        }
         return result;
     }
 
