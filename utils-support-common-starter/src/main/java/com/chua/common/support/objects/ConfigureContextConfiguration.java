@@ -18,5 +18,12 @@ public class ConfigureContextConfiguration {
     private EnvironmentConfiguration environmentConfiguration = EnvironmentConfiguration.builder().build();
 
 
+    /**
+     * 包装
+     */
     private String[] packages;
+    /**
+     * 外侧
+     */
+    private String[] outSide;
 }

@@ -22,7 +22,7 @@ import static com.chua.common.support.constant.FileType.FOLDER;
  *
  * @author CH
  */
-@Spi("zip")
+@Spi({"zip", "jar"})
 public class Zip extends AbstractCompress implements Decompress {
 
     @Override

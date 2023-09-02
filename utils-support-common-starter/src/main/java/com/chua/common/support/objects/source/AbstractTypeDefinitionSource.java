@@ -40,6 +40,11 @@ public abstract class AbstractTypeDefinitionSource implements TypeDefinitionSour
         }
         CACHE.add(aClass);
         TypeDefinition typeDefinition = new ClassTypeDefinition(aClass);
+        register(typeDefinition);
+    }
+
+    @Override
+    public void register(TypeDefinition typeDefinition) {
         String name = typeDefinition.getName();
         if (StringUtils.isNotEmpty(name)) {
             nameDefinitions.computeIfAbsent(name, it -> new SortedArrayList<>(COMPARABLE)).add(typeDefinition);

@@ -2,6 +2,7 @@ package com.chua.common.support.objects.source;
 
 import com.chua.common.support.objects.ConfigureContextConfiguration;
 import com.chua.common.support.objects.ObjectContext;
+import com.chua.common.support.objects.definition.TypeDefinition;
 import com.chua.common.support.spi.ServiceProvider;
 
 import java.util.List;
@@ -22,4 +23,13 @@ public class TypeDefinitionSourceFactory implements ObjectContext {
         this.definitionSources = ServiceProvider.of(TypeDefinitionSource.class).collect(configuration);
     }
 
+    @Override
+    public void register(TypeDefinition definition) {
+        for (TypeDefinitionSource definitionSource : definitionSources) {
+            if (definitionSource.isMatch(definition)) {
+                definitionSource.register(definition);
+                break;
+            }
+        }
+    }
 }

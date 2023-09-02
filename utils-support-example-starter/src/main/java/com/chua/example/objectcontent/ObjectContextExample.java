@@ -12,6 +12,7 @@ public class ObjectContextExample {
 
     public static void main(String[] args) {
         ConfigureObjectContext objectContext = new StandardConfigureObjectContext(ConfigureContextConfiguration.builder().build());
+        objectContext.register();
         StandardConfigureEnvironment environment = objectContext.getEnvironment();
 
 //        TypeDefinition typeDefinition = new ClassTypeDefinition(JsonObject.class);

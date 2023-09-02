@@ -18,4 +18,11 @@ public interface TypeDefinitionSource {
      * @return boolean
      */
     boolean isMatch(TypeDefinition typeDefinition);
+
+    /**
+     * 登记
+     *
+     * @param definition 释义
+     */
+    void register(TypeDefinition definition);
 }

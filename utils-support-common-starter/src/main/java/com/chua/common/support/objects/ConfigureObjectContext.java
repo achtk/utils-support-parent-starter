@@ -13,4 +13,6 @@ public interface ConfigureObjectContext extends ObjectContext{
      * @return 环境
      */
     StandardConfigureEnvironment getEnvironment();
+
+
 }
