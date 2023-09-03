@@ -1,12 +1,12 @@
 package com.chua.common.support.objects.definition;
 
 import com.chua.common.support.function.InitializingAware;
+import com.chua.common.support.lang.proxy.ProxyUtils;
+import com.chua.common.support.lang.proxy.VoidMethodIntercept;
 import com.chua.common.support.objects.ObjectContext;
-import com.chua.common.support.objects.definition.element.AnnotationDefinition;
-import com.chua.common.support.objects.definition.element.FieldDefinition;
-import com.chua.common.support.objects.definition.element.MethodDefinition;
-import com.chua.common.support.objects.definition.element.SuperTypeDefinition;
+import com.chua.common.support.objects.definition.element.*;
 import com.chua.common.support.objects.definition.resolver.*;
+import com.chua.common.support.objects.source.TypeDefinitionSourceFactory;
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.ClassUtils;
 
@@ -29,6 +29,10 @@ public class ClassTypeDefinition implements TypeDefinition, InitializingAware {
     private boolean isProxy;
     private int order;
     private String name;
+
+    private Object bean;
+
+    private boolean isLoaded;
 
     private Map<String, FieldDefinition> fieldDefinitions;
 
@@ -84,6 +88,12 @@ public class ClassTypeDefinition implements TypeDefinition, InitializingAware {
     }
 
     @Override
+    public boolean fromAssignableFrom(Class<?> target) {
+        String typeName = target.getTypeName();
+        return interfaces.contains(typeName) || superType.contains(typeName);
+    }
+
+    @Override
     public ClassLoader getClassLoader() {
         return type.getClassLoader();
     }
@@ -100,6 +110,46 @@ public class ClassTypeDefinition implements TypeDefinition, InitializingAware {
     public String getName() {
         return name;
     }
+
+    @Override
+    @SuppressWarnings("ALL")
+    public <T> T newInstance(TypeDefinitionSourceFactory typeDefinitionSourceFactory) {
+        if (isSingle) {
+            return newBean(typeDefinitionSourceFactory);
+        }
+        Object newBeanObject = newBeanObject(typeDefinitionSourceFactory);
+        reset();
+        return (T) newBeanObject;
+    }
+
+    private void reset() {
+        this.isLoaded = false;
+    }
+
+    @SuppressWarnings("ALL")
+    private <T> T newBean(TypeDefinitionSourceFactory typeDefinitionSourceFactory) {
+        if (!isLoaded) {
+            return newBeanObject(typeDefinitionSourceFactory);
+        }
+
+        return (T) bean;
+    }
+
+    @SuppressWarnings("ALL")
+    private <T> T newBeanObject(TypeDefinitionSourceFactory typeDefinitionSourceFactory) {
+        isLoaded = true;
+        if (type.isInterface()) {
+            return isProxy ? (T) ProxyUtils.newProxy(type, getClassLoader(), new VoidMethodIntercept<>()) : null;
+        }
+
+        return newBeanObject(type, typeDefinitionSourceFactory);
+
+    }
+
+    private <T> T newBeanObject(Class<?> type, TypeDefinitionSourceFactory typeDefinitionSourceFactory) {
+        return new ConstructorDefinition(type, typeDefinitionSourceFactory).newInstance();
+    }
+
 
     @Override
     public void afterPropertiesSet() {

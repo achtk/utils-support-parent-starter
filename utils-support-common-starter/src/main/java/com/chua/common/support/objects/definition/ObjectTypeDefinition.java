@@ -1,6 +1,7 @@
 package com.chua.common.support.objects.definition;
 
 import com.chua.common.support.objects.ObjectContext;
+import com.chua.common.support.objects.source.TypeDefinitionSourceFactory;
 import com.chua.common.support.utils.ClassUtils;
 
 /**
@@ -31,5 +32,10 @@ public class ObjectTypeDefinition extends ClassTypeDefinition{
     @Override
     public boolean isSingle() {
         return true;
+    }
+
+    @Override
+    public <T> T newInstance(TypeDefinitionSourceFactory typeDefinitionSourceFactory) {
+        return (T) bean;
     }
 }

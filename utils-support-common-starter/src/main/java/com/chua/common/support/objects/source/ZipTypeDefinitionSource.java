@@ -1,6 +1,8 @@
 package com.chua.common.support.objects.source;
 
 import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.collection.SortedArrayList;
+import com.chua.common.support.collection.SortedList;
 import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.objects.ConfigureContextConfiguration;
 import com.chua.common.support.objects.classloader.ZipClassLoader;
@@ -10,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static com.chua.common.support.objects.source.AbstractTypeDefinitionSource.COMPARABLE;
 
 /**
  * 类型定义源
@@ -36,6 +40,48 @@ public class ZipTypeDefinitionSource implements TypeDefinitionSource, Initializi
     }
 
     @Override
+    public SortedList<TypeDefinition> getBean(String name, Class<?> targetType) {
+        SortedList<TypeDefinition> rs = new SortedArrayList<>(COMPARABLE);
+        for (ClassLoaderTypeDefinitionSource source : sourceMap.values()) {
+            rs.addAll(source.getBean(name, targetType));
+        }
+        return rs;
+    }
+
+    @Override
+    public SortedList<TypeDefinition> getBean(String name) {
+        SortedList<TypeDefinition> rs = new SortedArrayList<>(COMPARABLE);
+        for (ClassLoaderTypeDefinitionSource source : sourceMap.values()) {
+            rs.addAll(source.getBean(name));
+        }
+        return rs;
+    }
+
+    @Override
+    public SortedList<TypeDefinition> getBean(Class<?> targetType) {
+        SortedList<TypeDefinition> rs = new SortedArrayList<>(COMPARABLE);
+        for (ClassLoaderTypeDefinitionSource source : sourceMap.values()) {
+            rs.addAll(source.getBean(targetType));
+        }
+        return rs;
+    }
+
+    @Override
+    public void unregister(TypeDefinition typeDefinition) {
+        SortedList<TypeDefinition> rs = new SortedArrayList<>(COMPARABLE);
+        for (ClassLoaderTypeDefinitionSource source : sourceMap.values()) {
+            source.unregister(typeDefinition);
+        }
+    }
+
+
+    @Override
+    public void unregister(String name) {
+        sourceMap.remove(name);
+        System.gc();
+    }
+
+    @Override
     public void register(TypeDefinition definition) {
         register(definition.getName(), (ZipClassLoader) definition.getClassLoader());
     }
@@ -48,7 +94,7 @@ public class ZipTypeDefinitionSource implements TypeDefinitionSource, Initializi
      */
     public void register(String path, ZipClassLoader classLoader) {
         if (sourceMap.containsKey(path)) {
-            sourceMap.remove(path);
+            unregister(path);
         }
         log.info("安装>>>> {}", path);
         sourceMap.put(path, new ClassLoaderTypeDefinitionSource(path, classLoader));
@@ -56,7 +102,12 @@ public class ZipTypeDefinitionSource implements TypeDefinitionSource, Initializi
 
     @Override
     public void afterPropertiesSet() {
-        for (String s : configuration.outSide()) {
+        String[] strings = configuration.outSide();
+        if (null == strings) {
+            return;
+        }
+
+        for (String s : strings) {
             register(s, null);
         }
     }

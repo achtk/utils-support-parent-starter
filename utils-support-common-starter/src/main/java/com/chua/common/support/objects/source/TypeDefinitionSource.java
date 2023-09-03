@@ -1,5 +1,6 @@
 package com.chua.common.support.objects.source;
 
+import com.chua.common.support.collection.SortedList;
 import com.chua.common.support.objects.definition.TypeDefinition;
 
 /**
@@ -20,7 +21,47 @@ public interface TypeDefinitionSource {
     boolean isMatch(TypeDefinition typeDefinition);
 
     /**
-     * 登记
+     * 获取bean
+     *
+     * @param name       名称
+     * @param targetType 目标类型
+     * @return {@link SortedList}<{@link TypeDefinition}>
+     */
+    SortedList<TypeDefinition> getBean(String name, Class<?> targetType);
+
+    /**
+     * 获取bean
+     *
+     * @param name 名称
+     * @return {@link SortedList}<{@link TypeDefinition}>
+     */
+    SortedList<TypeDefinition> getBean(String name);
+
+    /**
+     * 获取bean
+     *
+     * @param targetType 目标类型
+     * @return {@link SortedList}<{@link TypeDefinition}>
+     */
+    SortedList<TypeDefinition> getBean(Class<?> targetType);
+
+
+    /**
+     * 注销
+     *
+     * @param typeDefinition 定义
+     */
+    void unregister(TypeDefinition typeDefinition);
+
+    /**
+     * 注销
+     *
+     * @param name 名称
+     */
+    void unregister(String name);
+
+    /**
+     * 注册
      *
      * @param definition 释义
      */

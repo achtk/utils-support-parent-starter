@@ -3,7 +3,8 @@ package com.chua.example.objectcontent;
 import com.chua.common.support.objects.ConfigureContextConfiguration;
 import com.chua.common.support.objects.ConfigureObjectContext;
 import com.chua.common.support.objects.StandardConfigureObjectContext;
-import com.chua.common.support.objects.environment.StandardConfigureEnvironment;
+
+import java.io.File;
 
 /**
  * @author CH
@@ -12,11 +13,7 @@ public class ObjectContextExample {
 
     public static void main(String[] args) {
         ConfigureObjectContext objectContext = new StandardConfigureObjectContext(ConfigureContextConfiguration.builder().build());
-        objectContext.register();
-        StandardConfigureEnvironment environment = objectContext.getEnvironment();
-
-//        TypeDefinition typeDefinition = new ClassTypeDefinition(JsonObject.class);
+        objectContext.register(new File("Z://works/spring-core-5.3.23.jar"));
         System.out.println();
-
     }
 }

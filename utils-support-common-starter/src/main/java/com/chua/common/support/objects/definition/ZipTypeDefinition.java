@@ -2,7 +2,9 @@ package com.chua.common.support.objects.definition;
 
 import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.objects.classloader.ZipClassLoader;
+import com.chua.common.support.objects.source.TypeDefinitionSourceFactory;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.Set;
 
@@ -13,12 +15,12 @@ import java.util.Set;
  */
 public class ZipTypeDefinition implements TypeDefinition, InitializingAware {
 
-    private final String path;
+    private final File path;
     private final ZipClassLoader zipClassLoader;
 
-    public ZipTypeDefinition(String path) {
+    public ZipTypeDefinition(File path) {
         this.path = path;
-        this.zipClassLoader = new ZipClassLoader(path);
+        this.zipClassLoader = new ZipClassLoader();
     }
 
     @Override
@@ -57,6 +59,11 @@ public class ZipTypeDefinition implements TypeDefinition, InitializingAware {
     }
 
     @Override
+    public boolean fromAssignableFrom(Class<?> target) {
+        return false;
+    }
+
+    @Override
     public ClassLoader getClassLoader() {
         return zipClassLoader;
     }
@@ -68,6 +75,11 @@ public class ZipTypeDefinition implements TypeDefinition, InitializingAware {
 
     @Override
     public String getName() {
-        return path;
+        return path.getAbsolutePath();
+    }
+
+    @Override
+    public <T> T newInstance(TypeDefinitionSourceFactory typeDefinitionSourceFactory) {
+        return null;
     }
 }

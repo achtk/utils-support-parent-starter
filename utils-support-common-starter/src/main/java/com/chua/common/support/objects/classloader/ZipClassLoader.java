@@ -15,15 +15,11 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ZipClassLoader extends ClassLoader {
 
-    private final String path;
     private final Map<String, Class<?>> nameAndType = new ConcurrentHashMap<>();
 
     final Map<String, byte[]> byteBufferMap1 = new ConcurrentHashMap<>();
     private final ClassLoader parentClassLoader = Thread.currentThread().getContextClassLoader();
 
-    public ZipClassLoader(String path) {
-        this.path = path;
-    }
 
     @Override
     public Class<?> loadClass(String name) throws ClassNotFoundException {

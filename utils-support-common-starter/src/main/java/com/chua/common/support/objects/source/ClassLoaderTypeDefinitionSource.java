@@ -5,15 +5,18 @@ import com.chua.common.support.annotations.SpiIgnore;
 import com.chua.common.support.file.Decompress;
 import com.chua.common.support.file.FileMedia;
 import com.chua.common.support.function.InitializingAware;
-import com.chua.common.support.lang.exception.NotSupportedException;
+import com.chua.common.support.objects.ConfigureContextConfiguration;
 import com.chua.common.support.objects.classloader.ZipClassLoader;
 import com.chua.common.support.objects.definition.TypeDefinition;
 import com.chua.common.support.spi.ServiceProvider;
+import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.FileUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -29,15 +32,16 @@ import static com.chua.common.support.constant.CommonConstant.SUFFIX_CLASS;
 @Slf4j
 @Spi("classloader")
 @SpiIgnore
-public class ClassLoaderTypeDefinitionSource implements TypeDefinitionSource, InitializingAware {
+public class ClassLoaderTypeDefinitionSource extends AbstractTypeDefinitionSource implements TypeDefinitionSource, InitializingAware {
 
     private final String path;
 
     private ZipClassLoader classLoader;
 
     public ClassLoaderTypeDefinitionSource(String path, ZipClassLoader classLoader) {
+        super(ConfigureContextConfiguration.builder().build());
         this.path = path;
-        this.classLoader = Optional.ofNullable(classLoader).orElse(new ZipClassLoader(path));
+        this.classLoader = Optional.ofNullable(classLoader).orElse(new ZipClassLoader());
         this.register(path);
     }
 
@@ -50,12 +54,6 @@ public class ClassLoaderTypeDefinitionSource implements TypeDefinitionSource, In
     public boolean isMatch(TypeDefinition typeDefinition) {
         return typeDefinition instanceof ClassLoaderTypeDefinitionSource;
     }
-
-    @Override
-    public void register(TypeDefinition definition) {
-        throw new NotSupportedException("不支持注册");
-    }
-
     /**
      * 注册
      *
@@ -68,12 +66,15 @@ public class ClassLoaderTypeDefinitionSource implements TypeDefinitionSource, In
             return;
         }
 
+        List<String> classNames = new LinkedList<>();
+
         try (FileInputStream fos = new FileInputStream(path)) {
             decompress.unFile(fos, new Function<FileMedia, Boolean>() {
                         @Override
                         public Boolean apply(FileMedia metadata) {
                             if (metadata.getName().endsWith(SUFFIX_CLASS)) {
                                 classLoader.add(metadata.getName(), metadata.getStream());
+                                classNames.add(metadata.getName().replace("/", ".") + SUFFIX_CLASS);
                             }
                             return false;
                         }
@@ -81,6 +82,10 @@ public class ClassLoaderTypeDefinitionSource implements TypeDefinitionSource, In
                     true);
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+
+        for (String className : classNames) {
+            super.register(ClassUtils.forName(className, classLoader));
         }
     }
 }

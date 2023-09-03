@@ -1,5 +1,7 @@
 package com.chua.common.support.objects.definition;
 
+import com.chua.common.support.objects.source.TypeDefinitionSourceFactory;
+
 import java.util.Set;
 
 /**
@@ -43,10 +45,19 @@ public interface TypeDefinition {
 
     /**
      * 目标类是否是当前类的子类
+     *
      * @param target 目标类
      * @return 目标类是否是当前类的子类
      */
     boolean isAssignableFrom(Class<?> target);
+
+    /**
+     * 目标类是否是当前类的子类
+     *
+     * @param target 目标类
+     * @return 目标类是否是当前类的子类
+     */
+    boolean fromAssignableFrom(Class<?> target);
 
     /**
      * 类加载器
@@ -69,4 +80,13 @@ public interface TypeDefinition {
      * @return {@link String}
      */
     String getName();
+
+    /**
+     * 实例化
+     *
+     * @param typeDefinitionSourceFactory 定义
+     * @param <T>                         类型
+     * @return 结果
+     */
+    <T> T newInstance(TypeDefinitionSourceFactory typeDefinitionSourceFactory);
 }

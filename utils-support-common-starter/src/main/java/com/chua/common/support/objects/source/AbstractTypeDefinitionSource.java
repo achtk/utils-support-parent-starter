@@ -26,7 +26,7 @@ public abstract class AbstractTypeDefinitionSource implements TypeDefinitionSour
     protected Map<String, SortedList<TypeDefinition>> nameDefinitions = new ConcurrentHashMap<>();
     protected Map<String, SortedList<TypeDefinition>> typeDefinitions = new ConcurrentHashMap<>();
 
-    private static final Comparator<TypeDefinition> COMPARABLE = Comparator.comparingInt(TypeDefinition::order);
+    public static final Comparator<TypeDefinition> COMPARABLE = Comparator.comparingInt(TypeDefinition::order);
     private static final Set<Class<?>> CACHE = new HashSet<>();
 
     public AbstractTypeDefinitionSource(ConfigureContextConfiguration configuration) {
@@ -54,5 +54,47 @@ public abstract class AbstractTypeDefinitionSource implements TypeDefinitionSour
         for (String string : strings) {
             typeDefinitions.computeIfAbsent(string, it -> new SortedArrayList<>(COMPARABLE)).add(typeDefinition);
         }
+    }
+
+    @Override
+    public SortedList<TypeDefinition> getBean(String name, Class<?> targetType) {
+        SortedList<TypeDefinition> rs = new SortedArrayList<>(COMPARABLE);
+        SortedList<TypeDefinition> sortedList = nameDefinitions.get(name);
+        for (TypeDefinition typeDefinition : sortedList) {
+            if (typeDefinition.fromAssignableFrom(targetType)) {
+                rs.add(typeDefinition);
+            }
+        }
+        return rs;
+    }
+
+
+    @Override
+    public SortedList<TypeDefinition> getBean(String name) {
+        return nameDefinitions.get(name);
+    }
+
+    @Override
+    public SortedList<TypeDefinition> getBean(Class<?> targetType) {
+        String typeName = targetType.getTypeName();
+        return typeDefinitions.get(typeName);
+    }
+
+    @Override
+    public void unregister(TypeDefinition typeDefinition) {
+        for (SortedList<TypeDefinition> list : nameDefinitions.values()) {
+            list.remove(typeDefinition);
+        }
+
+        for (SortedList<TypeDefinition> definitionSortedList : typeDefinitions.values()) {
+            definitionSortedList.remove(typeDefinition);
+        }
+    }
+
+    @Override
+    public void unregister(String name) {
+        SortedList<TypeDefinition> sortedList = nameDefinitions.get(name);
+        SortedList<TypeDefinition> sortedList1 = typeDefinitions.get(name);
+        sortedList1.removeAll(sortedList);
     }
 }
