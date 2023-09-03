@@ -4,8 +4,11 @@ import com.chua.common.support.collection.SortedList;
 import com.chua.common.support.objects.definition.TypeDefinition;
 import com.chua.common.support.objects.definition.ZipTypeDefinition;
 import com.chua.common.support.objects.provider.ObjectProvider;
+import com.chua.common.support.utils.ClassUtils;
 
 import java.io.File;
+
+import static com.chua.common.support.constant.NameConstant.MAVEN_TYPE_DEFINITION;
 
 /**
  * 对象管理器
@@ -76,6 +79,10 @@ public interface ObjectContext {
      * @param file 释义
      */
     default void register(File file) {
+        if (ClassUtils.isPresent(MAVEN_TYPE_DEFINITION)) {
+            register((TypeDefinition) ClassUtils.forObject(MAVEN_TYPE_DEFINITION, file));
+            return;
+        }
         register(new ZipTypeDefinition(file));
     }
 

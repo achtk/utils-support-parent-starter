@@ -52,6 +52,11 @@
             <version>2.10.1</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.chua</groupId>
+            <artifactId>utils-support-maven-starter</artifactId>
+        </dependency>
+
         <!-- 中文分词组件 -->
         <dependency>
             <groupId>org.apdplat</groupId>

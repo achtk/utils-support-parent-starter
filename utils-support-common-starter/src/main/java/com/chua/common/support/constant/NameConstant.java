@@ -327,4 +327,9 @@ public class NameConstant implements Constant {
      * "is"
      */
     public static final String IS = "is";
+    /**
+     * MAVEN_TYPE_DEFINITION
+     */
+    public static final String MAVEN_TYPE_DEFINITION = "com.chua.maven.support.depends.definition.MavenTypeDefinition";
+
 }
