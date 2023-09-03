@@ -4,7 +4,9 @@ import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.collection.ImmutableBuilder;
 import com.chua.common.support.objects.definition.element.FieldDefinition;
 import com.chua.common.support.objects.definition.element.SuperTypeDefinition;
+import com.chua.common.support.utils.ClassUtils;
 
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -37,6 +39,9 @@ public interface SuperTypeResolver {
         @Override
         public Map<String, SuperTypeDefinition> get(Class<?> type) {
             Class<?> superclass = type.getSuperclass();
+            if (ClassUtils.isObject(superclass)) {
+                return Collections.emptyMap();
+            }
             return ImmutableBuilder.<String, SuperTypeDefinition>
                     builderOfMap().put(superclass.getTypeName(), new SuperTypeDefinition(superclass, type)).build();
         }

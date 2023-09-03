@@ -10,7 +10,7 @@ import java.lang.reflect.Parameter;
  * @author CH
  * @since 2023/09/03
  */
-public interface ArgumentResolver {
+public interface ParameterArgumentResolver {
 
     /**
      * 解析

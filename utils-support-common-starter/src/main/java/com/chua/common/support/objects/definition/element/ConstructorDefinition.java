@@ -1,6 +1,6 @@
 package com.chua.common.support.objects.definition.element;
 
-import com.chua.common.support.objects.definition.argument.ArgumentResolver;
+import com.chua.common.support.objects.definition.argument.ParameterArgumentResolver;
 import com.chua.common.support.objects.source.TypeDefinitionSourceFactory;
 import com.chua.common.support.spi.ServiceProvider;
 
@@ -114,9 +114,9 @@ public class ConstructorDefinition implements ElementDefinition {
 
     private Object newArgument(Parameter parameter, TypeDefinitionSourceFactory typeDefinitionSourceFactory) {
         Object value = null;
-        List<ArgumentResolver> argumentResolvers = ServiceProvider.of(ArgumentResolver.class).collect();
-        for (ArgumentResolver argumentResolver : argumentResolvers) {
-            value = argumentResolver.resolve(parameter, typeDefinitionSourceFactory);
+        List<ParameterArgumentResolver> parameterArgumentResolvers = ServiceProvider.of(ParameterArgumentResolver.class).collect();
+        for (ParameterArgumentResolver parameterArgumentResolver : parameterArgumentResolvers) {
+            value = parameterArgumentResolver.resolve(parameter, typeDefinitionSourceFactory);
             if (value != null) {
                 return value;
             }

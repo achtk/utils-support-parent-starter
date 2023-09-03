@@ -4,6 +4,7 @@ import com.chua.common.support.utils.IoUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -15,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ZipClassLoader extends ClassLoader {
 
-    private final Map<String, Class<?>> nameAndType = new ConcurrentHashMap<>();
+    private final Map<String, Class<?>> nameAndType = new LinkedHashMap<>();
 
     final Map<String, byte[]> byteBufferMap1 = new ConcurrentHashMap<>();
     private final ClassLoader parentClassLoader = Thread.currentThread().getContextClassLoader();
@@ -35,19 +36,22 @@ public class ZipClassLoader extends ClassLoader {
             } catch (Exception ignored) {
             }
             if (null != aClass) {
-                nameAndType.put(name, aClass);
                 return aClass;
             }
         }
 
-        Class<?> aClass = super.defineClass(name, byteBuffer, 0, byteBuffer.length);
+        Class<?> aClass = null;
+        try {
+            aClass = super.defineClass(name, byteBuffer, 0, byteBuffer.length);
+        } catch (Throwable ignored) {
+        }
         nameAndType.put(name, aClass);
         return aClass;
     }
 
     public void add(String name, InputStream stream) {
         try (InputStream is = stream) {
-            byteBufferMap1.put(name, IoUtils.toByteArray(is));
+            byteBufferMap1.put(name.replace("/", "."), IoUtils.toByteArray(is));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -73,8 +73,9 @@ public class ClassLoaderTypeDefinitionSource extends AbstractTypeDefinitionSourc
                         @Override
                         public Boolean apply(FileMedia metadata) {
                             if (metadata.getName().endsWith(SUFFIX_CLASS)) {
-                                classLoader.add(metadata.getName(), metadata.getStream());
-                                classNames.add(metadata.getName().replace("/", ".") + SUFFIX_CLASS);
+                                String name = metadata.getName().replace("/", ".").replace(SUFFIX_CLASS, "");
+                                classLoader.add(name, metadata.getStream());
+                                classNames.add(name);
                             }
                             return false;
                         }
