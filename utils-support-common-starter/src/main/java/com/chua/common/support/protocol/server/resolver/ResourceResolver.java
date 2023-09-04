@@ -1,10 +1,10 @@
 package com.chua.common.support.protocol.server.resolver;
 
 import com.chua.common.support.annotations.SpiIgnore;
-import com.chua.common.support.context.factory.BeanFactory;
 import com.chua.common.support.image.filter.ImageFilter;
 import com.chua.common.support.media.MediaType;
 import com.chua.common.support.media.MediaTypeFactory;
+import com.chua.common.support.objects.ConfigureObjectContext;
 import com.chua.common.support.resource.repository.Metadata;
 import com.chua.common.support.resource.repository.Repository;
 import com.chua.common.support.utils.BufferedImageUtils;
@@ -27,8 +27,8 @@ public class ResourceResolver extends AbstractResolver {
     static Repository repository = Repository.current().add(Repository.classpath(true));
     private String name;
 
-    public ResourceResolver(BeanFactory beanFactory) {
-        super(beanFactory);
+    public ResourceResolver(ConfigureObjectContext configureObjectContext) {
+        super(configureObjectContext);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class ResourceResolver extends AbstractResolver {
      * @return 过滤图片
      */
     private byte[] filter(byte[] bytes, Metadata metadata1) {
-        Map<String, ImageFilter> beanMap = beanFactory.getBeanMap(ImageFilter.class);
+        Map<String, ImageFilter> beanMap = beanFactory.getBeanOfType(ImageFilter.class);
         BufferedImage bufferedImage = BufferedImageUtils.getBufferedImage(bytes);
         for (ImageFilter imageFilter : beanMap.values()) {
             try {

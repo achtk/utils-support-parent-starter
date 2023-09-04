@@ -1,7 +1,7 @@
 package com.chua.common.support.protocol.server.websocket;
 
 
-import com.chua.common.support.context.bean.BeanObject;
+import com.chua.common.support.objects.bean.BeanObject;
 import com.chua.common.support.protocol.server.AbstractServer;
 import com.chua.common.support.protocol.server.ServerOption;
 import com.chua.common.support.protocol.server.parameter.WebSocketParameterResolver;
@@ -63,14 +63,14 @@ public class WebsocketServer extends AbstractServer {
         public void onOpen(WebSocket conn, ClientHandshake handshake) {
             BeanObject beanObject = getMapping(CONNECT);
             cache.put(conn, beanObject);
-            beanObject.invoke(it -> getValue(it, new WebsocketRequest(conn, handshake, CONNECT, null)));
+            beanObject.newInvoke(it -> getValue(it, new WebsocketRequest(conn, handshake, CONNECT, null))).invoke();
         }
 
         @Override
         public void onClose(WebSocket conn, int code, String reason, boolean remote) {
             BeanObject beanObject = getMapping(DISCONNECT);
             cache.remove(conn);
-            beanObject.invoke(it -> getValue(it, new WebsocketRequest(conn, null, DISCONNECT, null)));
+            beanObject.newInvoke(it -> getValue(it, new WebsocketRequest(conn, null, DISCONNECT, null))).invoke();
         }
 
         @Override
@@ -85,7 +85,10 @@ public class WebsocketServer extends AbstractServer {
                 return;
             }
 
-            beanObject1.invoke(it -> getValue(it, new WebsocketRequest(conn, null, resourceDescriptor, message, MapUtils.asMap(StringUtils.removePrefixContains(conn.getResourceDescriptor(), "?"), "&", "="))));
+            beanObject1.newInvoke(it -> getValue(it,
+                    new WebsocketRequest(conn, null, resourceDescriptor, message,
+                            MapUtils.asMap(StringUtils.removePrefixContains(conn.getResourceDescriptor(), "?"),
+                                    "&", "=")))).invoke();
 
         }
 
@@ -93,7 +96,7 @@ public class WebsocketServer extends AbstractServer {
         public void onError(WebSocket conn, Exception ex) {
             BeanObject beanObject = getMapping(ERROR);
             cache.remove(conn);
-            beanObject.invoke(it -> getValue(it, new WebsocketRequest(conn, null, ERROR, null)));
+            beanObject.newInvoke(it -> getValue(it, new WebsocketRequest(conn, null, ERROR, null))).invoke();
         }
 
         @Override

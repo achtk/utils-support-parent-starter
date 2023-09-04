@@ -1,14 +1,14 @@
 package com.chua.common.support.database.metadata;
 
-import com.chua.common.support.context.resolver.NamePair;
-import com.chua.common.support.context.resolver.NamedResolver;
-import com.chua.common.support.context.resolver.factory.SimpleNamedResolver;
 import com.chua.common.support.database.annotation.ColumnIgnore;
 import com.chua.common.support.database.entity.Column;
 import com.chua.common.support.database.entity.Index;
 import com.chua.common.support.file.export.ExportProperty;
 import com.chua.common.support.function.strategy.name.CamelUnderscoreNamedStrategy;
 import com.chua.common.support.function.strategy.name.NamedStrategy;
+import com.chua.common.support.function.strategy.resolver.NamePair;
+import com.chua.common.support.function.strategy.resolver.NamedResolver;
+import com.chua.common.support.function.strategy.resolver.SimpleNamedResolver;
 import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.StringUtils;
 import lombok.Getter;

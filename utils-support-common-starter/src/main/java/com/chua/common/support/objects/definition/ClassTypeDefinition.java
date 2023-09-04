@@ -10,12 +10,16 @@ import com.chua.common.support.objects.source.TypeDefinitionSourceFactory;
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.ClassUtils;
 
+import java.lang.annotation.Annotation;
 import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.chua.common.support.constant.CommonConstant.EMPTY_ARRAY;
+
 /**
  * 定义
+ *
  * @author CH
  */
 public class ClassTypeDefinition implements TypeDefinition, InitializingAware {
@@ -26,7 +30,7 @@ public class ClassTypeDefinition implements TypeDefinition, InitializingAware {
     private boolean isSingle;
     private boolean isProxy;
     private int order;
-    private String name;
+    private List<String> name;
 
     private Object bean;
 
@@ -40,8 +44,8 @@ public class ClassTypeDefinition implements TypeDefinition, InitializingAware {
 
     private Map<String, SuperTypeDefinition> superTypeDefinitions;
 
-    private Set<String> interfaces = new LinkedHashSet<>();
-    private Set<String> superType = new LinkedHashSet<>();
+    private final Set<String> interfaces = new LinkedHashSet<>();
+    private final Set<String> superType = new LinkedHashSet<>();
 
 
     public ClassTypeDefinition(Class<?> type) {
@@ -81,6 +85,12 @@ public class ClassTypeDefinition implements TypeDefinition, InitializingAware {
     }
 
     @Override
+    public int order(int order) {
+        this.order = order;
+        return order;
+    }
+
+    @Override
     public boolean isAssignableFrom(Class<?> target) {
         return type.isAssignableFrom(target);
     }
@@ -105,8 +115,8 @@ public class ClassTypeDefinition implements TypeDefinition, InitializingAware {
     }
 
     @Override
-    public String getName() {
-        return name;
+    public String[] getName() {
+        return name.toArray(EMPTY_ARRAY);
     }
 
     @Override
@@ -123,6 +133,37 @@ public class ClassTypeDefinition implements TypeDefinition, InitializingAware {
     @Override
     public List<URL> getDepends() {
         return Collections.emptyList();
+    }
+
+    @Override
+    public void addBeanName(String[] name) {
+        this.name.add(Arrays.toString(name));
+    }
+
+    @Override
+    public Map<String, List<MethodDefinition>> getMethodDefinition() {
+        if (null == methodDefinitions) {
+            this.methodDefinitions = ServiceProvider.of(MethodResolver.class).getSpiService().get(type);
+        }
+        return methodDefinitions;
+    }
+
+    @Override
+    public List<FieldDefinition> getFieldDefinition() {
+        if (null == fieldDefinitions) {
+            this.fieldDefinitions = ServiceProvider.of(FieldResolver.class).getSpiService().get(type);
+        }
+        return new ArrayList<>(fieldDefinitions.values());
+    }
+
+    @Override
+    public boolean hasAnnotation(Class<? extends Annotation> annotationType) {
+        return annotationDefinitions.containsKey(annotationType.getTypeName());
+    }
+
+    @Override
+    public List<AnnotationDefinition> getAnnotationDefinition() {
+        return new ArrayList<>(annotationDefinitions.values());
     }
 
     private void reset() {
@@ -156,13 +197,15 @@ public class ClassTypeDefinition implements TypeDefinition, InitializingAware {
 
     @Override
     public void afterPropertiesSet() {
+        if (ClassUtils.isVoid(type)) {
+            return;
+        }
         this.isSingle = ServiceProvider.of(SingleResolver.class).getSpiService().isSingle();
         this.isProxy = ServiceProvider.of(ProxyResolver.class).getSpiService().isProxy();
         this.order = ServiceProvider.of(OrderResolver.class).getSpiService().order();
-        this.name = ServiceProvider.of(NameResolver.class).getSpiService().name();
+        this.name = new ArrayList<>();
+        this.name.add(ServiceProvider.of(NameResolver.class).getSpiService().name());
         this.annotationDefinitions = ServiceProvider.of(AnnotationResolver.class).getSpiService().get(type);
-//        this.fieldDefinitions = ServiceProvider.of(FieldResolver.class).getSpiService().get(type);
-//        this.methodDefinitions = ServiceProvider.of(MethodResolver.class).getSpiService().get(type);
         this.superTypeDefinitions = ServiceProvider.of(SuperTypeResolver.class).getSpiService().get(type);
         this.interfaces.addAll(ClassUtils.getAllInterfaces(type).stream().map(Class::getTypeName).collect(Collectors.toSet()));
         this.superType.addAll(ClassUtils.getSuperType(type).stream().map(Class::getTypeName).collect(Collectors.toSet()));

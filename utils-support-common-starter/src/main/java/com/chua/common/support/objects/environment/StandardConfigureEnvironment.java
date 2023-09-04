@@ -12,6 +12,7 @@ import com.chua.common.support.utils.StringUtils;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -45,7 +46,7 @@ public class StandardConfigureEnvironment implements ConfigureEnvironment, Initi
 
     @Override
     public ConfigureEnvironment getEnvironment(EnvironmentConfiguration configuration) {
-        return new StandardConfigureEnvironment(configuration, configuration.propertySources());
+        return new StandardConfigureEnvironment(configuration, Collections.emptyList());
     }
 
     @Override

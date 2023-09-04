@@ -1,8 +1,6 @@
 package com.chua.common.support.objects.environment.properties;
 
 
-import com.chua.common.support.context.factory.ApplicationContextConfiguration;
-
 import java.util.List;
 
 /**
@@ -11,13 +9,6 @@ import java.util.List;
  * @author CH
  */
 public interface MultiPropertySource extends PropertySource {
-    /**
-     * 获取所有配置
-     *
-     * @param contextConfiguration 配置
-     * @return 配置
-     */
-    List<PropertySource> getPropertySources(ApplicationContextConfiguration contextConfiguration);
 
     /**
      * 添加配置

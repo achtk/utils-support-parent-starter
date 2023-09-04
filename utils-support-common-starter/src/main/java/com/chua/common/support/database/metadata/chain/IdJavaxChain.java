@@ -1,7 +1,6 @@
 package com.chua.common.support.database.metadata.chain;
 
 import com.chua.common.support.collection.AnnotationAttributes;
-import com.chua.common.support.context.constant.ContextConstant;
 import com.chua.common.support.database.entity.Column;
 import com.chua.common.support.database.entity.Primary;
 import com.chua.common.support.utils.AnnotationUtils;
@@ -10,21 +9,24 @@ import com.chua.common.support.utils.StringUtils;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
+import static com.chua.common.support.constant.ContextConstant.GENERATED_VALUE;
+import static com.chua.common.support.constant.ContextConstant.ID;
+
 /**
  * column
  */
 @SuppressWarnings("ALL")
-public class IdJavaxChain implements ColumnChain{
+public class IdJavaxChain implements ColumnChain {
 
 
     @Override
     public void chain(Column column, Field field, AnnotationAttributes javaxColumn) {
-        analysisOther(column, javaxColumn, AnnotationUtils.getAnnotationAttributes(field, ContextConstant.GENERATED_VALUE));
+        analysisOther(column, javaxColumn, AnnotationUtils.getAnnotationAttributes(field, GENERATED_VALUE));
     }
 
     @Override
     public Class<? extends Annotation> annotationType() {
-        return ContextConstant.ID;
+        return ID;
     }
 
     /**

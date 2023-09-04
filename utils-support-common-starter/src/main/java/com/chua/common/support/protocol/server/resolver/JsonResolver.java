@@ -1,8 +1,8 @@
 package com.chua.common.support.protocol.server.resolver;
 
 import com.chua.common.support.annotations.Spi;
-import com.chua.common.support.context.factory.BeanFactory;
 import com.chua.common.support.json.Json;
+import com.chua.common.support.objects.ConfigureObjectContext;
 
 /**
  * 解析器
@@ -11,7 +11,7 @@ import com.chua.common.support.json.Json;
 @Spi({"application/json", "json"})
 public class JsonResolver extends AbstractResolver {
 
-    public JsonResolver(BeanFactory beanFactory) {
+    public JsonResolver(ConfigureObjectContext beanFactory) {
         super(beanFactory);
     }
 

@@ -1,6 +1,6 @@
 package com.chua.common.support.protocol.server.resolver;
 
-import com.chua.common.support.context.factory.BeanFactory;
+import com.chua.common.support.objects.ConfigureObjectContext;
 
 /**
  * 解析器
@@ -8,9 +8,9 @@ import com.chua.common.support.context.factory.BeanFactory;
  */
 public abstract class AbstractResolver implements Resolver{
 
-    protected BeanFactory beanFactory;
+    protected ConfigureObjectContext beanFactory;
 
-    public AbstractResolver(BeanFactory beanFactory) {
+    public AbstractResolver(ConfigureObjectContext beanFactory) {
         this.beanFactory = beanFactory;
     }
 }

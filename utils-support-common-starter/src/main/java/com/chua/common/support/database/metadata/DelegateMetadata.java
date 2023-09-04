@@ -1,7 +1,5 @@
 package com.chua.common.support.database.metadata;
 
-import com.chua.common.support.context.resolver.NamedResolver;
-import com.chua.common.support.context.resolver.factory.SimpleNamedResolver;
 import com.chua.common.support.database.annotation.Indices;
 import com.chua.common.support.database.annotation.Table;
 import com.chua.common.support.database.entity.Column;
@@ -10,6 +8,8 @@ import com.chua.common.support.database.metadata.chain.ColumnChain;
 import com.chua.common.support.database.metadata.chain.SchemaChain;
 import com.chua.common.support.database.metadata.chain.TableChain;
 import com.chua.common.support.function.strategy.name.NamedStrategy;
+import com.chua.common.support.function.strategy.resolver.NamedResolver;
+import com.chua.common.support.function.strategy.resolver.SimpleNamedResolver;
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.AnnotationUtils;
 import com.chua.common.support.utils.StringUtils;

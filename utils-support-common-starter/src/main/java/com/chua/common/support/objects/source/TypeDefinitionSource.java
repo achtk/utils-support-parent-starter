@@ -3,6 +3,8 @@ package com.chua.common.support.objects.source;
 import com.chua.common.support.collection.SortedList;
 import com.chua.common.support.objects.definition.TypeDefinition;
 
+import java.lang.annotation.Annotation;
+
 /**
  * 类型定义源
  *
@@ -66,4 +68,12 @@ public interface TypeDefinitionSource {
      * @param definition 释义
      */
     void register(TypeDefinition definition);
+
+    /**
+     * 获取bean通过方法
+     *
+     * @param annotationType 注解类型
+     * @return {@link SortedList}<{@link TypeDefinition}>
+     */
+    SortedList<TypeDefinition> getBeanByMethod(Class<? extends Annotation> annotationType);
 }

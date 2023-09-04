@@ -1,12 +1,9 @@
 package com.chua.common.support.objects.environment.properties;
 
-import com.chua.common.support.context.factory.ApplicationContextConfiguration;
 import lombok.NoArgsConstructor;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * 配置
@@ -30,11 +27,6 @@ public class PropertiesPropertySource implements MultiPropertySource {
     @Override
     public Object getProperty(String name) {
         return null;
-    }
-
-    @Override
-    public List<PropertySource> getPropertySources(ApplicationContextConfiguration contextConfiguration) {
-        return Optional.ofNullable(propertySources).orElse(Collections.emptyList());
     }
 
     @Override

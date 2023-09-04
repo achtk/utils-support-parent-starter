@@ -4,11 +4,16 @@ import com.chua.common.support.collection.SortedArrayList;
 import com.chua.common.support.collection.SortedList;
 import com.chua.common.support.objects.ConfigureContextConfiguration;
 import com.chua.common.support.objects.ObjectContext;
+import com.chua.common.support.objects.bean.BeanObject;
+import com.chua.common.support.objects.bean.SingleBeanObject;
 import com.chua.common.support.objects.definition.TypeDefinition;
 import com.chua.common.support.objects.provider.ObjectProvider;
 import com.chua.common.support.spi.ServiceProvider;
 
+import java.lang.annotation.Annotation;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.chua.common.support.objects.source.AbstractTypeDefinitionSource.COMPARABLE;
 
@@ -39,13 +44,13 @@ public class TypeDefinitionSourceFactory implements ObjectContext {
     }
 
     @Override
-    public Object getBean(String name) {
+    public BeanObject getBean(String name) {
         SortedList<TypeDefinition> sortedList = new SortedArrayList<>(COMPARABLE);
         for (TypeDefinitionSource definitionSource : definitionSources) {
             sortedList.addAll(definitionSource.getBean(name));
         }
 
-        return sortedList.first().newInstance(this);
+        return new SingleBeanObject(sortedList.first(), this);
     }
 
     @Override
@@ -60,12 +65,38 @@ public class TypeDefinitionSourceFactory implements ObjectContext {
 
     @Override
     public <T> ObjectProvider<T> getBean(Class<T> targetType) {
-        SortedList<TypeDefinition> sortedList = new SortedArrayList<>(COMPARABLE);
+        return new ObjectProvider<>(getBeanOfType(targetType), this);
+    }
+
+    @Override
+    public <T> Map<String, T> getBeanOfType(Class<T> targetType) {
+        Map<String, T> rs = new LinkedHashMap<>();
+        Map<String, SortedList<TypeDefinition>> tmp = new LinkedHashMap<>();
         for (TypeDefinitionSource definitionSource : definitionSources) {
-            sortedList.addAll(definitionSource.getBean(targetType));
+            SortedList<TypeDefinition> bean = definitionSource.getBean(targetType);
+            doAnalysis(tmp, bean);
         }
 
-        return new ObjectProvider<>(sortedList, this);
+        for (Map.Entry<String, SortedList<TypeDefinition>> entry : tmp.entrySet()) {
+            rs.put(entry.getKey(), entry.getValue().first().newInstance(this));
+        }
+
+        return rs;
+    }
+
+    /**
+     * 做分析
+     *
+     * @param tmp  tmp
+     * @param bean bean
+     */
+    private <T> void doAnalysis(Map<String, SortedList<TypeDefinition>> tmp, SortedList<TypeDefinition> bean) {
+        for (TypeDefinition typeDefinition : bean) {
+            String[] name = typeDefinition.getName();
+            for (String s : name) {
+                tmp.computeIfAbsent(s, it -> new SortedArrayList<>(COMPARABLE)).add(typeDefinition);
+            }
+        }
     }
 
     @Override
@@ -86,12 +117,29 @@ public class TypeDefinitionSourceFactory implements ObjectContext {
     }
 
     @Override
-    public void register(TypeDefinition definition) {
+    public TypeDefinition register(TypeDefinition definition) {
         for (TypeDefinitionSource definitionSource : definitionSources) {
             if (definitionSource.isMatch(definition)) {
                 definitionSource.register(definition);
                 break;
             }
         }
+        return definition;
+    }
+
+    @Override
+    public Map<String, TypeDefinition> getBeanByMethod(Class<? extends Annotation> annotationType) {
+        Map<String, TypeDefinition> rs = new LinkedHashMap<>();
+        Map<String, SortedList<TypeDefinition>> tmp = new LinkedHashMap<>();
+        for (TypeDefinitionSource definitionSource : definitionSources) {
+            SortedList<TypeDefinition> bean = definitionSource.getBeanByMethod(annotationType);
+            doAnalysis(tmp, bean);
+        }
+
+        for (Map.Entry<String, SortedList<TypeDefinition>> entry : tmp.entrySet()) {
+            rs.put(entry.getKey(), entry.getValue().first().newInstance(this));
+        }
+
+        return rs;
     }
 }

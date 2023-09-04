@@ -54,4 +54,9 @@ public class SuperTypeDefinition implements ElementDefinition {
     public Map<String, Object> value() {
         return null;
     }
+
+    @Override
+    public void addBeanName(String name) {
+
+    }
 }

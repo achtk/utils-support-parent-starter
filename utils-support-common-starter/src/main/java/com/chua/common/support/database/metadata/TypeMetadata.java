@@ -1,8 +1,6 @@
 package com.chua.common.support.database.metadata;
 
 import com.chua.common.support.bean.BeanUtils;
-import com.chua.common.support.context.resolver.NamedResolver;
-import com.chua.common.support.context.resolver.factory.SimpleNamedResolver;
 import com.chua.common.support.database.annotation.Id;
 import com.chua.common.support.database.annotation.Indices;
 import com.chua.common.support.database.annotation.Table;
@@ -10,6 +8,8 @@ import com.chua.common.support.database.entity.Column;
 import com.chua.common.support.database.entity.Index;
 import com.chua.common.support.database.entity.Primary;
 import com.chua.common.support.function.strategy.name.NamedStrategy;
+import com.chua.common.support.function.strategy.resolver.NamedResolver;
+import com.chua.common.support.function.strategy.resolver.SimpleNamedResolver;
 import com.chua.common.support.utils.AnnotationUtils;
 
 import java.lang.reflect.Field;

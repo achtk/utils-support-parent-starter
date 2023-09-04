@@ -8,6 +8,7 @@ import com.chua.common.support.objects.definition.TypeDefinition;
 import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.StringUtils;
 
+import java.lang.annotation.Annotation;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -42,9 +43,11 @@ public abstract class AbstractTypeDefinitionSource implements TypeDefinitionSour
 
     @Override
     public void register(TypeDefinition typeDefinition) {
-        String name = typeDefinition.getName();
-        if (StringUtils.isNotEmpty(name)) {
-            nameDefinitions.computeIfAbsent(name, it -> new SortedArrayList<>(COMPARABLE)).add(typeDefinition);
+        String[] names = typeDefinition.getName();
+        for (String name : names) {
+            if (StringUtils.isNotEmpty(name)) {
+                nameDefinitions.computeIfAbsent(name, it -> new SortedArrayList<>(COMPARABLE)).add(typeDefinition);
+            }
         }
         typeDefinitions.computeIfAbsent(typeDefinition.getType().getTypeName(), it -> new SortedArrayList<>(COMPARABLE)).add(typeDefinition);
         Set<String> strings = typeDefinition.superTypeAndInterface();
@@ -82,21 +85,15 @@ public abstract class AbstractTypeDefinitionSource implements TypeDefinitionSour
 
     @Override
     public void unregister(TypeDefinition typeDefinition) {
-        for (SortedList<TypeDefinition> list : nameDefinitions.values()) {
-            list.remove(typeDefinition);
-        }
-
-        for (SortedList<TypeDefinition> definitionSortedList : typeDefinitions.values()) {
-            definitionSortedList.remove(typeDefinition);
-        }
     }
 
     @Override
     public void unregister(String name) {
-        SortedList<TypeDefinition> sortedList = nameDefinitions.get(name);
-        SortedList<TypeDefinition> sortedList1 = typeDefinitions.get(name);
-        if(null != sortedList1) {
-            sortedList1.removeAll(sortedList);
-        }
     }
+
+    @Override
+    public SortedList<TypeDefinition> getBeanByMethod(Class<? extends Annotation> annotationType) {
+        return SortedList.emptyList();
+    }
+
 }

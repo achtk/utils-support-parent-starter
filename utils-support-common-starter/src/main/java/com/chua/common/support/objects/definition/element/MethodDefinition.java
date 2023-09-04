@@ -20,15 +20,20 @@ public class MethodDefinition implements ElementDefinition {
 
     private final Method method;
     private final Class<?> type;
+    private String name;
 
     public MethodDefinition(Method method, Class<?> type) {
         this.method = method;
         this.type = type;
     }
 
+    public MethodDefinition(Method method) {
+        this(method, method.getDeclaringClass());
+    }
+
     @Override
     public String name() {
-        return method.getName();
+        return name;
     }
 
     @Override
@@ -65,5 +70,10 @@ public class MethodDefinition implements ElementDefinition {
     @Override
     public Map<String, Object> value() {
         return Collections.emptyMap();
+    }
+
+    @Override
+    public void addBeanName(String name) {
+        this.name = name;
     }
 }

@@ -12,6 +12,7 @@ import com.chua.common.support.utils.ClassUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
+import java.lang.annotation.Annotation;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
@@ -95,6 +96,11 @@ public class ZipTypeDefinitionSource implements TypeDefinitionSource, Initializi
         register(definition.getName(), definition.getDepends(), (ZipClassLoader) definition.getClassLoader());
     }
 
+    @Override
+    public SortedList<TypeDefinition> getBeanByMethod(Class<? extends Annotation> annotationType) {
+        return SortedList.emptyList();
+    }
+
     /**
      * 登记
      * 注册
@@ -103,12 +109,14 @@ public class ZipTypeDefinitionSource implements TypeDefinitionSource, Initializi
      * @param classLoader 类加载器
      * @param urls        url
      */
-    public void register(String path, List<URL> urls, ZipClassLoader classLoader) {
-        if (sourceMap.containsKey(path)) {
-            unregister(path);
+    public void register(String[] paths, List<URL> urls, ZipClassLoader classLoader) {
+        for (String path : paths) {
+            if (sourceMap.containsKey(path)) {
+                unregister(path);
+            }
+            File file = new File(path);
+            sourceMap.put(file.getAbsolutePath(), new ClassLoaderTypeDefinitionSource(path, urls, classLoader, configuration.outSideInAnnotation()));
         }
-        File file = new File(path);
-        sourceMap.put(file.getAbsolutePath(), new ClassLoaderTypeDefinitionSource(path, urls, classLoader, configuration.outSideInAnnotation()));
     }
 
     @Override

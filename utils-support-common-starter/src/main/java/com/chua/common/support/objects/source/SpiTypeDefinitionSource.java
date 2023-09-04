@@ -6,6 +6,7 @@ import com.chua.common.support.objects.definition.ObjectTypeDefinition;
 import com.chua.common.support.objects.definition.TypeDefinition;
 import com.chua.common.support.spi.ServiceProvider;
 
+import java.lang.annotation.Annotation;
 import java.util.Map;
 
 import static com.chua.common.support.objects.source.AbstractTypeDefinitionSource.COMPARABLE;
@@ -57,5 +58,10 @@ public class SpiTypeDefinitionSource implements TypeDefinitionSource{
     @Override
     public void register(TypeDefinition definition) {
 
+    }
+
+    @Override
+    public SortedList<TypeDefinition> getBeanByMethod(Class<? extends Annotation> annotationType) {
+        return SortedList.emptyList();
     }
 }

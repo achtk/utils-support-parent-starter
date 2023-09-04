@@ -2,14 +2,19 @@ package com.chua.common.support.objects;
 
 import com.chua.common.support.collection.SortedList;
 import com.chua.common.support.function.InitializingAware;
+import com.chua.common.support.objects.bean.BeanObject;
 import com.chua.common.support.objects.definition.TypeDefinition;
 import com.chua.common.support.objects.environment.StandardConfigureEnvironment;
 import com.chua.common.support.objects.provider.ObjectProvider;
 import com.chua.common.support.objects.source.TypeDefinitionSourceFactory;
 import lombok.extern.slf4j.Slf4j;
 
+import java.lang.annotation.Annotation;
+import java.util.Map;
+
 /**
  * 基础配置
+ *
  * @author CH
  * @date 2023/09/01
  */
@@ -31,6 +36,11 @@ public class StandardConfigureObjectContext implements ConfigureObjectContext, I
     }
 
     @Override
+    public void autowire(Object bean) {
+
+    }
+
+    @Override
     public void afterPropertiesSet() {
         if (log.isDebugEnabled()) {
             log.debug("初始化环境");
@@ -48,7 +58,7 @@ public class StandardConfigureObjectContext implements ConfigureObjectContext, I
     }
 
     @Override
-    public Object getBean(String name) {
+    public BeanObject getBean(String name) {
         return typeDefinitionSourceFactory.getBean(name);
     }
 
@@ -63,6 +73,11 @@ public class StandardConfigureObjectContext implements ConfigureObjectContext, I
     }
 
     @Override
+    public <T> Map<String, T> getBeanOfType(Class<T> targetType) {
+        return typeDefinitionSourceFactory.getBeanOfType(targetType);
+    }
+
+    @Override
     public void unregister(TypeDefinition typeDefinition) {
         typeDefinitionSourceFactory.unregister(typeDefinition);
     }
@@ -73,7 +88,12 @@ public class StandardConfigureObjectContext implements ConfigureObjectContext, I
     }
 
     @Override
-    public void register(TypeDefinition definition) {
-        typeDefinitionSourceFactory.register(definition);
+    public TypeDefinition register(TypeDefinition definition) {
+        return typeDefinitionSourceFactory.register(definition);
+    }
+
+    @Override
+    public Map<String, TypeDefinition> getBeanByMethod(Class<? extends Annotation> annotationType) {
+        return typeDefinitionSourceFactory.getBeanByMethod(annotationType);
     }
 }

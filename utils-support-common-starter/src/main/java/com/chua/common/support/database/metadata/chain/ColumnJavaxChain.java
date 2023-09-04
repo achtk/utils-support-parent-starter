@@ -7,18 +7,19 @@ import com.chua.common.support.utils.AnnotationUtils;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
-import static com.chua.common.support.context.constant.ContextConstant.COLUMN;
-import static com.chua.common.support.context.constant.ContextConstant.COMMENT;
+import static com.chua.common.support.constant.ContextConstant.COLUMN;
+import static com.chua.common.support.constant.ContextConstant.COMMENT;
+
 
 /**
  * column
  */
 @SuppressWarnings("ALL")
-public class ColumnJavaxChain implements ColumnChain{
+public class ColumnJavaxChain implements ColumnChain {
 
     @Override
     public void chain(Column column, Field field, AnnotationAttributes javaxColumn) {
-        if(!javaxColumn.isEmpty("name")) {
+        if (!javaxColumn.isEmpty("name")) {
             column.setName(javaxColumn.getString("name"));
         }
 

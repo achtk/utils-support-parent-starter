@@ -74,7 +74,7 @@ public class ClassLoaderTypeDefinitionSource extends AbstractTypeDefinitionSourc
 
     @Override
     public boolean isMatch(TypeDefinition typeDefinition) {
-        return typeDefinition instanceof ClassLoaderTypeDefinitionSource;
+        return false;
     }
     /**
      * 注册

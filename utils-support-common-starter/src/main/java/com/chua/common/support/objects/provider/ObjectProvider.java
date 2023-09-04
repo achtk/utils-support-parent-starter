@@ -1,8 +1,12 @@
 package com.chua.common.support.objects.provider;
 
-import com.chua.common.support.collection.SortedList;
 import com.chua.common.support.objects.definition.TypeDefinition;
 import com.chua.common.support.objects.source.TypeDefinitionSourceFactory;
+import com.chua.common.support.utils.CollectionUtils;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 对象提供程序
@@ -12,10 +16,10 @@ import com.chua.common.support.objects.source.TypeDefinitionSourceFactory;
  */
 public class ObjectProvider<T> {
 
-    private final SortedList<TypeDefinition> sortedList;
+    private final Map<String, T> sortedList;
     private final TypeDefinitionSourceFactory typeDefinitionSourceFactory;
 
-    public ObjectProvider(SortedList<TypeDefinition> sortedList, TypeDefinitionSourceFactory typeDefinitionSourceFactory) {
+    public ObjectProvider(Map<String, T> sortedList, TypeDefinitionSourceFactory typeDefinitionSourceFactory) {
         this.sortedList = sortedList;
         this.typeDefinitionSourceFactory = typeDefinitionSourceFactory;
     }
@@ -27,6 +31,15 @@ public class ObjectProvider<T> {
      * @return {@link T}
      */
     public T get() {
-        return sortedList.isEmpty() ? null : sortedList.first().newInstance(typeDefinitionSourceFactory);
+        return sortedList.isEmpty() ? null : CollectionUtils.findFirst(sortedList.values());
+    }
+
+    /**
+     * 获取全部
+     *
+     * @return {@link List}<{@link TypeDefinition}>
+     */
+    public Collection<T> getAll() {
+        return sortedList.values();
     }
 }

@@ -1,11 +1,11 @@
 package com.chua.common.support.value;
 
 import com.chua.common.support.bean.BeanMap;
-import com.chua.common.support.context.resolver.NamePair;
-import com.chua.common.support.context.resolver.NamedResolver;
-import com.chua.common.support.context.resolver.factory.SimpleNamedResolver;
 import com.chua.common.support.database.entity.Column;
 import com.chua.common.support.database.metadata.Metadata;
+import com.chua.common.support.function.strategy.resolver.NamePair;
+import com.chua.common.support.function.strategy.resolver.NamedResolver;
+import com.chua.common.support.function.strategy.resolver.SimpleNamedResolver;
 import com.chua.common.support.utils.StringUtils;
 import lombok.Builder;
 import lombok.Data;

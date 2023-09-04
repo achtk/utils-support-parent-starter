@@ -14,7 +14,8 @@ import java.net.URL;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.chua.common.support.context.constant.ContextConstant.COMPONENT;
+import static com.chua.common.support.constant.ContextConstant.COMPONENT;
+
 
 /**
  * 服务查找器
@@ -22,7 +23,7 @@ import static com.chua.common.support.context.constant.ContextConstant.COMPONENT
  * @author CH
  */
 @Slf4j
-public abstract class AbstractServiceFinder implements ServiceFinder{
+public abstract class AbstractServiceFinder implements ServiceFinder {
     private final Map<ClassLoader, Map<Class<?>, List<ServiceDefinition>>> CACHE = new ConcurrentHashMap<>();
     @Setter
     protected Class<?> service;

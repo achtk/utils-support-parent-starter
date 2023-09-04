@@ -5,9 +5,12 @@ import com.chua.common.support.media.MediaType;
 import com.chua.common.support.media.MediaTypeFactory;
 import com.chua.common.support.objects.ConfigureContextConfiguration;
 import com.chua.common.support.objects.StandardConfigureObjectContext;
+import com.chua.common.support.objects.bean.BeanObject;
+import com.chua.common.support.objects.bean.SingleBeanObject;
+import com.chua.common.support.objects.definition.ObjectTypeDefinition;
 import com.chua.common.support.objects.definition.TypeDefinition;
-import com.chua.common.support.objects.definition.element.MethodDefinition;
 import com.chua.common.support.objects.environment.properties.FunctionPropertySource;
+import com.chua.common.support.objects.provider.ObjectProvider;
 import com.chua.common.support.protocol.server.annotations.Mapping;
 import com.chua.common.support.protocol.server.parameter.ParameterResolver;
 import com.chua.common.support.protocol.server.request.Request;
@@ -22,6 +25,7 @@ import com.chua.common.support.utils.CollectionUtils;
 import com.chua.common.support.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -58,12 +62,12 @@ public abstract class AbstractServer implements Server, Constant {
 
         Map<String, TemplateResolver> list = ServiceProvider.of(TemplateResolver.class).list();
         for (TemplateResolver resolver : list.values()) {
-            objectContext.registerBean(ObjectDefinition.of(resolver));
+            objectContext.registerBean(resolver);
         }
 
         List<Object> bean = request.getList("bean");
         for (Object o : bean) {
-            beanFactory.registerBean(ObjectDefinition.of(o));
+            objectContext.registerBean(o);
         }
 
 
@@ -82,15 +86,12 @@ public abstract class AbstractServer implements Server, Constant {
             Set<Method> methodsAnnotatedWith = reflections.getMethodsAnnotatedWith(Mapping.class);
             for (Method method : methodsAnnotatedWith) {
                 Mapping mapping = method.getDeclaredAnnotation(Mapping.class);
-                MethodDefinition methodDefinition = new MethodDefinition(method);
-                methodDefinition.addBeanName(mapping.value());
-
-                beanFactory.registerBean(methodDefinition);
+                objectContext.registerBean(method).addBeanName(mapping.value());
             }
         }
 
 
-        this.templateResolver = beanFactory.getBean(TemplateResolver.class);
+        this.templateResolver = objectContext.getBean(TemplateResolver.class).get();
 
     }
 
@@ -101,18 +102,19 @@ public abstract class AbstractServer implements Server, Constant {
      * @return 结果
      */
     protected BeanObject getMapping(String name) {
-        return beanFactory.getBean(name);
+        return objectContext.getBean(name);
     }
 
     /**
      * 监听
      *
-     * @param type 名称
+     * @param annotationType 名称
      * @return 结果
      */
-    protected Map<String, BeanObject> getMappingByMethodParameterType(Class<?>... type) {
-        Map<String, TypeDefinition<Object>> beanByMethod = beanFactory.getBeanByMethod(String.class);
-        return beanByMethod.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, it -> new BeanObject(it.getValue(), it.getValue().getObject(beanFactory), beanFactory)));
+    protected Map<String, BeanObject> getMappingByMethodParameterType(Class<? extends Annotation> annotationType) {
+        Map<String, TypeDefinition> beanByMethod = objectContext.getBeanByMethod(annotationType);
+        return beanByMethod.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, it ->
+                new SingleBeanObject(it.getValue(), objectContext)));
     }
 
 
@@ -125,15 +127,13 @@ public abstract class AbstractServer implements Server, Constant {
 
     @Override
     public Server register(Object bean) {
-        beanFactory.registerBean(bean instanceof TypeDefinition ? (TypeDefinition) bean : ObjectDefinition.of(bean));
+        objectContext.registerBean(bean);
         return this;
     }
 
     @Override
     public Server register(String name, Object bean) {
-        TypeDefinition<Object> typeDefinition = ObjectDefinition.of(bean);
-        typeDefinition.addBeanName(name);
-        beanFactory.registerBean(typeDefinition);
+        objectContext.registerBean(new ObjectTypeDefinition(name, bean));
         return this;
     }
 
@@ -178,9 +178,9 @@ public abstract class AbstractServer implements Server, Constant {
      * @return 结果
      */
     protected Resolver getResolver(String produces, String router) {
-        Resolver resolver = new ResourceResolver(beanFactory);
+        Resolver resolver = new ResourceResolver(objectContext);
         if (null != produces) {
-            Resolver extension = ServiceProvider.of(Resolver.class).getNewExtension(produces, templateResolver, beanFactory);
+            Resolver extension = ServiceProvider.of(Resolver.class).getNewExtension(produces, templateResolver, objectContext);
             if (null != extension) {
                 return extension;
             }
@@ -189,7 +189,7 @@ public abstract class AbstractServer implements Server, Constant {
         if (resolver.hasResolve(router)) {
             Optional<MediaType> mediaType = MediaTypeFactory.getMediaType(router);
             if (mediaType.isPresent()) {
-                Resolver extension = ServiceProvider.of(Resolver.class).getNewExtension(mediaType.get().subtype(), templateResolver, beanFactory);
+                Resolver extension = ServiceProvider.of(Resolver.class).getNewExtension(mediaType.get().subtype(), templateResolver, objectContext);
                 if (null == extension) {
                     return resolver;
                 }
@@ -218,8 +218,9 @@ public abstract class AbstractServer implements Server, Constant {
 
     protected Object getValue(ParameterDescribe parameterDescribe, Request request) {
         ParameterResolver resolver = null;
-        List<ParameterResolver> anyBean = beanFactory.getAnyBean(ParameterResolver.class);
-        for (ParameterResolver parameterResolver : anyBean) {
+        ObjectProvider<ParameterResolver> objectContextBean = objectContext.getBean(ParameterResolver.class);
+        Collection<ParameterResolver> all = objectContextBean.getAll();
+        for (ParameterResolver parameterResolver : all) {
             if (parameterResolver.isMatch(parameterDescribe)) {
                 resolver = parameterResolver;
                 break;
@@ -227,7 +228,7 @@ public abstract class AbstractServer implements Server, Constant {
         }
 
         if (null == resolver) {
-            return beanFactory.getBean(parameterDescribe.returnClassType());
+            return objectContext.getBean(parameterDescribe.returnClassType());
         }
 
         if (parameterDescribe.returnClassType().isAssignableFrom(Request.class)) {

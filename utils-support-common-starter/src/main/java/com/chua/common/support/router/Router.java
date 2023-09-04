@@ -1,24 +1,24 @@
 package com.chua.common.support.router;
 
-import com.chua.common.support.context.aggregate.JarAggregate;
-import com.chua.common.support.context.bean.BeanObject;
-import com.chua.common.support.context.definition.ClassDefinition;
-import com.chua.common.support.context.definition.MethodDefinition;
-import com.chua.common.support.context.definition.ObjectDefinition;
-import com.chua.common.support.context.definition.TypeDefinition;
-import com.chua.common.support.context.environment.StandardEnvironment;
-import com.chua.common.support.context.factory.ApplicationContextBuilder;
-import com.chua.common.support.context.factory.ConfigureApplicationContext;
-import com.chua.common.support.context.resolver.*;
-import com.chua.common.support.context.resolver.factory.SimpleNamedResolver;
-import com.chua.common.support.context.resolver.factory.SimpleOrderResolver;
 import com.chua.common.support.converter.Converter;
+import com.chua.common.support.function.strategy.resolver.NamePair;
+import com.chua.common.support.function.strategy.resolver.NamedResolver;
+import com.chua.common.support.function.strategy.resolver.SimpleNamedResolver;
+import com.chua.common.support.objects.ConfigureContextConfiguration;
+import com.chua.common.support.objects.ConfigureObjectContext;
+import com.chua.common.support.objects.StandardConfigureObjectContext;
+import com.chua.common.support.objects.bean.BeanObject;
+import com.chua.common.support.objects.definition.ClassTypeDefinition;
+import com.chua.common.support.objects.definition.MethodTypeDefinition;
+import com.chua.common.support.objects.definition.ObjectTypeDefinition;
+import com.chua.common.support.objects.definition.TypeDefinition;
+import com.chua.common.support.objects.definition.resolver.OrderResolver;
+import com.chua.common.support.objects.environment.properties.SimplePropertySource;
 import com.chua.common.support.reflection.reflections.Reflections;
 import com.chua.common.support.reflection.reflections.scanners.Scanners;
 import com.chua.common.support.reflection.reflections.util.ConfigurationBuilder;
 import com.chua.common.support.utils.ArrayUtils;
 import com.chua.common.support.utils.ClassUtils;
-import com.chua.common.support.utils.IdUtils;
 import lombok.experimental.Accessors;
 
 import java.lang.annotation.Annotation;
@@ -36,18 +36,17 @@ import java.util.Set;
 public class Router {
 
     private final NamedResolver namedResolver = new SimpleNamedResolver();
-    private final OrderResolver orderResolver = new SimpleOrderResolver();
+    private final OrderResolver orderResolver = new OrderResolver.DefaultOrderResolver();
     private Class<? extends Annotation> type;
-    protected ConfigureApplicationContext beanFactory;
+    protected ConfigureObjectContext beanFactory;
 
     public <T extends Annotation> Router(Class<T> type, String[] packages) {
         this.type = type;
 
-        this.beanFactory = ApplicationContextBuilder.newBuilder()
-                .name(IdUtils.createTimeId())
-                .openScanner(false)
-                .environment(new StandardEnvironment())
-                .build();
+        this.beanFactory =
+                new StandardConfigureObjectContext(ConfigureContextConfiguration.builder()
+                        .register((SimplePropertySource) name -> null)
+                        .outSideInAnnotation(true).build());
 
         ConfigurationBuilder configuration = new ConfigurationBuilder();
         configuration.addScanners(Scanners.MethodsAnnotated);
@@ -63,7 +62,7 @@ public class Router {
         Set<Method> methodsAnnotatedWith = reflections.getMethodsAnnotatedWith(type);
         for (Method method : methodsAnnotatedWith) {
             T mapping = method.getDeclaredAnnotation(type);
-            MethodDefinition methodDefinition = new MethodDefinition(method);
+            MethodTypeDefinition methodDefinition = new MethodTypeDefinition(method);
             methodDefinition.addAnnotation(mapping);
             methodDefinition.addBeanName(namedResolver.resolve(NamePair.builder().annotation(mapping).annotationType(mapping.annotationType()).type(method).build()));
             methodDefinition.order(orderResolver.resolve(NamePair.builder().annotation(mapping).build()));
@@ -75,7 +74,7 @@ public class Router {
         for (Class<?> aClass : typesAnnotatedWith) {
             ClassUtils.doWithMethods(aClass, method -> {
                 T mapping = method.getDeclaredAnnotation(type);
-                MethodDefinition methodDefinition = new MethodDefinition(method);
+                MethodTypeDefinition methodDefinition = new MethodTypeDefinition(method);
                 if (null == mapping) {
                     methodDefinition.addBeanName(method.getName());
                 } else {
@@ -105,7 +104,7 @@ public class Router {
      */
     public void route(String name, Object... args) {
         BeanObject beanObject = beanFactory.getBean(name);
-        beanObject.invoke(args);
+        beanObject.newInvoke(args);
     }
 
     /**
@@ -117,7 +116,7 @@ public class Router {
      */
     public <T> T route(Class<T> returnType, String name, Object... args) {
         BeanObject beanObject = beanFactory.getBean(name);
-        return Converter.convertIfNecessary(beanObject.invoke(args).getInvoke().getValue(), returnType);
+        return Converter.convertIfNecessary(beanObject.newInvoke(args).invoke(), returnType);
     }
 
     /**
@@ -128,7 +127,7 @@ public class Router {
      */
     public void route(String name, Map<String, Object> args) {
         BeanObject beanObject = beanFactory.getBean(name);
-        beanObject.invoke(args);
+        beanObject.newInvoke(args).invoke();
     }
 
     /**
@@ -140,7 +139,7 @@ public class Router {
      */
     public <T> T route(Class<T> returnType, String name, Map<String, Object> args) {
         BeanObject beanObject = beanFactory.getBean(name);
-        return Converter.convertIfNecessary(beanObject.invoke(args).getInvoke().getValue(), returnType);
+        return Converter.convertIfNecessary(beanObject.newInvoke(args).invoke(), returnType);
     }
 
     /**
@@ -155,38 +154,6 @@ public class Router {
     }
 
     /**
-     * 添加插件
-     *
-     * @param name      插件名称
-     * @param aggregate 插件
-     * @return this
-     */
-    @SuppressWarnings("ALL")
-    public Router addPlugin(String name, JarAggregate aggregate) {
-        beanFactory.mount(name, aggregate);
-        return this;
-    }
-    /**
-     * 删除插件
-     *
-     * @param name      插件名称
-     * @return this
-     */
-    public Router removePlugin(String name) {
-        beanFactory.unmount(name);
-        return this;
-    }
-    /**
-     * 删除插件
-     *
-     * @param aggregate 插件
-     * @return this
-     */
-    public Router removePlugin(JarAggregate aggregate) {
-        beanFactory.unmount(aggregate);
-        return this;
-    }
-    /**
      * 添加路由
      *
      * @param bean 实现
@@ -200,10 +167,10 @@ public class Router {
         }
 
         if (bean instanceof Class) {
-            beanFactory.registerBean(new ClassDefinition((Class) bean));
+            beanFactory.registerBean(new ClassTypeDefinition((Class) bean));
             return this;
         }
-        beanFactory.registerBean(ObjectDefinition.of(bean));
+        beanFactory.registerBean(new ObjectTypeDefinition(bean));
         return this;
     }
 
@@ -215,9 +182,7 @@ public class Router {
      * @return this
      */
     public Router addRouter(String name, Object bean) {
-        TypeDefinition<Object> typeDefinition = ObjectDefinition.of(bean);
-        typeDefinition.addBeanName(name);
-        beanFactory.registerBean(typeDefinition);
+        beanFactory.registerBean(new ObjectTypeDefinition(name, bean));
         return this;
     }
 

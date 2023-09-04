@@ -67,4 +67,9 @@ public class ParameterDefinition implements ElementDefinition {
     public int getIndex() {
         return i;
     }
+
+    @Override
+    public void addBeanName(String name) {
+
+    }
 }

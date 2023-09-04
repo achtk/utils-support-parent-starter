@@ -4,7 +4,6 @@ package com.chua.common.support.lang.profile;
 import com.chua.common.support.bean.BeanMap;
 import com.chua.common.support.bean.BeanUtils;
 import com.chua.common.support.constant.ValueMode;
-import com.chua.common.support.context.environment.Environment;
 import com.chua.common.support.converter.Converter;
 import com.chua.common.support.json.JsonArray;
 import com.chua.common.support.json.JsonObject;
@@ -22,9 +21,10 @@ import java.util.stream.Collectors;
  *
  * @author CH
  */
-public interface Profile extends Environment, PlaceholderResolver {
+public interface Profile extends PlaceholderResolver {
     /**
      * 初始化
+     *
      * @return Profile
      */
     static Profile newDefault() {

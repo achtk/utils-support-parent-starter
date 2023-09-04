@@ -1,7 +1,6 @@
 package com.chua.common.support.eventbus;
 
 import com.chua.common.support.function.InitializingAware;
-import com.chua.common.support.lang.environment.EnvironmentProvider;
 import com.chua.common.support.lang.profile.Profile;
 import com.chua.common.support.log.Log;
 import com.chua.common.support.spi.ServiceProvider;
@@ -51,7 +50,6 @@ public class EventbusProvider implements InitializingAware, AutoCloseable {
 
     @Override
     public void afterPropertiesSet() {
-        EnvironmentProvider environmentProvider = new EnvironmentProvider(profile);
         Executor executor1 = ObjectUtils.defaultIfNull(executor, ThreadUtils.newSingleThreadExecutor());
         Map<String, Eventbus> list = ServiceProvider.of(Eventbus.class).list(profile, executor1);
         for (Map.Entry<String, Eventbus> entry : list.entrySet()) {
@@ -60,7 +58,6 @@ public class EventbusProvider implements InitializingAware, AutoCloseable {
                 return;
             }
             eventbus.executor(executor1);
-            environmentProvider.refresh(eventbus);
             addEventbus(eventbus.event().name(), eventbus);
         }
     }

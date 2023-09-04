@@ -71,4 +71,11 @@ public interface ElementDefinition {
     default int getIndex() {
         return 0;
     }
+
+    /**
+     * 添加bean名称
+     *
+     * @param name 名称
+     */
+    void addBeanName(String name);
 }

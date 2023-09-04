@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+
 /**
  * 注释定义
  *
@@ -20,7 +21,7 @@ public class AnnotationDefinition implements ElementDefinition, InitializingAwar
 
     private final Annotation annotation;
 
-    private Class<?> type;
+    private final Class<?> type;
     private Map<String, Object> value;
 
     public AnnotationDefinition(Annotation annotation, Class<?> type) {
@@ -65,7 +66,32 @@ public class AnnotationDefinition implements ElementDefinition, InitializingAwar
     }
 
     @Override
+    public void addBeanName(String name) {
+
+    }
+
+    @Override
     public void afterPropertiesSet() {
         this.value = AnnotationUtils.getAnnotationAttributes(annotation);
+    }
+
+    /**
+     * 注解是不一致
+     *
+     * @param annotationType 注解类型
+     * @return boolean
+     */
+    public <T extends Annotation> boolean isAnnotationPresent(Class<T> annotationType) {
+        return getType().isAnnotationPresent(annotationType);
+    }
+
+    /**
+     * 注解
+     *
+     * @return {@link T}
+     */
+    @SuppressWarnings("ALL")
+    public <T extends Annotation> T annotation() {
+        return (T) annotation;
     }
 }

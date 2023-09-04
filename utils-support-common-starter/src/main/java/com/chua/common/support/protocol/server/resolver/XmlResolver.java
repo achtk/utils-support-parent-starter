@@ -1,9 +1,9 @@
 package com.chua.common.support.protocol.server.resolver;
 
 import com.chua.common.support.annotations.Spi;
-import com.chua.common.support.context.factory.BeanFactory;
 import com.chua.common.support.file.transfer.JsonToXmlFileConverter;
 import com.chua.common.support.json.Json;
+import com.chua.common.support.objects.ConfigureObjectContext;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -15,7 +15,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 public class XmlResolver extends AbstractResolver {
 
 
-    public XmlResolver(BeanFactory beanFactory) {
+    public XmlResolver(ConfigureObjectContext beanFactory) {
         super(beanFactory);
     }
 

@@ -3,7 +3,6 @@ package com.chua.common.support.objects.source;
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.objects.ConfigureContextConfiguration;
-import com.chua.common.support.objects.definition.ClassTypeDefinition;
 import com.chua.common.support.objects.definition.TypeDefinition;
 import com.chua.common.support.objects.scanner.BaseAnnotationResourceScanner;
 import com.chua.common.support.spi.ServiceProvider;
@@ -31,7 +30,7 @@ public class ClassTypeDefinitionSource extends AbstractTypeDefinitionSource impl
 
     @Override
     public boolean isMatch(TypeDefinition typeDefinition) {
-        return typeDefinition instanceof ClassTypeDefinition;
+        return false;
     }
 
     @Override

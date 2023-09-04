@@ -8,13 +8,14 @@ import com.chua.common.support.utils.AnnotationUtils;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
-import static com.chua.common.support.context.constant.ContextConstant.TABLE_ID;
+import static com.chua.common.support.constant.ContextConstant.TABLE_ID;
+
 
 /**
  * mybatis column
  */
 @SuppressWarnings("ALL")
-public class IdMybatisChain implements ColumnChain{
+public class IdMybatisChain implements ColumnChain {
 
 
     @Override

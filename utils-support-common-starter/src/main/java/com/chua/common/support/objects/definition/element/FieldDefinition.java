@@ -60,4 +60,9 @@ public class FieldDefinition implements ElementDefinition {
     public Map<String, Object> value() {
         return Collections.emptyMap();
     }
+
+    @Override
+    public void addBeanName(String name) {
+
+    }
 }

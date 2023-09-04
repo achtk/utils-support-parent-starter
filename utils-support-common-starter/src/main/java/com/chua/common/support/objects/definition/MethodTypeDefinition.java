@@ -1,44 +1,44 @@
 package com.chua.common.support.objects.definition;
 
-import com.chua.common.support.function.InitializingAware;
-import com.chua.common.support.objects.classloader.ZipClassLoader;
 import com.chua.common.support.objects.definition.element.AnnotationDefinition;
 import com.chua.common.support.objects.definition.element.FieldDefinition;
 import com.chua.common.support.objects.definition.element.MethodDefinition;
+import com.chua.common.support.objects.definition.resolver.AnnotationResolver;
 import com.chua.common.support.objects.source.TypeDefinitionSourceFactory;
+import com.chua.common.support.spi.ServiceProvider;
 
-import java.io.File;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.net.URL;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 定义
  *
  * @author CH
  */
-public class ZipTypeDefinition implements TypeDefinition, InitializingAware {
+public class MethodTypeDefinition implements TypeDefinition {
 
-    protected final File path;
-    private final ZipClassLoader zipClassLoader;
+    private final Method method;
+    private Map<String, AnnotationDefinition> annotationDefinitions;
+
+    private final Map<String, List<MethodDefinition>> listMap = new HashMap<>(1);
+    private List<Annotation> mapping = new LinkedList<>();
     private int order;
 
-    public ZipTypeDefinition(File path) {
-        this.path = path;
-        this.zipClassLoader = new ZipClassLoader();
+    public MethodTypeDefinition(Class<?> type, Method method) {
+        this.method = method;
+        this.listMap.put(method.getName(), Collections.singletonList(new MethodDefinition(method)));
+        this.annotationDefinitions = ServiceProvider.of(AnnotationResolver.class).getSpiService().get(method);
     }
 
-    @Override
-    public void afterPropertiesSet() {
-
+    public MethodTypeDefinition(Method method) {
+        this(method.getDeclaringClass(), method);
     }
 
     @Override
     public Class<?> getType() {
-        return null;
+        return method.getReturnType();
     }
 
     @Override
@@ -79,7 +79,7 @@ public class ZipTypeDefinition implements TypeDefinition, InitializingAware {
 
     @Override
     public ClassLoader getClassLoader() {
-        return zipClassLoader;
+        return method.getClass().getClassLoader();
     }
 
     @Override
@@ -89,7 +89,7 @@ public class ZipTypeDefinition implements TypeDefinition, InitializingAware {
 
     @Override
     public String[] getName() {
-        return new String[]{path.getAbsolutePath()};
+        return new String[0];
     }
 
     @Override
@@ -109,7 +109,7 @@ public class ZipTypeDefinition implements TypeDefinition, InitializingAware {
 
     @Override
     public Map<String, List<MethodDefinition>> getMethodDefinition() {
-        return Collections.emptyMap();
+        return listMap;
     }
 
     @Override
@@ -119,11 +119,15 @@ public class ZipTypeDefinition implements TypeDefinition, InitializingAware {
 
     @Override
     public boolean hasAnnotation(Class<? extends Annotation> annotationType) {
-        return false;
+        return annotationDefinitions.containsKey(annotationType.getTypeName());
     }
 
     @Override
     public List<AnnotationDefinition> getAnnotationDefinition() {
-        return Collections.emptyList();
+        return new ArrayList<>(annotationDefinitions.values());
+    }
+
+    public <T extends Annotation> void addAnnotation(T mapping) {
+        this.mapping.add(mapping);
     }
 }

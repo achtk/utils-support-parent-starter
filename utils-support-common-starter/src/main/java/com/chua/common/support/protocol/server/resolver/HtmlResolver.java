@@ -1,8 +1,8 @@
 package com.chua.common.support.protocol.server.resolver;
 
 import com.chua.common.support.annotations.Spi;
-import com.chua.common.support.context.factory.BeanFactory;
 import com.chua.common.support.lang.template.Template;
+import com.chua.common.support.objects.ConfigureObjectContext;
 import com.chua.common.support.resource.repository.Metadata;
 import com.chua.common.support.resource.repository.Repository;
 import com.chua.common.support.utils.ClassUtils;
@@ -29,7 +29,7 @@ public class HtmlResolver extends AbstractResolver {
     final Metadata notfound = Repository.classpath().first("static/404.html");
     private static final String MODEL_AND_VIEW = "org.springframework.web.servlet.ModelAndView";
 
-    public HtmlResolver(BeanFactory beanFactory) {
+    public HtmlResolver(ConfigureObjectContext beanFactory) {
         super(beanFactory);
     }
 
@@ -72,7 +72,7 @@ public class HtmlResolver extends AbstractResolver {
     }
 
     private String resolveModel(Model obj) {
-        Template template = beanFactory.getBean(Template.class);
+        Template template = beanFactory.getBean(Template.class).get();
         String view = obj.getView();
         String resolveString = resolveString(view);
         try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {

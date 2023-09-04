@@ -3,10 +3,6 @@ package com.chua.common.support.lang.profile;
 
 import com.chua.common.support.bean.BeanBinder;
 import com.chua.common.support.constant.ValueMode;
-import com.chua.common.support.context.environment.Environment;
-import com.chua.common.support.context.environment.EnvironmentListener;
-import com.chua.common.support.context.environment.property.PropertySource;
-import com.chua.common.support.context.factory.ApplicationContextConfiguration;
 import com.chua.common.support.converter.Converter;
 import com.chua.common.support.lang.profile.resolver.ProfileResolver;
 import com.chua.common.support.lang.profile.value.MapProfileValue;
@@ -187,62 +183,6 @@ public class DelegateProfile implements  Profile, ServiceFactory<ProfileResolver
     @Override
     public String resolvePlaceholders(String name) {
         return propertyResolver.resolvePlaceholders(name);
-    }
-
-    @Override
-    public String getProperty(String name) {
-        return getString(name);
-    }
-
-    @Override
-    public Environment contextConfiguration(ApplicationContextConfiguration contextConfiguration) {
-        return this;
-    }
-
-    @Override
-    public Environment addPropertySource(String name, PropertySource propertySource) {
-        profileMap.put(name, new ProfileValue() {
-            @Override
-            public String getName() {
-                return name;
-            }
-
-            @Override
-            public Object getValue(String name, ValueMode valueMode) {
-                return propertySource.getProperty(name);
-            }
-
-            @Override
-            public boolean contains(String name, ValueMode valueMode) {
-                return propertySource.getProperty(name) != null;
-            }
-
-            @Override
-            public void add(ProfileValue value) {
-
-            }
-
-            @Override
-            public Set<String> keys() {
-                return Collections.emptySet();
-            }
-
-            @Override
-            public ProfileValue add(String s, Object o) {
-                return this;
-            }
-        });
-        return this;
-    }
-
-    @Override
-    public Environment addListener(EnvironmentListener listener) {
-        return this;
-    }
-
-    @Override
-    public void afterPropertiesSet() {
-
     }
 
     @Override

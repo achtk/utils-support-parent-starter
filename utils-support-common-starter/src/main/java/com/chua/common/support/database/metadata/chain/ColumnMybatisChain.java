@@ -1,18 +1,19 @@
 package com.chua.common.support.database.metadata.chain;
 
 import com.chua.common.support.collection.AnnotationAttributes;
-import com.chua.common.support.context.constant.ContextConstant;
 import com.chua.common.support.database.entity.Column;
 import com.chua.common.support.database.entity.JdbcType;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
+import static com.chua.common.support.constant.ContextConstant.TABLE_FIELD;
+
 /**
  * mybatis column
  */
 @SuppressWarnings("ALL")
-public class ColumnMybatisChain implements ColumnChain{
+public class ColumnMybatisChain implements ColumnChain {
 
 
     @Override
@@ -32,7 +33,7 @@ public class ColumnMybatisChain implements ColumnChain{
 
     @Override
     public Class<? extends Annotation> annotationType() {
-        return ContextConstant.TABLE_FIELD;
+        return TABLE_FIELD;
     }
 
 }

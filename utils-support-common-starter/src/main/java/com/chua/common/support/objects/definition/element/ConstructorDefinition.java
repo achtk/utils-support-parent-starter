@@ -61,6 +61,11 @@ public class ConstructorDefinition implements ElementDefinition {
         return Collections.emptyMap();
     }
 
+    @Override
+    public void addBeanName(String name) {
+
+    }
+
 
     /**
      * 新实例

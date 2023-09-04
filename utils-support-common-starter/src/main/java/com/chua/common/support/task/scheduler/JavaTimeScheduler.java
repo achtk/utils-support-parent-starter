@@ -3,8 +3,8 @@ package com.chua.common.support.task.scheduler;
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.annotations.SpiDefault;
 import com.chua.common.support.collection.SortedArrayList;
-import com.chua.common.support.context.definition.TypeDefinition;
 import com.chua.common.support.function.NamedThreadFactory;
+import com.chua.common.support.objects.definition.TypeDefinition;
 import com.chua.common.support.task.scheduler.expression.Cron2Expression;
 import com.chua.common.support.utils.ThreadUtils;
 import lombok.Data;
@@ -278,7 +278,7 @@ public class JavaTimeScheduler extends AbstractTimeScheduler {
 
         private Object getObject() {
             if (obj instanceof TypeDefinition) {
-                return ((TypeDefinition) obj).getObject(new Object[]{});
+                return ((TypeDefinition) obj).newInstance(null);
             }
             return obj;
         }
