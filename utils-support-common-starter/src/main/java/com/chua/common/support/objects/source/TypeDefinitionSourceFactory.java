@@ -40,17 +40,32 @@ public class TypeDefinitionSourceFactory implements ObjectContext {
 
     @Override
     public Object getBean(String name) {
-        return null;
+        SortedList<TypeDefinition> sortedList = new SortedArrayList<>(COMPARABLE);
+        for (TypeDefinitionSource definitionSource : definitionSources) {
+            sortedList.addAll(definitionSource.getBean(name));
+        }
+
+        return sortedList.first().newInstance(this);
     }
 
     @Override
     public SortedList<TypeDefinition> getBeanDefinition(String name) {
-        return null;
+        SortedList<TypeDefinition> sortedList = new SortedArrayList<>(COMPARABLE);
+        for (TypeDefinitionSource definitionSource : definitionSources) {
+            sortedList.addAll(definitionSource.getBean(name));
+        }
+
+        return sortedList.first().newInstance(this);
     }
 
     @Override
     public <T> ObjectProvider<T> getBean(Class<T> targetType) {
-        return null;
+        SortedList<TypeDefinition> sortedList = new SortedArrayList<>(COMPARABLE);
+        for (TypeDefinitionSource definitionSource : definitionSources) {
+            sortedList.addAll(definitionSource.getBean(targetType));
+        }
+
+        return new ObjectProvider<>(sortedList);
     }
 
     @Override

@@ -13,6 +13,7 @@ import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.FileUtils;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
@@ -46,7 +47,19 @@ public class ClassLoaderTypeDefinitionSource extends AbstractTypeDefinitionSourc
         this.urls = urls;
         this.classLoader = Optional.ofNullable(classLoader).orElse(new ZipClassLoader());
         this.classLoader.addDepends(urls);
+        this.print();
         this.register(path);
+    }
+
+    /**
+     * 打印
+     */
+    private void print() {
+        File tmp = new File(path);
+        log.info("装载 >>>> {}", tmp.getName());
+        for (java.net.URL url : urls) {
+            log.info("\t装载依赖 >>>> {}", FileUtils.getName(url.getPath()));
+        }
     }
 
     @Override

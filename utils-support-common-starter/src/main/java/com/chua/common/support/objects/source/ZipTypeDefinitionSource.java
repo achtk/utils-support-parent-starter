@@ -107,8 +107,8 @@ public class ZipTypeDefinitionSource implements TypeDefinitionSource, Initializi
         if (sourceMap.containsKey(path)) {
             unregister(path);
         }
-        log.info("安装>>>> {}", path);
-        sourceMap.put(new File(path).getAbsolutePath(), new ClassLoaderTypeDefinitionSource(path, urls, classLoader));
+        File file = new File(path);
+        sourceMap.put(file.getAbsolutePath(), new ClassLoaderTypeDefinitionSource(path, urls, classLoader));
     }
 
     @Override

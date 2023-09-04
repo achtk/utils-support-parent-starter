@@ -1,6 +1,7 @@
 package com.chua.common.support.objects.classloader;
 
 import com.chua.common.support.utils.IoUtils;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,6 +19,7 @@ import static com.chua.common.support.constant.CommonConstant.*;
  * @author CH
  * @since 2023/09/02
  */
+@Slf4j
 public class ZipClassLoader extends ClassLoader implements AutoCloseable {
 
     private final Map<String, Class<?>> nameAndType = new LinkedHashMap<>();
