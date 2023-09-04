@@ -1,9 +1,13 @@
 package com.chua.common.support.objects;
 
 import com.chua.common.support.objects.environment.EnvironmentConfiguration;
+import com.chua.common.support.objects.environment.properties.PropertySource;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Singular;
 import lombok.experimental.Accessors;
+
+import java.util.List;
 
 /**
  * 配置
@@ -18,6 +22,8 @@ public class ConfigureContextConfiguration {
     private EnvironmentConfiguration environmentConfiguration = EnvironmentConfiguration.builder().build();
 
 
+    @Singular("propertySource")
+    public List<PropertySource> propertySources;
     /**
      * 包装
      */
@@ -36,4 +42,41 @@ public class ConfigureContextConfiguration {
      */
     @Builder.Default
     private String repository = ".repository";
+
+
+
+    public static class ConfigureContextConfigurationBuilder {
+        /**
+         * 登记
+         *
+         * @param propertySource 数据
+         * @return {@link ConfigureContextConfigurationBuilder}
+         */
+        public ConfigureContextConfigurationBuilder register(PropertySource propertySource) {
+            this.propertySource(propertySource);
+            return this;
+        }
+
+        /**
+         * 登记
+         *
+         * @param propertySource 数据
+         * @param name           名称
+         * @return {@link ConfigureContextConfigurationBuilder}
+         */
+        public ConfigureContextConfigurationBuilder register(String name, PropertySource propertySource) {
+            this.propertySource(new PropertySource() {
+                @Override
+                public String getName() {
+                    return name;
+                }
+
+                @Override
+                public Object getProperty(String name) {
+                    return propertySource.getProperty(name);
+                }
+            });
+            return this;
+        }
+    }
 }

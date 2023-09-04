@@ -35,7 +35,7 @@ public class StandardConfigureObjectContext implements ConfigureObjectContext, I
         if (log.isDebugEnabled()) {
             log.debug("初始化环境");
         }
-        this.configureEnvironment = new StandardConfigureEnvironment(configuration.environmentConfiguration());
+        this.configureEnvironment = new StandardConfigureEnvironment(configuration.environmentConfiguration(), configuration.propertySources());
         if (log.isDebugEnabled()) {
             log.debug("初始化定义");
         }

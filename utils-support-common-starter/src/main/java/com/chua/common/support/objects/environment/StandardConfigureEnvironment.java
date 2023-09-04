@@ -26,8 +26,9 @@ public class StandardConfigureEnvironment implements ConfigureEnvironment, Initi
     private final EnvironmentConfiguration configuration;
     private final List<PropertySource> profileValues = new LinkedList<>();
 
-    public StandardConfigureEnvironment(EnvironmentConfiguration configuration) {
+    public StandardConfigureEnvironment(EnvironmentConfiguration configuration, List<PropertySource> propertySources) {
         this.configuration = configuration;
+        this.profileValues.addAll(propertySources);
         afterPropertiesSet();
     }
 
@@ -44,7 +45,7 @@ public class StandardConfigureEnvironment implements ConfigureEnvironment, Initi
 
     @Override
     public ConfigureEnvironment getEnvironment(EnvironmentConfiguration configuration) {
-        return new StandardConfigureEnvironment(configuration);
+        return new StandardConfigureEnvironment(configuration, configuration.propertySources());
     }
 
     @Override

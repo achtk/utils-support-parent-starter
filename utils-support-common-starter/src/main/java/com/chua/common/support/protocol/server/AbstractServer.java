@@ -1,15 +1,13 @@
 package com.chua.common.support.protocol.server;
 
 import com.chua.common.support.constant.Projects;
-import com.chua.common.support.context.bean.BeanObject;
-import com.chua.common.support.context.definition.MethodDefinition;
-import com.chua.common.support.context.definition.ObjectDefinition;
-import com.chua.common.support.context.definition.TypeDefinition;
-import com.chua.common.support.context.environment.StandardEnvironment;
-import com.chua.common.support.context.environment.property.FunctionPropertySource;
-import com.chua.common.support.context.factory.ApplicationContextBuilder;
 import com.chua.common.support.media.MediaType;
 import com.chua.common.support.media.MediaTypeFactory;
+import com.chua.common.support.objects.ConfigureContextConfiguration;
+import com.chua.common.support.objects.StandardConfigureObjectContext;
+import com.chua.common.support.objects.definition.TypeDefinition;
+import com.chua.common.support.objects.definition.element.MethodDefinition;
+import com.chua.common.support.objects.environment.properties.FunctionPropertySource;
 import com.chua.common.support.protocol.server.annotations.Mapping;
 import com.chua.common.support.protocol.server.parameter.ParameterResolver;
 import com.chua.common.support.protocol.server.request.Request;
@@ -43,6 +41,7 @@ public abstract class AbstractServer implements Server, Constant {
     private static final String ANY = "*/*";
     protected ServerRequest request;
     private TemplateResolver templateResolver;
+    private StandardConfigureObjectContext objectContext;
 
     protected AbstractServer(ServerOption serverOption) {
         this.request = new ServerRequest(serverOption);
@@ -52,15 +51,14 @@ public abstract class AbstractServer implements Server, Constant {
     }
 
     private void beforeAfterPropertiesSet() {
+        this.objectContext =
+                new StandardConfigureObjectContext(ConfigureContextConfiguration.builder()
+                        .register("server", new FunctionPropertySource("server", s -> request.getObject(s)))
+                        .outSideInAnnotation(true).build());
 
-
-        this.beanFactory = ApplicationContextBuilder.newBuilder()
-                .environment(new StandardEnvironment()
-                        .addPropertySource("server", new FunctionPropertySource("server", s -> request.getObject(s))))
-                .build();
         Map<String, TemplateResolver> list = ServiceProvider.of(TemplateResolver.class).list();
         for (TemplateResolver resolver : list.values()) {
-            beanFactory.registerBean(ObjectDefinition.of(resolver));
+            objectContext.registerBean(ObjectDefinition.of(resolver));
         }
 
         List<Object> bean = request.getList("bean");
