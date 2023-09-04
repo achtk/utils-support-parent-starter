@@ -1,9 +1,9 @@
 package com.chua.server.support.server.socketio;
 
-import com.chua.common.support.context.bean.BeanObject;
+import com.chua.common.support.objects.bean.BeanObject;
 import com.chua.common.support.protocol.server.AbstractServer;
 import com.chua.common.support.protocol.server.ServerOption;
-import com.chua.common.support.utils.MapUtils;
+import com.chua.common.support.protocol.server.annotations.Mapping;
 import com.chua.common.support.utils.StringUtils;
 import com.chua.server.support.server.parameter.SocketIoParameterResolver;
 import com.chua.server.support.server.request.SocketIoRequest;
@@ -52,7 +52,7 @@ public class SocketIoServer extends AbstractServer {
                 return;
             }
 
-            connect.invoke(parameterDescribe -> super.getValue(parameterDescribe, new SocketIoRequest(client, CONNECT)));
+            connect.newInvoke(parameterDescribe -> super.getValue(parameterDescribe, new SocketIoRequest(client, CONNECT))).invoke();
         });
 
         ioServer.addDisconnectListener(client -> {
@@ -60,17 +60,17 @@ public class SocketIoServer extends AbstractServer {
                 return;
             }
 
-            disconnect.invoke(parameterDescribe -> super.getValue(parameterDescribe, new SocketIoRequest(client, DISCONNECT)));
+            disconnect.newInvoke(parameterDescribe -> super.getValue(parameterDescribe, new SocketIoRequest(client, DISCONNECT))).invoke();
         });
 
-        Map<String, BeanObject> mappingByMethodParameterType = getMappingByMethodParameterType(String.class);
+        Map<String, BeanObject> mappingByMethodParameterType = getMappingByMethodParameterType(Mapping.class);
         for (Map.Entry<String, BeanObject> entry : mappingByMethodParameterType.entrySet()) {
             String key = entry.getKey();
             if (key.equals(CONNECT) || key.equals(DISCONNECT)) {
                 continue;
             }
             ioServer.addEventListener(key, String.class, (client, data, ackSender) -> {
-                disconnect.invoke(parameterDescribe -> super.getValue(parameterDescribe, new SocketIoRequest(client, key)));
+                disconnect.newInvoke(parameterDescribe -> super.getValue(parameterDescribe, new SocketIoRequest(client, key))).invoke();
             });
         }
         ioServer.startAsync();

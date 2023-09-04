@@ -1,13 +1,13 @@
 package com.chua.server.support.server.http;
 
-import com.chua.common.support.context.bean.BeanObject;
-import com.chua.common.support.context.bean.BeanObjectValue;
+import com.chua.common.support.objects.bean.BeanObject;
 import com.chua.common.support.protocol.server.AbstractServer;
 import com.chua.common.support.protocol.server.ServerOption;
 import com.chua.common.support.protocol.server.annotations.Mapping;
 import com.chua.common.support.protocol.server.request.Request;
 import com.chua.common.support.protocol.server.resolver.Resolver;
 import com.chua.common.support.utils.StringUtils;
+import com.chua.common.support.value.Value;
 import com.chua.server.support.server.parameter.VertxParameterResolver;
 import com.chua.server.support.server.request.VertxRequest;
 import io.vertx.core.Vertx;
@@ -49,12 +49,12 @@ public class HttpVfsServer extends AbstractServer {
 
             Request request1 = new VertxRequest(request, uri);
 
-            BeanObjectValue objectValue = beanObject.invoke(parameterDescribe -> super.getValue(parameterDescribe, request1));
+            Value<?> objectValue = beanObject.newInvoke(parameterDescribe -> super.getValue(parameterDescribe, request1)).invoke();
 
-            Mapping mapping = objectValue.getAnnotationValue(Mapping.class);
+            Mapping mapping = beanObject.getAnnotationValue(Mapping.class);
 
             Resolver resolver = super.getResolver(null == mapping ? null : mapping.produces(), request.getHeader("Accept"), uri);
-            byte[] resolve = resolver.resolve(objectValue.getInvoke().getValue());
+            byte[] resolve = resolver.resolve(objectValue.getValue());
             HttpServerResponse httpServerResponse = request.response();
 
             //设置响应头
