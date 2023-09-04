@@ -8,10 +8,7 @@ import com.chua.common.support.objects.definition.TypeDefinition;
 import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.StringUtils;
 
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -77,7 +74,7 @@ public abstract class AbstractTypeDefinitionSource implements TypeDefinitionSour
     @Override
     public SortedList<TypeDefinition> getBean(Class<?> targetType) {
         String typeName = targetType.getTypeName();
-        return typeDefinitions.get(typeName);
+        return Optional.ofNullable(typeDefinitions.get(typeName)).orElse(SortedList.emptyList());
     }
 
     @Override

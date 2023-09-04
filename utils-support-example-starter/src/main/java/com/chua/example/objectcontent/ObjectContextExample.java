@@ -14,7 +14,8 @@ import java.io.File;
 public class ObjectContextExample {
 
     public static void main(String[] args) {
-        ConfigureObjectContext objectContext = new StandardConfigureObjectContext(ConfigureContextConfiguration.builder().build());
+        ConfigureObjectContext objectContext =
+                new StandardConfigureObjectContext(ConfigureContextConfiguration.builder().outSideInAnnotation(true).build());
         objectContext.register(new File("D:\\env\\repository\\com\\chua\\utils-support-common-starter\\3.1.0\\utils-support-common-starter-3.1.0.jar"), "D:\\env\\repository");
         ObjectProvider<Robin> bean = objectContext.getBean(Robin.class);
 //        objectContext.unregister("Z://zookeeper-3.7.1.jar");

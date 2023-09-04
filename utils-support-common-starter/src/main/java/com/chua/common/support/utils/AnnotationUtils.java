@@ -507,4 +507,27 @@ public class AnnotationUtils {
         return (Class<? extends Annotation>) FieldStation.of(invocationHandler).getFieldValue("type");
     }
 
+    /**
+     * 具有注解
+     *
+     * @param type     类
+     * @param annotationType 注释
+     * @return boolean
+     */
+    public static <T extends Annotation> boolean hasAnnotation(Object type, Class<T> annotationType) {
+        if(type instanceof Class<?>) {
+            return ((Class<?>) type).isAnnotationPresent(annotationType);
+        }
+
+        if(type instanceof Field) {
+            return ((Field) type).isAnnotationPresent(annotationType);
+        }
+
+        if(type instanceof Method) {
+            return ((Method) type).isAnnotationPresent(annotationType);
+        }
+
+
+        return false;
+    }
 }

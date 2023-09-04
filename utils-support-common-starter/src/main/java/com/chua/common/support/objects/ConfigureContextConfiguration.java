@@ -23,9 +23,14 @@ public class ConfigureContextConfiguration {
      */
     private String[] packages;
     /**
-     * 外侧
+     * 外部数据地址
      */
     private String[] outSide;
+    /**
+     * 外部数据以注解方式注入
+     * 1.false 所有数据注入
+     */
+    private boolean outSideInAnnotation;
     /**
      * 依赖包位置
      */

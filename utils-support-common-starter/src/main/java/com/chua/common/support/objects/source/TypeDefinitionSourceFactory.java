@@ -65,7 +65,7 @@ public class TypeDefinitionSourceFactory implements ObjectContext {
             sortedList.addAll(definitionSource.getBean(targetType));
         }
 
-        return new ObjectProvider<>(sortedList);
+        return new ObjectProvider<>(sortedList, this);
     }
 
     @Override

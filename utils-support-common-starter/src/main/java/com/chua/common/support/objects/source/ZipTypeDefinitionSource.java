@@ -108,7 +108,7 @@ public class ZipTypeDefinitionSource implements TypeDefinitionSource, Initializi
             unregister(path);
         }
         File file = new File(path);
-        sourceMap.put(file.getAbsolutePath(), new ClassLoaderTypeDefinitionSource(path, urls, classLoader));
+        sourceMap.put(file.getAbsolutePath(), new ClassLoaderTypeDefinitionSource(path, urls, classLoader, configuration.outSideInAnnotation()));
     }
 
     @Override

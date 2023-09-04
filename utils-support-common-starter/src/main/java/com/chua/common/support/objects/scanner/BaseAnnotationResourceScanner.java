@@ -3,6 +3,7 @@ package com.chua.common.support.objects.scanner;
 import com.chua.common.support.reflection.reflections.Reflections;
 import com.chua.common.support.reflection.reflections.scanners.Scanners;
 import com.chua.common.support.reflection.reflections.util.ConfigurationBuilder;
+import com.chua.common.support.utils.AnnotationUtils;
 import com.chua.common.support.utils.ClassUtils;
 
 import java.lang.annotation.Annotation;
@@ -101,4 +102,13 @@ public abstract class BaseAnnotationResourceScanner<T extends Annotation> extend
         return (Class<T>) ClassUtils.getActualTypeArguments(this.getClass())[0];
     }
 
+    /**
+     * 匹配
+     *
+     * @param aClass 班级
+     * @return boolean
+     */
+    public boolean isMatch(Class<?> aClass) {
+        return AnnotationUtils.hasAnnotation(aClass, getAnnotation());
+    }
 }
