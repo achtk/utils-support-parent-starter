@@ -5,6 +5,7 @@ import com.chua.common.support.objects.definition.ZipTypeDefinition;
 import com.chua.common.support.utils.MapUtils;
 import com.chua.common.support.utils.StringUtils;
 import com.jcabi.aether.Aether;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.maven.artifact.repository.ArtifactRepositoryPolicy;
 import org.apache.maven.artifact.repository.MavenArtifactRepository;
 import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
@@ -36,9 +37,10 @@ import static com.chua.common.support.constant.NameConstant.POM_SUFFIX;
  * @author CH
  * @since 2023/09/03
  */
+@Slf4j
 public class MavenTypeDefinition extends ZipTypeDefinition {
 
-    private static final String DEFAULT_CACHE_PATH = "./repository";
+    private static final String DEFAULT_CACHE_PATH = "./.repository";
     private static final String PROVIDER = "provided";
     private static final String TEST = "test";
     private InputStream pomStream;
@@ -120,7 +122,7 @@ public class MavenTypeDefinition extends ZipTypeDefinition {
             return;
         }
         try {
-            doAnalysis(model);
+            doAnalysis(model, 1);
         } catch (DependencyResolutionException e) {
             throw new RuntimeException(e);
         }
@@ -141,10 +143,11 @@ public class MavenTypeDefinition extends ZipTypeDefinition {
      * 解析
      *
      * @param model 模型
+     * @param level 数量
      * @throws DependencyResolutionException 依赖项解析异常
      */
-    private void doAnalysis(Model model) throws DependencyResolutionException {
-        doParentDependence(model);
+    private void doAnalysis(Model model, int level) throws DependencyResolutionException {
+        doParentDependence(model, level);
         List<Dependency> dependencies = model.getDependencies();
         for (Dependency dependency : dependencies) {
             String scope = StringUtils.defaultString(dependency.getScope(), "runtime");
@@ -156,11 +159,14 @@ public class MavenTypeDefinition extends ZipTypeDefinition {
                             dependency.getArtifactId() + ":" +
                             getVersions(dependency), MapUtils.asStringMap(model.getProperties()));
 
+            if(log.isDebugEnabled()) {
+                log.debug("{}开始解析下载依赖 >>>> {}", StringUtils.repeat('\t', level), defaultArtifact);
+            }
             try {
                 List<org.sonatype.aether.artifact.Artifact> resolve = new Aether(project, new File(cachePath)).resolve(defaultArtifact, scope);
                 cache.addAll(resolve);
             } catch (DependencyResolutionException e) {
-                throw new RuntimeException(e);
+                log.error("{}解析失败", e.getLocalizedMessage());
             }
         }
 
@@ -214,12 +220,16 @@ public class MavenTypeDefinition extends ZipTypeDefinition {
     /**
      * 父依赖
      *
-     * @param model   模型
+     * @param model 模型
+     * @param level 数量
      */
-    private void doParentDependence(Model model) {
+    private void doParentDependence(Model model, int level) {
         Parent parent = model.getParent();
         if(null != parent) {
             parents.add(parent);
+            if(log.isDebugEnabled()) {
+                log.debug("{}开始解析下载父依赖pom >>>> {}", StringUtils.repeat('\t', level), parent);
+            }
             try {
                 DefaultArtifact defaultArtifact = new DefaultArtifact(
                         parent.getGroupId() + ":" +
@@ -233,11 +243,11 @@ public class MavenTypeDefinition extends ZipTypeDefinition {
                     cache.add(artifact);
                     File file = artifact.getFile();
                     if(null != file) {
-                        doParentDependence(file);
+                        doParentDependence(file, level + 1);
                     }
                 }
             } catch (DependencyResolutionException e) {
-                e.printStackTrace();
+                log.error("{}解析失败", e.getLocalizedMessage());
             }
             properties.put("${project.version}", parent.getVersion());
         }
@@ -249,9 +259,10 @@ public class MavenTypeDefinition extends ZipTypeDefinition {
     /**
      * 父依赖
      *
-     * @param file    文件
+     * @param file  文件
+     * @param level 数量
      */
-    private void doParentDependence(File file) {
+    private void doParentDependence(File file, int level) {
         if(!file.getName().endsWith(POM_SUFFIX)) {
             return;
         }
@@ -265,7 +276,7 @@ public class MavenTypeDefinition extends ZipTypeDefinition {
             return;
         }
         try {
-            doAnalysis(model);
+            doAnalysis(model, level + 1);
             doAnalysis(model.getProperties());
             doAnalysis(model.getDependencyManagement());
         } catch (DependencyResolutionException e) {
