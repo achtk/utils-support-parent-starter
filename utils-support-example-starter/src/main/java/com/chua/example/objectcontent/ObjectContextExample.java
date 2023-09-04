@@ -13,7 +13,8 @@ public class ObjectContextExample {
 
     public static void main(String[] args) {
         ConfigureObjectContext objectContext = new StandardConfigureObjectContext(ConfigureContextConfiguration.builder().build());
-        objectContext.register(new File("Z://works/spring-core-5.3.23.jar"));
+        objectContext.register(new File("Z://zookeeper-3.7.1.jar"), "D:\\env\\repository");
+        objectContext.unregister("Z://zookeeper-3.7.1.jar");
         System.out.println();
     }
 }

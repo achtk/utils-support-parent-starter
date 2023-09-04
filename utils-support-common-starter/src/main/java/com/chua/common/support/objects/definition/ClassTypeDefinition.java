@@ -10,10 +10,8 @@ import com.chua.common.support.objects.source.TypeDefinitionSourceFactory;
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.ClassUtils;
 
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.net.URL;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -122,6 +120,11 @@ public class ClassTypeDefinition implements TypeDefinition, InitializingAware {
         return (T) newBeanObject;
     }
 
+    @Override
+    public List<URL> getDepends() {
+        return Collections.emptyList();
+    }
+
     private void reset() {
         this.isLoaded = false;
     }
@@ -158,8 +161,8 @@ public class ClassTypeDefinition implements TypeDefinition, InitializingAware {
         this.order = ServiceProvider.of(OrderResolver.class).getSpiService().order();
         this.name = ServiceProvider.of(NameResolver.class).getSpiService().name();
         this.annotationDefinitions = ServiceProvider.of(AnnotationResolver.class).getSpiService().get(type);
-        this.fieldDefinitions = ServiceProvider.of(FieldResolver.class).getSpiService().get(type);
-        this.methodDefinitions = ServiceProvider.of(MethodResolver.class).getSpiService().get(type);
+//        this.fieldDefinitions = ServiceProvider.of(FieldResolver.class).getSpiService().get(type);
+//        this.methodDefinitions = ServiceProvider.of(MethodResolver.class).getSpiService().get(type);
         this.superTypeDefinitions = ServiceProvider.of(SuperTypeResolver.class).getSpiService().get(type);
         this.interfaces.addAll(ClassUtils.getAllInterfaces(type).stream().map(Class::getTypeName).collect(Collectors.toSet()));
         this.superType.addAll(ClassUtils.getSuperType(type).stream().map(Class::getTypeName).collect(Collectors.toSet()));

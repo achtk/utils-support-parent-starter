@@ -5,7 +5,9 @@ import com.chua.common.support.objects.classloader.ZipClassLoader;
 import com.chua.common.support.objects.source.TypeDefinitionSourceFactory;
 
 import java.io.File;
+import java.net.URL;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -15,7 +17,7 @@ import java.util.Set;
  */
 public class ZipTypeDefinition implements TypeDefinition, InitializingAware {
 
-    private final File path;
+    protected final File path;
     private final ZipClassLoader zipClassLoader;
 
     public ZipTypeDefinition(File path) {
@@ -81,5 +83,10 @@ public class ZipTypeDefinition implements TypeDefinition, InitializingAware {
     @Override
     public <T> T newInstance(TypeDefinitionSourceFactory typeDefinitionSourceFactory) {
         return null;
+    }
+
+    @Override
+    public List<URL> getDepends() {
+        return Collections.emptyList();
     }
 }

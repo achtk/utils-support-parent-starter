@@ -2,6 +2,8 @@ package com.chua.common.support.objects.definition;
 
 import com.chua.common.support.objects.source.TypeDefinitionSourceFactory;
 
+import java.net.URL;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -89,4 +91,11 @@ public interface TypeDefinition {
      * @return 结果
      */
     <T> T newInstance(TypeDefinitionSourceFactory typeDefinitionSourceFactory);
+
+    /**
+     * 依赖
+     *
+     * @return {@link List}<{@link URL}>
+     */
+    List<URL> getDepends();
 }

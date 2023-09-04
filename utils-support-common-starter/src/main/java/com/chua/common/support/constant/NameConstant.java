@@ -304,6 +304,10 @@ public class NameConstant implements Constant {
      */
     public static final String POM = "pom.xml";
     /**
+     * .pom
+     */
+    public static final String POM_SUFFIX = ".pom";
+    /**
      * aes
      */
     public static final String AES = "aes";

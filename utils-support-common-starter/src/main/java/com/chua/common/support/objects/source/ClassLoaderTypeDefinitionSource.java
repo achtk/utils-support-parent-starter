@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -32,16 +33,19 @@ import static com.chua.common.support.constant.CommonConstant.SUFFIX_CLASS;
 @Slf4j
 @Spi("classloader")
 @SpiIgnore
-public class ClassLoaderTypeDefinitionSource extends AbstractTypeDefinitionSource implements TypeDefinitionSource, InitializingAware {
+public class ClassLoaderTypeDefinitionSource extends AbstractTypeDefinitionSource implements TypeDefinitionSource, AutoCloseable, InitializingAware {
 
     private final String path;
+    private final List<URL> urls;
 
     private ZipClassLoader classLoader;
 
-    public ClassLoaderTypeDefinitionSource(String path, ZipClassLoader classLoader) {
+    public ClassLoaderTypeDefinitionSource(String path, List<URL> urls, ZipClassLoader classLoader) {
         super(ConfigureContextConfiguration.builder().build());
         this.path = path;
+        this.urls = urls;
         this.classLoader = Optional.ofNullable(classLoader).orElse(new ZipClassLoader());
+        this.classLoader.addDepends(urls);
         this.register(path);
     }
 
@@ -87,6 +91,15 @@ public class ClassLoaderTypeDefinitionSource extends AbstractTypeDefinitionSourc
 
         for (String className : classNames) {
             super.register(ClassUtils.forName(className, classLoader));
+        }
+    }
+
+    @Override
+    public void close() {
+        urls.clear();
+        try {
+            classLoader.close();
+        } catch (Exception e) {
         }
     }
 }

@@ -596,10 +596,12 @@ public class ClassUtils {
         Constructor<T> declaredConstructor = ClassUtils.getConstructor(tClass, classes);
         if (null != declaredConstructor) {
             declaredConstructor.setAccessible(true);
-            params = createArgs(params, declaredConstructor);
             try {
+                params = createArgs(params, declaredConstructor);
                 return declaredConstructor.newInstance(params);
             } catch (Exception ignore) {
+//                System.out.println();
+                //NOTHING
             }
         }
         return (T) createAlgorithm(tClass, params);
@@ -1311,9 +1313,11 @@ public class ClassUtils {
     public static <T> Constructor<T> getConstructor(Class<T> tClass, Class<?>[] classes) {
         Constructor<?>[] declaredConstructors = tClass.getDeclaredConstructors();
         Constructor<?> item = null;
-        boolean isTrue = true;
-        for (Constructor<?> declaredConstructor : declaredConstructors) {
+        root: for (Constructor<?> declaredConstructor : declaredConstructors) {
             Class<?>[] parameterTypes = declaredConstructor.getParameterTypes();
+            if(parameterTypes.length != classes.length) {
+                continue;
+            }
             for (int i = 0; i < parameterTypes.length; i++) {
                 Class<?> parameterType = parameterTypes[i];
                 Class<?> aClass = classes[i];
@@ -1321,15 +1325,15 @@ public class ClassUtils {
                     continue;
                 }
 
-                boolean b = !parameterType.isAssignableFrom(aClass) && !(Void.class.isAssignableFrom(aClass) || void.class.isAssignableFrom(aClass));
+                boolean b = parameterType.isAssignableFrom(aClass) || Void.class.isAssignableFrom(aClass)  || void.class.isAssignableFrom(aClass);
                 if (b) {
-                    isTrue = false;
-                    break;
+                    if(i == parameterTypes.length - 1) {
+                        item = declaredConstructor;
+                        break root;
+                    }
+                    continue;
                 }
-            }
-            if (isTrue) {
-                item = declaredConstructor;
-                break;
+                break ;
             }
         }
 

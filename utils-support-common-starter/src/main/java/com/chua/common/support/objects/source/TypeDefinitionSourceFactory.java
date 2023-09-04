@@ -55,12 +55,19 @@ public class TypeDefinitionSourceFactory implements ObjectContext {
 
     @Override
     public void unregister(TypeDefinition typeDefinition) {
-
+        for (TypeDefinitionSource definitionSource : definitionSources) {
+            if (definitionSource.isMatch(typeDefinition)) {
+                definitionSource.unregister(typeDefinition);
+                break;
+            }
+        }
     }
 
     @Override
-    public void unregister(String name, Class<? extends TypeDefinition> type) {
-
+    public void unregister(String name) {
+        for (TypeDefinitionSource definitionSource : definitionSources) {
+            definitionSource.unregister(name);
+        }
     }
 
     @Override

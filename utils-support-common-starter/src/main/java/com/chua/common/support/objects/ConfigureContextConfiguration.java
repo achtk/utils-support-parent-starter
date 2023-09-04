@@ -26,4 +26,9 @@ public class ConfigureContextConfiguration {
      * 外侧
      */
     private String[] outSide;
+    /**
+     * 依赖包位置
+     */
+    @Builder.Default
+    private String repository = ".repository";
 }

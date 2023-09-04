@@ -95,6 +95,8 @@ public abstract class AbstractTypeDefinitionSource implements TypeDefinitionSour
     public void unregister(String name) {
         SortedList<TypeDefinition> sortedList = nameDefinitions.get(name);
         SortedList<TypeDefinition> sortedList1 = typeDefinitions.get(name);
-        sortedList1.removeAll(sortedList);
+        if(null != sortedList1) {
+            sortedList1.removeAll(sortedList);
+        }
     }
 }

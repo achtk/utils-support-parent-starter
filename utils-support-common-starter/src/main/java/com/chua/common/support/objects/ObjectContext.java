@@ -1,14 +1,20 @@
 package com.chua.common.support.objects;
 
 import com.chua.common.support.collection.SortedList;
+import com.chua.common.support.file.zip.Zip;
+import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.objects.definition.TypeDefinition;
 import com.chua.common.support.objects.definition.ZipTypeDefinition;
 import com.chua.common.support.objects.provider.ObjectProvider;
 import com.chua.common.support.utils.ClassUtils;
 
 import java.io.File;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static com.chua.common.support.constant.NameConstant.MAVEN_TYPE_DEFINITION;
+import static com.chua.common.support.constant.NameConstant.POM;
 
 /**
  * 对象管理器
@@ -61,10 +67,9 @@ public interface ObjectContext {
     /**
      * 注销
      *
-     * @param type 类型
      * @param name 名称
      */
-    void unregister(String name, Class<? extends TypeDefinition> type);
+    void unregister(String name);
 
     /**
      * 注册
@@ -76,11 +81,40 @@ public interface ObjectContext {
     /**
      * 注册
      *
+     * @param file       释义
+     * @param repository repository
+     */
+    default void register(File file, String repository) {
+        TypeDefinition typeDefinition = ClassUtils.forObject(MAVEN_TYPE_DEFINITION, file, repository, null);
+        if(typeDefinition instanceof InitializingAware) {
+            ((InitializingAware) typeDefinition).afterPropertiesSet();
+        }
+        register(typeDefinition);
+    }
+
+    /**
+     * 注册
+     *
      * @param file 释义
      */
     default void register(File file) {
         if (ClassUtils.isPresent(MAVEN_TYPE_DEFINITION)) {
-            register((TypeDefinition) ClassUtils.forObject(MAVEN_TYPE_DEFINITION, file));
+            Zip zip = new Zip();
+            AtomicReference<InputStream> stream = new AtomicReference<>();
+            try (InputStream fis = Files.newInputStream(file.toPath())) {
+                zip.unFile(fis, fileMedia -> {
+                    if(fileMedia.getName().endsWith(POM)) {
+                        stream.set(fileMedia.getStream());
+                        return true;
+                    }
+                    return false;
+                }, true);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            InputStream inputStream = stream.get();
+            TypeDefinition typeDefinition = (TypeDefinition) ClassUtils.forObject(MAVEN_TYPE_DEFINITION, file, inputStream);
+            register(typeDefinition);
             return;
         }
         register(new ZipTypeDefinition(file));

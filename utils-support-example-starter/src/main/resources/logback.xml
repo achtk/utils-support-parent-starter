@@ -28,6 +28,7 @@
         </encoder>
     </appender>
     <logger name="*.mapper.*" level="DEBUG" additivity="false"/>
+    <logger name="com.jcabi" level="OFF" additivity="false"/>
 
     <!-- 按照每天生成日志文件 -->
     <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -54,7 +55,7 @@
 
     <!-- 至多只能配置一个root -->
     <root>
-        <level value="debug"/>
+        <level value="info"/>
         <appender-ref ref="console"/>
         <appender-ref ref="async"/>
     </root>

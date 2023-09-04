@@ -68,8 +68,8 @@ public class StandardConfigureObjectContext implements ConfigureObjectContext, I
     }
 
     @Override
-    public void unregister(String name, Class<? extends TypeDefinition> type) {
-        typeDefinitionSourceFactory.unregister(name, type);
+    public void unregister(String name) {
+        typeDefinitionSourceFactory.unregister(name);
     }
 
     @Override

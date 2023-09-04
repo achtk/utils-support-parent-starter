@@ -8,11 +8,16 @@ import com.chua.common.support.objects.ConfigureContextConfiguration;
 import com.chua.common.support.objects.classloader.ZipClassLoader;
 import com.chua.common.support.objects.definition.TypeDefinition;
 import com.chua.common.support.objects.definition.ZipTypeDefinition;
+import com.chua.common.support.utils.ClassUtils;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.File;
+import java.net.URL;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.chua.common.support.constant.NameConstant.MAVEN_TYPE_DEFINITION;
 import static com.chua.common.support.objects.source.AbstractTypeDefinitionSource.COMPARABLE;
 
 /**
@@ -77,27 +82,33 @@ public class ZipTypeDefinitionSource implements TypeDefinitionSource, Initializi
 
     @Override
     public void unregister(String name) {
+        name = new File(name).getAbsolutePath();
+        ClassLoaderTypeDefinitionSource classLoaderTypeDefinitionSource = sourceMap.get(name);
+        if(null != classLoaderTypeDefinitionSource) {
+            classLoaderTypeDefinitionSource.close();
+        }
         sourceMap.remove(name);
-        System.gc();
     }
 
     @Override
     public void register(TypeDefinition definition) {
-        register(definition.getName(), (ZipClassLoader) definition.getClassLoader());
+        register(definition.getName(), definition.getDepends(), (ZipClassLoader) definition.getClassLoader());
     }
 
     /**
+     * 登记
      * 注册
      *
      * @param path        路径
      * @param classLoader 类加载器
+     * @param urls        url
      */
-    public void register(String path, ZipClassLoader classLoader) {
+    public void register(String path, List<URL> urls, ZipClassLoader classLoader) {
         if (sourceMap.containsKey(path)) {
             unregister(path);
         }
         log.info("安装>>>> {}", path);
-        sourceMap.put(path, new ClassLoaderTypeDefinitionSource(path, classLoader));
+        sourceMap.put(new File(path).getAbsolutePath(), new ClassLoaderTypeDefinitionSource(path, urls, classLoader));
     }
 
     @Override
@@ -108,7 +119,11 @@ public class ZipTypeDefinitionSource implements TypeDefinitionSource, Initializi
         }
 
         for (String s : strings) {
-            register(s, null);
+            TypeDefinition typeDefinition = ClassUtils.forObject(MAVEN_TYPE_DEFINITION, s, configuration.repository(), null);
+            if(typeDefinition instanceof InitializingAware) {
+                ((InitializingAware) typeDefinition).afterPropertiesSet();
+            }
+            register(typeDefinition);
         }
     }
 
