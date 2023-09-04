@@ -8,7 +8,6 @@ import com.chua.common.support.context.definition.TypeDefinition;
 import com.chua.common.support.context.environment.StandardEnvironment;
 import com.chua.common.support.context.environment.property.FunctionPropertySource;
 import com.chua.common.support.context.factory.ApplicationContextBuilder;
-import com.chua.common.support.context.factory.ConfigureApplicationContext;
 import com.chua.common.support.media.MediaType;
 import com.chua.common.support.media.MediaTypeFactory;
 import com.chua.common.support.protocol.server.annotations.Mapping;
@@ -43,7 +42,6 @@ public abstract class AbstractServer implements Server, Constant {
     private static final String PACKAGES = "packages";
     private static final String ANY = "*/*";
     protected ServerRequest request;
-    protected ConfigureApplicationContext beanFactory;
     private TemplateResolver templateResolver;
 
     protected AbstractServer(ServerOption serverOption) {

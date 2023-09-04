@@ -12,7 +12,6 @@ import org.apache.calcite.schema.SchemaPlus;
 import org.apache.calcite.schema.Table;
 import org.elasticsearch.client.RestClient;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**

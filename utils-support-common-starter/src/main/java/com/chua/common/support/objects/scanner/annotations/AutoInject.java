@@ -1,4 +1,4 @@
-package com.chua.common.support.context.annotation;
+package com.chua.common.support.objects.scanner.annotations;
 
 import java.lang.annotation.*;
 
@@ -10,7 +10,7 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface AutoService {
+public @interface AutoInject {
 
     /**
      * The value may indicate a suggestion for a logical component name,

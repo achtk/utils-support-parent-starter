@@ -1,7 +1,6 @@
 package com.chua.datasource.support;
 
-import com.chua.common.support.context.factory.ApplicationContext;
-import com.chua.common.support.context.factory.ApplicationContextBuilder;
+import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.MapUtils;
 import com.chua.datasource.support.adator.CalciteTable;
 import com.chua.datasource.support.adator.TableAdaptor;
@@ -19,12 +18,6 @@ import java.util.Map;
  * @since 2021-11-10
  */
 public class TableUtils {
-
-    static final ApplicationContext CONTEXT = ApplicationContextBuilder
-            .newBuilder()
-            .openScanner(false)
-            .build();
-    ;
 
     /**
      * 创建字段
@@ -71,21 +64,12 @@ public class TableUtils {
      * @return 表
      */
     public static List<CalciteTable> createTable(String directory, String name) {
-        TableAdaptor tableAdaptor = CONTEXT.getBean(name, TableAdaptor.class);
+        TableAdaptor tableAdaptor = ServiceProvider.of(TableAdaptor.class).getExtension(name);
         if (null == tableAdaptor) {
             return Collections.emptyList();
         }
 
         return tableAdaptor.createTable(directory);
-    }
-
-    /**
-     * 路由
-     *
-     * @return 路由
-     */
-    public static ApplicationContext getContext() {
-        return CONTEXT;
     }
 
     /**

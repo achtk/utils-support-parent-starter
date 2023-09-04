@@ -1,12 +1,10 @@
 package com.chua.datasource.support.schema;
 
 import com.chua.common.support.annotations.Spi;
-import com.chua.common.support.context.factory.ApplicationContext;
 import com.chua.common.support.table.ConnectorMetadata;
 import com.chua.common.support.table.SchemaFactory;
 import com.chua.common.support.utils.MapUtils;
 import com.chua.datasource.support.SqlNameUtils;
-import com.chua.datasource.support.TableUtils;
 import com.chua.datasource.support.table.MemTable;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableMap;
@@ -139,11 +137,6 @@ public class MemSchemaFactory extends ReflectiveSchema implements SchemaFactory<
     @Override
     public String getSchemaName() {
         return name;
-    }
-
-    @Override
-    public ApplicationContext getApplicationContext() {
-        return TableUtils.getContext();
     }
 
     @Override

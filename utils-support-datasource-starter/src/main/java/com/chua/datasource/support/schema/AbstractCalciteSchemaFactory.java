@@ -1,10 +1,8 @@
 package com.chua.datasource.support.schema;
 
-import com.chua.common.support.context.factory.ApplicationContext;
 import com.chua.common.support.lang.profile.Profile;
 import com.chua.common.support.table.ConnectorMetadata;
 import com.chua.common.support.table.SchemaFactory;
-import com.chua.datasource.support.TableUtils;
 import org.apache.calcite.schema.Schema;
 import org.apache.calcite.schema.Table;
 import org.apache.calcite.schema.impl.AbstractSchema;
@@ -26,11 +24,6 @@ public abstract class AbstractCalciteSchemaFactory extends AbstractSchema implem
         super();
         this.connectorMetadata = connectorMetadata;
         this.profile = connectorMetadata.getConfig();
-    }
-
-    @Override
-    public ApplicationContext getApplicationContext() {
-        return TableUtils.getContext();
     }
 
     @Override
