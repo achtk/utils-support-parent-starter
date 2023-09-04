@@ -25,6 +25,11 @@ public class SortedArrayList<E> implements SortedList<E>, RandomAccess {
         //按对象的字符串形式做字典排序
         this.comparator = comparator;
     }
+    public SortedArrayList(E c, Comparator<? super E> comparator) {
+        this.add(c);
+        //按对象的字符串形式做字典排序
+        this.comparator = comparator;
+    }
 
     @Override
     public synchronized boolean add(E e) {

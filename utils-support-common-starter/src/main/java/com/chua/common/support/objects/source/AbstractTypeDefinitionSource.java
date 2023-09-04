@@ -55,8 +55,11 @@ public abstract class AbstractTypeDefinitionSource implements TypeDefinitionSour
 
     @Override
     public SortedList<TypeDefinition> getBean(String name, Class<?> targetType) {
-        SortedList<TypeDefinition> rs = new SortedArrayList<>(COMPARABLE);
         SortedList<TypeDefinition> sortedList = nameDefinitions.get(name);
+        if(null == sortedList) {
+            return SortedList.emptyList();
+        }
+        SortedList<TypeDefinition> rs = new SortedArrayList<>(COMPARABLE);
         for (TypeDefinition typeDefinition : sortedList) {
             if (typeDefinition.fromAssignableFrom(targetType)) {
                 rs.add(typeDefinition);

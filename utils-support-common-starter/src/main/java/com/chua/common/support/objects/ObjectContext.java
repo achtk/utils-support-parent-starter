@@ -113,7 +113,10 @@ public interface ObjectContext {
                 throw new RuntimeException(e);
             }
             InputStream inputStream = stream.get();
-            TypeDefinition typeDefinition = (TypeDefinition) ClassUtils.forObject(MAVEN_TYPE_DEFINITION, file, inputStream);
+            TypeDefinition typeDefinition = ClassUtils.forObject(MAVEN_TYPE_DEFINITION, file, inputStream);
+            if(typeDefinition instanceof InitializingAware) {
+                ((InitializingAware) typeDefinition).afterPropertiesSet();
+            }
             register(typeDefinition);
             return;
         }

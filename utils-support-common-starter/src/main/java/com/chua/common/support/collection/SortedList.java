@@ -4,12 +4,15 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
+ * 排序列表
  * 排序List
  *
  * @author CH
  * @version 1.0.0
+ * @date 2023/09/04
  * @since 2021/4/7
  */
+@SuppressWarnings("ALL")
 public interface SortedList<E> extends List<E> {
     /**
      * 空数据
@@ -19,6 +22,7 @@ public interface SortedList<E> extends List<E> {
     static <E> SortedList<E> emptyList() {
         return (SortedList<E>) SortedArrayList.EMPTY;
     }
+
 
     /**
      * 转为List

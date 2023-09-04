@@ -11,17 +11,24 @@ import com.chua.common.support.utils.ClassUtils;
 public class ObjectTypeDefinition extends ClassTypeDefinition{
 
 
+    private final String name;
     private final Object bean;
 
-    public ObjectTypeDefinition(Object bean) {
+    public ObjectTypeDefinition(String name, Object bean) {
         super(ClassUtils.toType(bean));
+        this.name = name;
         this.bean = bean;
     }
-    public ObjectTypeDefinition(Object bean, ObjectContext context) {
+    public ObjectTypeDefinition(String name, Object bean, ObjectContext context) {
         super(ClassUtils.toType(bean), context);
+        this.name = name;
         this.bean = bean;
     }
 
+    @Override
+    public String getName() {
+        return name;
+    }
 
     @Override
     public Object getObject() {
