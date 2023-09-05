@@ -2,9 +2,9 @@ package com.chua.common.support.objects.definition;
 
 import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.objects.classloader.ZipClassLoader;
-import com.chua.common.support.objects.definition.element.AnnotationDefinition;
-import com.chua.common.support.objects.definition.element.FieldDefinition;
-import com.chua.common.support.objects.definition.element.MethodDefinition;
+import com.chua.common.support.objects.definition.element.AnnotationDescribe;
+import com.chua.common.support.objects.definition.element.FieldDescribe;
+import com.chua.common.support.objects.definition.element.MethodDescribe;
 import com.chua.common.support.objects.source.TypeDefinitionSourceFactory;
 
 import java.io.File;
@@ -108,12 +108,12 @@ public class ZipTypeDefinition implements TypeDefinition, InitializingAware {
     }
 
     @Override
-    public Map<String, List<MethodDefinition>> getMethodDefinition() {
+    public Map<String, List<MethodDescribe>> getMethodDefinition() {
         return Collections.emptyMap();
     }
 
     @Override
-    public List<FieldDefinition> getFieldDefinition() {
+    public List<FieldDescribe> getFieldDefinition() {
         return Collections.emptyList();
     }
 
@@ -123,7 +123,7 @@ public class ZipTypeDefinition implements TypeDefinition, InitializingAware {
     }
 
     @Override
-    public List<AnnotationDefinition> getAnnotationDefinition() {
+    public List<AnnotationDescribe> getAnnotationDefinition() {
         return Collections.emptyList();
     }
 }

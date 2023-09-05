@@ -1,6 +1,6 @@
 package com.chua.common.support.objects.bean;
 
-import com.chua.common.support.objects.definition.element.ParameterDefinition;
+import com.chua.common.support.objects.definition.element.ParameterDescribe;
 import com.chua.common.support.objects.invoke.Invoke;
 
 import java.lang.annotation.Annotation;
@@ -19,7 +19,7 @@ public interface BeanObject {
      * @param function o
      * @return {@link Invoke}
      */
-    Invoke newInvoke(Function<ParameterDefinition, Object> function);
+    Invoke newInvoke(Function<ParameterDescribe, Object> function);
 
     /**
      * 参数

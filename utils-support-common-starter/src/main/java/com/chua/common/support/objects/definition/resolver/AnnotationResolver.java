@@ -1,7 +1,7 @@
 package com.chua.common.support.objects.definition.resolver;
 
 import com.chua.common.support.annotations.Spi;
-import com.chua.common.support.objects.definition.element.AnnotationDefinition;
+import com.chua.common.support.objects.definition.element.AnnotationDescribe;
 import com.chua.common.support.utils.ArrayUtils;
 import com.chua.common.support.utils.ClassUtils;
 
@@ -28,9 +28,9 @@ public interface AnnotationResolver {
      * 收到
      *
      * @param member 类型
-     * @return {@link Map}<{@link String}, {@link AnnotationDefinition}>
+     * @return {@link Map}<{@link String}, {@link AnnotationDescribe}>
      */
-    Map<String, AnnotationDefinition> get(Object member);
+    Map<String, AnnotationDescribe> get(Object member);
 
 
     /**
@@ -43,7 +43,7 @@ public interface AnnotationResolver {
     class DefaultAnnotationResolver implements AnnotationResolver {
 
         @Override
-        public Map<String, AnnotationDefinition> get(Object member) {
+        public Map<String, AnnotationDescribe> get(Object member) {
             Annotation[] declaredAnnotations = null;
             if (member instanceof Class<?>) {
                 declaredAnnotations = ((Class<?>) member).getDeclaredAnnotations();
@@ -63,7 +63,7 @@ public interface AnnotationResolver {
                 return Collections.emptyMap();
             }
 
-            return Arrays.stream(declaredAnnotations).map(it -> new AnnotationDefinition(it, ClassUtils.toType(member))).collect(Collectors.toMap(AnnotationDefinition::name, it -> it));
+            return Arrays.stream(declaredAnnotations).map(it -> new AnnotationDescribe(it, ClassUtils.toType(member))).collect(Collectors.toMap(AnnotationDescribe::name, it -> it));
         }
     }
 }

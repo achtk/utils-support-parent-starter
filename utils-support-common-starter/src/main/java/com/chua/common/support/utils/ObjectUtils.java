@@ -456,13 +456,26 @@ public class ObjectUtils {
      *
      * @param value    值
      * @param function 回调
-     * @return
+     * @return Object
      */
     public static Object withNull(Object value, SafeSupplier<Object> nullCallback, SafeFunction<Object, Object> function) {
         if (null == value) {
             return nullCallback.get();
         }
         return function.apply(value);
+    }
+    /**
+     * 处理非空
+     *
+     * @param value    值
+     * @param function 回调
+     * @return Object
+     */
+    public static <E, T>E withNull(T value,  SafeFunction<T, E> function) {
+        if (null == value) {
+            return null;
+        }
+        return (E) function.apply(value);
     }
 
     /**

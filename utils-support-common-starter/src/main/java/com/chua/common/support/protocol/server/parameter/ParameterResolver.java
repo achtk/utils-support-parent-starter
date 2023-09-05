@@ -1,11 +1,11 @@
 package com.chua.common.support.protocol.server.parameter;
 
 
+import com.chua.common.support.objects.definition.element.ParameterDescribe;
 import com.chua.common.support.protocol.server.annotations.Header;
 import com.chua.common.support.protocol.server.annotations.Param;
 import com.chua.common.support.protocol.server.annotations.Path;
 import com.chua.common.support.protocol.server.request.Request;
-import com.chua.common.support.reflection.describe.ParameterDescribe;
 
 /**
  * 参数解析器
@@ -14,23 +14,24 @@ import com.chua.common.support.reflection.describe.ParameterDescribe;
  */
 public interface ParameterResolver {
     /**
+     * 决定
      * 解析参数
      *
-     * @param describe 描述
-     * @param request
+     * @param parameterDefinition 描述
+     * @param request  要求
      * @return 结果
      */
-    Object resolve(ParameterDescribe describe, Request request);
+    Object resolve(ParameterDescribe parameterDefinition, Request request);
 
     /**
      * 是否匹配
      *
-     * @param describe 描述
+     * @param parameterDefinition 描述
      * @return 是否匹配
      */
-    default boolean isMatch(ParameterDescribe describe) {
-        return describe.hasAnnotation(Param.class) ||
-                describe.hasAnnotation(Header.class) ||
-                describe.hasAnnotation(Path.class);
+    default boolean isMatch(ParameterDescribe parameterDefinition) {
+        return parameterDefinition.hasAnnotation(Param.class) ||
+                parameterDefinition.hasAnnotation(Header.class) ||
+                parameterDefinition.hasAnnotation(Path.class);
     }
 }

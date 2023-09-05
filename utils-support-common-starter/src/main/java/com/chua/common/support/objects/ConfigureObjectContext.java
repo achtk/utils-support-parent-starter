@@ -23,4 +23,14 @@ public interface ConfigureObjectContext extends ObjectContext {
      * @param bean bean
      */
     void autowire(Object bean);
+
+
+    /**
+     * 新默认值
+     *
+     * @return {@link ConfigureObjectContext}
+     */
+    static  ConfigureObjectContext newDefault() {
+        return new StandardConfigureObjectContext(ConfigureContextConfiguration.builder().build());
+    }
 }

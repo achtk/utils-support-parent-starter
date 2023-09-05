@@ -3,14 +3,14 @@ package com.chua.common.support.objects.scanner.annotations;
 import java.lang.annotation.*;
 
 /**
- * AutoInject
+ * AutoValue
  *
  * @author CH
  */
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface AutoInject {
+public @interface AutoValue {
 
     /**
      * The value may indicate a suggestion for a logical component name,

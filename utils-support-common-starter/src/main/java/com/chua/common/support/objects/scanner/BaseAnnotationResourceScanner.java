@@ -81,7 +81,7 @@ public abstract class BaseAnnotationResourceScanner<T extends Annotation> extend
             builder.forPackages(packages);
         } else {
             builder.setUrls(new ArrayList<>());
-            builder.forPackages("");
+            builder.forPackages(".");
         }
 
 

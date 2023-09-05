@@ -2,8 +2,8 @@ package com.chua.common.support.objects.bean;
 
 import com.chua.common.support.objects.ObjectContext;
 import com.chua.common.support.objects.definition.TypeDefinition;
-import com.chua.common.support.objects.definition.element.AnnotationDefinition;
-import com.chua.common.support.objects.definition.element.ParameterDefinition;
+import com.chua.common.support.objects.definition.element.AnnotationDescribe;
+import com.chua.common.support.objects.definition.element.ParameterDescribe;
 import com.chua.common.support.objects.invoke.Invoke;
 
 import java.lang.annotation.Annotation;
@@ -26,7 +26,8 @@ public class SingleBeanObject implements BeanObject {
     }
 
     @Override
-    public Invoke newInvoke(Function<ParameterDefinition, Object> function) {
+    public Invoke newInvoke(Function<ParameterDescribe, Object> function) {
+        return null;
     }
 
     @Override
@@ -41,8 +42,8 @@ public class SingleBeanObject implements BeanObject {
 
     @Override
     public <T extends Annotation> T getAnnotationValue(Class<T> annotationType) {
-        List<AnnotationDefinition> annotationDefinition = typeDefinition.getAnnotationDefinition();
-        for (AnnotationDefinition definition : annotationDefinition) {
+        List<AnnotationDescribe> annotationDefinition = typeDefinition.getAnnotationDefinition();
+        for (AnnotationDescribe definition : annotationDefinition) {
             if (definition.isAnnotationPresent(annotationType)) {
                 return definition.annotation();
             }

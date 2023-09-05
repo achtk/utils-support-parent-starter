@@ -1,7 +1,7 @@
 package com.chua.common.support.objects.definition.resolver;
 
 import com.chua.common.support.annotations.Spi;
-import com.chua.common.support.objects.definition.element.FieldDefinition;
+import com.chua.common.support.objects.definition.element.FieldDescribe;
 import com.chua.common.support.utils.ArrayUtils;
 
 import java.lang.reflect.Field;
@@ -23,9 +23,9 @@ public interface FieldResolver {
      * 收到
      *
      * @param type 类型
-     * @return {@link Map}<{@link String}, {@link FieldDefinition}>
+     * @return {@link Map}<{@link String}, {@link FieldDescribe}>
      */
-    Map<String, FieldDefinition> get(Class<?> type);
+    Map<String, FieldDescribe> get(Class<?> type);
 
 
     /**
@@ -38,12 +38,12 @@ public interface FieldResolver {
     class DefaultFieldResolver implements FieldResolver {
 
         @Override
-        public Map<String, FieldDefinition> get(Class<?> type) {
+        public Map<String, FieldDescribe> get(Class<?> type) {
             Field[] fields = type.getDeclaredFields();
             if (ArrayUtils.isEmpty(fields)) {
                 return Collections.emptyMap();
             }
-            return Arrays.stream(fields).map(it -> new FieldDefinition(it, type)).collect(Collectors.toMap(FieldDefinition::name, it -> it));
+            return Arrays.stream(fields).map(it -> new FieldDescribe(it, type)).collect(Collectors.toMap(FieldDescribe::name, it -> it));
         }
     }
 }

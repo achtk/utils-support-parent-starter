@@ -1,10 +1,7 @@
 package com.chua.example.objectcontent;
 
 import com.chua.common.support.lang.robin.Robin;
-import com.chua.common.support.objects.ConfigureContextConfiguration;
 import com.chua.common.support.objects.ConfigureObjectContext;
-import com.chua.common.support.objects.StandardConfigureObjectContext;
-import com.chua.common.support.objects.environment.properties.SimplePropertySource;
 import com.chua.common.support.objects.provider.ObjectProvider;
 
 import java.io.File;
@@ -15,10 +12,14 @@ import java.io.File;
 public class ObjectContextExample {
 
     public static void main(String[] args) {
-        ConfigureObjectContext objectContext =
-                new StandardConfigureObjectContext(ConfigureContextConfiguration.builder()
-                        .register((SimplePropertySource) name -> null)
-                        .outSideInAnnotation(true).build());
+        ConfigureObjectContext objectContext = ConfigureObjectContext.newDefault();
+        Test2Demo test2Demo = objectContext.getBean(Test2Demo.class).get();
+        test2Demo = objectContext.getBean(Test2Demo.class).get();
+        System.out.println();
+    }
+
+    public static void installJar(String[] args) {
+        ConfigureObjectContext objectContext = ConfigureObjectContext.newDefault();
         objectContext.register(new File("D:\\env\\repository\\com\\chua\\utils-support-common-starter\\3.1.0\\utils-support-common-starter-3.1.0.jar"));
         ObjectProvider<Robin> bean = objectContext.getBean(Robin.class);
         Robin robin = objectContext.getBean("polling", Robin.class);

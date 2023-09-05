@@ -2,8 +2,8 @@ package com.chua.common.support.objects.definition.resolver;
 
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.collection.ImmutableBuilder;
-import com.chua.common.support.objects.definition.element.FieldDefinition;
-import com.chua.common.support.objects.definition.element.SuperTypeDefinition;
+import com.chua.common.support.objects.definition.element.FieldDescribe;
+import com.chua.common.support.objects.definition.element.SuperTypeDescribe;
 import com.chua.common.support.utils.ClassUtils;
 
 import java.util.Collections;
@@ -22,9 +22,9 @@ public interface SuperTypeResolver {
      * 收到
      *
      * @param type 类型
-     * @return {@link Map}<{@link String}, {@link FieldDefinition}>
+     * @return {@link Map}<{@link String}, {@link FieldDescribe}>
      */
-    Map<String, SuperTypeDefinition> get(Class<?> type);
+    Map<String, SuperTypeDescribe> get(Class<?> type);
 
 
     /**
@@ -37,13 +37,13 @@ public interface SuperTypeResolver {
     class DefaultSuperTypeResolver implements SuperTypeResolver {
 
         @Override
-        public Map<String, SuperTypeDefinition> get(Class<?> type) {
+        public Map<String, SuperTypeDescribe> get(Class<?> type) {
             Class<?> superclass = type.getSuperclass();
             if (ClassUtils.isObject(superclass)) {
                 return Collections.emptyMap();
             }
-            return ImmutableBuilder.<String, SuperTypeDefinition>
-                    builderOfMap().put(superclass.getTypeName(), new SuperTypeDefinition(superclass, type)).build();
+            return ImmutableBuilder.<String, SuperTypeDescribe>
+                    builderOfMap().put(superclass.getTypeName(), new SuperTypeDescribe(superclass, type)).build();
         }
     }
 }

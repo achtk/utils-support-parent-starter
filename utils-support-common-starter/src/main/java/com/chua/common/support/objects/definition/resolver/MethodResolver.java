@@ -1,7 +1,7 @@
 package com.chua.common.support.objects.definition.resolver;
 
 import com.chua.common.support.annotations.Spi;
-import com.chua.common.support.objects.definition.element.MethodDefinition;
+import com.chua.common.support.objects.definition.element.MethodDescribe;
 import com.chua.common.support.utils.ArrayUtils;
 
 import java.lang.reflect.Method;
@@ -20,22 +20,22 @@ public interface MethodResolver {
      * 收到
      *
      * @param type 类型
-     * @return {@link List}<{@link MethodDefinition}>
+     * @return {@link List}<{@link MethodDescribe}>
      */
-    Map<String, List<MethodDefinition>> get(Class<?> type);
+    Map<String, List<MethodDescribe>> get(Class<?> type);
 
     @Spi("default")
     class DefaultMethodResolver implements MethodResolver {
 
         @Override
-        public Map<String, List<MethodDefinition>> get(Class<?> type) {
+        public Map<String, List<MethodDescribe>> get(Class<?> type) {
             Method[] declaredMethods = type.getDeclaredMethods();
             if (ArrayUtils.isEmpty(declaredMethods)) {
                 return Collections.emptyMap();
             }
-            Map<String, List<MethodDefinition>> ts = new HashMap<>(declaredMethods.length);
+            Map<String, List<MethodDescribe>> ts = new HashMap<>(declaredMethods.length);
             for (Method method : declaredMethods) {
-                ts.computeIfAbsent(method.getName(), it -> new LinkedList<>()).add(new MethodDefinition(method, type));
+                ts.computeIfAbsent(method.getName(), it -> new LinkedList<>()).add(new MethodDescribe(method, type));
             }
             return ts;
         }

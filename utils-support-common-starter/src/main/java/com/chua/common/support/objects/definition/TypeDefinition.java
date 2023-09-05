@@ -1,8 +1,8 @@
 package com.chua.common.support.objects.definition;
 
-import com.chua.common.support.objects.definition.element.AnnotationDefinition;
-import com.chua.common.support.objects.definition.element.FieldDefinition;
-import com.chua.common.support.objects.definition.element.MethodDefinition;
+import com.chua.common.support.objects.definition.element.AnnotationDescribe;
+import com.chua.common.support.objects.definition.element.FieldDescribe;
+import com.chua.common.support.objects.definition.element.MethodDescribe;
 import com.chua.common.support.objects.source.TypeDefinitionSourceFactory;
 
 import java.lang.annotation.Annotation;
@@ -133,17 +133,17 @@ public interface TypeDefinition {
     /**
      * 获取方法释义
      *
-     * @return {@link Map}<{@link String}, {@link List}<{@link MethodDefinition}>>
+     * @return {@link Map}<{@link String}, {@link List}<{@link MethodDescribe}>>
      */
-    Map<String, List<MethodDefinition>> getMethodDefinition();
+    Map<String, List<MethodDescribe>> getMethodDefinition();
 
 
     /**
      * 获取领域释义
      *
-     * @return {@link List}<{@link FieldDefinition}>
+     * @return {@link List}<{@link FieldDescribe}>
      */
-    List<FieldDefinition> getFieldDefinition();
+    List<FieldDescribe> getFieldDefinition();
 
     /**
      * 存在注解
@@ -156,7 +156,7 @@ public interface TypeDefinition {
     /**
      * 获取注解释义
      *
-     * @return {@link List}<{@link AnnotationDefinition}>
+     * @return {@link List}<{@link AnnotationDescribe}>
      */
-    List<AnnotationDefinition> getAnnotationDefinition();
+    List<AnnotationDescribe> getAnnotationDefinition();
 }

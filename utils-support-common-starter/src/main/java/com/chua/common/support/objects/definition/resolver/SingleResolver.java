@@ -20,7 +20,7 @@ public interface SingleResolver {
 
         @Override
         public boolean isSingle() {
-            return false;
+            return true;
         }
     }
 }

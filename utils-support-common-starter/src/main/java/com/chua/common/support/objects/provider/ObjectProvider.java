@@ -42,4 +42,13 @@ public class ObjectProvider<T> {
     public Collection<T> getAll() {
         return sortedList.values();
     }
+
+    /**
+     * 为空
+     *
+     * @return boolean
+     */
+    public boolean isEmpty() {
+        return sortedList.isEmpty();
+    }
 }

@@ -4,10 +4,7 @@ import com.chua.common.support.collection.SortedList;
 import com.chua.common.support.file.zip.Zip;
 import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.objects.bean.BeanObject;
-import com.chua.common.support.objects.definition.MethodTypeDefinition;
-import com.chua.common.support.objects.definition.ObjectTypeDefinition;
-import com.chua.common.support.objects.definition.TypeDefinition;
-import com.chua.common.support.objects.definition.ZipTypeDefinition;
+import com.chua.common.support.objects.definition.*;
 import com.chua.common.support.objects.provider.ObjectProvider;
 import com.chua.common.support.utils.ClassUtils;
 
@@ -111,6 +108,24 @@ public interface ObjectContext {
         return register(new ObjectTypeDefinition(bean.getClass().getTypeName(), bean));
     }
 
+    /**
+     * 注册
+     *
+     * @param type       type
+     * @return {@link TypeDefinition}
+     */
+    default TypeDefinition register(Class<?> type) {
+        return register(new ClassTypeDefinition(type));
+    }
+    /**
+     * 注册
+     *
+     * @param bean       bean
+     * @return {@link TypeDefinition}
+     */
+    default TypeDefinition register(Object bean) {
+        return register(new ObjectTypeDefinition(bean));
+    }
     /**
      * 注册
      *

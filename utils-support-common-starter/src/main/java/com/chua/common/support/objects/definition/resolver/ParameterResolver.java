@@ -1,6 +1,6 @@
 package com.chua.common.support.objects.definition.resolver;
 
-import com.chua.common.support.objects.definition.element.AnnotationDefinition;
+import com.chua.common.support.objects.definition.element.AnnotationDescribe;
 
 import java.util.List;
 
@@ -16,9 +16,9 @@ public interface ParameterResolver {
      * 收到
      *
      * @param type 类型
-     * @return {@link List}<{@link AnnotationDefinition}>
+     * @return {@link List}<{@link AnnotationDescribe}>
      */
-    List<AnnotationDefinition> get(Class<?> type);
+    List<AnnotationDescribe> get(Class<?> type);
 
 
 }

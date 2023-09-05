@@ -3,10 +3,11 @@ package com.chua.common.support.objects.source;
 import com.chua.common.support.collection.SortedArrayList;
 import com.chua.common.support.collection.SortedList;
 import com.chua.common.support.objects.ConfigureContextConfiguration;
-import com.chua.common.support.objects.ObjectContext;
+import com.chua.common.support.objects.ConfigureObjectContext;
 import com.chua.common.support.objects.bean.BeanObject;
 import com.chua.common.support.objects.bean.SingleBeanObject;
 import com.chua.common.support.objects.definition.TypeDefinition;
+import com.chua.common.support.objects.environment.StandardConfigureEnvironment;
 import com.chua.common.support.objects.provider.ObjectProvider;
 import com.chua.common.support.spi.ServiceProvider;
 
@@ -23,14 +24,16 @@ import static com.chua.common.support.objects.source.AbstractTypeDefinitionSourc
  * @author CH
  * @since 2023/09/02
  */
-public class TypeDefinitionSourceFactory implements ObjectContext {
+public class TypeDefinitionSourceFactory implements ConfigureObjectContext {
 
     private final ConfigureContextConfiguration configuration;
     final List<TypeDefinitionSource> definitionSources;
+    private final StandardConfigureEnvironment configureEnvironment;
 
-    public TypeDefinitionSourceFactory(ConfigureContextConfiguration configuration) {
+    public TypeDefinitionSourceFactory(ConfigureContextConfiguration configuration, StandardConfigureEnvironment configureEnvironment) {
         this.configuration = configuration;
         this.definitionSources = ServiceProvider.of(TypeDefinitionSource.class).collect(configuration);
+        this.configureEnvironment = configureEnvironment;
     }
 
     @Override
@@ -141,5 +144,15 @@ public class TypeDefinitionSourceFactory implements ObjectContext {
         }
 
         return rs;
+    }
+
+    @Override
+    public StandardConfigureEnvironment getEnvironment() {
+        return configureEnvironment;
+    }
+
+    @Override
+    public void autowire(Object bean) {
+
     }
 }

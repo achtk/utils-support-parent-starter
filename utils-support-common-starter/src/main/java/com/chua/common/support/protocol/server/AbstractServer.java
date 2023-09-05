@@ -9,6 +9,7 @@ import com.chua.common.support.objects.bean.BeanObject;
 import com.chua.common.support.objects.bean.SingleBeanObject;
 import com.chua.common.support.objects.definition.ObjectTypeDefinition;
 import com.chua.common.support.objects.definition.TypeDefinition;
+import com.chua.common.support.objects.definition.element.ParameterDescribe;
 import com.chua.common.support.objects.environment.properties.FunctionPropertySource;
 import com.chua.common.support.objects.provider.ObjectProvider;
 import com.chua.common.support.protocol.server.annotations.Mapping;
@@ -16,7 +17,6 @@ import com.chua.common.support.protocol.server.parameter.ParameterResolver;
 import com.chua.common.support.protocol.server.request.Request;
 import com.chua.common.support.protocol.server.resolver.Resolver;
 import com.chua.common.support.protocol.server.resolver.ResourceResolver;
-import com.chua.common.support.reflection.describe.ParameterDescribe;
 import com.chua.common.support.reflection.reflections.Reflections;
 import com.chua.common.support.reflection.reflections.scanners.Scanners;
 import com.chua.common.support.reflection.reflections.util.ConfigurationBuilder;
@@ -216,26 +216,26 @@ public abstract class AbstractServer implements Server, Constant {
     }
 
 
-    protected Object getValue(ParameterDescribe parameterDescribe, Request request) {
+    protected Object getValue(ParameterDescribe parameterDefinition, Request request) {
         ParameterResolver resolver = null;
         ObjectProvider<ParameterResolver> objectContextBean = objectContext.getBean(ParameterResolver.class);
         Collection<ParameterResolver> all = objectContextBean.getAll();
         for (ParameterResolver parameterResolver : all) {
-            if (parameterResolver.isMatch(parameterDescribe)) {
+            if (parameterResolver.isMatch(parameterDefinition)) {
                 resolver = parameterResolver;
                 break;
             }
         }
 
         if (null == resolver) {
-            return objectContext.getBean(parameterDescribe.returnClassType());
+            return objectContext.getBean(parameterDefinition.getType());
         }
 
-        if (parameterDescribe.returnClassType().isAssignableFrom(Request.class)) {
+        if (parameterDefinition.isAssignableFrom(Request.class)) {
             return request;
         }
 
-        return resolver.resolve(parameterDescribe, request);
+        return resolver.resolve(parameterDefinition, request);
     }
 
 }

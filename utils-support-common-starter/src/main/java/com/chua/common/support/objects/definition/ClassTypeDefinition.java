@@ -36,13 +36,13 @@ public class ClassTypeDefinition implements TypeDefinition, InitializingAware {
 
     private boolean isLoaded;
 
-    private Map<String, FieldDefinition> fieldDefinitions;
+    private Map<String, FieldDescribe> fieldDefinitions;
 
-    private Map<String, List<MethodDefinition>> methodDefinitions;
+    private Map<String, List<MethodDescribe>> methodDefinitions;
 
-    private Map<String, AnnotationDefinition> annotationDefinitions;
+    private Map<String, AnnotationDescribe> annotationDefinitions;
 
-    private Map<String, SuperTypeDefinition> superTypeDefinitions;
+    private Map<String, SuperTypeDescribe> superTypeDefinitions;
 
     private final Set<String> interfaces = new LinkedHashSet<>();
     private final Set<String> superType = new LinkedHashSet<>();
@@ -141,7 +141,7 @@ public class ClassTypeDefinition implements TypeDefinition, InitializingAware {
     }
 
     @Override
-    public Map<String, List<MethodDefinition>> getMethodDefinition() {
+    public Map<String, List<MethodDescribe>> getMethodDefinition() {
         if (null == methodDefinitions) {
             this.methodDefinitions = ServiceProvider.of(MethodResolver.class).getSpiService().get(type);
         }
@@ -149,7 +149,7 @@ public class ClassTypeDefinition implements TypeDefinition, InitializingAware {
     }
 
     @Override
-    public List<FieldDefinition> getFieldDefinition() {
+    public List<FieldDescribe> getFieldDefinition() {
         if (null == fieldDefinitions) {
             this.fieldDefinitions = ServiceProvider.of(FieldResolver.class).getSpiService().get(type);
         }
@@ -162,7 +162,7 @@ public class ClassTypeDefinition implements TypeDefinition, InitializingAware {
     }
 
     @Override
-    public List<AnnotationDefinition> getAnnotationDefinition() {
+    public List<AnnotationDescribe> getAnnotationDefinition() {
         return new ArrayList<>(annotationDefinitions.values());
     }
 
@@ -173,7 +173,7 @@ public class ClassTypeDefinition implements TypeDefinition, InitializingAware {
     @SuppressWarnings("ALL")
     private <T> T newBean(TypeDefinitionSourceFactory typeDefinitionSourceFactory) {
         if (!isLoaded) {
-            return newBeanObject(typeDefinitionSourceFactory);
+            return (T) (bean = newBeanObject(typeDefinitionSourceFactory));
         }
 
         return (T) bean;
@@ -191,7 +191,7 @@ public class ClassTypeDefinition implements TypeDefinition, InitializingAware {
     }
 
     private <T> T newBeanObject(Class<?> type, TypeDefinitionSourceFactory typeDefinitionSourceFactory) {
-        return new ConstructorDefinition(type, typeDefinitionSourceFactory).newInstance();
+        return new ConstructorDescribe(this, type, typeDefinitionSourceFactory).newInstance();
     }
 
 

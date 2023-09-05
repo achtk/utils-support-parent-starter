@@ -24,11 +24,11 @@ public class StandardConfigureObjectContext implements ConfigureObjectContext, I
     private final ConfigureContextConfiguration configuration;
     private StandardConfigureEnvironment configureEnvironment;
     private TypeDefinitionSourceFactory typeDefinitionSourceFactory;
-
     public StandardConfigureObjectContext(ConfigureContextConfiguration configuration) {
         this.configuration = configuration;
         this.afterPropertiesSet();
     }
+
 
     @Override
     public StandardConfigureEnvironment getEnvironment() {
@@ -49,7 +49,7 @@ public class StandardConfigureObjectContext implements ConfigureObjectContext, I
         if (log.isDebugEnabled()) {
             log.debug("初始化定义");
         }
-        this.typeDefinitionSourceFactory = new TypeDefinitionSourceFactory(configuration);
+        this.typeDefinitionSourceFactory = new TypeDefinitionSourceFactory(configuration, configureEnvironment);
     }
 
     @Override

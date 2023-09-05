@@ -25,7 +25,7 @@ public class ConfigureContextConfiguration {
     @Singular("propertySource")
     public List<PropertySource> propertySources;
     /**
-     * 包装
+     * 掃描包
      */
     private String[] packages;
     /**
