@@ -23,7 +23,7 @@ public class DelegateMetadataExecutor implements MetadataExecutor {
     private final Expression expression;
 
     private static final Log log = Log.getLogger(MetadataExecutor.class);
-    private static final Cacheable CACHEABLE = Cacheable.auto();
+    private static final Cacheable<DataSource, Dialect> CACHEABLE = Cacheable.auto();
 
     public DelegateMetadataExecutor(Expression expression) {
         this.expression = expression;

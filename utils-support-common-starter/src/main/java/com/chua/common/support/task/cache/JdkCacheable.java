@@ -15,7 +15,7 @@ import java.util.Map;
  * @author CH
  */
 @Spi("juc")
-public class JdkCacheable extends AbstractCacheable {
+public class JdkCacheable<K, V> extends AbstractCacheable<K, V> {
 
     public JdkCacheable() {
     }
@@ -28,7 +28,7 @@ public class JdkCacheable extends AbstractCacheable {
         super(config);
     }
 
-    private final Map<Object, TimeValue<Object>> CACHE = new ConcurrentReferenceHashMap<>(512);
+    private final Map<K, TimeValue<V>> CACHE = new ConcurrentReferenceHashMap<>(512);
 
     @Override
     public void clear() {
@@ -36,13 +36,13 @@ public class JdkCacheable extends AbstractCacheable {
     }
 
     @Override
-    public boolean exist(Object key) {
+    public boolean exist(K key) {
         return CACHE.containsKey(key);
     }
 
     @Override
-    public Value<Object> get(Object key) {
-        TimeValue<Object> value = CACHE.get(key);
+    public Value<V> get(K key) {
+        TimeValue<V> value = CACHE.get(key);
         if (hotColdBackup) {
             value.refresh();
         }
@@ -51,14 +51,14 @@ public class JdkCacheable extends AbstractCacheable {
 
     @Override
     @SuppressWarnings("ALL")
-    public Value<Object> put(Object key, Object value) {
-        TimeValue<Object> timeValue = ObjectUtils.isPresent(TimeValue.class, value, () -> TimeValue.of(value, Duration.ofMillis(expireAfterWrite)));
+    public Value<V> put(K key, V value) {
+        TimeValue<V> timeValue = ObjectUtils.isPresent(TimeValue.class, value, () -> TimeValue.of(value, Duration.ofMillis(expireAfterWrite)));
         CACHE.put(key, timeValue);
         return timeValue;
     }
 
     @Override
-    public Value<Object> remove(Object key) {
+    public Value<V> remove(K key) {
         return CACHE.remove(key);
     }
 }

@@ -24,12 +24,12 @@ import java.util.concurrent.TimeUnit;
  */
 @Spi("guava")
 @SpiDefault
-public class GuavaCacheable extends AbstractCacheable {
+public class GuavaCacheable<K, V> extends AbstractCacheable<K, V> {
 
     public GuavaCacheable() {
     }
 
-    public GuavaCacheable(Cache<Object, Value<Object>> cache) {
+    public GuavaCacheable(Cache<K, Value<V>> cache) {
         this.cache = cache;
     }
 
@@ -41,10 +41,10 @@ public class GuavaCacheable extends AbstractCacheable {
         super(config);
     }
 
-    private Cache<Object, Value<Object>> cache;
+    private Cache<K, Value<V>> cache;
 
     @Override
-    public Cacheable configuration(Map<String, Object> config) {
+    public Cacheable<K, V> configuration(Map<String, Object> config) {
         super.configuration(config);
         CacheBuilder<Object, Object> cacheBuilder = CacheBuilder.newBuilder()
                 .initialCapacity(capacity < 1 ? 100000 : capacity)
@@ -73,11 +73,11 @@ public class GuavaCacheable extends AbstractCacheable {
         if (null == updateListener) {
             this.cache = cacheBuilder.build();
         } else {
-            this.cache = cacheBuilder.build(new CacheLoader<Object, Value<Object>>() {
+            this.cache = cacheBuilder.build(new CacheLoader<K, Value<V>>() {
                 @Override
-                public Value<Object> load(Object key) throws Exception {
+                public Value<V> load(K key) throws Exception {
                     updateListener.accept(key, null);
-                    return Value.of(key);
+                    return (Value<V>) Value.of(key);
                 }
             });
         }
@@ -91,13 +91,13 @@ public class GuavaCacheable extends AbstractCacheable {
     }
 
     @Override
-    public boolean exist(Object key) {
+    public boolean exist(K key) {
         return cache.asMap().containsKey(key);
     }
 
     @Override
-    public Value<Object> get(Object key) {
-        Value<Object> ifPresent = cache.getIfPresent(key);
+    public Value<V> get(K key) {
+        Value<V> ifPresent = cache.getIfPresent(key);
         if (null == ifPresent) {
             return Value.of(null);
         }
@@ -112,15 +112,15 @@ public class GuavaCacheable extends AbstractCacheable {
 
     @Override
     @SuppressWarnings("ALL")
-    public Value<Object> put(Object key, Object value) {
-        TimeValue<Object> value1 = ObjectUtils.isPresent(TimeValue.class, value, () -> TimeValue.of(value, Duration.ofMillis(expireAfterWrite)));
+    public Value<V> put(K key, V value) {
+        TimeValue<V> value1 = ObjectUtils.isPresent(TimeValue.class, value, () -> TimeValue.of(value, Duration.ofMillis(expireAfterWrite)));
         cache.put(key, value1);
         return value1;
     }
 
     @Override
-    public Value<Object> remove(Object key) {
-        Value<Object> o = get(key);
+    public Value<V> remove(K key) {
+        Value<V> o = get(key);
         cache.invalidate(key);
         return o;
     }

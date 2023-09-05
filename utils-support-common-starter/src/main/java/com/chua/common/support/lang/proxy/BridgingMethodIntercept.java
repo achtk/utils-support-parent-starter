@@ -1,5 +1,6 @@
 package com.chua.common.support.lang.proxy;
 
+import com.chua.common.support.bean.BeanUtils;
 import com.chua.common.support.lang.proxy.plugin.ProxyPlugin;
 import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.ObjectUtils;
@@ -47,13 +48,35 @@ public class BridgingMethodIntercept<T> implements MethodIntercept<T> {
             return null;
         }
 
+
         ClassUtils.setAccessible(method);
+        Object result = null;
         try {
-            return ClassUtils.invokeMethod(method, bridging, args);
-        } catch (Exception e) {
+            result = ClassUtils.invokeMethod(method, bridging, args);
+        } catch (ClassCastException e1) {
             Method method1 = ClassUtils.findMethod(bridging.getClass(), method.getName(), ClassUtils.toType(args));
             ClassUtils.setAccessible(method1);
-            return ClassUtils.invokeMethod(method1, bridging, args);
+            result = ClassUtils.invokeMethod(method1, bridging, args);
         }
+
+        if(null == result) {
+            return null;
+        }
+
+        Class<?> methodReturnType = method.getReturnType();
+        Class<?> returnType = result.getClass();
+        if(methodReturnType.isAssignableFrom(returnType)) {
+            return result;
+        }
+
+        try {
+            Object copyProperties = BeanUtils.copyProperties(result, methodReturnType);
+            if(null != copyProperties) {
+                return copyProperties;
+            }
+        } catch (Exception ignored) {
+        }
+
+        return ProxyUtils.proxy(methodReturnType, methodReturnType.getClassLoader(), new BridgingMethodIntercept(methodReturnType, result));
     }
 }

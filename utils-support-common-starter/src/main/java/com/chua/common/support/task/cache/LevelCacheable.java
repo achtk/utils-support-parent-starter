@@ -15,7 +15,7 @@ import java.util.Map;
  * @author CH
  */
 @SuppressWarnings("ALL")
-public class LevelCacheable extends AbstractCacheable {
+public class LevelCacheable<K, V> extends AbstractCacheable<K, V> {
 
 
     public LevelCacheable() {
@@ -44,13 +44,13 @@ public class LevelCacheable extends AbstractCacheable {
     }
 
     @Override
-    public boolean exist(Object key) {
+    public boolean exist(K key) {
         return using.contains(key);
     }
 
     @Override
-    public Value<Object> get(Object key) {
-        Value<Object> objectValue = (Value<Object>) using.read(key, Value.class);
+    public Value<V> get(K key) {
+        Value<V> objectValue = (Value<V>) using.read(key, Value.class);
         if (hotColdBackup) {
             using.write(key, objectValue);
         }
@@ -58,15 +58,15 @@ public class LevelCacheable extends AbstractCacheable {
     }
 
     @Override
-    public Value<Object> put(Object key, Object value) {
-        TimeValue<Object> value1 = ObjectUtils.isPresent(TimeValue.class, value, () -> TimeValue.of(value, Duration.ofMillis(expireAfterWrite)));
+    public Value<V> put(K key, V value) {
+        TimeValue<V> value1 = ObjectUtils.isPresent(TimeValue.class, value, () -> TimeValue.of(value, Duration.ofMillis(expireAfterWrite)));
         using.write(key, value1);
         return value1;
     }
 
     @Override
-    public Value<Object> remove(Object key) {
-        Value<Object> objectValue = (Value<Object>) using.read(key, Value.class);
+    public Value<V> remove(K key) {
+        Value<V> objectValue = (Value<V>) using.read(key, Value.class);
          using.erase(key);
          return objectValue;
     }

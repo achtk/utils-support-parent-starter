@@ -2,6 +2,7 @@ package com.chua.common.support.objects;
 
 import com.chua.common.support.objects.environment.EnvironmentConfiguration;
 import com.chua.common.support.objects.environment.properties.PropertySource;
+import com.chua.common.support.objects.scanner.BaseAnnotationResourceScanner;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Singular;
@@ -35,8 +36,10 @@ public class ConfigureContextConfiguration {
     /**
      * 外部数据以注解方式注入
      * 1.false 所有数据注入
+     * @see BaseAnnotationResourceScanner
      */
-    private boolean outSideInAnnotation;
+    @Builder.Default
+    private boolean outSideInAnnotation = true;
     /**
      * 依赖包位置
      */

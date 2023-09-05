@@ -1609,7 +1609,9 @@ public class ClassUtils {
                     .unreflectSpecial(method, declaringClass)
                     .bindTo(bean)
                     .invokeWithArguments(method.getParameterCount() == 0 ? EMPTY_OBJECT : args);
-        } catch (Throwable e) {
+        } catch (ClassCastException e1) {
+            throw e1;
+        }catch (Throwable e) {
             return null;
         }
     }

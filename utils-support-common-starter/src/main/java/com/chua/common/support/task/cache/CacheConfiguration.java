@@ -22,7 +22,7 @@ public class CacheConfiguration {
     @Builder.Default
     private int capacity = 100_000;
     /**
-     * 超时时间
+     * 超时时间(s)
      */
     private int expireAfterWrite;
     /**
@@ -31,7 +31,7 @@ public class CacheConfiguration {
     @Builder.Default
     private boolean hotColdBackup = true;
     /**
-     * 超时时间
+     * 超时时间(s)
      */
     @Builder.Default
     private int expireAfterAccess = -1;

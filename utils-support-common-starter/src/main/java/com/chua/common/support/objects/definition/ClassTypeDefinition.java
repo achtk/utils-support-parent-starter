@@ -116,7 +116,7 @@ public class ClassTypeDefinition implements TypeDefinition, InitializingAware {
 
     @Override
     public String[] getName() {
-        return name.toArray(EMPTY_ARRAY);
+        return null != name ? name.toArray(EMPTY_ARRAY) : EMPTY_ARRAY;
     }
 
     @Override
@@ -204,10 +204,15 @@ public class ClassTypeDefinition implements TypeDefinition, InitializingAware {
         this.isProxy = ServiceProvider.of(ProxyResolver.class).getSpiService().isProxy();
         this.order = ServiceProvider.of(OrderResolver.class).getSpiService().order();
         this.name = new ArrayList<>();
-        this.name.add(ServiceProvider.of(NameResolver.class).getSpiService().name());
+        this.name.add(ServiceProvider.of(NameResolver.class).getSpiService().name(type));
         this.annotationDefinitions = ServiceProvider.of(AnnotationResolver.class).getSpiService().get(type);
         this.superTypeDefinitions = ServiceProvider.of(SuperTypeResolver.class).getSpiService().get(type);
         this.interfaces.addAll(ClassUtils.getAllInterfaces(type).stream().map(Class::getTypeName).collect(Collectors.toSet()));
         this.superType.addAll(ClassUtils.getSuperType(type).stream().map(Class::getTypeName).collect(Collectors.toSet()));
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode() + getClassLoader().hashCode();
     }
 }

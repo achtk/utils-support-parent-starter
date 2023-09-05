@@ -3,7 +3,6 @@ package com.chua.common.support.objects.scanner;
 import com.chua.common.support.reflection.reflections.Reflections;
 import com.chua.common.support.reflection.reflections.scanners.Scanners;
 import com.chua.common.support.reflection.reflections.util.ConfigurationBuilder;
-import com.chua.common.support.utils.AnnotationUtils;
 import com.chua.common.support.utils.ClassUtils;
 
 import java.lang.annotation.Annotation;
@@ -19,9 +18,12 @@ import java.util.Set;
  */
 public abstract class BaseAnnotationResourceScanner<T extends Annotation> extends AbstractResourceScanner {
     private static Reflections REFLECTIONS;
+    private final Class<T> annotationType;
 
+    @SuppressWarnings("ALL")
     public BaseAnnotationResourceScanner(String[] packages) {
         super(packages);
+        this.annotationType = (Class<T>) ClassUtils.getActualTypeArguments(this.getClass())[0];
     }
 
     @Override
@@ -98,17 +100,8 @@ public abstract class BaseAnnotationResourceScanner<T extends Annotation> extend
      *
      * @return 注解
      */
-    Class<T> getAnnotation() {
-        return (Class<T>) ClassUtils.getActualTypeArguments(this.getClass())[0];
+    public Class<T> getAnnotation() {
+        return annotationType;
     }
 
-    /**
-     * 匹配
-     *
-     * @param aClass 班级
-     * @return boolean
-     */
-    public boolean isMatch(Class<?> aClass) {
-        return AnnotationUtils.hasAnnotation(aClass, getAnnotation());
-    }
 }

@@ -69,7 +69,7 @@ public class TypeDefinitionSourceFactory implements ConfigureObjectContext {
 
     @Override
     public <T> ObjectProvider<T> getBean(Class<T> targetType) {
-        return new ObjectProvider<>(getBeanOfType(targetType), this);
+        return new ObjectProvider<>(targetType, getBeanOfType(targetType), this);
     }
 
     @Override

@@ -15,7 +15,7 @@ import java.util.Map;
  *
  * @author CH
  */
-public class RedisCacheable extends AbstractCacheable {
+public class RedisCacheable<K, V> extends AbstractCacheable<K, V> {
 
     private Jedis jedis;
 
@@ -49,12 +49,12 @@ public class RedisCacheable extends AbstractCacheable {
     }
 
     @Override
-    public boolean exist(Object key) {
+    public boolean exist(K key) {
         return jedis.exists(key.toString());
     }
 
     @Override
-    public Value<Object> get(Object key) {
+    public Value<V> get(K key) {
         String s = jedis.get(key.toString());
         if (null == s) {
             return Value.of(null);
@@ -68,14 +68,14 @@ public class RedisCacheable extends AbstractCacheable {
     }
 
     @Override
-    public Value<Object> put(Object key, Object value) {
-        Value<Object> value1 = Value.of(value);
+    public Value<V> put(K key, V value) {
+        Value<V> value1 = Value.of(value);
         jedis.setex(key.toString(), expireAfterWrite, Json.toJson(value1));
         return value1;
     }
 
     @Override
-    public Value<Object> remove(Object key) {
+    public Value<V> remove(K key) {
         jedis.del(key.toString());
         return null;
     }

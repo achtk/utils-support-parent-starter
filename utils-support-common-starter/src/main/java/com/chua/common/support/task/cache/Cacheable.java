@@ -14,7 +14,8 @@ import java.util.function.Supplier;
  *
  * @author CH
  */
-public interface Cacheable extends InitializingAware, DisposableAware {
+@SuppressWarnings("ALL")
+public interface Cacheable<K, V> extends InitializingAware, DisposableAware {
     /**
      * 实例化缓存对象
      *
@@ -30,7 +31,7 @@ public interface Cacheable extends InitializingAware, DisposableAware {
      * 缓存器
      * @return 缓存器
      */
-    static Cacheable auto() {
+    static <K, V>Cacheable<K, V> auto() {
         return ServiceProvider.of(Cacheable.class).getExtension("guava", "juc");
     }
 
@@ -39,8 +40,22 @@ public interface Cacheable extends InitializingAware, DisposableAware {
      * @param configuration 配置
      * @return 缓存器
      */
-    static Cacheable auto(CacheConfiguration configuration) {
+    static <K, V>Cacheable<K, V> auto(CacheConfiguration configuration) {
         return ServiceProvider.of(Cacheable.class).getNewExtension(new String[]{"guava", "juc"}, configuration);
+    }
+
+    /**
+     * 汽车
+     * 缓存器
+     *
+     * @param timeout 超时
+     * @return 缓存器
+     */
+    static <K, V>Cacheable<K, V> auto(int timeout) {
+        return ServiceProvider.of(Cacheable.class).getNewExtension(new String[]{"guava", "juc"}, CacheConfiguration.builder()
+                        .expireAfterWrite(timeout)
+                .build()
+        );
     }
 
     /**
@@ -50,14 +65,12 @@ public interface Cacheable extends InitializingAware, DisposableAware {
      * @param supplier 回调
      * @return this
      */
-    default Value<Object> apply(String key, Supplier<Object> supplier) {
+    default Value<V> apply(K key, Supplier<V> supplier) {
         if (exist(key)) {
             return get(key);
         }
-
-        Value<Object> value = Value.of(supplier.get());
-        put(key, value);
-        return value;
+        V v = supplier.get();
+        return put(key, v);
     }
 
     /**
@@ -66,7 +79,7 @@ public interface Cacheable extends InitializingAware, DisposableAware {
      * @param config 配置
      * @return this
      */
-    Cacheable configuration(Map<String, Object> config);
+    Cacheable<K, V> configuration(Map<String, Object> config);
 
     /**
      * 配置
@@ -74,7 +87,7 @@ public interface Cacheable extends InitializingAware, DisposableAware {
      * @param config 配置
      * @return this
      */
-    default Cacheable configuration(CacheConfiguration config) {
+    default Cacheable<K, V> configuration(CacheConfiguration config) {
         BeanMap beanMap = BeanMap.create(config);
         return configuration(beanMap);
     }
@@ -90,7 +103,7 @@ public interface Cacheable extends InitializingAware, DisposableAware {
      * @param key 索引
      * @return 值
      */
-    boolean exist(Object key);
+    boolean exist(K key);
 
     /**
      * 获取值
@@ -98,7 +111,7 @@ public interface Cacheable extends InitializingAware, DisposableAware {
      * @param key 索引
      * @return 值
      */
-    Value<Object> get(Object key);
+    Value<V> get(K key);
 
     /**
      * 获取值/不存在则赋值
@@ -107,7 +120,7 @@ public interface Cacheable extends InitializingAware, DisposableAware {
      * @param value 值
      * @return 值
      */
-    default Value<Object> getOrPutValue(Object key, Object value) {
+    default Value<V> getOrPutValue(K key, V value) {
         if (exist(key)) {
             return get(key);
         }
@@ -122,11 +135,11 @@ public interface Cacheable extends InitializingAware, DisposableAware {
      * @return 值
      */
     @SuppressWarnings("ALL")
-    default <T>T getOrPut(Object key, T value) {
+    default V getOrPut(K key, V value) {
         if (exist(key)) {
-            return (T) get(key).getValue();
+            return get(key).getValue();
         }
-        return (T) put(key, value).getValue();
+        return put(key, value).getValue();
     }
 
     /**
@@ -136,7 +149,7 @@ public interface Cacheable extends InitializingAware, DisposableAware {
      * @param value 值
      * @return 值
      */
-    default Value<Object> getOrPut(Object key, Supplier<?> value) {
+    default Value<V> getOrPut(K key, Supplier<V> value) {
         return getOrPutValue(key, value.get());
     }
     /**
@@ -146,7 +159,7 @@ public interface Cacheable extends InitializingAware, DisposableAware {
      * @param value 值
      * @return 值
      */
-    Value<Object> put(Object key, Object value);
+    Value<V> put(K key, V value);
 
     /**
      * 删除
@@ -154,5 +167,5 @@ public interface Cacheable extends InitializingAware, DisposableAware {
      * @param key 索引
      * @return 值
      */
-    Value<Object> remove(Object key);
+    Value<V> remove(K key);
 }

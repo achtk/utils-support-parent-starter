@@ -8,6 +8,8 @@ import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.objects.ConfigureContextConfiguration;
 import com.chua.common.support.objects.classloader.ZipClassLoader;
 import com.chua.common.support.objects.definition.TypeDefinition;
+import com.chua.common.support.objects.definition.element.AnnotationDescribe;
+import com.chua.common.support.objects.definition.resolver.AnnotationResolver;
 import com.chua.common.support.objects.scanner.BaseAnnotationResourceScanner;
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.ClassUtils;
@@ -18,10 +20,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 
 import static com.chua.common.support.constant.CommonConstant.EMPTY_ARRAY;
@@ -135,9 +134,10 @@ public class ClassLoaderTypeDefinitionSource extends AbstractTypeDefinitionSourc
         List<BaseAnnotationResourceScanner> collect = ServiceProvider.of(BaseAnnotationResourceScanner.class).collect(new Object[]{EMPTY_ARRAY});
 
         for (String className : classNames) {
+            Class<?> aClass = ClassUtils.forName(className, classLoader);
+            Map<String, AnnotationDescribe> stringAnnotationDescribeMap = ServiceProvider.of(AnnotationResolver.class).getSpiService().get(aClass);
             for (BaseAnnotationResourceScanner baseAnnotationResourceScanner : collect) {
-                Class<?> aClass = ClassUtils.forName(className, classLoader);
-                if(baseAnnotationResourceScanner.isMatch(aClass)) {
+                if(stringAnnotationDescribeMap.containsKey(baseAnnotationResourceScanner.getAnnotation().getTypeName())) {
                     super.register(aClass);
                 }
             }

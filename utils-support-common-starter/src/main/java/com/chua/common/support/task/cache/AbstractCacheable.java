@@ -10,7 +10,7 @@ import java.util.function.BiConsumer;
  *
  * @author CH
  */
-public abstract class AbstractCacheable implements Cacheable {
+public abstract class AbstractCacheable<K, V> implements Cacheable<K, V> {
     /**
      * 初始化大小
      */
@@ -66,7 +66,7 @@ public abstract class AbstractCacheable implements Cacheable {
     }
 
     @Override
-    public Cacheable configuration(Map<String, Object> config) {
+    public Cacheable<K, V> configuration(Map<String, Object> config) {
         this.capacity = MapUtils.getInteger(config, "capacity", 10000);
         this.maximumSize = MapUtils.getInteger(config, "maximumSize", 10000);
         this.expireAfterAccess = MapUtils.getInteger(config, "expireAfterAccess", -1);

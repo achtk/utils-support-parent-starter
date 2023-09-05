@@ -10,36 +10,36 @@ import com.chua.common.support.spi.ServiceProvider;
  */
 public class BarCodeBuilder {
 
-    public String level = "M";
-    public int version = 1;
-    public int width = 300;
-    public int height = 300;
-    public String masterColor = "#000000";
-    public String slaveColor = "#FFFFFF";
-    public String logoBorderColor;
-    public String codeEyesBorderColor = "#000000";
-    public String codeEyesPointColor = "#000000";
-    public QrCodeEyesFormat qrCodeEyesFormat = QrCodeEyesFormat.R_BORDER;
-    public String bgImage;
-    public float alpha;
-    public String logoPath;
-    public String generate;
-    public int borderRadius = 0;
-    public int borderSize = 0;
-    public String borderColor = "#808080";
-    public BarCodeBorderStyle borderStyle = BarCodeBorderStyle.SOLID;
-    public int borderDashGranularity = 5;
-    public int margin = 2;
-    public int ratio = 5;
-    public int padding = 0;
-    public BarCodeLogoShape logoShape = BarCodeLogoShape.RECTANGLE;
-    public float panelArcWidth = 15f;
-    public float panelArcHeight = 15f;
-    public String panelColor = "#FFFFFF";
-    public float arcWidth = 10f;
-    public float arcHeight = 10f;
-    public String backgroundColor = "#FFFFFF";
-    public String outType = "png";
+    private String level = "M";
+    private int version = 1;
+    private int width = 300;
+    private int height = 300;
+    private String masterColor = "#000000";
+    private String slaveColor = "#FFFFFF";
+    private String logoBorderColor;
+    private String codeEyesBorderColor = "#000000";
+    private String codeEyesPointColor = "#000000";
+    private QrCodeEyesFormat qrCodeEyesFormat = QrCodeEyesFormat.R_BORDER_C_POINT;
+    private String bgImage;
+    private float alpha;
+    private String logoPath;
+    private String generate;
+    private int borderRadius = 0;
+    private int borderSize = 0;
+    private String borderColor = "#808080";
+    private BarCodeBorderStyle borderStyle = BarCodeBorderStyle.SOLID;
+    private int borderDashGranularity = 5;
+    private int margin = 2;
+    private int ratio = 5;
+    private int padding = 0;
+    private BarCodeLogoShape logoShape = BarCodeLogoShape.RECTANGLE;
+    private float panelArcWidth = 15f;
+    private float panelArcHeight = 15f;
+    private String panelColor = "#FFFFFF";
+    private float arcWidth = 10f;
+    private float arcHeight = 10f;
+    private String backgroundColor = "#FFFFFF";
+    private String outType = "png";
 
     /**
      * 初始化
@@ -202,61 +202,45 @@ public class BarCodeBuilder {
     public enum QrCodeEyesFormat {
 
         /**
-         * Rectangle random
-         */
-        R_RANDOM,
-        /**
          * Rectangle Border with Rectangle Point.
          */
-        R_BORDER,
+        R_BORDER_R_POINT,
+
         /**
-         * Gradient
+         * Rectangle Border with Circle Point.
          */
-        GRADIENT,
+        R_BORDER_C_POINT,
+
         /**
-         * Rectangle Border with Rectangle Point.
+         * Circle Border with Rectangle Point.
          */
-        R_BORDER_GRADIENT_POINT,
-//        /**
-//         * Rectangle Border with Rectangle Point.
-//         */
-//        R_BORDER_R_POINT,
-//
-//        /**
-//         * Rectangle Border with Circle Point.
-//         */
-//        R_BORDER_C_POINT,
-//
-//        /**
-//         * Circle Border with Rectangle Point.
-//         */
-//        C_BORDER_R_POINT,
-//
-//        /**
-//         * Circle Border with Circle Point.
-//         */
-//        C_BORDER_C_POINT,
-//
-//        /**
-//         * RoundRectangle Border with Rectangle Point.
-//         */
-//        R2_BORDER_R_POINT,
-//
-//        /**
-//         * RoundRectangle Border with Circle Point.
-//         */
-//        R2_BORDER_C_POINT,
-//
+        C_BORDER_R_POINT,
+
+        /**
+         * Circle Border with Circle Point.
+         */
+        C_BORDER_C_POINT,
+
+        /**
+         * RoundRectangle Border with Rectangle Point.
+         */
+        R2_BORDER_R_POINT,
+
+        /**
+         * RoundRectangle Border with Circle Point.
+         */
+        R2_BORDER_C_POINT,
+
         /**
          * Diagonal RoundRectangle Border with Rectangle Point.
          */
         DR2_BORDER_R_POINT,
 
-
         /**
          * Diagonal RoundRectangle Border with Circle Point.
          */
         DR2_BORDER_C_POINT;
+
     }
 
 }
