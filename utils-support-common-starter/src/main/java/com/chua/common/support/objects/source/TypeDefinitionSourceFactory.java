@@ -10,6 +10,7 @@ import com.chua.common.support.objects.definition.TypeDefinition;
 import com.chua.common.support.objects.environment.StandardConfigureEnvironment;
 import com.chua.common.support.objects.provider.ObjectProvider;
 import com.chua.common.support.spi.ServiceProvider;
+import com.chua.common.support.utils.ObjectUtils;
 
 import java.lang.annotation.Annotation;
 import java.util.LinkedHashMap;
@@ -43,7 +44,7 @@ public class TypeDefinitionSourceFactory implements ConfigureObjectContext {
             sortedList.addAll(definitionSource.getBean(name, targetType));
         }
 
-        return sortedList.first().newInstance(this);
+        return ObjectUtils.withNull(sortedList.first(), it -> it.newInstance(this));
     }
 
     @Override

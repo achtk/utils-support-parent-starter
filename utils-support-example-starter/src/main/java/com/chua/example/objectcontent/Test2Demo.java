@@ -4,8 +4,6 @@ package com.chua.example.objectcontent;
 import com.chua.common.support.objects.scanner.annotations.AutoService;
 import com.chua.common.support.objects.scanner.annotations.AutoValue;
 
-import javax.annotation.Resource;
-
 /**
  * 测试演示
  *
@@ -19,8 +17,10 @@ public class Test2Demo {
     @AutoValue("user.home")
     private String userHome;
 
-    @Resource
-    private TestDemo testDemo;
+    private final TestDemo testDemo;
 
 
+    public Test2Demo(TestDemo testDemo) {
+        this.testDemo = testDemo;
+    }
 }
