@@ -1,9 +1,10 @@
 package com.chua.common.support.mapping.invoke.hik;
 
+import com.chua.common.support.mapping.invoke.hik.util.HikHttpUtil;
 import com.chua.common.support.mapping.invoke.hik.util.HikRequest;
 import com.chua.common.support.mapping.invoke.hik.util.HikResponse;
 
-import static com.boren.biz.emergency.hik.util.HikHttpUtil.*;
+import static com.chua.common.support.mapping.invoke.hik.util.HikHttpUtil.*;
 
 /**
  * Client
