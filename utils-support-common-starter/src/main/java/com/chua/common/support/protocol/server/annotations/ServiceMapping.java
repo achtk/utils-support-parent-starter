@@ -10,7 +10,7 @@ import java.lang.annotation.*;
 @Documented
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Mapping {
+public @interface ServiceMapping {
     /**
      * 监听名称
      *

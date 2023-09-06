@@ -12,7 +12,7 @@ import com.chua.common.support.objects.definition.TypeDefinition;
 import com.chua.common.support.objects.definition.element.ParameterDescribe;
 import com.chua.common.support.objects.environment.properties.FunctionPropertySource;
 import com.chua.common.support.objects.provider.ObjectProvider;
-import com.chua.common.support.protocol.server.annotations.Mapping;
+import com.chua.common.support.protocol.server.annotations.ServiceMapping;
 import com.chua.common.support.protocol.server.parameter.ParameterResolver;
 import com.chua.common.support.protocol.server.request.Request;
 import com.chua.common.support.protocol.server.resolver.Resolver;
@@ -83,9 +83,9 @@ public abstract class AbstractServer implements Server, Constant {
             }
 
             Reflections reflections = new Reflections(configuration);
-            Set<Method> methodsAnnotatedWith = reflections.getMethodsAnnotatedWith(Mapping.class);
+            Set<Method> methodsAnnotatedWith = reflections.getMethodsAnnotatedWith(ServiceMapping.class);
             for (Method method : methodsAnnotatedWith) {
-                Mapping mapping = method.getDeclaredAnnotation(Mapping.class);
+                ServiceMapping mapping = method.getDeclaredAnnotation(ServiceMapping.class);
                 objectContext.registerBean(method).addBeanName(mapping.value());
             }
         }
