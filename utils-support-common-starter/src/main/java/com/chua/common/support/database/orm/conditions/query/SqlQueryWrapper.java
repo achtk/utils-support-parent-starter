@@ -3,7 +3,7 @@ package com.chua.common.support.database.orm.conditions.query;
 
 import com.chua.common.support.database.entity.Column;
 import com.chua.common.support.database.metadata.Metadata;
-import com.chua.common.support.database.orm.conditions.AbstractWrapper;
+import com.chua.common.support.database.orm.conditions.AbstractSqlWrapper;
 import com.chua.common.support.database.orm.conditions.SharedString;
 import com.chua.common.support.database.orm.conditions.segments.MergeSegments;
 import com.chua.common.support.utils.CollectionUtils;
@@ -23,24 +23,24 @@ import static com.chua.common.support.constant.CommonConstant.SYMBOL_COMMA;
  * @since 2018-05-25
  */
 @SuppressWarnings("serial")
-public class QueryWrapper<T> extends AbstractWrapper<T, String, QueryWrapper<T>>
-    implements Query<QueryWrapper<T>, T, String> {
+public class SqlQueryWrapper<T> extends AbstractSqlWrapper<T, String, SqlQueryWrapper<T>>
+    implements Query<SqlQueryWrapper<T>, T, String> {
 
     /**
      * 查询字段
      */
     private final SharedString sqlSelect = new SharedString();
 
-    public QueryWrapper() {
+    public SqlQueryWrapper() {
         this(null);
     }
 
-    public QueryWrapper(T entity) {
+    public SqlQueryWrapper(T entity) {
         super.setEntity(entity);
         super.initNeed();
     }
 
-    public QueryWrapper(T entity, String... columns) {
+    public SqlQueryWrapper(T entity, String... columns) {
         super.setEntity(entity);
         super.initNeed();
         this.select(columns);
@@ -51,9 +51,9 @@ public class QueryWrapper<T> extends AbstractWrapper<T, String, QueryWrapper<T>>
      *
      * @param entityClass 本不应该需要的
      */
-    private QueryWrapper(T entity, Class<T> entityClass, AtomicInteger paramNameSeq,
-                         Map<String, Object> paramNameValuePairs, MergeSegments mergeSegments, SharedString paramAlias,
-                         SharedString lastSql, SharedString sqlComment, SharedString sqlFirst) {
+    private SqlQueryWrapper(T entity, Class<T> entityClass, AtomicInteger paramNameSeq,
+                            Map<String, Object> paramNameValuePairs, MergeSegments mergeSegments, SharedString paramAlias,
+                            SharedString lastSql, SharedString sqlComment, SharedString sqlFirst) {
         super.setEntity(entity);
         super.setEntityClass(entityClass);
         this.paramNameSeq = paramNameSeq;
@@ -66,7 +66,7 @@ public class QueryWrapper<T> extends AbstractWrapper<T, String, QueryWrapper<T>>
     }
 
     @Override
-    public QueryWrapper<T> select(boolean condition, List<String> columns) {
+    public SqlQueryWrapper<T> select(boolean condition, List<String> columns) {
         if (condition && CollectionUtils.isNotEmpty(columns)) {
             this.sqlSelect.setStringValue(String.join(SYMBOL_COMMA, columns));
         }
@@ -74,7 +74,7 @@ public class QueryWrapper<T> extends AbstractWrapper<T, String, QueryWrapper<T>>
     }
 
     @Override
-    public QueryWrapper<T> select(Class<T> entityClass, Predicate<Column> predicate) {
+    public SqlQueryWrapper<T> select(Class<T> entityClass, Predicate<Column> predicate) {
         super.setEntityClass(entityClass);
         this.sqlSelect.setStringValue(Metadata.of(getEntityClass()).chooseSelect(predicate));
         return typedThis;
@@ -93,8 +93,8 @@ public class QueryWrapper<T> extends AbstractWrapper<T, String, QueryWrapper<T>>
     /**
      * 返回一个支持 lambda 函数写法的 wrapper
      */
-    public LambdaQueryWrapper<T> lambda() {
-        return new LambdaQueryWrapper<>(getEntity(), getEntityClass(), sqlSelect, paramNameSeq, paramNameValuePairs,
+    public LambdaSqlQueryWrapper<T> lambda() {
+        return new LambdaSqlQueryWrapper<>(getEntity(), getEntityClass(), sqlSelect, paramNameSeq, paramNameValuePairs,
             expression, paramAlias, lastSql, sqlComment, sqlFirst);
     }
 
@@ -105,8 +105,8 @@ public class QueryWrapper<T> extends AbstractWrapper<T, String, QueryWrapper<T>>
      * </p>
      */
     @Override
-    protected QueryWrapper<T> instance() {
-        return new QueryWrapper<>(getEntity(), getEntityClass(), paramNameSeq, paramNameValuePairs, new MergeSegments(),
+    protected SqlQueryWrapper<T> instance() {
+        return new SqlQueryWrapper<>(getEntity(), getEntityClass(), paramNameSeq, paramNameValuePairs, new MergeSegments(),
             paramAlias, SharedString.emptyString(), SharedString.emptyString(), SharedString.emptyString());
     }
 

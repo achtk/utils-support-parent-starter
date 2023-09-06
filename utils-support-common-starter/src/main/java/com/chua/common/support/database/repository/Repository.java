@@ -1,8 +1,8 @@
 package com.chua.common.support.database.repository;
 
 import com.chua.common.support.annotations.Extension;
-import com.chua.common.support.database.orm.conditions.Wrapper;
-import com.chua.common.support.database.orm.conditions.Wrappers;
+import com.chua.common.support.database.orm.conditions.SqlWrapper;
+import com.chua.common.support.database.orm.conditions.SqlWrappers;
 import com.chua.common.support.lang.page.Page;
 
 import java.io.Serializable;
@@ -30,7 +30,7 @@ public interface Repository<T> {
      * @param wrapper wrapper
      * @return 实体
      */
-    <S extends T> List<S> list(Wrapper<S> wrapper);
+    <S extends T> List<S> list(SqlWrapper<S> wrapper);
 
     /**
      * 保存实体
@@ -38,7 +38,7 @@ public interface Repository<T> {
      * @param wrapper wrapper
      * @return 实体
      */
-    default boolean exist(Wrapper<T> wrapper) {
+    default boolean exist(SqlWrapper<T> wrapper) {
         return page(new Page<T>().setPageNum(1).setPageSize(1), wrapper).getData().size() != 0;
     }
 
@@ -91,7 +91,7 @@ public interface Repository<T> {
      * @param wrapper 條件
      * @return 结果
      */
-    Page<T> page(Page<T> page, Wrapper<T> wrapper);
+    Page<T> page(Page<T> page, SqlWrapper<T> wrapper);
 
     /**
      * 分页查询
@@ -100,7 +100,7 @@ public interface Repository<T> {
      * @return 结果
      */
     default Page<T> page(Page<T> page) {
-        return page(page, Wrappers.emptyWrapper());
+        return page(page, SqlWrappers.emptyWrapper());
     }
 
     /**
@@ -116,5 +116,5 @@ public interface Repository<T> {
      *
      * @param wrapper 条件
      */
-    void delete(Wrapper<T> wrapper);
+    void delete(SqlWrapper<T> wrapper);
 }

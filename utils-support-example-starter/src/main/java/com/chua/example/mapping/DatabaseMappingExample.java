@@ -3,7 +3,7 @@ package com.chua.example.mapping;
 import com.chua.common.support.constant.Action;
 import com.chua.common.support.database.AutoMetadata;
 import com.chua.common.support.database.executor.MetadataExecutor;
-import com.chua.common.support.database.orm.conditions.Wrappers;
+import com.chua.common.support.database.orm.conditions.SqlWrappers;
 import com.chua.example.DataSourceUtils;
 import com.chua.example.database.SimpleRepository;
 import com.chua.example.pool.TestEntity;
@@ -38,7 +38,7 @@ public class DatabaseMappingExample {
         //DELETE
 //        repository.deleteById(testEntity.getId());
 
-        List<TestEntity> list1 = repository.list(Wrappers.<TestEntity>lambdaQuery()
+        List<TestEntity> list1 = repository.list(SqlWrappers.<TestEntity>lambdaQuery()
                 .gt(TestEntity::getId, 4)
                 .lt(TestEntity::getId, 104));
         //custom sql

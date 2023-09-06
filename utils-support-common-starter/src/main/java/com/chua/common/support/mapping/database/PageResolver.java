@@ -5,7 +5,7 @@ import com.chua.common.support.constant.CommonConstant;
 import com.chua.common.support.database.SqlModel;
 import com.chua.common.support.database.inquirer.JdbcInquirer;
 import com.chua.common.support.database.metadata.Metadata;
-import com.chua.common.support.database.orm.conditions.Wrapper;
+import com.chua.common.support.database.orm.conditions.SqlWrapper;
 import com.chua.common.support.database.sqldialect.Dialect;
 import com.chua.common.support.lang.expression.parser.ExpressionParser;
 import com.chua.common.support.lang.page.Page;
@@ -13,14 +13,12 @@ import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.StringUtils;
 
 import javax.sql.DataSource;
-
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 
 import static com.chua.common.support.constant.CommonConstant.SYMBOL_SELECT;
-import static com.chua.common.support.constant.CommonConstant.SYMBOL_WHERE;
 import static com.chua.common.support.mapping.database.SqlResolver.PATTERN;
 
 /**
@@ -43,7 +41,7 @@ public class PageResolver implements Resolver {
         if(args.length > 1) {
             Object arg = args[1];
             expressionParser.setVariable("ew", arg);
-            Wrapper<?> wrapper = (Wrapper<?>) arg;
+            SqlWrapper<?> wrapper = (SqlWrapper<?>) arg;
              sqlSegment = wrapper.getSqlSegment();
             if(!StringUtils.isEmpty(wrapper.getSqlSelect())) {
                 sqlSelect = wrapper.getSqlSelect();

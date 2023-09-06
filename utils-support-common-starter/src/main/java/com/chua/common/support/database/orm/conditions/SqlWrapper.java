@@ -20,7 +20,7 @@ import static com.chua.common.support.constant.CommonConstant.*;
  * @since 2018-05-25
  */
 @SuppressWarnings("all")
-public abstract class Wrapper<T> implements ISqlSegment {
+public abstract class SqlWrapper<T> implements ISqlSegment {
 
     /**
      * 实体对象（子类实现）

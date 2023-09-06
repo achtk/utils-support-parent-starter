@@ -23,34 +23,34 @@ import static com.chua.common.support.constant.CommonConstant.SYMBOL_EQUALS;
  * @since 2018-05-30
  */
 @SuppressWarnings("serial")
-public class LambdaUpdateWrapper<T> extends AbstractLambdaWrapper<T, LambdaUpdateWrapper<T>>
-    implements Update<LambdaUpdateWrapper<T>, SerFunction<T, ?>> {
+public class LambdaSqlUpdateWrapper<T> extends AbstractLambdaWrapper<T, LambdaSqlUpdateWrapper<T>>
+    implements Update<LambdaSqlUpdateWrapper<T>, SerFunction<T, ?>> {
 
     /**
      * SQL 更新字段内容，例如：name='1', age=2
      */
     private final List<String> sqlSet;
 
-    public LambdaUpdateWrapper() {
+    public LambdaSqlUpdateWrapper() {
         // 如果无参构造函数，请注意实体 NULL 情况 SET 必须有否则 SQL 异常
         this((T) null);
     }
 
-    public LambdaUpdateWrapper(T entity) {
+    public LambdaSqlUpdateWrapper(T entity) {
         super.setEntity(entity);
         super.initNeed();
         this.sqlSet = new ArrayList<>();
     }
 
-    public LambdaUpdateWrapper(Class<T> entityClass) {
+    public LambdaSqlUpdateWrapper(Class<T> entityClass) {
         super.setEntityClass(entityClass);
         super.initNeed();
         this.sqlSet = new ArrayList<>();
     }
 
-    LambdaUpdateWrapper(T entity, Class<T> entityClass, List<String> sqlSet, AtomicInteger paramNameSeq,
-                        Map<String, Object> paramNameValuePairs, MergeSegments mergeSegments, SharedString paramAlias,
-                        SharedString lastSql, SharedString sqlComment, SharedString sqlFirst) {
+    LambdaSqlUpdateWrapper(T entity, Class<T> entityClass, List<String> sqlSet, AtomicInteger paramNameSeq,
+                           Map<String, Object> paramNameValuePairs, MergeSegments mergeSegments, SharedString paramAlias,
+                           SharedString lastSql, SharedString sqlComment, SharedString sqlFirst) {
         super.setEntity(entity);
         super.setEntityClass(entityClass);
         this.sqlSet = sqlSet;
@@ -64,7 +64,7 @@ public class LambdaUpdateWrapper<T> extends AbstractLambdaWrapper<T, LambdaUpdat
     }
 
     @Override
-    public LambdaUpdateWrapper<T> set(boolean condition, SerFunction<T, ?> column, Object val, String mapping) {
+    public LambdaSqlUpdateWrapper<T> set(boolean condition, SerFunction<T, ?> column, Object val, String mapping) {
         return maybeDo(condition, () -> {
             String sql = formatParam(mapping, val);
             sqlSet.add(columnToString(column) + SYMBOL_EQUALS + sql);
@@ -72,7 +72,7 @@ public class LambdaUpdateWrapper<T> extends AbstractLambdaWrapper<T, LambdaUpdat
     }
 
     @Override
-    public LambdaUpdateWrapper<T> setSql(boolean condition, String sql) {
+    public LambdaSqlUpdateWrapper<T> setSql(boolean condition, String sql) {
         if (condition && StringUtils.isNotBlank(sql)) {
             sqlSet.add(sql);
         }
@@ -88,8 +88,8 @@ public class LambdaUpdateWrapper<T> extends AbstractLambdaWrapper<T, LambdaUpdat
     }
 
     @Override
-    protected LambdaUpdateWrapper<T> instance() {
-        return new LambdaUpdateWrapper<>(getEntity(), getEntityClass(), null, paramNameSeq, paramNameValuePairs,
+    protected LambdaSqlUpdateWrapper<T> instance() {
+        return new LambdaSqlUpdateWrapper<>(getEntity(), getEntityClass(), null, paramNameSeq, paramNameValuePairs,
             new MergeSegments(), paramAlias, SharedString.emptyString(), SharedString.emptyString(), SharedString.emptyString());
     }
 

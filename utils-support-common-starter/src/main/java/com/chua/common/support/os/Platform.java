@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
@@ -204,6 +206,15 @@ public enum Platform {
      */
     public static PlatformKey isWindow(String key) {
         return new PlatformKey(OS.WINDOWS, key);
+    }
+
+    /**
+     * 获取默认字符集
+     *
+     * @return {@link Charset}
+     */
+    public static Charset getDefaultCharset() {
+        return OS.getCurrent() == OS.WINDOWS ? Charset.forName("GBK") : StandardCharsets.UTF_8;
     }
 
     /**

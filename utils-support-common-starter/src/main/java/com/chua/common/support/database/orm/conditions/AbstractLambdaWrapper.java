@@ -16,7 +16,7 @@ import static com.chua.common.support.constant.CommonConstant.SYMBOL_COMMA;
 import static java.util.stream.Collectors.joining;
 
 /**
- * Lambda 语法使用 Wrapper
+ * Lambda 语法使用
  * <p>统一处理解析 lambda 获取 column</p>
  *
  * @author hubin miemie HCL
@@ -24,7 +24,7 @@ import static java.util.stream.Collectors.joining;
  */
 @SuppressWarnings("serial")
 public abstract class AbstractLambdaWrapper<T, Children extends AbstractLambdaWrapper<T, Children>>
-    extends AbstractWrapper<T, SerFunction<T, ?>, Children> {
+    extends AbstractSqlWrapper<T, SerFunction<T, ?>, Children> {
 
     private Map<String, Column> columnMap = null;
     private boolean initColumnMap = false;

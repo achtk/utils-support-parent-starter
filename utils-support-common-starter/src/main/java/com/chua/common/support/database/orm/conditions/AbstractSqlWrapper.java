@@ -33,7 +33,7 @@ import static java.util.stream.Collectors.joining;
  * @since 2017-05-26
  */
 @SuppressWarnings({"unchecked"})
-public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, R, Children>> extends Wrapper<T>
+public abstract class AbstractSqlWrapper<T, R, Children extends AbstractSqlWrapper<T, R, Children>> extends SqlWrapper<T>
     implements Compare<Children, R>, Nested<Children, Children>, Join<Children>, Func<Children, R> {
 
     /**

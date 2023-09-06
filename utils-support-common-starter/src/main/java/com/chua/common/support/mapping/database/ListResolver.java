@@ -4,13 +4,12 @@ import com.chua.common.support.annotations.Extension;
 import com.chua.common.support.constant.CommonConstant;
 import com.chua.common.support.database.inquirer.JdbcInquirer;
 import com.chua.common.support.database.metadata.Metadata;
-import com.chua.common.support.database.orm.conditions.Wrapper;
+import com.chua.common.support.database.orm.conditions.SqlWrapper;
 import com.chua.common.support.lang.expression.parser.ExpressionParser;
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.StringUtils;
 
 import javax.sql.DataSource;
-
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -32,7 +31,7 @@ public class ListResolver implements Resolver {
 
         if(args.length == 1) {
             ExpressionParser expressionParser = ServiceProvider.of(ExpressionParser.class).getExtension("spring");
-            Wrapper<?> wrapper = (Wrapper<?>) args[0];
+            SqlWrapper<?> wrapper = (SqlWrapper<?>) args[0];
             String sqlSegment = wrapper.getSqlSegment();
             String sqlSelect = wrapper.getSqlSelect();
             if(StringUtils.isEmpty(sqlSelect)) {

@@ -1,136 +1,135 @@
 package com.chua.common.support.database.orm.conditions;
 
-import com.chua.common.support.database.orm.conditions.query.LambdaQueryWrapper;
-import com.chua.common.support.database.orm.conditions.query.QueryWrapper;
+import com.chua.common.support.database.orm.conditions.query.LambdaSqlQueryWrapper;
+import com.chua.common.support.database.orm.conditions.query.SqlQueryWrapper;
 import com.chua.common.support.database.orm.conditions.segments.MergeSegments;
-import com.chua.common.support.database.orm.conditions.update.LambdaUpdateWrapper;
-import com.chua.common.support.database.orm.conditions.update.UpdateWrapper;
+import com.chua.common.support.database.orm.conditions.update.LambdaSqlUpdateWrapper;
+import com.chua.common.support.database.orm.conditions.update.SqlUpdateWrapper;
 
 import java.util.Collections;
 import java.util.Map;
 
 /**
- * Wrapper 条件构造
+ * 条件构造
  *
  * @author Caratacus
  */
-public final class Wrappers {
+public final class SqlWrappers {
 
     /**
      * 空的 EmptyWrapper
      */
-    private static final QueryWrapper<?> QUERY_WRAPPER = new EmptyWrapper<>();
+    private static final SqlQueryWrapper<?> QUERY_WRAPPER = new EmptyWrapper<>();
 
-    private Wrappers() {
+    private SqlWrappers() {
         // ignore
     }
 
     /**
-     * 获取 QueryWrapper&lt;T&gt;
+     * 获取 this
      *
      * @param <T> 实体类泛型
-     * @return QueryWrapper&lt;T&gt;
+     * @return this
      */
-    public static <T> QueryWrapper<T> query() {
-        return new QueryWrapper<>();
+    public static <T> SqlQueryWrapper<T> query() {
+        return new SqlQueryWrapper<>();
     }
 
     /**
-     * 获取 QueryWrapper&lt;T&gt;
+     * 获取 this
      *
      * @param entity 实体类
      * @param <T>    实体类泛型
-     * @return QueryWrapper&lt;T&gt;
+     * @return this
      */
-    public static <T> QueryWrapper<T> query(T entity) {
-        return new QueryWrapper<>(entity);
+    public static <T> SqlQueryWrapper<T> query(T entity) {
+        return new SqlQueryWrapper<>(entity);
     }
 
     /**
-     * 获取 LambdaQueryWrapper&lt;T&gt;
+     * 获取 this
      *
      * @param <T> 实体类泛型
-     * @return LambdaQueryWrapper&lt;T&gt;
+     * @return this
      */
-    public static <T> LambdaQueryWrapper<T> lambdaQuery() {
-        return new LambdaQueryWrapper<>();
+    public static <T> LambdaSqlQueryWrapper<T> lambdaQuery() {
+        return new LambdaSqlQueryWrapper<>();
     }
 
     /**
-     * 获取 LambdaQueryWrapper&lt;T&gt;
+     * 获取 this
      *
      * @param entity 实体类
      * @param <T>    实体类泛型
-     * @return LambdaQueryWrapper&lt;T&gt;
+     * @return this
      */
-    public static <T> LambdaQueryWrapper<T> lambdaQuery(T entity) {
-        return new LambdaQueryWrapper<>(entity);
+    public static <T> LambdaSqlQueryWrapper<T> lambdaQuery(T entity) {
+        return new LambdaSqlQueryWrapper<>(entity);
     }
 
     /**
-     * 获取 LambdaQueryWrapper&lt;T&gt;
+     * 获取 this
      *
      * @param entityClass 实体类class
      * @param <T>         实体类泛型
-     * @return LambdaQueryWrapper&lt;T&gt;
+     * @return this
      * @since 3.3.1
      */
-    public static <T> LambdaQueryWrapper<T> lambdaQuery(Class<T> entityClass) {
-        return new LambdaQueryWrapper<>(entityClass);
+    public static <T> LambdaSqlQueryWrapper<T> lambdaQuery(Class<T> entityClass) {
+        return new LambdaSqlQueryWrapper<>(entityClass);
     }
 
     /**
-     * 获取 UpdateWrapper&lt;T&gt;
+     * 获取 this
      *
      * @param <T> 实体类泛型
-     * @return UpdateWrapper&lt;T&gt;
+     * @return this
      */
-    public static <T> UpdateWrapper<T> update() {
-        return new UpdateWrapper<>();
+    public static <T> SqlUpdateWrapper<T> update() {
+        return new SqlUpdateWrapper<>();
     }
 
     /**
-     * 获取 UpdateWrapper&lt;T&gt;
+     * 获取 this
      *
      * @param entity 实体类
      * @param <T>    实体类泛型
-     * @return UpdateWrapper&lt;T&gt;
+     * @return this
      */
-    public static <T> UpdateWrapper<T> update(T entity) {
-        return new UpdateWrapper<>(entity);
+    public static <T> SqlUpdateWrapper<T> update(T entity) {
+        return new SqlUpdateWrapper<>(entity);
     }
 
     /**
-     * 获取 LambdaUpdateWrapper&lt;T&gt;
      *
      * @param <T> 实体类泛型
-     * @return LambdaUpdateWrapper&lt;T&gt;
+     * @return w
      */
-    public static <T> LambdaUpdateWrapper<T> lambdaUpdate() {
-        return new LambdaUpdateWrapper<>();
+    public static <T> LambdaSqlUpdateWrapper<T> lambdaUpdate() {
+        return new LambdaSqlUpdateWrapper<>();
     }
 
     /**
-     * 获取 LambdaUpdateWrapper&lt;T&gt;
+     * 获取
      *
      * @param entity 实体类
      * @param <T>    实体类泛型
-     * @return LambdaUpdateWrapper&lt;T&gt;
+     * @returnw
      */
-    public static <T> LambdaUpdateWrapper<T> lambdaUpdate(T entity) {
-        return new LambdaUpdateWrapper<>(entity);
+    public static <T> LambdaSqlUpdateWrapper<T> lambdaUpdate(T entity) {
+        return new LambdaSqlUpdateWrapper<>(entity);
     }
 
     /**
-     * 获取 LambdaUpdateWrapper&lt;T&gt;
+     * 获取
      *
      * @param entityClass 实体类class
      * @param <T>         实体类泛型
-     * @return LambdaUpdateWrapper&lt;T&gt;
+     * @return this
      * @since 3.3.1
      */
-    public static <T> LambdaUpdateWrapper<T> lambdaUpdate(Class<T> entityClass) {
-        return new LambdaUpdateWrapper<>(entityClass);
+    public static <T> LambdaSqlUpdateWrapper<T> lambdaUpdate(Class<T> entityClass) {
+        return new LambdaSqlUpdateWrapper<>(entityClass);
     }
 
     /**
@@ -141,17 +140,17 @@ public final class Wrappers {
      * @see EmptyWrapper
      */
     @SuppressWarnings("unchecked")
-    public static <T> QueryWrapper<T> emptyWrapper() {
-        return (QueryWrapper<T>) QUERY_WRAPPER;
+    public static <T> SqlQueryWrapper<T> emptyWrapper() {
+        return (SqlQueryWrapper<T>) QUERY_WRAPPER;
     }
 
     /**
      * 一个空的QueryWrapper子类该类不包含任何条件
      *
      * @param <T>
-     * @see com.chua.common.support.database.orm.conditions.query.QueryWrapper
+     * @see SqlQueryWrapper
      */
-    private static class EmptyWrapper<T> extends QueryWrapper<T> {
+    private static class EmptyWrapper<T> extends SqlQueryWrapper<T> {
 
         private static final long serialVersionUID = -2515957613998092272L;
 
@@ -166,7 +165,7 @@ public final class Wrappers {
         }
 
         @Override
-        public QueryWrapper<T> setEntityClass(Class<T> entityClass) {
+        public SqlQueryWrapper<T> setEntityClass(Class<T> entityClass) {
             throw new UnsupportedOperationException();
         }
 

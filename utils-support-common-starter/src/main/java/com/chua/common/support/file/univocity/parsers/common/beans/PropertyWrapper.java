@@ -19,7 +19,7 @@ package com.chua.common.support.file.univocity.parsers.common.beans;
 import java.lang.reflect.Method;
 
 /**
- * Wrapper for a implementation of PropertyDescriptor from either {@code java.beans.PropertyDescriptor}
+ * a implementation of PropertyDescriptor from either {@code java.beans.PropertyDescriptor}
  * or {@code com.googlecode.openbeans.PropertyDescriptor}.
  * <p>
  * Used to eliminate compile-time dependencies with package {@code java.beans.*} which is not

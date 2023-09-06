@@ -1,10 +1,9 @@
 
 package com.chua.common.support.database.orm.conditions.update;
 
-import com.chua.common.support.database.orm.conditions.AbstractWrapper;
+import com.chua.common.support.database.orm.conditions.AbstractSqlWrapper;
 import com.chua.common.support.database.orm.conditions.SharedString;
 import com.chua.common.support.database.orm.conditions.segments.MergeSegments;
-import com.chua.common.support.database.orm.conditions.update.LambdaUpdateWrapper;
 import com.chua.common.support.utils.CollectionUtils;
 import com.chua.common.support.utils.StringUtils;
 
@@ -23,28 +22,28 @@ import static com.chua.common.support.constant.CommonConstant.SYMBOL_EQUALS;
  * @since 2018-05-30
  */
 @SuppressWarnings("serial")
-public class UpdateWrapper<T> extends AbstractWrapper<T, String, UpdateWrapper<T>>
-    implements Update<UpdateWrapper<T>, String> {
+public class SqlUpdateWrapper<T> extends AbstractSqlWrapper<T, String, SqlUpdateWrapper<T>>
+    implements Update<SqlUpdateWrapper<T>, String> {
 
     /**
      * SQL 更新字段内容，例如：name='1', age=2
      */
     private final List<String> sqlSet;
 
-    public UpdateWrapper() {
+    public SqlUpdateWrapper() {
         // 如果无参构造函数，请注意实体 NULL 情况 SET 必须有否则 SQL 异常
         this(null);
     }
 
-    public UpdateWrapper(T entity) {
+    public SqlUpdateWrapper(T entity) {
         super.setEntity(entity);
         super.initNeed();
         this.sqlSet = new ArrayList<>();
     }
 
-    private UpdateWrapper(T entity, List<String> sqlSet, AtomicInteger paramNameSeq,
-                          Map<String, Object> paramNameValuePairs, MergeSegments mergeSegments, SharedString paramAlias,
-                          SharedString lastSql, SharedString sqlComment, SharedString sqlFirst) {
+    private SqlUpdateWrapper(T entity, List<String> sqlSet, AtomicInteger paramNameSeq,
+                             Map<String, Object> paramNameValuePairs, MergeSegments mergeSegments, SharedString paramAlias,
+                             SharedString lastSql, SharedString sqlComment, SharedString sqlFirst) {
         super.setEntity(entity);
         this.sqlSet = sqlSet;
         this.paramNameSeq = paramNameSeq;
@@ -65,7 +64,7 @@ public class UpdateWrapper<T> extends AbstractWrapper<T, String, UpdateWrapper<T
     }
 
     @Override
-    public UpdateWrapper<T> set(boolean condition, String column, Object val, String mapping) {
+    public SqlUpdateWrapper<T> set(boolean condition, String column, Object val, String mapping) {
         return maybeDo(condition, () -> {
             String sql = formatParam(mapping, val);
             sqlSet.add(column + SYMBOL_EQUALS + sql);
@@ -73,7 +72,7 @@ public class UpdateWrapper<T> extends AbstractWrapper<T, String, UpdateWrapper<T
     }
 
     @Override
-    public UpdateWrapper<T> setSql(boolean condition, String sql) {
+    public SqlUpdateWrapper<T> setSql(boolean condition, String sql) {
         if (condition && StringUtils.isNotBlank(sql)) {
             sqlSet.add(sql);
         }
@@ -88,14 +87,14 @@ public class UpdateWrapper<T> extends AbstractWrapper<T, String, UpdateWrapper<T
     /**
      * 返回一个支持 lambda 函数写法的 wrapper
      */
-    public LambdaUpdateWrapper<T> lambda() {
-        return new LambdaUpdateWrapper<>(getEntity(), getEntityClass(), sqlSet, paramNameSeq, paramNameValuePairs,
+    public LambdaSqlUpdateWrapper<T> lambda() {
+        return new LambdaSqlUpdateWrapper<>(getEntity(), getEntityClass(), sqlSet, paramNameSeq, paramNameValuePairs,
             expression, paramAlias, lastSql, sqlComment, sqlFirst);
     }
 
     @Override
-    protected UpdateWrapper<T> instance() {
-        return new UpdateWrapper<>(getEntity(), null, paramNameSeq, paramNameValuePairs, new MergeSegments(),
+    protected SqlUpdateWrapper<T> instance() {
+        return new SqlUpdateWrapper<>(getEntity(), null, paramNameSeq, paramNameValuePairs, new MergeSegments(),
             paramAlias, SharedString.emptyString(), SharedString.emptyString(), SharedString.emptyString());
     }
 

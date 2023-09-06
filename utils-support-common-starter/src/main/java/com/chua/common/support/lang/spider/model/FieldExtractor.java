@@ -8,7 +8,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 /**
- * Wrapper of field and extractor.
+ * field and extractor.
  *
  * @author code4crafter@gmail.com <br>
  * @since 0.2.0
