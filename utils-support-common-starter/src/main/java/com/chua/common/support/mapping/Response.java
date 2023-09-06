@@ -107,7 +107,7 @@ public class Response {
     private Object format(Object execute) {
         String value = Converter.convertIfNecessary(execute, String.class);
         if (StringUtils.isNotBlank(jsonPath)) {
-            value = JsonPath.read(value, jsonPath);
+            value = Converter.convertIfNecessary(JsonPath.read(value, jsonPath), String.class);
         }
 
         return value;
