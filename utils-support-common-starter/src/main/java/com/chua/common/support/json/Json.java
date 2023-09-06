@@ -1,6 +1,7 @@
 package com.chua.common.support.json;
 
 import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONReader;
 import com.alibaba.fastjson2.JSONWriter;
 import com.chua.common.support.utils.IoUtils;
 import com.chua.common.support.utils.StringUtils;
@@ -128,6 +129,18 @@ public class Json {
      */
     public static <T> T fromJson(String json, TypeReference<T> tTypeReference) {
         return JSON.parseObject(json, tTypeReference);
+    }
+
+    /**
+     * 从json到list
+     * 获取对象
+     *
+     * @param json       json
+     * @param targetType 目标类型
+     * @return JsonObject
+     */
+    public static <T> List<T> fromJsonToList(String json, Class<T> targetType) {
+        return JSON.parseArray(json).toJavaList(targetType, JSONReader.Feature.IgnoreNoneSerializable);
     }
 
     /**

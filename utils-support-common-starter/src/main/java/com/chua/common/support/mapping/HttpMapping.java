@@ -19,6 +19,7 @@ import com.chua.common.support.placeholder.PropertyResolver;
 import com.chua.common.support.placeholder.StringValuePropertyResolver;
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.ArrayUtils;
+import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.ObjectUtils;
 
 import java.util.Map;
@@ -42,10 +43,10 @@ public class HttpMapping<T> extends AbstractMapping<T> {
             @Override
             public Object apply(ProxyMethod proxyMethod) {
                 MethodDescribe methodDescribe = new MethodDescribe(proxyMethod.getMethod());
-                Request request = Request.builder().build();
                 Request.RequestBuilder requestBuilder = Request.builder();
                 Response.ResponseBuilder responseBuilder = Response.builder();
                 doAnalysis(requestBuilder, responseBuilder, proxyMethod, methodDescribe);
+                Request request = requestBuilder.build();
 
                 String url = getUrl(request);
                 Object execute = execute(url, request);
@@ -230,13 +231,16 @@ public class HttpMapping<T> extends AbstractMapping<T> {
      */
     private void doUrl(Request.RequestBuilder builder, Response.ResponseBuilder responseBuilder, MethodDescribe methodDescribe) {
         MappingRequest mappingRequest = methodDescribe.getAnnotation(MappingRequest.class);
+        responseBuilder.returnType(methodDescribe.getType());
         if (null == mappingRequest) {
             builder.url(methodDescribe.name());
             return;
         }
 
         responseBuilder.jsonPath(mappingRequest.jsonPath());
-        responseBuilder.returnType(mappingRequest.returnType());
+        if(!ClassUtils.isVoid(mappingRequest.returnType())) {
+            responseBuilder.returnType(mappingRequest.returnType());
+        }
         builder.readTimeout(mappingRequest.readTimeout());
         builder.connectTimeout(mappingRequest.connectTimeout());
         String value = mappingRequest.value();
