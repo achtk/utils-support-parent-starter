@@ -1,9 +1,11 @@
 package com.chua.common.support.mapping;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.chua.common.support.converter.Converter;
 import com.chua.common.support.json.Json;
 import com.chua.common.support.json.jsonpath.JsonPath;
 import com.chua.common.support.lang.proxy.ProxyMethod;
+import com.chua.common.support.log.Log;
 import com.chua.common.support.utils.StringUtils;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +13,6 @@ import lombok.Data;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 import static com.chua.common.support.constant.CommonConstant.*;
@@ -24,6 +25,8 @@ import static com.chua.common.support.constant.CommonConstant.*;
 @Data
 @Builder
 public class Response {
+
+    private Log log;
 
     /**
      * json-path
@@ -43,6 +46,7 @@ public class Response {
      * @return {@link Object}
      */
     public Object getValue(Object execute, ProxyMethod proxyMethod) {
+        this.log = Log.getLogger(proxyMethod.getMethod().getDeclaringClass());
         return convertResponse(execute, proxyMethod);
     }
 
@@ -86,13 +90,10 @@ public class Response {
     private Object formatResult(String format, Class<?> targetTarget) {
         if (Collection.class.isAssignableFrom(targetTarget)) {
             if(Collection.class.isAssignableFrom(returnType)) {
-                return Collections.emptyList();
+                log.info("请指定List的类型, @com.chua.common.support.mapping.annotations.MappingRequest.returnType");
+                return Collections.unmodifiableList(Json.fromJsonToList(format, JSONObject.class));
             }
             return Collections.unmodifiableList(Json.fromJsonToList(format, returnType));
-        }
-
-        if (Map.class.isAssignableFrom(targetTarget)) {
-            return Collections.unmodifiableMap(Json.fromJson(format, HashMap.class));
         }
 
         return Json.fromJson(format, returnType);

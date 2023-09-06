@@ -2,13 +2,11 @@ package com.chua.common.support.lang.expression.parser;
 
 import com.chua.common.support.constant.RegexConstant;
 import com.chua.common.support.spi.ServiceProvider;
-import com.chua.common.support.utils.RegexUtils;
 import com.chua.common.support.value.Value;
 
 import java.util.Map;
 import java.util.regex.Matcher;
 
-import static com.chua.common.support.mapping.database.SqlResolver.PATTERN;
 
 /**
  * 解析器
