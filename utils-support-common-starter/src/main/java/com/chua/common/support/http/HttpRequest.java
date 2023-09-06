@@ -26,6 +26,10 @@ public class HttpRequest {
      */
     private String bodyStr;
     /**
+     * byte
+     */
+    private byte[] bodyArray;
+    /**
      * 认证
      */
     @Singular("basicAuth")

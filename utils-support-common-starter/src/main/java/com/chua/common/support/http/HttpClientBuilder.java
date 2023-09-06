@@ -2,6 +2,8 @@ package com.chua.common.support.http;
 
 import java.util.Map;
 
+import static com.chua.common.support.http.HttpConstant.CONTENT_TYPE_FORM;
+
 /**
  * http构造器
  *
@@ -15,6 +17,16 @@ public interface HttpClientBuilder {
      */
     default HttpClientBuilder isJson() {
         return header("Content-Type", "application/json");
+    }
+
+
+    /**
+     * 是form
+     *
+     * @return {@link HttpClientBuilder}
+     */
+    default HttpClientBuilder isForm() {
+        return header("Content-Type", CONTENT_TYPE_FORM);
     }
 
     /**
@@ -106,13 +118,23 @@ public interface HttpClientBuilder {
      * @return this
      */
     HttpClientBuilder basicAuth(String basicAuthName, String basicAuthValue);
+
     /**
      * body
      *
-     * @param body  消息
+     * @param body 消息
      * @return this
      */
     HttpClientBuilder body(String body);
+
+    /**
+     * body
+     *
+     * @param body 消息
+     * @return this
+     */
+    HttpClientBuilder body(byte[] body);
+
     /**
      * body
      *
@@ -121,18 +143,20 @@ public interface HttpClientBuilder {
      * @return this
      */
     HttpClientBuilder body(String bodyName, Object bodyValue);
+
     /**
      * body
      *
-     * @param bodys  消息头
+     * @param bodys 消息头
      * @return this
      */
-    default HttpClientBuilder body(Map<String, Object> bodys) {
-        if(null != bodys) {
+    default HttpClientBuilder body(Map<String, ?> bodys) {
+        if (null != bodys) {
             bodys.forEach(this::body);
         }
         return this;
     }
+
     /**
      * url
      *
@@ -181,4 +205,5 @@ public interface HttpClientBuilder {
     default HttpClientInvoker newInvoker() {
         return newInvoker("httpclient");
     }
+
 }

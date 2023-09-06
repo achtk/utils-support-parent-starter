@@ -30,7 +30,16 @@ public @interface MappingAddress {
 
     /**
      * 超时时间(s)
+     *
      * @return 超时时间
      */
     int connectTimeout() default 10_000;
+
+
+    /**
+     * 调用类型
+     *
+     * @return {@link String}
+     */
+    String invokeType() default "default";
 }

@@ -57,4 +57,11 @@ public class Request {
      */
     @Builder.Default
     private String method = HttpMethod.GET.name();
+
+
+    /**
+     * 援引
+     */
+    @Builder.Default
+    private String invokeType = "default";
 }

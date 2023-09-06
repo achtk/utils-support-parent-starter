@@ -25,6 +25,13 @@
             <version>2.1.3</version>
         </dependency>
 
+        <!-- 海康sdk -->
+        <dependency>
+            <groupId>com.hikvision.ga</groupId>
+            <artifactId>artemis-http-client</artifactId>
+            <version>1.1.3</version>
+        </dependency>
+
         <dependency>
             <groupId>org.zbus</groupId>
             <artifactId>zbus</artifactId>

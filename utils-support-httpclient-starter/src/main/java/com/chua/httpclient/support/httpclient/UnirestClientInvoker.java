@@ -390,6 +390,10 @@ public class UnirestClientInvoker extends AbstractHttpClientInvoker {
             return request.body(this.request.getBodyStr());
         }
 
+        if (null != this.request.getBodyArray()) {
+            return request.body(this.request.getBodyArray());
+        }
+
         //上传文件
         if (this.request.hasBin() && this.request.isFormData()) {
             MultipartBody field = null;

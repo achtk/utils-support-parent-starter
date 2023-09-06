@@ -11,6 +11,14 @@ import java.util.List;
 public class HttpMappingExample {
 
     public static void main(String[] args) {
+        HikClient hikClient = Mapping.of(HikClient.class).get();
+        OrgListResult orgListResult = hikClient.orgList(1, 100);
+        System.out.println();
+
+    }
+
+
+    public static void moeIp(String[] args) {
         MoeIp moeIp = Mapping.of(MoeIp.class).get();
         JSONObject analysis = moeIp.analysis("127.0.0.1");
         System.out.println();

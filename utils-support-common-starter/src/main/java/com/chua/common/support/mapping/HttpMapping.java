@@ -2,15 +2,12 @@ package com.chua.common.support.mapping;
 
 import com.chua.common.support.converter.Converter;
 import com.chua.common.support.function.Splitter;
-import com.chua.common.support.http.HttpClient;
-import com.chua.common.support.http.HttpClientBuilder;
-import com.chua.common.support.http.HttpClientInvoker;
-import com.chua.common.support.http.HttpMethod;
 import com.chua.common.support.lang.proxy.DelegateMethodIntercept;
 import com.chua.common.support.lang.proxy.ProxyMethod;
 import com.chua.common.support.lang.proxy.ProxyUtils;
 import com.chua.common.support.lang.robin.Robin;
 import com.chua.common.support.mapping.annotations.*;
+import com.chua.common.support.mapping.invoke.HttpInvoke;
 import com.chua.common.support.objects.definition.element.MethodDescribe;
 import com.chua.common.support.objects.definition.element.ParameterDescribe;
 import com.chua.common.support.placeholder.MapMixSystemPlaceholderResolver;
@@ -48,33 +45,12 @@ public class HttpMapping<T> extends AbstractMapping<T> {
                 doAnalysis(requestBuilder, responseBuilder, proxyMethod, methodDescribe);
                 Request request = requestBuilder.build();
 
+                HttpInvoke httpInvoke = ServiceProvider.of(HttpInvoke.class).getExtension(request.getInvokeType());
                 String url = getUrl(request);
-                Object execute = execute(url, request);
+                Object execute = httpInvoke.execute(url, request);
                 return responseBuilder.build().getValue(execute, proxyMethod);
             }
         }));
-    }
-
-
-
-
-    /**
-     * 处决
-     *
-     * @param url     url
-     * @param request 要求
-     * @return {@link Object}
-     */
-    private Object execute(String url, Request request) {
-        HttpClientBuilder httpClientBuilder = HttpClient.newHttpMethod(HttpMethod.valueOf(request.getMethod()));
-        HttpClientInvoker newInvoker = httpClientBuilder.url(url)
-                .body(request.getBody())
-                .header(request.getHeader())
-                .readTimout(request.getReadTimeout())
-                .connectTimout(request.getConnectTimeout())
-                .newInvoker();
-
-        return newInvoker.execute().content();
     }
 
 
@@ -215,6 +191,8 @@ public class HttpMapping<T> extends AbstractMapping<T> {
         if (null == mappingAddress) {
             return;
         }
+
+        builder.invokeType(mappingAddress.invokeType());
         builder.readTimeout(mappingAddress.readTimeout());
         builder.connectTimeout(mappingAddress.connectTimeout());
         builder.address(mappingAddress.value());

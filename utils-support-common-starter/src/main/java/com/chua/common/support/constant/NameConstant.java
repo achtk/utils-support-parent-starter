@@ -11,6 +11,11 @@ import static com.chua.common.support.constant.CommonConstant.SYMBOL_DOT;
  */
 public class NameConstant implements Constant {
     /**
+     * http架构错误
+     */
+    public static final String HTTP_SCHEMA_ERROR = "http和https参数错误";
+
+    /**
      * CDATA
      */
     public static final String CDATA = "CDATA";
