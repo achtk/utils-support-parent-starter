@@ -1,7 +1,10 @@
 package com.chua.example.mapping;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.chua.common.support.mapping.annotation.*;
+import com.chua.common.support.mapping.annotations.MappingAddress;
+import com.chua.common.support.mapping.annotations.MappingHeader;
+import com.chua.common.support.mapping.annotations.MappingParam;
+import com.chua.common.support.mapping.annotations.MappingRequest;
 
 /**
  * 有人
@@ -20,7 +23,7 @@ public interface MpTarget {
      */
     
     @MappingRequest("POST /usrCloud/user/getAuthToken")
-    @MappingResponse("$.data.X-Access-Token")
+//    @MappingResponse("$.data.X-Access-Token")
     String getAccessToken(@MappingParam("appKey") String appKey, @MappingParam("appSecret") String appSecret);
 
 
@@ -34,7 +37,7 @@ public interface MpTarget {
     
     @MappingHeader(name = "X-Access-Token", script = "getAccessToken(${appKey}, ${appSecret})")
     @MappingRequest("POST /usrCloud/user/getUser")
-    @MappingResponse("$.data")
+//    @MappingResponse("$.data")
     JSONObject getUser(@MappingParam("appKey") String appKey, @MappingParam("appSecret") String appSecret, @MappingParam("account") String account);
 
     /**
@@ -44,7 +47,7 @@ public interface MpTarget {
      */
     
     @MappingRequest("POST /usrCloud/user/getUser")
-    @MappingResponse("$.data")
+//    @MappingResponse("$.data")
     JSONObject getUser(@MappingParam("account") String account, @MappingHeader(name = "X-Access-Token") String token);
 
 

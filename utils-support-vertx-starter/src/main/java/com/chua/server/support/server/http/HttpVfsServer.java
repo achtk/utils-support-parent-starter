@@ -3,7 +3,7 @@ package com.chua.server.support.server.http;
 import com.chua.common.support.objects.bean.BeanObject;
 import com.chua.common.support.protocol.server.AbstractServer;
 import com.chua.common.support.protocol.server.ServerOption;
-import com.chua.common.support.protocol.server.annotations.Mapping;
+import com.chua.common.support.protocol.server.annotations.ServiceMapping;
 import com.chua.common.support.protocol.server.request.Request;
 import com.chua.common.support.protocol.server.resolver.Resolver;
 import com.chua.common.support.utils.StringUtils;
@@ -51,7 +51,7 @@ public class HttpVfsServer extends AbstractServer {
 
             Value<?> objectValue = beanObject.newInvoke(parameterDescribe -> super.getValue(parameterDescribe, request1)).invoke();
 
-            Mapping mapping = beanObject.getAnnotationValue(Mapping.class);
+            ServiceMapping mapping = beanObject.getAnnotationValue(ServiceMapping.class);
 
             Resolver resolver = super.getResolver(null == mapping ? null : mapping.produces(), request.getHeader("Accept"), uri);
             byte[] resolve = resolver.resolve(objectValue.getValue());

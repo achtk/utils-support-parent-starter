@@ -3,7 +3,7 @@ package com.chua.server.support.server.socketio;
 import com.chua.common.support.objects.bean.BeanObject;
 import com.chua.common.support.protocol.server.AbstractServer;
 import com.chua.common.support.protocol.server.ServerOption;
-import com.chua.common.support.protocol.server.annotations.Mapping;
+import com.chua.common.support.protocol.server.annotations.ServiceMapping;
 import com.chua.common.support.utils.StringUtils;
 import com.chua.server.support.server.parameter.SocketIoParameterResolver;
 import com.chua.server.support.server.request.SocketIoRequest;
@@ -63,7 +63,7 @@ public class SocketIoServer extends AbstractServer {
             disconnect.newInvoke(parameterDescribe -> super.getValue(parameterDescribe, new SocketIoRequest(client, DISCONNECT))).invoke();
         });
 
-        Map<String, BeanObject> mappingByMethodParameterType = getMappingByMethodParameterType(Mapping.class);
+        Map<String, BeanObject> mappingByMethodParameterType = getMappingByMethodParameterType(ServiceMapping.class);
         for (Map.Entry<String, BeanObject> entry : mappingByMethodParameterType.entrySet()) {
             String key = entry.getKey();
             if (key.equals(CONNECT) || key.equals(DISCONNECT)) {

@@ -8,8 +8,6 @@ import com.chua.common.support.database.resolver.DelegateMetadataResolver;
 import com.chua.common.support.database.resolver.MetadataResolver;
 import com.chua.common.support.database.sqldialect.Dialect;
 import com.chua.common.support.lang.pipeline.PipelineBuilder;
-import com.chua.common.support.lang.profile.Profile;
-import com.chua.common.support.mapping.MappingProxy;
 import com.chua.common.support.utils.ClassUtils;
 import lombok.Builder;
 
@@ -64,13 +62,14 @@ public class AutoMetadata {
     public <T> Repository<T> createRepository(Map<String, DataSource> dataSources,
                                               Class<T> type) {
 
-        return MappingProxy.create("database", Repository.class,
-                Profile.newDefault()
-                        .addProfile("dataSource", getDataSource(dataSources, type))
-                        .addProfile("type", type)
-                        .addProfile("suffix", suffix)
-                        .addProfile("prefix", prefix)
-        );
+//        return MappingProxy.create("database", Repository.class,
+//                Profile.newDefault()
+//                        .addProfile("dataSource", getDataSource(dataSources, type))
+//                        .addProfile("type", type)
+//                        .addProfile("suffix", suffix)
+//                        .addProfile("prefix", prefix)
+//        );
+        return null;
     }
 
     private DataSource getDataSource(Map<String, DataSource> dataSources, Class<?> type) {
@@ -98,23 +97,25 @@ public class AutoMetadata {
     @SuppressWarnings("ALL")
     public <T> Repository<T> createRepository(DataSource dataSource,
                                                       Class<T> type) {
-        return MappingProxy.create("database", Repository.class,
-                Profile.newDefault()
-                        .addProfile("dataSource", dataSource)
-                        .addProfile("type", type)
-                        .addProfile("suffix", suffix)
-                        .addProfile("prefix", prefix)
-        );
+//        return MappingProxy.create("database", Repository.class,
+//                Profile.newDefault()
+//                        .addProfile("dataSource", dataSource)
+//                        .addProfile("type", type)
+//                        .addProfile("suffix", suffix)
+//                        .addProfile("prefix", prefix)
+//        );
+        return null;
     }
     @SuppressWarnings("ALL")
     public <T, R extends Repository<T>> R createRepository(DataSource dataSource,
                                                       Class<T> type, Class<R> r) {
-        return MappingProxy.create("database", r,
-                Profile.newDefault()
-                        .addProfile("dataSource", dataSource)
-                        .addProfile("type", type)
-                        .addProfile("suffix", suffix)
-                        .addProfile("prefix", prefix)
-        );
+//        return MappingProxy.create("database", r,
+//                Profile.newDefault()
+//                        .addProfile("dataSource", dataSource)
+//                        .addProfile("type", type)
+//                        .addProfile("suffix", suffix)
+//                        .addProfile("prefix", prefix)
+//        );
+        return null;
     }
 }

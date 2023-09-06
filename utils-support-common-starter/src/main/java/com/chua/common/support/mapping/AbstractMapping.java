@@ -4,7 +4,7 @@ package com.chua.common.support.mapping;
  * 实体映射
  * @author CH
  */
-public class AbstractMapping<T> implements Mapping<T>{
+public abstract class AbstractMapping<T> implements Mapping<T>{
 
     protected final Class<T> beanType;
 
