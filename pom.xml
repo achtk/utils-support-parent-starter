@@ -70,7 +70,6 @@
         <module>utils-support-milvus-starter</module>
         <module>utils-support-agent-starter</module>
         <module>utils-support-wx-support</module>
-        <module>utils-support-soft-starter</module>
     </modules>
 
     <!-- -Djava.net.preferIPv4Stack=true-->

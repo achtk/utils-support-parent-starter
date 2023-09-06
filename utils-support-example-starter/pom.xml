@@ -142,6 +142,11 @@
             <groupId>com.chua</groupId>
             <artifactId>utils-support-zxing-starter</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.chua</groupId>
+            <artifactId>utils-support-soft-starter</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.chua</groupId>
             <artifactId>utils-support-datasource-starter</artifactId>
