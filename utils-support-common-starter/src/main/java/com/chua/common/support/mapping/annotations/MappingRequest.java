@@ -17,14 +17,27 @@ public @interface MappingRequest {
     String value();
 
     /**
-     * 超时时间
+     * 超时时间(s)
      * @return 超时时间
      */
-    long timeout() default 30_000L;
+    int readTimeout() default 30_000;
 
     /**
-     * balance
-     * @return balance
+     * 超时时间(s)
+     * @return 超时时间
      */
-    String balance() default "round";
+    int connectTimeout() default 10_000;
+
+    /**
+     * 获取指定位置的响应
+     * @return  获取指定位置的响应
+     */
+    String jsonPath() default "";
+
+    /**
+     * 响应类型（用于处理List）
+     * @return 响应类型
+     */
+    Class<?> returnType() default Void.class;
+
 }

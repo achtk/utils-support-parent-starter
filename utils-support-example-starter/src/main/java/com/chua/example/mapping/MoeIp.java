@@ -1,9 +1,9 @@
 package com.chua.example.mapping;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.chua.common.support.mapping.annotation.MappingAddress;
-import com.chua.common.support.mapping.annotation.MappingParam;
-import com.chua.common.support.mapping.annotation.MappingRequest;
+import com.chua.common.support.mapping.annotations.MappingAddress;
+import com.chua.common.support.mapping.annotations.MappingParam;
+import com.chua.common.support.mapping.annotations.MappingRequest;
 import com.chua.common.support.task.cache.Cache;
 
 /**

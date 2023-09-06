@@ -1,7 +1,7 @@
 package com.chua.example.database;
 
 import com.chua.common.support.database.repository.Repository;
-import com.chua.common.support.mapping.annotation.MappingRequest;
+import com.chua.common.support.mapping.annotations.MappingRequest;
 
 import java.io.Serializable;
 import java.util.List;

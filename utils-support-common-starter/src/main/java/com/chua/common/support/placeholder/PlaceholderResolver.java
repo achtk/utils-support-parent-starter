@@ -13,4 +13,5 @@ public interface PlaceholderResolver {
      * @return 结果
      */
     String resolvePlaceholder(String placeholderName);
+
 }
