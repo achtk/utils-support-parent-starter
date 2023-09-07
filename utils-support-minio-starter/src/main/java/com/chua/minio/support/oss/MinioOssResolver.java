@@ -2,6 +2,7 @@ package com.chua.minio.support.oss;
 
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.annotations.SpiOption;
+import com.chua.common.support.collection.GuavaHashBasedTable;
 import com.chua.common.support.collection.Table;
 import com.chua.common.support.converter.Converter;
 import com.chua.common.support.lang.page.Page;
@@ -36,7 +37,7 @@ public class MinioOssResolver extends AbstractOssResolver {
 
     private String endpoint;
 
-    private static final Table<Integer, String, MinioClient> CACHE = new ConcurrentReferenceTable<>();
+    private static final Table<Integer, String, MinioClient> CACHE = new GuavaHashBasedTable<>();
 
     public synchronized MinioClient initialConfig(OssSystem ossSystem) {
         Integer ossId = ossSystem.getOssId();

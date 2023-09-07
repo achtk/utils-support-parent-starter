@@ -38,7 +38,7 @@ public class HibernateMetadataExecutor implements MetadataExecutor {
 
     private final Expression expression;
     static final Log log = Log.getLogger(MetadataExecutor.class);
-    private static final Cacheable CACHEABLE = Cacheable.auto();
+    private static final Cacheable<DataSource, Dialect> CACHEABLE = Cacheable.auto();
 
     public HibernateMetadataExecutor(Expression expression) {
         this.expression = expression;
