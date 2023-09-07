@@ -1,6 +1,7 @@
 package com.chua.httpclient.support.httpclient;
 
 import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.collection.ConcurrentReferenceHashMap;
 import com.chua.common.support.function.Joiner;
 import com.chua.common.support.http.HttpMethod;
 import com.chua.common.support.http.HttpRequest;
@@ -51,7 +52,6 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static com.chua.common.support.http.HttpClientUtils.createDefaultHostnameVerifier;
 import static com.chua.common.support.http.HttpMethod.*;
@@ -65,7 +65,7 @@ import static com.chua.common.support.http.HttpMethod.*;
 @Spi(value = "httpclient", order = 2)
 public class UnirestClientInvoker extends AbstractHttpClientInvoker {
 
-    private static final Map<HttpRequest, Object> CLIENT_MAP = new ConcurrentHashMap<>();
+    private static final Map<HttpRequest, Object> CLIENT_MAP = new ConcurrentReferenceHashMap<>(16);
 
 
     public UnirestClientInvoker(HttpRequest request, HttpMethod httpMethod) {
@@ -602,9 +602,9 @@ public class UnirestClientInvoker extends AbstractHttpClientInvoker {
     public static Registry<ConnectionSocketFactory> registryConnectionSocketFactory() throws Exception {
         SSLContext sslContext = SSLContext.getInstance("TLS");
         sslContext.init(null, getTrustManager(), null);
-        ConnectionSocketFactory sslioSessionStrategy = new SSLConnectionSocketFactory(sslContext, new NoopHostnameVerifier());
+        ConnectionSocketFactory connectionSocketFactory = new SSLConnectionSocketFactory(sslContext, new NoopHostnameVerifier());
         return RegistryBuilder.<ConnectionSocketFactory>create()
-                .register("https", sslioSessionStrategy)
+                .register("https", connectionSocketFactory)
                 .build();
     }
 
