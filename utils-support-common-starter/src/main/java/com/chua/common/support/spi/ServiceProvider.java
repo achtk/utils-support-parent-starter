@@ -633,7 +633,7 @@ public class ServiceProvider<T> implements InitializingAware {
     }
 
     /**
-     * 获取实现
+     * 获取实现(单例)
      *
      * @param name 名称
      * @return 实现

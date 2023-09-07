@@ -24,7 +24,8 @@ public class CacheConfiguration {
     /**
      * 超时时间(s)
      */
-    private int expireAfterWrite;
+    @Builder.Default
+    private int expireAfterWrite = -1;
     /**
      * 冷热备份(即用的多的缓存数据生命周期增长)
      */
