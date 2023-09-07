@@ -1,7 +1,6 @@
 package com.chua.common.support.lang.proxy.plugin;
 
-import com.chua.common.support.lang.proxy.ProxyMethod;
-import com.chua.common.support.reflection.describe.ParameterDescribe;
+import com.chua.common.support.objects.definition.element.ParameterDescribe;
 
 /**
  * 代理插件

@@ -1,7 +1,6 @@
 package com.chua.common.support.reflection;
 
 import com.chua.common.support.constant.CommonConstant;
-import com.chua.common.support.reflection.craft.MethodCraftTable;
 import com.chua.common.support.unit.name.NamingCase;
 import com.chua.common.support.utils.ArrayUtils;
 import com.chua.common.support.utils.ClassUtils;
@@ -22,7 +21,7 @@ import java.util.stream.Collectors;
  * @version 1.0.0
  * @since 2021/3/30
  */
-public class MethodStation extends MethodCraftTable {
+public class MethodStation {
 
     public static final MethodStation INSTANCE = new MethodStation(null);
     protected static final String GETTER_PREFIX = CommonConstant.METHOD_GETTER;
@@ -44,7 +43,6 @@ public class MethodStation extends MethodCraftTable {
      * @param entity 实体
      */
     public MethodStation(Object entity) {
-        super(ClassUtils.toType(entity));
         this.entity = entity;
         this.type = ClassUtils.toType(entity);
         this.getMethods();

@@ -1,6 +1,6 @@
 package com.chua.common.support.eventbus;
 
-import com.chua.common.support.reflection.describe.TypeDescribe;
+import com.chua.common.support.objects.definition.element.TypeDescribe;
 import com.chua.common.support.reflection.dynamic.AnnotationFactory;
 import com.chua.common.support.reflection.dynamic.DynamicFactory;
 import com.chua.common.support.reflection.dynamic.NonStandardDynamicFactory;

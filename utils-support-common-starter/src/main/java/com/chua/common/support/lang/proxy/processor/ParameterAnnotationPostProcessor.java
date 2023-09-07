@@ -1,4 +1,4 @@
-package com.chua.common.support.reflection.describe.processor;
+package com.chua.common.support.lang.proxy.processor;
 
 
 import com.chua.common.support.lang.proxy.plugin.ProxyParameterPlugin;

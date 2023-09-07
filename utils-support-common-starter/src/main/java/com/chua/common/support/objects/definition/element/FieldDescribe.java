@@ -29,6 +29,10 @@ public class FieldDescribe implements ElementDescribe {
     private final Map<String, List<MethodDescribe>> methodDefinitions;
     private final Map<String, AnnotationDescribe> annotationDefinitions;
 
+    public FieldDescribe(Field field) {
+        this(field, field.getDeclaringClass());
+    }
+
     public FieldDescribe(Field field, Class<?> type) {
         this.field = field;
         this.type = type;

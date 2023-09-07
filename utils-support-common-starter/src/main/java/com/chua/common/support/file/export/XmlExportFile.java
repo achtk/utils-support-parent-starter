@@ -4,7 +4,7 @@ import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.bean.BeanMap;
 import com.chua.common.support.file.export.resolver.DateValueResolver;
 import com.chua.common.support.file.export.resolver.ValueResolver;
-import com.chua.common.support.reflection.describe.FieldDescribe;
+import com.chua.common.support.objects.definition.element.FieldDescribe;
 import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.ObjectUtils;
 import com.chua.common.support.utils.StringUtils;
@@ -177,8 +177,8 @@ public class XmlExportFile extends AbstractExportFile {
         Pair pair = new Pair(it.getName(), null);
         pair.setJavaType(it.getType());
 
-        FieldDescribe fieldDescribe = FieldDescribe.of(it);
-        ExportProperty exportProperty = fieldDescribe.getAnnotationType(ExportProperty.class);
+        FieldDescribe fieldDescribe = new FieldDescribe(it);
+        ExportProperty exportProperty = fieldDescribe.getAnnotation(ExportProperty.class);
 
         ValueResolver valueResolver = null;
         String value = null;
@@ -187,7 +187,7 @@ public class XmlExportFile extends AbstractExportFile {
             value = exportProperty.value();
         }
 
-        ExportConverter exportConverter = fieldDescribe.getAnnotationType(ExportConverter.class);
+        ExportConverter exportConverter = fieldDescribe.getAnnotation(ExportConverter.class);
         if (null != exportConverter) {
             valueResolver = (ValueResolver) ClassUtils.forObject(exportConverter.value());
         }

@@ -1,7 +1,7 @@
 package com.chua.common.support.spi.autowire;
 
 import com.chua.common.support.function.InitializingAware;
-import com.chua.common.support.reflection.describe.TypeDescribe;
+import com.chua.common.support.objects.definition.element.TypeDescribe;
 import com.chua.common.support.utils.ClassUtils;
 
 /**
@@ -27,7 +27,7 @@ public class InitializingAwareAutoServiceAutowire implements ServiceAutowire {
         }
 
         if (null != SPRING_TYPE && SPRING_TYPE.isAssignableFrom(object.getClass())) {
-            TypeDescribe typeDescribe = new TypeDescribe(object);
+            TypeDescribe typeDescribe = TypeDescribe.create(object);
             typeDescribe.getMethodDescribe("afterPropertiesSet").executeSelf();
         }
         return null;

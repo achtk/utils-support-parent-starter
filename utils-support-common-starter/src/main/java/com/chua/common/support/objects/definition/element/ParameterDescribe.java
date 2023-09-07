@@ -60,6 +60,16 @@ public class ParameterDescribe implements ElementDescribe {
         return parameter.getType().getTypeName();
     }
 
+
+    /**
+     * 返回类型
+     *
+     * @return {@link Class}<{@link ?}>
+     */
+    public Class<?> returnTypeType() {
+        return parameter.getType();
+    }
+
     @Override
     public List<String> exceptionType() {
         return Collections.emptyList();

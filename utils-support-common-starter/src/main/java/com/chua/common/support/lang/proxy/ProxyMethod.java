@@ -1,10 +1,12 @@
 package com.chua.common.support.lang.proxy;
 
 import com.chua.common.support.lang.proxy.plugin.ProxyPlugin;
+import com.chua.common.support.objects.definition.element.MethodDescribe;
 import com.chua.common.support.utils.ClassUtils;
 import lombok.Builder;
 import lombok.Data;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -23,6 +25,8 @@ public class ProxyMethod {
     private Object proxy;
 
     private ProxyPlugin[] plugins;
+
+    private MethodDescribe methodDescribe;
 
     private boolean isReload;
 
@@ -73,5 +77,25 @@ public class ProxyMethod {
     public Object execute(Object bean) {
         method.setAccessible(true);
         return ClassUtils.invokeMethod(method, bean, args);
+    }
+
+    /**
+     * 收到注解价值
+     *
+     * @param annotationType 注解类型
+     * @return {@link A}
+     */
+    public <A  extends Annotation> A getAnnotationValue(Class<A> annotationType) {
+        return method.getDeclaredAnnotation(annotationType);
+    }
+
+    /**
+     * get方法描述
+     *
+     * @return {@link MethodDescribe}
+     */
+    public MethodDescribe getMethodDescribe() {
+        return methodDescribe;
+
     }
 }

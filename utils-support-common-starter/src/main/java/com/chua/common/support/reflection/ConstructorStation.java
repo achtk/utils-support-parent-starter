@@ -1,6 +1,5 @@
 package com.chua.common.support.reflection;
 
-import com.chua.common.support.reflection.craft.ConstructCraftTable;
 import com.chua.common.support.unit.name.NamingCase;
 import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.MapUtils;
@@ -20,7 +19,7 @@ import java.util.function.Consumer;
  * @author CH
  * @version 1.0.0
  */
-public class ConstructorStation<T> extends ConstructCraftTable {
+public class ConstructorStation<T> {
 
     private static final Map<Class<?>, Object> TIME_MAP = new ConcurrentHashMap<>();
     private static final Map<Object, ConstructorStation> CACHE_SELF = new ConcurrentHashMap<>();
@@ -39,7 +38,6 @@ public class ConstructorStation<T> extends ConstructCraftTable {
      * @param entity 实体
      */
     protected ConstructorStation(T entity) {
-        super(ClassUtils.toType(entity));
         this.entity = entity;
         if (null != entity) {
             this.type = ClassUtils.toType(entity);

@@ -11,8 +11,12 @@ import java.util.List;
  */
 public class HttpMappingExample {
 
-
     public static void main(String[] args) {
+        testMoeIp(args);
+    }
+
+
+    public static void testWxClient(String[] args) {
         WxClient wxClient = Mapping.of(WxClient.class, MappingConfig.builder().appKey("").secretAccessKey("").build()).get();
         JSONObject gzhUsers = wxClient.getGzhUsers(null);
         System.out.println();

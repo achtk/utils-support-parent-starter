@@ -1,9 +1,11 @@
 package com.chua.common.support.objects.definition.element;
 
+import com.chua.common.support.converter.Converter;
 import com.chua.common.support.objects.definition.resolver.AnnotationResolver;
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.ObjectUtils;
+import lombok.Getter;
 import lombok.experimental.Accessors;
 
 import java.lang.annotation.Annotation;
@@ -11,6 +13,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.chua.common.support.constant.CommonConstant.EMPTY_OBJECT;
 
 /**
  * 方法定义
@@ -21,19 +25,23 @@ import java.util.stream.Collectors;
 @Accessors(fluent = true)
 public class MethodDescribe implements ElementDescribe {
 
+    @Getter
     private final Method method;
     private final Class<?> type;
     private final Map<String, AnnotationDescribe> annotationDefinitions;
+    @Getter
+    private Object bean;
     private String name;
 
-    public MethodDescribe(Method method, Class<?> type) {
+    public MethodDescribe(Method method, Class<?> type, Object bean) {
         this.method = method;
         this.type = type;
         this.annotationDefinitions = ServiceProvider.of(AnnotationResolver.class).getSpiService().get(method);
+        this.bean = bean;
     }
 
     public MethodDescribe(Method method) {
-        this(method, method.getDeclaringClass());
+        this(method, method.getDeclaringClass(), null);
     }
 
     @Override
@@ -118,17 +126,65 @@ public class MethodDescribe implements ElementDescribe {
     }
 
     /**
-     * 处决
+     *执行
      *
      * @param value 价值
      * @param bean  bean
+     * @return {@link Object}
+     * @throws Exception 异常
      */
-    public void execute(Object bean, Object[] value) throws Exception {
+    public Object execute(Object bean, Object[] value) throws Exception {
         if(null == value || null == bean) {
             throw new NullPointerException();
         }
 
         ClassUtils.setAccessible(method);
-        method.invoke(bean, value);
+        return method.invoke(bean, value);
+    }
+
+    /**
+     * 自我执行
+     *
+     * @param targetType 目标类型
+     * @return {@link T}
+     */
+    public <T>T executeSelf(Class<T> targetType) {
+        try {
+            return Converter.convertIfNecessary(executeSelf(), targetType);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 自我执行
+     *
+     * @return {@link Object}
+     */
+    public Object executeSelf() {
+        try {
+            return execute(bean, EMPTY_OBJECT);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 有bean
+     *
+     * @return boolean
+     */
+    public boolean hasBean() {
+        return bean != null;
+    }
+
+
+    /**
+     * 登记
+     *
+     * @param bean bean
+     */
+    public void register(Object bean) {
+        this.bean = bean;
     }
 }

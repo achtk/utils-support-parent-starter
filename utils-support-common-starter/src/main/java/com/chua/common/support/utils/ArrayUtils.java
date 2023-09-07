@@ -4,7 +4,7 @@ import com.chua.common.support.bean.BeanMap;
 import com.chua.common.support.constant.CommonConstant;
 import com.chua.common.support.converter.Converter;
 import com.chua.common.support.matcher.PathMatcher;
-import com.chua.common.support.reflection.describe.ParameterDescribe;
+import com.chua.common.support.objects.definition.element.ParameterDescribe;
 
 import java.lang.reflect.Array;
 import java.util.*;
@@ -505,12 +505,12 @@ public class ArrayUtils {
         for (int i = 0; i < source.length; i++) {
             T sourceClass = source[i];
             if (sourceClass instanceof ParameterDescribe) {
-                sourceClass = (T) ((ParameterDescribe) sourceClass).returnClassType();
+                sourceClass = (T) ((ParameterDescribe) sourceClass).returnTypeType();
             }
 
             T targetClass = target[i];
             if (targetClass instanceof ParameterDescribe) {
-                targetClass = (T) ((ParameterDescribe) targetClass).returnClassType();
+                targetClass = (T) ((ParameterDescribe) targetClass).returnTypeType();
             }
 
             if (null != sourceClass && !sourceClass.equals(targetClass)) {

@@ -26,7 +26,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 import static com.chua.common.support.constant.CommonConstant.EMPTY_STRING;
 import static com.chua.common.support.constant.CommonConstant.SYMBOL_LEFT_BIG_PARENTHESES;
@@ -52,22 +51,19 @@ public class HttpMapping<T> extends AbstractMapping<T> {
 
     @Override
     public T get() {
-        T proxy = ProxyUtils.proxy(beanType, beanType.getClassLoader(), new DelegateMethodIntercept<>(beanType, new Function<ProxyMethod, Object>() {
-            @Override
-            public Object apply(ProxyMethod proxyMethod) {
-                MethodDescribe methodDescribe = new MethodDescribe(proxyMethod.getMethod());
-                Request.RequestBuilder requestBuilder = Request.builder();
-                Response.ResponseBuilder responseBuilder = Response.builder();
-                Pretreatment pretreatment = new Pretreatment();
-                doAnalysis(requestBuilder, responseBuilder, proxyMethod, methodDescribe, pretreatment);
-                Request request = requestBuilder.build();
-                refresh(request, pretreatment);
+        T proxy = ProxyUtils.proxy(beanType, beanType.getClassLoader(), new DelegateMethodIntercept<>(beanType, proxyMethod -> {
+            MethodDescribe methodDescribe = new MethodDescribe(proxyMethod.getMethod());
+            Request.RequestBuilder requestBuilder = Request.builder();
+            Response.ResponseBuilder responseBuilder = Response.builder();
+            Pretreatment pretreatment = new Pretreatment();
+            doAnalysis(requestBuilder, responseBuilder, proxyMethod, methodDescribe, pretreatment);
+            Request request = requestBuilder.build();
+            refresh(request, pretreatment);
 
-                HttpInvoker httpInvoke = ServiceProvider.of(HttpInvoker.class).getNewExtension(request.getInvokeType(), mappingConfig);
-                String url = getUrl(request);
-                Object execute = httpInvoke.execute(url, request);
-                return responseBuilder.build().getValue(execute, proxyMethod);
-            }
+            HttpInvoker httpInvoke = ServiceProvider.of(HttpInvoker.class).getNewExtension(request.getInvokeType(), mappingConfig);
+            String url = getUrl(request);
+            Object execute = httpInvoke.execute(url, request);
+            return responseBuilder.build().getValue(execute, proxyMethod);
         }));
         mappingBinder.bind(beanType.getSimpleName(), beanType, proxy);
         return proxy;
