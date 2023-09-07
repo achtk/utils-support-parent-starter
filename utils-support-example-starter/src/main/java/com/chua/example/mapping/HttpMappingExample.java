@@ -13,7 +13,7 @@ public class HttpMappingExample {
 
 
     public static void main(String[] args) {
-        WxClient wxClient = Mapping.of(WxClient.class, MappingConfig.builder().appKey("wx703f3a75a7e9e33b").secretAccessKey("ebdc79561e54040671606acc6872cb69").build()).get();
+        WxClient wxClient = Mapping.of(WxClient.class, MappingConfig.builder().appKey("").secretAccessKey("").build()).get();
         JSONObject gzhUsers = wxClient.getGzhUsers(null);
         System.out.println();
     }

@@ -22,7 +22,10 @@ import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.ObjectUtils;
 import com.chua.common.support.utils.StringUtils;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 import static com.chua.common.support.constant.CommonConstant.EMPTY_STRING;
@@ -288,14 +291,14 @@ public class HttpMapping<T> extends AbstractMapping<T> {
 
         String substring = value.substring(index + 1, value.length() - 1);
         List<String> strings = Splitter.on(',').omitEmptyStrings().trimResults().splitToList(substring);
-        List<Object> args = new LinkedList<>();
+
         StringBuilder stringBuilder = new StringBuilder(method).append("(");
         for (String string : strings) {
-            stringBuilder.append(format(string, request)).append(",");
+            stringBuilder.append("'").append(format(string, request)).append("',");
         }
 
         stringBuilder.delete(stringBuilder.length() - 1, stringBuilder.length()).append(")");
-        return mappingBinder.parse(substring.toString());
+        return mappingBinder.parse(stringBuilder.toString());
     }
 
 

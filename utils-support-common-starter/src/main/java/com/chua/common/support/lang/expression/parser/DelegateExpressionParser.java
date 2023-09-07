@@ -17,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -58,22 +57,19 @@ public class DelegateExpressionParser implements ExpressionParser{
                 @Override
                 public AviatorObject variadicCall(Map<String, Object> env, AviatorObject... args) {
                     Object o = env.get(type.getSimpleName());
-                    method.setAccessible(true);
                     Object[] args1 = new Object[args.length];
                     for (int i = 0; i < args.length; i++) {
                         AviatorObject aviatorObject = args[i];
-                        args1[i] = null;
+                        args1[i] = aviatorObject.getValue(env);
                     }
 
-                    Map<Integer, Method> cache = new HashMap<>();
-                    ClassUtils.doWithMethods(type, method1 -> {
-                        if(method.getName().equalsIgnoreCase(method1.getName())) {
-                            cache.put(method1.getParameterTypes().hashCode(), method);
-                        }
-                    });
-
+                    Method method1 = ClassUtils.findMethod(type, method.getName(), ClassUtils.toType(args1));
+                    if(null == method1) {
+                        return null;
+                    }
                     try {
-                        return AviatorRuntimeJavaType.valueOf(method.invoke(o, args1));
+                        ClassUtils.setAccessible(method1);
+                        return AviatorRuntimeJavaType.valueOf(method1.invoke(o, args1));
                     } catch (IllegalAccessException | InvocationTargetException e) {
                         log.error(e.getMessage());
                     }
