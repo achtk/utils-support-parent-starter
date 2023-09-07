@@ -21,15 +21,17 @@ public class DelegateMethodIntercept<T> implements MethodIntercept<T> {
     private final Function<ProxyMethod, Object> function;
 
     private final boolean openPlugin;
+    private final Object realBean;
 
     public DelegateMethodIntercept(Class<?> type, Function<ProxyMethod, Object> function) {
-        this(type, function, true);
+        this(type, function, false, null);
     }
 
-    public DelegateMethodIntercept(Class<?> type, Function<ProxyMethod, Object> function, boolean openPlugin) {
+    public DelegateMethodIntercept(Class<?> type, Function<ProxyMethod, Object> function, boolean openPlugin, Object realBean) {
         this.type = type;
         this.function = function;
         this.openPlugin = openPlugin;
+        this.realBean = realBean;
     }
 
     @Override
@@ -57,7 +59,7 @@ public class DelegateMethodIntercept<T> implements MethodIntercept<T> {
         ProxyMethod proxyMethod = ProxyMethod.builder()
                 .args(args)
                 .method(method)
-                .obj(obj)
+                .obj(realBean)
                 .methodDescribe(new MethodDescribe(method))
                 .plugins(proxyPluginList)
                 .proxy(proxy).build();
@@ -86,7 +88,7 @@ public class DelegateMethodIntercept<T> implements MethodIntercept<T> {
     private Object executeByPlugin(List<ProxyMethodPlugin> proxyMethodPlugins, ProxyMethod proxyMethod) {
         Object value = null;
         for (ProxyMethodPlugin proxyMethodPlugin : proxyMethodPlugins) {
-            value = proxyMethodPlugin.execute(proxyMethod.getMethodDescribe(), proxyMethod.getProxy(), proxyMethod.getArgs());
+            value = proxyMethodPlugin.execute(proxyMethod.getMethodDescribe(), proxyMethod.getObj(), proxyMethod.getArgs());
         }
 
         return value;

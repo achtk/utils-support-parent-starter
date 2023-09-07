@@ -22,6 +22,7 @@ import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.ObjectUtils;
 import com.chua.common.support.utils.StringUtils;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -66,7 +67,13 @@ public class HttpMapping<T> extends AbstractMapping<T> {
             return responseBuilder.build().getValue(execute, proxyMethod);
         }));
         mappingBinder.bind(beanType.getSimpleName(), beanType, proxy);
-        return proxy;
+        return ProxyUtils.proxy(beanType, beanType.getClassLoader(), new DelegateMethodIntercept<>(beanType, proxyMethod -> {
+            try {
+                return proxyMethod.invoke(proxy, proxyMethod.getArgs());
+            } catch (InvocationTargetException | IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }, true, proxy));
     }
 
     /**

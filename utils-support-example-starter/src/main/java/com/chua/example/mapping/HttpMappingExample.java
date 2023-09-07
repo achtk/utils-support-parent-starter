@@ -43,7 +43,8 @@ public class HttpMappingExample {
     public static void testMoeIp(String[] args) {
         MoeIp moeIp = Mapping.of(MoeIp.class).get();
         JSONObject analysis = moeIp.analysis("127.0.0.1");
-        System.out.println();
+        analysis = moeIp.analysis("127.0.0.1");
+        System.out.println(analysis);
     }
 
     /**
