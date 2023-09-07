@@ -1,4 +1,4 @@
-package com.chua.common.support.lang.proxy.processor;
+package com.chua.common.support.lang.proxy.plugin.processor;
 
 
 import com.chua.common.support.lang.proxy.plugin.ProxyParameterPlugin;

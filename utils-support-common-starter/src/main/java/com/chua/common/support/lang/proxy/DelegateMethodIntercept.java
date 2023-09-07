@@ -64,7 +64,7 @@ public class DelegateMethodIntercept<T> implements MethodIntercept<T> {
 
         if(openPlugin) {
             List<ProxyMethodPlugin> proxyMethodPlugins = checkMethodPlugin(method, proxyMethod);
-            if(proxyMethodPlugins.isEmpty()) {
+            if(!proxyMethodPlugins.isEmpty()) {
                 return executeByPlugin(proxyMethodPlugins, proxyMethod);
             }
         }
