@@ -24,8 +24,7 @@ public class BirthdayMockResolver extends DateMockResolver {
     public String resolve(MockValue mock, ExpressionParser expressionParser) {
         String base = expressionParser.parseExpression(mock.base()).getValue(String.class);
         if(CardUtils.isValidCard(base)) {
-            String value = String.valueOf(CardUtils.getBirthByIdCard(base));
-            return value;
+            return String.valueOf(CardUtils.getBirthByIdCard(base));
         }
 
         return getRandom(NumberUtils.toInt(mock.base(), -1));

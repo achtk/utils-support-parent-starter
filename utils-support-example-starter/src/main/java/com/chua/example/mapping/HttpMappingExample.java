@@ -11,27 +11,43 @@ import java.util.List;
  */
 public class HttpMappingExample {
 
+
     public static void main(String[] args) {
-        HikClient hikClient = Mapping.of(HikClient.class, MappingConfig.builder()
-                .host("")
-                .path("/artemis")
-                .appKey("")
-                .secretAccessKey("")
-                .build()
-        ).get();
+        WxClient wxClient = Mapping.of(WxClient.class, MappingConfig.builder().appKey("wx703f3a75a7e9e33b").secretAccessKey("ebdc79561e54040671606acc6872cb69").build()).get();
+        JSONObject gzhUsers = wxClient.getGzhUsers(null);
+        System.out.println();
+    }
+
+    /**
+     * 测试hik客户端
+     *
+     * @param args args
+     */
+    public static void testHikClient(String[] args) {
+        HikClient hikClient = Mapping.of(HikClient.class, MappingConfig.builder().host("").path("/artemis").appKey("").secretAccessKey("").build()).get();
         OrgListResult orgListResult = hikClient.orgList(1, 100);
         System.out.println();
 
     }
 
 
-    public static void moeIp(String[] args) {
+    /**
+     * 测试moe-ip
+     *
+     * @param args args
+     */
+    public static void testMoeIp(String[] args) {
         MoeIp moeIp = Mapping.of(MoeIp.class).get();
         JSONObject analysis = moeIp.analysis("127.0.0.1");
         System.out.println();
     }
 
-    public static void idiom(String[] args) {
+    /**
+     * 测试习语
+     *
+     * @param args args
+     */
+    public static void testIdiom(String[] args) {
         Idiom idiom = Mapping.of(Idiom.class).get();
         List<IdiomQuery> query = idiom.query(1, 10, "测");
     }

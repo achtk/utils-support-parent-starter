@@ -23,4 +23,9 @@ public class Test2Demo {
     public Test2Demo(TestDemo testDemo) {
         this.testDemo = testDemo;
     }
+
+
+    public Object getValue() {
+        return "1";
+    }
 }

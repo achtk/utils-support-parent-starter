@@ -41,4 +41,12 @@ public @interface MappingHeader {
      * @return 值
      */
     Class<?> conditionType() default MappingCondition.class;
+
+
+    /**
+     * 参数类型
+     * @return 参数类型
+     *
+     */
+    MappingParam.ParamType type() default MappingParam.ParamType.NONE;
 }

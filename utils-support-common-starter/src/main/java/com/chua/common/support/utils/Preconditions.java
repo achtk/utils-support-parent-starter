@@ -259,7 +259,6 @@ public final class Preconditions {
      * @param o2 o2
      */
     public static void assertEquals(Object o1, Object o2) {
-
         assertEquals(null, o1, o2);
     }
 

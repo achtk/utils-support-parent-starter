@@ -1,6 +1,7 @@
 package com.chua.common.support.mapping.condition;
 
-import com.chua.common.support.lang.profile.Profile;
+import com.chua.common.support.mapping.MappingBinder;
+import com.chua.common.support.mapping.MappingConfig;
 
 /**
  * 条件
@@ -10,7 +11,7 @@ import com.chua.common.support.lang.profile.Profile;
 public class SystemTimeMappingCondition implements MappingCondition {
 
     @Override
-    public String resolve(Profile profile, String name, String url) {
+    public String resolve(String name, MappingConfig mappingConfig, MappingBinder mappingBinder) {
         return System.currentTimeMillis() + "";
     }
 }

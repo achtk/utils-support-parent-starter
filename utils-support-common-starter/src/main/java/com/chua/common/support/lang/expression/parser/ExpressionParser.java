@@ -68,4 +68,12 @@ public interface ExpressionParser {
      * @return 结果
      */
     Value<?> parseExpression(String express);
+
+    /**
+     * add函数
+     *
+     * @param type 类型
+     * @param bean bean
+     */
+    void addFunction(Class<?> type, Object bean);
 }

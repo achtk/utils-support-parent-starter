@@ -1,5 +1,7 @@
 package com.chua.common.support.objects;
 
+import com.chua.common.support.lang.expression.parser.DelegateExpressionParser;
+import com.chua.common.support.lang.expression.parser.ExpressionParser;
 import com.chua.common.support.objects.environment.EnvironmentConfiguration;
 import com.chua.common.support.objects.environment.properties.PropertySource;
 import com.chua.common.support.objects.scanner.BaseAnnotationResourceScanner;
@@ -25,6 +27,11 @@ public class ConfigureContextConfiguration {
 
     @Singular("propertySource")
     public List<PropertySource> propertySources;
+    /**
+     * 算式解析器
+     */
+    @Builder.Default
+    private ExpressionParser expressionParser = new DelegateExpressionParser();
     /**
      * 掃描包
      */

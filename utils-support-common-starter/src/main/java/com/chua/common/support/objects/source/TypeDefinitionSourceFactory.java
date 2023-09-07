@@ -2,6 +2,7 @@ package com.chua.common.support.objects.source;
 
 import com.chua.common.support.collection.SortedArrayList;
 import com.chua.common.support.collection.SortedList;
+import com.chua.common.support.lang.expression.parser.ExpressionParser;
 import com.chua.common.support.objects.ConfigureContextConfiguration;
 import com.chua.common.support.objects.ConfigureObjectContext;
 import com.chua.common.support.objects.bean.BeanObject;
@@ -30,11 +31,13 @@ public class TypeDefinitionSourceFactory implements ConfigureObjectContext {
     private final ConfigureContextConfiguration configuration;
     final List<TypeDefinitionSource> definitionSources;
     private final StandardConfigureEnvironment configureEnvironment;
+    private final ExpressionParser expressionParser;
 
-    public TypeDefinitionSourceFactory(ConfigureContextConfiguration configuration, StandardConfigureEnvironment configureEnvironment) {
+    public TypeDefinitionSourceFactory(ConfigureContextConfiguration configuration, StandardConfigureEnvironment configureEnvironment, ExpressionParser expressionParser) {
         this.configuration = configuration;
         this.definitionSources = ServiceProvider.of(TypeDefinitionSource.class).collect(configuration);
         this.configureEnvironment = configureEnvironment;
+        this.expressionParser = expressionParser;
     }
 
     @Override
@@ -150,6 +153,11 @@ public class TypeDefinitionSourceFactory implements ConfigureObjectContext {
     @Override
     public StandardConfigureEnvironment getEnvironment() {
         return configureEnvironment;
+    }
+
+    @Override
+    public ExpressionParser getExpressionParser() {
+        return expressionParser;
     }
 
     @Override

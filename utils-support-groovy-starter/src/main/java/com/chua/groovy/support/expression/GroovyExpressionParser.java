@@ -25,4 +25,9 @@ public class GroovyExpressionParser implements ExpressionParser {
         GroovyShell groovyShell = new GroovyShell(binding);
         return Value.of(groovyShell.evaluate(express));
     }
+
+    @Override
+    public void addFunction(Class<?> type, Object bean) {
+
+    }
 }

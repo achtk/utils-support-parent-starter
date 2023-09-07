@@ -2,6 +2,7 @@ package com.chua.common.support.objects;
 
 import com.chua.common.support.collection.SortedList;
 import com.chua.common.support.function.InitializingAware;
+import com.chua.common.support.lang.expression.parser.ExpressionParser;
 import com.chua.common.support.objects.bean.BeanObject;
 import com.chua.common.support.objects.definition.TypeDefinition;
 import com.chua.common.support.objects.environment.StandardConfigureEnvironment;
@@ -24,8 +25,11 @@ public class StandardConfigureObjectContext implements ConfigureObjectContext, I
     private final ConfigureContextConfiguration configuration;
     private StandardConfigureEnvironment configureEnvironment;
     private TypeDefinitionSourceFactory typeDefinitionSourceFactory;
+
+    private final ExpressionParser expressionParser;
     public StandardConfigureObjectContext(ConfigureContextConfiguration configuration) {
         this.configuration = configuration;
+        this.expressionParser = configuration.expressionParser();
         this.afterPropertiesSet();
     }
 
@@ -33,6 +37,11 @@ public class StandardConfigureObjectContext implements ConfigureObjectContext, I
     @Override
     public StandardConfigureEnvironment getEnvironment() {
         return configureEnvironment;
+    }
+
+    @Override
+    public ExpressionParser getExpressionParser() {
+        return expressionParser;
     }
 
     @Override
@@ -49,7 +58,7 @@ public class StandardConfigureObjectContext implements ConfigureObjectContext, I
         if (log.isDebugEnabled()) {
             log.debug("初始化定义");
         }
-        this.typeDefinitionSourceFactory = new TypeDefinitionSourceFactory(configuration, configureEnvironment);
+        this.typeDefinitionSourceFactory = new TypeDefinitionSourceFactory(configuration, configureEnvironment, expressionParser);
     }
 
     @Override

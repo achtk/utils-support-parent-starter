@@ -1,8 +1,8 @@
 package com.chua.common.support.file.export;
 
 import com.chua.common.support.annotations.Spi;
-import com.chua.common.support.extra.el.baseutil.exception.UnSupportException;
 import com.chua.common.support.json.Json;
+import com.chua.common.support.lang.exception.NotSupportedException;
 
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -43,7 +43,7 @@ public class JsonDbExportFile extends AbstractExportFile {
 
     @Override
     public <T> void append(List<T> records) {
-        throw new UnSupportException("不支持追加");
+        throw new NotSupportedException("不支持追加");
     }
 
 

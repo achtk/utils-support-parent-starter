@@ -8,9 +8,11 @@ public abstract class AbstractMapping<T> implements Mapping<T>{
 
     protected final Class<T> beanType;
     protected final MappingConfig mappingConfig;
+    protected final MappingBinder mappingBinder;
 
-    public AbstractMapping(Class<T> beanType, MappingConfig mappingConfig) {
+    public AbstractMapping(Class<T> beanType, MappingConfig mappingConfig, MappingBinder mappingBinder) {
         this.beanType = beanType;
         this.mappingConfig = mappingConfig;
+        this.mappingBinder = mappingBinder;
     }
 }

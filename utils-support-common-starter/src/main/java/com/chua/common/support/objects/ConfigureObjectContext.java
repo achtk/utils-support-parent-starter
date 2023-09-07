@@ -1,6 +1,7 @@
 package com.chua.common.support.objects;
 
 
+import com.chua.common.support.lang.expression.parser.ExpressionParser;
 import com.chua.common.support.objects.environment.StandardConfigureEnvironment;
 
 /**
@@ -17,6 +18,12 @@ public interface ConfigureObjectContext extends ObjectContext {
     StandardConfigureEnvironment getEnvironment();
 
 
+    /**
+     * 获取表达式解析器
+     *
+     * @return {@link ExpressionParser}
+     */
+    ExpressionParser getExpressionParser();
     /**
      * 自动装配
      *

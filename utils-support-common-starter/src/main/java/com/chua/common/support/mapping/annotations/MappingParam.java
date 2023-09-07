@@ -34,4 +34,27 @@ public @interface MappingParam {
      */
     boolean ignore() default false;
 
+    /**
+     * 参数类型
+     * @return 参数类型
+     *
+     */
+    ParamType type() default ParamType.NONE;
+    /**
+     * 参数类型
+     *
+     * @author CH
+     */
+    public static enum ParamType {
+        /**
+         * none
+         */
+        NONE,
+
+        /**
+         * 参数来自方法
+         */
+        METHOD
+    }
+
 }
