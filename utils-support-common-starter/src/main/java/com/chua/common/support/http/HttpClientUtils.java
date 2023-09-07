@@ -86,7 +86,7 @@ public class HttpClientUtils {
      *
      * @return SSLSocketFactory
      */
-    public static SSLSocketFactory createSslSocketFactory() {
+    public static SSLContext createSSLContext() {
         SSLContext sc = null;
         try {
             TrustManager[] trustAllCerts = new TrustManager[1];
@@ -99,7 +99,15 @@ public class HttpClientUtils {
         } catch (NoSuchAlgorithmException | KeyManagementException e) {
             throw new RuntimeException(e);
         }
-        return sc.getSocketFactory();
+        return sc;
+    }
+    /**
+     * 生成安全套接字工厂，用于https请求的证书跳过
+     *
+     * @return SSLSocketFactory
+     */
+    public static SSLSocketFactory createSslSocketFactory() {
+        return createSSLContext().getSocketFactory();
     }
 
     /**

@@ -142,13 +142,14 @@
 
         <dependency>
             <groupId>com.chua</groupId>
-            <artifactId>utils-support-zxing-starter</artifactId>
+            <artifactId>utils-support-httpclient-starter</artifactId>
         </dependency>
 
         <dependency>
             <groupId>com.chua</groupId>
-            <artifactId>utils-support-soft-starter</artifactId>
+            <artifactId>utils-support-zxing-starter</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.chua</groupId>
             <artifactId>utils-support-datasource-starter</artifactId>

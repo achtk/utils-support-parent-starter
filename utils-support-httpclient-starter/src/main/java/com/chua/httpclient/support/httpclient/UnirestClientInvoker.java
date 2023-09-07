@@ -18,6 +18,7 @@ import org.apache.http.client.config.RequestConfig;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.HttpClientConnectionManager;
+import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.TrustStrategy;
@@ -52,6 +53,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.chua.common.support.http.HttpClientUtils.createDefaultHostnameVerifier;
 import static com.chua.common.support.http.HttpMethod.*;
 
 /**
@@ -481,6 +483,7 @@ public class UnirestClientInvoker extends AbstractHttpClientInvoker {
      *
      * @return 客户端
      */
+    @SuppressWarnings("ALL")
     protected CloseableHttpClient getClient() {
         if (CLIENT_MAP.containsKey(request)) {
             return (CloseableHttpClient) CLIENT_MAP.get(request);
@@ -590,6 +593,20 @@ public class UnirestClientInvoker extends AbstractHttpClientInvoker {
                 .register("https", sslioSessionStrategy)
                 .build();
     }
+    /**
+     * Registry
+     *
+     * @return
+     */
+    @SuppressWarnings("ALL")
+    public static Registry<ConnectionSocketFactory> registryConnectionSocketFactory() throws Exception {
+        SSLContext sslContext = SSLContext.getInstance("TLS");
+        sslContext.init(null, getTrustManager(), null);
+        ConnectionSocketFactory sslioSessionStrategy = new SSLConnectionSocketFactory(sslContext, new NoopHostnameVerifier());
+        return RegistryBuilder.<ConnectionSocketFactory>create()
+                .register("https", sslioSessionStrategy)
+                .build();
+    }
 
     /**
      * 获取客户端
@@ -634,7 +651,7 @@ public class UnirestClientInvoker extends AbstractHttpClientInvoker {
         RequestConfig config = builder.build();
         HttpClientConnectionManager connManager = null;
         try {
-            connManager = new PoolingHttpClientConnectionManager();
+            connManager = new PoolingHttpClientConnectionManager(registryConnectionSocketFactory());
         } catch (Exception ignored) {
         }
 
@@ -652,8 +669,9 @@ public class UnirestClientInvoker extends AbstractHttpClientInvoker {
             return httpClientBuilder.build();
         }
 
+
         try {
-            return httpClientBuilder.setSSLSocketFactory(sslConnectionSocketFactory()).build();
+            return httpClientBuilder.build();
         } catch (Exception ignored) {
         }
         return httpClientBuilder.build();
@@ -665,9 +683,7 @@ public class UnirestClientInvoker extends AbstractHttpClientInvoker {
      * @return SSLConnectionSocketFactory
      */
     public static SSLConnectionSocketFactory sslConnectionSocketFactory() throws Exception {
-        SSLContext sslContext = SSLContext.getInstance("TLS");
-        sslContext.init(null, getTrustManager(), null);
-        return new SSLConnectionSocketFactory(sslContext, NoopHostnameVerifier.INSTANCE);
+        return new SSLConnectionSocketFactory(HttpClientUtils.createSSLContext(), createDefaultHostnameVerifier());
     }
 
     /**
