@@ -15,4 +15,5 @@ public class MappingAnnotationResourceScanner extends BaseAnnotationResourceScan
     public MappingAnnotationResourceScanner(String[] packages) {
         super(packages);
     }
+
 }

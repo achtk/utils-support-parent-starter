@@ -2,8 +2,11 @@ package com.chua.common.support.objects.source;
 
 import com.chua.common.support.collection.SortedArrayList;
 import com.chua.common.support.collection.SortedList;
+import com.chua.common.support.mapping.Mapping;
+import com.chua.common.support.mapping.annotations.MappingAddress;
 import com.chua.common.support.objects.ConfigureContextConfiguration;
 import com.chua.common.support.objects.definition.ClassTypeDefinition;
+import com.chua.common.support.objects.definition.ObjectTypeDefinition;
 import com.chua.common.support.objects.definition.TypeDefinition;
 import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.StringUtils;
@@ -25,7 +28,7 @@ public abstract class AbstractTypeDefinitionSource implements TypeDefinitionSour
     protected Map<String, SortedList<TypeDefinition>> typeDefinitions = new ConcurrentHashMap<>();
 
     public static final Comparator<TypeDefinition> COMPARABLE = Comparator.comparingInt(TypeDefinition::order);
-    private static final Set<Class<?>> CACHE = new HashSet<>();
+    protected static final Set<Class<?>> CACHE = new HashSet<>();
 
     public AbstractTypeDefinitionSource(ConfigureContextConfiguration configuration) {
         this.configuration = configuration;
@@ -37,7 +40,12 @@ public abstract class AbstractTypeDefinitionSource implements TypeDefinitionSour
             return;
         }
         CACHE.add(aClass);
-        TypeDefinition typeDefinition = new ClassTypeDefinition(aClass);
+        TypeDefinition typeDefinition = null;
+        if(aClass.isAnnotationPresent(MappingAddress.class)) {
+            typeDefinition = new ObjectTypeDefinition(aClass.getTypeName(), Mapping.auto(aClass).get(), aClass);
+        } else {
+            typeDefinition = new ClassTypeDefinition(aClass);
+        }
         register(typeDefinition);
     }
 

@@ -1,7 +1,9 @@
 package com.chua.example.objectcontent;
 
 import com.chua.common.support.lang.robin.Robin;
+import com.chua.common.support.objects.ConfigureContextConfiguration;
 import com.chua.common.support.objects.ConfigureObjectContext;
+import com.chua.common.support.objects.StandardConfigureObjectContext;
 import com.chua.common.support.objects.provider.ObjectProvider;
 
 import java.io.File;
@@ -12,11 +14,13 @@ import java.io.File;
 public class ObjectContextExample {
 
     public static void main(String[] args) {
-        installJar(args);
+        sample(args);
     }
 
     public static void sample(String[] args) {
-        ConfigureObjectContext objectContext = ConfigureObjectContext.newDefault();
+        ConfigureObjectContext objectContext = new StandardConfigureObjectContext(ConfigureContextConfiguration.builder().packages(new String[] {
+                "com.chua.example.mapping", "com.chua.example.objectcontent"
+        }).build());
         Test2Demo test2Demo = objectContext.getBean(Test2Demo.class).get();
         test2Demo = objectContext.getBean(Test2Demo.class).get();
         System.out.println();

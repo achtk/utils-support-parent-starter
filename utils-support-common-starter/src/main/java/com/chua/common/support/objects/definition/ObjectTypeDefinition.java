@@ -18,9 +18,11 @@ public class ObjectTypeDefinition extends ClassTypeDefinition {
     public ObjectTypeDefinition(Object bean) {
         this(ClassUtils.toType(bean).getTypeName(), bean);
     }
-
     public ObjectTypeDefinition(String name, Object bean) {
-        super(ClassUtils.toType(bean));
+        this(name, bean, ClassUtils.toType(bean));
+    }
+    public ObjectTypeDefinition(String name, Object bean, Class<?> type) {
+        super(type);
         this.name = name;
         this.bean = bean;
     }

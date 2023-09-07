@@ -43,4 +43,12 @@ public @interface MappingAddress {
      * @return {@link String}
      */
     String invokeType() default "default";
+
+
+    /**
+     * 映射类型
+     *
+     * @return {@link String}
+     */
+    String mappingType() default "http";
 }
