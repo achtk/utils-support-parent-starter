@@ -55,7 +55,7 @@ public class CacheMethodAnnotationPostProcessor implements MethodAnnotationPostP
                     e.printStackTrace();
                 }
                 return TimeValue.of(value, duration);            }
-        });
+        }).getValue();
     }
 
     private String getKey(Object entity, Object[] args) {
