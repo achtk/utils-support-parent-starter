@@ -13,8 +13,9 @@ public @interface MappingAddress {
     /**
      * 远程地址
      * @return 远程地址
+     * @see com.chua.common.support.mapping.MappingConfig
      */
-    String value();
+    String value() default "";
 
     /**
      * balance

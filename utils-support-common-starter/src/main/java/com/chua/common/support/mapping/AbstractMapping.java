@@ -7,8 +7,10 @@ package com.chua.common.support.mapping;
 public abstract class AbstractMapping<T> implements Mapping<T>{
 
     protected final Class<T> beanType;
+    protected final MappingConfig mappingConfig;
 
-    public AbstractMapping(Class<T> beanType) {
+    public AbstractMapping(Class<T> beanType, MappingConfig mappingConfig) {
         this.beanType = beanType;
+        this.mappingConfig = mappingConfig;
     }
 }

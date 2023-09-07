@@ -9,7 +9,7 @@ import com.chua.common.support.mapping.annotations.MappingRequest;
  * @author CH
  * @since 2023/09/06
  */
-@MappingAddress("https://122.226.158.176:443/artemis")
+@MappingAddress(invokeType = "hik")
 public interface HikClient {
 
     /**
@@ -22,10 +22,10 @@ public interface HikClient {
      * 根据“组织名称orgName”查询为模糊查询。
      * 根据父组织查询子孙组织，为便于构建组织树，会返回没有权限的父组织，通过available为false区分； 如果额外指定了其它字段，为在返回数据的基础上进一步过滤出符合条件的数据。
      *
-     * @param page     页码(1)
+     * @param pageNo     页码(1)
      * @param pageSize 分页数量 (1000)
      * @return 组织机构
      */
-    @MappingRequest("/api/resource/v2/org/advance/orgList")
-    OrgListResult orgList(int page, int pageSize);
+    @MappingRequest(value = "POST /api/resource/v2/org/advance/orgList", jsonPath = "$.data")
+    OrgListResult orgList(int pageNo, int pageSize);
 }

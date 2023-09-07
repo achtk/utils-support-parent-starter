@@ -146,4 +146,14 @@ public final class Converter {
     public static Integer createInteger(String value) {
         return Converter.convertIfNecessary(value, Integer.class);
     }
+
+    /**
+     * 具有转换器
+     *
+     * @param returnType 返回类型
+     * @return boolean
+     */
+    public static boolean hasConverter( Class<?> returnType) {
+        return CONVERTER_MAP.get(returnType) != null;
+    }
 }

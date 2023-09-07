@@ -2,6 +2,7 @@ package com.chua.example.mapping;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.chua.common.support.mapping.Mapping;
+import com.chua.common.support.mapping.MappingConfig;
 
 import java.util.List;
 
@@ -11,7 +12,13 @@ import java.util.List;
 public class HttpMappingExample {
 
     public static void main(String[] args) {
-        HikClient hikClient = Mapping.of(HikClient.class).get();
+        HikClient hikClient = Mapping.of(HikClient.class, MappingConfig.builder()
+                .host("")
+                .path("/artemis")
+                .appKey("")
+                .secretAccessKey("")
+                .build()
+        ).get();
         OrgListResult orgListResult = hikClient.orgList(1, 100);
         System.out.println();
 

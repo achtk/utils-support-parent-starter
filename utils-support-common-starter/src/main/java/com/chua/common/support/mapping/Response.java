@@ -77,7 +77,10 @@ public class Response {
 
             return formatResult(format, Map.class);
         }
-        return Converter.convertIfNecessary(execute, returnType);
+        if(Converter.hasConverter(returnType)) {
+            return Converter.convertIfNecessary(execute, returnType);
+        }
+        return Json.fromJson((String) format(execute), returnType);
     }
 
     /**

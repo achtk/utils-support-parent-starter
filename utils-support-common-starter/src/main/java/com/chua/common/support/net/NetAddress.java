@@ -1065,7 +1065,7 @@ public class NetAddress implements Serializable {
     }
 
     public String getPath() {
-        return path;
+        return StringUtils.startWithAppend(path, SYMBOL_LEFT_SLASH);
     }
 
 }

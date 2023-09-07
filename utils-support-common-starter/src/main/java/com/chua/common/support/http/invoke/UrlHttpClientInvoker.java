@@ -3,6 +3,7 @@ package com.chua.common.support.http.invoke;
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.http.*;
 import com.chua.common.support.http.render.Render;
+import com.chua.common.support.io.ProgressInputStream;
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.CollectionUtils;
 import com.chua.common.support.utils.IoUtils;
@@ -117,7 +118,7 @@ public class UrlHttpClientInvoker extends AbstractHttpClientInvoker {
 
             Object content;
             byte[] bytes;
-            try (InputStream stream = connection.getInputStream()) {
+            try (ProgressInputStream stream = new ProgressInputStream(connection.getInputStream(), url)) {
                 bytes = IoUtils.toByteArray(stream);
                 content = bytes;
             }
@@ -151,8 +152,9 @@ public class UrlHttpClientInvoker extends AbstractHttpClientInvoker {
      */
     private HttpURLConnection urlConnection() throws IOException {
         HttpURLConnection connection;
-        URL realUrl = new URL(url);
+        URL realUrl;
         if (!isHttps) {
+            realUrl = new URL(url);
             // 打开和URL之间的连接
             if (StringUtils.isNotEmpty(request.getProxy())) {
                 connection = (HttpURLConnection) realUrl.openConnection(
@@ -162,6 +164,14 @@ public class UrlHttpClientInvoker extends AbstractHttpClientInvoker {
                 connection = (HttpURLConnection) realUrl.openConnection();
             }
         } else {
+            Object sslSocketFactory = request.getSslSocketFactory();
+            if (sslSocketFactory instanceof SSLSocketFactory) {
+                HttpsURLConnection.setDefaultSSLSocketFactory((SSLSocketFactory) sslSocketFactory);
+            } else {
+                HttpsURLConnection.setDefaultSSLSocketFactory(HttpClientUtils.createSslSocketFactory());
+                HttpsURLConnection.setDefaultHostnameVerifier(HttpClientUtils.createDefaultHostnameVerifier());
+            }
+            realUrl = new URL(url);
             HttpsURLConnection urlConnection = null;
             if (StringUtils.isNotEmpty(request.getProxy())) {
                 urlConnection = (HttpsURLConnection) realUrl.openConnection(
@@ -170,12 +180,8 @@ public class UrlHttpClientInvoker extends AbstractHttpClientInvoker {
             } else {
                 urlConnection = (HttpsURLConnection) realUrl.openConnection();
             }
-            Object sslSocketFactory = request.getSslSocketFactory();
             if (sslSocketFactory instanceof SSLSocketFactory) {
                 urlConnection.setSSLSocketFactory((SSLSocketFactory) sslSocketFactory);
-            } else {
-                HttpsURLConnection.setDefaultSSLSocketFactory(HttpClientUtils.createSslSocketFactory());
-                HttpsURLConnection.setDefaultHostnameVerifier(HttpClientUtils.createDefaultHostnameVerifier());
             }
             connection = urlConnection;
         }

@@ -7,7 +7,7 @@ import com.chua.common.support.lang.proxy.ProxyMethod;
 import com.chua.common.support.lang.proxy.ProxyUtils;
 import com.chua.common.support.lang.robin.Robin;
 import com.chua.common.support.mapping.annotations.*;
-import com.chua.common.support.mapping.invoke.HttpInvoke;
+import com.chua.common.support.mapping.invoke.HttpInvoker;
 import com.chua.common.support.objects.definition.element.MethodDescribe;
 import com.chua.common.support.objects.definition.element.ParameterDescribe;
 import com.chua.common.support.placeholder.MapMixSystemPlaceholderResolver;
@@ -18,9 +18,13 @@ import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.ArrayUtils;
 import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.ObjectUtils;
+import com.chua.common.support.utils.StringUtils;
 
 import java.util.Map;
 import java.util.function.Function;
+
+import static com.chua.common.support.constant.CommonConstant.EMPTY_STRING;
+import static com.chua.common.support.constant.NameConstant.HTTP;
 
 /**
  * 实体映射
@@ -29,8 +33,8 @@ import java.util.function.Function;
  */
 public class HttpMapping<T> extends AbstractMapping<T> {
 
-    public HttpMapping(Class<T> beanType) {
-        super(beanType);
+    public HttpMapping(Class<T> beanType, MappingConfig mappingConfig) {
+        super(beanType, mappingConfig);
     }
 
 
@@ -45,7 +49,7 @@ public class HttpMapping<T> extends AbstractMapping<T> {
                 doAnalysis(requestBuilder, responseBuilder, proxyMethod, methodDescribe);
                 Request request = requestBuilder.build();
 
-                HttpInvoke httpInvoke = ServiceProvider.of(HttpInvoke.class).getExtension(request.getInvokeType());
+                HttpInvoker httpInvoke = ServiceProvider.of(HttpInvoker.class).getNewExtension(request.getInvokeType(), mappingConfig);
                 String url = getUrl(request);
                 Object execute = httpInvoke.execute(url, request);
                 return responseBuilder.build().getValue(execute, proxyMethod);
@@ -195,7 +199,16 @@ public class HttpMapping<T> extends AbstractMapping<T> {
         builder.invokeType(mappingAddress.invokeType());
         builder.readTimeout(mappingAddress.readTimeout());
         builder.connectTimeout(mappingAddress.connectTimeout());
-        builder.address(mappingAddress.value());
+        if(StringUtils.isNotBlank(mappingAddress.value())) {
+            builder.address(mappingAddress.value());
+        } else {
+            String[] protocols = mappingConfig.getProtocol();
+            String protocol = HTTP;
+            if(!ArrayUtils.isEmpty(protocols)) {
+                protocol =  ArrayUtils.getIndex(protocols, 0);
+            }
+            builder.address(protocol + "://" + mappingConfig.getHost() + (StringUtils.defaultString(mappingConfig.getPath(), EMPTY_STRING)));
+        }
         builder.balance(mappingAddress.balance());
     }
 

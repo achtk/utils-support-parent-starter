@@ -40,7 +40,7 @@ public class HikSignUtil {
             byte[] keyBytes = secret.getBytes(ENCODING);
             hmacSha256.init(new SecretKeySpec(keyBytes, 0, keyBytes.length, HMAC_SHA256));
 
-            return new String(Base64.getDecoder().decode(
+            return new String(Base64.getEncoder().encode(
                     hmacSha256.doFinal(buildStringToSign(method, path, headers, querys, bodys, signHeaderPrefixList)
                             .getBytes(ENCODING))),
                     ENCODING);

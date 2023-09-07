@@ -543,8 +543,7 @@ public class HikHttpUtil {
                 HttpHeader httpHeader = response.httpHeader();
                 newUrl = httpHeader.getFirst("location");
                 HttpClientInvoker clientInvoker = HttpClient.get().url(newUrl).newInvoker();
-                HttpResponse response1 = clientInvoker.execute();
-                response = response1;
+                response = clientInvoker.execute();
             }
 
             response.httpHeader().forEach((k, v) -> {

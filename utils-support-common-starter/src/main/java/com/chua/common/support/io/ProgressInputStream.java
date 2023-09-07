@@ -48,6 +48,15 @@ public class ProgressInputStream extends InputStream {
     public ProgressInputStream(InputStream is) throws IOException {
         this(is, new ProgressBar("task", is.available()));
     }
+    /**
+     * Constructs a new ProgressInputStream with an input stream and progress.
+     *
+     * @param is the input stream
+     * @param name 名称
+     */
+    public ProgressInputStream(InputStream is, String name) throws IOException {
+        this(is, new ProgressBar(name, is.available()));
+    }
 
     /**
      * Constructs a new ProgressInputStream with an input stream and progress.

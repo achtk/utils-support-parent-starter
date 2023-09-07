@@ -2,6 +2,7 @@ package com.chua.common.support.converter.definition;
 
 
 import com.chua.common.support.function.Joiner;
+import com.chua.common.support.json.Json;
 import com.chua.common.support.utils.IoUtils;
 import com.chua.common.support.utils.StringUtils;
 
@@ -33,11 +34,11 @@ public class StringTypeConverter implements TypeConverter<String> {
         }
 
         if (value instanceof Collection) {
-            return Joiner.on(",").join(value);
+            return Json.toJson(value);
         }
 
         if (value instanceof Map) {
-            return Joiner.on("&").withKeyValueSeparator("=").join(value);
+            return Json.toJson(value);
         }
 
         if (value.getClass().isArray()) {

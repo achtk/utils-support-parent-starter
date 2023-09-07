@@ -1,5 +1,6 @@
 package com.chua.common.support.mapping.invoke;
 
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.http.HttpClient;
 import com.chua.common.support.http.HttpClientBuilder;
 import com.chua.common.support.http.HttpClientInvoker;
@@ -12,7 +13,7 @@ import com.chua.common.support.mapping.Request;
  * @author CH
  * @since 2023/09/06
  */
-public interface HttpInvoke {
+public interface HttpInvoker {
 
 
     /**
@@ -25,7 +26,8 @@ public interface HttpInvoke {
     Object execute(String url, Request request);
 
 
-    public static class DefaultHttpInvoke implements HttpInvoke {
+    @Spi("default")
+    public static class DefaultHttpInvoke implements HttpInvoker {
         /**
          * 执行
          *

@@ -87,14 +87,19 @@ public class HttpClientUtils {
      * @return SSLSocketFactory
      */
     public static SSLSocketFactory createSslSocketFactory() {
-        SSLSocketFactory ssfFactory = null;
+        SSLContext sc = null;
         try {
-            SSLContext sc = SSLContext.getInstance("SSL","SunJSSE");
-            sc.init(null, new TrustManager[]{new TrustAllCerts()}, new SecureRandom());
-            ssfFactory = sc.getSocketFactory();
-        } catch (Exception ignored) {
+            TrustManager[] trustAllCerts = new TrustManager[1];
+            TrustManager tm = new TrustAllCerts();
+            trustAllCerts[0] = tm;
+            sc = SSLContext.getInstance("SSL");
+            SSLSessionContext sslsc = sc.getServerSessionContext();
+            sslsc.setSessionTimeout(0);
+            sc.init(null, trustAllCerts, null);
+        } catch (NoSuchAlgorithmException | KeyManagementException e) {
+            throw new RuntimeException(e);
         }
-        return ssfFactory;
+        return sc.getSocketFactory();
     }
 
     /**
@@ -166,19 +171,27 @@ public class HttpClientUtils {
     /**
      * 用于信任所有证书
      */
-    public static class TrustAllCerts implements X509TrustManager {
-        @Override
-        public void checkClientTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
-        }
-
-        @Override
-        public void checkServerTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
-
-        }
-
-        @Override
+    public static class TrustAllCerts implements TrustManager, X509TrustManager {
         public X509Certificate[] getAcceptedIssuers() {
-            return new X509Certificate[0];
+            return null;
+        }
+
+        public boolean isServerTrusted(X509Certificate[] certs) {
+            return true;
+        }
+
+        public boolean isClientTrusted(X509Certificate[] certs) {
+            return true;
+        }
+
+        public void checkServerTrusted(X509Certificate[] certs, String authType)
+                throws CertificateException {
+            return;
+        }
+
+        public void checkClientTrusted(X509Certificate[] certs, String authType)
+                throws CertificateException {
+            return;
         }
     }
 
