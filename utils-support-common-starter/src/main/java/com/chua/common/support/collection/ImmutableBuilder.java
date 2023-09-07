@@ -1,8 +1,6 @@
 package com.chua.common.support.collection;
 
 import com.chua.common.support.bean.BeanMap;
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.Table;
 
 import java.util.*;
 
@@ -153,7 +151,7 @@ public class ImmutableBuilder {
      * @return table
      */
     public static <R, C, V> TableBuilder<R, C, V> builderOfTable() {
-        return new TableBuilder<>(HashBasedTable.create());
+        return new TableBuilder<>(new GuavaHashBasedTable());
     }
 
     public static <T> List<T> newArrayList() {
@@ -167,9 +165,9 @@ public class ImmutableBuilder {
 
     public static final class TableBuilder<R, C, V> {
 
-        private final HashBasedTable<R, C, V> basedTable;
+        private final GuavaHashBasedTable<R, C, V> basedTable;
 
-        public TableBuilder(HashBasedTable<R, C, V> basedTable) {
+        public TableBuilder(GuavaHashBasedTable<R, C, V> basedTable) {
             this.basedTable = basedTable;
         }
 

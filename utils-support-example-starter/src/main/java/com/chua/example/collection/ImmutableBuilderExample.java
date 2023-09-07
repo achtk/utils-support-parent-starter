@@ -1,9 +1,9 @@
 package com.chua.example.collection;
 
 import com.chua.common.support.collection.ImmutableBuilder;
-import com.chua.common.support.collection.Table;
 import com.chua.common.support.utils.RandomUtils;
 import com.google.common.collect.ImmutableTable;
+import com.google.common.collect.Table;
 
 import java.util.List;
 import java.util.Map;
@@ -34,7 +34,7 @@ public class ImmutableBuilderExample {
                 .put(1, "a", "A")
                 .put(2, "a", "B")
                 .put(3, "b", "A")
-                .buildGuavaOrThrow();
+                .build();
 
         System.out.println(table);
         System.out.println(table.toString());

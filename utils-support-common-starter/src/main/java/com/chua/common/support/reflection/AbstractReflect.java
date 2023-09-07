@@ -1,12 +1,10 @@
 package com.chua.common.support.reflection;
 
-import com.chua.common.support.collection.ConcurrentReferenceTable;
+import com.chua.common.support.collection.GuavaHashBasedTable;
 import com.chua.common.support.collection.Table;
 import com.chua.common.support.converter.Converter;
 import com.chua.common.support.lang.proxy.DelegateMethodIntercept;
 import com.chua.common.support.lang.proxy.ProxyUtils;
-import com.chua.common.support.spi.ServiceDefinition;
-import com.chua.common.support.spi.finder.SamePackageServiceFinder;
 import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.value.DelegateValue;
 import com.chua.common.support.value.Value;
@@ -45,7 +43,7 @@ public class AbstractReflect<T> extends DelegateMethodIntercept<T> {
             fieldMap.put(field.getName(), field);
         });
 
-        this.methodTable = new ConcurrentReferenceTable<>();
+        this.methodTable = new GuavaHashBasedTable<>();
         ClassUtils.doWithMethods(type, method -> {
             method.setAccessible(true);
             methodTable.put(method.getName(), method.getParameterTypes(), method);

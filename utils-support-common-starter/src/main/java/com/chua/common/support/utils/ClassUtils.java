@@ -1,7 +1,7 @@
 package com.chua.common.support.utils;
 
 import com.chua.common.support.collection.ConcurrentReferenceHashMap;
-import com.chua.common.support.collection.ConcurrentReferenceTable;
+import com.chua.common.support.collection.GuavaHashBasedTable;
 import com.chua.common.support.collection.Table;
 import com.chua.common.support.converter.Converter;
 import com.chua.common.support.function.MethodFilter;
@@ -72,7 +72,7 @@ public class ClassUtils {
     /**
      * 空 map
      */
-    public static final Table<Object, Class<?>, Class<?>> BASIC_VIRTUAL = new ConcurrentReferenceTable<>();
+    public static final Table<Object, Class<?>, Class<?>> BASIC_VIRTUAL = new GuavaHashBasedTable<>();
 
     static {
         BASIC_VIRTUAL.put("B", byte.class, Byte.class);

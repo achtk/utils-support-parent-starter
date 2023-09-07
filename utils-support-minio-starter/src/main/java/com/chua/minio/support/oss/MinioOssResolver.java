@@ -2,7 +2,6 @@ package com.chua.minio.support.oss;
 
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.annotations.SpiOption;
-import com.chua.common.support.collection.ConcurrentReferenceTable;
 import com.chua.common.support.collection.Table;
 import com.chua.common.support.converter.Converter;
 import com.chua.common.support.lang.page.Page;

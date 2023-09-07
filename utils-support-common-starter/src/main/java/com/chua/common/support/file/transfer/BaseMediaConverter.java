@@ -2,7 +2,10 @@ package com.chua.common.support.file.transfer;
 
 import com.chua.common.support.binary.BaseByteSource;
 import com.chua.common.support.binary.ByteSourceArray;
-import com.chua.common.support.collection.*;
+import com.chua.common.support.collection.GuavaHashBasedTable;
+import com.chua.common.support.collection.SortedArrayList;
+import com.chua.common.support.collection.SortedList;
+import com.chua.common.support.collection.Table;
 import com.chua.common.support.file.filesystem.BaseOsFileSystem;
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.*;
@@ -22,7 +25,7 @@ import static com.chua.common.support.constant.CommonConstant.FILE_URL_PREFIX;
  */
 public abstract class BaseMediaConverter {
 
-    private static final Table<String, String, SortedList<FileConverter>> TABLE = new ConcurrentReferenceTable<>();
+    private static final Table<String, String, SortedList<FileConverter>> TABLE = new GuavaHashBasedTable<>();
 
     static {
         if (TABLE.isEmpty()) {

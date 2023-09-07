@@ -10,49 +10,7 @@ import java.util.function.BiFunction;
  *
  * @author CH
  */
-public interface Table<R, C, V> {
-    /**
-     * 是否包含行,列
-     *
-     * @param rowKey    r
-     * @param columnKey c
-     * @return 是否包含行, 列
-     */
-    boolean contains(R rowKey, C columnKey);
-
-    /**
-     * 是否包含行
-     *
-     * @param rowKey r
-     * @return 是否包含行
-     */
-    boolean containsRow(R rowKey);
-
-    /**
-     * 是否包含列
-     *
-     * @param columnKey c
-     * @return 是否包含行
-     */
-    boolean containsColumn(C columnKey);
-
-    /**
-     * 是否包含值
-     *
-     * @param value v
-     * @return 是否包含行
-     */
-    boolean containsValue(V value);
-
-    /**
-     * 获取值
-     *
-     * @param rowKey    r
-     * @param columnKey c
-     * @return v
-     */
-    V get(R rowKey, C columnKey);
-
+public interface Table<R, C, V> extends com.google.common.collect.Table<R, C, V> {
     /**
      * 获取值
      *
@@ -92,15 +50,6 @@ public interface Table<R, C, V> {
      * @return v
      */
     V put(R rowKey, C columnKey, V value);
-
-    /**
-     * 删除
-     *
-     * @param rowKey    r
-     * @param columnKey c
-     * @return v
-     */
-    V remove(R rowKey, C columnKey);
 
     /**
      * 存储
