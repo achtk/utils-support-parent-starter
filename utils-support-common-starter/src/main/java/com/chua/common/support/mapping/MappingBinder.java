@@ -1,9 +1,7 @@
 package com.chua.common.support.mapping;
 
 import com.chua.common.support.lang.expression.parser.ExpressionParser;
-import com.chua.common.support.objects.ConfigureContextConfiguration;
 import com.chua.common.support.objects.ConfigureObjectContext;
-import com.chua.common.support.objects.StandardConfigureObjectContext;
 import lombok.Data;
 
 /**
@@ -13,7 +11,7 @@ import lombok.Data;
 @Data
 public class MappingBinder {
 
-    private ConfigureObjectContext configureObjectContext = new StandardConfigureObjectContext(ConfigureContextConfiguration.builder().build());
+    private ConfigureObjectContext configureObjectContext ;
 
 
     /**
