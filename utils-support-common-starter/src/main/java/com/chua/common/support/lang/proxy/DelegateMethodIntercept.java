@@ -6,7 +6,7 @@ import com.chua.common.support.objects.definition.element.MethodDescribe;
 import com.chua.common.support.spi.ServiceProvider;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -84,6 +84,12 @@ public class DelegateMethodIntercept<T> implements MethodIntercept<T> {
      * @return {@link Object}
      */
     private Object executeByPlugin(List<ProxyMethodPlugin> proxyMethodPlugins, ProxyMethod proxyMethod) {
+        Object value = null;
+        for (ProxyMethodPlugin proxyMethodPlugin : proxyMethodPlugins) {
+            value = proxyMethodPlugin.execute(proxyMethod.getMethodDescribe(), proxyMethod.getProxy(), proxyMethod.getArgs());
+        }
+
+        return value;
     }
 
     /**
@@ -96,7 +102,7 @@ public class DelegateMethodIntercept<T> implements MethodIntercept<T> {
     @SuppressWarnings("ALL")
     private List<ProxyMethodPlugin> checkMethodPlugin(Method method, ProxyMethod proxyMethod) {
         List<ProxyMethodPlugin> collect = ServiceProvider.of(ProxyMethodPlugin.class).collect();
-        List<ProxyMethodPlugin> plugins = new ArrayList<>(collect.size());
+        List<ProxyMethodPlugin> plugins = new LinkedList<>();
         for (ProxyMethodPlugin proxyMethodPlugin : collect) {
             if(proxyMethodPlugin.hasAnnotation(method)) {
                 plugins.add(proxyMethodPlugin);
