@@ -96,7 +96,36 @@ public interface ElementDescribe {
      * @return boolean
      */
    boolean hasAnnotation(String annotationType);
+    /**
+     * 是否有任意注解
+     *
+     * @param annotationType 注解类型
+     * @return boolean
+     */
+    default boolean hasAnnotation(String[] annotationType) {
+        for (String s : annotationType) {
+            if(hasAnnotation(s)) {
+                return true;
+            }
+        }
 
+        return false;
+    }
+    /**
+     * 是否有任意注解
+     *
+     * @param annotationType 注解类型
+     * @return boolean
+     */
+    default boolean hasAnnotation(Class<?>[] annotationType) {
+        for (Class<?> s : annotationType) {
+            if(hasAnnotation(s.getTypeName())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
     /**
      * 注解
      *

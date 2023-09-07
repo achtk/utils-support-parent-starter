@@ -17,7 +17,7 @@ import com.alibaba.excel.write.style.row.SimpleRowHeightStyleStrategy;
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.file.export.AbstractExportFile;
 import com.chua.common.support.file.export.ExportConfiguration;
-import com.chua.common.support.reflection.describe.TypeAttribute;
+import com.chua.common.support.objects.definition.element.TypeDescribe;
 import com.chua.poi.support.excel.handler.ColFilterHandler;
 import com.chua.poi.support.excel.handler.EasyExcelCustomCellWriteHandler;
 import com.chua.poi.support.excel.handler.FilterHandler;
@@ -56,7 +56,7 @@ public class XlsExportFile extends AbstractExportFile {
             OnceAbsoluteMerge.class.getTypeName(),
     };
     private ExcelWriter excelWriter;
-    private TypeAttribute typeAttribute;
+    private TypeDescribe typeAttribute;
 
     public XlsExportFile(ExportConfiguration configuration) {
         super(configuration);
@@ -74,7 +74,7 @@ public class XlsExportFile extends AbstractExportFile {
     @Override
     public <T> void export(OutputStream outputStream, List<T> data) {
         Class<?> aClass = data.get(0).getClass();
-        this.typeAttribute = TypeAttribute.create(aClass);
+        this.typeAttribute = TypeDescribe.create(aClass);
         // 头的策略
         WriteCellStyle headWriteCellStyle = new WriteCellStyle();
         // 背景颜色
@@ -93,7 +93,7 @@ public class XlsExportFile extends AbstractExportFile {
                 new HorizontalCellStyleStrategy(headWriteCellStyle, contentWriteCellStyle);
 
 
-        if (typeAttribute.hasAnyAnnotation(DEFAULT_ANNOTATION)) {
+        if (typeAttribute.hasAnnotation(DEFAULT_ANNOTATION)) {
             this.excelWriter = EasyExcel.write()
                     .head(aClass)
                     .file(outputStream)
@@ -145,7 +145,7 @@ public class XlsExportFile extends AbstractExportFile {
 
     @Override
     public <T> void append(List<T> records) {
-        if (typeAttribute.hasAnyAnnotation(DEFAULT_ANNOTATION)) {
+        if (typeAttribute.hasAnnotation(DEFAULT_ANNOTATION)) {
             this.excelWriter.write(records, EasyExcel.write().sheet(0).build());
             return;
         }
