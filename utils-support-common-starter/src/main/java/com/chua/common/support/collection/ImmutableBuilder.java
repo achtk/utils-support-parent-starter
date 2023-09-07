@@ -152,8 +152,8 @@ public class ImmutableBuilder {
      * @param <V> v
      * @return table
      */
-    public static <R, C, V> Table<R, C, V> builderOfTable() {
-        return HashBasedTable.create();
+    public static <R, C, V> TableBuilder<R, C, V> builderOfTable() {
+        return new TableBuilder<>(HashBasedTable.create());
     }
 
     public static <T> List<T> newArrayList() {
@@ -164,6 +164,37 @@ public class ImmutableBuilder {
         return ImmutableBuilder.<K, V>builderOfMap().newHashMap();
     }
 
+
+    public static final class TableBuilder<R, C, V> {
+
+        private final HashBasedTable<R, C, V> basedTable;
+
+        public TableBuilder(HashBasedTable<R, C, V> basedTable) {
+            this.basedTable = basedTable;
+        }
+
+        /**
+         * 放
+         *
+         * @param r r
+         * @param c c
+         * @param v v
+         * @return {@link TableBuilder}<{@link R}, {@link C}, {@link V}>
+         */
+        public TableBuilder<R, C, V> put(R r, C c, V v) {
+            this.basedTable.put(r, c, v);
+            return this;
+        }
+
+        /**
+         * 建筑
+         *
+         * @return {@link Table}<{@link R}, {@link C}, {@link V}>
+         */
+        public Table<R, C, V> build() {
+            return basedTable;
+        }
+    }
 
     static final class CollectionComparableBuilder<E> extends CollectionMethodBuilder<E, CollectionComparableBuilder<E>> {
 

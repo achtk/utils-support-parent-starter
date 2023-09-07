@@ -1,8 +1,8 @@
 package com.chua.common.support.geo.transform;
 
 import com.chua.common.support.collection.ImmutableBuilder;
-import com.chua.common.support.collection.Table;
 import com.chua.common.support.geo.Point;
+import com.google.common.collect.Table;
 
 import java.io.Serializable;
 

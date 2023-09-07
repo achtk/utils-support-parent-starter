@@ -2,7 +2,6 @@ package com.chua.common.support.reflection;
 
 import com.chua.common.support.collection.TypeHashMap;
 import com.chua.common.support.converter.Converter;
-import com.chua.common.support.reflection.craft.FieldCraftTable;
 import com.chua.common.support.unit.name.NamingCase;
 import com.chua.common.support.utils.AnnotationUtils;
 import com.chua.common.support.utils.ClassUtils;
@@ -29,7 +28,7 @@ import java.util.stream.Collectors;
  * @version 1.0.0
  * @since 2021/3/30
  */
-public final class FieldStation extends FieldCraftTable {
+public final class FieldStation  {
 
     public static final FieldStation INSTANCE = new FieldStation(null);
     private static final Map<Class<?>, FieldStation> CACHE = new HashMap<>();
@@ -50,7 +49,6 @@ public final class FieldStation extends FieldCraftTable {
      * @param entity 实体
      */
     public FieldStation(Object entity) {
-        super(ClassUtils.toType(entity));
         this.entity = entity;
         this.type = ClassUtils.toType(entity);
         this.getFields();

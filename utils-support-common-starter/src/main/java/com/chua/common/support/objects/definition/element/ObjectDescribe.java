@@ -25,8 +25,10 @@ public class ObjectDescribe extends TypeDescribe{
     }
     private void loadMethodDefinitions() {
         methodDefinitions = ServiceProvider.of(MethodResolver.class).getSpiService().get(type);
-        for (List<MethodDescribe> describeList : methodDefinitions.values()) {
-            describeList.register(data);
+        for (List<MethodDescribe> register : methodDefinitions.values()) {
+            for (MethodDescribe methodDescribe : register) {
+                methodDescribe.register(data);
+            }
         }
     }
 

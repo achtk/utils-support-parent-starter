@@ -39,6 +39,9 @@ public class MethodDescribe implements ElementDescribe {
         this.annotationDefinitions = ServiceProvider.of(AnnotationResolver.class).getSpiService().get(method);
         this.bean = bean;
     }
+    public MethodDescribe(Method method, Class<?> type) {
+        this(method, type, null);
+    }
 
     public MethodDescribe(Method method) {
         this(method, method.getDeclaringClass(), null);

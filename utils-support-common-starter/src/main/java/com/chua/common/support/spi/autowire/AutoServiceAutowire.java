@@ -1,6 +1,5 @@
 package com.chua.common.support.spi.autowire;
 
-import com.chua.common.support.objects.definition.element.TypeDescribe;
 import com.chua.common.support.utils.ClassUtils;
 
 import java.util.LinkedList;
@@ -29,10 +28,6 @@ public class AutoServiceAutowire implements ServiceAutowire {
             springServiceAutowire = ClassUtils.forObject(SPRING_AUTO);
         }
         AUTOWIRES.add(new InitializingAwareAutoServiceAutowire());
-        boolean b= null == springServiceAutowire && (ClassUtils.isPresent(APPLICATION_CONTEXT) && ClassUtils.isPresent(UTILS));
-        if (b) {
-            TypeDescribe typeDescribe = new TypeDescribe(UTILS);
-        }
     }
 
     @Override
