@@ -1,8 +1,6 @@
 package com.chua.common.support.http;
 
 
-import com.sun.istack.internal.Nullable;
-
 /**
  * http状态码
  *
@@ -608,7 +606,6 @@ public enum HttpStatus {
      * @return the corresponding {@code HttpStatus}, or {@code null} if not found
      * @since 5.0
      */
-    @Nullable
     public static HttpStatus resolve(int statusCode) {
         // Use cached VALUES instead of values() to prevent array allocation.
         for (HttpStatus status : VALUES) {
