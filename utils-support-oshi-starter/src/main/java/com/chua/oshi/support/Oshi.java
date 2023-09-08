@@ -11,10 +11,12 @@ import oshi.hardware.GlobalMemory;
 import oshi.hardware.HardwareAbstractionLayer;
 import oshi.software.os.FileSystem;
 import oshi.software.os.OSFileStore;
+import oshi.software.os.OSProcess;
 import oshi.software.os.OperatingSystem;
 import oshi.util.Util;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
@@ -84,6 +86,21 @@ public class Oshi {
         mem.setUsed(memory.getTotal() - memory.getAvailable());
         mem.setFree(memory.getAvailable());
         return mem;
+    }
+
+    /**
+     * 新 process
+     *
+     * @return {@link Jvm}
+     */
+    public static List<Process> newProcess() {
+        List<Process> rs = new LinkedList<>();
+        OperatingSystem operatingSystem = si.getOperatingSystem();
+        List<OSProcess> processes = operatingSystem.getProcesses();
+        for (OSProcess process : processes) {
+            Process process1 = new Process();
+        }
+        return rs;
     }
 
     /**
