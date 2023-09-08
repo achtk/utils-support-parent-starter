@@ -191,7 +191,7 @@ public class JedisUtil {
             String user = redisConfiguration.getUsername();
             String password = redisConfiguration.getPassword();
             Integer database = redisConfiguration.getDatabase();
-            Long connectionTimeoutMs = redisConfiguration.getConnectTimeout().get(ChronoUnit.MILLIS);
+            Long connectionTimeoutMs = redisConfiguration.getConnectTimeout().get(ChronoUnit.SECONDS) * 1000;
             Integer port = redisConfiguration.getPort();
 
             DefaultJedisClientConfig.Builder builder = DefaultJedisClientConfig.builder();
