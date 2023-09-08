@@ -1,16 +1,3 @@
-/*
-  DBFReader
-  Class for reading the records assuming that the given
-	InputStream comtains DBF data.
-
-  This file is part of JavaDBF packege.
-
-  Author: anil@linuxense.com
-  License: LGPL (http://www.gnu.org/copyleft/lesser.html)
-
-  $Id: DBFReader.java,v 1.8 2004/03/31 10:54:03 anil Exp $
-*/
-
 package com.chua.common.support.file.javadbf;
 
 import com.chua.common.support.utils.IoUtils;
