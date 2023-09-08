@@ -8,7 +8,7 @@ import java.time.temporal.ChronoUnit;
  *
  * @author CH
  */
-public enum DateUnit implements DateUnit.IDateUnit {
+public enum DateUnit  {
     /**
      * 一毫秒
      */
@@ -127,11 +127,4 @@ public enum DateUnit implements DateUnit.IDateUnit {
     }
 
 
-    public static interface IDateUnit {
-
-        /**
-         * @return 单位对应的毫秒数
-         */
-        long getMillis();
-    }
 }
