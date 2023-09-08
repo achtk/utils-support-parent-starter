@@ -1,7 +1,7 @@
 package com.chua.common.support.mapping;
 
+import com.chua.common.support.lang.expression.parser.DelegateExpressionParser;
 import com.chua.common.support.lang.expression.parser.ExpressionParser;
-import com.chua.common.support.objects.ConfigureObjectContext;
 import lombok.Data;
 
 /**
@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 public class MappingBinder {
 
-    private ConfigureObjectContext configureObjectContext ;
+    private ExpressionParser expressionParser = new DelegateExpressionParser();
 
 
     /**
@@ -22,7 +22,6 @@ public class MappingBinder {
      * @param type 类型
      */
     public void bind(String name, Class<?> type ,Object bean) {
-        ExpressionParser expressionParser = configureObjectContext.getExpressionParser();
         expressionParser.addFunction(type, bean);
         expressionParser.setVariable(name, bean);
     }
@@ -34,6 +33,6 @@ public class MappingBinder {
      * @return {@link Object}
      */
     public Object parse(String value) {
-        return configureObjectContext.getExpressionParser().parseExpression(value).getValue();
+        return expressionParser.parseExpression(value).getValue();
     }
 }

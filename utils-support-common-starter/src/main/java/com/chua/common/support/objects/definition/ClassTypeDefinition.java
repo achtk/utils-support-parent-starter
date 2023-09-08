@@ -98,7 +98,7 @@ public class ClassTypeDefinition implements TypeDefinition, InitializingAware {
     @Override
     public boolean fromAssignableFrom(Class<?> target) {
         String typeName = target.getTypeName();
-        return interfaces.contains(typeName) || superType.contains(typeName);
+        return interfaces.contains(typeName) || superType.contains(typeName) || typeName.equals(type.getTypeName());
     }
 
     @Override
