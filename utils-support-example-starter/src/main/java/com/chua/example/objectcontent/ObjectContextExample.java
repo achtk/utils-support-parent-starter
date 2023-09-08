@@ -1,12 +1,10 @@
 package com.chua.example.objectcontent;
 
-import com.alibaba.fastjson2.JSONObject;
 import com.chua.common.support.lang.robin.Robin;
 import com.chua.common.support.objects.ConfigureContextConfiguration;
 import com.chua.common.support.objects.ConfigureObjectContext;
 import com.chua.common.support.objects.StandardConfigureObjectContext;
 import com.chua.common.support.objects.provider.ObjectProvider;
-import com.chua.example.mapping.MoeIp;
 
 import java.io.File;
 
@@ -25,8 +23,6 @@ public class ObjectContextExample {
         }).build());
         Test2Demo test2Demo = objectContext.getBean(Test2Demo.class).get();
         test2Demo = objectContext.getBean(Test2Demo.class).get();
-        MoeIp moeIp = objectContext.getBean(MoeIp.class.getTypeName(), MoeIp.class);
-        JSONObject jsonObject = moeIp.analysis("127.0.0.1");
         System.out.println();
     }
 
