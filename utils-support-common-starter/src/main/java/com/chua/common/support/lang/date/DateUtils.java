@@ -1,6 +1,7 @@
 package com.chua.common.support.lang.date;
 
 import com.chua.common.support.lang.date.constant.DateFormatConstant;
+import com.chua.common.support.lang.date.unit.DateUnit;
 import com.chua.common.support.utils.NumberUtils;
 
 import java.math.BigDecimal;
@@ -221,6 +222,18 @@ public class DateUtils {
      */
     public static Period toPeriod(String time) {
         return Period.parse("P" + time);
+    }
+
+    /**
+     * 之间
+     *
+     * @param date  日期
+     * @param date1 日期1
+     * @param dateUnit    dateUnit
+     * @return long
+     */
+    public static long between(Date date, Date date1, DateUnit dateUnit) {
+        return Math.abs(date.getTime() - date1.getTime()) / dateUnit.getMillis();
     }
 
 

@@ -7,12 +7,14 @@ import com.chua.common.support.range.IpRange;
 import com.chua.common.support.utils.StringUtils;
 
 import java.math.BigInteger;
+import java.net.InetAddress;
 import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.regex.Pattern;
 
 import static com.chua.common.support.constant.CommonConstant.*;
 import static com.chua.common.support.constant.NumberConstant.*;
+import static com.chua.common.support.net.NetUtils.getLocalAddress;
 
 /**
  * 地址处理
@@ -144,7 +146,8 @@ public class IpUtils {
      * @return 本地地址
      */
     public static String getLocalHost() {
-        return NetUtils.getLocalIpv4();
+        InetAddress address = getLocalAddress();
+        return address == null ? null : address.getHostName();
     }
 
     /**
@@ -508,4 +511,12 @@ public class IpUtils {
         return ret;
     }
 
+    /**
+     * 获取主机名
+     *
+     * @return {@link String}
+     */
+    public static String getHostName() {
+        return getLocalHost();
+    }
 }

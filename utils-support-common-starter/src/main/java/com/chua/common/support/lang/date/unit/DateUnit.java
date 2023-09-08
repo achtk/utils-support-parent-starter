@@ -1,5 +1,6 @@
 package com.chua.common.support.lang.date.unit;
 
+import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 
 /**
@@ -7,7 +8,7 @@ import java.time.temporal.ChronoUnit;
  *
  * @author CH
  */
-public enum DateUnit {
+public enum DateUnit implements DateUnit.IDateUnit {
     /**
      * 一毫秒
      */
@@ -31,7 +32,12 @@ public enum DateUnit {
     /**
      * 一周的毫秒数
      */
-    WEEK(DAY.getMillis() * 7);
+    WEEK(DAY.getMillis() * 7),
+    /**
+     * custom
+     */
+    CUSTOM(DAY.getMillis()),;
+
 
     private final long millis;
 
@@ -42,6 +48,7 @@ public enum DateUnit {
     /**
      * @return 单位对应的毫秒数
      */
+    @Override
     public long getMillis() {
         return this.millis;
     }
@@ -54,6 +61,17 @@ public enum DateUnit {
      */
     public ChronoUnit toChronosUnit() {
         return DateUnit.toChronosUnit(this);
+    }
+
+    /**
+     * 单位兼容转换，将{@link ChronoUnit}转换为对应的DateUnit
+     *
+     * @param duration {@link ChronoUnit}
+     * @return DateUnit，null表示不支持此单位
+     * @since 5.4.5
+     */
+    public static DateUnit of(Duration duration) {
+        return new DateUnit(duration.toMillis());
     }
 
     /**
@@ -106,5 +124,14 @@ public enum DateUnit {
             default:
         }
         return null;
+    }
+
+
+    public static interface IDateUnit {
+
+        /**
+         * @return 单位对应的毫秒数
+         */
+        long getMillis();
     }
 }

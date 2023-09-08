@@ -3348,6 +3348,15 @@ public class StringUtils {
      * 大小格式化
      *
      * @param size   大小
+     * @return 大小格式化
+     */
+    public static String getNetFileSizeDescription(long size) {
+        return getNetFileSizeDescription(size, new DecimalFormat("#.00"));
+    }
+    /**
+     * 大小格式化
+     *
+     * @param size   大小
      * @param format 格式
      * @return 大小格式化
      */
