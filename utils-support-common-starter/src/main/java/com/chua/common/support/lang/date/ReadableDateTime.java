@@ -97,7 +97,7 @@ public interface ReadableDateTime {
      * @return 星期几
      */
     default String getDayOfWeekName() {
-        return WEEK_NAME[getDayOfWeek()];
+        return WEEK_NAME[getDayOfWeek() % 7];
     }
 
     /**

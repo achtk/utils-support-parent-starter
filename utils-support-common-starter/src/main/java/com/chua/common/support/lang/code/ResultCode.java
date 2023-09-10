@@ -25,7 +25,8 @@ public interface ResultCode {
      * @return 结果
      */
     static ResultCode transferForHttpCode(Integer status) {
-        if (status == V_200) {
+        int v300 = 300;
+        if (status >= V_200 && status < v300) {
             return OK;
         }
         if (status == V_403) {
