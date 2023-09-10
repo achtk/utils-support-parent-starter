@@ -11,6 +11,11 @@ import lombok.Data;
 public class Process {
 
     /**
+     * command
+     */
+    private String command;
+
+    /**
      * 名称
      */
     private String name;

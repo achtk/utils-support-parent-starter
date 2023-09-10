@@ -16,32 +16,32 @@ public class Cpu implements Serializable {
     /**
      * 核心数
      */
-    private int cpuNum;
+    private int cpuNum = 0;
 
     /**
      * CPU总的使用率
      */
-    private double total;
+    private double total = 0;
 
     /**
      * CPU系统使用率
      */
-    private double sys;
+    private double sys = 0;
 
     /**
      * CPU用户使用率
      */
-    private double used;
+    private double used = 0;
 
     /**
      * CPU当前等待率
      */
-    private double wait;
+    private double wait = 0;
 
     /**
      * CPU当前空闲率
      */
-    private double free;
+    private double free = 0;
 
 
     public double getTotal() {

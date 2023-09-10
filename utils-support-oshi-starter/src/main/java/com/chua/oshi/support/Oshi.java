@@ -99,6 +99,9 @@ public class Oshi {
         List<OSProcess> processes = operatingSystem.getProcesses();
         for (OSProcess process : processes) {
             Process process1 = new Process();
+            process1.setId(process1.getId());
+            process1.setName(process.getName());
+            process1.setCommand(process.getCommandLine());
         }
         return rs;
     }
