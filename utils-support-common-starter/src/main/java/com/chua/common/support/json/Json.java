@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -131,6 +132,22 @@ public class Json {
         return JSON.parseObject(json, tTypeReference);
     }
 
+    /**
+     * 从json到list
+     * 获取对象
+     *
+     * @param inputStream       json
+     * @param targetType 目标类型
+     * @return JsonObject
+     */
+    public static <T> List<T> fromJsonToList(InputStream inputStream, Class<T> targetType) {
+        try {
+            return fromJsonToList(IoUtils.toString(new InputStreamReader(inputStream, UTF_8)), targetType);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
     /**
      * 从json到list
      * 获取对象
