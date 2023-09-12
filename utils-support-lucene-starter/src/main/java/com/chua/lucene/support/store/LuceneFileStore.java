@@ -26,7 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author CH
  */
-@Spi(value = {"lucene", "nio"}, order = -1)
+@Spi(value = {"lucene", "nio"}, order = 1)
 public class LuceneFileStore extends NioFileStore {
 
     private final LuceneTemplateResolver luceneTemplateResolver;

@@ -46,7 +46,7 @@ public class NioFileStore implements FileStore, Runnable, InitializingAware {
         this.suffix = suffix;
         this.storeConfig = storeConfig;
         afterPropertiesSet();
-        executor.schedule(this, 0, TimeUnit.SECONDS);
+        executor.scheduleAtFixedRate(this, 0, 1, TimeUnit.HOURS);
     }
 
     @Override
@@ -58,7 +58,10 @@ public class NioFileStore implements FileStore, Runnable, InitializingAware {
 
     @Override
     public void run() {
-        new RetentionDaysPlugin().doWith(file, storeConfig);
+        try {
+            new RetentionDaysPlugin().doWith(file, storeConfig);
+        } catch (Exception ignored) {
+        }
     }
 
     @Override
