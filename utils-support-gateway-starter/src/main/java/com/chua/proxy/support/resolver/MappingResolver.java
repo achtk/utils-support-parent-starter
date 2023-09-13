@@ -20,4 +20,11 @@ public interface MappingResolver {
      * @return SocketAddress
      */
     SocketAddress resolve(Frame frame);
+
+    /**
+     * 超时
+     *
+     * @return int
+     */
+    int timeout();
 }

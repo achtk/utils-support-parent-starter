@@ -29,10 +29,18 @@ public class SimpleHttpProxyChannel implements HttpProxyChannel<FullHttpRequest,
     @Override
     public ByteBuf proxy(FullHttpRequest req) {
         EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
+//        final SslContext sslCtx;
+//        if (SSL) {
+//            SelfSignedCertificate ssc = new SelfSignedCertificate();
+//            sslCtx = SslContextBuilder.forServer(ssc.certificate(), ssc.privateKey()).build();
+//        } else {
+//            sslCtx = null;
+//        }
         Bootstrap bootstrap = new Bootstrap();
         bootstrap.group(eventLoopGroup)
                 .channel(NioSocketChannel.class)
                 .option(ChannelOption.SO_KEEPALIVE, true)
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, mappingResolver.timeout())
                 .remoteAddress(mappingResolver.resolve(FrameUtils.createFrame(req)))
         return null;
     }
