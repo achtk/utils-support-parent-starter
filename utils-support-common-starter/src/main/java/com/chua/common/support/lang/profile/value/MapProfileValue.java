@@ -2,8 +2,8 @@ package com.chua.common.support.lang.profile.value;
 
 
 import com.chua.common.support.constant.ValueMode;
-import com.chua.common.support.json.jsonpath.DocumentContext;
-import com.chua.common.support.json.jsonpath.JsonPath;
+import com.chua.common.support.json.Json;
+import com.chua.common.support.json.JsonPath;
 import com.chua.common.support.lang.expression.parser.ExpressionParser;
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.unit.name.NamingCase;
@@ -23,7 +23,6 @@ import java.util.Set;
 public class MapProfileValue implements ProfileValue {
     private final String resourceUrl;
     private final Map<String, Object> value;
-    private DocumentContext documentContext;
 
     private ExpressionParser spelExpressionParser = ServiceProvider.of(ExpressionParser.class).getNewExtension("el");
 
@@ -35,7 +34,6 @@ public class MapProfileValue implements ProfileValue {
         this.resourceUrl = resourceUrl;
         this.value = new LinkedHashMap<>();
         this.value.forEach(this::add);
-        this.documentContext = JsonPath.parse(map);
     }
     public MapProfileValue(String resourceUrl, Properties properties) {
        this(resourceUrl, MapUtils.asMap(properties));
@@ -51,7 +49,6 @@ public class MapProfileValue implements ProfileValue {
             spelExpressionParser.setVariable(NamingCase.toKebabCase(s), o);
             spelExpressionParser.setVariable(NamingCase.toPascalCase(s), o);
         }
-        this.documentContext = JsonPath.parse(value);
         return this;
     }
 
@@ -74,7 +71,7 @@ public class MapProfileValue implements ProfileValue {
 
         if(valueMode == ValueMode.XPATH) {
             try {
-                return documentContext.read(key);
+                return JsonPath.of(key).get(Json.toJson(this.value));
             } catch (Exception ignored) {
             }
             return null;
