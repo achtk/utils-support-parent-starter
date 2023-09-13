@@ -91,15 +91,6 @@ public class MapProfileValue implements ProfileValue {
             return true;
         }
 
-        if(valueMode == ValueMode.XPATH) {
-            try {
-                documentContext.read(name);
-                return true;
-            } catch (Exception ignored) {
-            }
-            return false;
-        }
-
         try {
              spelExpressionParser.parseExpression(name).getValue();
              return true;

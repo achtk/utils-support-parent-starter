@@ -32,6 +32,17 @@ public class JsonPath implements ProfileReliable {
         return CACHE.computeIfAbsent(path, it -> new JsonPath(path));
     }
 
+    /**
+     * 阅读
+     *
+     * @param json     json
+     * @param jsonPath json路径
+     * @return {@link Object}
+     */
+    public static Object read(String json, String jsonPath) {
+        return JSONPath.extract(json, jsonPath);
+    }
+
 
     /**
      * get

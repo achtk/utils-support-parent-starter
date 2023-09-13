@@ -3,7 +3,7 @@ package com.chua.common.support.mapping;
 import com.alibaba.fastjson2.JSONObject;
 import com.chua.common.support.converter.Converter;
 import com.chua.common.support.json.Json;
-import com.chua.common.support.json.jsonpath.JsonPath;
+import com.chua.common.support.json.JsonPath;
 import com.chua.common.support.lang.proxy.ProxyMethod;
 import com.chua.common.support.log.Log;
 import com.chua.common.support.utils.StringUtils;

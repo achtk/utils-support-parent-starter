@@ -1,7 +1,7 @@
 package com.chua.common.support.lang.spider.selector;
 
 import com.alibaba.fastjson2.JSON;
-import com.chua.common.support.json.jsonpath.JsonPath;
+import com.chua.common.support.json.JsonPath;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ public class JsonPathSelector implements Selector {
 
     public JsonPathSelector(String jsonPathStr) {
         this.jsonPathStr = jsonPathStr;
-        this.jsonPath = JsonPath.compile(this.jsonPathStr);
+        this.jsonPath = JsonPath.of(this.jsonPathStr);
     }
 
     @SuppressWarnings("unused")
@@ -32,7 +32,7 @@ public class JsonPathSelector implements Selector {
 
     @Override
     public String select(String text) {
-        Object object = jsonPath.read(text);
+        Object object = jsonPath.get(text);
         if (object == null) {
             return null;
         }
@@ -57,7 +57,7 @@ public class JsonPathSelector implements Selector {
     @SuppressWarnings("unchecked")
     public List<String> selectList(String text) {
         List<String> list = new ArrayList<>();
-        Object object = jsonPath.read(text);
+        Object object = jsonPath.get(text);
         if (object == null) {
             return list;
         }
