@@ -1,5 +1,7 @@
 package com.chua.common.support.net.proxy;
 
+import com.chua.common.support.net.frame.Frame;
+
 /**
  * 限流通道
  *
@@ -15,5 +17,5 @@ public interface LimitChannel extends ProxyChannel {
      * @param frame 资源
      * @return 尝试获取
      */
-    boolean tryAcquire(LimitFrame frame);
+    boolean tryAcquire(Frame frame);
 }

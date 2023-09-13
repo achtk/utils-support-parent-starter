@@ -1,17 +1,17 @@
 package com.chua.proxy.support.channel;
 
-import com.chua.common.support.collection.ImmutableBuilder;
 import com.chua.common.support.net.proxy.HttpProxyChannel;
 import com.chua.common.support.net.proxy.LimitChannel;
-import com.chua.common.support.net.proxy.LimitFrame;
 import com.chua.proxy.support.context.ProxyContext;
 import com.chua.proxy.support.message.LimitMessage;
+import com.chua.proxy.support.utils.FrameUtils;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.handler.codec.http.*;
-
-import java.util.Map;
+import io.netty.handler.codec.http.DefaultFullHttpResponse;
+import io.netty.handler.codec.http.FullHttpRequest;
+import io.netty.handler.codec.http.HttpResponseStatus;
+import io.netty.handler.codec.http.HttpVersion;
 
 import static com.chua.common.support.constant.NameConstant.HTTP;
 import static com.chua.proxy.support.constant.MessageConstant.LIMIT_MESSAGE;
@@ -37,7 +37,8 @@ public class HttpProxyServerHandler extends SimpleChannelInboundHandler<FullHttp
             ctx.writeAndFlush(Unpooled.copiedBuffer(new LimitMessage(msg, LIMIT_MESSAGE, "401").toByteArray()));
             return;
         }
-        Map<String, HttpProxyChannel> beanOfType = ProxyContext.getInstance().getBeanOfType(HttpProxyChannel.class);
+        HttpProxyChannel channel = ProxyContext.getInstance().getBean(HTTP, HttpProxyChannel.class);
+        channel.proxy(msg);
         //TODO:
     }
 
@@ -53,15 +54,6 @@ public class HttpProxyServerHandler extends SimpleChannelInboundHandler<FullHttp
         if (null == limitChannel) {
             return false;
         }
-
-        LimitFrame frame = new LimitFrame();
-        frame.setMethod(request.method().name());
-        frame.setUri(request.uri());
-        HttpHeaders headers = request.headers();
-        frame.setHeader(ImmutableBuilder.<String, String>builderOfMap()
-                .put(headers)
-                .build()
-        );
-        return limitChannel.tryAcquire(frame);
+        return limitChannel.tryAcquire(FrameUtils.createFrame(request));
     }
 }

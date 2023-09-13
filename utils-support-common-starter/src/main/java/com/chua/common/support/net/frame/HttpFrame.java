@@ -1,4 +1,4 @@
-package com.chua.common.support.net.proxy;
+package com.chua.common.support.net.frame;
 
 import lombok.Data;
 
@@ -11,7 +11,7 @@ import java.util.Map;
  * @since 2023/09/13
  */
 @Data
-public class LimitFrame {
+public class HttpFrame implements Frame {
 
     /**
      * uri
