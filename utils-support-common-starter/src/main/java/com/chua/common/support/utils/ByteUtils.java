@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.chua.common.support.constant.CommonConstant.EMPTY_BYTE;
+import static com.chua.common.support.utils.ArrayUtils.isEmpty;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
@@ -31,10 +32,124 @@ public class ByteUtils extends BitUtils {
             'A', 'B', 'E', 'F', 'I', 'J', 'K', 'L', 'M', 'R', 'S', 'T', 'Y', 'Z',
             '-', '_'};
 
-    public static char toDigit(int i)
-    {
+    /**
+     * 数字
+     *
+     * @param i i
+     * @return char
+     */
+    public static char toDigit(int i) {
         return DIGITS[i];
     }
+
+    /**
+     * 作语法分析六角形一串到数组
+     *
+     * @param s s
+     * @return {@link byte[]}
+     */
+    public static byte[] parseHexStringToArray(String s) {
+        if (StringUtils.isEmpty(s)) {
+            return null;
+        }
+        int len = s.length();
+        if (len == 1) {
+            byte[] tmp = new byte[1];
+            tmp[0] = parseHexString(s);
+            return tmp;
+        }
+        if (len % 2 != 0) {
+            return null;
+        }
+        int size = len / 2;
+        byte[] data = new byte[size];
+        for (int i = 0; i < size; i++) {
+            String sub = s.substring(i * 2, i * 2 + 2);
+            data[i] = parseHexString(sub);
+        }
+        return data;
+    }
+
+    /**
+     * 解析十六进制字符串
+     *
+     * @param s s
+     * @return byte
+     */
+    public static byte parseHexString(String s) {
+        int i = Integer.parseInt(s, 16);
+        return (byte) i;
+    }
+
+    /**
+     * 到十六进制字符串
+     *
+     * @param b b
+     * @return {@link String}
+     */
+    public static String toHexString(byte b) {
+        String s = Integer.toHexString(b & 0xFF);
+        int len = s.length();
+        if (len < 2) {
+            s = "0" + s;
+        }
+        return s.toUpperCase();
+    }
+
+    /**
+     * 到十六进制字符串
+     *
+     * @param bytes  字节
+     * @param prefix 前缀
+     * @param suffix 后缀
+     * @return {@link String}
+     */
+    public static String toHexString(byte[] bytes, String prefix, String suffix) {
+        if (isEmpty(bytes)) {
+            return null;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (byte b : bytes) {
+            sb.append(toHexString(b, prefix, suffix));
+        }
+        return sb.toString();
+    }
+
+    /**
+     * 到十六进制字符串
+     *
+     * @param bytes 字节
+     * @return {@link String}
+     */
+    public static String toHexString(byte[] bytes) {
+        if (isEmpty(bytes)) {
+            return null;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (byte b : bytes) {
+            sb.append(toHexString(b));
+        }
+        return sb.toString();
+    }
+
+    /**
+     * 到十六进制字符串
+     *
+     * @param b      b
+     * @param prefix 前缀
+     * @param suffix 后缀
+     * @return {@link String}
+     */
+    public static String toHexString(byte b, String prefix, String suffix) {
+        String s = Integer.toHexString(b & 0xFF);
+        int len = s.length();
+        if (len < 2) {
+            s = "0" + s;
+        }
+        s = prefix + s + suffix;
+        return s.toUpperCase();
+    }
+
     /**
      * double value to byte array
      *

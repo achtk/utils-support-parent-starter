@@ -587,7 +587,7 @@ public class LocationUtils {
 
 
     private static void doAnalysisClasspath(List<String> urls, String[] url) {
-        log.info("检测类加载器下是否存在模型 : classpath*:**/{}", url);
+        log.info("检测类加载器下是否存在模型 : classpath*:**/{}", ArrayUtils.toString(url));
         for (String s : url) {
             ResourceProvider resourceProvider = ResourceProvider.of("classpath*:**/" + s);
             Set<Resource> resources = resourceProvider.getResources();
