@@ -43,7 +43,7 @@ public abstract class AbstractProxyServer implements ProxyServer {
                 .channel(NioServerSocketChannel.class)
                 .option(ChannelOption.SO_BACKLOG, proxyConfig.backlog())
                 .option(ChannelOption.SO_REUSEADDR, true)
-                .handler(new ProxyChannelInitializer(proxyConfig))
+                .childHandler(new ProxyChannelInitializer(proxyConfig))
                 .childOption(ChannelOption.TCP_NODELAY, proxyConfig.tcpNoDelay());
 
         log.info("=======================================================");
