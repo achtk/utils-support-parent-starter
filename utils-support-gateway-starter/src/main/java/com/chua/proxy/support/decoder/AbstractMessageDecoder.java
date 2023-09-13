@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
+import static com.chua.common.support.constant.NumberConstant.FIVE;
+
 /**
  * 调度员处理程序
  *
@@ -19,9 +21,11 @@ public abstract class AbstractMessageDecoder extends ByteToMessageDecoder {
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) throws Exception {
         // Will use the first five bytes to detect a protocol.
-        if (byteBuf.readableBytes() < 5) {
+        if (byteBuf.readableBytes() < FIVE) {
             return;
         }
+
+
         final int magic1 = byteBuf.getUnsignedByte(byteBuf.readerIndex());
         final int magic2 = byteBuf.getUnsignedByte(byteBuf.readerIndex() + 1);
 

@@ -338,6 +338,11 @@ public class ImmutableBuilder {
             return this;
         }
 
+        public MapBuilder<K, V> put(Iterable<Map.Entry<String, String>> iterable) {
+            iterable.forEach(this::put);
+            return this;
+        }
+
         public MapBuilder<K, V> put(Object bean) {
             BeanMap.of(bean, false).forEach((k, v) -> {
                 if (k == null || v == null) {

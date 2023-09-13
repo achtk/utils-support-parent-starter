@@ -36,7 +36,7 @@ public class DispatcherHandler extends AbstractMessageDecoder {
     public void addHttpHandler(ChannelHandlerContext ctx) {
         // server端发送的是httpResponse，所以要使用HttpResponseEncoder进行编码
         ch.pipeline().addLast(new HttpServerCodec())
-                .addLast(new HttpObjectAggregator(512 * 1024))
+                .addLast(new HttpObjectAggregator(65536 * 100))
                 .addLast(new HttpProxyServerHandler());
     }
 
