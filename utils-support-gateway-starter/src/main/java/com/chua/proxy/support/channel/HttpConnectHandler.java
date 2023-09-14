@@ -34,10 +34,6 @@ public class HttpConnectHandler extends ChannelInboundHandlerAdapter {
 	 */
 	@Override
 	public void channelUnregistered(ChannelHandlerContext ctx0) throws Exception {
-		log.info(LOG_PRE + ",在目标服务器取消注册", ctx0.channel().id());
-
-		//关闭与客户端的通道
-//		ctx.close();
 	}
 
 
