@@ -62,6 +62,7 @@ public class HttpConnectHandler extends ChannelInboundHandlerAdapter {
 	 */
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx0, Throwable cause) throws Exception {
+		cause.printStackTrace();
 		ctx0.close();
 		//关闭 与客户端的连接
 		ctx.close();

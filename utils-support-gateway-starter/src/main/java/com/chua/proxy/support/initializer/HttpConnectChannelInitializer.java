@@ -33,7 +33,7 @@ public class HttpConnectChannelInitializer extends ChannelInitializer<SocketChan
 				//作为客户端时的请求编码解码
 				.addLast(new HttpClientCodec())
 				//数据聚合类,将http报文转为 FullHttpRequest和FullHttpResponse
-				.addLast(new HttpObjectAggregator(65536))
+				.addLast(new HttpObjectAggregator(Integer.MAX_VALUE))
 				//自定义处理器
 				.addLast(new HttpConnectHandler(ctx));
 	}

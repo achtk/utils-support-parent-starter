@@ -50,6 +50,8 @@ public class SimpleHttpProxyChannel implements HttpProxyChannel {
                     HttpResponseStatus.NOT_FOUND));
             return;
         }
+        req.headers().set("Host", discovery.getAddress() + ":" + discovery.getPort());
+
         //用工厂类构建bootstrap,用来建立socket连接
         Bootstrap bootstrap = new Bootstrap()
                 .group(new NioEventLoopGroup(8))
@@ -64,7 +66,6 @@ public class SimpleHttpProxyChannel implements HttpProxyChannel {
                     .addListener(new HttpChannelFutureListener(req, ctx));
             return;
         }
-        req.headers().set("Host", discovery.getAddress() + ":" + discovery.getPort());
         //如果是Https请求
         bootstrap
                 .handler(new HttpsConnectChannelInitializer(ctx))
