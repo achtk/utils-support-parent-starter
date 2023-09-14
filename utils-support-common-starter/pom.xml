@@ -16,6 +16,8 @@
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <groovy.version>4.0.13</groovy.version>
+        <dep.guava.version>31.1-jre</dep.guava.version>
+        <guava.version>31.1-jre</guava.version>
     </properties>
 
     <dependencies>

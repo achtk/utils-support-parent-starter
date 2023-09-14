@@ -11,6 +11,7 @@ public interface HttpProxyChannel<I, O> extends ProxyChannel {
      * 代理
      *
      * @param req 绿色
+     * @return {@link O}
      */
     O proxy(I req);
 }

@@ -1,11 +1,12 @@
 package com.chua.proxy.support.channel;
 
+import com.chua.common.support.net.channel.limit.LimitChannel;
+import com.chua.common.support.net.channel.limit.LimitConfig;
 import com.chua.common.support.net.proxy.HttpProxyChannel;
-import com.chua.common.support.net.proxy.LimitChannel;
+import com.chua.common.support.net.resolver.MappingResolver;
+import com.chua.common.support.spi.ServiceProvider;
 import com.chua.proxy.support.context.ProxyContext;
-import com.chua.proxy.support.message.LimitMessage;
 import com.chua.proxy.support.utils.FrameUtils;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
@@ -13,8 +14,6 @@ import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpVersion;
 
-import static com.chua.common.support.constant.NameConstant.HTTP;
-import static com.chua.proxy.support.constant.MessageConstant.LIMIT_MESSAGE;
 import static io.netty.handler.codec.http.HttpUtil.is100ContinueExpected;
 
 /**
@@ -34,10 +33,14 @@ public class HttpProxyServerHandler extends SimpleChannelInboundHandler<FullHttp
         }
 
         if (isLimit(ctx, msg)) {
-            ctx.writeAndFlush(Unpooled.copiedBuffer(new LimitMessage(msg, LIMIT_MESSAGE, "401").toByteArray()));
+            ctx.writeAndFlush(new DefaultFullHttpResponse(
+                    HttpVersion.HTTP_1_1,
+                    HttpResponseStatus.TOO_MANY_REQUESTS));
             return;
         }
-        HttpProxyChannel channel = ProxyContext.getInstance().getBean(HTTP, HttpProxyChannel.class);
+
+        HttpProxyChannel channel = ServiceProvider.of(HttpProxyChannel.class).getNewExtension("http-proxy", ctx,
+                ProxyContext.getInstance().getBean(ProxyContext.getInstance().getMappingConfig().getName(), MappingResolver.class));
         channel.proxy(msg);
         //TODO:
     }
@@ -50,7 +53,8 @@ public class HttpProxyServerHandler extends SimpleChannelInboundHandler<FullHttp
      * @return boolean
      */
     private boolean isLimit(ChannelHandlerContext ctx, FullHttpRequest request) {
-        LimitChannel limitChannel = ProxyContext.getInstance().getBean(HTTP, LimitChannel.class);
+        LimitConfig limitConfig = ProxyContext.getInstance().getLimitConfig();
+        LimitChannel limitChannel = ProxyContext.getInstance().getBean(limitConfig.getName(), LimitChannel.class);
         if (null == limitChannel) {
             return false;
         }

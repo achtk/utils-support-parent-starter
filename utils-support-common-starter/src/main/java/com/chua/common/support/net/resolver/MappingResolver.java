@@ -1,4 +1,4 @@
-package com.chua.proxy.support.resolver;
+package com.chua.common.support.net.resolver;
 
 import com.chua.common.support.net.frame.Frame;
 

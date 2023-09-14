@@ -1,6 +1,7 @@
-package com.chua.common.support.net.proxy;
+package com.chua.common.support.net.channel.limit;
 
 import com.chua.common.support.net.frame.Frame;
+import com.chua.common.support.net.proxy.ProxyChannel;
 
 /**
  * 限流通道
