@@ -1,8 +1,7 @@
 package com.chua.quartz.support.scheduler;
 
 import com.chua.common.support.annotations.Spi;
-import com.chua.common.support.context.definition.TypeDefinition;
-import com.chua.common.support.context.factory.ApplicationContextBuilder;
+import com.chua.common.support.objects.definition.TypeDefinition;
 import com.chua.common.support.task.scheduler.AbstractTimeScheduler;
 import com.chua.common.support.task.scheduler.Scheduled;
 import com.chua.common.support.task.scheduler.TimeScheduler;
@@ -142,7 +141,7 @@ public class QuartzTimeScheduler extends AbstractTimeScheduler {
      */
     private Object getEntity(Object entity) {
         if (entity instanceof TypeDefinition) {
-            return ((TypeDefinition) entity).getObject(ApplicationContextBuilder.newBuilder().build());
+            return ((TypeDefinition) entity).getObject();
         }
 
         return entity;
