@@ -30,6 +30,7 @@ public class HttpProxyServerHandler extends SimpleChannelInboundHandler<FullHttp
             ctx.writeAndFlush(new DefaultFullHttpResponse(
                     HttpVersion.HTTP_1_1,
                     HttpResponseStatus.CONTINUE));
+            return;
         }
 
         if (isLimit(ctx, msg)) {
@@ -46,7 +47,7 @@ public class HttpProxyServerHandler extends SimpleChannelInboundHandler<FullHttp
     }
 
     /**
-     * 是极限
+     * limit
      *
      * @param ctx     ctx
      * @param request msg
