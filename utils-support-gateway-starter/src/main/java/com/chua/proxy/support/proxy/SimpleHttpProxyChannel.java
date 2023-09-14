@@ -64,6 +64,7 @@ public class SimpleHttpProxyChannel implements HttpProxyChannel {
                     .addListener(new HttpChannelFutureListener(req, ctx));
             return;
         }
+        req.headers().set("Host", discovery.getAddress() + ":" + discovery.getPort());
         //如果是Https请求
         bootstrap
                 .handler(new HttpsConnectChannelInitializer(ctx))
