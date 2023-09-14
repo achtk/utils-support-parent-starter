@@ -48,8 +48,8 @@ public class FileVfsServer extends AbstractServer {
 
     @Override
     public void run() {
-        viewResolver.putAll(beanFactory.getBeanMap(ViewResolver.class));
-        imageFilterList.putAll(beanFactory.getBeanMap(ImageFilter.class));
+//        viewResolver.putAll(beanFactory.getBeanMap(ViewResolver.class));
+//        imageFilterList.putAll(beanFactory.getBeanMap(ImageFilter.class));
         addClassPathViewResolver();
         addViewResolver();
         refreshResolver();
