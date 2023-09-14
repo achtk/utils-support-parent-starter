@@ -5,6 +5,7 @@ import com.chua.common.support.lang.date.DateTime;
 import com.chua.common.support.lang.date.Times;
 import com.chua.common.support.lang.date.lunar.LunarTime;
 import com.chua.common.support.utils.ThreadUtils;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.text.ParseException;
@@ -19,6 +20,7 @@ import static java.time.DayOfWeek.MONDAY;
  * @author CH
  * @since 2022-03-18
  */
+@Data
 @Slf4j
 public class DateExample {
 
