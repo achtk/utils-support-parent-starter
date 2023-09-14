@@ -27,7 +27,7 @@ import io.netty.handler.codec.http.HttpVersion;
  * @since 2023/09/13
  */
 @Spi("http-proxy")
-public class SimpleHttpProxyChannel implements HttpProxyChannel<FullHttpRequest> {
+public class SimpleHttpProxyChannel implements HttpProxyChannel {
 
 
     private final MappingResolver mappingResolver;
@@ -41,7 +41,8 @@ public class SimpleHttpProxyChannel implements HttpProxyChannel<FullHttpRequest>
     }
 
     @Override
-    public void proxy(FullHttpRequest req) {
+    public void proxy(Object req1) {
+        FullHttpRequest req = (FullHttpRequest) req1;
         Discovery discovery = mappingResolver.resolve(FrameUtils.createFrame(req));
         if (null == discovery) {
             ctx.writeAndFlush(new DefaultFullHttpResponse(
