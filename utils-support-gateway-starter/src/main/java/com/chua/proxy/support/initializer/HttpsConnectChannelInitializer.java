@@ -4,6 +4,11 @@ import com.chua.proxy.support.channel.HttpsConnectHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.handler.ssl.SslContext;
+import io.netty.handler.ssl.SslContextBuilder;
+import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
+
+import javax.net.ssl.SSLException;
 
 /**
  * 用于客户端https请求的 通道初始化器
@@ -21,6 +26,20 @@ public class HttpsConnectChannelInitializer extends ChannelInitializer<SocketCha
 	 */
 	private final ChannelHandlerContext ctx;
 
+	static
+	SslContextBuilder sslContextBuilder = SslContextBuilder.forClient();
+	public static SslContext sslContext;
+
+	//下面这行，直接信任自签证书
+	static {
+		sslContextBuilder.trustManager(InsecureTrustManagerFactory.INSTANCE);
+		try {
+			sslContext = sslContextBuilder.build();
+		} catch (SSLException ignored) {
+		}
+
+	}
+
 	public HttpsConnectChannelInitializer(ChannelHandlerContext ctx) {
 		this.ctx = ctx;
 	}
@@ -28,6 +47,7 @@ public class HttpsConnectChannelInitializer extends ChannelInitializer<SocketCha
 	@Override
 	protected void initChannel(SocketChannel socketChannel) throws Exception {
 		socketChannel.pipeline()
+				.addLast("ssl", sslContext.newHandler(socketChannel.alloc()))
 				//https请求无法解析,不做任何编解码操作
 				//自定义处理器
 				.addLast(new HttpsConnectHandler(ctx));
