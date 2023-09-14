@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/utils-support-common-starter/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/utils-support-common-starter/src/main/resources" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/utils-support-example-starter/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/utils-support-example-starter/src/main/resources" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/utils-support-gateway-starter/src/main/java" isTestSource="false" />
+    </content>
+  </component>
+</module>

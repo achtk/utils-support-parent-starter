@@ -1,6 +1,5 @@
 package com.chua.common.support.jsoup.select;
 
-import com.chua.common.support.json.jsonpath.internal.filter.Evaluator;
 import com.chua.common.support.jsoup.nodes.Element;
 import com.chua.common.support.jsoup.nodes.Node;
 

@@ -19,7 +19,7 @@ import java.io.OutputStream;
  */
 public class ZxingQrCode implements QrCode {
 
-    private QrCodeConfigure qrCodeConfigure;
+    private final QrCodeConfigure qrCodeConfigure;
 
     public ZxingQrCode(QrCodeConfigure qrCodeConfigure) {
         this.qrCodeConfigure = qrCodeConfigure;

@@ -1,6 +1,5 @@
 package com.chua.common.support.jsoup.select;
 
-import com.chua.common.support.json.jsonpath.internal.filter.Evaluator;
 import com.chua.common.support.jsoup.helper.Validate;
 import com.chua.common.support.jsoup.nodes.*;
 
@@ -15,7 +14,10 @@ import static com.chua.common.support.utils.StringUtils.normaliseWhitespace;
 
 /**
  * Evaluates that an element matches the selector.
+ *
+ * @author CH
  */
+@SuppressWarnings("ALL")
 public abstract class AbstractEvaluator {
     protected AbstractEvaluator() {
     }
