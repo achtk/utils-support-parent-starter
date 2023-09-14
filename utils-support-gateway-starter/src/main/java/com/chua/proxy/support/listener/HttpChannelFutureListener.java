@@ -39,7 +39,7 @@ public class HttpChannelFutureListener implements ChannelFutureListener {
 		String channelId = ctx.channel().toString();
 		//连接成功操作
 		if (future.isSuccess()) {
-			log.info(LOG_PRE + ",与目标主机建立连接成功.", channelId);
+			log.info("{} ,与目标主机建立连接成功.", LOG_PRE);
 			//将客户端请求报文发送给服务端
 			future.channel().writeAndFlush(msg);
 			return;
