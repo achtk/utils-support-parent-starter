@@ -6,12 +6,11 @@ package com.chua.common.support.net.proxy;
  * @author CH
  * @since 2023/09/13
  */
-public interface HttpProxyChannel<I, O> extends ProxyChannel {
+public interface HttpProxyChannel<I> extends ProxyChannel {
     /**
      * 代理
      *
      * @param req 绿色
-     * @return {@link O}
      */
-    O proxy(I req);
+   void proxy(I req);
 }

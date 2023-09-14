@@ -1,8 +1,7 @@
 package com.chua.common.support.net.resolver;
 
+import com.chua.common.support.discovery.Discovery;
 import com.chua.common.support.net.frame.Frame;
-
-import java.net.SocketAddress;
 
 /**
  * 映射解析器
@@ -19,7 +18,7 @@ public interface MappingResolver {
      * @param frame 帧
      * @return SocketAddress
      */
-    SocketAddress resolve(Frame frame);
+    Discovery resolve(Frame frame);
 
     /**
      * 超时

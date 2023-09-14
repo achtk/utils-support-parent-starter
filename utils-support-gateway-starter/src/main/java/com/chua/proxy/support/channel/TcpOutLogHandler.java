@@ -19,7 +19,7 @@ public class TcpOutLogHandler extends ChannelOutboundHandlerAdapter {
 
     @Override
     public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
-        log.debug("ProxyServer发送消息：{}", ByteUtils.toHexString(BufUtils.getArray((ByteBuf) msg)));
+        log.debug("TcpOutLogHandler 发送消息：{}", ByteUtils.toHexString(BufUtils.getArray((ByteBuf) msg)));
         super.write(ctx, msg, promise);
     }
 }

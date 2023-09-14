@@ -9,6 +9,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 
+import static com.chua.common.support.http.HttpConstant.HTTP;
+
 /**
  * 发现实例
  *
@@ -33,6 +35,10 @@ public class Discovery {
      * id
      */
     private String id;
+    /**
+     * 协议
+     */
+    private String protocol;
     /**
      * 权
      */
@@ -72,4 +78,7 @@ public class Discovery {
      */
     private Map<String, String> metadata;
 
+    public boolean isHttp() {
+        return HTTP.equals(protocol);
+    }
 }

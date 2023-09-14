@@ -12,5 +12,5 @@ public class MappingConfig {
     /**
      * 名称
      */
-    private String name = "token";
+    private String name = "mapping";
 }

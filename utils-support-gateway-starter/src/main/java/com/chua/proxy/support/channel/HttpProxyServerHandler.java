@@ -30,6 +30,9 @@ public class HttpProxyServerHandler extends SimpleChannelInboundHandler<FullHttp
             ctx.writeAndFlush(new DefaultFullHttpResponse(
                     HttpVersion.HTTP_1_1,
                     HttpResponseStatus.CONTINUE));
+
+            ctx.pipeline().remove("httpCodec");
+            ctx.pipeline().remove("httpObject");
             return;
         }
 
@@ -55,7 +58,7 @@ public class HttpProxyServerHandler extends SimpleChannelInboundHandler<FullHttp
      */
     private boolean isLimit(ChannelHandlerContext ctx, FullHttpRequest request) {
         LimitConfig limitConfig = ProxyContext.getInstance().getLimitConfig();
-        LimitChannel limitChannel = ProxyContext.getInstance().getBean(limitConfig.getName(), LimitChannel.class);
+        LimitChannel limitChannel = ServiceProvider.of(LimitChannel.class).getNewExtension(limitConfig.getName(), limitConfig);
         if (null == limitChannel) {
             return false;
         }

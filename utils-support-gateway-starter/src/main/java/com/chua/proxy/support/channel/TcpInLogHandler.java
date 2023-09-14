@@ -23,7 +23,7 @@ public class TcpInLogHandler extends SimpleChannelInboundHandler<ByteBuf> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
-        log.debug("TcpProxyServer收到消息：{}", msg.toString());
+        log.debug("TcpInLogHandler收到消息：{}", msg.toString());
         ctx.fireChannelRead(msg);
     }
 
