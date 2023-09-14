@@ -48,14 +48,10 @@ public class SpeedRecognizer extends AbstractRecognizer {
         this.model = ModelZoo.loadModel(criteria);
     }
 
-    @Override
-    public float[] predict(Object img) {
-        return new float[0];
-    }
 
     @SneakyThrows
     @Override
-    public List<PredictResult> recognize(Object image) {
+    public List<PredictResult> predict(Object image) {
         NDManager manager = NDManager.newBaseManager(Device.cpu());
         NDArray audioFeature = AudioProcess.processUtterance(manager, image.toString());
         try (Predictor<NDArray, Pair> predictor = model.newPredictor()) {

@@ -69,7 +69,6 @@
         <module>utils-support-deeplearning-tensorFlow-starter</module>
         <module>utils-support-milvus-starter</module>
         <module>utils-support-agent-starter</module>
-        <module>utils-support-wx-support</module>
         <module>utils-support-oshi-starter</module>
         <module>utils-support-gateway-starter</module>
     </modules>

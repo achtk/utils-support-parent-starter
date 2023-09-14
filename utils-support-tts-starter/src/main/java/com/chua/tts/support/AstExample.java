@@ -13,7 +13,7 @@ public class AstExample {
 
     public static void main(String[] args) throws Exception {
         LongSpeedRecognizer speedRecognizer = new LongSpeedRecognizer(DetectionConfiguration.DEFAULT);
-        List<PredictResult> predictResults = speedRecognizer.recognize("Z:/20230316_101443.m4a");
+        List<PredictResult> predictResults = speedRecognizer.predict("Z:/20230316_101443.m4a");
         System.out.println();
     }
 }

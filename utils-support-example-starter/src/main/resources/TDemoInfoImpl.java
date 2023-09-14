@@ -1,8 +1,8 @@
 package com.chua.tools.example.entity;
 
+import com.chua.example.dynamic.TDemoInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.chua.example.dynamic.TDemoInfo;
 
 import java.util.Date;
 
@@ -11,8 +11,8 @@ import java.util.Date;
  * @version 1.0.0
  * @since 2020/10/28
  */
-public class TDemoInfoImpl1 implements TDemoInfo {
-    private static final Logger log = LoggerFactory.getLogger(TDemoInfoImpl1.class);
+public class TDemoInfoImpl implements TDemoInfo {
+    private static final Logger log = LoggerFactory.getLogger(TDemoInfoImpl.class);
     public Integer id;
     public Date time;
     public String name;

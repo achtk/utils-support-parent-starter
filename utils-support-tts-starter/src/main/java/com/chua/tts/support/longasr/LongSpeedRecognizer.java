@@ -35,14 +35,10 @@ public class LongSpeedRecognizer extends AbstractRecognizer {
         speedRecognizer = new SpeedRecognizer(configuration);
     }
 
-    @Override
-    public float[] predict(Object img) {
-        return new float[0];
-    }
 
     @SneakyThrows
     @Override
-    public List<PredictResult> recognize(Object image) {
+    public List<PredictResult> predict(Object image) {
         NDManager manager = NDManager.newBaseManager(Device.cpu());
         Queue<byte[]> segments = AudioVadUtils.cropAudioVad(Paths.get(image.toString()), 300, 30);
 
