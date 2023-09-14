@@ -1,8 +1,8 @@
 package com.chua.proxy.support;
 
 import com.chua.common.support.utils.StringUtils;
-import com.chua.proxy.support.channel.ProxyChannelInitializer;
 import com.chua.proxy.support.config.ProxyConfig;
+import com.chua.proxy.support.initializer.ProxyChannelInitializer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;

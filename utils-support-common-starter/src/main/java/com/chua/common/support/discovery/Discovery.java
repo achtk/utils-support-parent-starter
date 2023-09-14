@@ -5,7 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
+import java.net.SocketAddress;
 import java.net.URL;
 import java.util.Map;
 
@@ -80,5 +82,9 @@ public class Discovery {
 
     public boolean isHttp() {
         return HTTP.equals(protocol);
+    }
+
+    public SocketAddress address() {
+        return new InetSocketAddress(address, port);
     }
 }

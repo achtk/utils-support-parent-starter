@@ -1,5 +1,8 @@
-package com.chua.proxy.support.channel;
+package com.chua.proxy.support.initializer;
 
+import com.chua.proxy.support.channel.DispatcherHandler;
+import com.chua.proxy.support.channel.TcpInLogHandler;
+import com.chua.proxy.support.channel.TcpOutLogHandler;
 import com.chua.proxy.support.config.ProxyConfig;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;

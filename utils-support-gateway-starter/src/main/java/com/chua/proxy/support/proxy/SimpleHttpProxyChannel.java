@@ -4,13 +4,17 @@ import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.discovery.Discovery;
 import com.chua.common.support.net.proxy.HttpProxyChannel;
 import com.chua.common.support.net.resolver.MappingResolver;
-import com.chua.proxy.support.channel.HttpClientProxyInitializer;
+import com.chua.proxy.support.initializer.HttpConnectChannelInitializer;
+import com.chua.proxy.support.initializer.HttpsConnectChannelInitializer;
+import com.chua.proxy.support.listener.HttpChannelFutureListener;
+import com.chua.proxy.support.listener.HttpsChannelFutureListener;
 import com.chua.proxy.support.utils.FrameUtils;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpResponseStatus;
@@ -39,26 +43,31 @@ public class SimpleHttpProxyChannel implements HttpProxyChannel<FullHttpRequest>
     @Override
     public void proxy(FullHttpRequest req) {
         Discovery discovery = mappingResolver.resolve(FrameUtils.createFrame(req));
-        if(null == discovery) {
+        if (null == discovery) {
             ctx.writeAndFlush(new DefaultFullHttpResponse(
                     HttpVersion.HTTP_1_1,
                     HttpResponseStatus.NOT_FOUND));
-            return ;
+            return;
         }
+        //用工厂类构建bootstrap,用来建立socket连接
+        Bootstrap bootstrap = new Bootstrap()
+                .group(new NioEventLoopGroup(8))
+                .channel(NioSocketChannel.class)
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, mappingResolver.timeout());
+        //如果是http请求
+        if (discovery.isHttp()) {
+            //添加监听器,当连接建立成功后,转发客户端的消息给它
+            bootstrap
+                    .handler(new HttpConnectChannelInitializer(ctx))
+                    .connect(discovery.address())
+                    .addListener(new HttpChannelFutureListener(req, ctx));
+            return;
+        }
+        //如果是Https请求
+        bootstrap
+                .handler(new HttpsConnectChannelInitializer(ctx))
+                .connect(discovery.address())
+                .addListener(new HttpsChannelFutureListener(req, ctx));
 
-        Bootstrap bootstrap = new Bootstrap();
-        bootstrap.group(ctx.channel().eventLoop())
-                .channel(ctx.channel().getClass())
-                .handler(new HttpClientProxyInitializer(ctx, ctx.channel(), discovery.isHttp()));
-        ChannelFuture cf = bootstrap.connect(discovery.getAddress(), discovery.getPort());
-        cf.addListener(new ChannelFutureListener() {
-            public void operationComplete(ChannelFuture future) throws Exception {
-                if (future.isSuccess()) {
-                    future.channel().writeAndFlush(req);
-                } else {
-                    ctx.channel().close();
-                }
-            }
-        });
     }
 }

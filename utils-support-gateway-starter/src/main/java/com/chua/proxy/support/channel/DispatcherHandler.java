@@ -5,7 +5,8 @@ import com.chua.proxy.support.decoder.AbstractMessageDecoder;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
-import io.netty.handler.codec.http.HttpServerCodec;
+import io.netty.handler.codec.http.HttpRequestDecoder;
+import io.netty.handler.codec.http.HttpResponseEncoder;
 import io.netty.handler.timeout.IdleStateHandler;
 
 import java.util.concurrent.TimeUnit;
@@ -32,11 +33,19 @@ public class DispatcherHandler extends AbstractMessageDecoder {
 
     }
 
+    public static final String HTTP_CODEC = "httpCodec";
+    public static final String HTTP_OBJECT = "httpObject";
+    public static final String HTTP_REQUEST_DECODER = "HttpRequestDecoder";
+    public static final String HTTP_RESPONSE_ENCODER = "HttpResponseEncoder";
+    public static final String HTTP_PROXY_SERVER_HANDLER = "HttpProxyServerHandler";
+
     @Override
     public void addHttpHandler(ChannelHandlerContext ctx) {
         // server端发送的是httpResponse，所以要使用HttpResponseEncoder进行编码
-        ch.pipeline().addLast("httpCodec", new HttpServerCodec())
-                .addLast("httpObject", new HttpObjectAggregator(65536 * 100))
+        ch.pipeline()
+                .addLast(HTTP_REQUEST_DECODER, new HttpRequestDecoder())
+                .addLast(HTTP_RESPONSE_ENCODER, new HttpResponseEncoder())
+                .addLast(HTTP_OBJECT, new HttpObjectAggregator(65536))
                 .addLast(new HttpProxyServerHandler());
     }
 

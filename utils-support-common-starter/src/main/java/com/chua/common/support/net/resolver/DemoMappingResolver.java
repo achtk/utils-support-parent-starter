@@ -16,7 +16,7 @@ import static com.chua.common.support.http.HttpConstant.HTTP;
 public class DemoMappingResolver implements MappingResolver{
     @Override
     public Discovery resolve(Frame frame) {
-        InetSocketAddress inetSocketAddress = new InetSocketAddress("192.168.110.31", 3000);
+        InetSocketAddress inetSocketAddress = new InetSocketAddress("127.0.0.1", 5173);
         Discovery.DiscoveryBuilder builder = Discovery.builder();
         builder.address(inetSocketAddress.getAddress().getHostAddress())
                 .port(inetSocketAddress.getPort()).build();

@@ -1,9 +1,8 @@
 package com.chua.proxy.support.channel;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.InetSocketAddress;
@@ -15,14 +14,14 @@ import java.net.InetSocketAddress;
  * @since 2023/09/13
  */
 @Slf4j
-public class TcpInLogHandler extends SimpleChannelInboundHandler<ByteBuf> {
+public class TcpInLogHandler extends ChannelInboundHandlerAdapter {
 
     private String clientIP;
 
     private String clientPort;
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         log.debug("TcpInLogHandler收到消息：{}", msg.toString());
         ctx.fireChannelRead(msg);
     }
@@ -45,8 +44,8 @@ public class TcpInLogHandler extends SimpleChannelInboundHandler<ByteBuf> {
     /**
      * 通道异常触发
      *
-     * @param ctx
-     * @param cause
+     * @param ctx   ctx
+     * @param cause cause
      * @throws Exception
      */
     @Override
@@ -55,6 +54,7 @@ public class TcpInLogHandler extends SimpleChannelInboundHandler<ByteBuf> {
         if (!channel.isActive()) {
             ctx.close();
         }
-        log.error("TcpProxyServer连接[{}]发生异常：{}", ctx.channel().id(), cause.getStackTrace());
+        cause.printStackTrace();
+        log.error("TcpProxyServer连接[{}]发生异常：{}", ctx.channel().id(), cause.getLocalizedMessage());
     }
 }
