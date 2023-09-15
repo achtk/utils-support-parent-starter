@@ -56,7 +56,7 @@ public class HttpClientProperties {
     /** Enables compression for Netty HttpClient. */
     private boolean compression;
 
-    private Http2 http2;
+    private Http2 http2 = new Http2();
 
     public Http2 getHttp2() {
         return this.http2;
