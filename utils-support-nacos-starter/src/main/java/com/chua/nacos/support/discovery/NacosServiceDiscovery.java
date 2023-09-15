@@ -15,7 +15,10 @@ import com.chua.common.support.lang.robin.Robin;
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.MapUtils;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 服务发现
@@ -32,6 +35,28 @@ public class NacosServiceDiscovery extends AbstractServiceDiscovery {
 
     public NacosServiceDiscovery(DiscoveryOption discoveryOption) {
         super(discoveryOption);
+    }
+
+    @Override
+    protected Set<Discovery> get(String path) {
+        List<Instance> allInstances = null;
+        try {
+            allInstances = namingService.getAllInstances(path);
+        } catch (NacosException e) {
+            throw new RuntimeException(e);
+        }
+
+        if (null == allInstances) {
+            return Collections.emptySet();
+        }
+        return allInstances.stream().map(it -> Discovery.builder()
+                .protocol(MapUtils.getString(it.getMetadata(), "protocol"))
+                .uriSpec(path)
+                .port(it.getPort())
+                .weight(it.getWeight())
+                .ip(it.getIp())
+                .build()).collect(Collectors.toSet());
+
     }
 
     @Override
@@ -59,27 +84,12 @@ public class NacosServiceDiscovery extends AbstractServiceDiscovery {
 
     @Override
     public Discovery getService(String path, String balance) {
-        List<Instance> allInstances = null;
-        try {
-            allInstances = namingService.getAllInstances(path);
-        } catch (NacosException e) {
-            throw new RuntimeException(e);
-        }
+        Set<Discovery> netAddresses = getPath(path);
         Robin robin = ServiceProvider.of(Robin.class).getNewExtension(balance);
         Robin robin1 = robin.create();
-        robin1.addNode(allInstances);
+        robin1.addNode(netAddresses);
         Node selectNode = robin1.selectNode();
-        if(null == selectNode) {
-            return null;
-        }
-        Instance selectNodeValue = selectNode.getValue(Instance.class);
-        return Discovery.builder()
-                .protocol(MapUtils.getString(selectNodeValue.getMetadata(), "protocol"))
-                .uriSpec(path)
-                .port(selectNodeValue.getPort())
-                .weight(selectNodeValue.getWeight())
-                .ip(selectNodeValue.getIp())
-                .build();
+        return null == selectNode ? null : selectNode.getValue(Discovery.class);
     }
 
     @Override

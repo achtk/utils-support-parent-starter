@@ -4,6 +4,7 @@ import com.chua.common.support.discovery.Discovery;
 import com.chua.common.support.discovery.ServiceDiscovery;
 import com.chua.common.support.utils.StringUtils;
 import com.chua.proxy.support.filter.HttpClientProxyFilter;
+import com.chua.proxy.support.filter.WebClientWriteResponseFilter;
 import com.chua.proxy.support.route.Route;
 import com.google.common.collect.Lists;
 import reactor.core.publisher.Flux;
@@ -66,7 +67,7 @@ public class DynamicPathRouteLocator implements RouteLocator{
                 discovery.getIp() + ":" + discovery.getPort() + "" + discovery.getUriSpec()
         );
         route.setTimeout(discovery.getTimeout());
-        route.setFilters(Lists.newArrayList(new HttpClientProxyFilter(route)));
+        route.setFilters(Lists.newArrayList(new HttpClientProxyFilter(route), new WebClientWriteResponseFilter()));
         return route;
     }
 }

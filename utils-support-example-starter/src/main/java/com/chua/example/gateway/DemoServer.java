@@ -16,8 +16,8 @@ public class DemoServer {
         ServiceDiscovery serviceDiscovery = new MulticastServiceDiscovery(new DiscoveryOption().setAddress("224.0.0.1:2111"));
         serviceDiscovery.start();
         serviceDiscovery.registerService("/", Discovery.builder()
-                        .ip("192.168.110.31")
-                        .port(3000)
+                .ip("127.0.0.1")
+                .port(5173)
                         .uriSpec("/")
                 .build());
 

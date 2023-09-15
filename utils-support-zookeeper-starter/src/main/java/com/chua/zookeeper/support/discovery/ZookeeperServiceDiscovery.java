@@ -25,8 +25,10 @@ import org.apache.zookeeper.CreateMode;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CountDownLatch;
@@ -56,6 +58,11 @@ public class ZookeeperServiceDiscovery extends AbstractServiceDiscovery implemen
     }
 
     @Override
+    protected Set<Discovery> get(String path) {
+        return new HashSet<>(received.get(path));
+    }
+
+    @Override
     public ServiceDiscovery registerService(String path, Discovery discovery) {
         String newNode = root + "/" + path;
         try {
@@ -72,7 +79,7 @@ public class ZookeeperServiceDiscovery extends AbstractServiceDiscovery implemen
 
     @Override
     public Discovery getService(String path, String balance) {
-        List<Discovery> netAddresses = received.get(path);
+        Set<Discovery> netAddresses = getPath(path);
         Robin robin = ServiceProvider.of(Robin.class).getNewExtension(balance);
         Robin robin1 = robin.create();
         robin1.addNode(netAddresses);

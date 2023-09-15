@@ -51,6 +51,11 @@ public class MulticastServiceDiscovery extends AbstractServiceDiscovery implemen
         super(discoveryOption);
     }
 
+    @Override
+    protected Set<Discovery> get(String path) {
+        return received.get(path);
+    }
+
 
     public static void joinMulticastGroup(MulticastSocket multicastSocket, InetAddress multicastAddress) throws
             IOException {
@@ -158,7 +163,7 @@ public class MulticastServiceDiscovery extends AbstractServiceDiscovery implemen
 
     @Override
     public Discovery getService(String path, String balance) {
-        Set<Discovery> netAddresses = received.get(path);
+        Set<Discovery> netAddresses = getPath(path);
         Robin robin = ServiceProvider.of(Robin.class).getNewExtension(balance);
         Robin robin1 = robin.create();
         robin1.addNode(netAddresses);
@@ -195,7 +200,7 @@ public class MulticastServiceDiscovery extends AbstractServiceDiscovery implemen
                 }
             } catch (Exception ignored) {
             }
-        }, 0, 20, TimeUnit.SECONDS);
+        }, 0, 10, TimeUnit.SECONDS);
 
         this.cleanPeriod = (int) discoveryOption.getOrDefault(SESSION_TIMEOUT_KEY, DEFAULT_SESSION_TIMEOUT);
         this.cleanFuture = ThreadUtils.newScheduleWithFixedDelay(() -> {
