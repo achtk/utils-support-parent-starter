@@ -25,9 +25,21 @@ public class HttpProxyServer extends AbstractServer {
         super(serverOption);
     }
 
-    protected HttpProxyServer(ServerOption serverOption, RouteLocator routeLocator) {
+    public HttpProxyServer(ServerOption serverOption, RouteLocator routeLocator) {
         super(serverOption);
         this.routeLocator = routeLocator;
+    }
+
+    public HttpProxyServer(String host, RouteLocator routeLocator) {
+        this(ServerOption.builder().host(host).build(), routeLocator);
+    }
+
+    public HttpProxyServer(int port, RouteLocator routeLocator) {
+        this(ServerOption.builder().port(port).build(), routeLocator);
+    }
+
+    public HttpProxyServer(String host, int port, RouteLocator routeLocator) {
+        this(ServerOption.builder().host(host).port(port).build(), routeLocator);
     }
 
     @Override

@@ -163,7 +163,7 @@ public class MulticastServiceDiscovery extends AbstractServiceDiscovery implemen
         Robin robin1 = robin.create();
         robin1.addNode(netAddresses);
         Node selectNode = robin1.selectNode();
-        return selectNode.getValue(Discovery.class);
+        return null == selectNode ? null : selectNode.getValue(Discovery.class);
     }
 
     @Override

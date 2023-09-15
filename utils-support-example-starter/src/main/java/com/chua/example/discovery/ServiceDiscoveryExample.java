@@ -16,17 +16,17 @@ import com.chua.common.support.utils.ThreadUtils;
 public class ServiceDiscoveryExample {
 
     public static void main(String[] args) throws Exception {
-        ServiceDiscovery serviceDiscovery = ServiceProvider.of(ServiceDiscovery.class).getExtension("multicast");
-        serviceDiscovery.start(new DiscoveryOption().setAddress("224.2.2.4:6379"));
-        serviceDiscovery.register(Discovery.builder().discovery("/danbin").address("").build());
-        serviceDiscovery.register(Discovery.builder().discovery("/danbin").address("").build());
-        serviceDiscovery.register(Discovery.builder().discovery("/webrtc").address("").build());
+        ServiceDiscovery serviceDiscovery = ServiceProvider.of(ServiceDiscovery.class).getNewExtension("multicast", new DiscoveryOption().setAddress("224.2.2.4:6379"));
+        serviceDiscovery.start();
+        serviceDiscovery.registerService("/danbin", Discovery.builder().build());
+        serviceDiscovery.registerService("/danbin", Discovery.builder().build());
+        serviceDiscovery.registerService("/webrtc", Discovery.builder().build());
 
         System.out.println();
         while (true) {
-            Discovery discovery1 = serviceDiscovery.discovery("danbin");
-            Discovery discovery2 = serviceDiscovery.discovery("danbin");
-            Discovery discovery3 = serviceDiscovery.discovery("webrtc");
+            Discovery discovery1 = serviceDiscovery.getService("danbin");
+            Discovery discovery2 = serviceDiscovery.getService("danbin");
+            Discovery discovery3 = serviceDiscovery.getService("webrtc");
             System.out.println(discovery1);
             System.out.println(discovery2);
             System.out.println(discovery3);

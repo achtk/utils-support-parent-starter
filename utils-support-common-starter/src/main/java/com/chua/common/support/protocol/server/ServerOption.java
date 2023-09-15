@@ -94,6 +94,10 @@ public class ServerOption implements Serializable {
      */
     private boolean autoScanner;
     /**
+     * 负载均衡
+     */
+    private String balance;
+    /**
      * 密码
      */
     private String password;

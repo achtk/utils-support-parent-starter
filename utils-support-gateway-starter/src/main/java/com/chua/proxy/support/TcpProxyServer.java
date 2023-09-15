@@ -1,6 +1,7 @@
 package com.chua.proxy.support;
 
-import com.chua.common.support.protocol.server.Server;
+import com.chua.common.support.protocol.server.AbstractServer;
+import com.chua.common.support.protocol.server.ServerOption;
 import io.netty.buffer.ByteBuf;
 import reactor.core.Disposable;
 import reactor.core.Disposables;
@@ -16,7 +17,7 @@ import java.util.function.Consumer;
  * http
  * @author CH
  */
-public class TcpProxyServer implements Server {
+public class TcpProxyServer extends AbstractServer {
     private DisposableServer disposableServer;
     private int port;
 
@@ -25,7 +26,12 @@ public class TcpProxyServer implements Server {
     private String targetHost;
     private int targetTcp;
 
+    public TcpProxyServer(ServerOption serverOption) {
+        super(serverOption);
+    }
+
     public TcpProxyServer(int port, String host, String targetHost, int targetTcp) {
+        this(ServerOption.builder().host(host).port(port).build());
         this.port = port;
         this.host = host;
         this.targetHost = targetHost;
@@ -44,8 +50,23 @@ public class TcpProxyServer implements Server {
 
     }
 
+    private final Disposable decoratedBridge(final NettyInbound inbound, final NettyOutbound outbound,
+                                             final Consumer<? super ByteBuf> decorator) {
+        return outbound.send(inbound.receive()
+                        .retain()
+                        .doOnNext(decorator))
+                .then()
+                .subscribe();
+    }
+
+
     @Override
-    public void start() {
+    protected void shutdown() {
+        disposableServer.disposeNow();
+    }
+
+    @Override
+    protected void run() {
         this.disposableServer = TcpServer.create()
                 .host(this.host)
                 .port(this.port)
@@ -63,29 +84,5 @@ public class TcpProxyServer implements Server {
                 .bindNow();
 
         disposableServer.onDispose().block();
-    }
-
-    private final Disposable decoratedBridge(final NettyInbound inbound, final NettyOutbound outbound,
-                                             final Consumer<? super ByteBuf> decorator) {
-        return outbound.send(inbound.receive()
-                        .retain()
-                        .doOnNext(decorator))
-                .then()
-                .subscribe();
-    }
-
-    @Override
-    public Server register(Object bean) {
-        return null;
-    }
-
-    @Override
-    public Server register(String name, Object bean) {
-        return null;
-    }
-
-    @Override
-    public void close() {
-        disposableServer.disposeNow();
     }
 }

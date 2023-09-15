@@ -23,11 +23,13 @@ import com.chua.common.support.reflection.reflections.util.ConfigurationBuilder;
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.CollectionUtils;
 import com.chua.common.support.utils.StringUtils;
+import com.chua.common.support.utils.ThreadUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
 import java.util.stream.Collectors;
 
 import static com.chua.common.support.constant.CommonConstant.EMPTY_ARRAY;
@@ -38,7 +40,7 @@ import static com.chua.common.support.constant.CommonConstant.EMPTY_ARRAY;
  * @author CH
  */
 @Slf4j
-public abstract class AbstractServer implements Server, Constant {
+public abstract class AbstractServer implements BeanServer, Constant {
 
     private static final String AUTO = "auto-scanner";
     private static final String PACKAGES = "packages";
@@ -46,6 +48,7 @@ public abstract class AbstractServer implements Server, Constant {
     protected ServerRequest request;
     private TemplateResolver templateResolver;
     private StandardConfigureObjectContext objectContext;
+    private ExecutorService runService = ThreadUtils.newSingleThreadExecutor("run-thread");
 
     protected AbstractServer(ServerOption serverOption) {
         this.request = new ServerRequest(serverOption);
@@ -121,7 +124,7 @@ public abstract class AbstractServer implements Server, Constant {
     @Override
     public void start() {
         log.debug("服务启动中");
-        run();
+        runService.execute(this::run);
         log.info("服务启动成功: 端口: {}, PID: {}", request.getInteger("port"), Projects.getPid());
     }
 
@@ -158,6 +161,7 @@ public abstract class AbstractServer implements Server, Constant {
     @Override
     public void close() {
         shutdown();
+        ThreadUtils.shutdownNow(runService);
     }
 
     /**

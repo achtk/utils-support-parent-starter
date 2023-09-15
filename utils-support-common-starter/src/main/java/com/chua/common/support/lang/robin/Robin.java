@@ -69,6 +69,9 @@ public interface Robin extends AutoCloseable {
      * @return 节点
      */
     default Robin addNode(Collection<?> node) {
+        if(null == node) {
+            return this;
+        }
         for (Object node1 : node) {
             addNode(new Node(node1));
         }

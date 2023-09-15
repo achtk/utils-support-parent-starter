@@ -14,7 +14,7 @@ import reactor.core.publisher.Flux;
 @SuppressWarnings("java:S1075")
 public class GatewayInternalRouteLocator implements RouteLocator {
 
-    public static final String INTERNAL_CONTEXT_PATH = "/__rgw_internal";
+    public static final String INTERNAL_CONTEXT_PATH = "/__internal";
 
     private static final String INTERNAL_CONTEXT_PATH_SLASH = INTERNAL_CONTEXT_PATH + "/";
 
@@ -22,7 +22,7 @@ public class GatewayInternalRouteLocator implements RouteLocator {
 
     public GatewayInternalRouteLocator(GatewayInternalEndpoint gatewayInternalEndpoint) {
         Route route = new Route();
-        route.setId("__rgw_internal");
+        route.setId("__internal__");
         route.setPath(INTERNAL_CONTEXT_PATH);
         route.setFilters(Lists.newArrayList(gatewayInternalEndpoint));
         this.internalRoutes = Flux.just(route);

@@ -69,6 +69,9 @@ public class NacosServiceDiscovery extends AbstractServiceDiscovery {
         Robin robin1 = robin.create();
         robin1.addNode(allInstances);
         Node selectNode = robin1.selectNode();
+        if(null == selectNode) {
+            return null;
+        }
         Instance selectNodeValue = selectNode.getValue(Instance.class);
         return Discovery.builder()
                 .protocol(MapUtils.getString(selectNodeValue.getMetadata(), "protocol"))

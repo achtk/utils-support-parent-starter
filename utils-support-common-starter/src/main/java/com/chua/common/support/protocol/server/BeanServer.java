@@ -14,7 +14,7 @@ public interface BeanServer extends Server {
      * @param bean 对象
      * @return this
      */
-    BeanServer register(Object bean);
+    Server register(Object bean);
 
     /**
      * 注册对象
@@ -23,6 +23,6 @@ public interface BeanServer extends Server {
      * @param bean 对象
      * @return this
      */
-    BeanServer register(String name, Object bean);
+    Server register(String name, Object bean);
 
 }
