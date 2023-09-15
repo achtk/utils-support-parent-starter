@@ -61,9 +61,9 @@ public class HttpClientProxyFilter implements Filter{
         Flux<HttpClientResponse> responseFlux = httpClient.headers(new Consumer<HttpHeaders>() {
             @Override
             public void accept(HttpHeaders entries) {
-                headers.add(headers);
+                entries.add(headers);
                 // Will either be set below, or later by Netty
-                headers.remove(HOST);
+                entries.remove(HOST);
 //                if (preserveHost) {
 //                    String host = request.getHeaders().getFirst(HttpHeaders.HOST);
 //                    headers.add(HttpHeaders.HOST, host);
@@ -98,8 +98,9 @@ public class HttpClientProxyFilter implements Filter{
             return Mono.just(res);
         });
 
-        Duration responseTimeout = Duration.ofSeconds(route.getTimeout());
-        if (responseTimeout != null) {
+        Integer timeout = route.getTimeout();
+        if (timeout != null && timeout > 0) {
+            Duration responseTimeout = Duration.ofSeconds(timeout);
             responseFlux = responseFlux
                     .timeout(responseTimeout,
                             Mono.error(new TimeoutException("响应超时: " + responseTimeout)))
