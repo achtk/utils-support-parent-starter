@@ -34,6 +34,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static com.chua.common.support.http.HttpHeaders.*;
+import static com.chua.proxy.support.constant.Constants.CLIENT_RESPONSE_ATTR;
+import static com.chua.proxy.support.constant.Constants.CLIENT_RESPONSE_CONN_ATTR;
 
 /**
  * 代理
@@ -76,8 +78,8 @@ public class HttpClientProxyFilter implements Filter{
             }
             return nettyOutbound.send(request.receive().retain().map(bufferFactory::wrap).map(this::getByteBuf));
         }).responseConnection((res, connection) -> {
-//            exchange.getAttributes().put(CLIENT_RESPONSE_ATTR, res);
-//            exchange.getAttributes().put(CLIENT_RESPONSE_CONN_ATTR, connection);
+            exchange.getAttributes().put(CLIENT_RESPONSE_ATTR, res);
+            exchange.getAttributes().put(CLIENT_RESPONSE_CONN_ATTR, connection);
 
             HttpServerResponse response = exchange.getResponse();
             // put headers and status so filters can modify the response
@@ -91,6 +93,7 @@ public class HttpClientProxyFilter implements Filter{
             }
             setResponseStatus(res, response);
 
+            response.responseHeaders().set(headers1);
             if (!headers.contains(TRANSFER_ENCODING) && headers.contains(CONTENT_LENGTH)) {
                 response.responseHeaders().remove(TRANSFER_ENCODING);
             }

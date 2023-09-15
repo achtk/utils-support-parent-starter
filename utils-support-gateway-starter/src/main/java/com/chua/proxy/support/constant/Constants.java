@@ -16,6 +16,10 @@ public class Constants {
     private Constants() {
     }
 
+
+    public static final String  CLIENT_RESPONSE_ATTR =  "gatewayClientResponse";
+    public static final String  CLIENT_RESPONSE_CONN_ATTR =  "gatewayClientResponseConnection";
+
     public static final Set<HttpMethod> HTTP_METHODS_ALL = Sets.newHashSet(
             HttpMethod.GET,
             HttpMethod.POST,
