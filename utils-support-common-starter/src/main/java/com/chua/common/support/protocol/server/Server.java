@@ -3,38 +3,27 @@ package com.chua.common.support.protocol.server;
 
 import com.chua.common.support.function.InitializingAware;
 
+import java.io.IOException;
+
 /**
  * 服务端
  *
  * @author CH
  */
-public interface Server extends InitializingAware, AutoCloseable {
+public interface Server extends InitializingAware {
     /**
      * 启动
-     */
-    void start();
-
-    /**
-     * 注册对象
      *
-     * @param bean 对象
-     * @return this
+     * @throws IOException IOException
      */
-    Server register(Object bean);
+    void start() throws IOException;
 
-    /**
-     * 注册对象
-     *
-     * @param name name
-     * @param bean 对象
-     * @return this
-     */
-    Server register(String name, Object bean);
 
     /**
      * 关闭连接
+     *
+     * @throws IOException IOException
      */
-    @Override
-    void close();
+    void close() throws IOException;
 
 }

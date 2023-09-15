@@ -27,7 +27,7 @@ public class DiscoveryOption extends LinkedHashMap<String, Object> {
     /**
      * 根目录
      */
-    private String root;
+    private String root = "discovery";
 
     /**
      * 账号
@@ -43,6 +43,7 @@ public class DiscoveryOption extends LinkedHashMap<String, Object> {
      * 数据库
      */
     private String database;
+
     /**
      * 连接超时时间
      */

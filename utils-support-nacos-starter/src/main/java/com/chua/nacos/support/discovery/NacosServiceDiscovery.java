@@ -4,17 +4,18 @@ import com.alibaba.nacos.api.NacosFactory;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.api.naming.NamingService;
 import com.alibaba.nacos.api.naming.pojo.Instance;
+import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.bean.BeanMap;
+import com.chua.common.support.discovery.AbstractServiceDiscovery;
 import com.chua.common.support.discovery.Discovery;
-import com.chua.common.support.discovery.DiscoveryBoundType;
 import com.chua.common.support.discovery.DiscoveryOption;
 import com.chua.common.support.discovery.ServiceDiscovery;
 import com.chua.common.support.lang.robin.Node;
 import com.chua.common.support.lang.robin.Robin;
+import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.MapUtils;
 
-import java.util.*;
-
-import static com.chua.common.support.constant.NumberConstant.DEFAULT_INITIAL_CAPACITY;
+import java.util.List;
 
 /**
  * 服务发现
@@ -23,49 +24,23 @@ import static com.chua.common.support.constant.NumberConstant.DEFAULT_INITIAL_CA
  * @version 1.0.0
  * @since 2021/6/28
  */
-public class NacosServiceDiscovery implements ServiceDiscovery {
-    private static final String DEFAULT_DISCOVERY = "discovery";
-    private String discovery = DEFAULT_DISCOVERY;
+@Spi("nacos")
+public class NacosServiceDiscovery extends AbstractServiceDiscovery {
+
+
     private NamingService namingService;
-    private Robin robin;
 
-    @Override
-    public ServiceDiscovery robin(Robin robin) {
-        this.robin = robin;
-        return this;
+    public NacosServiceDiscovery(DiscoveryOption discoveryOption) {
+        super(discoveryOption);
     }
 
     @Override
-    public Discovery discovery(String discovery, DiscoveryBoundType strategy) throws Exception {
-        strategy = null == strategy ? DiscoveryBoundType.ROUND_ROBIN : strategy;
-
-        List<Instance> instances = namingService.getAllInstances(discovery);
-        Robin roundRobin = robin.create();
-        for (Instance instance : instances) {
-            roundRobin.addNode(instance);
-        }
-        Node robin = roundRobin.selectNode();
-        Instance perceptual = robin.getValue(Instance.class);
-        return Discovery.builder()
-                .address(perceptual.getIp())
-                .port(perceptual.getPort())
-                .uriSpec(MapUtils.getString(perceptual.getMetadata(), "uriSpec", "http://" + perceptual.getIp() + ":" + perceptual.getPort()))
-                .weight(perceptual.getWeight())
-                .build();
-    }
-
-
-    @Override
-    public ServiceDiscovery register(Discovery discovery) {
-        Map<String, String> value = new HashMap<>(DEFAULT_INITIAL_CAPACITY);
-        value.put("uriSpec", discovery.getUriSpec());
-        value.putAll(Optional.ofNullable(discovery.getMetadata()).orElse(Collections.emptyMap()));
-
+    public ServiceDiscovery registerService(String path, Discovery discovery) {
         Instance instance = new Instance();
         instance.setIp(discovery.getAddress());
         instance.setPort(discovery.getPort());
-        instance.setMetadata(value);
-        instance.setServiceName(discovery.getDiscovery());
+        instance.setMetadata(MapUtils.asStringMap(BeanMap.create(discovery)));
+        instance.setServiceName(discovery.getUriSpec());
         if (null != discovery.getId()) {
             instance.setInstanceId(discovery.getId());
         }
@@ -74,9 +49,8 @@ public class NacosServiceDiscovery implements ServiceDiscovery {
         }
 
         instance.setHealthy(true);
-        instance.setClusterName(this.discovery);
         try {
-            namingService.registerInstance(discovery.getDiscovery(), instance);
+            namingService.registerInstance(discovery.getUriSpec(), instance);
         } catch (NacosException e) {
             e.printStackTrace();
         }
@@ -84,18 +58,47 @@ public class NacosServiceDiscovery implements ServiceDiscovery {
     }
 
     @Override
-    public ServiceDiscovery start(DiscoveryOption discoveryOption) throws Exception {
+    public Discovery getService(String path, String balance) {
+        List<Instance> allInstances = null;
+        try {
+            allInstances = namingService.getAllInstances(path);
+        } catch (NacosException e) {
+            throw new RuntimeException(e);
+        }
+        Robin robin = ServiceProvider.of(Robin.class).getNewExtension(balance);
+        Robin robin1 = robin.create();
+        robin1.addNode(allInstances);
+        Node selectNode = robin1.selectNode();
+        Instance selectNodeValue = selectNode.getValue(Instance.class);
+        return Discovery.builder()
+                .protocol(MapUtils.getString(selectNodeValue.getMetadata(), "protocol"))
+                .uriSpec(path)
+                .port(selectNodeValue.getPort())
+                .weight(selectNodeValue.getWeight())
+                .address(selectNodeValue.getIp())
+                .build();
+    }
+
+    @Override
+    public void start() {
         try {
             this.namingService = NacosFactory.createNamingService(discoveryOption.getAddress());
         } catch (NacosException e) {
             e.printStackTrace();
         }
-        return this;
     }
 
     @Override
-    public ServiceDiscovery stop() throws Exception {
-        this.namingService.shutDown();
-        return this;
+    public void close() {
+        try {
+            namingService.shutDown();
+        } catch (NacosException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void afterPropertiesSet() {
+
     }
 }

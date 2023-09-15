@@ -1,6 +1,8 @@
 package com.chua.common.support.utils;
 
 
+import com.chua.common.support.constant.CommonConstant;
+
 import java.io.*;
 import java.nio.file.*;
 import java.nio.file.attribute.*;
@@ -8,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Stream;
 
 import static com.chua.common.support.constant.CommonConstant.SYMBOL_DOT;
 
@@ -54,6 +55,83 @@ public class PathUtils {
      * @since 2.9.0
      */
     public static final Path[] EMPTY_PATH_ARRAY = {};
+    public static final String SLASH = CommonConstant.SYMBOL_LEFT_SLASH;
+
+    /**
+     * 规范化
+     *
+     * @param path 路径
+     * @return {@link String}
+     */
+    public static String normalize(String path) {
+        String newPath = Paths.get(path).normalize().toString();
+        if (newPath.isEmpty()) {
+            return SLASH;
+        }
+        if (!newPath.startsWith(SLASH)) {
+            newPath = SLASH + newPath;
+        }
+        return newPath;
+    }
+
+    /**
+     * 常量前缀
+     *
+     * @param normalizePath 规范化路径
+     * @return {@link String}
+     */
+    public static String constantPrefix(String normalizePath) {
+        int slashIndex = 0;
+        boolean foundWildcardChar = false;
+        for (int i = 0; i < normalizePath.length(); ++i) {
+            char c = normalizePath.charAt(i);
+            if (c == '*' || c == '?' || c == '{') {
+                foundWildcardChar = true;
+                break;
+            } else if (c == '/') {
+                slashIndex = i;
+            }
+        }
+        if (!foundWildcardChar) {
+            return normalizePath;
+        }
+        if (slashIndex == 0) {
+            return SLASH;
+        }
+        return normalizePath.substring(0, slashIndex);
+    }
+
+    /**
+     * 删除最后一个
+     *
+     * @param normalizePath 规范化路径
+     * @return {@link String}
+     */
+    public static String removeLast(String normalizePath) {
+        if ("".equals(normalizePath)) {
+            return "";
+        }
+        int index = normalizePath.length() - 1;
+        while (index > 0 && normalizePath.charAt(index) != '/') {
+            --index;
+        }
+        return normalizePath.substring(0, index);
+    }
+
+    /**
+     * 获取第一部分
+     *
+     * @param normalizePath 规范化路径
+     * @return {@link String}
+     */
+    public static String getFirstPart(String normalizePath) {
+        final int secondSlashIndex = normalizePath.indexOf(SLASH, 1);
+        if (secondSlashIndex == -1) {
+            return normalizePath;
+        } else {
+            return normalizePath.substring(0, secondSlashIndex);
+        }
+    }
 
     /**
      * 删除目录

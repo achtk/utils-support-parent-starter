@@ -1,7 +1,7 @@
 package com.chua.common.support.discovery;
 
 
-import com.chua.common.support.lang.robin.Robin;
+import com.chua.common.support.protocol.server.Server;
 
 /**
  * 服务发现
@@ -10,68 +10,31 @@ import com.chua.common.support.lang.robin.Robin;
  * @version 1.0.0
  * @since 2021/6/28
  */
-public interface ServiceDiscovery {
+public interface ServiceDiscovery extends Server {
+    /**
+     * 注册服务
+     *
+     * @param path      注册路径
+     * @param discovery 数据
+     * @return {@link ServiceDiscovery}
+     */
+    ServiceDiscovery registerService(String path, Discovery discovery);
 
     /**
-     * 负载均衡
+     * 获取服务
      *
-     * @param robin 负载均衡
-     * @return this
+     * @param path    路径
+     * @param balance 均衡算法实现
+     * @return 结果
      */
-    ServiceDiscovery robin(Robin robin);
-
+    Discovery getService(String path, String balance);
     /**
-     * 发现目录
+     * 获取服务
      *
-     * @param discovery 发现目录
-     * @return this
-     * @throws Exception e
+     * @param path    路径
+     * @return 结果
      */
-    default Discovery discovery(String discovery) throws Exception {
-        return discovery(discovery, null);
+    default Discovery getService(String path) {
+        return getService(path, "round");
     }
-
-    /**
-     * 发现服务
-     *
-     * @param discovery 发现目录
-     * @param strategy  策略
-     * @return this
-     * @throws Exception e
-     */
-    Discovery discovery(String discovery, DiscoveryBoundType strategy) throws Exception;
-    /**
-     * 注册
-     *
-     * @param discovery 发现器
-     * @return this
-     */
-    ServiceDiscovery register(Discovery discovery);
-
-    /**
-     * 启动发现服务
-     *
-     * @return this
-     * @throws Exception e
-     */
-    default ServiceDiscovery start() throws Exception {
-        return start(new DiscoveryOption().setAddress("127.0.0.1:2181"));
-    }
-
-    /**
-     * 启动发现服务
-     *
-     * @param discoveryOption 配置
-     * @return this
-     * @throws Exception e
-     */
-    ServiceDiscovery start(DiscoveryOption discoveryOption) throws Exception;
-
-    /**
-     * 关闭发现服务
-     *
-     * @return this
-     * @throws Exception e
-     */
-    ServiceDiscovery stop() throws Exception;
 }

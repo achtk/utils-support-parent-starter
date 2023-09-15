@@ -1,16 +1,13 @@
 package com.chua.common.support.discovery;
 
 import com.chua.common.support.annotations.Spi;
-import com.chua.common.support.bean.BeanMap;
-import com.chua.common.support.converter.Converter;
-import com.chua.common.support.lang.net.UrlQuery;
+import com.chua.common.support.json.Json;
 import com.chua.common.support.lang.robin.Node;
-import com.chua.common.support.lang.robin.RandomRoundRobin;
 import com.chua.common.support.lang.robin.Robin;
 import com.chua.common.support.net.NetAddress;
 import com.chua.common.support.net.NetUtils;
+import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.CollectionUtils;
-import com.chua.common.support.utils.FileUtils;
 import com.chua.common.support.utils.StringUtils;
 import com.chua.common.support.utils.ThreadUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -20,24 +17,21 @@ import java.net.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.regex.PatternSyntaxException;
-import java.util.stream.Collectors;
 
 import static com.chua.common.support.constant.CommonConstant.SYMBOL_COMMA;
 import static com.chua.common.support.discovery.Constants.*;
 
 /**
- * 组播
- *
  * @author CH
  */
 @Slf4j
 @Spi("multicast")
-public class MulticastServiceDiscovery implements ServiceDiscovery, Runnable {
+public class MulticastServiceDiscovery extends AbstractServiceDiscovery implements Runnable {
+
     static String NETWORK_IGNORED_INTERFACE = "network.interface.ignored";
-    private final ConcurrentMap<String, Set<NetAddress>> received = new ConcurrentHashMap<>();
-    private final Set<NetAddress> registered = new CopyOnWriteArraySet<>();
+    private final ConcurrentMap<String, List<Discovery>> received = new ConcurrentHashMap<>();
+    private final Set<Discovery> registered = new CopyOnWriteArraySet<>();
     private final ExecutorService executor = ThreadUtils.newSingleThreadExecutor("multicast-service-discovery");
-    private Robin robin = new RandomRoundRobin();
     private DatagramPacket datagramPacketSend;
     private DatagramPacket datagramPacketReceive;
 
@@ -51,6 +45,12 @@ public class MulticastServiceDiscovery implements ServiceDiscovery, Runnable {
     private InetAddress multicastAddress;
     private Integer multicastPort;
     private Integer bufferSize;
+
+
+    public MulticastServiceDiscovery(DiscoveryOption discoveryOption) {
+        super(discoveryOption);
+    }
+
 
     public static void joinMulticastGroup(MulticastSocket multicastSocket, InetAddress multicastAddress) throws
             IOException {
@@ -95,6 +95,7 @@ public class MulticastServiceDiscovery implements ServiceDiscovery, Runnable {
             }
         }
     }
+
 
     /**
      * Get the valid {@link NetworkInterface network interfaces}
@@ -149,83 +150,29 @@ public class MulticastServiceDiscovery implements ServiceDiscovery, Runnable {
     }
 
     @Override
-    public ServiceDiscovery robin(Robin robin) {
-        this.robin = robin;
+    public ServiceDiscovery registerService(String path, Discovery discovery) {
+        multicast(REGISTER + " " + discovery.toFullString());
+        received.computeIfAbsent(path, it -> new LinkedList<>()).add(discovery);
         return this;
     }
 
     @Override
-    public Discovery discovery(String discovery, DiscoveryBoundType strategy) throws Exception {
-        discovery = StringUtils.startWithAppend(discovery, "/");
-        Set<NetAddress> netAddresses = received.get(discovery);
-        List<Discovery> proxyUri = new LinkedList<>();
-        if (null != netAddresses) {
-            for (NetAddress netAddress : netAddresses) {
-                UrlQuery source = netAddress.getUrlQuery();
-                proxyUri.add(Discovery.builder()
-                        .address(source.get("address").toString())
-                        .discovery(source.get("discovery").toString())
-                        .weight(Converter.convertIfNecessary(source.get("weight").toString(), Float.class))
-                        .build());
-            }
-        }
-
-        String proxyPath = discovery;
-        if (proxyUri.isEmpty()) {
-            String fullPath = discovery;
-            while (!StringUtils.isNullOrEmpty(fullPath = (FileUtils.getFullPath(fullPath)))) {
-                if (fullPath.endsWith("/")) {
-                    fullPath = fullPath.substring(0, fullPath.length() - 1);
-                }
-
-                Collection<NetAddress> strings1 = received.get(fullPath);
-
-                proxyPath = fullPath;
-                if (null != strings1 && !strings1.isEmpty()) {
-                    for (NetAddress netAddress : strings1) {
-                        Object source = netAddress.getParameter("source", null);
-                        if (null == source) {
-                            continue;
-                        }
-                        proxyUri.add((Discovery) source);
-                    }
-                    break;
-                }
-            }
-        }
-
+    public Discovery getService(String path, String balance) {
+        List<Discovery> netAddresses = received.get(path);
+        Robin robin = ServiceProvider.of(Robin.class).getNewExtension(balance);
         Robin robin1 = robin.create();
-        robin1.addNodes(createNode(proxyUri, discovery.substring(proxyPath.length())));
-        Node discoveryNode = robin1.selectNode();
-        return null == discoveryNode ? null : discoveryNode.getValue(Discovery.class);
-    }
-
-    /**
-     * 创建节点
-     *
-     * @param proxyUri url
-     * @param uri      uri
-     * @return node
-     */
-    private List<Node> createNode(List<Discovery> proxyUri, String uri) {
-        return proxyUri.stream().map(it -> {
-            Node node = new Node();
-            node.setContent(it);
-            node.setWeight((int) it.getWeight());
-            return node;
-        }).collect(Collectors.toList());
+        robin1.addNode(netAddresses);
+        Node selectNode = robin1.selectNode();
+        return selectNode.getValue(Discovery.class);
     }
 
     @Override
-    public ServiceDiscovery register(Discovery discovery) {
-        NetAddress netAddress = NetAddress.of(discovery.getAddress());
-        netAddress.addParameter(BeanMap.create(discovery));
-        multicast(REGISTER + " " + netAddress.toFullString());
-        return this;
+    public void afterPropertiesSet() {
+
     }
 
     @Override
-    public ServiceDiscovery start(DiscoveryOption discoveryOption) throws Exception {
+    public void start() throws IOException {
         NetAddress netAddress = NetAddress.of(discoveryOption.getAddress());
         String host = netAddress.getHost();
         this.multicastAddress = InetAddress.getByName(host);
@@ -248,15 +195,15 @@ public class MulticastServiceDiscovery implements ServiceDiscovery, Runnable {
                 log.error("Unexpected exception occur at clean expired provider, cause: " + t.getMessage(), t);
             }
         }, cleanPeriod, cleanPeriod, TimeUnit.MILLISECONDS);
-        return this;
+        multicast(SUBSCRIBE + "L" + multicastPort);
     }
 
     /**
      * Remove the expired providers, only when "clean" parameter is true.
      */
     private void clean() {
-        for (Set<NetAddress> providers : new HashSet<>(received.values())) {
-            for (NetAddress url : new HashSet<>(providers)) {
+        for (List<Discovery> providers : new HashSet<>(received.values())) {
+            for (Discovery url : new HashSet<>(providers)) {
                 if (isExpired(url)) {
                     if (log.isWarnEnabled()) {
                         log.warn("Clean expired provider " + url);
@@ -267,15 +214,16 @@ public class MulticastServiceDiscovery implements ServiceDiscovery, Runnable {
         }
     }
 
-    public void doUnregister(NetAddress netAddress) {
-        multicast(UNREGISTER + " " + netAddress.toFullString());
+    public void doUnregister(Discovery discovery) {
+        multicast(UNREGISTER + " " + discovery.toFullString());
     }
 
-    private boolean isExpired(NetAddress netAddress) {
+    private boolean isExpired(Discovery discovery) {
+        NetAddress netAddress = NetAddress.of(discovery.getAddress());
         if (!netAddress.getParameter(DYNAMIC_KEY, true) || netAddress.getPort() <= 0 || CONSUMER_PROTOCOL.equals(netAddress.getProtocol())) {
             return false;
         }
-        try (Socket socket = new Socket(netAddress.getHost(), netAddress.getPort())) {
+        try (Socket socket = new Socket(netAddress.getAddress(), netAddress.getPort())) {
         } catch (Throwable e) {
             try {
                 Thread.sleep(100);
@@ -290,9 +238,8 @@ public class MulticastServiceDiscovery implements ServiceDiscovery, Runnable {
     }
 
     @Override
-    public ServiceDiscovery stop() throws Exception {
+    public void close() {
         executor.shutdownNow();
-        return this;
     }
 
     @Override
@@ -316,25 +263,27 @@ public class MulticastServiceDiscovery implements ServiceDiscovery, Runnable {
         }
     }
 
+
     private void receive(String msg, InetSocketAddress remoteAddress) {
         if (log.isInfoEnabled()) {
             log.info("Receive multicast message: " + msg + " from " + remoteAddress);
         }
 
         if (msg.startsWith(REGISTER)) {
-            NetAddress netAddress = NetAddress.of(msg.substring(REGISTER.length()).trim());
-            registered(netAddress);
+            Discovery discovery = Json.fromJson(msg.substring(REGISTER.length()).trim(), Discovery.class);
+            registered(discovery);
         } else if (msg.startsWith(UNREGISTER)) {
-            NetAddress netAddress = NetAddress.of(msg.substring(UNREGISTER.length()).trim());
-            unregistered(netAddress);
+            Discovery discovery = Json.fromJson(msg.substring(REGISTER.length()).trim(), Discovery.class);
+            unregistered(discovery);
         } else if (msg.startsWith(SUBSCRIBE)) {
-            NetAddress url = NetAddress.valueOf(msg.substring(SUBSCRIBE.length()).trim());
-            Set<NetAddress> urls = getRegistered();
+            String urlAndHost = msg.substring(SUBSCRIBE.length()).trim();
+            String[] ls = urlAndHost.split("L");
+            String url = ls[0];
+            String host = ls[1];
+            List<Discovery> urls = received.get(url);
             if (CollectionUtils.isNotEmpty(urls)) {
-                for (NetAddress u : urls) {
-                    String host = remoteAddress != null && remoteAddress.getAddress() != null ? remoteAddress.getAddress().getHostAddress() : url.getIp();
-                    if (url.getParameter("unicast", true)
-                            && !NetUtils.getLocalHost().equals(host)) {
+                for (Discovery u : urls) {
+                    if (!NetUtils.getLocalHost().equals(host)) {
                         unicast(REGISTER + " " + u.toFullString(), host);
                     } else {
                         multicast(REGISTER + " " + u.toFullString());
@@ -344,35 +293,36 @@ public class MulticastServiceDiscovery implements ServiceDiscovery, Runnable {
         }
     }
 
-    public Set<NetAddress> getRegistered() {
-        Set<NetAddress> rs = new LinkedHashSet<>();
-        Collection<Set<NetAddress>> values = received.values();
-        for (Set<NetAddress> value : values) {
-            rs.addAll(value);
-        }
-        return Collections.unmodifiableSet(rs);
+
+    /**
+     * 注册
+     *
+     * @param discovery 发现
+     */
+    protected void registered(Discovery discovery) {
+        List<Discovery> urls = received.computeIfAbsent(discovery.getUriSpec(), k -> new LinkedList<>());
+        urls.add(discovery);
     }
 
-
-    protected void registered(NetAddress netAddress) {
-        Set<NetAddress> urls = received.computeIfAbsent(
-                netAddress.getParameter("discovery", "/"), k -> new CopyOnWriteArraySet<>());
-        urls.add(netAddress);
-    }
-
-    protected void unregistered(NetAddress url) {
-        URL key = url.toUrl();
-        Set<NetAddress> urls = received.get(key);
-        if (urls != null) {
-            urls.remove(url);
+    /**
+     * 注销
+     *
+     * @param discovery 发现
+     */
+    protected void unregistered(Discovery discovery) {
+        List<Discovery> discoveryList = received.get(discovery.getUriSpec());
+        if (discoveryList == null) {
+            return;
         }
-        if (urls == null || urls.isEmpty()) {
-            if (urls == null) {
-                urls = new CopyOnWriteArraySet<>();
+
+        List<Discovery> remove = new LinkedList<>();
+        for (Discovery discovery1 : discoveryList) {
+            if(discovery1.getPort() == discovery.getPort() && discovery1.getAddress().equals(discovery.getAddress())) {
+                remove.add(discovery1);
             }
-            NetAddress empty = url.setProtocol(EMPTY_PROTOCOL);
-            urls.add(empty);
         }
+
+        discoveryList.removeAll(remove);
     }
 
 

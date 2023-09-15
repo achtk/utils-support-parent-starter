@@ -1,17 +1,12 @@
 package com.chua.common.support.discovery;
 
-import com.chua.common.support.utils.StringUtils;
+import com.chua.common.support.json.Json;
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.net.InetSocketAddress;
-import java.net.MalformedURLException;
-import java.net.SocketAddress;
-import java.net.URL;
+import java.io.Serializable;
 import java.util.Map;
-
-import static com.chua.common.support.http.HttpConstant.HTTP;
 
 /**
  * 发现实例
@@ -22,16 +17,7 @@ import static com.chua.common.support.http.HttpConstant.HTTP;
 @Data
 @Builder
 @Accessors(chain = true)
-public class Discovery {
-    /**
-     * 发现服务目录
-     */
-    @Builder.Default
-    private String discovery = "discovery";
-
-    public void setDiscovery(String discovery) {
-        this.discovery = StringUtils.startWithAppend(discovery, "/");
-    }
+public class Discovery implements Serializable {
 
     /**
      * id
@@ -50,27 +36,10 @@ public class Discovery {
      */
     private String address;
 
-    public String getAddress() {
-        return StringUtils.defaultString(address,  "127.0.0.1:" + port);
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-        try {
-            URL url = new URL(address);
-            this.setPort(url.getPort());
-        } catch (MalformedURLException ignored) {
-        }
-    }
-
     /**
      * 端口
      */
     private int port;
-    /**
-     * 端口
-     */
-    private int sslPort;
     /**
      * 格式
      */
@@ -80,11 +49,7 @@ public class Discovery {
      */
     private Map<String, String> metadata;
 
-    public boolean isHttp() {
-        return HTTP.equals(protocol);
-    }
-
-    public SocketAddress address() {
-        return new InetSocketAddress(address, port);
+    public String toFullString() {
+        return Json.toJson(this);
     }
 }
