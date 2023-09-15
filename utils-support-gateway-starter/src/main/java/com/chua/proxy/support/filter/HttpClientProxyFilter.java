@@ -151,7 +151,7 @@ public class HttpClientProxyFilter implements Filter{
     protected HttpClient getHttpClient(Route route, Exchange exchange) {
         HttpClient httpClient = reactorClient.createInstance();
         Integer timeout = route.getTimeout();
-        if (timeout != null) {
+        if (timeout != null && timeout > 0) {
             return httpClient.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, route.getTimeout() * 1000);
         }
         return httpClient;
