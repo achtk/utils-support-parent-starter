@@ -16,6 +16,8 @@ public interface Constants {
 
     String REGISTER = "register";
 
+    String BEAT = "beat";
+
     String UNREGISTER = "unregister";
 
     String SUBSCRIBE = "subscribe";

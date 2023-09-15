@@ -22,7 +22,7 @@ public class GatewayExample {
     public static void main(String[] args) throws IOException {
         HttpProxyServer httpProxyServer = new HttpProxyServer(3333, new CompositeRouteLocator(
                 new GatewayInternalRouteLocator(new GatewayInternalEndpoint("/")),
-                new DynamicPathRouteLocator(new MulticastServiceDiscovery(new DiscoveryOption()))
+                new DynamicPathRouteLocator(new MulticastServiceDiscovery(new DiscoveryOption().setAddress("224.0.0.1:2111")))
         ));
         httpProxyServer.start();
     }

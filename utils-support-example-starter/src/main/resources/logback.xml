@@ -28,6 +28,8 @@
         </encoder>
     </appender>
     <logger name="*.mapper.*" level="DEBUG" additivity="false"/>
+    <logger name="io.netty" level="INFO" additivity="false"/>
+    <logger name="reactor.netty" level="INFO" additivity="false"/>
     <logger name="com.jcabi" level="OFF" additivity="false"/>
     <logger name="com.ning.http.client.providers" level="OFF" additivity="false"/>
 

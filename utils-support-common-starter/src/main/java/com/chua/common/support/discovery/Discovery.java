@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -28,13 +29,21 @@ public class Discovery implements Serializable {
      */
     private String protocol;
     /**
+     * header
+     */
+    private Map<String, String> headers = new LinkedHashMap<>();
+    /**
+     * 超时
+     */
+    private int timeout;
+    /**
      * 权
      */
     private double weight;
     /**
      * 地址
      */
-    private String address;
+    private String ip;
 
     /**
      * 端口

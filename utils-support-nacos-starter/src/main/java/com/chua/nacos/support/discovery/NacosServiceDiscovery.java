@@ -37,7 +37,7 @@ public class NacosServiceDiscovery extends AbstractServiceDiscovery {
     @Override
     public ServiceDiscovery registerService(String path, Discovery discovery) {
         Instance instance = new Instance();
-        instance.setIp(discovery.getAddress());
+        instance.setIp(discovery.getIp());
         instance.setPort(discovery.getPort());
         instance.setMetadata(MapUtils.asStringMap(BeanMap.create(discovery)));
         instance.setServiceName(discovery.getUriSpec());
@@ -78,7 +78,7 @@ public class NacosServiceDiscovery extends AbstractServiceDiscovery {
                 .uriSpec(path)
                 .port(selectNodeValue.getPort())
                 .weight(selectNodeValue.getWeight())
-                .address(selectNodeValue.getIp())
+                .ip(selectNodeValue.getIp())
                 .build();
     }
 

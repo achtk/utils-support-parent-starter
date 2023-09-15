@@ -29,9 +29,9 @@ import static com.chua.common.support.discovery.Constants.*;
 public class MulticastServiceDiscovery extends AbstractServiceDiscovery implements Runnable {
 
     static String NETWORK_IGNORED_INTERFACE = "network.interface.ignored";
-    private final ConcurrentMap<String, List<Discovery>> received = new ConcurrentHashMap<>();
-    private final Set<Discovery> registered = new CopyOnWriteArraySet<>();
+    private final ConcurrentMap<String, Set<Discovery>> received = new ConcurrentHashMap<>();
     private final ExecutorService executor = ThreadUtils.newSingleThreadExecutor("multicast-service-discovery");
+    private final ScheduledExecutorService beatHeart = ThreadUtils.newScheduledThreadPoolExecutor("multicast-service-beat-heart");
     private DatagramPacket datagramPacketSend;
     private DatagramPacket datagramPacketReceive;
 
@@ -152,13 +152,13 @@ public class MulticastServiceDiscovery extends AbstractServiceDiscovery implemen
     @Override
     public ServiceDiscovery registerService(String path, Discovery discovery) {
         multicast(REGISTER + " " + discovery.toFullString());
-        received.computeIfAbsent(path, it -> new LinkedList<>()).add(discovery);
+        received.computeIfAbsent(path, it -> new LinkedHashSet<>()).add(discovery);
         return this;
     }
 
     @Override
     public Discovery getService(String path, String balance) {
-        List<Discovery> netAddresses = received.get(path);
+        Set<Discovery> netAddresses = received.get(path);
         Robin robin = ServiceProvider.of(Robin.class).getNewExtension(balance);
         Robin robin1 = robin.create();
         robin1.addNode(netAddresses);
@@ -186,6 +186,16 @@ public class MulticastServiceDiscovery extends AbstractServiceDiscovery implemen
         this.datagramPacketSend = new DatagramPacket(new byte[bufferSize], bufferSize, InetAddress.getByName(host), netAddress.getPort());
         joinMulticastGroup(multicastSocket, multicastAddress);
         executor.execute(this);
+        beatHeart.scheduleAtFixedRate(() -> {
+            try {
+                for (Map.Entry<String, Set<Discovery>> entry : received.entrySet()) {
+                    for (Discovery discovery : entry.getValue()) {
+                        multicast(BEAT + " " + discovery.toFullString());
+                    }
+                }
+            } catch (Exception ignored) {
+            }
+        }, 0, 20, TimeUnit.SECONDS);
 
         this.cleanPeriod = (int) discoveryOption.getOrDefault(SESSION_TIMEOUT_KEY, DEFAULT_SESSION_TIMEOUT);
         this.cleanFuture = ThreadUtils.newScheduleWithFixedDelay(() -> {
@@ -202,7 +212,7 @@ public class MulticastServiceDiscovery extends AbstractServiceDiscovery implemen
      * Remove the expired providers, only when "clean" parameter is true.
      */
     private void clean() {
-        for (List<Discovery> providers : new HashSet<>(received.values())) {
+        for (Set<Discovery> providers : received.values()) {
             for (Discovery url : new HashSet<>(providers)) {
                 if (isExpired(url)) {
                     if (log.isWarnEnabled()) {
@@ -219,17 +229,16 @@ public class MulticastServiceDiscovery extends AbstractServiceDiscovery implemen
     }
 
     private boolean isExpired(Discovery discovery) {
-        NetAddress netAddress = NetAddress.of(discovery.getAddress());
-        if (!netAddress.getParameter(DYNAMIC_KEY, true) || netAddress.getPort() <= 0 || CONSUMER_PROTOCOL.equals(netAddress.getProtocol())) {
+        if (discovery.getPort() <= 0 || CONSUMER_PROTOCOL.equals(discovery.getProtocol())) {
             return false;
         }
-        try (Socket socket = new Socket(netAddress.getAddress(), netAddress.getPort())) {
+        try (Socket socket = new Socket(discovery.getIp(), discovery.getPort())) {
         } catch (Throwable e) {
             try {
                 Thread.sleep(100);
             } catch (Throwable ignored) {
             }
-            try (Socket socket2 = new Socket(netAddress.getHost(), netAddress.getPort())) {
+            try (Socket socket2 = new Socket(discovery.getIp(), discovery.getPort())) {
             } catch (Throwable e2) {
                 return true;
             }
@@ -265,12 +274,14 @@ public class MulticastServiceDiscovery extends AbstractServiceDiscovery implemen
 
 
     private void receive(String msg, InetSocketAddress remoteAddress) {
-        if (log.isInfoEnabled()) {
-            log.info("Receive multicast message: " + msg + " from " + remoteAddress);
-        }
-
         if (msg.startsWith(REGISTER)) {
+            if (log.isInfoEnabled()) {
+                log.info("Receive multicast message: " + msg + " from " + remoteAddress);
+            }
             Discovery discovery = Json.fromJson(msg.substring(REGISTER.length()).trim(), Discovery.class);
+            registered(discovery);
+        } else if (msg.startsWith(BEAT)) {
+            Discovery discovery = Json.fromJson(msg.substring(BEAT.length()).trim(), Discovery.class);
             registered(discovery);
         } else if (msg.startsWith(UNREGISTER)) {
             Discovery discovery = Json.fromJson(msg.substring(REGISTER.length()).trim(), Discovery.class);
@@ -280,7 +291,7 @@ public class MulticastServiceDiscovery extends AbstractServiceDiscovery implemen
             String[] ls = urlAndHost.split("L");
             String url = ls[0];
             String host = ls[1];
-            List<Discovery> urls = received.get(url);
+            Set<Discovery> urls = received.get(url);
             if (CollectionUtils.isNotEmpty(urls)) {
                 for (Discovery u : urls) {
                     if (!NetUtils.getLocalHost().equals(host)) {
@@ -300,7 +311,7 @@ public class MulticastServiceDiscovery extends AbstractServiceDiscovery implemen
      * @param discovery 发现
      */
     protected void registered(Discovery discovery) {
-        List<Discovery> urls = received.computeIfAbsent(discovery.getUriSpec(), k -> new LinkedList<>());
+        Set<Discovery> urls = received.computeIfAbsent(discovery.getUriSpec(), k -> new LinkedHashSet<>());
         urls.add(discovery);
     }
 
@@ -310,25 +321,28 @@ public class MulticastServiceDiscovery extends AbstractServiceDiscovery implemen
      * @param discovery 发现
      */
     protected void unregistered(Discovery discovery) {
-        List<Discovery> discoveryList = received.get(discovery.getUriSpec());
+        Set<Discovery> discoveryList = received.get(discovery.getUriSpec());
         if (discoveryList == null) {
             return;
         }
 
         List<Discovery> remove = new LinkedList<>();
         for (Discovery discovery1 : discoveryList) {
-            if(discovery1.getPort() == discovery.getPort() && discovery1.getAddress().equals(discovery.getAddress())) {
+            if(discovery1.getPort() == discovery.getPort() && discovery1.getIp().equals(discovery.getIp())) {
                 remove.add(discovery1);
             }
         }
 
-        discoveryList.removeAll(remove);
+        for (Discovery discovery1 : remove) {
+            discoveryList.remove(discovery1);
+
+        }
     }
 
 
     private void unicast(String msg, String host) {
-        if (log.isInfoEnabled()) {
-            log.info("Send unicast message: " + msg + " to " + host + ":" + multicastPort);
+        if (log.isDebugEnabled()) {
+            log.debug("Send unicast message: " + msg + " to " + host + ":" + multicastPort);
         }
         try {
             byte[] data = (msg + "\n").getBytes();
@@ -340,8 +354,8 @@ public class MulticastServiceDiscovery extends AbstractServiceDiscovery implemen
     }
 
     private void multicast(String msg) {
-        if (log.isInfoEnabled()) {
-            log.info("Send multicast message: " + msg + " to " + multicastAddress + ":" + multicastPort);
+        if (log.isDebugEnabled()) {
+            log.debug("Send multicast message: " + msg + " to " + multicastAddress + ":" + multicastPort);
         }
         try {
             byte[] data = (msg + "\n").getBytes();

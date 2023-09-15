@@ -7,7 +7,9 @@ import io.netty.handler.codec.http.HttpMethod;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -24,12 +26,19 @@ public class Route {
 
     private String envKey;
 
+    private Integer timeout;
+
     private Set<HttpMethod> methods = Constants.HTTP_METHODS_ALL;
+
+    private Map<String, String> headers = new LinkedHashMap<>();
 
     private String path;
 
     private List<Filter> filters;
 
+    public List<Filter> getFilters() {
+        return filters;
+    }
 
     public boolean isMatch(Exchange exchange) {
         return true;

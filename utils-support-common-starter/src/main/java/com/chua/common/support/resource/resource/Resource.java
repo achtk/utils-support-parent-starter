@@ -9,6 +9,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 
+import static com.chua.common.support.constant.NameConstant.FILE;
+
 /**
  * 资源
  * @author CH
@@ -81,5 +83,24 @@ public interface Resource {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * is文件
+     *
+     * @return boolean
+     */
+    default boolean isFile() {
+        URL url = getUrl();
+        return null != url && FILE.equals(url.getProtocol());
+    }
+
+    /**
+     * 获取文件
+     *
+     * @return {@link File}
+     */
+    default File getFile() {
+        return new File(getUrlPath());
     }
 }
