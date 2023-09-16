@@ -1,25 +1,21 @@
 package com.chua.proxy.support.global;
 
-import com.chua.proxy.support.config.HttpClientProperties;
-import com.chua.proxy.support.ssl.HttpClientSslConfigurer;
-import lombok.Data;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * 全局配置
+ *
  * @author CH
+ * @since 2023/09/16
  */
-@Data
 public class GlobalConfig {
+
 
     public static final GlobalConfig INSTANCE = new GlobalConfig();
 
-    private final HttpClientProperties properties = new HttpClientProperties();
-
-    private final HttpClientProperties.Ssl sslProperties = new HttpClientProperties.Ssl();
-    private final HttpClientSslConfigurer sslConfigurer = new HttpClientSslConfigurer(sslProperties, properties);
-
-
     /**
-     * 获取实例
+     * 获取例子
      *
      * @return {@link GlobalConfig}
      */
@@ -27,5 +23,27 @@ public class GlobalConfig {
         return INSTANCE;
     }
 
+    private static final Map<String, Object> ATTRIBUTE = new ConcurrentHashMap<>();
 
+    /**
+     * 获取属性
+     *
+     * @param name 名称
+     * @return {@link T}
+     */
+    @SuppressWarnings("ALL")
+    public <T> void addAttribute(String name, T value) {
+        ATTRIBUTE.put(name, value);
+    }
+
+    /**
+     * 获取属性
+     *
+     * @param name 名称
+     * @return {@link T}
+     */
+    @SuppressWarnings("ALL")
+    public <T> T getAttribute(String name) {
+        return (T) ATTRIBUTE.get(name);
+    }
 }
