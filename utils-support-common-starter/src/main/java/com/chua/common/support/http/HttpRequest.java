@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.Map;
 
+
 /**
  * 请求
  *
@@ -109,10 +110,19 @@ public class HttpRequest {
                 continue;
             }
             if (value instanceof byte[] || value instanceof File || value instanceof InputStream) {
-                header.add(HttpConstant.CONTENT_TYPE, HttpConstant.FORM_DATA);
+                header.addHeader(HttpConstant.CONTENT_TYPE, HttpConstant.FORM_DATA);
                 return true;
             }
         }
         return false;
+    }
+
+    /**
+     * 消息头
+     *
+     * @return {@link Iterable}<{@link Map.Entry}<{@link String}, {@link String}>>
+     */
+    public Iterable<Map.Entry<String, String>> headers() {
+        return header.asSimpleMap().entrySet();
     }
 }

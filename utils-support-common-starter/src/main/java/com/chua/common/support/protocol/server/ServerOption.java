@@ -108,5 +108,12 @@ public class ServerOption implements Serializable {
     @Singular("parameter")
     private Map<String, Object> parameter;
 
-
+    @Builder.Default
+    private boolean tcpNoDelay = true;
+    @Builder.Default
+    private long readerIdleTime = 10_000;
+    @Builder.Default
+    private long writerIdleTime = 10_000;
+    @Builder.Default
+    private long allIdleTime = 10_000;
 }

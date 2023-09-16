@@ -1,6 +1,7 @@
 package com.chua.common.support.protocol.server;
 
 import com.chua.common.support.constant.Projects;
+import com.chua.common.support.log.Log;
 import com.chua.common.support.media.MediaType;
 import com.chua.common.support.media.MediaTypeFactory;
 import com.chua.common.support.objects.ConfigureContextConfiguration;
@@ -24,7 +25,7 @@ import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.CollectionUtils;
 import com.chua.common.support.utils.StringUtils;
 import com.chua.common.support.utils.ThreadUtils;
-import lombok.extern.slf4j.Slf4j;
+import lombok.Getter;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -39,18 +40,22 @@ import static com.chua.common.support.constant.CommonConstant.EMPTY_ARRAY;
  *
  * @author CH
  */
-@Slf4j
 public abstract class AbstractServer implements BeanServer, Constant {
 
+    private static final Log log = Log.getLogger(Server.class);
     private static final String AUTO = "auto-scanner";
     private static final String PACKAGES = "packages";
     private static final String ANY = "*/*";
+    @Getter
+    private final ServerOption serverOption;
+    @Getter
     protected ServerRequest request;
     private TemplateResolver templateResolver;
     private StandardConfigureObjectContext objectContext;
-    private ExecutorService runService = ThreadUtils.newSingleThreadExecutor("run-thread");
+    private final ExecutorService runService = ThreadUtils.newSingleThreadExecutor("run-thread");
 
     protected AbstractServer(ServerOption serverOption) {
+        this.serverOption = serverOption;
         this.request = new ServerRequest(serverOption);
         this.beforeAfterPropertiesSet();
         afterPropertiesSet();
@@ -123,9 +128,11 @@ public abstract class AbstractServer implements BeanServer, Constant {
 
     @Override
     public void start() {
+        log.info("===========================================================================================");
         log.debug("服务启动中");
         runService.execute(this::run);
         log.info("服务启动成功: 端口: {}, PID: {}", request.getInteger("port"), Projects.getPid());
+        log.info("===========================================================================================");
     }
 
     @Override

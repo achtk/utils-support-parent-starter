@@ -2,6 +2,7 @@ package com.chua.common.support.http;
 
 /**
  * HttpHeaders
+ *
  * @author CH
  */
 public class HttpHeaders {

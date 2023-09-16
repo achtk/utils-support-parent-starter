@@ -1,11 +1,9 @@
 package com.chua.common.support.http;
 
-import com.chua.common.support.collection.MultiLinkedValueMap;
-import com.chua.common.support.collection.MultiValueMap;
-
-import java.util.HashMap;
-import java.util.List;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 /**
  * 消息头
@@ -13,59 +11,129 @@ import java.util.Map;
  * @author CH
  */
 
-public class HttpHeader extends MultiLinkedValueMap<String, String> implements MultiValueMap<String, String> {
+public class HttpHeader implements Iterable<Map.Entry<String, String>> {
+
+    private final Map<String, String> headers = new LinkedHashMap<>();
 
     public HttpHeader() {
     }
 
-
-    public HttpHeader(Map<String, String> map) {
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            this.put(entry.getKey(), entry.getValue());
+    public HttpHeader(Iterable<Map.Entry<String, String>> headers) {
+        if (null == headers) {
+            return;
         }
+        headers.forEach((k) -> {
+            addHeader(k.getKey(), k.getValue());
+        });
     }
 
-    public void putList(Map<String, List<String>> map) {
-        for (Map.Entry<String, List<String>> entry : map.entrySet()) {
-            this.putAll(entry.getKey(), entry.getValue());
-        }
+
+    @Override
+    public Iterator<Map.Entry<String, String>> iterator() {
+        return headers.entrySet().iterator();
     }
+
 
     /**
-     * 简单化集合
+     * 每个
      *
-     * @return 简单化集合
+     * @param consumer 消费者
      */
-    public Map<String, String> asSimpleMap() {
-        Map<String, String> header = new HashMap<>(1 << 4);
-        this.forEach(header::put);
-        return header;
+    public void forEach(BiConsumer<String, String> consumer) {
+        for (Map.Entry<String, String> entry : headers.entrySet()) {
+            consumer.accept(entry.getKey(), entry.getValue());
+        }
     }
 
+    /**
+     * 为空
+     *
+     * @return boolean
+     */
+    public boolean isEmpty() {
+        return headers.isEmpty();
+    }
 
     /**
-     * 添加数据
+     * 去除消息头
      *
-     * @param headerName  名称
-     * @param headerValue 值
-     * @return 结果
+     * @param headerName 消息头名称
+     * @return {@link HttpHeader}
+     */
+    public HttpHeader removeHeader(String headerName) {
+        headers.remove(headerName);
+        return this;
+    }
+
+    /**
+     * 添加消息头
+     *
+     * @param headerName  消息头名称
+     * @param headerValue 消息头值
+     * @return {@link HttpHeader}
      */
     public HttpHeader addHeader(String headerName, String headerValue) {
-        this.put(headerName, headerValue);
+        headers.put(headerName, headerValue);
         return this;
     }
 
     /**
-     * 添加数据
+     * 添加消息头
      *
-     * @param headerName  名称
-     * @param headerValue 值
-     * @return 结果
+     * @param headerName  消息头名称
+     * @param headerValue 消息头值
+     * @return {@link HttpHeader}
      */
-    public HttpHeader addHeader(String headerName, String... headerValue) {
-        for (String s : headerValue) {
-            addHeader(headerName, s);
-        }
+    public HttpHeader set(String headerName, String headerValue) {
+        headers.put(headerName, headerValue);
         return this;
+    }
+
+    /**
+     * 获取消息头
+     *
+     * @param headerName 消息头名称
+     * @return {@link String}
+     */
+    public String getHeader(String headerName) {
+        return headers.get(headerName);
+    }
+
+    /**
+     * 获取消息头
+     *
+     * @param headerName   消息头名称
+     * @param defaultValue 违约值
+     * @return {@link String}
+     */
+    public String getHeader(String headerName, String defaultValue) {
+        return headers.getOrDefault(headerName, defaultValue);
+    }
+
+    /**
+     * 价值观
+     *
+     * @return {@link Iterable}<{@link ?} {@link extends} {@link String}>
+     */
+    public Iterable<? extends String> values() {
+        return headers.values();
+    }
+
+    /**
+     * 密钥集
+     *
+     * @return {@link Iterable}<{@link ?} {@link extends} {@link String}>
+     */
+    public Iterable<? extends String> keySet() {
+        return headers.keySet();
+    }
+
+    /**
+     * 作为简单地图
+     *
+     * @return {@link Map}<{@link String}, {@link String}>
+     */
+    public Map<String, String> asSimpleMap() {
+        return headers;
     }
 }

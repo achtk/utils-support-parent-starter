@@ -93,7 +93,7 @@ public interface HttpClientBuilder {
      */
     default HttpClientBuilder header(HttpHeader headers) {
         if(null != headers) {
-            headers.forEach(this::header);
+            headers.forEach((s, s2) -> header(s, s2));
         }
         return this;
     }

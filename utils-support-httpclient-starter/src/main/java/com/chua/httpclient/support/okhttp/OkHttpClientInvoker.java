@@ -133,10 +133,10 @@ public class OkHttpClientInvoker extends AbstractHttpClientInvoker implements Au
         builder.code(httpResult.getStatus());
         builder.content(httpResult.getBody());
 
-        HttpHeader header = new HttpHeader();
+        HttpHeader header = new HttpHeader(request.headers());
         ListMap<String> stringListMap = httpResult.allHeaders();
         for (Map.Entry<String, String> entry : stringListMap.entrySet()) {
-            header.put(entry.getKey(), entry.getValue());
+            header.addHeader(entry.getKey(), entry.getValue());
         }
 
         builder.httpHeader(header);

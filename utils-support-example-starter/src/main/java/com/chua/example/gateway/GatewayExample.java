@@ -4,10 +4,9 @@ import com.chua.common.support.discovery.DiscoveryOption;
 import com.chua.common.support.discovery.MulticastServiceDiscovery;
 import com.chua.proxy.support.HttpProxyServer;
 import com.chua.proxy.support.TcpProxyServer;
-import com.chua.proxy.support.endpoint.GatewayInternalEndpoint;
-import com.chua.proxy.support.route.locator.CompositeRouteLocator;
-import com.chua.proxy.support.route.locator.DynamicPathRouteLocator;
-import com.chua.proxy.support.route.locator.GatewayInternalRouteLocator;
+import com.chua.proxy.support.factory.DiscoveryServiceChannelFactory;
+import com.chua.proxy.support.factory.ProxyChannelFactory;
+import com.google.common.collect.Lists;
 
 import java.io.IOException;
 
@@ -20,15 +19,17 @@ import java.io.IOException;
 public class GatewayExample {
 
     public static void main(String[] args) throws IOException {
-        HttpProxyServer httpProxyServer = new HttpProxyServer(3333, new CompositeRouteLocator(
-                new GatewayInternalRouteLocator(new GatewayInternalEndpoint("/")),
-                new DynamicPathRouteLocator(new MulticastServiceDiscovery(new DiscoveryOption().setAddress("224.0.0.1:2111")))
-        ));
+        HttpProxyServer httpProxyServer = new HttpProxyServer(3333,
+                Lists.newArrayList(
+                        new DiscoveryServiceChannelFactory(new MulticastServiceDiscovery(new DiscoveryOption().setAddress("224.0.0.1:2111"))),
+                        new ProxyChannelFactory()
+                )
+        );
         httpProxyServer.start();
     }
 
     public static void tcp() {
-        TcpProxyServer server = new TcpProxyServer(3333, 6379);
+        TcpProxyServer server = new TcpProxyServer(3333, 3306);
         server.start();
     }
 }

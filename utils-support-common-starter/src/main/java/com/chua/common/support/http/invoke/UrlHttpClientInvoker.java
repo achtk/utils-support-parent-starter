@@ -113,7 +113,7 @@ public class UrlHttpClientInvoker extends AbstractHttpClientInvoker {
             Map<String, List<String>> fields = connection.getHeaderFields();
             HttpHeader header = new HttpHeader();
             for (Map.Entry<String, List<String>> entry : fields.entrySet()) {
-                header.put(entry.getKey(), CollectionUtils.findFirst(entry.getValue()));
+                header.addHeader(entry.getKey(), CollectionUtils.findFirst(entry.getValue()));
             }
 
             Object content;
@@ -210,10 +210,7 @@ public class UrlHttpClientInvoker extends AbstractHttpClientInvoker {
             ((HttpURLConnection) connection).setInstanceFollowRedirects(false);
         }
 
-        HttpHeader header = request.getHeader();
-        if (null == header) {
-            header = new HttpHeader();
-        }
+        HttpHeader header = new HttpHeader(request.getHeader());
 
         if (!header.isEmpty()) {
             header.forEach(connection::setRequestProperty);
@@ -238,7 +235,7 @@ public class UrlHttpClientInvoker extends AbstractHttpClientInvoker {
                 log.debug("消息头设置完成, header!!");
                 log.debug("=======================================================");
                 for (String key : header.keySet()) {
-                    log.debug("{}: {}", key, header.get(key));
+                    log.debug("{}: {}", key, header.getHeader(key));
                 }
                 log.debug("=======================================================");
             }
@@ -313,7 +310,7 @@ public class UrlHttpClientInvoker extends AbstractHttpClientInvoker {
         }
 
         //非上传文件
-        String contentType = CollectionUtils.findFirst(request.getHeader().get(HTTP_HEADER_CONTENT_TYPE), "*");
+        String contentType = request.getHeader().getHeader(HTTP_HEADER_CONTENT_TYPE, "*");
         try (OutputStream outputStream = connection.getOutputStream();) {
             Render render = ServiceProvider.of(Render.class).getNewExtension(contentType);
             byte[] bytes = render.render(body, contentType);

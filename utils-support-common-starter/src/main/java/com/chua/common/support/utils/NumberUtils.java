@@ -2449,6 +2449,17 @@ public class NumberUtils {
      * @param defaultValue 默认值
      * @return 结果
      */
+    public static int isValid(Integer value, int defaultValue) {
+        return null == value || value == 0 ? defaultValue : value;
+    }
+
+    /**
+     * zero
+     *
+     * @param value        值
+     * @param defaultValue 默认值
+     * @return 结果
+     */
     public static int isZero(int value, int defaultValue) {
         return value == 0 ? defaultValue : value;
     }

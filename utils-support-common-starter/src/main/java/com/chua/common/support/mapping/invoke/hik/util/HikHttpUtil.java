@@ -541,7 +541,7 @@ public class HikHttpUtil {
         if (null != response) {
             if (302 == response.code()) {
                 HttpHeader httpHeader = response.httpHeader();
-                newUrl = httpHeader.getFirst("location");
+                newUrl = httpHeader.getHeader("location");
                 HttpClientInvoker clientInvoker = HttpClient.get().url(newUrl).newInvoker();
                 response = clientInvoker.execute();
             }

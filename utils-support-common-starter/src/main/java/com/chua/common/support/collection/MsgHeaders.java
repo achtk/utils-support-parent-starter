@@ -7,7 +7,6 @@ import lombok.experimental.Accessors;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 消息头
@@ -32,7 +31,7 @@ public class MsgHeaders {
     public HttpHeader toHttpHeader() {
         HttpHeader header = new HttpHeader();
         for (MsgHeader msgHeader : headers) {
-            header.add(msgHeader.getName(), msgHeader.getValue());
+            header.set(msgHeader.getName(), msgHeader.getValue());
         }
         return header;
     }

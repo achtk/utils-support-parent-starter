@@ -330,7 +330,7 @@ public class UnirestClientInvoker extends AbstractHttpClientInvoker {
      */
     private HttpHeader createHeader(Headers headers) {
         HttpHeader header =
-                new HttpHeader();
+                new HttpHeader(request.headers());
         List<Header> all = headers.all();
         for (Header header1 : all) {
             header.addHeader(header1.getName(), header1.getValue());
