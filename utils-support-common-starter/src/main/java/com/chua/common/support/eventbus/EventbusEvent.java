@@ -223,9 +223,9 @@ public class EventbusEvent {
 
         Parameter parameter = parameters[0];
         Class<?> parameterType = parameter.getType();
-        method.setAccessible(true);
 
         try {
+            method.setAccessible(true);
             if(Collection.class.isAssignableFrom(parameterType)) {
                 method.invoke(bean, new Object[]{values});
                 return;
