@@ -1,13 +1,15 @@
 package com.chua.common.support.eventbus;
 
 import com.chua.common.support.converter.Converter;
-import com.chua.common.support.lang.profile.Profile;
 import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.ObjectUtils;
 import com.chua.common.support.utils.ThreadUtils;
 
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 
@@ -16,29 +18,25 @@ import java.util.concurrent.ExecutorService;
  *
  * @author CH
  */
-public abstract class AbstractEventbus implements Eventbus {
+public abstract class AbstractEventbus implements SubscribeEventbus {
     private final List<EventbusEvent> eventbusEvents = new LinkedList<>();
     protected Executor executor;
-    protected Profile profile;
 
-    public AbstractEventbus(Profile profile) {
-        this.profile = profile;
-    }
 
     @Override
-    public Eventbus executor(Executor executor) {
+    public SubscribeEventbus executor(Executor executor) {
         this.executor = ObjectUtils.defaultIfNull(executor, ThreadUtils.newSingleThreadExecutor("eventbus-0"));
         return this;
     }
 
     @Override
-    public Eventbus register(EventbusEvent... eventbusEvent) {
+    public SubscribeEventbus register(EventbusEvent... eventbusEvent) {
         eventbusEvents.addAll(Arrays.asList(eventbusEvent));
         return this;
     }
 
     @Override
-    public Eventbus unregister(EventbusEvent value) {
+    public SubscribeEventbus unregister(EventbusEvent value) {
         eventbusEvents.remove(value);
         return this;
     }

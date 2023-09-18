@@ -35,7 +35,7 @@ public enum ReturnResultCode implements ResultCode {
     /**
      * 请求资源不存在
      */
-    RESOURCE_NOT_FOUND("C0401", "请求资源不存在"),
+    RESOURCE_NOT_FOUND("C0404", "请求资源不存在"),
     /**
      * 无访问权限,请联系管理员授予权限
      */

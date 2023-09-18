@@ -14,7 +14,7 @@ public enum EventbusType {
     /**
      * 本地
      */
-    LOCAL,
+    DEFAULT,
     /**
      * guava
      */

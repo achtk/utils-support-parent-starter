@@ -31,6 +31,6 @@ public @interface Subscribe {
      *
      * @return 类型
      */
-    EventbusType type() default EventbusType.LOCAL;
+    EventbusType type() default EventbusType.DEFAULT;
 
 }

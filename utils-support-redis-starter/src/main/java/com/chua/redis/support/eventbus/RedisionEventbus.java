@@ -58,7 +58,7 @@ public class RedisionEventbus extends AbstractEventbus {
     }
 
     @Override
-    public Eventbus register(EventbusEvent[] value) {
+    public SubscribeEventbus register(EventbusEvent[] value) {
         if (!IS_RUNNING.get()) {
             IS_RUNNING.set(true);
         }
@@ -89,7 +89,7 @@ public class RedisionEventbus extends AbstractEventbus {
     }
 
     @Override
-    public Eventbus unregister(EventbusEvent value) {
+    public SubscribeEventbus unregister(EventbusEvent value) {
         if (null == value) {
             return this;
         }
@@ -143,7 +143,7 @@ public class RedisionEventbus extends AbstractEventbus {
     }
 
     @Override
-    public Eventbus post(String name, Object message) {
+    public SubscribeEventbus post(String name, Object message) {
         if (StringUtils.isNullOrEmpty(name) || null == message || !IS_RUNNING.get()) {
             return this;
         }

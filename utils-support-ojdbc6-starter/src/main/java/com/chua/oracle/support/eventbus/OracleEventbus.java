@@ -1,11 +1,10 @@
 package com.chua.oracle.support.eventbus;
 
 import com.chua.common.support.eventbus.AbstractEventbus;
-import com.chua.common.support.eventbus.Eventbus;
 import com.chua.common.support.eventbus.EventbusType;
+import com.chua.common.support.eventbus.SubscribeEventbus;
 import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.lang.profile.Profile;
-import oracle.jms.AQjmsFactory;
 
 import javax.sql.DataSource;
 
@@ -20,7 +19,7 @@ public class OracleEventbus extends AbstractEventbus implements InitializingAwar
     }
 
     @Override
-    public Eventbus post(String name, Object message) {
+    public SubscribeEventbus post(String name, Object message) {
         return null;
     }
 
