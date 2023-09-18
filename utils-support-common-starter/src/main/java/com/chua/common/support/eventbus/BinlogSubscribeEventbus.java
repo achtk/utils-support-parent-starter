@@ -412,7 +412,7 @@ public class BinlogSubscribeEventbus extends AbstractEventbus implements Initial
         executor.execute(() -> {
             for (EventbusEvent eventbusEvent : eventbusEvents) {
                 Action action1 = eventbusEvent.getAction();
-                if((null != action1 && action1 == action) || action == Action.NONE) {
+                if((null != action1 && (action1 == action || action1 == Action.NONE))) {
                     send(eventbusEvent, values);
                 }
             }

@@ -15,7 +15,7 @@ public class BinlogSubscribeEntity {
     private int index = 0;
 
     @Subscribe(value = "*", type = EventbusType.BINLOG)
-    public void local(Integer holiday) {
+    public void local(Object holiday) {
         log.info("{} -> binlog: {}", ++index, holiday);
     }
 }
