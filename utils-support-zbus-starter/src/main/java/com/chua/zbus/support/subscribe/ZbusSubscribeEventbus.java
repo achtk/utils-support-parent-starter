@@ -9,6 +9,7 @@ import com.chua.common.support.json.Json;
 import com.chua.common.support.utils.ArrayUtils;
 import com.chua.common.support.utils.CollectionUtils;
 import com.chua.common.support.utils.StringUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.zbus.broker.Broker;
 import org.zbus.broker.BrokerConfig;
 import org.zbus.broker.HaBroker;
@@ -26,14 +27,16 @@ import java.util.*;
 /**
  * @author CH
  */
+@Slf4j
 public class ZbusSubscribeEventbus extends AbstractEventbus implements InitializingAware, Consumer.ConsumerHandler {
 
     public String address;
     private final String endpoint;
     private Consumer consumer;
     private Producer producer;
+    Broker broker;
+
     private final Map<String, Set<EventbusEvent>> temp = new HashMap<>();
-    private final List<EventbusEvent> empty = new ArrayList<>();
 
     /**
      * zbus订阅eventbus
@@ -49,7 +52,7 @@ public class ZbusSubscribeEventbus extends AbstractEventbus implements Initializ
     public ZbusSubscribeEventbus(String endpoint) {
         this("127.0.0.1:55555", endpoint);
     }
-    public ZbusSubscribeEventbus() {
+    public  ZbusSubscribeEventbus() {
         this("127.0.0.1:55555", "mq");
     }
 
@@ -58,7 +61,6 @@ public class ZbusSubscribeEventbus extends AbstractEventbus implements Initializ
         for (EventbusEvent eventbusEvent : value) {
             String name = eventbusEvent.getName();
             if (StringUtils.isNullOrEmpty(name)) {
-                empty.add(eventbusEvent);
                 continue;
             }
             temp.computeIfAbsent(name, it -> new HashSet<>()).add(eventbusEvent);
@@ -77,18 +79,11 @@ public class ZbusSubscribeEventbus extends AbstractEventbus implements Initializ
         }
         String name = value.getName();
 
-        if (StringUtils.isNullOrEmpty(name)) {
-            List<EventbusEvent> list = intoRemoveList(empty, value);
+        Set<EventbusEvent> subscribeTasks = temp.get(name);
+        if (null != subscribeTasks) {
+            List<EventbusEvent> list = intoRemoveList(subscribeTasks, value);
             if (!CollectionUtils.isEmpty(list)) {
-                empty.removeAll(list);
-            }
-        } else {
-            Set<EventbusEvent> subscribeTasks = temp.get(name);
-            if (null != subscribeTasks) {
-                List<EventbusEvent> list = intoRemoveList(subscribeTasks, value);
-                if (!CollectionUtils.isEmpty(list)) {
-                    list.forEach(subscribeTasks::remove);
-                }
+                list.forEach(subscribeTasks::remove);
             }
         }
         return this;
@@ -141,7 +136,6 @@ public class ZbusSubscribeEventbus extends AbstractEventbus implements Initializ
         //创建Broker代表
         BrokerConfig brokerConfig = new BrokerConfig();
         brokerConfig.setBrokerAddress(address);
-        Broker broker;
         try {
             if (address.contains(CommonConstant.SYMBOL_COMMA)) {
                 broker = new HaBroker(brokerConfig);
@@ -157,7 +151,9 @@ public class ZbusSubscribeEventbus extends AbstractEventbus implements Initializ
         mqConfig1.setMq(endpoint);
         this.producer = new Producer(mqConfig1);
         try {
-            producer.createMQ();
+            producer.createMQAsync((it) -> {
+                log.info(it.getBodyString());
+            });
         } catch (Exception ignored) {
         }
 
@@ -181,6 +177,20 @@ public class ZbusSubscribeEventbus extends AbstractEventbus implements Initializ
         JSONObject jsonObject = Json.fromJson(utf8Str, JSONObject.class);
         String name = jsonObject.getString("name");
         EventbusMessage eventbusMessage = jsonObject.getObject("data", EventbusMessage.class);
+        Set<EventbusEvent> eventbusEvents = temp.get(name);
+        if(null == eventbusMessage || null == eventbusEvents) {
+            return;
+        }
 
+        invoke(eventbusEvents, eventbusMessage);
+    }
+
+    @Override
+    public void close() throws Exception {
+        super.close();
+        consumer.stop();
+        if(null != broker) {
+            broker.close();
+        }
     }
 }

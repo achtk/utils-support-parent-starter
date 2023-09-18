@@ -29,6 +29,7 @@
     </appender>
     <logger name="*.mapper.*" level="DEBUG" additivity="false"/>
     <logger name="com.jcabi" level="OFF" additivity="false"/>
+    <logger name="org.zbus.net.tcp.TcpClient" level="OFF" additivity="false"/>
     <logger name="com.ning.http.client.providers" level="OFF" additivity="false"/>
 
     <!-- 按照每天生成日志文件 -->
