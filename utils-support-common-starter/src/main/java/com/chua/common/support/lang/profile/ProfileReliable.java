@@ -61,6 +61,23 @@ public interface ProfileReliable extends PlaceholderResolver {
     }
 
     /**
+     * 获取枚举
+     *
+     * @param name     名称
+     * @param enumType 枚举类型
+     * @return 结果
+     */
+    default <T extends Enum<T>>T getEnum(String name, T[] enumType) {
+        String string = getString(name);
+        for (T t : enumType) {
+            if(t.name().equalsIgnoreCase(string)) {
+                return t;
+            }
+        }
+        return null;
+    }
+
+    /**
      * 获取数据
      *
      * @param name 名称

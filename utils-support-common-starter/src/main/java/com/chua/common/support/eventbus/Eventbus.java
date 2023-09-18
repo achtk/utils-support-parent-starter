@@ -1,13 +1,15 @@
 package com.chua.common.support.eventbus;
 
-import com.chua.common.support.utils.AnnotationUtils;
+import com.chua.common.support.objects.definition.attribute.AnnotationAttribute;
+import com.chua.common.support.objects.definition.element.AnnotationDescribe;
+import com.chua.common.support.objects.definition.element.MethodDescribe;
 import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.ObjectUtils;
-import com.chua.common.support.utils.StringUtils;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
 import static com.chua.common.support.constant.NameConstant.CGLIB$$;
@@ -26,7 +28,17 @@ public interface Eventbus{
      * @return {@link Eventbus}
      */
     static Eventbus newDefault() {
-        return new EventbusImpl();
+        return new EventbusImpl(null);
+    }
+
+    /**
+     * 新默认值
+     *
+     * @param executor 遗嘱执行人
+     * @return {@link Eventbus}
+     */
+    static Eventbus newDefault(Executor executor) {
+        return new EventbusImpl(executor);
     }
     /**
      * 注册用户
@@ -61,24 +73,23 @@ public interface Eventbus{
      * @param entity 实体
      * @return this
      */
-    default Eventbus register(Object entity) {
+    default Eventbus registerObject(Object entity) {
         Class<?> aClass = entity.getClass();
         String typeName = aClass.getTypeName();
         if (typeName.contains(CGLIB$$)) {
             aClass = ObjectUtils.defaultIfNull(ClassUtils.forName(typeName.substring(0, typeName.indexOf("$$"))), aClass);
         }
 
-        Map<Method, Subscribe> collect = Arrays.stream(aClass.getDeclaredMethods()).filter(it -> {
-            Subscribe subscribe = it.getDeclaredAnnotation(Subscribe.class);
-            return null != subscribe;
-        }).collect(Collectors.toMap(it -> it, it1 -> it1.getDeclaredAnnotation(Subscribe.class)));
+        Map<Method, AnnotationDescribe> collect = Arrays.stream(aClass.getDeclaredMethods()).map(MethodDescribe::new).filter(it -> {
+            return it.hasAnnotation(Subscribe.class);
+        }).collect(Collectors.toMap(MethodDescribe::method, it1 -> it1.getAnnotationDescribe(Subscribe.class)));
 
 
         if (collect.isEmpty()) {
             return this;
         }
 
-        for (Map.Entry<Method, Subscribe> entry : collect.entrySet()) {
+        for (Map.Entry<Method, AnnotationDescribe> entry : collect.entrySet()) {
             processSubscribe(entry.getValue(), entry.getKey().getName(), entry.getKey(), entity);
         }
 
@@ -93,37 +104,33 @@ public interface Eventbus{
      * @param entity 实体
      */
     default void register(Method method, Object entity) {
-        Subscribe subscribe1 = method.getDeclaredAnnotation(Subscribe.class);
-        if (null == subscribe1) {
+        MethodDescribe methodDescribe = new MethodDescribe(method, entity.getClass(), entity);
+        AnnotationDescribe annotationDescribe = methodDescribe.getAnnotationDescribe(Subscribe.class);
+        if (null == annotationDescribe) {
             return;
         }
 
-        processSubscribe(subscribe1, method.getName(), method, entity);
+        processSubscribe(annotationDescribe, method.getName(), method, entity);
     }
 
     /**
      * 预加载
      *
-     * @param subscribe 注解
+     * @param annotationDescribe 注解
      * @param beanName  名称
      * @param method    方法
      * @param bean      对象
      */
-    default void processSubscribe(Subscribe subscribe, String beanName, Method method, Object bean) {
-        Map<String, Object> attributes = AnnotationUtils.getAnnotationValue(subscribe);
-        Object value = "";
+    default void processSubscribe(AnnotationDescribe annotationDescribe, String beanName, Method method, Object bean) {
+        AnnotationAttribute attributes = annotationDescribe.getAnnotationAttribute();
+        String value = "";
         if (null != attributes) {
-            value = attributes.get("name");
-
-            if (StringUtils.isNullOrEmpty(value.toString())) {
-                value = attributes.get("value");
-            }
-
+            value = attributes.getString("name");
             if (null == value) {
                 value = "";
             }
         }
-        register(new EventbusEvent(subscribe, method, beanName, bean));
+        register(new EventbusEvent(annotationDescribe, method, beanName, bean));
     }
 
     /**

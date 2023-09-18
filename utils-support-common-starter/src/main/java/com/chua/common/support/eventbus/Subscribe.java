@@ -1,5 +1,7 @@
 package com.chua.common.support.eventbus;
 
+import com.chua.common.support.annotations.Alias;
+
 import java.lang.annotation.*;
 
 /**
@@ -17,6 +19,7 @@ public @interface Subscribe {
      *
      * @return 名称
      */
+    @Alias("name")
     String value() default "";
 
     /**
@@ -24,6 +27,7 @@ public @interface Subscribe {
      *
      * @return 名称
      */
+    @Alias("value")
     String name() default "";
 
     /**
@@ -31,6 +35,13 @@ public @interface Subscribe {
      *
      * @return 类型
      */
+    String typeName() default "DEFAULT";
+    /**
+     * 类型
+     *
+     * @return 类型
+     */
+    @Alias("typeName")
     EventbusType type() default EventbusType.DEFAULT;
 
 }

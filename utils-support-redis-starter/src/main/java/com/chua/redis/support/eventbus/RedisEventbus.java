@@ -3,7 +3,6 @@ package com.chua.redis.support.eventbus;
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.eventbus.*;
 import com.chua.common.support.json.Json;
-import com.chua.common.support.lang.profile.Profile;
 import com.chua.common.support.utils.ArrayUtils;
 import com.chua.common.support.utils.CollectionUtils;
 import com.chua.common.support.utils.StringUtils;
@@ -34,14 +33,23 @@ public class RedisEventbus extends AbstractEventbus {
     private final List<EventbusEvent> empty = new ArrayList<>();
     private JedisPool shardedJedisPool;
 
-    public RedisEventbus(Profile profile) {
-        super(profile);
-        RedisConfiguration redisConfiguration = profile.bind(new String[]{"redis", "spring.redis"}, RedisConfiguration.class);
-
+    public RedisEventbus(RedisConfiguration redisConfiguration) {
         this.shardedJedisPool = JedisUtil.getJedisPool(redisConfiguration);
         if (null != shardedJedisPool) {
             IS_RUNNING.set(true);
         }
+    }
+    public RedisEventbus() {
+        this(new RedisConfiguration());
+    }
+    public RedisEventbus(String host, int port) {
+        this(new RedisConfiguration(host, port));
+    }
+    public RedisEventbus(int port) {
+        this(new RedisConfiguration(port));
+    }
+    public RedisEventbus(String host) {
+        this(new RedisConfiguration(host));
     }
 
     @Override

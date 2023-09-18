@@ -1,10 +1,11 @@
 package com.chua.common.support.eventbus;
 
+import com.chua.common.support.objects.definition.attribute.AnnotationAttribute;
+import com.chua.common.support.objects.definition.element.AnnotationDescribe;
 import com.chua.common.support.objects.definition.element.TypeDescribe;
 import com.chua.common.support.reflection.dynamic.AnnotationFactory;
 import com.chua.common.support.reflection.dynamic.DynamicFactory;
 import com.chua.common.support.reflection.dynamic.NonStandardDynamicFactory;
-import com.chua.common.support.utils.AnnotationUtils;
 import com.chua.common.support.utils.ArrayUtils;
 import com.chua.common.support.utils.ClassUtils;
 import com.chua.common.support.utils.StringUtils;
@@ -61,17 +62,18 @@ public class EventbusEvent {
      */
     private Class<?> paramType;
 
-    public EventbusEvent(Subscribe subscribe, Method method, String beanName, Object bean) {
-        Map<String, Object> attributes = AnnotationUtils.getAnnotationValue(subscribe);
+    public EventbusEvent(AnnotationDescribe annotationDescribe, Method method, String beanName, Object bean) {
+        AnnotationAttribute attributes = annotationDescribe.getAnnotationAttribute();
         setBean(bean);
         setParamType(method.getParameterTypes()[0]);
         setMethod(method);
         setBeanName(beanName);
 
-        setName(StringUtils.isNullOrEmpty(subscribe.name()) ? subscribe.value() : subscribe.name());
-        setType(EventbusType.valueOf(String.valueOf(attributes.get("type"))));
+        AnnotationAttribute annotationAttribute = annotationDescribe.getAnnotationAttribute();
+        setName(StringUtils.defaultString(annotationAttribute.getString("name"), annotationDescribe.name()));
+        setType(EventbusType.valueOf(attributes.getString("type").toUpperCase()));
         setConfiguration(configuration);
-        EventbusType type = subscribe.type();
+        EventbusType type = attributes.getEnum("type", EventbusType.values());
         if (type == EventbusType.GUAVA && ClassUtils.isPresent(SUBSCRIBE)) {
             setBean(analysisGuavaSubscribe(bean));
         }

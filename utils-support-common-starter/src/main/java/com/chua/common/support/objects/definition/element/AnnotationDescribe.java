@@ -1,6 +1,7 @@
 package com.chua.common.support.objects.definition.element;
 
 import com.chua.common.support.function.InitializingAware;
+import com.chua.common.support.objects.definition.attribute.AnnotationAttribute;
 import com.chua.common.support.objects.definition.resolver.AnnotationResolver;
 import com.chua.common.support.spi.ServiceProvider;
 import com.chua.common.support.utils.AnnotationUtils;
@@ -25,6 +26,7 @@ public class AnnotationDescribe implements ElementDescribe, InitializingAware {
 
     private final Class<?> type;
     private Map<String, Object> value;
+    private AnnotationAttribute annotationAttribute;
 
     public AnnotationDescribe(Annotation annotation, Class<?> type) {
         this.annotation = annotation;
@@ -40,6 +42,8 @@ public class AnnotationDescribe implements ElementDescribe, InitializingAware {
         }
         return aClass.getTypeName();
     }
+
+
 
     @Override
     public Class<?> getType() {
@@ -69,6 +73,10 @@ public class AnnotationDescribe implements ElementDescribe, InitializingAware {
     @Override
     public Map<String, Object> value() {
         return value;
+    }
+
+    public AnnotationAttribute getAnnotationAttribute() {
+        return annotationAttribute;
     }
 
     @Override
@@ -103,6 +111,7 @@ public class AnnotationDescribe implements ElementDescribe, InitializingAware {
     @Override
     public void afterPropertiesSet() {
         this.value = AnnotationUtils.getAnnotationAttributes(annotation);
+        this.annotationAttribute = new AnnotationAttribute(value, annotation);
     }
 
     /**

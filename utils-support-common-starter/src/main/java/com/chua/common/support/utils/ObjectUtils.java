@@ -497,7 +497,15 @@ public class ObjectUtils {
      * @return 结果
      */
     public static boolean isEmpty(Object reference) {
-        return null == reference;
+        if(null == reference) {
+            return true;
+        }
+
+        if(reference instanceof String) {
+            return StringUtils.isEmpty(reference.toString());
+        }
+
+        return false;
     }
 
 

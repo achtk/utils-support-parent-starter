@@ -71,6 +71,7 @@
         <module>utils-support-agent-starter</module>
         <module>utils-support-oshi-starter</module>
         <module>utils-support-gateway-starter</module>
+        <module>utils-support-encache-support</module>
     </modules>
 
     <!-- -Djava.net.preferIPv4Stack=true-->

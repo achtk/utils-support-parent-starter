@@ -7,6 +7,8 @@ import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
+import static com.chua.common.support.net.NetUtils.LOCAL_HOST;
+
 /**
  * redis 配置
  *
@@ -38,5 +40,22 @@ public class RedisConfiguration {
 
     public String getUrl() {
         return Optional.ofNullable(url).orElse(ssl ? "rediss://" + host + ":" + port : "redis://" + host + ":" + port);
+    }
+
+    public RedisConfiguration() {
+        this(LOCAL_HOST, 6379);
+    }
+
+    public RedisConfiguration(String host, int port) {
+        this.host = host;
+        this.port = port;
+    }
+
+    public RedisConfiguration(int port) {
+        this(LOCAL_HOST, port);
+    }
+
+    public RedisConfiguration(String host) {
+        this(host, 6379);
     }
 }

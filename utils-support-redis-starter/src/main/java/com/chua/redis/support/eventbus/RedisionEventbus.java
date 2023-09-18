@@ -2,7 +2,7 @@ package com.chua.redis.support.eventbus;
 
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.eventbus.*;
-import com.chua.common.support.lang.profile.Profile;
+import com.chua.common.support.lang.loader.Loader;
 import com.chua.common.support.utils.ArrayUtils;
 import com.chua.common.support.utils.CollectionUtils;
 import com.chua.common.support.utils.StringUtils;
@@ -15,7 +15,6 @@ import org.redisson.api.listener.MessageListener;
 
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.chua.common.support.constant.CommonConstant.SYMBOL_COMMA;
@@ -36,21 +35,37 @@ public class RedisionEventbus extends AbstractEventbus {
     private static final AtomicBoolean IS_RUNNING = new AtomicBoolean(false);
     private final Map<String, Set<EventbusEvent>> temp = new HashMap<>();
     private final List<EventbusEvent> empty = new ArrayList<>();
-    private RedissonClient redissonClient;
+    private final RedisConfiguration redisConfiguration;
 
-    public RedisionEventbus(Profile profile, Executor executor) {
-        super(profile);
-        RedisConfiguration redisConfiguration = profile.bind(new String[]{"redis", "spring.redis.redisson", "spring.redis"}, RedisConfiguration.class);
-        try {
-            this.redissonClient = RedissonUtils.create(redisConfiguration, executor);
-        } catch (Exception ignored) {
-            log.warn("redis消息总线启动失败");
-            return;
+    private Loader<RedissonClient> loader = new Loader<RedissonClient>() {
+        @Override
+        public RedissonClient get() {
+            try {
+                return RedissonUtils.create(redisConfiguration, executor);
+            } catch (Exception ignored) {
+                log.warn("redis消息总线启动失败");
+                return null;
+            }
         }
-        if (redissonClient != null) {
-            IS_RUNNING.set(true);
-        }
+    };
+
+    public RedisionEventbus(RedisConfiguration redisConfiguration) {
+        this.redisConfiguration = redisConfiguration;
     }
+
+    public RedisionEventbus() {
+        this(new RedisConfiguration());
+    }
+    public RedisionEventbus(String host, int port) {
+        this(new RedisConfiguration(host, port));
+    }
+    public RedisionEventbus(int port) {
+        this(new RedisConfiguration(port));
+    }
+    public RedisionEventbus(String host) {
+        this(new RedisConfiguration(host));
+    }
+
 
     @Override
     public EventbusType event() {
@@ -59,6 +74,7 @@ public class RedisionEventbus extends AbstractEventbus {
 
     @Override
     public SubscribeEventbus register(EventbusEvent[] value) {
+
         if (!IS_RUNNING.get()) {
             IS_RUNNING.set(true);
         }
@@ -71,11 +87,12 @@ public class RedisionEventbus extends AbstractEventbus {
             temp.computeIfAbsent(name, it -> new HashSet<>()).add(eventbusEvent);
         }
 
-        if (null == redissonClient) {
+        if (null == loader.get()) {
             return this;
         }
+
         for (Map.Entry<String, Set<EventbusEvent>> entry : temp.entrySet()) {
-            RTopic topic = redissonClient.getTopic(entry.getKey());
+            RTopic topic = loader.get().getTopic(entry.getKey());
             topic.addListener(EventbusMessage.class, new MessageListener<EventbusMessage>() {
                 @Override
                 public void onMessage(CharSequence charSequence, EventbusMessage eventbusMessage) {
@@ -148,12 +165,12 @@ public class RedisionEventbus extends AbstractEventbus {
             return this;
         }
 
-        if (null == redissonClient) {
+        if (null == loader.get()) {
             return this;
         }
 
         for (String s : name.split(SYMBOL_COMMA)) {
-            RTopic topic = redissonClient.getTopic(s);
+            RTopic topic = loader.get().getTopic(s);
             if (null == topic) {
                 continue;
             }

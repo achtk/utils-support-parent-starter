@@ -2,11 +2,13 @@ package com.chua.common.support.eventbus;
 
 import com.chua.common.support.lang.exception.NotSupportedException;
 import com.chua.common.support.utils.StringUtils;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executor;
 
 import static com.chua.common.support.lang.code.ReturnResultCode.OK;
 import static com.chua.common.support.lang.code.ReturnResultCode.RESOURCE_NOT_FOUND;
@@ -16,13 +18,22 @@ import static com.chua.common.support.lang.code.ReturnResultCode.RESOURCE_NOT_FO
  *
  * @author CH
  */
+@Slf4j
 final class EventbusImpl implements Eventbus{
 
     private final Map<String, SubscribeEventbus> eventBusPool = new ConcurrentHashMap<>();
+    private final Executor executor;
 
     {
         eventBusPool.put(EventbusType.DEFAULT.name(), new LocalSubscribeEventBus());
         eventBusPool.put(EventbusType.GUAVA.name(), new GuavaSubscribeEventBus());
+    }
+
+    public EventbusImpl(Executor executor) {
+        this.executor = executor;
+        for (SubscribeEventbus eventbus : eventBusPool.values()) {
+            eventbus.executor(executor);
+        }
     }
 
     /**
@@ -33,12 +44,16 @@ final class EventbusImpl implements Eventbus{
      */
     @Override
     public EventbusImpl registerSubscriber(String name, SubscribeEventbus eventbus) {
+        if(null == eventbus) {
+            throw new NullPointerException("注册器不能为空");
+        }
+
         name = name.toUpperCase();
         SubscribeEventbus subscribeEventbus = eventBusPool.get(name);
         if(null != subscribeEventbus) {
             unregisterSubscriber(name);
         }
-
+        eventbus.executor(executor);
         eventBusPool.put(name, eventbus);
         return this;
     }
@@ -78,7 +93,8 @@ final class EventbusImpl implements Eventbus{
             String name = event.getType().name();
             SubscribeEventbus subscribeEventbus = eventBusPool.get(name);
             if(null == subscribeEventbus) {
-                throw new NotSupportedException(StringUtils.format("{}不存在", name));
+                log.error(StringUtils.format("{}不存在", name));
+                return this;
             }
 
             subscribeEventbus.register(event);
