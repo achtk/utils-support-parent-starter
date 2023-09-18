@@ -1,5 +1,6 @@
 package com.chua.common.support.eventbus;
 
+import com.chua.common.support.constant.Action;
 import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.matcher.PathMatcher;
 import com.chua.common.support.mysql.binlog.BinaryLogClient;
@@ -234,7 +235,7 @@ public class BinlogSubscribeEventbus extends AbstractEventbus implements Initial
         List<TableMetadata> tableMetadata1 = getTableMeta(table);
         List<Map<String, Object>> values = createValue(tableMetadata1, eventData.getRows());
 
-        send(eventbusEvents, values);
+        send(eventbusEvents, values, Action.DROP);
     }
 
     /**
@@ -257,7 +258,7 @@ public class BinlogSubscribeEventbus extends AbstractEventbus implements Initial
         Set<EventbusEvent> eventbusEvents = getEvent(table);
         List<TableMetadata> tableMetadata1 = getTableMeta(table);
         List<Map<String, Object>> values = createValue(tableMetadata1, eventData.getRows());
-        send(eventbusEvents, values);
+        send(eventbusEvents, values, Action.CREATE);
     }
 
     /**
@@ -335,7 +336,7 @@ public class BinlogSubscribeEventbus extends AbstractEventbus implements Initial
             values.addAll(createValue(tableMetadata1, Collections.singletonList(row.getValue())));
             values.addAll(createValue(tableMetadata1, Collections.singletonList(row.getKey())));
         }
-        send(eventbusEvents, values);
+        send(eventbusEvents, values, Action.UPDATE);
 
 
     }
@@ -405,11 +406,15 @@ public class BinlogSubscribeEventbus extends AbstractEventbus implements Initial
      *
      * @param eventbusEvents eventbus事件
      * @param values         价值观
+     * @param action         行动
      */
-    private void send(Set<EventbusEvent> eventbusEvents, List<Map<String, Object>> values) {
+    private void send(Set<EventbusEvent> eventbusEvents, List<Map<String, Object>> values, Action action) {
         executor.execute(() -> {
             for (EventbusEvent eventbusEvent : eventbusEvents) {
-                send(eventbusEvent, values);
+                Action action1 = eventbusEvent.getAction();
+                if((null != action1 && action1 == action) || action == Action.NONE) {
+                    send(eventbusEvent, values);
+                }
             }
         });
     }
