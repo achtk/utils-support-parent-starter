@@ -4,19 +4,12 @@ import com.chua.common.support.eventbus.AbstractEventbus;
 import com.chua.common.support.eventbus.EventbusType;
 import com.chua.common.support.eventbus.SubscribeEventbus;
 import com.chua.common.support.function.InitializingAware;
-import com.chua.common.support.lang.profile.Profile;
-
-import javax.sql.DataSource;
 
 /**
  * oracle jms
  * @author CH
  */
 public class OracleEventbus extends AbstractEventbus implements InitializingAware {
-    public OracleEventbus(Profile profile) {
-        super(profile);
-        afterPropertiesSet();
-    }
 
     @Override
     public SubscribeEventbus post(String name, Object message) {
@@ -31,9 +24,9 @@ public class OracleEventbus extends AbstractEventbus implements InitializingAwar
 
     @Override
     public void afterPropertiesSet() {
-        DataSource datasource = profile.getType("datasource", null, DataSource.class);
-        if(null != datasource) {
+//        DataSource datasource = profile.getType("datasource", null, DataSource.class);
+//        if(null != datasource) {
 //            javax.jms.QueueConnectionFactory queueConnectionFactory = AQjmsFactory.getQueueConnectionFactory(datasource);
-        }
+//        }
     }
 }

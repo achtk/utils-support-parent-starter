@@ -29,7 +29,7 @@ public interface KafkaOperate {
      * @param consumer        消费者
      */
     default void subscribe(String[] topics, final long timeoutMs, Consumer<ConsumerRecords<String, String>> consumer) {
-        subscribe(topics, timeoutMs, consumer);
+        subscribe(topics, timeoutMs, consumer, null);
     }
 
     /**

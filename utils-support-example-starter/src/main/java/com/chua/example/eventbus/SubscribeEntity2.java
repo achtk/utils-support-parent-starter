@@ -14,7 +14,7 @@ public class SubscribeEntity2 {
 
     private int index = 0;
 
-    @Subscribe(value = "demo", type = EventbusType.REDIS)
+    @Subscribe(value = "demo", type = EventbusType.KAFKA)
     public void local(Integer holiday) {
         log.info("{} -> redis: {}", ++index, holiday);
     }

@@ -1,9 +1,9 @@
 package com.chua.kafka.support.subscribe;
 
 import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.collection.ImmutableBuilder;
 import com.chua.common.support.eventbus.*;
 import com.chua.common.support.json.Json;
-import com.chua.common.support.lang.profile.Profile;
 import com.chua.common.support.protocol.client.Client;
 import com.chua.common.support.protocol.client.ClientOption;
 import com.chua.common.support.utils.ArrayUtils;
@@ -16,6 +16,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.chua.common.support.eventbus.EventbusType.KAFKA;
@@ -33,12 +34,22 @@ public class KafkaEventbus extends AbstractEventbus implements AutoCloseable {
     private final List<EventbusEvent> empty = new ArrayList<>();
     KafkaTemplate kafkaTemplate;
 
-    public KafkaEventbus(Profile profile) {
-        super(profile);
-        this.kafkaTemplate = initialKafka();
+    public KafkaEventbus(String address, String groupId) {
+        this.kafkaTemplate = initialKafka(address, groupId);
         if(null != kafkaTemplate) {
             IS_RUNNING.set(true);
         }
+    }
+    public KafkaEventbus(String groupId) {
+        this("127.0.0.1:9092", groupId);
+    }
+    public KafkaEventbus() {
+        this("127.0.0.1:9092", null);
+    }
+
+    public KafkaEventbus(KafkaTemplate kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
+        IS_RUNNING.set(true);
     }
 
     @Override
@@ -59,35 +70,32 @@ public class KafkaEventbus extends AbstractEventbus implements AutoCloseable {
             }
             temp.computeIfAbsent(name, it -> new HashSet<>()).add(eventbusEvent);
         }
-        int total = Runtime.getRuntime().availableProcessors() * 2;
-        for (int i = 0; i < total; i++) {
-            executor.execute(() -> {
-                kafkaTemplate.subscribe(temp.keySet().toArray(new String[0]), consumerRecords -> {
-                    if (null == consumerRecords) {
-                        return;
-                    }
-                    for (ConsumerRecord<String, String> consumerRecord : consumerRecords) {
-                        String topic = consumerRecord.topic();
-                        String value1 = consumerRecord.value();
-                        Set<EventbusEvent> subscribeTasks = temp.get(topic);
+        kafkaTemplate.subscribe(temp.keySet().toArray(new String[0]), 1000, consumerRecords1 -> {
+            if (null == consumerRecords1) {
+                return;
+            }
+            for (ConsumerRecord<String, String> consumerRecord : consumerRecords1) {
+                String topic = consumerRecord.topic();
+                String value1 = consumerRecord.value();
+                Set<EventbusEvent> subscribeTasks = temp.get(topic);
 
-                        EventbusMessage eventbusMessage = Json.fromJson(value1, EventbusMessage.class);
-                        invoke(subscribeTasks, eventbusMessage);
-                        invoke(empty, eventbusMessage);
-                    }
-                });
-            });
-        }
-
+                EventbusMessage eventbusMessage = Json.fromJson(value1, EventbusMessage.class);
+                invoke(subscribeTasks, eventbusMessage);
+                invoke(empty, eventbusMessage);
+            }
+        }, (ExecutorService) executor);
         return this;
-
     }
 
-    private KafkaTemplate initialKafka() {
+    private KafkaTemplate initialKafka(String address, String groupId) {
         KafkaClientProvider kafkaClientProvider = new KafkaClientProvider(
-                ClientOption.newDefault().executor(executor).ream(profile.bind("kafka", HashMap.class)));
+                ClientOption.newDefault().executor(executor)
+                        .ream(ImmutableBuilder.builderOfStringMap(Object.class)
+                                .put("group.id", groupId).build()
+                        )
+        );
         Client<KafkaTemplate> templateClient = kafkaClientProvider.create();
-        templateClient.connect(profile.getString("address"));
+        templateClient.connect(address);
         try {
             return templateClient.getClient();
         } catch (Exception e) {
@@ -165,5 +173,6 @@ public class KafkaEventbus extends AbstractEventbus implements AutoCloseable {
     public void close() throws Exception {
         IS_RUNNING.set(false);
         ThreadUtils.closeQuietly(executor);
+        kafkaTemplate.close();
     }
 }

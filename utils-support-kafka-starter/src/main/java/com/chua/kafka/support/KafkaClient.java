@@ -36,7 +36,7 @@ public class KafkaClient extends AbstractClient<KafkaTemplate> {
         //指定链接的kafka集群
         properties.put(BOOTSTRAP_SERVERS_CONFIG, url);
         //ack应答级别
-        properties.put(ACKS_CONFIG, describe().getIntValue("ack", 0));
+        properties.put(ACKS_CONFIG, describe().getString("ack", "all"));
         //重试次数
         properties.put(RETRIES_CONFIG, clientOption.retry());
         //批次大小
@@ -47,10 +47,12 @@ public class KafkaClient extends AbstractClient<KafkaTemplate> {
         properties.put(BUFFER_MEMORY_CONFIG, describe().getIntValue(BUFFER_MEMORY_CONFIG, 33554432));
         //Key,Value的序列化类
         properties.put(KEY_SERIALIZER_CLASS_CONFIG, describe().getString(KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer"));
+        properties.put(KEY_DESERIALIZER_CLASS_CONFIG, describe().getString(KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer"));
         properties.put(VALUE_SERIALIZER_CLASS_CONFIG, describe().getString(VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer"));
+        properties.put(VALUE_DESERIALIZER_CLASS_CONFIG, describe().getString(VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer"));
 
-
-        Properties consumerConfig = new Properties(properties);
+        Properties consumerConfig = new Properties();
+        consumerConfig.putAll(properties);
         consumerConfig.put(ENABLE_AUTO_COMMIT_CONFIG, describe().getBooleanValue(ENABLE_AUTO_COMMIT_CONFIG, true));
         consumerConfig.put(AUTO_COMMIT_INTERVAL_MS_CONFIG, describe().getIntValue(AUTO_COMMIT_INTERVAL_MS_CONFIG, 1000));
         consumerConfig.put(GROUP_ID_CONFIG, describe().getString(GROUP_ID_CONFIG, "consumer-group-id"));
@@ -59,7 +61,7 @@ public class KafkaClient extends AbstractClient<KafkaTemplate> {
         //创建生产者对象
         KafkaProducer<String, String> producer = new KafkaProducer<>(properties);
         //创建生产者
-        KafkaConsumer<String,String> consumer = new KafkaConsumer<>(properties);
+        KafkaConsumer<String,String> consumer = new KafkaConsumer<>(consumerConfig);
 
         return new KafkaTemplate(producer, consumer);
     }

@@ -243,6 +243,10 @@
             <groupId>com.chua</groupId>
             <artifactId>utils-support-redis-starter</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.chua</groupId>
+            <artifactId>utils-support-kafka-starter</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

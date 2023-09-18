@@ -2,6 +2,7 @@ package com.chua.redis.support.eventbus;
 
 import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.eventbus.*;
+import com.chua.common.support.lang.loader.BaseLazyLoader;
 import com.chua.common.support.lang.loader.Loader;
 import com.chua.common.support.utils.ArrayUtils;
 import com.chua.common.support.utils.CollectionUtils;
@@ -37,9 +38,9 @@ public class RedisionEventbus extends AbstractEventbus {
     private final List<EventbusEvent> empty = new ArrayList<>();
     private final RedisConfiguration redisConfiguration;
 
-    private Loader<RedissonClient> loader = new Loader<RedissonClient>() {
+    private Loader<RedissonClient> loader = new BaseLazyLoader<RedissonClient>() {
         @Override
-        public RedissonClient get() {
+        public RedissonClient init() {
             try {
                 return RedissonUtils.create(redisConfiguration, executor);
             } catch (Exception ignored) {
@@ -47,6 +48,7 @@ public class RedisionEventbus extends AbstractEventbus {
                 return null;
             }
         }
+
     };
 
     public RedisionEventbus(RedisConfiguration redisConfiguration) {
@@ -78,6 +80,7 @@ public class RedisionEventbus extends AbstractEventbus {
         if (!IS_RUNNING.get()) {
             IS_RUNNING.set(true);
         }
+
         for (EventbusEvent eventbusEvent : value) {
             String name = eventbusEvent.getName();
             if (StringUtils.isNullOrEmpty(name)) {
@@ -185,5 +188,6 @@ public class RedisionEventbus extends AbstractEventbus {
     public void close() throws Exception {
         super.close();
         IS_RUNNING.set(false);
+        loader.get().shutdown();
     }
 }
