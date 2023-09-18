@@ -6,6 +6,7 @@ import com.chua.common.support.function.SafeFunction;
 import com.chua.common.support.function.SafeSupplier;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -621,5 +622,28 @@ public class ObjectUtils {
      */
     public static <T> T to(Object source, Class<T> targetType) {
         return BeanUtils.copyProperties(source, targetType);
+    }
+
+    /**
+     * 转为对象
+     *
+     * @param serializable 可序列化
+     * @return {@link Object}
+     */
+    public static Object toObject(Serializable serializable) {
+        if(null == serializable) {
+            return null;
+        }
+
+        if(serializable.getClass().isPrimitive()) {
+            return serializable;
+        }
+
+        if(serializable.getClass().isArray()) {
+            return StringUtils.utf8Str(serializable);
+        }
+
+        return serializable;
+
     }
 }

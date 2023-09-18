@@ -33,6 +33,7 @@ final class EventbusImpl implements Eventbus{
         this.executor = executor;
         for (SubscribeEventbus eventbus : eventBusPool.values()) {
             eventbus.executor(executor);
+            eventbus.build();
         }
     }
 
@@ -54,6 +55,7 @@ final class EventbusImpl implements Eventbus{
             unregisterSubscriber(name);
         }
         eventbus.executor(executor);
+        eventbus.build();
         eventBusPool.put(name, eventbus);
         return this;
     }

@@ -33,11 +33,7 @@ public class BinlogCheckpointEventData implements EventData {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder();
-        sb.append("BinlogCheckpointEventData");
-        sb.append("{logFileName=").append(logFileName);
-        sb.append('}');
-        return sb.toString();
+        return logFileName;
     }
 
 }

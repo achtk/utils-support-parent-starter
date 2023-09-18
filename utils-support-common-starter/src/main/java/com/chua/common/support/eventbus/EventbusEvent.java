@@ -1,5 +1,7 @@
 package com.chua.common.support.eventbus;
 
+import com.chua.common.support.constant.Action;
+import com.chua.common.support.json.Json;
 import com.chua.common.support.objects.definition.attribute.AnnotationAttribute;
 import com.chua.common.support.objects.definition.element.AnnotationDescribe;
 import com.chua.common.support.objects.definition.element.TypeDescribe;
@@ -8,13 +10,16 @@ import com.chua.common.support.reflection.dynamic.DynamicFactory;
 import com.chua.common.support.reflection.dynamic.NonStandardDynamicFactory;
 import com.chua.common.support.utils.ArrayUtils;
 import com.chua.common.support.utils.ClassUtils;
+import com.chua.common.support.utils.CollectionUtils;
 import com.chua.common.support.utils.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.*;
 
 /**
@@ -37,6 +42,10 @@ public class EventbusEvent {
      * 类型
      */
     private EventbusType type;
+    /**
+     * 动作
+     */
+    private Action action;
     /**
      * bean名称
      */
@@ -63,10 +72,15 @@ public class EventbusEvent {
     private Class<?> paramType;
 
     public EventbusEvent(AnnotationDescribe annotationDescribe, Method method, String beanName, Object bean) {
+        this(annotationDescribe, method, Action.NONE, beanName, bean);
+
+    }
+    public EventbusEvent(AnnotationDescribe annotationDescribe, Method method, Action action, String beanName, Object bean) {
         AnnotationAttribute attributes = annotationDescribe.getAnnotationAttribute();
         setBean(bean);
         setParamType(method.getParameterTypes()[0]);
         setMethod(method);
+        setAction(action);
         setBeanName(beanName);
 
         AnnotationAttribute annotationAttribute = annotationDescribe.getAnnotationAttribute();
@@ -193,5 +207,37 @@ public class EventbusEvent {
             e.printStackTrace();
         }
         return o;
+    }
+
+    /**
+     * 邮寄
+     *
+     * @param values 价值观
+     */
+    @SuppressWarnings("ALL")
+    public void send(List<Map<String, Object>> values) {
+        Parameter[] parameters = method.getParameters();
+        if(parameters.length != 1) {
+            return;
+        }
+
+        Parameter parameter = parameters[0];
+        Class<?> parameterType = parameter.getType();
+        method.setAccessible(true);
+
+        try {
+            if(Collection.class.isAssignableFrom(parameterType)) {
+                method.invoke(bean, new Object[]{values});
+                return;
+            }
+
+            if(Map.class.isAssignableFrom(parameterType) || ClassUtils.isObject(parameterType)) {
+                method.invoke(bean, new Object[]{CollectionUtils.findFirst(values)});
+                return;
+            }
+            method.invoke(bean, new Object[]{Json.fromJson(Json.toJson(CollectionUtils.findFirst(values)), parameterType)});
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -26,11 +26,6 @@ public class RotateEventData implements EventData {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder();
-        sb.append("RotateEventData");
-        sb.append("{binlogFilename='").append(binlogFilename).append('\'');
-        sb.append(", binlogPosition=").append(binlogPosition);
-        sb.append('}');
-        return sb.toString();
+        return binlogFilename;
     }
 }

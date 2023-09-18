@@ -12,6 +12,10 @@ public enum EventbusType {
      */
     ORACLE,
     /**
+     * mysql
+     */
+    BINLOG,
+    /**
      * 本地
      */
     DEFAULT,

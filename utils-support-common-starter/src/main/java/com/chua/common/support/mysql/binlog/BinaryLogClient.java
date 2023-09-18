@@ -8,6 +8,7 @@ import com.chua.common.support.mysql.binlog.jmx.BinaryLogClientMXBean;
 import com.chua.common.support.mysql.binlog.network.*;
 import com.chua.common.support.mysql.binlog.network.protocol.*;
 import com.chua.common.support.mysql.binlog.network.protocol.command.*;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
@@ -28,14 +29,13 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * MySQL replication stream client.
  *
  * @author <a href="mailto:stanley.shyiko@gmail.com">Stanley Shyiko</a>
  */
+@Slf4j
 public class BinaryLogClient implements BinaryLogClientMXBean {
 
     private static final SSLSocketFactory DEFAULT_REQUIRED_SSL_MODE_SOCKET_FACTORY = new DefaultSSLSocketFactory() {
@@ -66,7 +66,6 @@ public class BinaryLogClient implements BinaryLogClientMXBean {
     // https://dev.mysql.com/doc/internals/en/sending-more-than-16mbyte.html
     private static final int MAX_PACKET_LENGTH = 16777215;
 
-    private final Logger logger = Logger.getLogger(getClass().getName());
 
     private final String hostname;
     private final int port;
@@ -524,8 +523,8 @@ public class BinaryLogClient implements BinaryLogClientMXBean {
                     fetchBinlogFilenameAndPosition();
                 }
                 if (binlogPosition < 4) {
-                    if (logger.isLoggable(Level.WARNING)) {
-                        logger.warning("Binary log position adjusted from " + binlogPosition + " to " + 4);
+                    if (log.isWarnEnabled()) {
+                        log.warn("Binary log position adjusted from " + binlogPosition + " to " + 4);
                     }
                     binlogPosition = 4;
                 }
@@ -541,8 +540,8 @@ public class BinaryLogClient implements BinaryLogClientMXBean {
                     try {
                         cancelDisconnect.call();
                     } catch (Exception e) {
-                        if (logger.isLoggable(Level.WARNING)) {
-                            logger.warning("\"" + e.getMessage() +
+                        if (log.isWarnEnabled()) {
+                            log.warn("\"" + e.getMessage() +
                                 "\" was thrown while canceling scheduled disconnect call");
                         }
                     }
@@ -550,12 +549,12 @@ public class BinaryLogClient implements BinaryLogClientMXBean {
             }
             connected = true;
             notifyWhenDisconnected = true;
-            if (logger.isLoggable(Level.INFO)) {
+            if (log.isInfoEnabled()) {
                 String position;
                 synchronized (gtidSetAccessLock) {
                     position = gtidSet != null ? gtidSet.toString() : binlogFilename + "/" + binlogPosition;
                 }
-                logger.info("Connected to " + hostname + ":" + port + " at " + position +
+                log.info("Connected to " + hostname + ":" + port + " at " + position +
                     " (" + (blocking ? "sid:" + serverId + ", " : "") + "cid:" + connectionId + ")");
             }
             for (LifecycleListener lifecycleListener : lifecycleListeners) {
@@ -617,20 +616,20 @@ public class BinaryLogClient implements BinaryLogClientMXBean {
                 try {
                     connectLatch.await(timeout, TimeUnit.MILLISECONDS);
                 } catch (InterruptedException e) {
-                    if (logger.isLoggable(Level.WARNING)) {
-                        logger.log(Level.WARNING, e.getMessage());
+                    if (log.isWarnEnabled()) {
+                        log.warn(e.getMessage());
                     }
                 }
                 if (connectLatch.getCount() != 0) {
-                    if (logger.isLoggable(Level.WARNING)) {
-                        logger.warning("Failed to establish connection in " + timeout + "ms. " +
+                    if (log.isWarnEnabled()) {
+                        log.warn("Failed to establish connection in " + timeout + "ms. " +
                             "Forcing disconnect.");
                     }
                     try {
                         self.disconnectChannel();
                     } catch (IOException e) {
-                        if (logger.isLoggable(Level.WARNING)) {
-                            logger.log(Level.WARNING, e.getMessage());
+                        if (log.isWarnEnabled()) {
+                            log.warn(e.getMessage());
                         }
                     }
                 }
@@ -685,7 +684,7 @@ public class BinaryLogClient implements BinaryLogClientMXBean {
                             DEFAULT_VERIFY_CA_SSL_MODE_SOCKET_FACTORY;
                 channel.upgradeToSSL(sslSocketFactory,
                     sslMode == SSLMode.VERIFY_IDENTITY ? new TLSHostnameVerifier() : null);
-                logger.info("SSL enabled");
+                log.info("SSL enabled");
                 return true;
             }
         }
@@ -740,7 +739,7 @@ public class BinaryLogClient implements BinaryLogClientMXBean {
 
         synchronized (gtidSetAccessLock) {
             if (this.gtidEnabled) {
-                logger.info(gtidSet.toString());
+                log.info(gtidSet.toString());
                 channel.write(new QueryCommand("SET @slave_connect_state = '" + gtidSet.toString() + "'"));
                 checkError(channel.read());
                 channel.write(new QueryCommand("SET @slave_gtid_strict_mode = 0"));
@@ -801,7 +800,7 @@ public class BinaryLogClient implements BinaryLogClientMXBean {
                             // expected in case of disconnect
                         }
                         if (threadExecutor.isShutdown()) {
-                            logger.info("threadExecutor is shut down, terminating keepalive thread");
+                            log.info("threadExecutor is shut down, terminating keepalive thread");
                             return;
                         }
                         boolean connectionLost = false;
@@ -815,12 +814,12 @@ public class BinaryLogClient implements BinaryLogClientMXBean {
                             }
                         }
                         if (connectionLost) {
-                            logger.info("Keepalive: Trying to restore lost connection to " + hostname + ":" + port);
+                            log.info("Keepalive: Trying to restore lost connection to " + hostname + ":" + port);
                             try {
                                 terminateConnect();
                                 connect(connectTimeout);
                             } catch (Exception ce) {
-                                logger.warning("keepalive: Failed to restore connection to " + hostname + ":" + port +
+                                log.warn("keepalive: Failed to restore connection to " + hostname + ":" + port +
                                     ". Next attempt in " + keepAliveInterval + "ms");
                             }
                         }
@@ -887,8 +886,8 @@ public class BinaryLogClient implements BinaryLogClientMXBean {
         try {
             started = countDownLatch.await(timeout, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
-            if (logger.isLoggable(Level.WARNING)) {
-                logger.log(Level.WARNING, e.getMessage());
+            if (log.isWarnEnabled()) {
+                log.warn( e.getMessage());
             }
         }
         unregisterLifecycleListener(connectListener);
@@ -1188,8 +1187,8 @@ public class BinaryLogClient implements BinaryLogClientMXBean {
             try {
                 eventListener.onEvent(event);
             } catch (Exception e) {
-                if (logger.isLoggable(Level.WARNING)) {
-                    logger.log(Level.WARNING, eventListener + " choked on " + event, e);
+                if (log.isWarnEnabled()) {
+                    log.warn(eventListener + " choked on " + event, e);
                 }
             }
         }

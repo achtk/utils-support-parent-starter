@@ -46,4 +46,10 @@ public interface SubscribeEventbus extends AutoCloseable {
      * @return 类型
      */
     EventbusType event();
+
+
+    /**
+     * 构建
+     */
+    void build();
 }

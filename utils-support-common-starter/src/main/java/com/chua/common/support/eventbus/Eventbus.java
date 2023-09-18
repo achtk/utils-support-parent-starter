@@ -1,5 +1,6 @@
 package com.chua.common.support.eventbus;
 
+import com.chua.common.support.constant.Action;
 import com.chua.common.support.objects.definition.attribute.AnnotationAttribute;
 import com.chua.common.support.objects.definition.element.AnnotationDescribe;
 import com.chua.common.support.objects.definition.element.MethodDescribe;
@@ -80,10 +81,7 @@ public interface Eventbus{
             aClass = ObjectUtils.defaultIfNull(ClassUtils.forName(typeName.substring(0, typeName.indexOf("$$"))), aClass);
         }
 
-        Map<Method, AnnotationDescribe> collect = Arrays.stream(aClass.getDeclaredMethods()).map(MethodDescribe::new).filter(it -> {
-            return it.hasAnnotation(Subscribe.class);
-        }).collect(Collectors.toMap(MethodDescribe::method, it1 -> it1.getAnnotationDescribe(Subscribe.class)));
-
+        Map<Method, AnnotationDescribe> collect = Arrays.stream(aClass.getDeclaredMethods()).map(MethodDescribe::new).filter(it -> it.hasAnnotation(Subscribe.class)).collect(Collectors.toMap(MethodDescribe::method, it1 -> it1.getAnnotationDescribe(Subscribe.class)));
 
         if (collect.isEmpty()) {
             return this;
@@ -130,7 +128,7 @@ public interface Eventbus{
                 value = "";
             }
         }
-        register(new EventbusEvent(annotationDescribe, method, beanName, bean));
+        register(new EventbusEvent(annotationDescribe, method, attributes.getEnum("action", Action.values()), beanName, bean));
     }
 
     /**

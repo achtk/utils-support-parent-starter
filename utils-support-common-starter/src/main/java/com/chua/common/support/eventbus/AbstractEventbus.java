@@ -25,7 +25,7 @@ public abstract class AbstractEventbus implements SubscribeEventbus {
 
     @Override
     public SubscribeEventbus executor(Executor executor) {
-        this.executor = ObjectUtils.defaultIfNull(executor, ThreadUtils.newSingleThreadExecutor("eventbus-0"));
+        this.executor = ObjectUtils.defaultIfNull(executor, ThreadUtils.newProcessorThreadExecutor("eventbus-0"));
         return this;
     }
 
@@ -48,6 +48,10 @@ public abstract class AbstractEventbus implements SubscribeEventbus {
         }
     }
 
+    @Override
+    public void build() {
+
+    }
 
     /**
      * 执行

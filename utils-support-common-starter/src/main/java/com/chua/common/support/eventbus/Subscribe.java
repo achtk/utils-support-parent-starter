@@ -1,6 +1,7 @@
 package com.chua.common.support.eventbus;
 
 import com.chua.common.support.annotations.Alias;
+import com.chua.common.support.constant.Action;
 
 import java.lang.annotation.*;
 
@@ -44,4 +45,9 @@ public @interface Subscribe {
     @Alias("typeName")
     EventbusType type() default EventbusType.DEFAULT;
 
+    /**
+     * 动作
+     * @return 动作
+     */
+    Action action() default Action.NONE;
 }

@@ -12,7 +12,6 @@ import com.chua.redis.support.util.RedissonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RTopic;
 import org.redisson.api.RedissonClient;
-import org.redisson.api.listener.MessageListener;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -96,12 +95,9 @@ public class RedisionEventbus extends AbstractEventbus {
 
         for (Map.Entry<String, Set<EventbusEvent>> entry : temp.entrySet()) {
             RTopic topic = loader.get().getTopic(entry.getKey());
-            topic.addListener(EventbusMessage.class, new MessageListener<EventbusMessage>() {
-                @Override
-                public void onMessage(CharSequence charSequence, EventbusMessage eventbusMessage) {
-                    invoke(entry.getValue(), eventbusMessage);
-                    invoke(empty, eventbusMessage);
-                }
+            topic.addListener(EventbusMessage.class, (charSequence, eventbusMessage) -> {
+                invoke(entry.getValue(), eventbusMessage);
+                invoke(empty, eventbusMessage);
             });
         }
 
