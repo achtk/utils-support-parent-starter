@@ -73,6 +73,7 @@
         <module>utils-support-gateway-starter</module>
         <module>utils-support-encache-support</module>
         <module>utils-support-zbus-starter</module>
+        <module>utils-support-rpc-starter</module>
     </modules>
 
     <!-- -Djava.net.preferIPv4Stack=true-->
