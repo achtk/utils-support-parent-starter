@@ -3,9 +3,11 @@ package com.chua.common.support.shell.mapping;
 import com.chua.common.support.ansi.AnsiColor;
 import com.chua.common.support.ansi.AnsiOutput;
 import com.chua.common.support.collection.ImmutableBuilder;
+import com.chua.common.support.constant.Projects;
 import com.chua.common.support.function.Joiner;
 import com.chua.common.support.function.Splitter;
 import com.chua.common.support.json.Json;
+import com.chua.common.support.lang.date.DateTime;
 import com.chua.common.support.matcher.AntPathMatcher;
 import com.chua.common.support.matcher.PathMatcher;
 import com.chua.common.support.shell.*;
@@ -13,13 +15,12 @@ import com.chua.common.support.utils.CmdUtils;
 import com.chua.common.support.utils.StringUtils;
 
 import java.io.File;
+import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static com.chua.common.support.constant.CommonConstant.SYMBOL_ASTERISK;
 
@@ -30,6 +31,7 @@ import static com.chua.common.support.constant.CommonConstant.SYMBOL_ASTERISK;
  */
 public class SystemCommand {
     private static final String OS_NAME = System.getProperty("os.name").toUpperCase();
+    RuntimeMXBean runtimeMXBean = ManagementFactory.getRuntimeMXBean();
 
     private static final CharSequence WIN = "WIN";
 
@@ -58,6 +60,44 @@ public class SystemCommand {
                 StringUtils.getNetFileSizeDescription(maxMemory, D),
                 StringUtils.getNetFileSizeDescription(totalMemory, D),
                 StringUtils.getNetFileSizeDescription(freeMemory, D)).newArrayList()
+        );
+        table.addRows(lists);
+        try {
+            return ShellResult.table(Json.toJson(table));
+        } catch (Exception e) {
+            return ShellResult.error();
+        }
+    }
+
+    /**
+     * help
+     *
+     * @return help
+     */
+    @ShellMapping(value = {"jvm"}, describe = "JVM")
+    public ShellResult jvm() {
+        Properties props = System.getProperties();
+        Runtime runtime = Runtime.getRuntime();
+        long maxMemory = runtime.maxMemory();
+        long totalMemory = runtime.totalMemory();
+        long freeMemory = runtime.freeMemory();
+
+        ShellTable table = new ShellTable(
+                "最大内存",
+                "已使用内存",
+                "剩余内存",
+                "Java版本",
+                "启动时间",
+                "进程ID"
+        );
+        List lists = Collections.singletonList(ImmutableBuilder.builder().add(
+                        StringUtils.getNetFileSizeDescription(maxMemory, D),
+                        StringUtils.getNetFileSizeDescription(totalMemory, D),
+                        StringUtils.getNetFileSizeDescription(freeMemory, D),
+                        props.getProperty("java.version"),
+                        DateTime.of(runtimeMXBean.getStartTime()).toStandard(),
+                        Projects.getPid()
+                ).newArrayList()
         );
         table.addRows(lists);
         try {

@@ -30,7 +30,7 @@ public @interface ShellMapping {
      *
      * @return 分组
      */
-    String group() default "Built-In Commands";
+    String group() default "自定义";
 
     /**
      * 描述

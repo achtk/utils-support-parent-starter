@@ -46,8 +46,7 @@ public class CommandAttribute {
     private List<Map<String, Object>> example = new LinkedList<>();
 
     private List<String> required = new LinkedList<>();
-    final CommandAttributeAdaptor commandAttributeAdaptor = ServiceProvider.of(CommandAttributeAdaptor.class)
-            .getSpiService();
+    final CommandAttributeAdaptor commandAttributeAdaptor;
     final Map<String, Object> rs = new LinkedHashMap<>();
     private Map<Parameter, ShellParam> pShell = new LinkedHashMap<>();
 
@@ -58,6 +57,8 @@ public class CommandAttribute {
         this.describe = describe;
         this.method = method;
         this.bean = bean;
+        this.commandAttributeAdaptor = ServiceProvider.of(CommandAttributeAdaptor.class)
+                .getNewExtension("cli");
         this.doAnalysisMethod();
     }
 

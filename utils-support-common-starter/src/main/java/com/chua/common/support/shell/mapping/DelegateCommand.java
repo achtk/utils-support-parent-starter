@@ -1,9 +1,18 @@
 package com.chua.common.support.shell.mapping;
 
 import com.chua.common.support.shell.ShellMapping;
+import com.chua.common.support.shell.ShellMode;
+import com.chua.common.support.shell.ShellParam;
 import com.chua.common.support.shell.ShellResult;
+import com.chua.common.support.utils.ClassUtils;
+import com.chua.common.support.utils.IoUtils;
+import com.chua.common.support.view.view.ClassInfoView;
 import com.sun.management.DiagnosticCommandMBean;
 import sun.management.ManagementFactoryHelper;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 /**
  * 基础命令
@@ -16,20 +25,27 @@ public class DelegateCommand {
 
     DiagnosticCommandMBean diagnosticCommand = ManagementFactoryHelper.getDiagnosticCommandMBean();
 
-//    @ShellMapping(value = {"view"}, describe = "预览")
-//    public ShellResult view(
-//            @ShellParam(value = "mode", describe = "模式", example = {"view --mode CLASS class: view --mode CLASS java.lang.String"}, numberOfArgs = 2) List<String> file
-//    ) {
-//        if (null == file || file.size() != 2) {
-//            return ShellResult.builder().mode(ERROR).result("参数不正确, view --mode CLASS class: 模式").build();
-//        }
-//
-//        if ("class".equalsIgnoreCase(file.get(0))) {
-//            return ShellResult.builder().mode(TABLE).result(new ClassInfoView(ClassUtils.forName(file.get(1), ClassLoader.getSystemClassLoader()), true, 100).draw()).build();
-//        }
-//
-//        return ShellResult.error();
-//    }
+    @ShellMapping(value = {"view"}, describe = "预览")
+    public ShellResult view(
+            @ShellParam(value = "file", describe = "获取类型结构", example = {"view -f xxx: 预览"}) String file) {
+        if (null != file) {
+            Class<?> aClass = ClassUtils.forName(file);
+            if (null != aClass) {
+                return ShellResult.builder().mode(ShellMode.CODE).result(new ClassInfoView(aClass, true, 200).draw()).build();
+            }
+
+            InputStream systemResourceAsStream = ClassLoader.getSystemResourceAsStream(file);
+            if (null != systemResourceAsStream) {
+                try {
+                    return ShellResult.builder().mode(ShellMode.CODE).result(
+                            IoUtils.toString(systemResourceAsStream, StandardCharsets.UTF_8)).build();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        return ShellResult.error();
+    }
 
 
     /**
@@ -41,7 +57,7 @@ public class DelegateCommand {
     public ShellResult stack() {
         try {
             Object res = diagnosticCommand.invoke("threadPrint", new Object[]{new String[]{}}, new String[]{String[].class.getName()});
-            return ShellResult.text(res.toString());
+            return ShellResult.builder().mode(ShellMode.CODE).result(res.toString()).build();
         } catch (Exception ignored) {
         }
         return ShellResult.error("命令不存在");

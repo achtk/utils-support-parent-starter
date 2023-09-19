@@ -19,6 +19,10 @@ public enum ShellMode {
      */
     NORMAL,
     /**
+     * code
+     */
+    CODE,
+    /**
      * html
      */
     HTML,
