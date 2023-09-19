@@ -274,6 +274,7 @@ public class BinlogSubscribeEventbus extends AbstractEventbus implements Initial
         List<Map<String, Object>> rs = new LinkedList<>();
         for (int i = 0; i < rows.size(); i++) {
             Map<String, Object> item = new LinkedHashMap<>();
+            item.put("table", table);
             Serializable[] serializables = rows.get(i);
             for (int j = 0; j < serializables.length; j++) {
                 TableMetadata tableMetadata2 = null;
