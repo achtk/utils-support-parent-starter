@@ -42,7 +42,7 @@ public class BinlogSubscribeEventbus extends AbstractEventbus implements Initial
 
     private final Map<String, TableMapEventData> tableIds = new ConcurrentHashMap<>();
 
-    private final Map<String, List<TableMetadata>> tableMetadata = new ConcurrentReferenceHashMap<>(16);
+    private final Map<String, Set<TableMetadata>> tableMetadata = new ConcurrentReferenceHashMap<>(16);
     private Connection connection;
 
     /**
@@ -233,8 +233,8 @@ public class BinlogSubscribeEventbus extends AbstractEventbus implements Initial
         }
 
         Set<EventbusEvent> eventbusEvents = getEvent(table);
-        List<TableMetadata> tableMetadata1 = getTableMeta(table);
-        List<Map<String, Object>> values = createValue(tableMetadata1, eventData.getRows());
+        Set<TableMetadata> tableMetadata1 = getTableMeta(table);
+        List<Map<String, Object>> values = createValue(tableMetadata1, eventData.getRows(), table);
 
         send(eventbusEvents, values, Action.DROP);
     }
@@ -257,8 +257,8 @@ public class BinlogSubscribeEventbus extends AbstractEventbus implements Initial
         }
 
         Set<EventbusEvent> eventbusEvents = getEvent(table);
-        List<TableMetadata> tableMetadata1 = getTableMeta(table);
-        List<Map<String, Object>> values = createValue(tableMetadata1, eventData.getRows());
+        Set<TableMetadata> tableMetadata1 = getTableMeta(table);
+        List<Map<String, Object>> values = createValue(tableMetadata1, eventData.getRows(), table);
         send(eventbusEvents, values, Action.CREATE);
     }
 
@@ -267,9 +267,10 @@ public class BinlogSubscribeEventbus extends AbstractEventbus implements Initial
      *
      * @param tableMetadata1 表元数据1
      * @param rows           行
-     * @return {@link Map}<{@link String}, {@link Object}>
+     * @param table          桌子
+     * @return {@link List}<{@link Map}<{@link String}, {@link Object}>>
      */
-    private List<Map<String, Object>> createValue(List<TableMetadata> tableMetadata1, List<Serializable[]> rows) {
+    private List<Map<String, Object>> createValue(Set<TableMetadata> tableMetadata1, List<Serializable[]> rows, String table) {
         List<Map<String, Object>> rs = new LinkedList<>();
         for (int i = 0; i < rows.size(); i++) {
             Map<String, Object> item = new LinkedHashMap<>();
@@ -277,7 +278,7 @@ public class BinlogSubscribeEventbus extends AbstractEventbus implements Initial
             for (int j = 0; j < serializables.length; j++) {
                 TableMetadata tableMetadata2 = null;
                 try {
-                    tableMetadata2 = tableMetadata1.get(j);
+                    tableMetadata2 = CollectionUtils.find(tableMetadata1, j);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -291,7 +292,7 @@ public class BinlogSubscribeEventbus extends AbstractEventbus implements Initial
     }
 
 
-    private List<TableMetadata> getTableMeta(String table) {
+    private Set<TableMetadata> getTableMeta(String table) {
         return tableMetadata.computeIfAbsent(table, (tableMetadata) -> {
             try {
                 ResultSet resultSet1 = connection.getMetaData().getColumns(null, null, table, "%");
@@ -299,7 +300,7 @@ public class BinlogSubscribeEventbus extends AbstractEventbus implements Initial
                 if (log.isTraceEnabled()) {
                     log.trace("开始装载: {}", table);
                 }
-                List<TableMetadata> rs = new LinkedList<>();
+                Set<TableMetadata> rs = new LinkedHashSet<>();
                 while (resultSet1.next()) {
                     rs.add(new TableMetadata(resultSet1.getString("COLUMN_NAME"),
                                     index++,
@@ -311,7 +312,7 @@ public class BinlogSubscribeEventbus extends AbstractEventbus implements Initial
                 return rs;
             } catch (SQLException e) {
                 e.printStackTrace();
-                return Collections.emptyList();
+                return Collections.emptySet();
             }
 
         });
@@ -335,12 +336,12 @@ public class BinlogSubscribeEventbus extends AbstractEventbus implements Initial
         }
 
         Set<EventbusEvent> eventbusEvents = getEvent(table);
-        List<TableMetadata> tableMetadata1 = getTableMeta(table);
+        Set<TableMetadata> tableMetadata1 = getTableMeta(table);
         List<Map<String, Object>> values = new LinkedList<>();
         List<Map.Entry<Serializable[], Serializable[]>> rows = eventData.getRows();
         for (Map.Entry<Serializable[], Serializable[]> row : rows) {
-            values.addAll(createValue(tableMetadata1, Collections.singletonList(row.getValue())));
-            values.addAll(createValue(tableMetadata1, Collections.singletonList(row.getKey())));
+            values.addAll(createValue(tableMetadata1, Collections.singletonList(row.getValue()), table));
+            values.addAll(createValue(tableMetadata1, Collections.singletonList(row.getKey()), table));
         }
         send(eventbusEvents, values, Action.UPDATE);
 
@@ -452,5 +453,37 @@ public class BinlogSubscribeEventbus extends AbstractEventbus implements Initial
         private int index;
         private String type;
         private int typeIndex;
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+
+            TableMetadata that = (TableMetadata) o;
+
+            if (index != that.index) {
+                return false;
+            }
+            if (typeIndex != that.typeIndex) {
+                return false;
+            }
+            if (!Objects.equals(name, that.name)) {
+                return false;
+            }
+            return Objects.equals(type, that.type);
+        }
+
+        @Override
+        public int hashCode() {
+            int result = name != null ? name.hashCode() : 0;
+            result = 31 * result + index;
+            result = 31 * result + (type != null ? type.hashCode() : 0);
+            result = 31 * result + typeIndex;
+            return result;
+        }
     }
 }
