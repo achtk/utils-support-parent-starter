@@ -3,6 +3,8 @@ package com.chua.common.support.rpc;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -96,4 +98,21 @@ public class RpcRegistryConfig extends BaseRpcConfig{
      * Take effect only when no preferred registry is specified.
      */
     private Integer weight;
+
+    /**
+     * 创造注册
+     *
+     * @param url url
+     * @return {@link List}<{@link RpcRegistryConfig}>
+     */
+    public static List<RpcRegistryConfig> createRegister(String... url) {
+        List<RpcRegistryConfig> rs = new ArrayList<>(url.length);
+        for (String s : url) {
+            RpcRegistryConfig rpcRegistryConfig = new RpcRegistryConfig();
+            rpcRegistryConfig.setAddress(s);
+
+            rs.add(rpcRegistryConfig);
+        }
+        return rs;
+    }
 }

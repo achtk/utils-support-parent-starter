@@ -6,4 +6,12 @@ package com.chua.common.support.rpc;
  * @author CH
  */
 public interface RpcClient {
+
+    /**
+     * 收到
+     *
+     * @param targetType 目标类型
+     * @return {@link T}
+     */
+    <T>T get(Class<T> targetType);
 }
