@@ -1,5 +1,6 @@
 package com.chua.rpc.support.annotation.dubbo;
 
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.bean.BeanUtils;
 import com.chua.common.support.rpc.RpcClient;
 import com.chua.common.support.rpc.RpcProtocolConfig;
@@ -16,6 +17,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *
  * @author CH
  */
+@Spi("dubbo")
 @SuppressWarnings("ALL")
 public class DubboRpcClient implements RpcClient {
 
@@ -36,10 +38,15 @@ public class DubboRpcClient implements RpcClient {
 
     @Override
     public <T> T get(Class<T> targetType) {
-        ReferenceConfig<T> refrence=new ReferenceConfig<>();
+        ReferenceConfig<T> refrence= new ReferenceConfig<>();
         refrence.setApplication(applicationConfig);
         refrence.setRegistries(registryConfigs);
         refrence.setInterface(targetType);
         return refrence.get();
+    }
+
+    @Override
+    public void close() throws Exception {
+
     }
 }

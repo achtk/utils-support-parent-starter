@@ -5,7 +5,7 @@ package com.chua.common.support.rpc;
  *
  * @author CH
  */
-public interface RpcClient {
+public interface RpcClient extends AutoCloseable{
 
     /**
      * 收到

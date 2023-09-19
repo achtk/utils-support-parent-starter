@@ -1,5 +1,6 @@
 package com.chua.rpc.support.annotation.dubbo;
 
+import com.chua.common.support.annotations.Spi;
 import com.chua.common.support.bean.BeanUtils;
 import com.chua.common.support.protocol.server.Server;
 import com.chua.common.support.rpc.RpcProtocolConfig;
@@ -23,6 +24,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *
  * @author CH
  */
+@Spi("dubbo")
 @SuppressWarnings("ALL")
 public class DubboRpcServer implements RpcServer {
 
@@ -62,6 +64,8 @@ public class DubboRpcServer implements RpcServer {
 
     @Override
     public void close() throws IOException {
+        state.set(false);
+        ThreadUtils.closeQuietly(runService);
     }
 
     @Override

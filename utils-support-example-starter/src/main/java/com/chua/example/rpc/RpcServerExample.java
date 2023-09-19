@@ -13,7 +13,7 @@ import java.io.IOException;
 public class RpcServerExample {
 
     public static void main(String[] args) throws IOException {
-        RpcServer rpcServer = new DubboRpcServer(
+        RpcServer rpcServer = RpcServer;new DubboRpcServer(
                 RpcRegistryConfig.createRegister("zookeeper://127.0.0.1:2181"),
                 RpcProtocolConfig.createProtocol("dubbo://127.0.0.1:20880"),
                 "rpc"

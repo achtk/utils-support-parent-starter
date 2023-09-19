@@ -1,7 +1,9 @@
 package com.chua.example.zbus;
 
-import org.zbus.mq.server.MqServer;
-import org.zbus.mq.server.MqServerConfig;
+import com.chua.common.support.protocol.server.Server;
+import com.chua.common.support.protocol.server.ServerOption;
+import com.chua.common.support.protocol.server.ServerProvider;
+
 
 /**
  * @author CH
@@ -9,9 +11,8 @@ import org.zbus.mq.server.MqServerConfig;
 public class ZbusServerExample {
 
     public static void main(String[] args) throws Exception {
-        MqServerConfig mqServerConfig = new MqServerConfig();
-        mqServerConfig.setServerPort(55555);
-        MqServer mqServer = new MqServer(mqServerConfig);
-        mqServer.start();
+        ServerProvider serverProvider = Server.createServerProvider("zbus");
+        Server server = serverProvider.create(ServerOption.builder().build());
+        server.start();
     }
 }
