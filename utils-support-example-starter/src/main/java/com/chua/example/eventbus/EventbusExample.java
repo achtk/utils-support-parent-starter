@@ -12,7 +12,7 @@ public class EventbusExample {
     public static void main(String[] args) throws Exception {
         Eventbus eventbus = Eventbus.newDefault();
 //        eventbus.registerSubscriber("zbus" , new ZbusSubscribeEventbus());
-        eventbus.registerSubscriber("binlog", new BinlogSubscribeEventbus("112.124.44.21:3306", "root", "rootDB@qrkj"));
+        eventbus.registerSubscriber("binlog", new BinlogSubscribeEventbus("xxxx", "root", "root"));
 //        eventbus.registerObject(new SubscribeEntity());
 //        eventbus.registerObject(new SubscribeEntity1());
         eventbus.registerObject(new BinlogSubscribeEntity());
