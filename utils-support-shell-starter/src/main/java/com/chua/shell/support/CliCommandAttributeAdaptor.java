@@ -47,6 +47,10 @@ public class CliCommandAttributeAdaptor implements CommandAttributeAdaptor {
     public ShellResult execute(CommandAttribute commandAttribute, List<String> options, ShellResult pipeData, Map<String, Object> env, Object obj) {
         CommandLineParser parser = new DefaultParser();
         String[] strings = options.subList(1, options.size()).toArray(new String[0]);
+        if(strings.length == 0) {
+            options.add("-h");
+            strings = options.subList(1, options.size()).toArray(new String[0]);
+        }
         CommandLine commandLine = null;
         try {
             commandLine = parser.parse(this.options, strings);

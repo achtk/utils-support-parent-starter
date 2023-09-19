@@ -32,6 +32,7 @@ public class DubboRpcClient implements RpcClient {
         this.rpcRegistryConfigs = rpcRegistryConfigs;
         this.name = name;
         applicationConfig.setName(name);
+        applicationConfig.setQosEnable(false);
         this.registryConfigs = BeanUtils.copyPropertiesList(rpcRegistryConfigs, RegistryConfig.class);
     }
 
