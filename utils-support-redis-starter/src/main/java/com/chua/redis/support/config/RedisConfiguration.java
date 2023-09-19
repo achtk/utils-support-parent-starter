@@ -51,6 +51,13 @@ public class RedisConfiguration {
         this.port = port;
     }
 
+    public RedisConfiguration(String host, int port, String username, String password) {
+        this.host = host;
+        this.username = username;
+        this.password = password;
+        this.port = port;
+    }
+
     public RedisConfiguration(int port) {
         this(LOCAL_HOST, port);
     }

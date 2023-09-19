@@ -4,6 +4,7 @@ import com.chua.common.support.converter.Converter;
 import com.chua.common.support.function.NameAware;
 import com.chua.common.support.spi.autowire.ServiceAutowire;
 import com.chua.common.support.spi.finder.ServiceFinder;
+import com.chua.common.support.utils.ClassUtils;
 import lombok.Data;
 
 import java.lang.reflect.Constructor;
@@ -93,6 +94,14 @@ public class ServiceDefinition implements Comparable<ServiceDefinition> {
             return null;
         }
 
+        //检测与参数一致的数据
+        try {
+            Constructor<?> declaredConstructor = implClass.getDeclaredConstructor(ClassUtils.toType(args));
+            if(null != declaredConstructor) {
+                return (T) serviceAutowire.autowire(declaredConstructor.newInstance(args));
+            }
+        } catch (Exception e) {
+        }
         Constructor<?>[] constructors = implClass.getConstructors();
         for (Constructor<?> constructor : constructors) {
             if(constructor.getParameterCount() != args.length) {

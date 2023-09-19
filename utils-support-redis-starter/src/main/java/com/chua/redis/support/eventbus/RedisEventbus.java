@@ -45,6 +45,9 @@ public class RedisEventbus extends AbstractEventbus {
     public RedisEventbus(String host, int port) {
         this(new RedisConfiguration(host, port));
     }
+    public RedisEventbus(String host, int port, String user, String passwd) {
+        this(new RedisConfiguration(host, port));
+    }
     public RedisEventbus(int port) {
         this(new RedisConfiguration(port));
     }
