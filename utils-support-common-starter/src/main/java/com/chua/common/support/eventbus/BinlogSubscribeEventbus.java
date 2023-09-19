@@ -1,5 +1,6 @@
 package com.chua.common.support.eventbus;
 
+import com.chua.common.support.collection.ConcurrentReferenceHashMap;
 import com.chua.common.support.constant.Action;
 import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.matcher.PathMatcher;
@@ -41,7 +42,7 @@ public class BinlogSubscribeEventbus extends AbstractEventbus implements Initial
 
     private final Map<String, TableMapEventData> tableIds = new ConcurrentHashMap<>();
 
-    private final Map<String, List<TableMetadata>> tableMetadata = new ConcurrentHashMap<>();
+    private final Map<String, List<TableMetadata>> tableMetadata = new ConcurrentReferenceHashMap<>(16);
     private Connection connection;
 
     /**
@@ -274,7 +275,12 @@ public class BinlogSubscribeEventbus extends AbstractEventbus implements Initial
             Map<String, Object> item = new LinkedHashMap<>();
             Serializable[] serializables = rows.get(i);
             for (int j = 0; j < serializables.length; j++) {
-                TableMetadata tableMetadata2 = tableMetadata1.get(j);
+                TableMetadata tableMetadata2 = null;
+                try {
+                    tableMetadata2 = tableMetadata1.get(j);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 Serializable serializable = serializables[j];
                 item.put(tableMetadata2.getName(), ObjectUtils.toObject(serializable));
             }
