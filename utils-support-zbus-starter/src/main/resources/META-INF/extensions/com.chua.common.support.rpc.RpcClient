@@ -1,1 +1,1 @@
-com.chua.rpc.support.annotation.dubbo.DubboRpcClient
+com.chua.zbus.support.rpc.ZbusRpcClient

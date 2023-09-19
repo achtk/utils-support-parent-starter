@@ -2,7 +2,6 @@ package com.chua.example.rpc;
 
 import com.chua.common.support.rpc.RpcClient;
 import com.chua.common.support.rpc.RpcRegistryConfig;
-import com.chua.rpc.support.annotation.dubbo.DubboRpcClient;
 
 import java.io.IOException;
 
@@ -12,9 +11,9 @@ import java.io.IOException;
 public class RpcClientExample {
 
     public static void main(String[] args) throws IOException {
-        RpcClient rpcClient = new DubboRpcClient(
+        RpcClient rpcClient = RpcClient.createClient("zbus",
                 RpcRegistryConfig.createRegister("zookeeper://127.0.0.1:2181"),
-                "rpc-client"
+                "rpc"
         );
 
         RpcService rpcService = rpcClient.get(RpcService.class);

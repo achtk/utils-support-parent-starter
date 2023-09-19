@@ -1,6 +1,7 @@
 package com.chua.zbus.support.rpc;
 
 import com.chua.common.support.annotations.Spi;
+import com.chua.common.support.net.NetAddress;
 import com.chua.common.support.rpc.RpcClient;
 import com.chua.common.support.rpc.RpcProtocolConfig;
 import com.chua.common.support.rpc.RpcRegistryConfig;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
  *
  * @author CH
  */
-@Spi("dubbo")
+@Spi("zbus")
 @SuppressWarnings("ALL")
 public class ZbusRpcClient implements RpcClient {
 
@@ -35,7 +36,11 @@ public class ZbusRpcClient implements RpcClient {
         this.rpcRegistryConfigs = rpcRegistryConfigs;
         this.name = name;
         try {
-            this.broker = new ZbusBroker(rpcRegistryConfigs.stream().map(RpcRegistryConfig::getAddress).collect(Collectors.joining(";")));
+            this.broker = new ZbusBroker(rpcRegistryConfigs.stream()
+                    .map(RpcRegistryConfig::getAddress)
+                    .map(NetAddress::of)
+                    .map(NetAddress::getAddress)
+                    .collect(Collectors.joining(";")));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

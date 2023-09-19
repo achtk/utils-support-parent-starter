@@ -12,7 +12,7 @@ public class ZbusServerExample {
 
     public static void main(String[] args) throws Exception {
         ServerProvider serverProvider = Server.createServerProvider("zbus");
-        Server server = serverProvider.create(ServerOption.builder().build());
+        Server server = serverProvider.create(ServerOption.builder().port(2181).build());
         server.start();
     }
 }
