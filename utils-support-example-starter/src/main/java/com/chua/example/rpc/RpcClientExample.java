@@ -11,9 +11,9 @@ import java.io.IOException;
 public class RpcClientExample {
 
     public static void main(String[] args) throws IOException {
-        RpcClient rpcClient = RpcClient.createClient("zbus",
-                RpcRegistryConfig.createRegister("zookeeper://127.0.0.1:2181"),
-                "rpc"
+        RpcClient rpcClient = RpcClient.createClient("dubbo",
+                RpcRegistryConfig.createRegister("nacos://127.0.0.1:8848"),
+                "rpc-c"
         );
 
         RpcService rpcService = rpcClient.get(RpcService.class);

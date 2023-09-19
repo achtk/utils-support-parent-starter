@@ -12,12 +12,12 @@ import java.io.IOException;
 public class RpcServerExample {
 
     public static void main(String[] args) throws IOException {
-        zbus(args);
+        dubbo(args);
     }
 
     public static void dubbo(String[] args) throws IOException {
-        RpcServer rpcServer = RpcServer.createService("zbus",
-                RpcRegistryConfig.createRegister("zookeeper://127.0.0.1:2181"),
+        RpcServer rpcServer = RpcServer.createService("dubbo",
+                RpcRegistryConfig.createRegister("nacos://127.0.0.1:8848"),
                 RpcProtocolConfig.createProtocol("dubbo://127.0.0.1:20880"),
                 "rpc"
         );
