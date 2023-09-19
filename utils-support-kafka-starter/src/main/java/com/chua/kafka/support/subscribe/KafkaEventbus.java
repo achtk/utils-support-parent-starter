@@ -43,6 +43,9 @@ public class KafkaEventbus extends AbstractEventbus implements AutoCloseable {
     public KafkaEventbus(String groupId) {
         this("127.0.0.1:9092", groupId);
     }
+    public KafkaEventbus(String host, int port, String user, String passwd, String groupId) {
+        this(host + ":" + port, groupId);
+    }
     public KafkaEventbus() {
         this("127.0.0.1:9092", null);
     }

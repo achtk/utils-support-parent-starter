@@ -58,6 +58,18 @@ public class BinlogSubscribeEventbus extends AbstractEventbus implements Initial
         this.passwd = passwd;
     }
 
+    /**
+     * binlog订阅事件总线
+     *
+     * @param host   地址
+     * @param port   端口
+     * @param user   使用者
+     * @param passwd passwd
+     */
+    public BinlogSubscribeEventbus(String host, int port, String user, String passwd) {
+        this(host + ":" + port, user, passwd);
+    }
+
     public BinlogSubscribeEventbus(String user, String passwd) {
         this("127.0.0.1:3306", user, passwd);
     }
