@@ -115,10 +115,8 @@ public class SshClient extends AbstractClient<SshClient> {
 
     /**
      * 删除侦听器
-     *
-     * @param consumer 消息
      */
-    public void removeListener(String uid, Consumer<String> consumer) {
+    public void removeListener(String uid) {
         consumerMap.remove(uid);
     }
 
