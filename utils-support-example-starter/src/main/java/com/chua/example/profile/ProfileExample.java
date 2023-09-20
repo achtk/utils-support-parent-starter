@@ -20,7 +20,7 @@ public class ProfileExample {
 
         profile.refresh("log4j2.xml");
 
-        log.info("server.port -> {}", profile.getObject("#server['port']"));
+        log.info("server.port -> {}", profile.getObject("server.port"));
         log.info("0x0404.1100 -> {}", profile.getString("0x0404.1100"));
 //        log.info("bind entity -> {}", profile.bind(ObjectFileObject.class));
         System.out.println();

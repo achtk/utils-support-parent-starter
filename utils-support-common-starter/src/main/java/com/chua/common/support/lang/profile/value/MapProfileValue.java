@@ -24,7 +24,7 @@ public class MapProfileValue implements ProfileValue {
     private final String resourceUrl;
     private final Map<String, Object> value;
 
-    private ExpressionParser spelExpressionParser = ServiceProvider.of(ExpressionParser.class).getNewExtension("el");
+    private final ExpressionParser spelExpressionParser = ServiceProvider.of(ExpressionParser.class).getNewExtension("el");
 
     public MapProfileValue(String resourceUrl) {
         this(resourceUrl, new LinkedHashMap<>());
@@ -59,17 +59,13 @@ public class MapProfileValue implements ProfileValue {
     }
 
     @Override
-    public Object getValue(String key, ValueMode valueMode) {
+    public Object getValue(String key) {
         if(null == key) {
             return null;
         }
 
         Object o = value.get(key);
-        if(null != o || valueMode == ValueMode.NONE) {
-            return o;
-        }
-
-        if(valueMode == ValueMode.XPATH) {
+        if(null == o) {
             try {
                 return JsonPath.of(key).get(Json.toJson(this.value));
             } catch (Exception ignored) {

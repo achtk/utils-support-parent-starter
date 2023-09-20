@@ -22,20 +22,10 @@ public interface ProfileValue extends ChainMap<ProfileValue, String, Object> {
      * 获取值
      *
      * @param name      索引
-     * @param valueMode 模式
      * @return 结果
      */
-    Object getValue(String name, ValueMode valueMode);
+    Object getValue(String name);
 
-    /**
-     * 获取值
-     *
-     * @param name      索引
-     * @return 结果
-     */
-    default Object getValue(String name) {
-        return getValue(name, ValueMode.XPATH);
-    }
 
     /**
      * 是否包含数据
