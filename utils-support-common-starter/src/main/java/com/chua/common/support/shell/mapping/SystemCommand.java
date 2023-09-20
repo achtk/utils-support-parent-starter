@@ -12,6 +12,8 @@ import com.chua.common.support.matcher.AntPathMatcher;
 import com.chua.common.support.matcher.PathMatcher;
 import com.chua.common.support.shell.*;
 import com.chua.common.support.utils.CmdUtils;
+import com.chua.common.support.utils.CollectionUtils;
+import com.chua.common.support.utils.NumberUtils;
 import com.chua.common.support.utils.StringUtils;
 
 import java.io.File;
@@ -23,6 +25,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static com.chua.common.support.constant.CommonConstant.SYMBOL_ASTERISK;
+import static com.chua.common.support.constant.CommonConstant.SYMBOL_COMMA;
 
 /**
  * 系统命令
@@ -42,32 +45,6 @@ public class SystemCommand {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-
-    /**
-     * help
-     *
-     * @return help
-     */
-    @ShellMapping(value = {"mem"}, describe = "java内存情况")
-    public ShellResult spring() {
-        Runtime runtime = Runtime.getRuntime();
-        long maxMemory = runtime.maxMemory();
-        long totalMemory = runtime.totalMemory();
-        long freeMemory = runtime.freeMemory();
-
-        ShellTable table = new ShellTable("最大内存", "已使用内存", "剩余内存");
-        List lists = Collections.singletonList(ImmutableBuilder.builder().add(
-                StringUtils.getNetFileSizeDescription(maxMemory, D),
-                StringUtils.getNetFileSizeDescription(totalMemory, D),
-                StringUtils.getNetFileSizeDescription(freeMemory, D)).newArrayList()
-        );
-        table.addRows(lists);
-        try {
-            return ShellResult.table(Json.toJson(table));
-        } catch (Exception e) {
-            return ShellResult.error();
-        }
-    }
 
     /**
      * help
@@ -115,9 +92,9 @@ public class SystemCommand {
     @ShellMapping(value = {"ip"}, describe = "显示当前系统IP")
     public ShellResult ip() {
         if (OS_NAME.contains(WIN)) {
-            return ShellResult.text(CmdUtils.exec(IP_CONFIG));
+            return ShellResult.builder().mode(ShellMode.CODE).result(CmdUtils.exec(IP_CONFIG)).build();
         }
-        return ShellResult.text(CmdUtils.exec(IF_CONFIG));
+        return ShellResult.builder().mode(ShellMode.CODE).result(CmdUtils.exec(IF_CONFIG)).build();
     }
 
     /**
@@ -127,7 +104,7 @@ public class SystemCommand {
      */
     @ShellMapping(value = {"netstat"}, describe = "显示当前系统端口")
     public ShellResult netstat() {
-        return ShellResult.text(CmdUtils.exec("netstat -ano"));
+        return ShellResult.builder().mode(ShellMode.CODE).result(CmdUtils.exec("netstat -ano")).build();
     }
 
     /**
@@ -170,7 +147,6 @@ public class SystemCommand {
         List<String> line = new LinkedList<>();
         List<String> split = Splitter.on("\n").omitEmptyStrings().trimResults().splitToList(data.getResult());
         if (mode == ShellMode.TABLE) {
-            int index = 0;
             ShellTable shellTable = Json.fromJson(data.getResult(), ShellTable.class);
             ShellTable rs = new ShellTable(shellTable.getHead());
             List<Collection<String>> rows = shellTable.getRows();
@@ -189,12 +165,46 @@ public class SystemCommand {
             }
             return ShellResult.table(rs.toString());
         }
+
         for (String s : split) {
             if (isMatch(s, name)) {
                 line.add(ansi(s, name));
             }
         }
+        if(mode == ShellMode.CODE) {
+            return ShellResult.builder().mode(ShellMode.CODE).result(Joiner.on("\r\n").join(line)).build();
+        }
         return ShellResult.ansi(Joiner.on("\r\n").join(line));
+
+    }
+    /**
+     * grep
+     */
+    @ShellMapping(value = {"less"}, describe = "过滤信息")
+    public ShellResult less(@ShellPipe ShellResult data, @ShellParam(value = "num", numberOfArgs = 1) String name) {
+        if (StringUtils.isNullOrEmpty(name)) {
+            return data;
+        }
+
+        int start = 0;
+        int end = 0;
+        if(name.contains(SYMBOL_COMMA)) {
+            String[] split = name.split(SYMBOL_COMMA);
+            start = NumberUtils.toInt(split[0], 0);
+            end = NumberUtils.toInt(split[1], 10);
+        } else {
+            end = NumberUtils.toInt(name, 10);
+        }
+
+        ShellMode mode = data.getMode();
+        if(mode == ShellMode.TABLE) {
+            ShellTable shellTable = Json.fromJson(data.getResult(), ShellTable.class);
+            List<Collection<String>> rows = shellTable.getRows();
+            shellTable.setRows(CollectionUtils.sub(rows, start, end));
+            return ShellResult.table(shellTable.toString());
+        }
+        String[] split = data.getResult().split("\r\n");
+        return ShellResult.builder().mode(data.getMode()).result(CollectionUtils.sub(Arrays.asList(split), start, end).toString()).build();
 
     }
 

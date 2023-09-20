@@ -6,10 +6,13 @@ import com.chua.common.support.http.HttpClient;
 import com.chua.common.support.http.HttpClientInvoker;
 import com.chua.common.support.http.HttpResponse;
 import com.chua.common.support.lang.tokenizer.Tokenizer;
+import com.chua.common.support.utils.IoUtils;
 import com.chua.common.support.utils.MapUtils;
 import com.chua.common.support.utils.Md5Utils;
 import org.apache.http.HttpHeaders;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -17,7 +20,11 @@ import java.util.Map;
  */
 public class TokenizerExample {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        System.out.println(IoUtils.toString(new File("z://base64.txt")));
+    }
+
+    public static void main2(String[] args) {
         Tokenizer tokenizer = Tokenizer.newDefault();
         System.out.println(tokenizer.segments("测试单词"));
     }

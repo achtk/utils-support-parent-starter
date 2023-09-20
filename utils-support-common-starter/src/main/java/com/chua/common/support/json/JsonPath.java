@@ -2,7 +2,6 @@ package com.chua.common.support.json;
 
 import com.alibaba.fastjson2.JSONPath;
 import com.chua.common.support.collection.ConcurrentReferenceHashMap;
-import com.chua.common.support.constant.ValueMode;
 import com.chua.common.support.converter.Converter;
 import com.chua.common.support.lang.profile.ProfileReliable;
 
@@ -64,7 +63,7 @@ public class JsonPath implements ProfileReliable {
     }
 
     @Override
-    public Object getObject(String name, ValueMode valueMode) {
+    public Object getObject(String name) {
         return get(name);
     }
 

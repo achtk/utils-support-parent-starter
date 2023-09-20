@@ -21,7 +21,7 @@ public class DigestUtils {
 
     private static final int KEY_SIZE = 1024;
     private static final String MD2 = "MD2";
-    private static final String MD5 = "MD5";
+    public static final String MD5 = "MD5";
     private static final String RSA = "RSA";
     public static final String SHA_1 = "SHA-1";
     /**

@@ -29,7 +29,11 @@ public enum ShellMode {
     /**
      * ansi
      */
-    ASNI,
+    ANSI,
+    /**
+     * ask
+     */
+    ASK,
     /**
      * other
      */
