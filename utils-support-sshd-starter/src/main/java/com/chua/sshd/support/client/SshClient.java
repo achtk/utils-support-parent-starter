@@ -1,18 +1,19 @@
 package com.chua.sshd.support.client;
 
-import ch.ethz.ssh2.Connection;
-import ch.ethz.ssh2.Session;
-import ch.ethz.ssh2.StreamGobbler;
+import com.chua.common.support.constant.Projects;
 import com.chua.common.support.protocol.client.AbstractClient;
 import com.chua.common.support.protocol.client.ClientOption;
 import com.chua.common.support.utils.IoUtils;
 import com.chua.common.support.utils.ThreadUtils;
+import com.jcraft.jsch.ChannelShell;
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.Session;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
+import java.io.OutputStreamWriter;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -24,16 +25,17 @@ import java.util.function.Consumer;
  * @author CH
  * @since 2023/09/19
  */
-public class SshClient extends AbstractClient<Session> {
+@Slf4j
+public class SshClient extends AbstractClient<SshClient> {
 
-    private Connection connection;
-    private Session session;
-    private BufferedReader stdout;
-    public PrintWriter printWriter;
-    private BufferedReader stderr;
     private final ExecutorService service = ThreadUtils.newProcessorThreadExecutor("ssh-client-monitor");
 
     private final Map<String, Consumer<String>> consumerMap = new ConcurrentHashMap<>();
+    private Session session;
+    private OutputStreamWriter writer;
+    private BufferedReader reader;
+    private ChannelShell shell;
+
     public SshClient(ClientOption clientOption) {
         super(clientOption);
     }
@@ -46,48 +48,58 @@ public class SshClient extends AbstractClient<Session> {
     @Override
     public void connectClient() {
         try {
-            //根据主机名先获取一个远程连接
-            connection = new Connection(netAddress.getHost(), netAddress.getPort(22));
-            //发起连接
-            connection.connect();
-            //认证账号密码
-            boolean authenticateWithPassword = connection.authenticateWithPassword(clientOption.username(), clientOption.password());
-            //如果账号密码有误抛出异常
-            if (!authenticateWithPassword) {
-                throw new RuntimeException("Authentication failed. Please check hostName, userName and passwd");
-            }
-            //开启一个会话
-            session = connection.openSession();
-            session.requestDumbPTY();
-            session.startShell();
-            //获取标准输出
-            stdout = new BufferedReader(new InputStreamReader(new StreamGobbler(session.getStdout()), StandardCharsets.UTF_8));
-            //获取标准错误输出
-            stderr = new BufferedReader(new InputStreamReader(new StreamGobbler(session.getStderr()), StandardCharsets.UTF_8));
-            //获取标准输入
-            printWriter = new PrintWriter(session.getStdin());
-        } catch (IOException e) {
+
+            // 创建JSCH
+            JSch ssh = new JSch();
+            session = ssh.getSession(clientOption.username(), netAddress.getHost(), netAddress.getPort(22));
+            session.setPassword(clientOption.password());
+
+            // 这里是 屏蔽掉验证
+            session.setConfig("StrictHostKeyChecking", "no");
+//            session.setTimeout();
+            session.connect(clientOption.connectionTimeoutMillis());
+
+            // 打开shell，windows可以用 exec
+            shell = (ChannelShell) session.openChannel("shell");
+            shell.connect();
+
+            writer = new OutputStreamWriter(shell.getOutputStream(), Projects.defaultCharset());
+            reader = new BufferedReader(new InputStreamReader(shell.getInputStream(), Projects.defaultCharset()));
+            service.execute(() -> {
+                StringBuffer buffer = new StringBuffer();
+                try {
+                    String line = null;
+                    while ((line = reader.readLine()) != null) {
+                        for (Consumer<String> consumer : consumerMap.values()) {
+                            consumer.accept(line);
+                        }
+                    }
+                } catch (IOException e) {
+                    log.error("解析脚本出错：" + e.getMessage());
+                    e.printStackTrace();
+                }
+            });
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public Session getClient() {
-        return session;
+    public SshClient getClient() {
+        return this;
     }
 
     @Override
     public void close() {
+        shell.disconnect();
+        session.disconnect();
+        IoUtils.closeQuietly(writer);
+        IoUtils.closeQuietly(reader);
         ThreadUtils.closeQuietly(service);
-        IoUtils.closeQuietly(stdout);
-        IoUtils.closeQuietly(stderr);
-        IoUtils.closeQuietly(printWriter);
-        session.close();
-        connection.close();
     }
 
     @Override
-    public void closeClient(Session client) {
+    public void closeClient(SshClient client) {
         client.close();
     }
 
@@ -109,12 +121,26 @@ public class SshClient extends AbstractClient<Session> {
     public void removeListener(String uid, Consumer<String> consumer) {
         consumerMap.remove(uid);
     }
+
     /**
      * 发送
      *
      * @param message 消息
      */
     public void send(String message) {
-        printWriter.write(message);
+        try {
+            writer.write(message);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 正在连接
+     *
+     * @return boolean
+     */
+    public boolean isConnect() {
+        return null != session && session.isConnected();
     }
 }

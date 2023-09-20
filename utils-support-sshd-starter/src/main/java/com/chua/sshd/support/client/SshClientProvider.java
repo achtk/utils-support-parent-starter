@@ -1,6 +1,5 @@
 package com.chua.sshd.support.client;
 
-import ch.ethz.ssh2.Session;
 import com.chua.common.support.protocol.client.AbstractClientProvider;
 import com.chua.common.support.protocol.client.ClientOption;
 
@@ -10,7 +9,7 @@ import com.chua.common.support.protocol.client.ClientOption;
  * @author CH
  * @since 2023/09/19
  */
-public class SshClientProvider extends AbstractClientProvider<Session> {
+public class SshClientProvider extends AbstractClientProvider<SshClient> {
 
     public SshClientProvider(ClientOption option) {
         super(option);
