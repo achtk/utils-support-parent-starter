@@ -10,7 +10,11 @@ import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -30,7 +34,6 @@ public class SshClient extends AbstractClient<SshClient> {
     private final Map<String, Consumer<String>> consumerMap = new ConcurrentHashMap<>();
     private Session session;
     private BufferedReader reader;
-    private PrintWriter writer;
     private ChannelShell shell;
 
     public SshClient(ClientOption clientOption) {
@@ -58,10 +61,12 @@ public class SshClient extends AbstractClient<SshClient> {
 
             // 打开shell，windows可以用 exec
             shell = (ChannelShell) session.openChannel("shell");
+            shell.setPtyType("xterm");
             shell.connect();
 
-            writer = new PrintWriter(new OutputStreamWriter(shell.getOutputStream(), Projects.defaultCharset()));
             reader = new BufferedReader(new InputStreamReader(shell.getInputStream(), Projects.defaultCharset()));
+
+            send("\r");
             service.execute(() -> {
                 StringBuffer buffer = new StringBuffer();
                 try {
@@ -90,7 +95,6 @@ public class SshClient extends AbstractClient<SshClient> {
     public void close() {
         shell.disconnect();
         session.disconnect();
-        IoUtils.closeQuietly(writer);
         IoUtils.closeQuietly(reader);
         ThreadUtils.closeQuietly(service);
     }
@@ -123,8 +127,13 @@ public class SshClient extends AbstractClient<SshClient> {
      * @param message 消息
      */
     public void send(String message) {
-        writer.write(message);
-        writer.flush();
+        try {
+            OutputStream outputStream = shell.getOutputStream();
+            outputStream.write(message.getBytes(StandardCharsets.UTF_8));
+            outputStream.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
