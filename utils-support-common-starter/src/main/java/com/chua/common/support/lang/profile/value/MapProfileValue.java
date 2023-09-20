@@ -33,7 +33,7 @@ public class MapProfileValue implements ProfileValue {
     public MapProfileValue(String resourceUrl, Map<String, Object> map) {
         this.resourceUrl = resourceUrl;
         this.value = new LinkedHashMap<>();
-        this.value.forEach(this::add);
+        map.forEach(this::add);
     }
     public MapProfileValue(String resourceUrl, Properties properties) {
        this(resourceUrl, MapUtils.asMap(properties));

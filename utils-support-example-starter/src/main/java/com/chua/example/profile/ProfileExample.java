@@ -13,10 +13,12 @@ public class ProfileExample {
     public static void main(String[] args) {
         Profile profile = ProfileBuilder.newBuilder().build();
         profile.addProfile("actuator.properties")
-                .addProfile("log4j2.xml")
+                .addProfile("logback.xml")
                 .addProfile("0x0404.ini")
                 .addProfile("Cargo.toml")
                 .addProfile("application.yml");
+
+        profile.refresh("log4j2.xml");
 
         log.info("server.port -> {}", profile.getObject("#server['port']"));
         log.info("0x0404.1100 -> {}", profile.getString("0x0404.1100"));

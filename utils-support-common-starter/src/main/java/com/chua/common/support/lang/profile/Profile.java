@@ -259,4 +259,11 @@ public interface Profile extends PlaceholderResolver, ProfileReliable {
 
         return null;
     }
+
+    /**
+     * 刷新
+     *
+     * @param file s
+     */
+    void refresh(String file);
 }

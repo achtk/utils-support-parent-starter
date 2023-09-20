@@ -169,6 +169,12 @@ public class DelegateProfile implements  Profile, ServiceFactory<ProfileResolver
     }
 
     @Override
+    public void refresh(String file) {
+        addProfile(file);
+    }
+
+
+    @Override
     public Object getObject(String name, ValueMode valueMode) {
         for (ProfileValue profileValue : profiles) {
             if (!profileValue.contains(name, valueMode)) {
