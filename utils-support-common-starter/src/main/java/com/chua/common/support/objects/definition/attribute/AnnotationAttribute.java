@@ -1,7 +1,6 @@
 package com.chua.common.support.objects.definition.attribute;
 
 import com.chua.common.support.annotations.Alias;
-import com.chua.common.support.constant.ValueMode;
 import com.chua.common.support.converter.Converter;
 import com.chua.common.support.function.InitializingAware;
 import com.chua.common.support.lang.profile.ProfileReliable;
@@ -44,7 +43,7 @@ public class AnnotationAttribute implements InitializingAware, ProfileReliable {
     }
 
     @Override
-    public Object getObject(String name, ValueMode valueMode) {
+    public Object getObject(String name) {
         return value.get(name);
     }
 
