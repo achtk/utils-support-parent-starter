@@ -2,7 +2,6 @@ package com.chua.common.support.lang.profile;
 
 
 import com.chua.common.support.bean.BeanBinder;
-import com.chua.common.support.constant.ValueMode;
 import com.chua.common.support.converter.Converter;
 import com.chua.common.support.lang.profile.resolver.ProfileResolver;
 import com.chua.common.support.lang.profile.value.MapProfileValue;
@@ -175,13 +174,13 @@ public class DelegateProfile implements  Profile, ServiceFactory<ProfileResolver
 
 
     @Override
-    public Object getObject(String name, ValueMode valueMode) {
+    public Object getObject(String name) {
         for (ProfileValue profileValue : profiles) {
-            if (!profileValue.contains(name, valueMode)) {
+            if (!profileValue.contains(name)) {
                 continue;
             }
 
-            return profileValue.getValue(name, valueMode);
+            return profileValue.getValue(name);
         }
         return null;
     }

@@ -2,7 +2,6 @@ package com.chua.common.support.lang.profile;
 
 
 import com.chua.common.support.bean.BeanMap;
-import com.chua.common.support.constant.ValueMode;
 import com.chua.common.support.converter.Converter;
 import com.chua.common.support.json.JsonArray;
 import com.chua.common.support.json.JsonObject;
@@ -24,20 +23,10 @@ public interface ProfileReliable extends PlaceholderResolver {
      * 获取数据
      *
      * @param name      名称
-     * @param valueMode 取值模式
      * @return 结果
      */
-    Object getObject(String name, ValueMode valueMode);
+    Object getObject(String name);
 
-    /**
-     * 获取数据
-     *
-     * @param name 名称
-     * @return 结果
-     */
-    default Object getObject(String name) {
-        return getObject(name, ValueMode.XPATH);
-    }
 
     /**
      * 获取数据
