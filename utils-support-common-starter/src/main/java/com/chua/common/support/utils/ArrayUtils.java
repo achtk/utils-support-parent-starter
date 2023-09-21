@@ -1041,6 +1041,53 @@ public class ArrayUtils {
         System.arraycopy(arr, offset, v, 0, v.length);
         return v;
     }
+
+    /**
+     * <p>Reverses the order of the given array.
+     *
+     * <p>This method does nothing for a {@code null} input array.
+     *
+     * @param array  the array to reverse, may be {@code null}
+     */
+    public static void reverse(final byte[] array) {
+        if (array == null) {
+            return;
+        }
+        reverse(array, 0, array.length);
+    }
+
+    /**
+     * <p>
+     * Reverses the order of the given array in the given range.
+     *
+     * <p>
+     * This method does nothing for a {@code null} input array.
+     *
+     * @param array
+     *            the array to reverse, may be {@code null}
+     * @param startIndexInclusive
+     *            the starting index. Undervalue (&lt;0) is promoted to 0, overvalue (&gt;array.length) results in no
+     *            change.
+     * @param endIndexExclusive
+     *            elements up to endIndex-1 are reversed in the array. Undervalue (&lt; start index) results in no
+     *            change. Overvalue (&gt;array.length) is demoted to array length.
+     * @since 3.2
+     */
+    public static void reverse(final byte[] array, final int startIndexInclusive, final int endIndexExclusive) {
+        if (array == null) {
+            return;
+        }
+        int i = Math.max(startIndexInclusive, 0);
+        int j = Math.min(array.length, endIndexExclusive) - 1;
+        byte tmp;
+        while (j > i) {
+            tmp = array[j];
+            array[j] = array[i];
+            array[i] = tmp;
+            j--;
+            i++;
+        }
+    }
     /**
      * 截取数组
      *
@@ -1062,5 +1109,27 @@ public class ArrayUtils {
         T[] v = (T[]) Array.newInstance(arr[0].getClass(), arr.length - offset);
         System.arraycopy(arr, offset, v, 0, offset2 - offset);
         return v;
+    }
+    /**
+     * 截取数组
+     *
+     * @param arr    数组
+     * @param offset 位置1
+     * @param offset2 位置2
+     * @return 截取数组
+     */
+    @SuppressWarnings("ALL")
+    public static byte[] subArray(byte[] arr, int offset, int offset2) {
+        if(arr.length < offset) {
+            return null;
+        }
+
+        if(offset2 <= offset) {
+            return null;
+        }
+
+        byte[] rs = new byte[offset2 - offset + 1];
+        System.arraycopy(arr, offset, rs, 0, offset2 - offset + 1);
+        return rs;
     }
 }
