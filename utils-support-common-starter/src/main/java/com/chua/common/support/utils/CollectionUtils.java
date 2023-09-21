@@ -11,7 +11,6 @@ import java.util.*;
 import java.util.function.Consumer;
 
 import static com.chua.common.support.constant.CommonConstant.SYMBOL_COMMA;
-import static com.chua.common.support.constant.CommonConstant.SYMBOL_LEFT_SLASH;
 
 /**
  * 集合工具类
@@ -370,6 +369,8 @@ public class CollectionUtils {
         if (isEmpty(list)) {
             return new ArrayList<>(0);
         }
+
+        pageNo = pageNo - 1;
 
         int resultSize = list.size();
         // 每页条目数大于总数直接返回所有
