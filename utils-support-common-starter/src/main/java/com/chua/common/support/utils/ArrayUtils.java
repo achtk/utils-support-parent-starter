@@ -1111,6 +1111,16 @@ public class ArrayUtils {
         return v;
     }
     /**
+     * 校验数组是否包含指定值
+     *
+     * @param arr         数组
+     * @param targetValue 值
+     * @return 是否包含
+     */
+    public static boolean arraysContains(String[] arr, String targetValue) {
+        return Arrays.asList(arr).contains(targetValue);
+    }
+    /**
      * 截取数组
      *
      * @param arr    数组

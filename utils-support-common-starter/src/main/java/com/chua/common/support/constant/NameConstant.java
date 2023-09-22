@@ -9,339 +9,529 @@ import static com.chua.common.support.constant.CommonConstant.SYMBOL_DOT;
  *
  * @author CH
  */
-public class NameConstant implements Constant {
+public interface NameConstant extends Constant {
     /**
      * http架构错误
      */
-    public static final String HTTP_SCHEMA_ERROR = "http和https参数错误";
+    String HTTP_SCHEMA_ERROR = "http和https参数错误";
     /**
      * cglib
      */
-    public static final CharSequence CGLIB$$ = "CGLIB$$";
+    CharSequence CGLIB$$ = "CGLIB$$";
     /**
      * CDATA
      */
-    public static final String CDATA = "CDATA";
+    String CDATA = "CDATA";
     /**
      * with
      */
-    public static final String WITH = "with";
+    String WITH = "with";
     /**
      * as
      */
-    public static final String AS = "as";
+    String AS = "as";
     /**
      * length
      */
-    public static final String LENGTH = "length";
+    String LENGTH = "length";
 
 
-    public static final String FTP = "ftp";
+    String FTP = "ftp";
     /**
      * GET
      */
-    public static final String GET = "GET";
+    String GET = "GET";
     /**
      * POST
      */
-    public static final String POST = "POST";
+    String POST = "POST";
     /**
      * DELETE
      */
-    public static final String DELETE = "DELETE";
+    String DELETE = "DELETE";
     /**
      * PUT
      */
-    public static final String PUT = "PUT";
+    String PUT = "PUT";
     /**
      * set方法
      */
-    public static final String METHOD_SETTER = "set";
+    String METHOD_SETTER = "set";
     /**
      * get方法
      */
-    public static final String METHOD_GETTER = "get";
+    String METHOD_GETTER = "get";
 
 
     /**
      * toString
      */
-    public static final String METHOD_TO_STRING = "toString";
+    String METHOD_TO_STRING = "toString";
     /**
      * equals
      */
-    public static final String METHOD_EQUALS = "equals";
+    String METHOD_EQUALS = "equals";
     /**
      * hashCode
      */
-    public static final String METHOD_HASH_CODE = "hashCode";
+    String METHOD_HASH_CODE = "hashCode";
 
     /**
      * source
      */
-    public static final String SOURCE = "source";
-    public static final String HTTP = "http";
-    public static final String PATH = "path";
-    public static final String FILE_FILTERS = "fileFilters";
-    public static final String JPG = "jpg";
-    public static final String JPEG = "jpeg";
+    String SOURCE = "source";
+    String HTTP = "http";
+    String PATH = "path";
+    String FILE_FILTERS = "fileFilters";
+    String JPG = "jpg";
+    String JPEG = "jpeg";
 
     /**
      * default
      */
-    public static final String DEFAULT = "default";
+    String DEFAULT = "default";
 
     /**
      * default
      */
-    public static final String SYSTEM = "system";
+    String SYSTEM = "system";
     /**
      * null
      */
-    public static final String NULL = "null";
+    String NULL = "null";
     /**
      * now
      */
-    public static final String NOW = "now";
+    String NOW = "now";
     /**
      * null
      */
-    public static final String NULL_CHAR = "'null'";
+    String NULL_CHAR = "'null'";
     /**
      * 处理占位符对象属性
      */
-    public static final String SYSTEM_PLACEHOLDER_PROP = "system.prop.placeholder";
+    String SYSTEM_PLACEHOLDER_PROP = "system.prop.placeholder";
     /**
      * 处理文件优先级
      */
-    public static final String SYSTEM_PRIORITY_PROP = "system.prop.priority";
+    String SYSTEM_PRIORITY_PROP = "system.prop.priority";
     /**
      * spi默认配置
      */
-    public static final String SPI_CONFIG_DEFAULT = "spi-config-default";
+    String SPI_CONFIG_DEFAULT = "spi-config-default";
     /**
      * spi配置
      */
-    public static final String SPI_CONFIG = "spi-config.json";
+    String SPI_CONFIG = "spi-config.json";
     /**
      * resource默认配置
      */
-    public static final String RESOURCE_CONFIG_DEFAULT = "resource-config-default.json";
+    String RESOURCE_CONFIG_DEFAULT = "resource-config-default.json";
     /**
      * host
      */
-    public static final String CONFIG_FIELD_HOST = "host";
+    String CONFIG_FIELD_HOST = "host";
     /**
      * port
      */
-    public static final String CONFIG_FIELD_PORT = "port";
+    String CONFIG_FIELD_PORT = "port";
     /**
      * password
      */
-    public static final String CONFIG_FIELD_PASSWORD = "password";
+    String CONFIG_FIELD_PASSWORD = "password";
     /**
      * username
      */
-    public static final String CONFIG_FIELD_USERNAME = "username";
+    String CONFIG_FIELD_USERNAME = "username";
     /**
      * 最大连接数
      */
-    public static final String CONFIG_FIELD_MAX_CONNECTION = "maxConnection";
+    String CONFIG_FIELD_MAX_CONNECTION = "maxConnection";
     /**
      * 连接超时
      */
-    public static final String CONFIG_FIELD_CONNECTION_TIMEOUT = "connectionTimeout";
+    String CONFIG_FIELD_CONNECTION_TIMEOUT = "connectionTimeout";
     /**
      * 读取超时
      */
-    public static final String CONFIG_FIELD_READ_TIMEOUT = "readTimeout";
+    String CONFIG_FIELD_READ_TIMEOUT = "readTimeout";
     /**
      * 写入超时
      */
-    public static final String CONFIG_FIELD_WRITE_TIMEOUT = "writeTimeout";
+    String CONFIG_FIELD_WRITE_TIMEOUT = "writeTimeout";
     /**
      * 路径
      */
-    public static final String CONFIG_FIELD_PATH = "path";
+    String CONFIG_FIELD_PATH = "path";
     /**
      * 超时时间
      */
-    public static final String CONFIG_FIELD_SESSION_TIMEOUT = "sessionTimeout";
+    String CONFIG_FIELD_SESSION_TIMEOUT = "sessionTimeout";
     /**
      * 重试
      */
-    public static final String CONFIG_FIELD_RETRY = "retry";
+    String CONFIG_FIELD_RETRY = "retry";
     /**
      * jar
      */
-    public static final String JAR = "jar";
+    String JAR = "jar";
 
     /**
      * file
      */
-    public static final String FILE = "file";
+    String FILE = "file";
     /**
      * file
      */
-    public static final String WAR = "war";
+    String WAR = "war";
     /**
      * zip
      */
-    public static final String ZIP = "zip";
+    String ZIP = "zip";
     /**
      * gzip
      */
-    public static final String GZIP = "gzip";
+    String GZIP = "gzip";
 
     /**
      * wrapper 内部参数相关
      */
-    public static final String SYMBOL_WRAPPER_PARAM = "MPGENVAL";
-    public static final String SYMBOL_WRAPPER_PARAM_MIDDLE = ".paramNameValuePairs" + SYMBOL_DOT;
+    String SYMBOL_WRAPPER_PARAM = "MPGENVAL";
+    String SYMBOL_WRAPPER_PARAM_MIDDLE = ".paramNameValuePairs" + SYMBOL_DOT;
 
     /**
      * master
      */
 
-    public static final String MASTER = "master";
+    String MASTER = "master";
     /**
      * order by
      */
-    public static final CharSequence SYMBOL_ORDER_BY = " ORDER BY ";
+    CharSequence SYMBOL_ORDER_BY = " ORDER BY ";
     /**
      * limit
      */
-    public static final CharSequence SYMBOL_LIMIT = " limit ";
+    CharSequence SYMBOL_LIMIT = " limit ";
     /**
      * ew
      */
-    public static final String SYMBOL_WRAPPER = "ew";
+    String SYMBOL_WRAPPER = "ew";
     /**
      * select
      */
-    public static final CharSequence SYMBOL_SELECT = " SELECT ";
+    CharSequence SYMBOL_SELECT = " SELECT ";
     /**
      * INSERT
      */
-    public static final CharSequence SYMBOL_INSERT = " INSERT INTO ";
+    CharSequence SYMBOL_INSERT = " INSERT INTO ";
     /**
      * update
      */
-    public static final CharSequence SYMBOL_UPDATE = " UPDATE ";
+    CharSequence SYMBOL_UPDATE = " UPDATE ";
     /**
      * DELETE
      */
-    public static final CharSequence SYMBOL_DELETE = " DELETE FROM ";
+    CharSequence SYMBOL_DELETE = " DELETE FROM ";
     /**
      * create table
      */
-    public static final CharSequence SYMBOL_CREATE_TABLE = "CREATE TABLE";
+    CharSequence SYMBOL_CREATE_TABLE = "CREATE TABLE";
 
-    public static final String SYMBOL_EXCEPTION = "Exception:";
+    String SYMBOL_EXCEPTION = "Exception:";
 
     /**
      * where
      */
-    public static final String SYMBOL_WHERE = " WHERE ";
+    String SYMBOL_WHERE = " WHERE ";
     /**
      * null
      */
-    public static final String SYMBOL_NULL_STRING = "null";
+    String SYMBOL_NULL_STRING = "null";
     /**
      * "java/lang/Object"
      */
-    public static final String OBJECT_NAME = "java/lang/Object";
+    String OBJECT_NAME = "java/lang/Object";
     /**
      * "java/lang/String"
      */
-    public static final String STRING_NAME = "java/lang/String";
+    String STRING_NAME = "java/lang/String";
     /**
      * "java/lang/Class"
      */
-    public static final String CLASS_NAME = "java/lang/Class";
+    String CLASS_NAME = "java/lang/Class";
     /**
      * li
      */
-    public static final String LI_TAG = "li";
+    String LI_TAG = "li";
     /**
      * dt
      */
-    public static final String DT_TAG = "dt";
+    String DT_TAG = "dt";
     /**
      * a
      */
-    public static final String A_TAG = "a";
+    String A_TAG = "a";
     /**
      * "SITE"
      */
-    public static final String SITE = "SITE";
+    String SITE = "SITE";
     /**
      * .gz
      */
-    public static final String SUFFIX_GZ = ".gz";
+    String SUFFIX_GZ = ".gz";
     /**
      * .z
      */
-    public static final String SUFFIX_Z = ".z";
+    String SUFFIX_Z = ".z";
     /**
      * .xml
      */
-    public static final String SUFFIX_XML = ".xml";
+    String SUFFIX_XML = ".xml";
     /**
      * xml
      */
-    public static final String XML = "xml";
+    String XML = "xml";
     /**
      * UPDATE
      */
-    public static final String UPDATE = "UPDATE";
+    String UPDATE = "UPDATE";
     /**
      * INSERT
      */
-    public static final String INSERT = "INSERT";
+    String INSERT = "INSERT";
     /**
      * union
      */
-    public static final String UNION = "union";
+    String UNION = "union";
     /**
      * name
      */
-    public static final String NAME = "name";
+    String NAME = "name";
     /**
      * pom.xml
      */
-    public static final String POM = "pom.xml";
+    String POM = "pom.xml";
     /**
      * .pom
      */
-    public static final String POM_SUFFIX = ".pom";
+    String POM_SUFFIX = ".pom";
     /**
      * aes
      */
-    public static final String AES = "aes";
+    String AES = "aes";
     /**
      * "elseif"
      */
-    public static final String ELSEIF = "elseif";
+    String ELSEIF = "elseif";
     /**
      * "else"
      */
-    public static final String ELSE = "else";
+    String ELSE = "else";
     /**
      * raw
      */
-    public static final String END = "end";
+    String END = "end";
     /**
      * raw
      */
-    public static final String RAW = "raw";
+    String RAW = "raw";
     /**
      * "is"
      */
-    public static final String IS = "is";
+    String IS = "is";
     /**
      * MAVEN_TYPE_DEFINITION
      */
-    public static final String MAVEN_TYPE_DEFINITION = "com.chua.maven.support.depends.definition.MavenTypeDefinition";
+    String MAVEN_TYPE_DEFINITION = "com.chua.maven.support.depends.definition.MavenTypeDefinition";
 
+    /**
+     * 单表（增删改查）
+     */
+    String TPL_CRUD = "crud";
+
+    /**
+     * 树表（增删改查）
+     */
+    String TPL_TREE = "tree";
+
+    /**
+     * 主子表（增删改查）
+     */
+    String TPL_SUB = "sub";
+
+    /**
+     * 树编码字段
+     */
+    String TREE_CODE = "treeCode";
+
+    /**
+     * 树父编码字段
+     */
+    String TREE_PARENT_CODE = "treeParentCode";
+
+    /**
+     * 树名称字段
+     */
+    String TREE_NAME = "treeName";
+
+    /**
+     * 上级菜单ID字段
+     */
+    String PARENT_MENU_ID = "parentMenuId";
+
+    /**
+     * 上级菜单名称字段
+     */
+    String PARENT_MENU_NAME = "parentMenuName";
+
+    /**
+     * 数据库字符串类型
+     */
+    String[] COLUMNTYPE_STR = {"char", "varchar", "nvarchar", "varchar2"};
+
+    /**
+     * 数据库文本类型
+     */
+    String[] COLUMNTYPE_TEXT = {"tinytext", "text", "mediumtext", "longtext"};
+
+    /**
+     * 数据库时间类型
+     */
+    String[] COLUMNTYPE_TIME = {"datetime", "time", "date", "timestamp"};
+
+    /**
+     * 数据库数字类型
+     */
+     String[] COLUMNTYPE_NUMBER = {"tinyint", "smallint", "mediumint", "int", "number", "integer",
+            "bit", "bigint", "float", "double", "decimal"};
+
+    /**
+     * BO对象 不需要添加字段
+     */
+    String[] COLUMNNAME_NOT_ADD = {"create_by", "create_time", "del_flag", "update_by",
+            "update_time", "version"};
+
+    /**
+     * BO对象 不需要编辑字段
+     */
+    String[] COLUMNNAME_NOT_EDIT = {"create_by", "create_time", "del_flag", "update_by",
+            "update_time", "version"};
+
+    /**
+     * VO对象 不需要返回字段
+     */
+     String[] COLUMNNAME_NOT_LIST = {"create_by", "create_time", "del_flag", "update_by",
+            "update_time", "version"};
+
+    /**
+     * BO对象 不需要查询字段
+     */
+     String[] COLUMNNAME_NOT_QUERY = {"id", "create_by", "create_time", "del_flag", "update_by",
+            "update_time", "remark", "version"};
+
+    /**
+     * Entity基类字段
+     */
+    String[] BASE_ENTITY = {"createBy", "createTime", "updateBy", "updateTime"};
+
+    /**
+     * Tree基类字段
+     */
+    String[] TREE_ENTITY = {"parentName", "parentId", "children"};
+
+    /**
+     * 文本框
+     */
+    String HTML_INPUT = "input";
+
+    /**
+     * 文本域
+     */
+    String HTML_TEXTAREA = "textarea";
+
+    /**
+     * 下拉框
+     */
+    String HTML_SELECT = "select";
+
+    /**
+     * 单选框
+     */
+    String HTML_RADIO = "radio";
+
+    /**
+     * 复选框
+     */
+    String HTML_CHECKBOX = "checkbox";
+
+    /**
+     * 日期控件
+     */
+    String HTML_DATETIME = "datetime";
+
+    /**
+     * 图片上传控件
+     */
+    String HTML_IMAGE_UPLOAD = "imageUpload";
+
+    /**
+     * 文件上传控件
+     */
+    String HTML_FILE_UPLOAD = "fileUpload";
+
+    /**
+     * 富文本控件
+     */
+    String HTML_EDITOR = "editor";
+
+    /**
+     * 字符串类型
+     */
+    String TYPE_STRING = "String";
+
+    /**
+     * 整型
+     */
+    String TYPE_INTEGER = "Integer";
+
+    /**
+     * 长整型
+     */
+    String TYPE_LONG = "Long";
+
+    /**
+     * 浮点型
+     */
+    String TYPE_DOUBLE = "Double";
+
+    /**
+     * 高精度计算类型
+     */
+    String TYPE_BIGDECIMAL = "BigDecimal";
+
+    /**
+     * 时间类型
+     */
+    String TYPE_DATE = "Date";
+
+    /**
+     * 时间类型
+     */
+    String TYPE_JAVA8_DATE = "LocalDateTime";
+
+
+    /**
+     * 模糊查询
+     */
+    String QUERY_LIKE = "LIKE";
+
+    /**
+     * 相等查询
+     */
+    String QUERY_EQ = "EQ";
+
+    /**
+     * 需要
+     */
+    String REQUIRE = "1";
 }
